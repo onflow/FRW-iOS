@@ -245,6 +245,15 @@ extension CadenceModel {
         let batchSendChildNFTToChild: String?
         /// send NFT from child to child
         let sendChildNFTToChild: String?
+        
+        let bridgeChildNFTToEvm: String?
+        let bridgeChildNFTFromEvm: String?
+        
+        let batchBridgeChildNFTToEvm: String?
+        let batchBridgeChildNFTFromEvm: String?
+        
+        let bridgeChildFTToEvm: String?
+        let bridgeChildFTFromEvm: String?
     }
 
     struct Staking: Codable {

@@ -115,7 +115,7 @@ class NFTUIKitListNormalDataModel {
         if var cachedCollections = NFTUIKitCache.cache.getCollections(), let address = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() {
             cachedCollections.sort {
                 if $0.count == $1.count {
-                    return $0.collection.contractName < $1.collection.contractName
+                    return ($0.collection.contractName ?? "") < ($1.collection.contractName ?? "")
                 }
 
                 return $0.count > $1.count
@@ -125,7 +125,7 @@ class NFTUIKitListNormalDataModel {
             for collection in cachedCollections {
                 let item = CollectionItem()
                 item.address = address
-                item.name = collection.collection.contractName
+                item.name = collection.collection.contractName ?? ""
                 item.collectionId = collection.collection.id
                 item.count = collection.count
                 item.collection = collection.collection
@@ -166,7 +166,7 @@ class NFTUIKitListNormalDataModel {
 
         collecitons.sort {
             if $0.count == $1.count {
-                return $0.collection.contractName < $1.collection.contractName
+                return ($0.collection.contractName ?? "") < ($1.collection.contractName ?? "")
             }
 
             return $0.count > $1.count
@@ -178,7 +178,7 @@ class NFTUIKitListNormalDataModel {
         for collection in collecitons {
             let item = CollectionItem()
             item.address = address
-            item.name = collection.collection.contractName
+            item.name = collection.collection.contractName ?? ""
             item.collectionId = collection.collection.id
             item.count = collection.count
             item.collection = collection.collection

@@ -71,7 +71,10 @@ extension ChildAccountManager {
                 if let contractName = list[safe: 2],
                    let address = list[safe: 1]
                 {
-                    return contractName == model.contractName && model.address.hasSuffix(address)
+                    if let name = model.contractName, let modelAddress = model.address {
+                        return (contractName == name && modelAddress.hasSuffix(address))
+                    }
+                    return false
                 } else {
                     return false
                 }

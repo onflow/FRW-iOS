@@ -142,8 +142,8 @@ class BackupUploadViewModel: ObservableObject {
         case .idle:
             Task {
                 do {
-                    buttonState = .loading
                     DispatchQueue.main.async {
+                        self.buttonState = .loading
                         self.mnemonicBlur = true
                     }
                     try await MultiBackupManager.shared.preLogin(with: currentType)
@@ -162,7 +162,10 @@ class BackupUploadViewModel: ObservableObject {
         case .upload:
             Task {
                 do {
-                    buttonState = .loading
+                    DispatchQueue.main.async {
+                        self.buttonState = .loading
+                    }
+                    
                     try await MultiBackupManager.shared.backupKey(on: currentType)
                     toggleProcess(process: .regist)
                     onClickButton()
@@ -175,14 +178,18 @@ class BackupUploadViewModel: ObservableObject {
         case .regist:
             Task {
                 do {
-                    buttonState = .loading
+                    DispatchQueue.main.async {
+                        self.buttonState = .loading
+                    }
+                    
                     try await MultiBackupManager.shared.syncKeyToServer(on: currentType)
                     DispatchQueue.main.async {
                         self.mnemonicBlur = false
+                        self.buttonState = .enabled
                     }
                     toggleProcess(process: .finish)
 //                    onClickButton()
-                    buttonState = .enabled
+                    
                 } catch {
                     buttonState = .enabled
                     HUD.dismissLoading()
@@ -204,17 +211,9 @@ class BackupUploadViewModel: ObservableObject {
     }
 
     func toggleProcess(process: BackupProcess) {
-        hasError = false
-        self.process = process
-//        switch self.process {
-//        case .idle:
-//            <#code#>
-//        case .upload:
-//            <#code#>
-//        case .regist:
-//            <#code#>
-//        case .finish:
-//            <#code#>
-//        }
+        DispatchQueue.main.async {
+            self.hasError = false
+            self.process = process
+        }
     }
 }

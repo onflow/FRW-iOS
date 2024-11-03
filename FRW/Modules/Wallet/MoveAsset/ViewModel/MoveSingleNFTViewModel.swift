@@ -63,10 +63,7 @@ class MoveSingleNFTViewModel: ObservableObject {
     }
 
     func moveAction() {
-        guard let nftId = UInt64(nft.response.id),
-              let address = nft.response.contractAddress,
-              let name = nft.response.collectionContractName
-        else {
+        guard let nftId = UInt64(nft.response.id) else {
             HUD.error(title: "invalid data")
             return
         }
@@ -108,8 +105,13 @@ class MoveSingleNFTViewModel: ObservableObject {
     }
 
     private func moveForLinkedAccount(nftId: UInt64) async {
-        guard let collection = nft.collection
-        else {
+        var collection = nft.collection
+        if collection == nil {
+            collection = NFTCatalogCache.cache
+                .find(by: nft.collectionName)?.collection
+        }
+        guard let collection = collection else {
+            log.error("[NFT] nft \(nft.collectionName) not found")
             return
         }
         let identifier = nft.publicIdentifier
@@ -122,6 +124,26 @@ class MoveSingleNFTViewModel: ObservableObject {
                 tid = try await FlowNetwork.moveNFTToParent(nftId: nftId, childAddress: fromContact.address ?? "", identifier: identifier, collection: collection)
             case (.link, .link):
                 tid = try await FlowNetwork.sendChildNFTToChild(nftId: nftId, childAddress: fromContact.address ?? "", toAddress: toContact.address ?? "", identifier: identifier, collection: collection)
+            case (.link, .evm):
+                guard let nftIdentifier = nft.response.flowIdentifier else {
+                    return
+                }
+                tid = try await FlowNetwork
+                    .bridgeChildNFTToEvm(
+                        nft: nftIdentifier,
+                        id: nftId,
+                        child: fromContact
+                            .address ?? "")
+            case (.evm, .link):
+                guard let nftIdentifier = nft.response.flowIdentifier else {   
+                    return
+                }
+                tid = try await FlowNetwork
+                    .bridgeChildNFTFromEvm(
+                        nft: nftIdentifier,
+                        id: nftId,
+                        child: toContact
+                            .address ?? "")
             default:
                 log.info("===")
             }
@@ -151,5 +173,13 @@ extension MoveSingleNFTViewModel {
     func logo() -> Image {
         let isSelectedEVM = EVMAccountManager.shared.selectedAccount != nil
         return isSelectedEVM ? Image("icon_qr_evm") : Image("Flow")
+    }
+    
+    var showFee: Bool {
+        !(fromContact.walletType == .link || toContact.walletType == .link)
+    }
+    
+    var isFeeFree: Bool {
+        fromContact.walletType == toContact.walletType
     }
 }

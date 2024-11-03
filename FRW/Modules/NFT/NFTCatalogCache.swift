@@ -40,11 +40,16 @@ class NFTCatalogCache {
         await NFTCollectionStateManager.share.fetch()
         collectionList.removeAll { _ in true }
         collectionList = NFTCollectionConfig.share.config.filter { col in
-            !col.address.isEmpty
+            if let address = col.address {
+                return !address.isEmpty
+            }
+            return false
         }
         .map { it in
             var status = NFTCollectionItem.ItemStatus.idle
-            if NFTCollectionStateManager.share.isTokenAdded(it.address) {
+            if let address = it.address, NFTCollectionStateManager.share.isTokenAdded(
+                address
+            ) {
                 status = .own
             }
             return NFTCollectionItem(collection: it, status: status)
@@ -81,7 +86,7 @@ class NFTCatalogCache {
 
     func find(by collectionName: String) -> NFTCollectionItem? {
         let result = collectionList.first { item in
-            item.collection.contractName.contains(collectionName)
+            item.collection.contractName?.contains(collectionName) ?? false
         }
         return result
     }

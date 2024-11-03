@@ -27,6 +27,7 @@ enum ScriptAddress: String, CaseIterable {
     case hybridCustody = "0xHybridCustody"
     case evm = "0xEVM"
     case flowEVMBridge = "0xFlowEVMBridge"
+    case CapabilityFilter = "0xCapabilityFilter"
 
     static func addressMap(on network: LocalUserDefaults.FlowNetworkType = LocalUserDefaults.shared.flowNetwork) -> [String: String] {
         let dict = ScriptAddress.allCases.reduce(into: [String: String]()) { partialResult, script in

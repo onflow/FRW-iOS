@@ -168,15 +168,15 @@ extension MoveTokenView {
         var body: some View {
             VStack(spacing: 12) {
                 HStack {
-                    TextField("", text: $viewModel.inputText)
+                    TextField("", text: $viewModel.showBalance)
                         .keyboardType(.decimalPad)
                         .disableAutocorrection(true)
-                        .modifier(PlaceholderStyle(showPlaceHolder: viewModel.inputText.isEmpty,
+                        .modifier(PlaceholderStyle(showPlaceHolder: viewModel.showBalance.isEmpty,
                                                    placeholder: "0.00",
                                                    font: .inter(size: 30, weight: .w700),
                                                    color: Color.Theme.Text.black3))
                         .font(.inter(size: 30, weight: .w700))
-                        .onChange(of: viewModel.inputText) { text in
+                        .onChange(of: viewModel.showBalance) { text in
                             viewModel.inputTextDidChangeAction(text: text)
                         }
                         .focused($isAmountFocused)

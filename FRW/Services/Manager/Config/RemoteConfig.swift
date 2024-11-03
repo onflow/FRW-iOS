@@ -17,8 +17,16 @@ extension RemoteConfigManager {
 
     struct ENVConfig: Codable {
         let version: String
+        let versionProd: String
         let prod: Config
         let staging: Config
+        
+        enum CodingKeys: String, CodingKey {
+            case version
+            case prod
+            case staging
+            case versionProd = "version_prod"
+        }
     }
 
     struct Config: Codable {
@@ -132,9 +140,58 @@ extension RemoteConfigManager {
         case normal
         case walletconnect
         case upgrade
+        
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let rawValue = try? container.decode(String.self)
+            self = NewsFlag(rawValue: rawValue ?? "") ?? .normal
+        }
+    }
+    
+    struct Condition: Codable,Hashable {
+       let type: ConditionType
+//       let data: JsonObject? // can be ignored this time
+    }
+
+    enum ConditionType: String, Codable {
+        case unknow
+        case canUpgrade
+        case isIOS
+              case isAndroid
+              case isWeb
+              case cadence // can be ignored this time
+              case noBackup // can be ignored this time
+              case noBiometric // can be ignored this time
+        
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            let rawValue = try? container.decode(String.self)
+            self = ConditionType(rawValue: rawValue ?? "") ?? .unknow
+        }
+        
+        func boolValue() -> Bool {
+            
+            switch self {
+            case .unknow:
+                return false
+            case .canUpgrade:
+                if let remoteVersion = RemoteConfigManager.shared.remoteVersion,
+                   let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                    return remoteVersion.compareVersion(to: currentVersion) != .orderedAscending
+                }else {
+                    return false
+                }
+            case .isIOS:
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     struct News: Codable, Comparable, Identifiable, Hashable {
+        
+        
         let id: String
         let priority: NewsPriority
         let type: NewsType
@@ -148,6 +205,7 @@ extension RemoteConfigManager {
         let displayType: NewDisplayType
 
         var flag: NewsFlag? = .normal
+        let conditions: [Condition]?
 
         var iconURL: URL? {
             if let logoString = icon {
@@ -161,6 +219,10 @@ extension RemoteConfigManager {
 
         static func < (lhs: RemoteConfigManager.News, rhs: RemoteConfigManager.News) -> Bool {
             lhs.priority < rhs.priority
+        }
+        
+        static func == (lhs: RemoteConfigManager.News, rhs: RemoteConfigManager.News) -> Bool {
+            lhs.id == rhs.id
         }
     }
 }

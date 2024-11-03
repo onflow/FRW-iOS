@@ -299,7 +299,9 @@ struct NFTDetailPage: RouteableView {
             .halfSheet(showSheet: $vm.isPresentMove) {
                 MoveSingleNFTView(nft: vm.nft, fromChildAccount: fromChildAccount) {
                     withAnimation {
-                        vm.isPresentMove = false
+                        DispatchQueue.main.async {
+                            vm.isPresentMove = false
+                        }
                     }
 
                     Router.pop()

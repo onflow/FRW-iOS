@@ -172,16 +172,18 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         cancel()
                     }
 
-                    let tix = try await FlowNetwork.sendTransaction(amount: receiveModel.amount, data: receiveModel.dataValue, toAddress: toAddr, gas: receiveModel.gasValue)
-                    let tixResult = try await tix.onceSealed()
+                    let txid = try await FlowNetwork.sendTransaction(amount: receiveModel.amount, data: receiveModel.dataValue, toAddress: toAddr, gas: receiveModel.gasValue)
+                    let holder = TransactionManager.TransactionHolder(id: txid, type: .transferCoin)
+                    TransactionManager.shared.newTransaction(holder: holder)
+                    let tixResult = try await txid.onceSealed()
                     if tixResult.isFailed {
                         HUD.error(title: "transaction failed")
                         cancel()
                         return
                     }
-                    let model = try await FlowNetwork.fetchEVMTransactionResult(txid: tix.hex)
+                    let model = try await FlowNetwork.fetchEVMTransactionResult(txid: txid.hex)
                     DispatchQueue.main.async {
-                        confirm(model.hashString ?? "")
+                        confirm(model.hashString?.addHexPrefix() ?? "")
                     }
                 }
             }

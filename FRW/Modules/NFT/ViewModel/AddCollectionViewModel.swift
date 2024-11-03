@@ -27,7 +27,9 @@ class AddCollectionViewModel: ObservableObject {
         }
         var list: [NFTCollectionItem] = []
         list = collectionList.filter { item in
-            if item.collection.name.localizedCaseInsensitiveContains(searchQuery) {
+            let name = item.collection.name ?? ""
+            
+            if name.localizedCaseInsensitiveContains(searchQuery) {
                 return true
             }
             if let des = item.collection.description, des.localizedCaseInsensitiveContains(searchQuery) {
@@ -65,12 +67,15 @@ class AddCollectionViewModel: ObservableObject {
         await NFTCollectionStateManager.share.fetch()
         collectionList.removeAll { _ in true }
         collectionList = NFTCollectionConfig.share.config.filter { col in
-            !col.address.isEmpty
+            if let address = col.address {
+                return !address.isEmpty
+            }
+            return false
         }
         .map { it in
             // TODO: handle status
             var status = NFTCollectionItem.ItemStatus.idle
-            if NFTCollectionStateManager.share.isTokenAdded(it.address) {
+            if let address = it.address, NFTCollectionStateManager.share.isTokenAdded(address) {
                 status = .own
             }
             // TODO: fail or pending
@@ -99,7 +104,10 @@ extension AddCollectionViewModel {
             return
         }
 
-        if TransactionManager.shared.isCollectionEnabling(contractName: item.collection.contractName) {
+        if TransactionManager.shared
+            .isCollectionEnabling(
+                contractName: item.collection.contractName ?? ""
+            ) {
             // TODO: show add collection bottom sheet
             return
         }

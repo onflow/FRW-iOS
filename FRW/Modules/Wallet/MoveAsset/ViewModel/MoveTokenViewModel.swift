@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Flow
 
 class MoveTokenViewModel: ObservableObject {
     @Published var inputDollarNum: Double = 0
 
-    @Published var inputText: String = ""
+    @Published var showBalance: String = ""
+    var actualBalance: String = ""
+    
     @Published var inputTokenNum: Double = 0
     @Published var amountBalance: Double = 0
     @Published var coinRate: Double = 0
@@ -21,6 +24,8 @@ class MoveTokenViewModel: ObservableObject {
     @Published var fromContact = Contact(address: "", avatar: "", contactName: "", contactType: nil, domain: nil, id: -1, username: nil)
     @Published var toContact = Contact(address: "", avatar: "", contactName: "", contactType: nil, domain: nil, id: -1, username: nil)
 
+    private var minBalance: Double? = nil
+    
     var token: TokenModel
     @Binding var isPresent: Bool
 
@@ -29,6 +34,9 @@ class MoveTokenViewModel: ObservableObject {
         _isPresent = isPresent
         loadUserInfo()
         refreshTokenData()
+        Task {
+            await fetchMinFlowBalance()
+        }
     }
 
     private func loadUserInfo() {
@@ -56,12 +64,30 @@ class MoveTokenViewModel: ObservableObject {
         }
     }
 
+    private func fetchMinFlowBalance() async {
+        do {
+            self.minBalance = try await FlowNetwork.minFlowBalance()
+            log.debug("[Flow] min balance:\(self.minBalance ?? 0.001)")
+        } catch {
+            self.minBalance = 0.001
+        }
+    }
+    
+    private func updateBalance(_ text: String) {
+        guard !text.isEmpty else {
+            showBalance = ""
+            actualBalance = ""
+            return
+        }
+        
+    }
+    
     func changeTokenModelAction(token: TokenModel) {
         if token.contractId == self.token.contractId {
             return
         }
         self.token = token
-        inputText = ""
+        updateBalance("")
         errorType = .none
         refreshTokenData()
     }
@@ -77,46 +103,89 @@ class MoveTokenViewModel: ObservableObject {
     }
 
     func refreshSummary() {
-        if inputText.isEmpty {
+        if showBalance.isEmpty {
             inputTokenNum = 0.0
             inputDollarNum = 0.0
             errorType = .none
             return
         }
 
-        if !inputText.isNumber {
+        if !showBalance.isNumber {
             inputTokenNum = 0.0
             inputDollarNum = 0.0
             errorType = .formatError
             return
         }
-        inputTokenNum = inputText.doubleValue
+        
+        actualBalance = showBalance.doubleValue
+            .formatCurrencyString(digits: token.decimal)
+        inputTokenNum = actualBalance.doubleValue
         inputDollarNum = inputTokenNum * coinRate * CurrencyCache.cache.currentCurrencyRate
+        
         if inputTokenNum > amountBalance {
             errorType = .insufficientBalance
             return
         }
-
-//        if amountBalance - inputTokenNum < 0.001 {
-//            errorType = .belowMinimum
-//            return
-//        }
+        
+        if !allowZero() {
+            errorType = .insufficientBalance
+            return
+        }
         errorType = .none
     }
 
     func maxAction() {
-        let num = max(amountBalance, 0)
-        inputText = num.formatCurrencyString()
-        refreshSummary()
-        updateState()
+        Task {
+            let num = await updateAmountIfNeed(inputAmount: amountBalance)
+            DispatchQueue.main.async {
+                self.showBalance = num.formatCurrencyString()
+                self.actualBalance = num.formatCurrencyString(digits: self.token.decimal)
+                self.refreshSummary()
+                self.updateState()
+            }
+        }
+    }
+    
+    private func isFromFlowToCoa() -> Bool {
+        return token.isFlowCoin && fromContact.walletType == .flow && toContact.walletType == .evm
+    }
+    
+    private func allowZero() -> Bool {
+        guard isFromFlowToCoa() else {
+            return true
+        }
+        return false
+    }
+    
+    private func updateAmountIfNeed(inputAmount: Double) async -> Double {
+        guard isFromFlowToCoa() else {
+            return max(inputAmount, 0)
+        }
+        if self.minBalance == nil {
+            HUD.loading()
+            await fetchMinFlowBalance()
+            HUD.dismissLoading()
+        }
+        // move fee
+        let num = max(
+            inputAmount - (
+                minBalance ?? WalletManager.minDefaultBlance
+            ) - WalletManager.moveFee,
+            0
+        )
+        return num
     }
 
+    
     private func updateState() {
-        buttonState = isReadyForSend ? .enabled : .disabled
+        DispatchQueue.main.async {
+            self.buttonState = self.isReadyForSend ? .enabled : .disabled
+        }
+        
     }
 
     var isReadyForSend: Bool {
-        return errorType == .none && inputText.isNumber && !inputText.isEmpty
+        return errorType == .none && showBalance.isNumber && !showBalance.isEmpty
     }
 
     var currentBalance: String {
@@ -145,10 +214,48 @@ extension MoveTokenViewModel {
 
 extension MoveTokenViewModel {
     func onNext() {
-        // TODO: #six 新的cadence
+        
         if fromContact.walletType == .link || toContact.walletType == .link {
-            HUD.info(title: "Features are coming.")
-            return
+            Task {
+                do {
+                    var tid: Flow.ID?
+                    let amount = self.inputTokenNum.decimalValue
+                    let vaultIdentifier = (fromIsEVM ? (token.flowIdentifier ?? "") : token.contractId + ".Vault")
+                    switch (fromContact.walletType, toContact.walletType) {
+                    case (.link, .evm):
+                        tid = try await FlowNetwork
+                            .bridgeChildTokenToCoa(
+                                vaultIdentifier: vaultIdentifier,
+                                child: fromContact.address ?? "",
+                                amount: amount
+                            )
+                    case (.evm, .link):
+                        tid = try await FlowNetwork
+                            .bridgeChildTokenFromCoa(
+                                vaultIdentifier: vaultIdentifier,
+                                child: toContact.address ?? "",
+                                amount: amount
+                            )
+                    default:
+                        break
+                    }
+                    
+                    if let txid = tid {
+                        let holder = TransactionManager.TransactionHolder(id: txid, type: .moveAsset)
+                        TransactionManager.shared.newTransaction(holder: holder)
+                    }
+                    DispatchQueue.main.async {
+                        self.closeAction()
+                        self.buttonState = .enabled
+                    }
+                }
+                catch {
+                    log.error(" Move Token: \(fromContact.walletType?.rawValue ?? "") to  \(toContact.walletType?.rawValue ?? "") failed. \(error)")
+                    log.error(error)
+                    buttonState = .enabled
+                }
+            }
+            
         }
         if token.isFlowCoin {
             if WalletManager.shared.isSelectedEVMAccount {
@@ -194,10 +301,19 @@ extension MoveTokenViewModel {
         Task {
             do {
                 log.info("[EVM] fund Coa balance")
+                let maxAmount = await updateAmountIfNeed(
+                    inputAmount: amountBalance
+                )
+                guard maxAmount >= self.inputTokenNum else {
+                    HUD.error(title: "Insufficient_balance::message".localized)
+                    return
+                }
                 DispatchQueue.main.async {
                     self.buttonState = .loading
                 }
                 let amount = self.inputTokenNum.decimalValue
+                log.debug("[amount] move \(self.inputTokenNum)")
+                log.debug("[amount] move \(amount.description)")
                 let txid = try await FlowNetwork.fundCoa(amount: amount)
                 let holder = TransactionManager.TransactionHolder(id: txid, type: .transferCoin)
                 TransactionManager.shared.newTransaction(holder: holder)

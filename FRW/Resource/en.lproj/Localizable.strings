@@ -1032,3 +1032,5 @@ Please create backups for your wallet to ensure you retain access to your Flow a
 "Restore Profile" = "Restore profile";
 "Hide Profile" = "Hide Profile";
 
+"Please wait" = "Please wait";
+"until_web_loaded" = "Until the website is fully loaded";

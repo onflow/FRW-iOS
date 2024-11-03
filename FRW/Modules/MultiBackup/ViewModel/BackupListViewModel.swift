@@ -133,7 +133,9 @@ class BackupListViewModel: ObservableObject {
             if res {
                 try await MultiBackupManager.shared.removeItem(with: type)
                 await fetchMultiBackup()
-                showRemoveTipView = false
+                DispatchQueue.main.async {
+                    self.showRemoveTipView = false
+                }
             }
 
             HUD.dismissLoading()

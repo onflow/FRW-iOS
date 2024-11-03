@@ -147,15 +147,15 @@ class MoveAccountsViewModel: ObservableObject {
         let isChild = ChildAccountManager.shared.selectedChildAccount != nil
         let isEVM = EVMAccountManager.shared.selectedAccount != nil
 
-        if let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() {
+        if let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress(), currentAddr != primaryAddr {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             let contact = Contact(address: primaryAddr, avatar: nil, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: user.name, user: user, walletType: .flow)
             list.append(contact)
         }
 
         EVMAccountManager.shared.accounts.forEach { account in
-            // don't move from child to evm by 'isChild'
-            if currentAddr != account.showAddress, !isChild {
+            
+            if currentAddr != account.showAddress {
                 let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
                 let contact = Contact(address: account.showAddress, avatar: nil, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: user.name, user: user, walletType: .evm)
                 list.append(contact)
@@ -163,8 +163,8 @@ class MoveAccountsViewModel: ObservableObject {
         }
 
         ChildAccountManager.shared.childAccounts.forEach { account in
-            // don't move from evm to child by 'isEVM'
-            if currentAddr != account.showAddress, !isEVM {
+            
+            if currentAddr != account.showAddress {
                 let contact = Contact(address: account.showAddress, avatar: account.showIcon, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: account.showName, walletType: .link)
                 list.append(contact)
             }

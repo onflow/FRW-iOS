@@ -113,7 +113,8 @@ class RemoteConfigManager {
                let ivData = key.sha256().prefix(16).data(using: .utf8)
             {
                 let decodeData = AES.decryptCBC(key: keyData, data: Data(hex: data), iv: ivData, mode: .pkcs7)!
-                let config = try? JSONDecoder().decode(ENVConfig.self, from: decodeData)
+                let decoder = JSONDecoder()
+                let config = try decoder.decode(ENVConfig.self, from: decodeData)
                 envConfig = config
                 self.config = nil
                 if let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
@@ -204,5 +205,11 @@ extension RemoteConfigManager: FlowSigner {
         let request = SignPayerRequest(transaction: voucher, message: .init(envelopeMessage: signableData.hexValue))
         let signature: SignPayerResponse = try await Network.requestWithRawModel(FirebaseAPI.signAsPayer(request))
         return Data(hex: signature.envelopeSigs.sig)
+    }
+}
+
+extension RemoteConfigManager {
+    var remoteVersion: String? {
+        return envConfig?.versionProd
     }
 }

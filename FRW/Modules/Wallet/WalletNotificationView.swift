@@ -88,7 +88,7 @@ struct WalletNotificationView: View {
 // MARK: - Demo
 
 extension RemoteConfigManager.News {
-    static let sample = RemoteConfigManager.News(id: "22722ad7-fd47-4167-a7e6-c4c69973bc5d", priority: .high, type: .image, title: "Missing USDC?", body: "Please upgrade USDC to USDCf", icon: "https://cdn.jsdelivr.net/gh/FlowFans/flow-token-list@main/token-registry/A.b19436aae4d94622.FiatToken/logo.svg", image: "https://w.wallhaven.cc/full/3l/wallhaven-3lv8j6.jpg", url: "https://port.flow.com/transaction?hash=a32bf0cabf37d52ca3c60daccc10b9ba79db5975d29e7a105d96983b918788e4", expiryTime: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, displayType: .click)
+    static let sample = RemoteConfigManager.News(id: "22722ad7-fd47-4167-a7e6-c4c69973bc5d", priority: .high, type: .image, title: "Missing USDC?", body: "Please upgrade USDC to USDCf", icon: "https://cdn.jsdelivr.net/gh/FlowFans/flow-token-list@main/token-registry/A.b19436aae4d94622.FiatToken/logo.svg", image: "https://w.wallhaven.cc/full/3l/wallhaven-3lv8j6.jpg", url: "https://port.flow.com/transaction?hash=a32bf0cabf37d52ca3c60daccc10b9ba79db5975d29e7a105d96983b918788e4", expiryTime: Calendar.current.date(byAdding: .day, value: 1, to: Date())!, displayType: .click, conditions: nil)
 }
 
 struct WalletNotificationView_Previews: PreviewProvider {

@@ -75,7 +75,7 @@ extension NFTAddCollectionView {
                 } label: {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(alignment: .center) {
-                            Text(item.collection.name)
+                            Text(item.collection.name ?? "")
                                 .font(.LL.largeTitle3)
                                 .fontWeight(.w700)
                                 .foregroundColor(.LL.Neutrals.text)

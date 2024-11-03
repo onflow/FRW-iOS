@@ -32,7 +32,7 @@ struct EVMTransactionReceive: Codable {
         let defaultValue = "0"
         guard let balance = value else { return defaultValue }
         guard let value = BigUInt(from: balance) else { return defaultValue }
-        return Utilities.formatToPrecision(value)
+        return Utilities.formatToPrecision(value, formattingDecimals: 64)
     }
 
     var gasValue: UInt64 {
@@ -44,8 +44,7 @@ struct EVMTransactionReceive: Codable {
 
     var dataValue: Data? {
         guard let dataStr = data else { return nil }
-        guard let value = BigUInt(from: dataStr) else { return nil }
-        return Data(from: value.hexString)
+        return Data(hex: dataStr)
     }
 
     var toAddress: String? {
