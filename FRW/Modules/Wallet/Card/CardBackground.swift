@@ -18,6 +18,7 @@ enum CardBackground: CaseIterable {
         .fluid,
         .matrix,
         .fade(imageIndex: 0),
+        .fluidGradient
     ]
 
     static var imageCases: [CardBackground] = [
@@ -33,6 +34,7 @@ enum CardBackground: CaseIterable {
         .fluid,
         .matrix,
         .color(color: UIColor.LL.Primary.salmonPrimary),
+        .fluidGradient,
         .fade(imageIndex: 0),
     ]
 
@@ -41,6 +43,7 @@ enum CardBackground: CaseIterable {
     case fade(imageIndex: Int)
     case fluid
     case matrix
+    case fluidGradient
 
     @ViewBuilder
     func renderView() -> some View {
@@ -64,6 +67,10 @@ enum CardBackground: CaseIterable {
             (imageList[safe: imageIndex] ?? imageList[0])
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+        case .fluidGradient:
+            FluidGradient(blobs: [.green, .blue, .red, .pink, .purple, .indigo],
+                          highlights: [.green, .yellow, .orange, .blue, .pink, .indigo],
+                          speed: 0.8)
         }
     }
 
@@ -115,6 +122,8 @@ enum CardBackground: CaseIterable {
             return identify
         case .matrix:
             return identify
+        case .fluidGradient:
+            return identify
         }
     }
 
@@ -130,6 +139,8 @@ enum CardBackground: CaseIterable {
             return "fluid"
         case .matrix:
             return "matrix"
+        case .fluidGradient:
+            return "fluidGradient"
         }
     }
 
@@ -173,6 +184,8 @@ enum CardBackground: CaseIterable {
                 return
             }
             self = .image(imageIndex: index)
+        case CardBackground.fluidGradient.identify:
+            self = .fluidGradient
         default:
             self = .fade(imageIndex: 0)
         }

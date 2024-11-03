@@ -50,15 +50,15 @@ extension NFTResponse: NFTMask {
 
 extension NFTCollection: CollectionMask {
     var maskName: String {
-        collection.name
+        collection.name ?? ""
     }
 
     var maskAddress: String {
-        collection.address
+        collection.address ?? ""
     }
 
     var maskContractName: String {
-        collection.contractName
+        collection.contractName ?? ""
     }
 
     var maskId: String {

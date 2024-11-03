@@ -127,10 +127,10 @@ extension String {
 extension NFTCollectionInfo {
     func formatCadence(script: String, chainId _: Flow.ChainID = flow.chainID) -> String {
         var newScript = script
-            .replacingOccurrences(of: "<NFT>", with: contractName.trim())
-            .replacingOccurrences(of: "<NFTAddress>", with: address)
-            .replacingOccurrences(of: "<Token>", with: contractName.trim())
-            .replacingOccurrences(of: "<TokenAddress>", with: address)
+            .replacingOccurrences(of: "<NFT>", with: contractName?.trim() ?? "")
+            .replacingOccurrences(of: "<NFTAddress>", with: address ?? "")
+            .replacingOccurrences(of: "<Token>", with: contractName?.trim() ?? "")
+            .replacingOccurrences(of: "<TokenAddress>", with: address ?? "")
 
         if let path = path {
             newScript = newScript

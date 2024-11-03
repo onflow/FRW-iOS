@@ -33,9 +33,9 @@ struct EVMNFTCollectionResponse: Codable {
 
 struct NFTCollectionInfo: Codable, Hashable, Mockable {
     let id: String
-    let name: String
-    let contractName: String
-    let address: String
+    let name: String?
+    let contractName: String?
+    let address: String?
 
     let logo: String?
     let banner: String?
@@ -93,6 +93,14 @@ struct ContractPath: Codable, Hashable, Mockable {
     static func mock() -> ContractPath {
         return ContractPath(storagePath: randomString(), publicPath: randomString(), privatePath: "", publicCollectionName: randomString(), publicType: randomString(), privateType: randomString())
     }
+    
+    func storagePathId() -> String {
+        let list = storagePath.components(separatedBy: "/")
+        if list.count > 0 {
+            return list.last ?? storagePath
+        }
+        return storagePath
+    }
 }
 
 struct NFTModel: Codable, Hashable, Identifiable {
@@ -119,7 +127,7 @@ struct NFTModel: Codable, Hashable, Identifiable {
     }
 
     var isNBA: Bool {
-        collection?.contractName.trim() == "TopShot"
+        collection?.contractName?.trim() == "TopShot"
     }
 
     init(_ response: NFTResponse, in collection: NFTCollectionInfo?, from _: FlowModel.CollectionInfo? = nil) {
@@ -260,7 +268,7 @@ class CollectionItem: Identifiable, ObservableObject {
         }
     }
 
-    func load() {
+    func load(address: String? = nil) {
         if isRequesting || isEnd {
             return
         }
@@ -314,8 +322,8 @@ class CollectionItem: Identifiable, ObservableObject {
         }
     }
 
-    private func requestCollectionListDetail(offset: Int, limit: Int = 24) async throws -> NFTListResponse {
-        let addr = WalletManager.shared.selectedAccountAddress
+    private func requestCollectionListDetail(offset: Int, limit: Int = 24, fromAddress: String? = nil) async throws -> NFTListResponse {
+        let addr = fromAddress ?? WalletManager.shared.selectedAccountAddress
         let request = NFTCollectionDetailListRequest(address: addr, collectionIdentifier: collection?.id ?? "", offset: offset, limit: limit)
         let from: FRWAPI.From = EVMAccountManager.shared.selectedAccount == nil ? .main : .evm
         let response: NFTListResponse = try await Network.request(FRWAPI.NFT.collectionDetailList(request, from))

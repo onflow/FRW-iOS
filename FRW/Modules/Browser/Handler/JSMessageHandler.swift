@@ -254,7 +254,7 @@ extension JSMessageHandler {
                 guard let self = self else {
                     return
                 }
-
+                
                 if result {
                     self.didConfirmAuthn(response: authnResponse)
                 } else {

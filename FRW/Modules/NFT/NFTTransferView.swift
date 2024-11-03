@@ -141,11 +141,16 @@ class NFTTransferViewModel: ObservableObject {
                     let nftId = nft.response.id
                     guard let nftAddress = self.nft.collection?.address,
                           let identifier = nft.collection?.flowIdentifier ?? nft.response.flowIdentifier,
-                          let evmContractAddress = await NFTCollectionConfig.share.get(from: nftAddress)?.evmAddress?.stripHexPrefix()
+                          let toAddress = targetContact.address?.stripHexPrefix()
                     else {
                         throw NFTError.sendInvalidAddress
                     }
-                    tid = try await FlowNetwork.bridgeNFTToAnyEVM(identifier: identifier, id: nftId, contractEVMAddress: evmContractAddress)
+                    tid = try await FlowNetwork
+                        .bridgeNFTToAnyEVM(
+                            identifier: identifier,
+                            id: nftId,
+                            toAddress: toAddress
+                        )
 
                 case (.coa, .flow):
                     let nftId = nft.response.id
@@ -204,6 +209,27 @@ class NFTTransferViewModel: ObservableObject {
                     let identifier = nft.publicIdentifier
                     let childAddr = fromChildAccount?.addr ?? currentAddress
                     tid = try await FlowNetwork.sendChildNFTToChild(nftId: nftId, childAddress: childAddr, toAddress: toAddress, identifier: identifier, collection: collection)
+                case (.linked, .coa):
+                    guard let nftIdentifier = nft.response.flowIdentifier,let nftId = UInt64(nft.response.id) else {
+                        return
+                    }
+                    let childAddr = fromChildAccount?.addr ?? currentAddress
+                    tid = try await FlowNetwork
+                        .bridgeChildNFTToEvm(
+                            nft: nftIdentifier,
+                            id: nftId,
+                            child: childAddr)
+                case (.coa, .linked):
+                    guard let nftIdentifier = nft.response.flowIdentifier,
+                          let nftId = UInt64(nft.response.id) else {
+                        return
+                    }
+                    let childAddr = fromChildAccount?.addr ?? toAddress
+                    tid = try await FlowNetwork
+                        .bridgeChildNFTFromEvm(
+                            nft: nftIdentifier,
+                            id: nftId,
+                            child: childAddr)
                 default:
                     failedBlock()
                     return

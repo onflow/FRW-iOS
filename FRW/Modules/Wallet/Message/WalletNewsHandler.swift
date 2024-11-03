@@ -34,6 +34,7 @@ class WalletNewsHandler: ObservableObject {
             self.list.append(contentsOf: news)
             self.removeExpiryNew()
             self.removeMarkedNews()
+            self.handleConfition()
             self.orderNews()
             log.debug("[NEWS] count:\(list.count)")
         }
@@ -79,14 +80,29 @@ class WalletNewsHandler: ObservableObject {
 
     private func removeExpiryNew() {
         accessQueue.sync {
+            
             let currentData = Date()
             list = list.filter { $0.expiryTime > currentData }
+            log.debug("[NEWS] removeExpiryNew count:\(list.count)")
         }
     }
 
     private func removeMarkedNews() {
         accessQueue.sync {
             list = list.filter { !removeIds.contains($0.id) }
+            log.debug("[NEWS] removeMarkedNews count:\(list.count)")
+        }
+    }
+
+    private func handleConfition() {
+        accessQueue.sync {
+            list = list.filter { model in
+                guard let conditionList = model.conditions, !conditionList.isEmpty else {
+                    return true
+                }
+                return !conditionList.map { $0.type.boolValue() }.contains(false)
+            }
+            log.debug("[NEWS] handleConfition count:\(list.count)")
         }
     }
 
@@ -138,7 +154,11 @@ extension WalletNewsHandler {
         let shouldRemove = markItemIfNeed(itemId, displatyType: [.click, .once])
 
         if let urlStr = item.url, !urlStr.isEmpty, let url = URL(string: urlStr) {
-            Router.route(to: RouteMap.Explore.browser(url))
+            if urlStr.contains("apple.com") {
+                UIApplication.shared.open(url)
+            } else {
+                Router.route(to: RouteMap.Explore.browser(url))
+            }
         }
 
         if item.flag == .walletconnect, let request = WalletConnectManager.shared.pendingRequests.first(where: { $0.topic == item.id }) {

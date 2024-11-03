@@ -41,7 +41,7 @@ extension Contact {
 // MARK: - AddressBook
 
 struct Contact: Codable, Identifiable {
-    enum WalletType: Codable {
+    enum WalletType: String,Codable {
         case flow
         case evm
         case link

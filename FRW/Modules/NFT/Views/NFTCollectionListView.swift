@@ -54,7 +54,7 @@ class NFTCollectionListViewViewModel: ObservableObject {
         }
 
         if collection.nfts.isEmpty {
-            collection.load()
+            collection.load(address: self.address)
         }
     }
 
@@ -90,7 +90,7 @@ class NFTCollectionListViewViewModel: ObservableObject {
             }
 
             do {
-                let address = WalletManager.shared.selectedAccountAddress
+                let address = address ?? WalletManager.shared.selectedAccountAddress
                 let from: FRWAPI.From = EVMAccountManager.shared.selectedAccount != nil ? .evm : .main
                 let request = NFTCollectionDetailListRequest(address: address, collectionIdentifier: path, offset: 0, limit: 24)
                 let response: NFTListResponse = try await Network.request(FRWAPI.NFT.collectionDetailList(request, from))

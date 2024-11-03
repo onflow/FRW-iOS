@@ -786,6 +786,6 @@ extension WalletConnectSign.Request {
                                         url: nil,
                                         expiryTime: .distantFuture,
                                         displayType: .click,
-                                        flag: .walletconnect)
+                                        flag: .walletconnect, conditions: nil)
     }
 }

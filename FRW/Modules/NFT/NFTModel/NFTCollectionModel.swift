@@ -22,14 +22,16 @@ final class NFTCollectionConfig {
         if config.isEmpty {
             await fetchData()
         }
-        return config.first { $0.address.lowercased() == address.lowercased() }
+        return config.first { $0.address?.lowercased() == address.lowercased() }
     }
 }
 
 extension NFTCollectionConfig {
     private func fetchData() async {
         do {
-            var list: [NFTCollectionInfo] = try await Network.request(FRWAPI.NFT.collections)
+            let list: [NFTCollectionInfo] = try await Network.request(
+                FRWAPI.NFT.collections
+            )
             config = list
         } catch {
             log.error("NFTCollectionConfig -> fetchData failed: \(error)")

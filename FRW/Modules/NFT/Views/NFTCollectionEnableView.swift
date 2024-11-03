@@ -47,7 +47,7 @@ extension NFTAddCollectionView {
                                     .cornerRadius(8)
 
                                 HStack(alignment: .center, spacing: 6) {
-                                    Text(item.collection.name)
+                                    Text(item.collection.name ?? "")
                                         .font(.LL.largeTitle3)
                                         .fontWeight(.w700)
                                         .foregroundColor(.LL.Neutrals.text)

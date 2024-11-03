@@ -52,6 +52,7 @@ class WalletSendAmountViewModel: ObservableObject {
     @Published var inputText: String = ""
     @Published var inputTokenNum: Double = 0
     @Published var inputDollarNum: Double = 0
+    var actualBalance: String = ""
 
     @Published var exchangeType: WalletSendAmountView.ExchangeType = .token
     @Published var errorType: WalletSendAmountView.ErrorType = .none
@@ -159,26 +160,30 @@ extension WalletSendAmountViewModel {
             errorType = .formatError
             return
         }
-
+        actualBalance = inputText.doubleValue
+            .formatCurrencyString(digits: token.decimal)
         if exchangeType == .token {
-            inputTokenNum = inputText.doubleValue
+            inputTokenNum = actualBalance.doubleValue
             inputDollarNum = inputTokenNum * coinRate * CurrencyCache.cache.currentCurrencyRate
         } else {
-            inputDollarNum = inputText.doubleValue
+            inputDollarNum = actualBalance.doubleValue
             if coinRate == 0 {
                 inputTokenNum = 0
             } else {
                 inputTokenNum = inputDollarNum / CurrencyCache.cache.currentCurrencyRate / coinRate
             }
         }
-
+        
         if inputTokenNum > amountBalance {
             errorType = .insufficientBalance
             return
         }
 
-        if token.isFlowCoin, EVMAccountManager.shared.selectedAccount == nil {
-            if amountBalance - inputTokenNum < minBalance {
+        if token.isFlowCoin, WalletManager.shared.isCoa(targetContact.address) {
+            let validBalance = (
+                Decimal(amountBalance) - Decimal(minBalance)
+            ).doubleValue
+            if validBalance < inputTokenNum  {
                 errorType = .belowMinimum
                 return
             }
@@ -205,41 +210,38 @@ extension WalletSendAmountViewModel {
 
 extension WalletSendAmountViewModel {
     func inputTextDidChangeAction(text _: String) {
-//        let filtered = text.filter {"0123456789.".contains($0)}
-//
-//        if filtered.contains(".") {
-//            let splitted = filtered.split(separator: ".")
-//            if splitted.count >= 2 {
-//                let preDecimal = String(splitted[0])
-//                let afterDecimal = String(splitted[1])
-//                inputText = "\(preDecimal).\(afterDecimal)"
-//            } else {
-//                inputText = filtered
-//            }
-//        } else {
-//            inputText = filtered
-//        }
-
         refreshInput()
     }
 
     func maxAction() {
         exchangeType = .token
-        if token.isFlowCoin && EVMAccountManager.shared.selectedAccount == nil {
+        if token.isFlowCoin && WalletManager.shared
+            .isCoa(targetContact.address) && WalletManager.shared.isMain() {
             Task {
                 do {
                     let topAmount = try await FlowNetwork.minFlowBalance()
-                    let num = max(amountBalance - topAmount, 0)
-                    inputText = num.formatCurrencyString()
+                    let num = max(
+                        amountBalance - topAmount - WalletManager.moveFee,
+                        0
+                    )
+                    DispatchQueue.main.async {
+                        self.inputText = num.formatCurrencyString()
+                    }
+                    
+                    actualBalance = num.formatCurrencyString(digits: token.decimal)
                 } catch {
                     let num = max(amountBalance - minBalance, 0)
-                    inputText = num.formatCurrencyString()
+                    DispatchQueue.main.async {
+                        self.inputText = num.formatCurrencyString()
+                    }
+                    actualBalance = num.formatCurrencyString(digits: token.decimal)
                     log.error("[Flow] min flow balance error")
                 }
             }
         } else {
             let num = max(amountBalance, 0)
             inputText = num.formatCurrencyString()
+            actualBalance = num.formatCurrencyString(digits: token.decimal)
         }
     }
 
@@ -247,9 +249,13 @@ extension WalletSendAmountViewModel {
         if exchangeType == .token, coinRate != 0 {
             exchangeType = .dollar
             inputText = inputDollarNum.formatCurrencyString()
+            actualBalance = inputDollarNum
+                .formatCurrencyString(digits: token.decimal)
         } else {
             exchangeType = .token
             inputText = inputTokenNum.formatCurrencyString()
+            actualBalance = inputTokenNum
+                .formatCurrencyString(digits: token.decimal)
         }
     }
 
@@ -354,7 +360,13 @@ extension WalletSendAmountViewModel {
 
                 case (.coa, .eoa):
                     if token.isFlowCoin {
-                        txId = try await FlowNetwork.sendFlowToEvm(evmAddress: targetAddress.stripHexPrefix(), amount: amount, gas: gas)
+                        txId = try await FlowNetwork
+                            .sendTransaction(
+                                amount: amount.description,
+                                data: nil,
+                                toAddress: targetAddress.stripHexPrefix(),
+                                gas: gas
+                            )
                     } else {
                         let erc20Contract = try await FlowProvider.Web3.defaultContract()
                         let testData = erc20Contract?.contract.method("transfer", parameters: [targetAddress, Utilities.parseToBigUInt(amount.description, units: .ether)!], extraData: nil)
