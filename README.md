@@ -1,4 +1,4 @@
-# Lilico-iOS
+# FLOW Reference Wallet-iOS
 
 ## How to build
 
@@ -20,18 +20,18 @@
     ```
 
 5. Add the necessary files in the following locations
-   - For ```Lilico``` target:
+   - For ```FRW``` target:
     ```
-    /Lilico/App/Env/Prod/GoogleOAuth2.plist
-    /Lilico/App/Env/Prod/GoogleService-Info.plist
+    /FRW/App/Env/Prod/GoogleOAuth2.plist
+    /FRW/App/Env/Prod/GoogleService-Info.plist
     ```
 
-   - For ```Lilico-dev``` target: 
+   - For ```FRW-dev``` target: 
     ```
-    /Lilico/App/Env/Dev/GoogleOAuth2.plist
-    /Lilico/App/Env/Dev/GoogleService-Info.plist
+    /FRW/App/Env/Dev/GoogleOAuth2.plist
+    /FRW/App/Env/Dev/GoogleService-Info.plist
     ```
 
 6. Make iCloud and Widget work:
-    - For ```Lilico``` target: search and replace ```io.outblock.lilico```
-    - For ```Lilico-dev``` target: search and replace ```io.outblock.lilico.dev```
+    - For ```FRW``` target: search and replace ```com.flowfoundation.wallet```
+    - For ```FRW-dev``` target: search and replace ```com.flowfoundation.wallet```
