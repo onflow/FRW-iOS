@@ -41,7 +41,7 @@ struct BrowserSignMessageView: View {
         }
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color.Theme.BG.bg1)
+        .backgroundFill(.Theme.Background.white)
     }
 
     var titleView: some View {
