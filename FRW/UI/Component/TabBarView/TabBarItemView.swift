@@ -24,11 +24,11 @@ struct TabBarItemView<T: Hashable>: View {
             withAnimation(.spring()) { selected = pageModel.tag }
             action()
         }, label: {
-            VStack(spacing: 2) {
+            VStack(spacing: 8) {
                 icon
                 title
             }
-            .padding(.top, 8)
+            .padding(.top, 12)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .contextMenu {
@@ -42,6 +42,7 @@ struct TabBarItemView<T: Hashable>: View {
     @ViewBuilder
     private var icon: some View {
         Image(pageModel.iconName + (isSelected ? "-selected" : "") )
+            .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 28, height: 28)
             .frame(maxWidth: .infinity)
