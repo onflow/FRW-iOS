@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import SwiftUI
+import Web3Core
 
 // MARK: - EVMAccountManager
 
@@ -83,7 +84,8 @@ class EVMAccountManager: ObservableObject {
 
     @Published
     var selectedAccount: EVMAccountManager.Account? = LocalUserDefaults.shared
-        .selectedEVMAccount {
+        .selectedEVMAccount
+    {
         didSet {
             LocalUserDefaults.shared.selectedEVMAccount = selectedAccount
             NotificationCenter.default.post(name: .watchAddressDidChanged, object: nil)
@@ -166,8 +168,9 @@ extension EVMAccountManager {
         }
 
         if let EVMAddress = cacheAccounts[primaryAddress]?.first {
-            DispatchQueue.main.async {
-                let account = EVMAccountManager.Account(address: EVMAddress)
+            await MainActor.run {
+                let checksumAddress = EthereumAddress.toChecksumAddress(EVMAddress) ?? EVMAddress
+                let account = EVMAccountManager.Account(address: checksumAddress)
                 self.accounts = [account]
             }
             do {
@@ -181,7 +184,7 @@ extension EVMAccountManager {
         do {
             let address = try await fetchAddress()
             if let address = address, !address.isEmpty {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     let account = EVMAccountManager.Account(address: address)
                     self.accounts = [account]
                     self.addAddress(address)
@@ -199,7 +202,7 @@ extension EVMAccountManager {
     func refreshBalance(address: String) async throws {
         log.info("[EVM] refresh balance at \(address)")
         let balance = try await fetchBalance(address)
-        DispatchQueue.main.async {
+        await MainActor.run {
             log.info("[EVM] refresh balance success")
             self.balance = balance
         }
@@ -295,7 +298,8 @@ extension EVMAccountManager {
 
         var isSelected: Bool {
             if let selectedAccount = EVMAccountManager.shared.selectedAccount,
-               selectedAccount.address.lowercased() == address.lowercased(), !address.isEmpty {
+               selectedAccount.address.lowercased() == address.lowercased(), !address.isEmpty
+            {
                 return true
             }
             return false

@@ -687,7 +687,7 @@ extension WalletManager {
 
                 if UserManager.shared.activatedUID != uid { return }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.walletInfo = response
                     try? MultiAccountStorage.shared.saveWalletInfo(response, uid: uid)
                     self.pollingWalletInfoIfNeeded()
@@ -696,7 +696,7 @@ extension WalletManager {
                 if UserManager.shared.activatedUID != uid { return }
                 log.error("reloadWalletInfo failed", context: error)
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.startWalletInfoRetryTimer()
                 }
             }

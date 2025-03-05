@@ -173,7 +173,7 @@ extension UserManager {
 
         try await Auth.auth().signInAnonymously()
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             NotificationCenter.default.post(name: .willResetWallet)
 
             self.activatedUID = nil
@@ -661,39 +661,35 @@ extension UserManager {
 extension UserManager {
     func switchAccount(withUID uid: String) async throws {
         
-        do {
-            // Only set this flag when it is switch profile, not login
-            if isLoggedIn {
-                await MainActor.run {
-                    isProfileSwitching = true
-                }
-            }
-            
-            if !currentNetwork.isMainnet {
-                WalletManager.shared.changeNetwork(.mainnet)
-            }
-            
-            if uid == activatedUID {
-                log.warning("switching the same account")
-                return
-            }
-            
-            if WalletManager.shared.keyProvider(with: uid) != nil {
-                try await restoreLogin(with: uid)
-                return
-            }
-            
-            try await restoreLogin(userId: uid)
-            
-            await MainActor.run {
-                isProfileSwitching = false
-            }
-            
-        } catch {
-            await MainActor.run {
-                isProfileSwitching = false
+        defer {
+            runOnMain {
+                self.isProfileSwitching = true
             }
         }
+        
+        // Only set this flag when it is switch profile, not login
+        if isLoggedIn {
+            await MainActor.run {
+                isProfileSwitching = true
+            }
+        }
+        
+        if !currentNetwork.isMainnet {
+            WalletManager.shared.changeNetwork(.mainnet)
+        }
+        
+        if uid == activatedUID {
+            log.warning("switching the same account")
+            return
+        }
+        
+        if WalletManager.shared.keyProvider(with: uid) != nil {
+            try await restoreLogin(with: uid)
+            return
+        }
+        
+        try await restoreLogin(userId: uid)
+            
             
         // FIXME: data migrate from device to other device,the private key is destructive
 //        let allModel = try WallectSecureEnclave.Store.fetchAllModel(by: uid)

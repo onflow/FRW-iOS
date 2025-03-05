@@ -20,11 +20,13 @@ class WalletSettingViewModel: ObservableObject {
         Task {
             do {
                 let info = try await FlowNetwork.checkAccountInfo()
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.storageUsedRatio = info.storageUsedRatio
                     self.storageUsedDesc = info.storageUsedString
                 }
-            } catch {}
+            } catch {
+                
+            }
         }
     }
 
