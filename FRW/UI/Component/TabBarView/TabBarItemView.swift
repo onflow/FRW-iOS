@@ -52,7 +52,8 @@ struct TabBarItemView<T: Hashable>: View {
     @ViewBuilder
     private var title: some View {
         Text(pageModel.title)
-            .font(.inter(size: 12, weight: .semibold))
+            .font(.inter(size: 12, weight: isSelected ? .semibold : .regular))
+            .animation(nil)
     }
     
     @ViewBuilder
