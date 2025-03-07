@@ -47,12 +47,11 @@ final class KeyStoreLoginViewModel: ObservableObject {
     func update(address _: String) {}
 
     func onSumbit() {
-
         UIApplication.shared.endEditing()
         HUD.loading()
+        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
         Task {
             do {
-                let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
                 privateKey = try PrivateKey.restore(
                     json: json,
                     password: password,
@@ -70,7 +69,6 @@ final class KeyStoreLoginViewModel: ObservableObject {
                 if wantedAddress.isEmpty {
                     await self.showAllAccounts()
                 } else {
-                    let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
                     guard let keys = wallet?.flowAccounts?[chainId] else {
                         HUD.error(title: "not_find_address".localized)
                         return
@@ -130,6 +128,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
         guard let selectedKey = keys?.first,
               let address = account?.address.hex, let privateKey = privateKey
         else {
+            HUD.error(title: "not_find_address".localized)
             log.error("[Import] keys of account not match the public:\(String(describing: p256PublicKey)) or \(String(describing: secp256PublicKey)) ")
             return
         }
@@ -221,11 +220,11 @@ final class KeyStoreLoginViewModel: ObservableObject {
 
 extension KeyStoreLoginViewModel {
     private var p256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_P256))?.hexValue.dropPrefix("04")
+        (try? privateKey?.publicKey(signAlgo: .ECDSA_P256))?.hexValue
     }
 
     private var secp256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1))?.hexValue.dropPrefix("04")
+        (try? privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1))?.hexValue
     }
 }
 
