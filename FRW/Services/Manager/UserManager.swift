@@ -645,7 +645,7 @@ extension UserManager {
         
         defer {
             runOnMain {
-                self.isProfileSwitching = true
+                self.isProfileSwitching = false
             }
         }
         
