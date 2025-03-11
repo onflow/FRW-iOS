@@ -108,8 +108,8 @@ class NFTUIKitListGridDataModel {
 }
 
 // MARK: - NFTUIKitListNormalDataModel
-
-class NFTUIKitListNormalDataModel {
+@MainActor
+class NFTUIKitListNormalDataModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
@@ -124,10 +124,10 @@ class NFTUIKitListNormalDataModel {
 
     // MARK: Internal
 
-    var items: [CollectionItem] = []
-    var selectedIndex = 0
-    var isCollectionListStyle: Bool = false
-    var reloadCallback: (() -> Void)?
+    @Published var items: [CollectionItem] = []
+    @Published var selectedIndex = 0
+    @Published var isCollectionListStyle: Bool = false
+    @Published var reloadCallback: (() -> Void)?
 
     var selectedCollectionItem: CollectionItem? {
         if selectedIndex >= items.count {
@@ -138,12 +138,7 @@ class NFTUIKitListNormalDataModel {
     }
 
     func refreshCollectionAction() async throws {
-        DispatchQueue.syncOnMain {
-            self.items = []
-        }
         var collecitons = try await requestCollections()
-
-        removeAllCache()
 
         guard let address = WalletManager.shared
             .getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
@@ -152,34 +147,35 @@ class NFTUIKitListNormalDataModel {
             }
             return
         }
-
-        collecitons.sort {
-            if $0.count == $1.count {
-                return ($0.collection.contractName ?? "") < ($1.collection.contractName ?? "")
+        
+        await Task.detached {
+            collecitons.sort {
+                if $0.count == $1.count {
+                    return ($0.collection.contractName ?? "") < ($1.collection.contractName ?? "")
+                }
+                
+                return $0.count > $1.count
             }
-
-            return $0.count > $1.count
-        }
+        }.value
 
         NFTUIKitCache.cache.saveCollectionToCache(collecitons)
-
-        var items = [CollectionItem]()
-        for collection in collecitons {
-            let item = CollectionItem()
-            item.address = address
-            item.name = collection.collection.contractName ?? ""
-            item.collectionId = collection.collection.id
-            item.count = collection.count
-            item.collection = collection.collection
-            if let list = collection.evmNFTs {
-                item.nfts = list
+        
+        self.items = await Task.detached {
+            var items = [CollectionItem]()
+            for collection in collecitons {
+                let item = CollectionItem()
+                item.address = address
+                item.name = collection.collection.contractName ?? ""
+                item.collectionId = collection.collection.id
+                item.count = collection.count
+                item.collection = collection.collection
+                if let list = collection.evmNFTs {
+                    item.nfts = list
+                }
+                items.append(item)
             }
-            items.append(item)
-        }
-
-        DispatchQueue.syncOnMain {
-            self.items = items
-        }
+            return items
+        }.value
     }
 
     // MARK: Private

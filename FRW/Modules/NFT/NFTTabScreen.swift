@@ -49,20 +49,9 @@ struct NFTTabScreen: View {
     }
 
     var body: some View {
-        ZStack {
-            content
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color.LL.Neutrals.background)
-        .navigationBarHidden(true)
-        .environmentObject(viewModel)
-    }
-
-    var content: some View {
-        VStack(spacing: 0) {
-            NFTUIKitListView(vm: viewModel)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        NFTCollectionsView(vm: NFTCollectionsViewModel(dataFetcher: NFTUIKitListNormalDataModel(), tabVM: viewModel))
+            .backgroundFill(Color.LL.Neutrals.background.ignoresSafeArea())
+            .ignoresSafeArea()
     }
 }
 
@@ -71,54 +60,6 @@ struct NFTTabScreen: View {
 extension NFTTabScreen {
     private enum Layout {
         static let menuHeight = 32.0
-    }
-}
-
-// MARK: NFTTabScreen.TopBar
-
-extension NFTTabScreen {
-    struct TopBar: View {
-        // MARK: Internal
-
-        @Binding
-        var listStyle: NFTTabScreen.ViewStyle
-        @Binding
-        var offset: CGFloat
-
-        var body: some View {
-            VStack(spacing: 0) {
-                Spacer()
-
-                HStack(alignment: .center) {
-                    NFTSegmentControl(currentTab: $listStyle, styles: [.normal, .grid])
-
-                    Spacer()
-
-                    Button {} label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.white)
-                            .padding(8)
-                            .background {
-                                Circle()
-                                    .foregroundColor(.LL.outline.opacity(0.8))
-                            }
-                    }
-                }
-                .frame(height: 44, alignment: .center)
-                .padding(.horizontal, 18)
-                .padding(.bottom, 4)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 44)
-            .background(
-                Color.LL.Shades.front.opacity(offset < 0 ? abs(offset / 100.0) : 0)
-            )
-        }
-
-        // MARK: Private
-
-        @EnvironmentObject
-        private var viewModel: NFTTabViewModel
     }
 }
 

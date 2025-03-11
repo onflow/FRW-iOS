@@ -23,7 +23,7 @@ extension NFTUIKitListStyleHandler {
 }
 
 // MARK: - NFTUIKitListStyleHandler
-
+@MainActor
 class NFTUIKitListStyleHandler: NSObject {
     // MARK: Internal
 
@@ -87,20 +87,10 @@ class NFTUIKitListStyleHandler: NSObject {
     }
 
     func setup() {
-        setupBlurBgView()
-
         containerView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.left.right.bottom.equalToSuperview()
         }
-
-        let offset = Router.coordinator.window.safeAreaInsets.top + 44.0
-        containerView.addSubview(emptyView)
-        emptyView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().offset(-offset)
-        }
-        emptyView.isHidden = true
 
         NotificationCenter.default.addObserver(
             self,
@@ -130,12 +120,6 @@ class NFTUIKitListStyleHandler: NSObject {
     private var isInitRequested: Bool = false
     private var isRequesting: Bool = false
 
-    private lazy var emptyView: NFTUIKitListStyleHandler.EmptyView = {
-        let view = NFTUIKitListStyleHandler.EmptyView()
-        view.button.addTarget(self, action: #selector(onAddButtonClick), for: .touchUpInside)
-        return view
-    }()
-
     private lazy var blurBgView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -162,17 +146,6 @@ class NFTUIKitListStyleHandler: NSObject {
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
         return layer
-    }()
-
-    private lazy var collectionTitleView: NFTUIKitListTitleView = {
-        let view = NFTUIKitListTitleView()
-        view.switchButton.addTarget(
-            self,
-            action: #selector(onSwitchButtonClick),
-            for: .touchUpInside
-        )
-
-        return view
     }()
 
     private lazy var collectionHContainer: NFTUIKitCollectionHContainerView = {
@@ -205,35 +178,6 @@ class NFTUIKitListStyleHandler: NSObject {
         return viewLayout
     }()
 
-    private func setupBlurBgView() {
-        let offset = Router.coordinator.window.safeAreaInsets.top + 44.0
-
-        containerView.addSubview(blurBgView)
-        blurBgView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalToSuperview().offset(-offset)
-            make.height.equalTo(offset + NFTUIKitFavContainerView.calculateViewHeight())
-        }
-
-        blurBgView.addSubview(bgImageView)
-        bgImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        blurBgView.addSubview(blurEffectView)
-        blurEffectView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        blurMaskLayer.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: Router.coordinator.window.bounds.size.width,
-            height: offset + NFTUIKitFavContainerView.calculateViewHeight()
-        )
-        blurBgView.layer.mask = blurMaskLayer
-    }
-
     @objc
     private func onCollectionsDidChanged() {
         collectionView.beginRefreshing()
@@ -241,12 +185,6 @@ class NFTUIKitListStyleHandler: NSObject {
 
     @objc
     private func reloadViews() {
-        if dataModel.items.isEmpty {
-            showEmptyView()
-        } else {
-            hideEmptyView()
-        }
-
         reloadBgView()
 
         collectionView.reloadData()
@@ -318,14 +256,12 @@ extension NFTUIKitListStyleHandler {
 
         guard WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() != nil
         else {
-            showEmptyView()
             return
         }
 
         isRequesting = true
 
         hideErrorView()
-        hideEmptyView()
 
         NFTUIKitCache.cache.requestFav()
 
@@ -433,28 +369,12 @@ extension NFTUIKitListStyleHandler {
             collectionView.beginLoading()
         }
     }
-
-    @objc
-    private func onSwitchButtonClick() {
-        collectionView.scrollToTop(animated: false)
-
-        dataModel.isCollectionListStyle.toggle()
-        reloadViews()
-    }
 }
 
 extension NFTUIKitListStyleHandler {
     private func showLoadingView() {}
 
     private func hideLoadingView() {}
-
-    private func showEmptyView() {
-        emptyView.isHidden = false
-    }
-
-    private func hideEmptyView() {
-        emptyView.isHidden = true
-    }
 
     private func showErrorView() {}
 
@@ -601,36 +521,9 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
                     withReuseIdentifier: "PinFooter",
                     for: indexPath
                 )
-                if collectionTitleView.superview != footer {
-                    collectionTitleView.removeFromSuperview()
-                    footer.addSubview(collectionTitleView)
-                    collectionTitleView.snp.makeConstraints { make in
-                        make.left.right.top.bottom.equalToSuperview()
-                    }
-                }
-
+                
                 return footer
             }
-        }
-
-        if kind != UICollectionView.elementKindSectionHeader {
-            return UICollectionReusableView()
-        }
-
-        if dataModel.isCollectionListStyle {
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: "PinHeader",
-                for: indexPath
-            )
-            header.removeSubviews()
-            collectionTitleView.removeFromSuperview()
-            header.addSubview(collectionTitleView)
-            collectionTitleView.snp.makeConstraints { make in
-                make.left.right.top.bottom.equalToSuperview()
-            }
-
-            return header
         }
 
         let header = collectionView.dequeueReusableSupplementaryView(
@@ -703,106 +596,6 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         if dataModel.isCollectionListStyle, indexPath.item < dataModel.items.count {
             let collectionItem = dataModel.items[indexPath.item]
             Router.route(to: RouteMap.NFT.collection(vm, collectionItem))
-        }
-    }
-}
-
-// MARK: NFTUIKitListStyleHandler.EmptyView
-
-extension NFTUIKitListStyleHandler {
-    class EmptyView: UIView {
-        // MARK: Lifecycle
-
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            setup()
-        }
-
-        @available(*, unavailable)
-        required init?(coder _: NSCoder) {
-            fatalError("")
-        }
-
-        // MARK: Internal
-
-        lazy var button: UIButton = {
-            let btn = UIButton(type: .custom)
-            let bg = UIImage.image(withColor: UIColor.LL.Secondary.mango4.withAlphaComponent(0.08))
-            btn.setBackgroundImage(bg, for: .normal)
-
-            btn.setTitle("get_new_nft".localized, for: .normal)
-            btn.setTitleColor(UIColor.LL.Secondary.mangoNFT, for: .normal)
-            btn.titleLabel?.font = .interSemiBold(size: 14)
-
-            btn.contentEdgeInsets = UIEdgeInsets(top: 10, left: 43, bottom: 10, right: 43)
-
-            btn.clipsToBounds = true
-            btn.layer.cornerRadius = 12
-
-            return btn
-        }()
-
-        // MARK: Private
-
-        private lazy var bgImageView: UIView = {
-            let view = UIHostingController(rootView: NFTEmptyView()).view ?? UIView()
-//            UIImageView(image: UIImage(named: "nft_empty_bg"))
-            view.contentMode = .scaleAspectFill
-            view.clipsToBounds = true
-            return view
-        }()
-
-        private lazy var iconImageView: UIImageView = {
-            let view = UIImageView(image: UIImage(named: "icon-empty"))
-            return view
-        }()
-
-        private lazy var titleLabel: UILabel = {
-            let view = UILabel()
-            view.font = .montserratBold(size: 16)
-            view.textColor = UIColor.LL.Neutrals.neutrals3
-            view.text = "nft_empty".localized
-            return view
-        }()
-
-        private lazy var descLabel: UILabel = {
-            let view = UILabel()
-            view.font = .inter(size: 14)
-            view.textColor = UIColor.LL.Neutrals.neutrals8
-            view.text = "nft_empty_discovery".localized
-            return view
-        }()
-
-        private func setup() {
-            addSubview(bgImageView)
-            bgImageView.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-
-            addSubview(iconImageView)
-            iconImageView.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.centerY.equalToSuperview().offset(-70)
-            }
-
-            addSubview(titleLabel)
-            titleLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(iconImageView.snp.bottom).offset(16)
-            }
-
-            addSubview(descLabel)
-            descLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            }
-
-            // Hide it for now
-//            addSubview(button)
-//            button.snp.makeConstraints { make in
-//                make.centerX.equalToSuperview()
-//                make.top.equalTo(descLabel.snp.bottom).offset(36)
-//            }
         }
     }
 }

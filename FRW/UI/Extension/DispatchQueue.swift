@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 extension DispatchQueue {
+    //TODO: this is not a sync method
     static func syncOnMain(_ callback: @escaping () -> Void) {
         if Thread.isMainThread {
             callback()

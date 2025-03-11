@@ -592,9 +592,16 @@ struct SideContainerView: View {
             iconName: NFTTabScreen.iconName(),
             title: NFTTabScreen.title()
         ) {
-            AnyView(NFTTabScreen())
+            AnyView(
+                NavigationView {
+                    NFTTabScreen()
+                        .navigationBarBackButtonHidden()
+                }
+                    .navigationViewStyle(StackNavigationViewStyle())
+                    .padding(.top, 4)
+            )
         }
-
+        
         let explore = TabBarPageModel<AppTabType>(
             tag: ExploreTabScreen.tabTag(),
             iconName: ExploreTabScreen.iconName(),
