@@ -17,16 +17,43 @@ struct PrivateKeyView: RouteableView {
         "Private Key".localized.capitalized
     }
 
+    var privateKey: String {
+        WalletManager.shared.getCurrentPrivateKey() ?? ""
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
                 Section {
+                    Text(WalletManager.shared.getCurrentPublicKey() ?? "")
+                        .font(.inter(size: 12))
+                        .foregroundColor(.Theme.Text.black8)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 20)
+                        .background(Color.Theme.Fill.fill1)
+                        .cornerRadius(16)
+
+                } header: {
+                    HStack {
+                        Text("account_key_key".localized)
+                            .foregroundColor(.Theme.Text.text4)
+                            .font(.inter(size: 14, weight: .semibold))
+                        Spacer()
+                        CopyButton {
+                            UIPasteboard.general.string = WalletManager.shared
+                                .getCurrentPublicKey() ?? ""
+                            HUD.success(title: "copied".localized)
+                        }
+                    }
+                }
+
+                Section {
                     ZStack(alignment: .center) {
-                        Text(WalletManager.shared.getCurrentPrivateKey() ?? "")
-                            .foregroundColor(.LL.Neutrals.neutrals1)
-                            .padding(25)
-                            .background(.LL.bgForIcon)
-                            .cornerRadius(16)
+                        Text(privateKey)
+                            .font(.inter(size: 12))
+                            .foregroundColor(.Theme.Text.black8)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 20)
                             .blur(radius: isBlur ? 5 : 0)
 
                         if isBlur {
@@ -37,48 +64,22 @@ struct PrivateKeyView: RouteableView {
                     .onTapGesture {
                         isBlur.toggle()
                     }
+                    .background(Color.Theme.Fill.fill1)
+                    .cornerRadius(16)
+                    .onTapGesture {}
                     .animation(.easeInOut, value: isBlur)
 
                 } header: {
                     HStack {
                         Text("Private Key".localized)
-                            .foregroundColor(.LL.Neutrals.neutrals3)
-                            .fontWeight(.semibold)
+                            .foregroundColor(.Theme.Text.text4)
+                            .font(.inter(size: 14, weight: .semibold))
                         Spacer()
 
-                        Button {
+                        CopyButton {
                             UIPasteboard.general.string = WalletManager.shared
                                 .getCurrentPrivateKey() ?? ""
                             HUD.success(title: "copied".localized)
-                        } label: {
-                            Label(LocalizedStringKey("Copy".localized), colorImage: "Copy")
-                                .foregroundColor(.Theme.Accent.grey)
-                        }
-                    }
-                }
-
-                Section {
-                    Text(WalletManager.shared.getCurrentPublicKey() ?? "")
-                        .padding(16)
-                        .background(.LL.bgForIcon)
-                        .cornerRadius(16)
-                        .foregroundColor(.LL.Neutrals.neutrals1)
-
-                } header: {
-                    HStack {
-                        Text("account_key_key".localized)
-                            .foregroundColor(.LL.Neutrals.neutrals3)
-                            .fontWeight(.semibold)
-                        Spacer()
-
-                        Button {
-                            UIPasteboard.general.string = WalletManager.shared
-                                .getCurrentPublicKey() ?? ""
-                            HUD.success(title: "copied".localized)
-
-                        } label: {
-                            Label(LocalizedStringKey("Copy".localized), colorImage: "Copy")
-                                .foregroundColor(.Theme.Accent.grey)
                         }
                     }
                 }
@@ -88,11 +89,11 @@ struct PrivateKeyView: RouteableView {
                         Divider()
                         VStack(alignment: .leading) {
                             Text("Hash__Algorithm::message".localized)
-                                .font(.LL.footnote)
-                                .foregroundColor(.LL.Neutrals.neutrals4)
+                                .font(.inter(size: 14))
+                                .foregroundColor(.Theme.Text.text4)
                             Text(WalletManager.shared.hashAlgo.algorithm)
-                                .font(.LL.body)
-                                .foregroundColor(.LL.Neutrals.neutrals1)
+                                .font(.inter(size: 14))
+                                .foregroundColor(.Theme.Text.text4)
                         }
                     }
 
@@ -102,36 +103,23 @@ struct PrivateKeyView: RouteableView {
                         Divider()
                         VStack(alignment: .leading) {
                             Text("Sign__Algorithm::message".localized)
-                                .font(.LL.footnote)
-                                .foregroundColor(.LL.Neutrals.neutrals4)
+                                .font(.inter(size: 14))
+                                .foregroundColor(.Theme.Text.text4)
                             Text(WalletManager.shared.signatureAlgo.id)
-                                .font(.LL.body)
-                                .foregroundColor(.LL.Neutrals.neutrals1)
+                                .font(.inter(size: 14))
+                                .foregroundColor(.Theme.Text.text4)
                         }
                     }
                 }.padding(.vertical, 10)
 
-                VStack(spacing: 10) {
-                    Text("not_share_secret_tips".localized)
-                        .font(.LL.caption)
-                        .bold()
-                    Text("not_share_secret_desc".localized)
-                        .font(.LL.footnote)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .padding()
-                .foregroundColor(.LL.warning2)
-                .background {
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundColor(.LL.warning6)
-                }
-                .padding(.top)
-                .padding(.bottom)
-
-            }.padding(.horizontal, 18)
+                PrivateKeyWarning()
+                    .padding(.top)
+                    .padding(.bottom)
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
         }
-        .backgroundFill(.LL.background)
+        .backgroundFill(Color.Theme.BG.bg1)
         .applyRouteable(self)
     }
 }

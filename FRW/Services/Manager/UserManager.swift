@@ -88,9 +88,6 @@ class UserManager: ObservableObject {
         activatedUID != nil
     }
     
-    @Published
-    var isProfileSwitching: Bool = false
-
     func verifyUserType(by _: String) {
         Task {
             do {
@@ -191,13 +188,6 @@ extension UserManager {
 
 extension UserManager {
     func register(_ userName: String) async throws -> String? {
-        if Auth.auth().currentUser?.isAnonymous != true {
-            try await Auth.auth().signInAnonymously()
-            await MainActor.run {
-                self.activatedUID = nil
-                self.userInfo = nil
-            }
-        }
 
         let secureKey = try SecureEnclaveKey.create()
         let key = try secureKey.flowAccountKey(index: 0)
@@ -452,14 +442,6 @@ extension UserManager {
     }
 
     func restoreLogin(with userId: String) async throws {
-        if Auth.auth().currentUser?.isAnonymous != true {
-            try await Auth.auth().signInAnonymously()
-            DispatchQueue.main.async {
-                self.activatedUID = nil
-                self.userInfo = nil
-            }
-        }
-
         guard let token = try? await getIDToken(), !token.isEmpty else {
             loginAnonymousIfNeeded()
             throw LLError.restoreLoginFailed
@@ -660,20 +642,6 @@ extension UserManager {
 
 extension UserManager {
     func switchAccount(withUID uid: String) async throws {
-        
-        defer {
-            runOnMain {
-                self.isProfileSwitching = true
-            }
-        }
-        
-        // Only set this flag when it is switch profile, not login
-        if isLoggedIn {
-            await MainActor.run {
-                isProfileSwitching = true
-            }
-        }
-        
         if !currentNetwork.isMainnet {
             WalletManager.shared.changeNetwork(.mainnet)
         }
@@ -689,8 +657,7 @@ extension UserManager {
         }
         
         try await restoreLogin(userId: uid)
-            
-            
+
         // FIXME: data migrate from device to other device,the private key is destructive
 //        let allModel = try WallectSecureEnclave.Store.fetchAllModel(by: uid)
 //        let model = try WallectSecureEnclave.Store.fetchModel(by: uid)

@@ -28,7 +28,7 @@ struct BrowserSignTypedMessageView: View {
             VStack {
                 ScrollView(showsIndicators: false) {
                     VStack {
-                        ForEach(0..<viewModel.list.count, id: \.self) { index in
+                        ForEach(0 ..< viewModel.list.count, id: \.self) { index in
                             if index > 0 {
                                 Divider()
                                     .foregroundStyle(Color.Theme.Line.line)
@@ -65,11 +65,11 @@ struct BrowserSignTypedMessageView: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("browser_sign_message_request_from".localized)
                         .font(.inter(size: 14))
-                        .foregroundColor(Color(hex: "#808080"))
+                        .foregroundColor(.Theme.Text.text4)
 
                     Text(viewModel.title)
                         .font(.inter(size: 16, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(.Theme.Text.text1)
                         .lineLimit(1)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -127,7 +127,7 @@ extension BrowserSignTypedMessageView {
                 if let subValue = model.subValue {
                     if case let .object(dictionary) = subValue {
                         let keys = Array(dictionary.keys)
-                        ForEach(0..<keys.count, id: \.self) { index in
+                        ForEach(0 ..< keys.count, id: \.self) { index in
                             let key = keys[index]
                             let value = dictionary[key]?.toString() ?? ""
                             HStack(spacing: 12) {
@@ -147,7 +147,7 @@ extension BrowserSignTypedMessageView {
                     }
                     if case let .array(array) = subValue {
                         VStack {
-                            ForEach(0..<array.count, id: \.self) { index in
+                            ForEach(0 ..< array.count, id: \.self) { index in
                                 let value = array[index]
                                 innerCard(item: value)
                             }
@@ -161,7 +161,7 @@ extension BrowserSignTypedMessageView {
             VStack {
                 if case let .object(dictionary) = item {
                     let keys = Array(dictionary.keys)
-                    ForEach(0..<keys.count, id: \.self) { index in
+                    ForEach(0 ..< keys.count, id: \.self) { index in
                         let key = keys[index]
                         let value = dictionary[key]?.toString() ?? ""
                         HStack(spacing: 12) {
@@ -187,8 +187,6 @@ extension BrowserSignTypedMessageView {
         }
     }
 }
-
-
 
 #Preview {
     BrowserSignTypedMessageView(viewModel: BrowserSignTypedMessageViewModel(

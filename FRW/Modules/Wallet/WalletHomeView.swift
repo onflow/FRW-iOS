@@ -448,6 +448,7 @@ struct WalletHomeView: View {
                 event: .send,
                 allowClick: !wm.isSelectedChildAccount
             ) {
+                LocalUserDefaults.shared.recentToken = nil
                 Router.route(to: RouteMap.Wallet.send())
             }
 

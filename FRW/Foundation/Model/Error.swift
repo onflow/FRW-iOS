@@ -23,11 +23,11 @@ extension BaseError {
         }
         return baseCode + index + 1 // Adding 1 to avoid 0-based index
     }
-    
+
     var errorLog: String {
         "\(String(describing: Self.self)) - Code: \(errorCode), RawValue:\(rawValue)"
     }
-    
+
     var errorMessage: String {
         // Convert camelCase to space-separated words
         return rawValue.replacingOccurrences(of: "([A-Z])", with: " $1", options: .regularExpression)
@@ -56,7 +56,7 @@ enum LLError: String, BaseError {
     case signFailed
     case decodeFailed
     case unknown
-    
+
     var baseCode: Int { 1000 }
 }
 
@@ -71,7 +71,8 @@ enum WalletError: String, BaseError {
     case emptyPublicKey
     case insufficientBalance
     case securityVerifyFailed
-    
+    case collectionIsNil
+
     var baseCode: Int { 2000 }
 }
 
@@ -87,7 +88,7 @@ enum BackupError: String, BaseError {
     case fileIsNotExistOnCloud
     case cloudFileData
     case unauthorized
-    
+
     var baseCode: Int { 3000 }
 }
 
@@ -97,7 +98,7 @@ enum GoogleBackupError: String, BaseError {
     case missingLoginUser
     case noDriveScope
     case createFileError
-    
+
     var baseCode: Int { 4000 }
 }
 
@@ -112,7 +113,7 @@ enum iCloudBackupError: String, BaseError {
     case noDataToSave
     case saveToDataFailed
     case fileIsNotExist
-    
+
     var baseCode: Int { 5000 }
 }
 
@@ -122,7 +123,7 @@ enum NFTError: String, BaseError {
     case noCollectionInfo
     case invalidTokenId
     case sendInvalidAddress
-    
+
     var baseCode: Int { 6000 }
 }
 
@@ -134,7 +135,7 @@ enum StakingError: String, BaseError {
     case stakingSetupFailed
     case stakingCreateDelegatorIdFailed
     case unknown
-    
+
     var baseCode: Int { 7000 }
 }
 
@@ -146,7 +147,7 @@ enum EVMError: String, BaseError {
     case createAccount
     case findAddress
     case transactionResult
-    
+
     var baseCode: Int { 8000 }
 }
 
@@ -156,7 +157,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
-    
+
     var baseCode: Int { 9000 }
 }
 
@@ -167,6 +168,7 @@ enum MoveError: String, BaseError {
     case invalidateFromAddress
     case invalidateToAddress
     case invalidateNftCollectionInfo
-    
+    case failedToSubmitTransaction
+
     var baseCode: Int { 10000 }
 }

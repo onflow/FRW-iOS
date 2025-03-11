@@ -41,7 +41,7 @@ struct BrowserAuthzView: View {
             scriptView.visibility(vm.isScriptShowing ? .visible : .invisible)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color.Theme.BG.bg1)
+        .backgroundFill(Color(hex: "0x1E1E1F"))
     }
 
     var normalView: some View {

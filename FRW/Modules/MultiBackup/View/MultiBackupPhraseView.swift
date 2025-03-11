@@ -12,7 +12,7 @@ struct MultiBackupPhraseView: RouteableView {
 
     init(mnemonic: String) {
         self.mnemonic = mnemonic
-        self.dataSource = mnemonic.split(separator: " ").enumerated().map { item in
+        dataSource = mnemonic.split(separator: " ").enumerated().map { item in
             WordListView.WordItem(id: item.offset + 1, word: String(item.element))
         }
     }
@@ -126,23 +126,9 @@ struct MultiBackupPhraseView: RouteableView {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    VStack(spacing: 10) {
-                        Text("not_share_secret_tips".localized)
-                            .font(.LL.caption)
-                            .bold()
-                        Text("not_share_secret_desc".localized)
-                            .font(.LL.footnote)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    }
-                    .padding()
-                    .foregroundColor(.LL.warning2)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundColor(.LL.warning6)
-                    }
-                    .padding(.top)
-                    .padding(.bottom)
+                    PrivateKeyWarning()
+                        .padding(.top)
+                        .padding(.bottom)
 
                     Spacer()
                 }

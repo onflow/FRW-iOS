@@ -42,9 +42,10 @@ struct BrowserAuthnView: View {
             Spacer()
             actionView
         }
+        .preferredColorScheme(.dark)
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(.Theme.Background.white)
+        .backgroundFill(Color(hex: "0x1E1E1F"))
     }
 
     var titleView: some View {
