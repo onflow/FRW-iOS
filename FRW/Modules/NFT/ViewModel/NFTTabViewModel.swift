@@ -24,8 +24,6 @@ extension NFTTabScreen {
                 return "List"
             case .grid:
                 return "Grid"
-            default:
-                return ""
             }
         }
     }

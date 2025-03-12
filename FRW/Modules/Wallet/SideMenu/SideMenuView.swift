@@ -594,7 +594,7 @@ struct SideContainerView: View {
         ) {
             AnyView(NFTTabScreen())
         }
-
+        
         let explore = TabBarPageModel<AppTabType>(
             tag: ExploreTabScreen.tabTag(),
             iconName: ExploreTabScreen.iconName(),

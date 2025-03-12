@@ -154,7 +154,7 @@ struct ExploreTabScreen: View {
                                 cornerRadius: 18,
                                 fillColor: .clear,
                                 strokeColor: tintColor,
-                                strokeLineWidth: 2
+                                strokeLineWidth: 1.5
                             )
                             .contentShape(Rectangle())
                     }
