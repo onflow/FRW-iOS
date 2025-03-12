@@ -167,7 +167,7 @@ extension EVMAccountManager {
             return
         }
 
-        if let EVMAddress = cacheAccounts[primaryAddress]?.first {
+        if let EVMAddress = cacheAccounts[primaryAddress]?.first, EthereumAddress(EVMAddress) != nil {
             await MainActor.run {
                 let checksumAddress = EthereumAddress.toChecksumAddress(EVMAddress) ?? EVMAddress
                 let account = EVMAccountManager.Account(address: checksumAddress)
@@ -183,7 +183,7 @@ extension EVMAccountManager {
 
         do {
             let address = try await fetchAddress()
-            if let address = address, !address.isEmpty {
+            if let address = address {
                 await MainActor.run {
                     let account = EVMAccountManager.Account(address: address)
                     self.accounts = [account]
