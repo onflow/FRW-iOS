@@ -49,80 +49,10 @@ struct NFTTabScreen: View {
     }
 
     var body: some View {
-        NFTCollectionsView(vm: NFTCollectionsViewModel(dataFetcher: NFTUIKitListNormalDataModel(), tabVM: viewModel))
-            .backgroundFill(Color.LL.Neutrals.background.ignoresSafeArea())
-            .ignoresSafeArea()
+        NFTCollectionsView(vm: NFTCollectionsViewModel(tabVM: viewModel))
     }
 }
-
-// MARK: NFTTabScreen.Layout
-
-extension NFTTabScreen {
-    private enum Layout {
-        static let menuHeight = 32.0
-    }
-}
-
-// MARK: NFTTabScreen.CollectionBar
-
-extension NFTTabScreen {
-    struct CollectionBar: View {
-        enum BarStyle {
-            case horizontal
-            case vertical
-
-            // MARK: Internal
-
-            mutating func toggle() {
-                switch self {
-                case .horizontal:
-                    self = .vertical
-                case .vertical:
-                    self = .horizontal
-                }
-            }
-        }
-
-        @Binding
-        var barStyle: NFTTabScreen.CollectionBar.BarStyle
-        @Binding
-        var listStyle: String
-
-        var body: some View {
-            VStack {
-                if listStyle == "List" {
-                    HStack {
-                        Image(.Image.Logo.collection3D)
-                        Text("collections".localized)
-                            .font(.LL.largeTitle2)
-                            .semibold()
-
-                        Spacer()
-                        Button {
-                            barStyle.toggle()
-                        } label: {
-                            Image(
-                                barStyle == .horizontal ? .Image.Logo.gridHLayout : .Image.Logo
-                                    .gridHLayout
-                            )
-                        }
-                    }
-                    .foregroundColor(.LL.text)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
-                } else {
-                    HStack {}
-                        .frame(height: 0)
-                }
-            }
-            .padding(.top, 36)
-            .background(
-                Color.LL.Neutrals.background
-            )
-        }
-    }
-}
-
+ 
 // MARK: - NFTTabScreen_Previews
 
 struct NFTTabScreen_Previews: PreviewProvider {

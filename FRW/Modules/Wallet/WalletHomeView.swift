@@ -64,9 +64,6 @@ struct WalletHomeView: View {
     @State
     private var logViewPresented: Bool = false
 
-//    @State private var forcedColorScheme: ColorScheme? = nil
-//    @Environment(\.colorScheme) var colorScheme
-
     var body: some View {
         GeometryReader { proxy in
 
@@ -87,12 +84,6 @@ struct WalletHomeView: View {
                 size = proxy.size
                 self.vm.viewWillAppear()
             }
-//            .preferredColorScheme(forcedColorScheme)
-//            .onChange(of: colorScheme, perform: { newValue in
-//                if ThemeManager.shared.style == nil {
-//                    ThemeManager.shared.setStyle(style: newValue)
-//                }
-//            })
             .navigationBarHidden(true)
             .ignoresSafeArea(.container, edges: .top)
         }

@@ -8,86 +8,6 @@
 import SwiftUI
 import Combine
 
-// MARK: - Protocols
-
-protocol NFTCollectionsDataFetcher {
-    func refreshCollections() async throws -> [CollectionItem]
-}
-
-extension NFTUIKitListNormalDataModel: NFTCollectionsDataFetcher {
-    func refreshCollections() async throws -> [CollectionItem] {
-        try await refreshCollectionAction()
-        return items
-    }
-}
-
-// MARK: - ViewModel
-
-@MainActor
-final class NFTCollectionsViewModel: ObservableObject {
-    @Published private(set) var collections: [CollectionItem] = []
-    @Published var isListView: Bool = true
-    @Published var isRefreshing: Bool = false
-    @Published var tabVM: NFTTabViewModel
-    
-    lazy var dataModel: NFTUIKitListNormalDataModel = {
-        let dm = NFTUIKitListNormalDataModel()
-        dm.reloadCallback = { [weak self] in
-            Task {
-                await self?.refresh()
-            }
-        }
-        
-        return dm
-    }()
-    
-    private let dataFetcher: NFTCollectionsDataFetcher
-    
-    init(dataFetcher: NFTCollectionsDataFetcher, tabVM: NFTTabViewModel) {
-        self.dataFetcher = dataFetcher
-        self.tabVM = tabVM
-    }
-    
-    func refresh() async {
-        if isRefreshing {
-            return
-        }
-        do {
-            isRefreshing = true
-            let fetched = try await dataFetcher.refreshCollections()
-            collections = fetched
-            isRefreshing = false
-        } catch {
-            // Handle error appropriately or rethrow
-        }
-    }
-    
-    func toggleViewStyle() {
-        isListView.toggle()
-    }
-    
-    func onAddButtonTap() {
-        Router.route(to: RouteMap.NFT.addCollection)
-    }
-    
-    func onCollectionSelection(_ collection: CollectionItem) {
-        Router.route(to: RouteMap.NFT.collection(tabVM, collection))
-    }
-}
-
-// MARK: - Mock Fetcher & Mock VM (for Preview)
-
-struct MockNFTCollectionsFetcher: NFTCollectionsDataFetcher {
-    func refreshCollections() async throws -> [CollectionItem] {
-        [
-            CollectionItem.mock(),
-            CollectionItem.mock()
-        ]
-    }
-}
-
-// MARK: - Main View
-
 struct NFTCollectionsView: View {
     @StateObject var vm: NFTCollectionsViewModel
     @State private var headerHeight: CGFloat = 0
@@ -102,7 +22,9 @@ struct NFTCollectionsView: View {
         .task {
             await vm.refresh()
         }
-        .backgroundFill(.LL.Neutrals.background)
+        .if(vm.dataModel.items.isEmpty) { view in
+            return view.backgroundFill(NFTEmptyView())
+        }
     }
     
     @ViewBuilder
@@ -133,42 +55,37 @@ struct NFTCollectionsView: View {
         }
         .padding(.leading, 24)
         .padding(.trailing, 18)
-        .padding(.vertical, 24)
+        .padding(.vertical, 8)
         .background(.clear)
     }
     
     @ViewBuilder
     private var content: some View {
         Group {
-            if vm.dataModel.items.isEmpty {
-                EmptyView()
-            } else if vm.isListView {
+            if vm.isListView || vm.dataModel.items.isEmpty {
                 listView
                     .padding(.horizontal, 18)
                     .padding(.top, 12)
             } else {
                 gridView
-                    .padding(.top, -20)
-                    .background(.clear)
+                    .padding(.top, -10)
+                    .zIndex(-999)
             }
         }
+        .background(.clear)
     }
     
     @ViewBuilder
     private var emptyView: some View {
-        NFTBlurImageView(
-            colors: [.red, .blue] //vm.tabVM.state
-//                .colorsMap[vm.collection.iconURL.absoluteString] ?? []
-        )
-        .ignoresSafeArea()
-        .offset(y: -4)
+        NFTEmptyView()
+            .ignoresSafeArea()
     }
     
     @ViewBuilder
     private var listView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                ForEach(vm.collections) { item in
+                ForEach(vm.dataModel.items) { item in
                     NFTCollectionListCell(item: item) {
                         vm.onCollectionSelection(item)
                     }
@@ -271,7 +188,7 @@ struct ActionButtonStyle: SwiftUI.ButtonStyle {
         iconName: NFTTabScreen.iconName(),
         title: NFTTabScreen.title()
     ) {
-        AnyView(NFTCollectionsView(vm: NFTCollectionsViewModel(dataFetcher: MockNFTCollectionsFetcher(), tabVM: NFTTabViewModel())))
+        AnyView(NFTCollectionsView(vm: NFTCollectionsViewModel(tabVM: NFTTabViewModel())))
     }
     TabBarView<AppTabType?>(
         current: .nft,
