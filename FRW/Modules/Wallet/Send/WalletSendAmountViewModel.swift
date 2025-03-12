@@ -159,20 +159,18 @@ extension WalletSendAmountViewModel {
                     }
                     return
                 }
-                guard let compareKey = EVMAccountManager.shared.selectedAccount == nil ? token
-                    .contractId : token.flowIdentifier
+                guard let compareKey = token.vaultIdentifier
                 else {
                     await MainActor.run {
                         self.isValidToken = false
                     }
                     return
                 }
-                let list = try await FlowNetwork
-                    .checkTokensEnable(address: Flow.Address(hex: address))
-                let model = list.first { compareKey.lowercased().contains($0.key.lowercased()) }
-                let isValid = model?.value
+
+                let list = try await FlowNetwork.fetchTokenBalance(address: Flow.Address(hex: address))
+                let model = list.first { compareKey.lowercased() == $0.key.lowercased() }
                 await MainActor.run {
-                    self.isValidToken = isValid ?? false
+                    self.isValidToken = (model != nil) ? true : false
                 }
             }
         }

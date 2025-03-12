@@ -1,5 +1,5 @@
 //
-//  TokenManager.swift
+//  TokenBalanceHandler.swift
 //  FRW
 //
 //  Created by Hao Fu on 22/2/2025.
@@ -68,10 +68,26 @@ class TokenBalanceHandler {
         let address = flowTokenAddress(network: network).stripHexPrefix()
         guard let data = flowTokenJsonStr
             .replacingOccurrences(of: "<FlowTokenAddress>", with: address)
-            .data(using: .utf8) else {
+            .data(using: .utf8)
+        else {
             return nil
         }
         return try? FRWAPI.jsonDecoder.decode(SingleToken.self, from: data)
+    }
+
+    func getSupportTokens(address: FWAddress,
+                          network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
+    {
+        let provider = try generateProvider(address: address, network: network)
+        return try await provider.getSupportTokens()
+    }
+
+    func getActivatedTokens(address: FWAddress,
+                            tokens: [TokenModel]?,
+                            network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
+    {
+        let provider = try generateProvider(address: address, network: network)
+        return try await provider.getActivatedTokens(address: address, in: tokens)
     }
 
     func getFTBalance(

@@ -558,7 +558,12 @@ extension WalletManager {
     }
 
     func getPrimaryWalletAddress() -> String? {
-        walletInfo?.currentNetworkWalletModel?.getAddress
+        if let uid = UserManager.shared.activatedUID, let user = userStore(with: uid) {
+            if user.address != nil {
+                return user.address
+            }
+        }
+        return walletInfo?.currentNetworkWalletModel?.getAddress
     }
 
     func getFlowNetworkTypeAddress(network: FlowNetworkType) -> String? {
@@ -871,16 +876,16 @@ extension WalletManager {
         guard getPrimaryWalletAddress() != nil else {
             return
         }
-
         log.debug("fetchWalletDatas")
+        // First fetch evm and link address of this address
+        await EVMAccountManager.shared.refreshSync()
+        await ChildAccountManager.shared.refreshAsync()
 
-        try await fetchSupportedCoins()
-        try await fetchActivatedCoins()
+        try await fetchSupportedTokens()
+        try await fetchActivatedTokens()
 
         try await fetchBalance()
         try await fetchAccessible()
-        ChildAccountManager.shared.refresh()
-        EVMAccountManager.shared.refresh()
 
         flowAccountKey = nil
         try await findFlowAccount()
@@ -888,77 +893,73 @@ extension WalletManager {
         try? await fetchAccountInfo()
     }
 
-    private func fetchSupportedCoins() async throws {
-        let tokenResponse: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.ftTokenList(LocalUserDefaults.shared.flowNetwork))
-        let coins: [TokenModel] = tokenResponse.conversion(type: .cadence)
-        let validCoins = coins.filter { $0.getAddress()?.isEmpty == false }
-        await MainActor.run {
-            self.supportedCoins = validCoins
+    private func fetchSupportedTokens() async throws {
+        func fetchFlowCoins() async throws {
+            guard let addr = getPrimaryWalletAddress(), let address = FWAddressDector.create(address: addr) else {
+                return
+            }
+            let supportedToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
+            await MainActor.run {
+                self.supportedCoins = supportedToken
+            }
+            PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
         }
-        await fetchEVMCoins()
-        PageCache.cache.set(value: validCoins, forKey: CacheKeys.supportedCoins.rawValue)
+
+        func fetchEVMCoins() async throws {
+            guard let addr = EVMAccountManager.shared.selectedAccount?.showAddress, let address = FWAddressDector.create(address: addr) else {
+                return
+            }
+            let supportToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
+            await MainActor.run {
+                self.evmSupportedCoins = supportToken
+            }
+        }
+        try await fetchFlowCoins()
+        try await fetchEVMCoins()
     }
 
-    private func fetchActivatedCoins() async throws {
+    /// fetch main or child activated token and balances
+    private func fetchActivatedTokens() async throws {
         guard let supportedCoins = supportedCoins, !supportedCoins.isEmpty else {
             await MainActor.run {
                 self.activatedCoins.removeAll()
             }
             return
         }
-
-        let address = selectedAccountAddress
-        if address.isEmpty {
+        guard let currrentAddr = getWatchAddressOrChildAccountAddressOrPrimaryAddress(),
+              let address = FWAddressDector.create(address: currrentAddr)
+        else {
             await MainActor.run {
                 self.activatedCoins.removeAll()
             }
             return
         }
 
-        var enabledList: [String: Bool] = [:]
-        if let account = ChildAccountManager.shared.selectedChildAccount {
-            enabledList = try await FlowNetwork
-                .linkedAccountEnabledTokenList(address: account.showAddress)
-        } else {
-            enabledList = try await FlowNetwork
-                .checkTokensEnable(address: Flow.Address(hex: address))
-        }
+        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getFTBalance(address: address)
 
-        var list = [TokenModel]()
-        for (_, value) in enabledList.enumerated() {
-            if value.value {
-                let model = supportedCoins
-                    .first { $0.contractId.lowercased() == value.key.lowercased() }
-                if let model = model {
-                    list.append(model)
+        if !isSelectedEVMAccount {
+            var newBalanceMap: [String: Decimal] = [:]
+            for token in availableTokens {
+                let contractId = token.contractId
+                if let balance = token.avaibleBalance {
+                    newBalanceMap[contractId] = Decimal(string: Utilities.formatToPrecision(balance, units: .custom(token.decimal), formattingDecimals: token.decimal))
                 }
             }
+            await MainActor.run {
+                self.coinBalances = newBalanceMap
+            }
+
+            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
+            PageCache.cache.set(
+                value: newBalanceMap,
+                forKey: CacheKeys.coinBalancesV2.rawValue
+            )
         }
 
         await MainActor.run {
-            self.activatedCoins = list
+            self.activatedCoins = availableTokens
         }
         preloadActivatedIcons()
-
-        PageCache.cache.set(value: list, forKey: CacheKeys.activatedCoins.rawValue)
-    }
-
-    private func fetchEVMCoins() async {
-        guard EVMAccountManager.shared.selectedAccount != nil else {
-            return
-        }
-        do {
-            let network = LocalUserDefaults.shared.flowNetwork
-            let tokenResponse: SingleTokenResponse = try await Network
-                .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
-            let coins: [TokenModel] = tokenResponse.conversion(type: .evm)
-            await MainActor.run {
-                self.evmSupportedCoins = coins
-            }
-        } catch {
-            log.error("[EVM] fetch token list failed.\(error.localizedDescription)")
-        }
     }
 
     func fetchAccountInfo() async throws {
@@ -1007,8 +1008,8 @@ extension WalletManager {
 
     func fetchBalance() async throws {
         let address = selectedAccountAddress
-        if address.isEmpty {
-            throw WalletError.fetchBalanceFailed
+        guard !address.isEmpty else {
+            return
         }
         balanceProvider.refreshBalance()
         if isSelectedEVMAccount {
@@ -1016,27 +1017,6 @@ extension WalletManager {
             try await fetchCustomBalance()
             return
         }
-
-        let balanceList = try await FlowNetwork.fetchBalance(at: Flow.Address(hex: address))
-
-        var newBalanceMap: [String: Decimal] = [:]
-
-        for value in activatedCoins {
-            let contractId = value.contractId
-            if let balance = balanceList[contractId] {
-                newBalanceMap[contractId] = Decimal(balance)
-            }
-        }
-
-        await MainActor.run {
-            self.coinBalances = newBalanceMap
-        }
-
-        PageCache.cache
-            .set(
-                value: newBalanceMap,
-                forKey: CacheKeys.coinBalancesV2.rawValue
-            )
     }
 
     private func fetchEVMBalance() async throws {
@@ -1053,7 +1033,7 @@ extension WalletManager {
 
         let list = try await EVMAccountManager.shared.fetchTokens()
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             log.info("[EVM] load balance success \(balance)")
             tokenModel.flowIdentifier = tokenModel.contractId
             self.activatedCoins = [tokenModel]
@@ -1091,7 +1071,7 @@ extension WalletManager {
         Task {
             await MainActor.run {
                 let model = token.toToken()
-                let index = self.activatedCoins.index { $0.contractId == model.contractId }
+                let index = self.activatedCoins.firstIndex { $0.contractId == model.contractId }
                 if let index {
                     self.activatedCoins[index] = model
                 } else {

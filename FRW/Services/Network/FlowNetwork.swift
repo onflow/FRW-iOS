@@ -25,21 +25,7 @@ enum FlowNetwork {
 // MARK: - Token
 
 extension FlowNetwork {
-    static func checkTokensEnable(address: Flow.Address) async throws -> [String: Bool] {
-        try await fetch(
-            by: \.ft?.isTokenListEnabled,
-            arguments: [.address(address)]
-        )
-    }
-
-    static func fetchBalance(at address: Flow.Address) async throws -> [String: Double] {
-        try await fetch(
-            by: \.ft?.getTokenListBalance,
-            arguments: [.address(address)]
-        )
-    }
-
-    static func enableToken(at address: Flow.Address, token: TokenModel) async throws -> Flow.ID {
+    static func enableToken(at _: Flow.Address, token: TokenModel) async throws -> Flow.ID {
         try await sendTransaction(
             by: \.ft?.addToken,
             with: token,
@@ -69,21 +55,32 @@ extension FlowNetwork {
         )
         return result.doubleValue
     }
+
+    /// fetch all valid token and balance
+    static func fetchTokenBalance(address: Flow.Address) async throws -> [String: Double] {
+        try await fetch(by: \.ft?.getTokenBalanceStorage, arguments: [.address(address)])
+    }
+
+    /// get avaiblabe account balance for all type: coa,flow,link
+    static func getFlowBalanceForAnyAccount(address: [String]) async throws -> [String: Double?] {
+        let list = address.map { Flow.Cadence.FValue.string($0) }
+
+        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [Flow.Cadence.FValue.array(list)])
+    }
 }
 
 // MARK: - NFT
 
 extension FlowNetwork {
-    static func checkCollectionEnable(address: Flow.Address) async throws -> [String: Bool] {
-        let result: [String: Bool] = try await fetch(
-            by: \.nft?.checkNFTListEnabled,
+    static func checkCollectionEnable(address: Flow.Address) async throws -> [String: Int] {
+        try await fetch(
+            by: \.collection?.getNftBalanceStorage,
             arguments: [.address(address)]
         )
-        return result
     }
 
     static func addCollection(
-        at address: Flow.Address,
+        at _: Flow.Address,
         collection: NFTCollectionInfo
     ) async throws -> Flow.ID {
         try await sendTransaction(
@@ -251,7 +248,8 @@ extension FlowNetwork {
     }
 
     static func claimUnstake(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow
-        .ID {
+        .ID
+    {
         try await sendTransaction(
             by: \.staking?.withdrawUnstaked,
             argumentList: [
@@ -279,7 +277,8 @@ extension FlowNetwork {
 
     // FIXME:
     static func claimReward(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow
-        .ID {
+        .ID
+    {
         try await sendTransaction(
             by: \.staking?.withdrawReward,
             argumentList: [.string(nodeID), .uint32(UInt32(delegatorId)), .ufix64(amount)]
@@ -322,7 +321,8 @@ extension FlowNetwork {
     }
 
     static func stakeFlow(providerId: String, delegatorId: Int, amount: Double) async throws -> Flow
-        .ID {
+        .ID
+    {
         let txId = try await sendTransaction(
             by: \.staking?.createStake,
             argumentList: [
@@ -579,9 +579,8 @@ extension FlowNetwork {
         )
     }
 
+    @available(iOS, introduced: 13.0, deprecated: 100_000.0, message: "replaced by fetchTokenBalance")
     static func linkedAccountEnabledTokenList(address: String) async throws -> [String: Bool] {
-        let cadence = CadenceManager.shared.current.ft?.isLinkedAccountTokenListEnabled?
-            .toFunc() ?? ""
         return try await fetch(
             by: \.ft?.isLinkedAccountTokenListEnabled,
             arguments: [.address(Flow.Address(hex: address))]
@@ -714,7 +713,8 @@ extension FlowNetwork {
 
     static func checkAccountInfo() async throws -> Flow.AccountInfo {
         guard let address = WalletManager.shared.getPrimaryWalletAddress()
-            .map(Flow.Address.init(hex:)) else {
+            .map(Flow.Address.init(hex:))
+        else {
             throw LLError.invalidAddress
         }
 
@@ -763,14 +763,14 @@ extension Flow.TransactionResult {
 // MARK: - Account Key
 
 extension FlowNetwork {
-    static func revokeAccountKey(by index: Int, at address: Flow.Address) async throws -> Flow.ID {
+    static func revokeAccountKey(by index: Int, at _: Flow.Address) async throws -> Flow.ID {
         try await sendTransaction(by: \.basic?.revokeKey, argumentList: [.int(index)])
     }
 
     static func addKeyToAccount(
-        address: Flow.Address,
+        address _: Flow.Address,
         accountKey: Flow.AccountKey,
-        signers: [FlowSigner]
+        signers _: [FlowSigner]
     ) async throws -> Flow.ID {
         try await sendTransaction(
             by: \.basic?.addKey,
@@ -827,11 +827,11 @@ extension FlowNetwork {
             script: Flow.Script(text: cadenceStr),
             arguments: [.address(Flow.Address(hex: fromAddress))]
         ).decode(String.self)
-        
+
         guard let checkSumAddress = EthereumAddress.toChecksumAddress(response) else {
             return response
         }
-        
+
         return checkSumAddress
     }
 
@@ -942,7 +942,8 @@ extension FlowNetwork {
 
     // transferFlowToEvmAddress
     static func sendFlowToEvm(evmAddress: String, amount: Decimal, gas: UInt64) async throws -> Flow
-        .ID {
+        .ID
+    {
         try await sendTransaction(by: \.evm?.transferFlowToEvmAddress, argumentList: [
             .string(evmAddress),
             .ufix64(amount),
@@ -952,7 +953,8 @@ extension FlowNetwork {
 
     /// transferFlowFromCoaToFlow
     static func sendFlowTokenFromCoaToFlow(amount: Decimal, address: String) async throws -> Flow
-        .ID {
+        .ID
+    {
         try await sendTransaction(by: \.evm?.transferFlowFromCoaToFlow, argumentList: [
             .ufix64(amount),
             .address(Flow.Address(hex: address)),
@@ -1207,7 +1209,7 @@ extension FlowNetwork {
                     error: CadenceError.empty.errorLog,
                     scriptId: funcName
                 )
-            log.error("[Cadence] empty script on \(funcName)")
+            log.error("[Cadence] empty script on \(funcName),version:\(CadenceManager.shared.version)")
             throw CadenceError.empty
         }
         let replacedCadence = cadence.replace(by: ScriptAddress.addressMap())
@@ -1518,8 +1520,8 @@ extension String {
     }
 }
 
-extension KeyPath {
-    fileprivate func funcName() -> String {
+private extension KeyPath {
+    func funcName() -> String {
         "\(self)".split(separator: ".").last?.replacingOccurrences(
             of: "?",
             with: ""

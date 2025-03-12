@@ -11,6 +11,8 @@ import Foundation
 
 protocol TokenBalanceProvider {
     var network: FlowNetworkType { get }
+    func getSupportTokens() async throws -> [TokenModel]
+    func getActivatedTokens(address: FWAddress, in list: [TokenModel]?) async throws -> [TokenModel]
     func getFTBalance(address: FWAddress) async throws -> [TokenModel]
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel?
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection]

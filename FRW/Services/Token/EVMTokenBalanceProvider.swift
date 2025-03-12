@@ -1,5 +1,5 @@
 //
-//  EVMTokenBalanceHandler.swift
+//  EVMTokenBalanceProvider.swift
 //  FRW
 //
 //  Created by Hao Fu on 22/2/2025.
@@ -22,12 +22,30 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     var network: FlowNetworkType
 
-    func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
+    func getSupportTokens() async throws -> [TokenModel] {
+        let tokenResponse: SingleTokenResponse = try await Network
+            .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
+        var tokens: [TokenModel] = tokenResponse.conversion(type: .evm)
+        if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
+            var flowModel = flowToken.toTokenModel(type: .evm, network: network)
+            tokens.insert(flowModel, at: 0)
+        }
+        return tokens
+    }
+
+    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]?) async throws -> [TokenModel] {
         guard let addr = address as? EthereumAddress,
-              let web3 = try await FlowProvider.Web3.default(networkType: network) else {
+              let web3 = try await FlowProvider.Web3.default(networkType: network)
+        else {
             throw EVMError.rpcError
         }
-
+        // fetch all tokens
+        var allTokens: [TokenModel] = list ?? []
+        if allTokens.isEmpty {
+            let list = try await getSupportTokens()
+            allTokens.append(contentsOf: list)
+        }
+        // add `flow` token
         let flowBalance = try await web3.eth.getBalance(for: addr)
 
         // The SimpleHash API doesn't return token metadata like logo and flowIdentifier
@@ -35,8 +53,6 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         let response: [EVMTokenResponse] = try await Network
             .request(FRWAPI.EVM.tokenList(address.hexAddr))
         var models = response.map { $0.toTokenModel(type: .evm) }
-        let tokenMetadataResponse: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
 
         if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
             var flowModel = flowToken.toTokenModel(type: .evm, network: network)
@@ -46,12 +62,10 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
         let updateModels: [TokenModel] = models.compactMap { model in
             var newModel = model
-            if let metadata = tokenMetadataResponse.tokens.first(where: { token in
-                token.address.lowercased() == model.address.mainnet?.lowercased()
+            if let metadata = allTokens.first(where: { token in
+                token.address.addressByNetwork(network.toFlowType())?.lowercased() == model.address.addressByNetwork(network.toFlowType())?.lowercased()
             }) {
-                if let logo = metadata.logoURI {
-                    newModel.icon = URL(string: logo)
-                }
+                newModel.icon = metadata.iconURL
                 newModel.flowIdentifier = metadata.flowIdentifier
             }
             return newModel
@@ -64,8 +78,12 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
             }
             return lBal > rBal
         }
-
         return sorted
+    }
+
+    func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
+        let list = try await getActivatedTokens(address: address, in: nil)
+        return list
     }
 
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
