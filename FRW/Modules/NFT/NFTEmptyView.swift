@@ -34,9 +34,7 @@ struct NFTEmptyView: View {
 //                    .fontWeight(.bold)
 //                    .foregroundColor(.LL.Neutrals.neutrals3)
 //                    .padding(2)
-//                Text("nft_empty_discovery".localized)
-//                    .font(.LL.body)
-//                    .foregroundColor(.LL.Neutrals.neutrals8)
+
 //                Spacer()
 //                    .frame(height: 18)
 //                Button {} label: {

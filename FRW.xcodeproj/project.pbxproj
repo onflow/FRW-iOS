@@ -3019,6 +3019,7 @@
 				4E09A1F02CC7949E0099606E /* Mixpanel in Frameworks */,
 				15D3BA6D28C3B217009AEA6E /* ColorKit in Frameworks */,
 				4E2FA6A82CF410BF00D46EA7 /* ReownRouter in Frameworks */,
+
 				4E62247A2D7F2D8100BABC28 /* FlowWalletKit in Frameworks */,
 				15DE22F1277F133B00B5EE03 /* SkeletonUI in Frameworks */,
 				1552DC6A2787090D00EAA7D5 /* Introspect in Frameworks */,
@@ -10385,7 +10386,7 @@
 			package = 4E5F2F0D2C11F036008589C4 /* XCRemoteSwiftPackageReference "mobile-sdk-ios" */;
 			productName = CrowdinSDK;
 		};
-		4E6224792D7F2D8100BABC28 /* FlowWalletKit */ = {
+		4E6224772D7F1A9300BABC28 /* FlowWalletKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */;
 			productName = FlowWalletKit;
