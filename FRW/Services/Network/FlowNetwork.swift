@@ -74,7 +74,7 @@ extension FlowNetwork {
 extension FlowNetwork {
     static func checkCollectionEnable(address: Flow.Address) async throws -> [String: Int] {
         try await fetch(
-            by: \.collection?.getNftBalanceStorage,
+            by: \.collection?.getNFTBalanceStorage,
             arguments: [.address(address)]
         )
     }
@@ -576,14 +576,6 @@ extension FlowNetwork {
                 .string(identifier),
                 .uint64(nftId),
             ]
-        )
-    }
-
-    @available(iOS, introduced: 13.0, deprecated: 100_000.0, message: "replaced by fetchTokenBalance")
-    static func linkedAccountEnabledTokenList(address: String) async throws -> [String: Bool] {
-        return try await fetch(
-            by: \.ft?.isLinkedAccountTokenListEnabled,
-            arguments: [.address(Flow.Address(hex: address))]
         )
     }
 

@@ -54,7 +54,7 @@ final class WalletSendAmountViewModel: ObservableObject {
         targetContact = target
         self.token = token
 
-        WalletManager.shared.$coinBalances.sink { [weak self] _ in
+        WalletManager.shared.$activatedCoins.sink { [weak self] _ in
             DispatchQueue.main.async {
                 self?.refreshTokenData()
                 self?.refreshInput()
@@ -138,7 +138,7 @@ extension WalletSendAmountViewModel {
                     isValidAddr = await FlowNetwork.addressVerify(address: address)
                 }
                 let isValid = isValidAddr
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.addressIsValid = isValid
                     if isValid == false {
                         self.errorType = .invalidAddress
@@ -168,9 +168,9 @@ extension WalletSendAmountViewModel {
                 }
 
                 let list = try await FlowNetwork.fetchTokenBalance(address: Flow.Address(hex: address))
-                let model = list.first { compareKey.lowercased() == $0.key.lowercased() }
+                let model = list.first { $0.key.lowercased().contains(compareKey.lowercased()) }
                 await MainActor.run {
-                    self.isValidToken = (model != nil) ? true : false
+                    self.isValidToken = (model != nil)
                 }
             }
         }
@@ -178,7 +178,7 @@ extension WalletSendAmountViewModel {
 
     private func refreshTokenData() {
         amountBalance = WalletManager.shared
-            .getBalance(byId: token.contractId).doubleValue
+            .getBalance(with: token).doubleValue
         coinRate = CoinRateCache.cache
             .getSummary(by: token.contractId)?
             .getLastRate() ?? 0
@@ -272,35 +272,9 @@ extension WalletSendAmountViewModel {
 
     func maxAction() {
         exchangeType = .token
-        if token.isFlowCoin, WalletManager.shared
-            .isCoa(targetContact.address), WalletManager.shared.isMain()
-        {
-            Task {
-                do {
-                    let topAmount = try await FlowNetwork.minFlowBalance()
-                    let num = max(
-                        amountBalance - topAmount - WalletManager.fixedMoveFee.doubleValue,
-                        0
-                    )
-                    DispatchQueue.main.async {
-                        self.inputText = num.formatCurrencyString()
-                    }
-
-                    actualBalance = num.formatCurrencyString(digits: token.decimal)
-                } catch {
-                    let num = max(amountBalance - minBalance.doubleValue, 0)
-                    DispatchQueue.main.async {
-                        self.inputText = num.formatCurrencyString()
-                    }
-                    actualBalance = num.formatCurrencyString(digits: token.decimal)
-                    log.error("[Flow] min flow balance error")
-                }
-            }
-        } else {
-            let num = max(amountBalance, 0)
-            inputText = num.formatCurrencyString()
-            actualBalance = num.formatCurrencyString(digits: token.decimal)
-        }
+        let num = max(amountBalance, 0)
+        inputText = num.formatCurrencyString()
+        actualBalance = num.formatCurrencyString(digits: token.decimal)
     }
 
     func toggleExchangeTypeAction() {
@@ -559,7 +533,7 @@ extension WalletSendAmountViewModel {
     }
 
     func changeTokenModelAction(token: TokenModel) {
-        LocalUserDefaults.shared.recentToken = token.symbol
+        LocalUserDefaults.shared.recentToken = token.vaultIdentifier
 
         self.token = token
         refreshTokenData()

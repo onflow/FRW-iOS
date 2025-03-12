@@ -406,7 +406,8 @@ extension WalletSendViewModel {
     private func refreshCurrentSearchingStatusAfterPerSearchComplete() {
         if let serverSearchList = serverSearchList, serverSearchList.isEmpty,
            let findSearchList = findSearchList, findSearchList.isEmpty,
-           let flownsSearchList = flownsSearchList, flownsSearchList.isEmpty {
+           let flownsSearchList = flownsSearchList, flownsSearchList.isEmpty
+        {
             errorType = .notFound
             status = .error
             return
@@ -425,8 +426,8 @@ extension WalletSendViewModel {
             return
         }
 
-        let symbol = LocalUserDefaults.shared.recentToken ?? "flow"
-        guard let token = WalletManager.shared.getToken(bySymbol: symbol) else {
+        let vaultIdentifier = LocalUserDefaults.shared.recentToken
+        guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
             return
         }
 
@@ -481,8 +482,8 @@ extension WalletSendViewModel {
             id: UUID().hashValue,
             username: nil
         )
-        let symbol = LocalUserDefaults.shared.recentToken ?? "flow"
-        guard let token = WalletManager.shared.getToken(bySymbol: symbol) else {
+        let vaultIdentifier = LocalUserDefaults.shared.recentToken
+        guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
             return
         }
         Router.route(to: RouteMap.Wallet.sendAmount(contact, token))

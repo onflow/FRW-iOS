@@ -57,18 +57,21 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
             var flowModel = flowToken.toTokenModel(type: .evm, network: network)
             flowModel.balance = flowBalance
+            flowModel.avaibleBalance = flowBalance
             models.insert(flowModel, at: 0)
         }
 
         let updateModels: [TokenModel] = models.compactMap { model in
-            var newModel = model
+
             if let metadata = allTokens.first(where: { token in
                 token.address.addressByNetwork(network.toFlowType())?.lowercased() == model.address.addressByNetwork(network.toFlowType())?.lowercased()
             }) {
+                var newModel = model
                 newModel.icon = metadata.iconURL
                 newModel.flowIdentifier = metadata.flowIdentifier
+                return newModel
             }
-            return newModel
+            return nil
         }
 
         // Sort by balance

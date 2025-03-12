@@ -41,7 +41,8 @@ final class NFTCollectionStateManager {
             return false
         }
         let contractId = "A." + contractAddress.stripHexPrefix() + "." + contractName
-        return collectionStateList[contractId] != nil
+        let result = collectionStateList.filter { $0.key.lowercased().contains(contractId.lowercased()) }
+        return !result.isEmpty
     }
 
     // MARK: Private

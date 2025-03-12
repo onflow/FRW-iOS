@@ -170,11 +170,21 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var isActivated: Bool {
-        if let symbol = symbol {
-            return WalletManager.shared.isTokenActivated(symbol: symbol)
-        }
+        WalletManager.shared.isTokenActivated(model: self)
+    }
 
-        return false
+    var showBalance: Decimal? {
+        guard let bal = avaibleBalance else {
+            return nil
+        }
+        return Decimal(string: Utilities.formatToPrecision(bal, units: .custom(decimal), formattingDecimals: decimal))
+    }
+
+    var hasBalance: Bool {
+        guard let bal = balance else {
+            return false
+        }
+        return bal > 0
     }
 
     static func mock() -> TokenModel {

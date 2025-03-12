@@ -79,11 +79,8 @@ class WalletManager: ObservableObject {
     @Published
     var supportedCoins: [TokenModel]?
     @Published
-    var evmSupportedCoins: [TokenModel]?
-    @Published
     var activatedCoins: [TokenModel] = []
-    @Published
-    var coinBalances: [String: Decimal] = [:]
+
     @Published
     var childAccount: ChildAccount? = nil
     @Published
@@ -137,7 +134,7 @@ class WalletManager: ObservableObject {
     }
 
     var flowToken: TokenModel? {
-        WalletManager.shared.supportedCoins?.first(where: { $0.isFlowCoin })
+        WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })
     }
 
     func bindChildAccountManager() {
@@ -200,12 +197,8 @@ class WalletManager: ObservableObject {
                 forKey: CacheKeys.activatedCoins.rawValue,
                 type: [TokenModel].self
             )
-            let cacheBalances = try? await PageCache.cache.get(
-                forKey: CacheKeys.coinBalancesV2.rawValue,
-                type: [String: Decimal].self
-            )
 
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.walletInfo = cacheWalletInfo
 
                 if let cacheSupportedCoins = cacheSupportedCoins,
@@ -213,10 +206,6 @@ class WalletManager: ObservableObject {
                 {
                     self.supportedCoins = cacheSupportedCoins
                     self.activatedCoins = cacheActivatedCoins
-                }
-
-                if let cacheBalances = cacheBalances {
-                    self.coinBalances = cacheBalances
                 }
             }
         }
@@ -494,7 +483,6 @@ extension WalletManager {
         walletInfo = nil
         supportedCoins = nil
         activatedCoins = []
-        coinBalances = [:]
     }
 
     func clearFlowAccount() {
@@ -596,9 +584,9 @@ extension WalletManager {
         return nil
     }
 
-    func isTokenActivated(symbol: String) -> Bool {
+    func isTokenActivated(model: TokenModel) -> Bool {
         for token in activatedCoins {
-            if token.symbol == symbol {
+            if token.vaultIdentifier?.uppercased() == model.vaultIdentifier?.uppercased() {
                 return true
             }
         }
@@ -606,19 +594,23 @@ extension WalletManager {
         return false
     }
 
-    func getToken(bySymbol symbol: String) -> TokenModel? {
+    func getToken(by vaultIdentifier: String?) -> TokenModel? {
+        guard let identifier = vaultIdentifier else {
+            return flowToken
+        }
         for token in activatedCoins {
-            if token.symbol?.lowercased() == symbol.lowercased() {
+            if token.vaultIdentifier?.lowercased() == identifier.lowercased() {
                 return token
             }
         }
-
         return nil
     }
 
-    func getBalance(byId contactId: String) -> Decimal {
-        coinBalances[contactId] ?? coinBalances[contactId.lowercased()] ??
-            coinBalances[contactId.uppercased()] ?? 0
+    func getBalance(with token: TokenModel?) -> Decimal {
+        guard let token else {
+            return Decimal(0.0)
+        }
+        return token.showBalance ?? Decimal(0.0)
     }
 
     func currentContact() -> Contact {
@@ -885,6 +877,7 @@ extension WalletManager {
         try await fetchActivatedTokens()
 
         try await fetchBalance()
+
         try await fetchAccessible()
 
         flowAccountKey = nil
@@ -894,28 +887,16 @@ extension WalletManager {
     }
 
     private func fetchSupportedTokens() async throws {
-        func fetchFlowCoins() async throws {
-            guard let addr = getPrimaryWalletAddress(), let address = FWAddressDector.create(address: addr) else {
-                return
-            }
-            let supportedToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
-            await MainActor.run {
-                self.supportedCoins = supportedToken
-            }
-            PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
+        guard let addr = getWatchAddressOrChildAccountAddressOrPrimaryAddress(),
+              let address = FWAddressDector.create(address: addr)
+        else {
+            return
         }
-
-        func fetchEVMCoins() async throws {
-            guard let addr = EVMAccountManager.shared.selectedAccount?.showAddress, let address = FWAddressDector.create(address: addr) else {
-                return
-            }
-            let supportToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
-            await MainActor.run {
-                self.evmSupportedCoins = supportToken
-            }
+        let supportedToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
+        await MainActor.run {
+            self.supportedCoins = supportedToken
         }
-        try await fetchFlowCoins()
-        try await fetchEVMCoins()
+        PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
     }
 
     /// fetch main or child activated token and balances
@@ -935,30 +916,11 @@ extension WalletManager {
             return
         }
 
-        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getFTBalance(address: address)
-
-        if !isSelectedEVMAccount {
-            var newBalanceMap: [String: Decimal] = [:]
-            for token in availableTokens {
-                let contractId = token.contractId
-                if let balance = token.avaibleBalance {
-                    newBalanceMap[contractId] = Decimal(string: Utilities.formatToPrecision(balance, units: .custom(token.decimal), formattingDecimals: token.decimal))
-                }
-            }
-            await MainActor.run {
-                self.coinBalances = newBalanceMap
-            }
-
-            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
-            PageCache.cache.set(
-                value: newBalanceMap,
-                forKey: CacheKeys.coinBalancesV2.rawValue
-            )
-        }
-
+        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address, tokens: supportedCoins)
         await MainActor.run {
             self.activatedCoins = availableTokens
         }
+        PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
         preloadActivatedIcons()
     }
 
@@ -1013,44 +975,8 @@ extension WalletManager {
         }
         balanceProvider.refreshBalance()
         if isSelectedEVMAccount {
-            try await fetchEVMBalance()
             try await fetchCustomBalance()
             return
-        }
-    }
-
-    private func fetchEVMBalance() async throws {
-        log.info("[EVM] load balance")
-        guard let evmAccount = EVMAccountManager.shared.selectedAccount else { return }
-        try await EVMAccountManager.shared.refreshBalance(address: evmAccount.address)
-
-        let tokenModel = supportedCoins?.first { $0.name.lowercased() == "flow" }
-        let balance = EVMAccountManager.shared.balance
-        guard var tokenModel = tokenModel else {
-            return
-        }
-        let flowTokenKey = tokenModel.contractId
-
-        let list = try await EVMAccountManager.shared.fetchTokens()
-
-        await MainActor.run {
-            log.info("[EVM] load balance success \(balance)")
-            tokenModel.flowIdentifier = tokenModel.contractId
-            self.activatedCoins = [tokenModel]
-            self.coinBalances = [flowTokenKey: balance]
-
-            for item in list {
-                if item.flowBalance > 0 {
-                    let result = self.evmSupportedCoins?.first(where: { model in
-                        model.getAddress()?.lowercased() == item.address.lowercased()
-                    })
-                    if var result = result {
-                        result.balance = BigUInt(from: item.balance ?? "-1")
-                        self.activatedCoins.append(result)
-                        self.coinBalances[result.contractId] = item.flowBalance
-                    }
-                }
-            }
         }
     }
 
@@ -1077,14 +1003,6 @@ extension WalletManager {
                 } else {
                     self.activatedCoins.append(model)
                 }
-
-                let balance = token.balance ?? BigUInt(0)
-                let result = Utilities.formatToPrecision(
-                    balance,
-                    units: .custom(token.decimals),
-                    formattingDecimals: token.decimals
-                )
-                self.coinBalances[model.contractId] = Decimal(string: result)
             }
         }
     }
@@ -1094,8 +1012,6 @@ extension WalletManager {
             self.activatedCoins.removeAll { model in
                 model.getAddress() == token.address && model.name == token.name
             }
-            let model = token.toToken()
-            self.coinBalances[model.contractId] = nil
         }
     }
 

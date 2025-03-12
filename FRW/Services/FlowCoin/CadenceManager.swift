@@ -222,7 +222,7 @@ extension CadenceModel {
         let sendNbaNFTV3: String?
         let sendNFTV3: String?
         /// 2.6+, replace checkNFTListEnabled
-        let getNftBalanceStorage: String?
+        let getNFTBalanceStorage: String?
     }
 
     struct Contract: Codable {
@@ -247,7 +247,6 @@ extension CadenceModel {
 
         let isTokenListEnabled: String?
         let getTokenListBalance: String?
-        let isLinkedAccountTokenListEnabled: String?
 
         let getTokenBalanceStorage: String?
     }
