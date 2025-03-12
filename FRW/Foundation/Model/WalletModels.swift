@@ -55,7 +55,8 @@ enum ListedToken: String, CaseIterable {
 
     init?(rawValue: String) {
         if let item = ListedToken.allCases
-            .first(where: { $0.rawValue.lowercased() == rawValue.lowercased() }) {
+            .first(where: { $0.rawValue.lowercased() == rawValue.lowercased() })
+        {
             self = item
         } else {
             self = .other
@@ -158,7 +159,16 @@ struct TokenModel: Codable, Identifiable, Mockable {
         guard let bal = readableBalance else {
             return nil
         }
-        return bal.doubleValue.formatted(.number.precision(.fractionLength(0...3)))
+        return bal.doubleValue.formatted(.number.precision(.fractionLength(0 ... 3)))
+    }
+
+    var precision: Int {
+        switch type {
+        case .cadence:
+            return min(decimal, 8)
+        case .evm:
+            return min(decimal, 18)
+        }
     }
 
     // Identifiable
@@ -328,9 +338,9 @@ struct TokenExtension: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.website = try? container.decode(URL.self, forKey: .website)
-        self.twitter = try? container.decode(URL.self, forKey: .twitter)
-        self.discord = try? container.decode(URL.self, forKey: .discord)
+        website = try? container.decode(URL.self, forKey: .website)
+        twitter = try? container.decode(URL.self, forKey: .twitter)
+        discord = try? container.decode(URL.self, forKey: .discord)
     }
 
     // MARK: Internal
