@@ -41,7 +41,7 @@ struct BrowserSignMessageView: View {
         }
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color(hex: "1E1E1F"))
+        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var titleView: some View {
@@ -59,11 +59,11 @@ struct BrowserSignMessageView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("browser_sign_message_request_from".localized)
                     .font(.inter(size: 14))
-                    .foregroundColor(Color(hex: "#808080"))
+                    .foregroundColor(.Theme.Text.text4)
 
                 Text(vm.title)
                     .font(.inter(size: 16, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(.Theme.Text.text1)
                     .lineLimit(1)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -79,18 +79,20 @@ struct BrowserSignMessageView: View {
 
                 Text("browser_script".localized)
                     .font(.inter(size: 14, weight: .regular))
-                    .foregroundColor(Color(hex: "#F2F2F2"))
+                    .foregroundColor(.Theme.Text.black8)
                     .lineLimit(1)
 
                 Spacer()
 
                 Image("icon-search-arrow")
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.Theme.Text.black8)
                     .frame(width: 12, height: 12)
             }
             .frame(height: 46)
             .padding(.horizontal, 18)
-            .background(Color(hex: "#313131"))
+            .background(Color.Theme.BG.bg2)
             .cornerRadius(12)
         }
     }
@@ -102,25 +104,14 @@ struct BrowserSignMessageView: View {
     }
 
     var scriptView: some View {
-//        ZStack {
-//            TextEditor(text: .constant(vm.message))
-//                .padding(.all, 12)
-//                .disabled(true)
-//                .backgroundFill(Color(hex: "#313131", alpha: 1))
-//                .foregroundColor(.white)
-//                .cornerRadius(16)
-//
-//            Text(vm.message).opacity(0).padding(.all, 8)
-//        }
-
         ScrollView(.vertical, showsIndicators: false) {
             Text(vm.message)
-                .font(.LL.body)
-                .foregroundColor(Color(hex: "#B2B2B2"))
+                .font(.inter(size: 14))
+                .foregroundColor(.Theme.Text.black8)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .padding(.all, 18)
         }
-        .background(Color(hex: "#313131"))
+        .background(Color.Theme.BG.bg2)
         .cornerRadius(12)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
