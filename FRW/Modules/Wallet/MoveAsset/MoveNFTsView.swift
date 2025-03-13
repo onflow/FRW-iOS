@@ -16,7 +16,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
     var changeHeight: (() -> Void)?
     @StateObject
     var viewModel = MoveNFTsViewModel()
-
+    @FocusState private var isSearchFocused: Bool
     var title: String {
         ""
     }
@@ -44,7 +44,6 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                 .padding(.vertical, 12)
 
             NFTListView()
-                .mockPlaceholder(viewModel.isMock)
 
             VStack(spacing: 0) {
                 InsufficientStorageToastView<MoveNFTsViewModel>()
@@ -195,7 +194,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
             }
             .padding(.bottom, 12)
 
-            if viewModel.nfts.isEmpty {
+            if viewModel.nfts.isEmpty && viewModel.loadingState == .success {
                 HStack {
                     Spacer()
                     Text("0 NFTs")
@@ -207,8 +206,33 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
             }
 
             ScrollView {
+                if !viewModel.nfts.isEmpty {
+                    HStack {
+                        TextField("search_nft_name".localized, text: $viewModel.searchText)
+                            .font(.inter())
+                            .foregroundStyle(Color.Theme.Text.black3)
+                            .focused($isSearchFocused)
+
+                        if !viewModel.searchText.isEmpty {
+                            Button(action: {
+                                withAnimation {
+                                    viewModel.searchText = ""
+                                }
+                            }) {
+                                Image("icon_close_circle_gray")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(Color.Theme.Fill.fill1)
+                    .cornerRadius(16)
+                }
+
                 LazyVGrid(columns: columns, spacing: 4) {
-                    ForEach(viewModel.nfts) { nft in
+                    ForEach(viewModel.filteredNFTItems) { nft in
                         NFTView(
                             nft: nft,
                             reachMax: viewModel.showHint,
@@ -218,12 +242,27 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                         }
                     }
                 }
+                .padding(.horizontal, -18)
+                .padding(.horizontal, 18)
                 Spacer()
             }
             .overlay(alignment: .bottom) {
                 hintView
                     .visibility(viewModel.showHint ? .visible : .gone)
                     .animation(.easeInOut, value: viewModel.selectedCount)
+            }
+        }
+        .overlay {
+            switch viewModel.loadingState {
+            case .loading:
+                NFTLoadingView(loadedCount: viewModel.loadedCount, totalCount: viewModel.totalCount)
+            case .failure:
+                ErrorWithTryView(
+                    message: .check,
+                    retryAction: viewModel.retry
+                )
+            case .idle, .success:
+                EmptyView()
             }
         }
     }
@@ -235,7 +274,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
     // MARK: Private
 
     private let columns = [
-        GridItem(.adaptive(minimum: 110, maximum: 125), spacing: 4),
+        GridItem(.adaptive(minimum: 110, maximum: 150), spacing: 4),
     ]
 }
 

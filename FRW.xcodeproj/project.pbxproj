@@ -1170,6 +1170,8 @@
 		4E8E3F812D82A61C000916A6 /* NFTSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E3F7F2D82A61C000916A6 /* NFTSearchViewModel.swift */; };
 		4E8E3F832D82C14E000916A6 /* NFTLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E3F822D82C14E000916A6 /* NFTLoadingView.swift */; };
 		4E8E3F842D82C14E000916A6 /* NFTLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E3F822D82C14E000916A6 /* NFTLoadingView.swift */; };
+		4E8E3F862D82DF19000916A6 /* ErrorWithTryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E3F852D82DF19000916A6 /* ErrorWithTryView.swift */; };
+		4E8E3F872D82DF19000916A6 /* ErrorWithTryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8E3F852D82DF19000916A6 /* ErrorWithTryView.swift */; };
 		4E90592F2B1792F10029FC66 /* SyncAddDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90592E2B1792F10029FC66 /* SyncAddDeviceView.swift */; };
 		4E9059302B1792F10029FC66 /* SyncAddDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90592E2B1792F10029FC66 /* SyncAddDeviceView.swift */; };
 		4E947C922BBEB2E300E87A85 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E947C912BBEB2E300E87A85 /* web3swift */; };
@@ -2523,6 +2525,7 @@
 		4E8E3F7C2D82A1C8000916A6 /* NFTSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTSearchView.swift; sourceTree = "<group>"; };
 		4E8E3F7F2D82A61C000916A6 /* NFTSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTSearchViewModel.swift; sourceTree = "<group>"; };
 		4E8E3F822D82C14E000916A6 /* NFTLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTLoadingView.swift; sourceTree = "<group>"; };
+		4E8E3F852D82DF19000916A6 /* ErrorWithTryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWithTryView.swift; sourceTree = "<group>"; };
 		4E90592E2B1792F10029FC66 /* SyncAddDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAddDeviceView.swift; sourceTree = "<group>"; };
 		4E95322E2CD2082F00AAECD1 /* AddCustomTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomTokenView.swift; sourceTree = "<group>"; };
 		4E9532312CD2089C00AAECD1 /* AddCustomTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomTokenViewModel.swift; sourceTree = "<group>"; };
@@ -4688,6 +4691,7 @@
 		15DDFB932751137E008263A2 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				4E8E3F852D82DF19000916A6 /* ErrorWithTryView.swift */,
 				4E9532342CD2196400AAECD1 /* SectionItem.swift */,
 				15F2443928CB370D00C1090E /* Like */,
 				6A0137652897E7A0009BEF20 /* HalfSheetModal.swift */,
@@ -7340,6 +7344,7 @@
 				4E2380FF2B186A6000756874 /* WalletConnect+Tools.swift in Sources */,
 				15D9282A278338DB00382226 /* UIApplication.swift in Sources */,
 				6A7D9DCF28E1858E00333954 /* SwapEstimateRequest.swift in Sources */,
+				4E8E3F872D82DF19000916A6 /* ErrorWithTryView.swift in Sources */,
 				15DC20B927819C56000B187A /* VChevronButtonModel.swift in Sources */,
 				15DC209127819C56000B187A /* VSheet.swift in Sources */,
 				6A2C560F290BE75C00306A6C /* CurrencyCache.swift in Sources */,
@@ -8176,6 +8181,7 @@
 				15C58B752868A4EE00BD4FC6 /* VChevronButtonModel.swift in Sources */,
 				6A7D9DCE28E1858E00333954 /* SwapEstimateRequest.swift in Sources */,
 				15C58B762868A4EE00BD4FC6 /* VSheet.swift in Sources */,
+				4E8E3F862D82DF19000916A6 /* ErrorWithTryView.swift in Sources */,
 				15C58B782868A4EE00BD4FC6 /* UINavigationController.swift in Sources */,
 				6A2C560E290BE75C00306A6C /* CurrencyCache.swift in Sources */,
 				15C58B792868A4EE00BD4FC6 /* VLazyScrollViewType.swift in Sources */,

@@ -72,7 +72,7 @@ struct NFTSearchView: RouteableView {
 //                Image(systemName: "magnifyingglass")
 //                    .foregroundColor(.gray)
 
-                TextField("Search NFT Name", text: $viewModel.searchText)
+                TextField("search_nft_name".localized, text: $viewModel.searchText)
                     .font(.inter())
                     .foregroundStyle(Color.Theme.Text.black3)
                     .focused($isSearchFocused)
@@ -89,7 +89,8 @@ struct NFTSearchView: RouteableView {
                     }
                 }
             }
-            .padding(16)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
             .background(Color.Theme.Fill.fill1)
             .cornerRadius(16)
 
@@ -121,35 +122,10 @@ struct NFTSearchView: RouteableView {
 
     @ViewBuilder
     var errorView: some View {
-        VStack(spacing: 16) {
-            Spacer()
-
-            Text("Error, please check your internet or refresh.")
-                .font(.inter(weight: .semibold))
-                .foregroundStyle(Color.Theme.Text.black6)
-                .multilineTextAlignment(.center)
-
-            Button(action: {
-                viewModel.retry()
-            }) {
-                HStack(spacing: 16) {
-                    Image(systemName: "arrow.triangle.2.circlepath")
-                    Text("Refresh::message".localized)
-                        .font(.inter(weight: .semibold))
-                        .foregroundStyle(Color.Theme.Text.black6)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(
-                    Capsule()
-                        .stroke(Color.Theme.Text.black, lineWidth: 1)
-                )
-            }
-            .foregroundColor(.primary)
-
-            Spacer()
-        }
-        .padding()
+        ErrorWithTryView(
+            message: .check,
+            retryAction: viewModel.retry
+        )
     }
 }
 

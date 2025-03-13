@@ -1147,3 +1147,5 @@ Key Store and Private Key.";
 "select_backup" = "Select Backup";
 "or" = "Or";
 "loading_nfts" = "Loading NFTs...";
+"search_nft_name" = "Search NFT Name";
+"error_check_refresh" = "Error, please check your internet or refresh.";
