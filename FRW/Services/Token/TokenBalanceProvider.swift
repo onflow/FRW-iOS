@@ -59,7 +59,7 @@ extension TokenBalanceProvider {
                                     offset: offset
                                 )
                                 completedCount += 1
-                                progressHandler(Double(completedCount / pageCount))
+                                progressHandler(Double(completedCount) / Double(pageCount))
                                 return response
                             } catch {
                                 log.error(error)
