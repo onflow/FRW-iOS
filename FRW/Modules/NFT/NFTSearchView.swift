@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NFTSearchView: RouteableView {
     @StateObject private var viewModel: NFTSearchViewModel
-    @FocusState private var isSearchFocused: Bool
+    @State private var isSearchFocused: Bool = false
     @Namespace private var imageEffect
 
     var childAccount: ChildAccount?
@@ -68,31 +68,7 @@ struct NFTSearchView: RouteableView {
     @ViewBuilder
     var searchBar: some View {
         HStack(spacing: 8) {
-            HStack {
-//                Image(systemName: "magnifyingglass")
-//                    .foregroundColor(.gray)
-
-                TextField("search_nft_name".localized, text: $viewModel.searchText)
-                    .font(.inter())
-                    .foregroundStyle(Color.Theme.Text.black3)
-                    .focused($isSearchFocused)
-
-                if !viewModel.searchText.isEmpty {
-                    Button(action: {
-                        withAnimation {
-                            viewModel.searchText = ""
-                        }
-                    }) {
-                        Image("icon_close_circle_gray")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                    }
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color.Theme.Fill.fill1)
-            .cornerRadius(16)
+            SearchBar(placeholder: "search_nft_name".localized, searchText: $viewModel.searchText, isFocused: $isSearchFocused)
 
             Button(action: {
                 viewModel.searchText = ""
