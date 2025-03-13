@@ -16,7 +16,9 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
     var changeHeight: (() -> Void)?
     @StateObject
     var viewModel = MoveNFTsViewModel()
-    @FocusState private var isSearchFocused: Bool
+
+    @State private var isSearchFocused: Bool = false
+
     var title: String {
         ""
     }
@@ -205,32 +207,12 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                 .padding(.top, 24)
             }
 
+            if !viewModel.nfts.isEmpty {
+                SearchBar(placeholder: "search_nft_name".localized, searchText: $viewModel.searchText, isFocused: $isSearchFocused)
+                    .padding(.bottom)
+            }
+
             ScrollView {
-                if !viewModel.nfts.isEmpty {
-                    HStack {
-                        TextField("search_nft_name".localized, text: $viewModel.searchText)
-                            .font(.inter())
-                            .foregroundStyle(Color.Theme.Text.black3)
-                            .focused($isSearchFocused)
-
-                        if !viewModel.searchText.isEmpty {
-                            Button(action: {
-                                withAnimation {
-                                    viewModel.searchText = ""
-                                }
-                            }) {
-                                Image("icon_close_circle_gray")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(Color.Theme.Fill.fill1)
-                    .cornerRadius(16)
-                }
-
                 LazyVGrid(columns: columns, spacing: 4) {
                     ForEach(viewModel.filteredNFTItems) { nft in
                         NFTView(
