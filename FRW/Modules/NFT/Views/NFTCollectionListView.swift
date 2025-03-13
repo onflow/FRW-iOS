@@ -17,13 +17,13 @@ class NFTCollectionListViewViewModel: ObservableObject {
         let item = CollectionItem.mock()
         self.init(collection: item)
         self.address = address
-        self.collectionPath = path
-        self.isLoading = true
+        collectionPath = path
+        isLoading = true
     }
 
     init(collection: CollectionItem) {
         self.collection = collection
-        self.nfts = collection.nfts
+        nfts = collection.nfts
 
         collection.loadCallback2 = { [weak self] result in
             guard let self = self else {
@@ -112,7 +112,7 @@ class NFTCollectionListViewViewModel: ObservableObject {
                         from
                     ))
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.collection = response.toCollectionItem()
                     self.nfts = self.collection.nfts
                     self.isLoading = false
@@ -150,7 +150,7 @@ struct NFTCollectionListView: RouteableView {
             address: address,
             path: path
         ))
-        self.childAccount = linkedAccount
+        childAccount = linkedAccount
     }
 
     // MARK: Internal
@@ -218,7 +218,9 @@ struct NFTCollectionListView: RouteableView {
                     .id(999)
                     .mockPlaceholder(vm.isLoading)
                 } appBar: {
-                    BackAppBar {
+                    BackAppBar(rightButton: .search {
+                        viewModel.trigger(.search(vm.collection))
+                    }) {
                         viewModel.trigger(.back)
                     }
                 }
