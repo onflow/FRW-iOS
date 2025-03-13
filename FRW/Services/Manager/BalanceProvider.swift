@@ -8,6 +8,7 @@
 import Flow
 import Foundation
 
+@available(*, deprecated, renamed: "TokenBalanceProvider", message: "")
 class BalanceProvider: ObservableObject {
     // MARK: Internal
 

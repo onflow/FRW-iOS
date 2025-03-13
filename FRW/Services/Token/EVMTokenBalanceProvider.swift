@@ -18,8 +18,6 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     // MARK: Internal
 
-    static let nftLimit = 30
-
     var network: FlowNetworkType
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
@@ -88,7 +86,7 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
             address: address.hexAddr,
             collectionIdentifier: collectionIdentifier,
             offset: offset,
-            limit: EVMTokenBalanceProvider.nftLimit
+            limit: Self.nftLimit
         )
         let response: NFTListResponse = try await Network.request(
             FRWAPI.NFT.collectionDetailList(
