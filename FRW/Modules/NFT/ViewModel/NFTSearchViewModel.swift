@@ -9,11 +9,26 @@ import Combine
 import Foundation
 import SwiftUI
 
-enum NFTLoadingState {
+enum NFTLoadingState: Equatable {
     case idle
     case loading
     case success
     case failure(Error)
+
+    static func == (lhs: NFTLoadingState, rhs: NFTLoadingState) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle):
+            return true
+        case (.loading, .loading):
+            return true
+        case (.success, .success):
+            return true
+        case (.failure, .failure):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 class NFTSearchViewModel: ObservableObject {
@@ -26,7 +41,6 @@ class NFTSearchViewModel: ObservableObject {
     @Published var filteredNFTItems: [NFTModel] = []
     @Published var loadingState: NFTLoadingState = .idle
     @Published var errorMessage: String?
-    @Published var isSearching: Bool = false
 
     private var cancellables = Set<AnyCancellable>()
     private var currentBatch: Int = 0
@@ -56,8 +70,6 @@ class NFTSearchViewModel: ObservableObject {
     }
 
     private func filterNFTs(query: String) {
-        isSearching = true
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
             guard let self = self else { return }
 
@@ -70,8 +82,6 @@ class NFTSearchViewModel: ObservableObject {
                     }
                 }
             }
-
-            self.isSearching = false
         }
     }
 
