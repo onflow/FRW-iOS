@@ -9,50 +9,102 @@ import SwiftUI
 
 // MARK: - BackAppBar
 
-struct BackAppBar: View {
-    var title: String?
-    var showShare = false
-    var onBack: () -> Void
-    var onShare: (() -> Void)? = nil
+// MARK: - BackBarButton
 
-    var body: some View {
-        HStack(alignment: .center) {
-            Button {
-                onBack()
-            } label: {
-                Image(systemName: "arrow.backward")
+enum BackBarButton {
+    case none
+    case share(() -> Void)
+    case search(() -> Void)
+    case custom(icon: String, action: () -> Void)
+
+    @ViewBuilder
+    var view: some View {
+        switch self {
+        case .none:
+            EmptyView()
+        case let .share(action):
+            Button(action: action) {
+                Image(systemName: "square.and.arrow.up")
                     .foregroundColor(.LL.Button.color)
-                    .frame(width: 54, height: 30)
+                    .frame(width: 44, height: 44)
             }
-
-            Spacer()
-            if showShare {
-                Button {
-                    onShare?()
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(.LL.Button.color)
-                        .frame(width: 54, height: 30)
-                }
+        case let .search(action):
+            Button(action: action) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.LL.Button.color)
+                    .frame(width: 44, height: 44)
+            }
+        case let .custom(icon, action):
+            Button(action: action) {
+                Image(systemName: icon)
+                    .foregroundColor(.LL.Button.color)
+                    .frame(width: 44, height: 44)
             }
         }
-        .overlay {
+    }
+}
+
+struct BackAppBar: View {
+    var title: String?
+    var rightButton: BackBarButton
+    var onBack: () -> Void
+
+    init(title: String? = nil,
+         rightButton: BackBarButton = .none,
+         onBack: @escaping () -> Void)
+    {
+        self.title = title
+        self.rightButton = rightButton
+        self.onBack = onBack
+    }
+
+    var body: some View {
+        ZStack {
+            HStack {
+                Button {
+                    onBack()
+                } label: {
+                    Image(systemName: "arrow.backward")
+                        .foregroundColor(.LL.Button.color)
+                        .frame(width: 44, height: 44)
+                }
+                Spacer()
+            }
+
             if let title = self.title {
                 Text(title)
                     .font(.title2)
                     .foregroundColor(.LL.Neutrals.text)
-                    .frame(maxWidth: screenWidth - 90)
+                    .lineLimit(1)
+                    .frame(maxWidth: screenWidth - 140)
+            }
+
+            HStack {
+                Spacer()
+                rightButton.view
             }
         }
-        .frame(height: 44, alignment: .center)
-        .frame(maxHeight: .infinity, alignment: .top)
+        .frame(height: 44)
     }
 }
 
-// MARK: - NFTNavigationBar_Previews
+// MARK: - Preview
 
-struct NFTNavigationBar_Previews: PreviewProvider {
+struct BackAppBar_Previews: PreviewProvider {
     static var previews: some View {
-        BackAppBar(title: "I'm a Title,too long long long  long long ") {} onShare: {}
+        Group {
+            BackAppBar(title: "title") {}
+
+            BackAppBar(
+                title: "with share",
+                rightButton: .share {}
+            ) {}
+
+            BackAppBar(
+                title: "custom",
+                rightButton: .custom(icon: "bell") {}
+            ) {}
+        }
+        .previewLayout(.sizeThatFits)
     }
 }

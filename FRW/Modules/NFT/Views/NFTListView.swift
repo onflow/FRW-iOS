@@ -56,7 +56,7 @@ struct MyProgress: View {
 
     var body: some View {
         HStack {
-            ForEach(0...4, id: \.self) { index in
+            ForEach(0 ... 4, id: \.self) { index in
                 Circle()
                     .frame(width: 10, height: 10)
                     .foregroundColor(.red)
@@ -109,6 +109,10 @@ struct NFTListView: View {
                     }
                     .frame(height: ceil((screenWidth - 18 * 3) / 2 + 50))
                 }
+                .transition(.asymmetric(
+                    insertion: .opacity.combined(with: .scale(scale: 0.8)).animation(.easeInOut(duration: 0.3)),
+                    removal: .opacity.combined(with: .scale(scale: 0.6)).animation(.easeInOut(duration: 0.2))
+                ))
             }
             .padding(EdgeInsets(top: 12, leading: 18, bottom: 30, trailing: 18))
         }
