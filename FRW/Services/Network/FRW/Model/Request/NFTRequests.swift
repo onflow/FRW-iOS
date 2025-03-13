@@ -20,7 +20,7 @@ struct NFTGridDetailListRequest: Codable {
 struct NFTCollectionDetailListRequest: Codable {
     var address: String = "0x050aa60ac445a061"
     var collectionIdentifier: String
-    var offset: Int = 0
+    var offset: String = "0"
     var limit: Int = 24
 }
 
