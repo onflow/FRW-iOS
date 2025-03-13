@@ -1149,3 +1149,4 @@ Key Store and Private Key.";
 "loading_nfts" = "Loading NFTs...";
 "search_nft_name" = "Search NFT Name";
 "error_check_refresh" = "Error, please check your internet or refresh.";
+"result" = "Result";

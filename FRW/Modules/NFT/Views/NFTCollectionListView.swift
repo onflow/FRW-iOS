@@ -103,7 +103,7 @@ class NFTCollectionListViewViewModel: ObservableObject {
                 let request = NFTCollectionDetailListRequest(
                     address: address,
                     collectionIdentifier: path,
-                    offset: 0,
+                    offset: String(0),
                     limit: 24
                 )
                 let response: NFTListResponse = try await Network
@@ -215,6 +215,7 @@ struct NFTCollectionListView: RouteableView {
                         imageEffect: imageEffect,
                         fromChildAccount: childAccount
                     )
+                    .padding(.horizontal, 16)
                     .id(999)
                     .mockPlaceholder(vm.isLoading)
                 } appBar: {

@@ -3,6 +3,7 @@ import SwiftUI
 struct NFTLoadingView: View {
     let loadedCount: Int
     let totalCount: Int
+    @State private var currentProgress: Double = 0
 
     var body: some View {
         VStack {
@@ -13,7 +14,7 @@ struct NFTLoadingView: View {
                     .font(.inter(size: 14))
                     .foregroundStyle(Color.Theme.Text.black6)
 
-                ProgressView(value: Double(loadedCount), total: Double(totalCount))
+                ProgressView(value: currentProgress, total: Double(totalCount))
                     .progressViewStyle(LinearProgressViewStyle(tint: .Theme.Accent.green))
                     .frame(width: 144, height: 8)
                     .scaleEffect(x: 1, y: 1.5, anchor: .center)
@@ -21,6 +22,14 @@ struct NFTLoadingView: View {
                 Text("\(loadedCount)/\(totalCount)")
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundStyle(Color.Theme.Text.black6)
+            }
+            .onChange(of: loadedCount) { newValue in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    currentProgress = Double(newValue)
+                }
+            }
+            .onAppear {
+                currentProgress = Double(loadedCount)
             }
 
             Spacer()

@@ -256,7 +256,7 @@ final class MoveNFTsViewModel: ObservableObject {
         resetButtonState()
     }
 
-    func fetchNFTs(_ offset: Int = 0) async {
+    func fetchNFTs(_: Int = 0) async {
         guard let collection = selectedCollection else {
             return
         }
@@ -270,17 +270,15 @@ final class MoveNFTsViewModel: ObservableObject {
         }
 
         do {
-            let response = try await TokenBalanceHandler.shared.getNFTCollectionDetail(
-                address: from,
-                collectionIdentifier: collection.maskId,
-                offset: offset
-            )
-            await MainActor.run {
-                if let list = response.nfts {
-                    self.nfts = list.map { MoveNFTsViewModel.NFT(isSelected: false, model: $0) }
-                } else {
-                    self.nfts = []
+            let result = try await TokenBalanceHandler.shared.getAllNFTsUnderCollection(address: from, collectionIdentifier: collection.maskId) { cur, total in
+                runOnMain {
+                    self.loadedCount = cur
+                    self.totalCount = total
                 }
+            }
+
+            await MainActor.run {
+                self.nfts = result.map { MoveNFTsViewModel.NFT(isSelected: false, model: $0) }
                 self.loadingState = .success
                 self.resetButtonState()
             }

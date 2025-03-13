@@ -1,5 +1,5 @@
 //
-//  TokenManager.swift
+//  TokenBalanceHandler.swift
 //  FRW
 //
 //  Created by Hao Fu on 22/2/2025.
@@ -68,7 +68,8 @@ class TokenBalanceHandler {
         let address = flowTokenAddress(network: network).stripHexPrefix()
         guard let data = flowTokenJsonStr
             .replacingOccurrences(of: "<FlowTokenAddress>", with: address)
-            .data(using: .utf8) else {
+            .data(using: .utf8)
+        else {
             return nil
         }
         return try? FRWAPI.jsonDecoder.decode(SingleToken.self, from: data)
@@ -111,6 +112,62 @@ class TokenBalanceHandler {
             collectionIdentifier: collectionIdentifier,
             offset: offset
         )
+    }
+
+    func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
+        guard let collection = try await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier }) else {
+            throw TokenBalanceProviderError.collectionNotFound
+        }
+        let provider = generateProvider(address: address, network: network)
+
+        return try await withThrowingTaskGroup(of: [NFTModel].self) { group in
+            var completedCount = 0
+            group.addTask {
+                let total = collection.count
+                let pageCount = (total + provider.nftPageSize - 1) / provider.nftPageSize
+
+                // Parallel requests for each page of this collection
+                let nfts = try await withThrowingTaskGroup(of: NFTListResponse?.self) { subGroup in
+                    for page in 0 ..< pageCount {
+                        let offset = page * provider.nftPageSize
+                        subGroup.addTask {
+                            do {
+                                let response = try await self.getNFTCollectionDetail(
+                                    address: address,
+                                    collectionIdentifier: collection.id,
+                                    offset: String(offset)
+                                )
+                                completedCount += response.nfts?.count ?? 0
+                                progressHandler(completedCount, total)
+                                return response
+                            } catch {
+                                log.error(error)
+                                return nil
+                            }
+                        }
+                    }
+
+                    var collectionNFTs = [NFTModel]()
+                    for try await subResult in subGroup {
+                        if let nftModels = subResult?.nfts?.map({ nftResponse in
+                            NFTModel(nftResponse, in: subResult?.collection)
+                        }) {
+                            collectionNFTs.append(contentsOf: nftModels)
+                        }
+                    }
+                    return collectionNFTs
+                }
+
+                return nfts
+            }
+
+            // Aggregate results from all collections
+            var finalResults = [NFTModel]()
+            for try await result in group {
+                finalResults.append(contentsOf: result)
+            }
+            return finalResults
+        }
     }
 
     // MARK: Private

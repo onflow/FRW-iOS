@@ -30,13 +30,13 @@ struct NFTSearchView: RouteableView {
         VStack(spacing: 20) {
             searchBar
 
-            if !viewModel.isLoading && !viewModel.filteredNFTItems.isEmpty {
+            if viewModel.loadingState == .success && !viewModel.filteredNFTItems.isEmpty {
                 nftCountView
             }
 
             if case .failure = viewModel.loadingState {
                 errorView
-            } else if viewModel.isLoading {
+            } else if viewModel.loadingState == .loading {
                 loadingStateView
             } else {
                 nftGridView
@@ -50,7 +50,7 @@ struct NFTSearchView: RouteableView {
     @ViewBuilder
     var nftCountView: some View {
         HStack {
-            Text(viewModel.filteredNFTItems.count == viewModel.totalCount ? "All" : "Result")
+            Text(viewModel.filteredNFTItems.count == viewModel.totalCount ? "All::message".localized : "result".localized)
                 .font(.inter(weight: .semibold))
                 .foregroundStyle(Color.Theme.Text.black3)
             Spacer()
@@ -73,6 +73,7 @@ struct NFTSearchView: RouteableView {
             Button(action: {
                 viewModel.searchText = ""
                 isSearchFocused = false
+                Router.pop()
             }) {
                 Text("Cancel")
                     .font(.inter(size: 14, weight: .semibold))
@@ -92,6 +93,7 @@ struct NFTSearchView: RouteableView {
                 imageEffect: imageEffect,
                 fromChildAccount: childAccount
             )
+            .environmentObject(NFTTabViewModel())
             .animation(.easeInOut(duration: 0.3), value: viewModel.searchText)
         }
     }

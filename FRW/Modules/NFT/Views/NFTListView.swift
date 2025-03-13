@@ -114,13 +114,12 @@ struct NFTListView: View {
                     removal: .opacity.combined(with: .scale(scale: 0.6)).animation(.easeInOut(duration: 0.2))
                 ))
             }
-            .padding(EdgeInsets(top: 12, leading: 18, bottom: 30, trailing: 18))
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Color.LL.Shades.front
         )
-        .cornerRadius(16)
     }
 
     func repairHeight() -> CGFloat {

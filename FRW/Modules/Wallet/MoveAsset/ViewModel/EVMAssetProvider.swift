@@ -87,6 +87,24 @@ extension NFTCollection: CollectionMask {
     }
 }
 
+extension NFTModel: NFTMask {
+    var maskLogo: String {
+        logoUrl.absoluteString
+    }
+
+    var maskId: String {
+        id
+    }
+
+    var maskFlowIdentifier: String? {
+        response.flowIdentifier
+    }
+
+    var maskName: String? {
+        title
+    }
+}
+
 // MARK: - EVMNFT + NFTMask
 
 extension EVMNFT: NFTMask {

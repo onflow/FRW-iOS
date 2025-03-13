@@ -224,8 +224,6 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                         }
                     }
                 }
-                .padding(.horizontal, -18)
-                .padding(.horizontal, 18)
                 Spacer()
             }
             .overlay(alignment: .bottom) {

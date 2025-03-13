@@ -31,10 +31,10 @@ enum NFTLoadingState: Equatable {
     }
 }
 
+@MainActor
 class NFTSearchViewModel: ObservableObject {
     let collectionInfo: NFTCollectionInfo
     @Published var searchText: String = ""
-    @Published var isLoading: Bool = true
     @Published var loadedCount: Int = 0
     @Published var totalCount: Int = 0
     @Published var nftItems: [NFTModel] = []
@@ -87,7 +87,6 @@ class NFTSearchViewModel: ObservableObject {
 
     func loadNFTs() {
         // reset status
-        isLoading = true
         loadingState = .loading
         errorMessage = nil
         nftItems = []
@@ -99,13 +98,29 @@ class NFTSearchViewModel: ObservableObject {
     }
 
     private func fetchNextBatch() {
-        /*
-         self.nftItems.append(contentsOf: newItems)
-
-         // update progress
-         self.loadedCount += currentBatchSize
-         self.currentBatch += 1
-         */
+        guard let addr = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress(),
+              let address = FWAddressDector.create(address: addr)
+        else {
+            loadingState = .failure(LLError.invalidAddress)
+            return
+        }
+        Task {
+            do {
+                let result = try await TokenBalanceHandler.shared.getAllNFTsUnderCollection(address: address, collectionIdentifier: collectionInfo.id) { cur, total in
+                    runOnMain {
+                        self.loadedCount = cur
+                        self.totalCount = total
+                    }
+                }
+                await MainActor.run {
+                    self.nftItems = result
+                    self.loadingState = .success
+                }
+            } catch {
+                loadingState = .failure(error)
+                self.nftItems = []
+            }
+        }
     }
 
     func retry() {
