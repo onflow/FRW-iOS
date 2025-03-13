@@ -77,7 +77,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
             address: address.hexAddr,
             collectionIdentifier: collectionIdentifier,
             offset: offset,
-            limit: Self.nftLimit
+            limit: EVMTokenBalanceProvider.nftLimit
         )
         let response: NFTListResponse = try await Network.request(
             FRWAPI.NFT.collectionDetailList(

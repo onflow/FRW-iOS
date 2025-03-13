@@ -115,10 +115,12 @@ class TokenBalanceHandler {
     
     func getAllNFTs(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork
+        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+        collectionIdentifier: String,
+        progressHandler: @escaping ((Double) -> Void) = { _ in }
     ) async throws -> [NFTModel] {
         let provider = generateProvider(address: address, network: network)
-        return try await provider.getAllNFTs(address: address)
+        return try await provider.getAllNFTs(address: address, collectionIdentifier: collectionIdentifier, progressHandler: progressHandler)
     }
 
     // MARK: Private
