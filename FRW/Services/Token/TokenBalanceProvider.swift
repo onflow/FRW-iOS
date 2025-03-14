@@ -19,7 +19,7 @@ protocol TokenBalanceProvider {
     func getAllNFTsUnderCollection(
         address: FWAddress,
         collectionIdentifier: String,
-        progressHandler: @escaping (Int, Int) -> ()
+        progressHandler: @escaping (_ current: Int, _ total: Int) -> ()
     ) async throws -> [NFTModel]
 
     func getNFTCollectionDetail(

@@ -13,6 +13,7 @@ struct NFTListResponse: Codable {
     let nfts: [NFTResponse]?
     let nftCount: Int
     let collection: NFTCollectionInfo?
+    let offset: String?
 }
 
 extension NFTListResponse {
