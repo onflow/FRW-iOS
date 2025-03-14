@@ -285,7 +285,7 @@ extension Color {
         }
 
         enum Fill {
-            static let fill1 = Color("fill.1")
+            static let fill1 = Color("fill.fill1")
         }
 
         static let evm = Color("evm")

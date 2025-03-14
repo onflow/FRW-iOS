@@ -19,7 +19,7 @@ struct NFTDetailPage: RouteableView {
     init(viewModel: NFTTabViewModel, nft: NFTModel, from childAccount: ChildAccount? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel)
         _vm = StateObject(wrappedValue: NFTDetailPageViewModel(nft: nft))
-        self.fromChildAccount = childAccount
+        fromChildAccount = childAccount
     }
 
     // MARK: Internal
@@ -318,9 +318,7 @@ struct NFTDetailPage: RouteableView {
                 }
 
             } appBar: {
-                BackAppBar(showShare: true) {
-                    viewModel.trigger(.back)
-                } onShare: {
+                BackAppBar(rightButton: .share {
                     Task {
                         UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                         let image = await vm.image()
@@ -339,6 +337,8 @@ struct NFTDetailPage: RouteableView {
                             completion: nil
                         )
                     }
+                }) {
+                    viewModel.trigger(.back)
                 }
             }
             .halfSheet(showSheet: $vm.isPresentMove, autoResizing: true, backgroundColor: Color.Theme.Background.grey) {
@@ -420,7 +420,8 @@ struct NFTDetailPage: RouteableView {
                     }
 
                     if let urlString = vm.nft.response.externalURL,
-                       let url = URL(string: urlString) {
+                       let url = URL(string: urlString)
+                    {
                         Button {
                             Router.route(to: RouteMap.Explore.browser(url))
                         } label: {

@@ -64,7 +64,8 @@ class NFTUIKitListGridDataModel {
 
     private func requestGrid(offset: Int, limit: Int = 24) async throws -> [NFTModel] {
         guard let address = WalletManager.shared
-            .getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+            .getWatchAddressOrChildAccountAddressOrPrimaryAddress()
+        else {
             return []
         }
 
@@ -146,7 +147,8 @@ class NFTUIKitListNormalDataModel {
         removeAllCache()
 
         guard let address = WalletManager.shared
-            .getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+            .getWatchAddressOrChildAccountAddressOrPrimaryAddress()
+        else {
             DispatchQueue.syncOnMain {
                 self.items = []
             }
@@ -200,7 +202,8 @@ class NFTUIKitListNormalDataModel {
     private func loadCache() {
         if var cachedCollections = NFTUIKitCache.cache.getCollections(),
            let address = WalletManager.shared
-           .getWatchAddressOrChildAccountAddressOrPrimaryAddress() {
+           .getWatchAddressOrChildAccountAddressOrPrimaryAddress()
+        {
             cachedCollections.sort {
                 if $0.count == $1.count {
                     return ($0.collection.contractName ?? "") < ($1.collection.contractName ?? "")
@@ -231,10 +234,12 @@ class NFTUIKitListNormalDataModel {
 
     private func requestCollections() async throws -> [NFTCollection] {
         guard let address = WalletManager.shared
-            .getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+            .getWatchAddressOrChildAccountAddressOrPrimaryAddress(), let dector = FWAddressDector.create(address: address)
+        else {
             return []
         }
-        let type: VMType = EVMAccountManager.shared.selectedAccount != nil ? .evm : .cadence
+
+        let type: VMType = dector.type
         return try await Network.request(
             FRWAPI.NFT.userCollection(address, type)
         )
