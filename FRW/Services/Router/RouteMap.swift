@@ -639,7 +639,7 @@ extension RouteMap.Transaction: RouterTarget {
             let network = LocalUserDefaults.shared.flowNetwork
             let accountType = AccountType.current
             let url = network.getTransactionHistoryUrl(
-                accountType: accountType,
+                accountType: .flow,
                 transactionId: transactionId.hex
             )
 
