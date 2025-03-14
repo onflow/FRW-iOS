@@ -415,7 +415,6 @@ extension NFTUIKitListStyleHandler {
 
 extension NFTUIKitListStyleHandler {
     private func changeSelectCollectionIndexAction(_ newIndex: Int) {
-        dataModel.isCollectionListStyle = false
         dataModel.selectedIndex = newIndex
         collectionHContainer.items = dataModel.items
         collectionHContainer.selectedIndex = dataModel.selectedIndex
