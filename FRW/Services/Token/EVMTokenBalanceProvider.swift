@@ -18,8 +18,6 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     // MARK: Internal
 
-    static let nftLimit = 30
-
     var network: FlowNetworkType
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
@@ -67,35 +65,9 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
         return sorted
     }
-
-    func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
-        let list: [NFTCollection] = try await Network.request(
-            FRWAPI.NFT.userCollection(
-                address.hexAddr,
-                address.type
-            )
-        )
-        let sorted = list.sorted(by: { $0.count > $1.count })
-        return sorted
-    }
-
-    func getNFTCollectionDetail(
-        address: FWAddress,
-        collectionIdentifier: String,
-        offset: Int
-    ) async throws -> NFTListResponse {
-        let request = NFTCollectionDetailListRequest(
-            address: address.hexAddr,
-            collectionIdentifier: collectionIdentifier,
-            offset: offset,
-            limit: EVMTokenBalanceProvider.nftLimit
-        )
-        let response: NFTListResponse = try await Network.request(
-            FRWAPI.NFT.collectionDetailList(
-                request,
-                address.type
-            )
-        )
-        return response
+    
+    func getAllNFTsUnderCollection(address: any FWAddress, collectionIdentifier: String, progressHandler: @escaping (Int, Int) -> ()) async throws -> [NFTModel] {
+        // TODO:
+        return []
     }
 }
