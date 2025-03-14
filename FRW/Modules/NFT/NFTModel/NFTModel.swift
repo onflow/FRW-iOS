@@ -403,7 +403,9 @@ class CollectionItem: Identifiable, ObservableObject {
         limit: Int = 24,
         fromAddress: String? = nil
     ) async throws -> NFTListResponse {
-        guard let addr = fromAddress ?? WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+        guard let addr = fromAddress ?? WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress(),
+              let address = FWAddressDector.create(address: addr)
+        else {
             throw LLError.invalidAddress
         }
         let request = NFTCollectionDetailListRequest(
@@ -412,7 +414,7 @@ class CollectionItem: Identifiable, ObservableObject {
             offset: String(offset),
             limit: limit
         )
-        let from: VMType = EVMAccountManager.shared.selectedAccount == nil ? .cadence : .evm
+        let from: VMType = address.type
         let response: NFTListResponse = try await Network.request(FRWAPI.NFT.collectionDetailList(
             request,
             from
