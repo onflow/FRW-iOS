@@ -17,6 +17,8 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
     @StateObject
     var viewModel = MoveNFTsViewModel()
 
+    @State private var isSearchFocused: Bool = false
+
     var title: String {
         ""
     }
@@ -44,7 +46,6 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                 .padding(.vertical, 12)
 
             NFTListView()
-                .mockPlaceholder(viewModel.isMock)
 
             VStack(spacing: 0) {
                 InsufficientStorageToastView<MoveNFTsViewModel>()
@@ -195,7 +196,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
             }
             .padding(.bottom, 12)
 
-            if viewModel.nfts.isEmpty {
+            if viewModel.nfts.isEmpty && viewModel.loadingState == .success {
                 HStack {
                     Spacer()
                     Text("0 NFTs")
@@ -206,9 +207,14 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                 .padding(.top, 24)
             }
 
+            if !viewModel.nfts.isEmpty {
+                SearchBar(placeholder: "search_nft_name".localized, searchText: $viewModel.searchText, isFocused: $isSearchFocused)
+                    .padding(.bottom)
+            }
+
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 4) {
-                    ForEach(viewModel.nfts) { nft in
+                    ForEach(viewModel.filteredNFTItems) { nft in
                         NFTView(
                             nft: nft,
                             reachMax: viewModel.showHint,
@@ -226,6 +232,19 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                     .animation(.easeInOut, value: viewModel.selectedCount)
             }
         }
+        .overlay {
+            switch viewModel.loadingState {
+            case .loading:
+                NFTLoadingView(loadedCount: viewModel.loadedCount, totalCount: viewModel.totalCount)
+            case .failure:
+                ErrorWithTryView(
+                    message: .check,
+                    retryAction: viewModel.retry
+                )
+            case .idle, .success:
+                EmptyView()
+            }
+        }
     }
 
     func customViewDidDismiss() {
@@ -235,7 +254,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
     // MARK: Private
 
     private let columns = [
-        GridItem(.adaptive(minimum: 110, maximum: 125), spacing: 4),
+        GridItem(.adaptive(minimum: 110, maximum: 150), spacing: 4),
     ]
 }
 
