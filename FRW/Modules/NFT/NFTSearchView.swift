@@ -30,7 +30,7 @@ struct NFTSearchView: RouteableView {
         VStack(spacing: 20) {
             searchBar
 
-            if viewModel.loadingState == .success && !viewModel.filteredNFTItems.isEmpty {
+            if viewModel.loadingState == .success && !viewModel.nftItems.isEmpty {
                 nftCountView
             }
 
@@ -95,6 +95,11 @@ struct NFTSearchView: RouteableView {
             )
             .environmentObject(NFTTabViewModel())
             .animation(.easeInOut(duration: 0.3), value: viewModel.searchText)
+        }
+        .overlay {
+            if viewModel.filteredNFTItems.isEmpty {
+                CollectionEmptyView()
+            }
         }
     }
 

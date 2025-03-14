@@ -127,7 +127,7 @@ class NFTUIKitListNormalDataModel {
 
     var items: [CollectionItem] = []
     var selectedIndex = 0
-    var isCollectionListStyle: Bool = false
+    var isCollectionListStyle: Bool = true
     var reloadCallback: (() -> Void)?
 
     var selectedCollectionItem: CollectionItem? {
