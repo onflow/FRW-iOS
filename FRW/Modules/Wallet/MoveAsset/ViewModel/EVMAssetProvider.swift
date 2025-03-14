@@ -93,7 +93,7 @@ extension NFTModel: NFTMask {
     }
 
     var maskId: String {
-        id
+        response.id
     }
 
     var maskFlowIdentifier: String? {
