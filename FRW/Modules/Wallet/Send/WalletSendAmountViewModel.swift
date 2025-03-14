@@ -433,14 +433,14 @@ extension WalletSendAmountViewModel {
                     } else {
                         guard let bigUIntValue = amount.description
                             .parseToBigUInt(decimals: token.decimal),
-                            let flowIdentifier = self.token.flowIdentifier
+                            let vaultIdentifier = token.vaultIdentifier
                         else {
                             failureBlock()
                             return
                         }
 
                         txId = try await FlowNetwork.bridgeTokensFromEvmToFlow(
-                            identifier: flowIdentifier,
+                            identifier: vaultIdentifier,
                             amount: bigUIntValue,
                             receiver: targetAddress
                         )
