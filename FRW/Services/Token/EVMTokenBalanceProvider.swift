@@ -66,8 +66,30 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         return sorted
     }
     
-    func getAllNFTsUnderCollection(address: any FWAddress, collectionIdentifier: String, progressHandler: @escaping (Int, Int) -> ()) async throws -> [NFTModel] {
-        // TODO:
-        return []
+    func getAllNFTsUnderCollection(
+        address: any FWAddress,
+        collectionIdentifier: String,
+        progressHandler: @escaping (Int, Int) -> ()
+    ) async throws -> [NFTModel] {
+        var nfts = [NFTModel]()
+        var currentOffset: String? = "0"
+        let nftsInCollection = try? await getNFTCollections(address: address).first { $0.id == collectionIdentifier }?.count
+        
+        while let offset = currentOffset {
+            let response = try await self.getNFTCollectionDetail(
+                address: address,
+                collectionIdentifier: collectionIdentifier,
+                offset: offset
+            )
+            currentOffset = response.offset
+            
+            let newNFTs = response.nfts?.map { NFTModel($0, in: response.collection) } ?? []
+            nfts.append(contentsOf: newNFTs)
+            
+            if let nftsInCollection {
+                progressHandler(nfts.count, nftsInCollection)
+            }
+        }
+        return nfts
     }
 }
