@@ -99,7 +99,7 @@ struct FlowScanTransfer: Codable {
     }
 
     var amountString: String {
-        if let amountString = amount, !amountString.isEmpty {
+        if let amountString = Double(amount ?? "")?.formattedCurrency(), !amountString.isEmpty {
             return amountString
         } else {
             return "-"
