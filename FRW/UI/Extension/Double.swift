@@ -8,6 +8,8 @@
 import Foundation
 
 extension Double {
+    private var maxDigitsAllowed: Int { 4 }
+    
     static let currencyFormatter: NumberFormatter = {
         let f = NumberFormatter()
         f.maximumFractionDigits = 3
@@ -17,21 +19,23 @@ extension Double {
 
     func formatCurrencyString(
         digits: Int = 2,
-        roundingMode: NumberFormatter.RoundingMode = .down,
+        roundingMode: NumberFormatter.RoundingMode = .halfUp,
         considerCustomCurrency: Bool = false
     ) -> String {
-        let value = NSNumber(
-            value: considerCustomCurrency ? self * CurrencyCache.cache
+        let value = considerCustomCurrency ? self * CurrencyCache.cache
                 .currentCurrencyRate : self
-        ).decimalValue
 
-        let f = NumberFormatter()
-        f.maximumFractionDigits = digits
-        f.minimumFractionDigits = digits
-        f.roundingMode = roundingMode
-        return f.string(for: value) ?? "?"
+        if abs(value) < 0.0001, value != 0 {
+            return value.formattedCurrency() ?? "?"
+        } else {
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = min(digits, maxDigitsAllowed)
+            formatter.roundingMode = roundingMode
+            return formatter.string(from: NSNumber(value: value)) ?? "?"
+        }
     }
-
+    
     var decimalValue: Decimal {
         // Deal with precision issue with swift decimal
         Decimal(string: String(self)) ?? Decimal(self)
@@ -41,38 +45,50 @@ extension Double {
 extension Int {
     func formattedToSubscriptNotion() -> String {
         let subscriptNumbers: [Character] = ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"]
-        return String(self).compactMap { String(subscriptNumbers[$0.wholeNumberValue ?? 0]) }.joined()
+        return String(self).compactMap { $0.wholeNumberValue }.map { String(subscriptNumbers[$0]) }.joined()
     }
 }
 
 extension Double {
-    func formattedCurrency() -> String? {
+    private func formattedCurrency() -> String? {
+        guard self != 0 else { return "0" }
+
         let threshold = 0.0001
-        let formatter = NumberFormatter()
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 8
-        
-        if self >= threshold {
+
+        if abs(self) >= threshold {
+            let formatter = NumberFormatter()
+            formatter.minimumFractionDigits = 0
+            formatter.maximumFractionDigits = 8
+            formatter.roundingMode = .halfUp
             return formatter.string(from: NSNumber(value: self))
-        } else {
-            let numberString = String(format: "%.18f", self)
-            let components = numberString.split(separator: ".")
-            guard components.count == 2 else { return nil }
-            
-            let decimalPart = components[1]
-            var leadingZeros = 0
-            for char in decimalPart {
-                if char == "0" {
-                    leadingZeros += 1
-                } else {
-                    break
-                }
-            }
-            
-            let subscriptZeros = leadingZeros.formattedToSubscriptNotion()
-            let significantDigits = decimalPart.dropFirst(leadingZeros).prefix(3)
-            
-            return "0.0\(subscriptZeros)\(significantDigits)"
         }
+
+        let decimalString = String(format: "%.20f", abs(self)).split(separator: ".")[1]
+        var leadingZeros = 0
+
+        for char in decimalString {
+            guard char == "0" else { break }
+            leadingZeros += 1
+        }
+
+        var significantDigits = decimalString.dropFirst(leadingZeros)
+        let requiredDigits = 4
+
+        while significantDigits.count < requiredDigits {
+            significantDigits += "0"
+        }
+
+        var roundedNumber = Int(significantDigits.prefix(requiredDigits)) ?? 0
+        roundedNumber = (roundedNumber + 5) / 10
+
+        var roundedString = String(roundedNumber)
+
+        while roundedString.last == "0" {
+            roundedString.removeLast()
+        }
+
+        let subscriptZeros = leadingZeros.formattedToSubscriptNotion()
+
+        return "0.0\(subscriptZeros)\(roundedString)"
     }
 }
