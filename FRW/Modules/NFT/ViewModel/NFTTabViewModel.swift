@@ -33,7 +33,7 @@ extension NFTTabScreen {
     }
 
     enum Action {
-        case search
+        case search(CollectionItem)
         case info(NFTModel, ChildAccount?)
         case fetchColors(String)
         case back
@@ -66,8 +66,12 @@ class NFTTabViewModel: ViewModel {
         switch input {
         case let .info(model, childAccount):
             Router.route(to: RouteMap.NFT.detail(self, model, childAccount))
-        case .search:
-            break
+        case let .search(item):
+            guard let info = item.collection else {
+                HUD.error(title: "Invalid Collection")
+                return
+            }
+            Router.route(to: RouteMap.NFT.searchNFT(info))
         case let .fetchColors(url):
             fetchColors(from: url)
         case .back:

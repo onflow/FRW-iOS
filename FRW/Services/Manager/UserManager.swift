@@ -641,7 +641,7 @@ extension UserManager {
 // MARK: - Switch Account
 
 extension UserManager {
-    func switchAccount(withUID uid: String) async throws {
+    func switchAccount(withUID uid: String) async throws {        
         if !currentNetwork.isMainnet {
             WalletManager.shared.changeNetwork(.mainnet)
         }
@@ -657,7 +657,8 @@ extension UserManager {
         }
         
         try await restoreLogin(userId: uid)
-
+            
+            
         // FIXME: data migrate from device to other device,the private key is destructive
 //        let allModel = try WallectSecureEnclave.Store.fetchAllModel(by: uid)
 //        let model = try WallectSecureEnclave.Store.fetchModel(by: uid)

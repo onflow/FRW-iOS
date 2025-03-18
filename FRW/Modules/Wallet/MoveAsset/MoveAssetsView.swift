@@ -180,7 +180,7 @@ struct MoveAssetsView: RouteableView, PresentActionDelegate {
         }
         let flowToken = WalletManager.shared.activatedCoins.first { $0.isFlowCoin }
         if let token = flowToken {
-            return flowToken
+            return token
         }
         if let current = WalletManager.shared.activatedCoins.first {
             return current

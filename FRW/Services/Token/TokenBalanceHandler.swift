@@ -1,5 +1,5 @@
 //
-//  TokenManager.swift
+//  TokenBalanceHandler.swift
 //  FRW
 //
 //  Created by Hao Fu on 22/2/2025.
@@ -68,7 +68,8 @@ class TokenBalanceHandler {
         let address = flowTokenAddress(network: network).stripHexPrefix()
         guard let data = flowTokenJsonStr
             .replacingOccurrences(of: "<FlowTokenAddress>", with: address)
-            .data(using: .utf8) else {
+            .data(using: .utf8)
+        else {
             return nil
         }
         return try? FRWAPI.jsonDecoder.decode(SingleToken.self, from: data)
@@ -78,7 +79,7 @@ class TokenBalanceHandler {
         address: FWAddress,
         network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork
     ) async throws -> [TokenModel] {
-        let provider = try generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getFTBalance(address: address)
     }
 
@@ -95,7 +96,7 @@ class TokenBalanceHandler {
         address: FWAddress,
         network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork
     ) async throws -> [NFTCollection] {
-        let provider = try generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getNFTCollections(address: address)
     }
 
@@ -103,13 +104,25 @@ class TokenBalanceHandler {
         address: FWAddress,
         network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
         collectionIdentifier: String,
-        offset: Int
+        offset: String
     ) async throws -> NFTListResponse {
-        let provider = try generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getNFTCollectionDetail(
             address: address,
             collectionIdentifier: collectionIdentifier,
             offset: offset
+        )
+    }
+
+    func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
+        guard let collection = try await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier }) else {
+            throw TokenBalanceProviderError.collectionNotFound
+        }
+        let provider = generateProvider(address: address, network: network)
+        return try await provider.getAllNFTsUnderCollection(
+            address: address,
+            collectionIdentifier: collectionIdentifier,
+            progressHandler: progressHandler
         )
     }
 
@@ -118,7 +131,7 @@ class TokenBalanceHandler {
     private func generateProvider(
         address: FWAddress,
         network: FlowNetworkType
-    ) throws -> TokenBalanceProvider {
+    ) -> TokenBalanceProvider {
         switch address.type {
         case .cadence:
             return CadenceTokenBalanceProvider(network: network)

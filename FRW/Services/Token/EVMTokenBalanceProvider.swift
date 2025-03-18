@@ -18,8 +18,6 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     // MARK: Internal
 
-    static let nftLimit = 30
-
     var network: FlowNetworkType
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
@@ -67,35 +65,31 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
         return sorted
     }
-
-    func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
-        let list: [NFTCollection] = try await Network.request(
-            FRWAPI.NFT.userCollection(
-                address.hexAddr,
-                address.type
-            )
-        )
-        let sorted = list.sorted(by: { $0.count > $1.count })
-        return sorted
-    }
-
-    func getNFTCollectionDetail(
-        address: FWAddress,
+    
+    func getAllNFTsUnderCollection(
+        address: any FWAddress,
         collectionIdentifier: String,
-        offset: Int
-    ) async throws -> NFTListResponse {
-        let request = NFTCollectionDetailListRequest(
-            address: address.hexAddr,
-            collectionIdentifier: collectionIdentifier,
-            offset: offset,
-            limit: EVMTokenBalanceProvider.nftLimit
-        )
-        let response: NFTListResponse = try await Network.request(
-            FRWAPI.NFT.collectionDetailList(
-                request,
-                address.type
+        progressHandler: @escaping (Int, Int) -> ()
+    ) async throws -> [NFTModel] {
+        var nfts = [NFTModel]()
+        var currentOffset: String? = "0"
+        let nftsInCollection = try? await getNFTCollections(address: address).first { $0.id == collectionIdentifier }?.count
+        
+        while let offset = currentOffset {
+            let response = try await self.getNFTCollectionDetail(
+                address: address,
+                collectionIdentifier: collectionIdentifier,
+                offset: offset
             )
-        )
-        return response
+            currentOffset = response.offset
+            
+            let newNFTs = response.nfts?.map { NFTModel($0, in: response.collection) } ?? []
+            nfts.append(contentsOf: newNFTs)
+            
+            if let nftsInCollection {
+                progressHandler(nfts.count, nftsInCollection)
+            }
+        }
+        return nfts
     }
 }

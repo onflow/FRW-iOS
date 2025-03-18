@@ -353,7 +353,7 @@ class CollectionItem: Identifiable, ObservableObject {
                     offset: nfts.count,
                     limit: limit
                 )
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
 
                     guard let list = response.nfts, !list.isEmpty else {
@@ -377,7 +377,7 @@ class CollectionItem: Identifiable, ObservableObject {
                 }
             } catch {
                 log.error("[NFT] load NFTs of \(name): \(error)")
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.loadCallback?(false)
                     self.loadCallback2?(false)
@@ -403,19 +403,18 @@ class CollectionItem: Identifiable, ObservableObject {
         limit: Int = 24,
         fromAddress: String? = nil
     ) async throws -> NFTListResponse {
-        guard let addr = fromAddress ?? WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+        guard let addr = fromAddress ?? WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress(),
+              let address = FWAddressDector.create(address: addr)
+        else {
             throw LLError.invalidAddress
-        }
-        guard let collectionIdentifier = collection?.id else {
-            throw WalletError.collectionIsNil
         }
         let request = NFTCollectionDetailListRequest(
             address: addr,
-            collectionIdentifier: collectionIdentifier,
-            offset: offset,
+            collectionIdentifier: collection?.id ?? "",
+            offset: String(offset),
             limit: limit
         )
-        let from: VMType = EVMAccountManager.shared.selectedAccount == nil ? .cadence : .evm
+        let from: VMType = address.type
         let response: NFTListResponse = try await Network.request(FRWAPI.NFT.collectionDetailList(
             request,
             from

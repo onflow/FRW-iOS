@@ -11,19 +11,61 @@ import Foundation
 
 protocol TokenBalanceProvider {
     var network: FlowNetworkType { get }
+    var nftPageSize: Int { get }
     func getFTBalance(address: FWAddress) async throws -> [TokenModel]
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel?
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection]
+
+    func getAllNFTsUnderCollection(
+        address: FWAddress,
+        collectionIdentifier: String,
+        progressHandler: @escaping (_ current: Int, _ total: Int) -> ()
+    ) async throws -> [NFTModel]
+
     func getNFTCollectionDetail(
         address: FWAddress,
         collectionIdentifier: String,
-        offset: Int
+        offset: String
     ) async throws -> NFTListResponse
 }
 
 extension TokenBalanceProvider {
+    
+    var nftPageSize: Int { 50 }
+    
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel? {
         let models = try await getFTBalance(address: address)
         return models.first { $0.id == tokenId }
+    }
+    
+    func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
+        let list: [NFTCollection] = try await Network.request(
+            FRWAPI.NFT.userCollection(
+                address.hexAddr,
+                address.type
+            )
+        )
+        let sorted = list.sorted(by: { $0.count > $1.count })
+        return sorted
+    }
+    
+    func getNFTCollectionDetail(
+        address: FWAddress,
+        collectionIdentifier: String,
+        offset: String
+    ) async throws -> NFTListResponse {
+        let request = NFTCollectionDetailListRequest(
+            address: address.hexAddr,
+            collectionIdentifier: collectionIdentifier,
+            offset: offset,
+            limit: nftPageSize
+        )
+        let response: NFTListResponse = try await Network.request(
+            FRWAPI.NFT.collectionDetailList(
+                request,
+                address.type
+            )
+        )
+        return response
     }
 }

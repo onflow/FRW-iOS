@@ -1147,3 +1147,8 @@ Key Store and Private Key.";
 "or" = "Or";
 "collection_ready_to_shine" = "Your collection is waiting to shine!";
 "start_exploring_nfts" = "Start exploring and add your first NFTs today.";
+"loading_nfts" = "Loading NFTs...";
+"search_nft_name" = "Search NFT Name";
+"error_check_refresh" = "Error, please check your internet or refresh.";
+"result" = "Result";
+"nft_no_found" = "No relevant NFT found.";

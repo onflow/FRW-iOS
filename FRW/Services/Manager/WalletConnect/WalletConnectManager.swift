@@ -108,9 +108,8 @@ class WalletConnectManager: ObservableObject {
         print("[RESPONDER] Pairing to: \(link)")
         Task {
             do {
-                if let removedLink = link.removingPercentEncoding,
-                   let uri = WalletConnectURI(string: removedLink) {
-                    // TODO: commit
+                if let removedLink = link.removingPercentEncoding {
+                    let uri = try WalletConnectURI(uriString: removedLink)
                     #if DEBUG
 //                    if Pair.instance.getPairings().contains(where: { $0.topic == uri.topic }) {
 //                        try await Pair.instance.disconnect(topic: uri.topic)
