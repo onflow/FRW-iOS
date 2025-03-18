@@ -115,9 +115,6 @@ class TokenBalanceHandler {
     }
 
     func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
-        guard let collection = try await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier }) else {
-            throw TokenBalanceProviderError.collectionNotFound
-        }
         let provider = generateProvider(address: address, network: network)
         return try await provider.getAllNFTsUnderCollection(
             address: address,
