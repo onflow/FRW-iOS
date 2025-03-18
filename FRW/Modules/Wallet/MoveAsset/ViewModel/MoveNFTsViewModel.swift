@@ -558,9 +558,7 @@ extension MoveNFTsViewModel {
                     self.filteredNFTItems = self.nfts
                 } else {
                     self.filteredNFTItems = self.nfts.filter {
-                        guard let name = $0.model.maskName else {
-                            return false
-                        }
+                        let name = $0.model.maskSearchContent
                         return name.lowercased().contains(query.lowercased())
                     }
                     log.debug("\(self.filteredNFTItems)")
