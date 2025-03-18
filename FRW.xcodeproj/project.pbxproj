@@ -15,7 +15,6 @@
 		150D3E372A58718700F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E362A58718700F7F2DC /* QRCode */; };
 		150D3E392A58719A00F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E382A58719A00F7F2DC /* QRCode */; };
 		15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */ = {isa = PBXBuildFile; productRef = 15185ED7278A73A3006B74A9 /* SPConfetti */; };
-		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
 		152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 152BB09328AE8FD100B2A2AA /* Lottie */; };
 		152BB09628AE900C00B2A2AA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 152BB09528AE900C00B2A2AA /* Lottie */; };
 		152BB09828AE91A700B2A2AA /* ResizableLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */; };
@@ -1922,11 +1921,12 @@
 		7652E32B2D6AA3F000AECFEF /* CreatingAccount.json in Resources */ = {isa = PBXBuildFile; fileRef = 7652E3292D6AA3F000AECFEF /* CreatingAccount.json */; };
 		7652E32D2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7652E32C2D6AAE2400AECFEF /* AccountCreatedView.swift */; };
 		7652E32E2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7652E32C2D6AAE2400AECFEF /* AccountCreatedView.swift */; };
-		76E335632D84437200A655A7 /* FlowWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 76E335622D84437200A655A7 /* FlowWalletKit */; };
+		76644C232D891F7C00B1591D /* NFTEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8DD9F7282E2FBB0016A931 /* NFTEmptyView.swift */; };
 		7690FCD02D78533C00C578F3 /* NFTCollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690FCCF2D78533C00C578F3 /* NFTCollectionsView.swift */; };
 		7690FCD12D78533C00C578F3 /* NFTCollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7690FCCF2D78533C00C578F3 /* NFTCollectionsView.swift */; };
 		76C796E72D81604D005D9F41 /* NFTCollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C796E62D81583B005D9F41 /* NFTCollectionsViewModel.swift */; };
 		76C796E82D81604D005D9F41 /* NFTCollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C796E62D81583B005D9F41 /* NFTCollectionsViewModel.swift */; };
+		76E335632D84437200A655A7 /* FlowWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 76E335622D84437200A655A7 /* FlowWalletKit */; };
 		76E4A4462D5A99DE000EE408 /* TransactionListViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4A4452D5A99D6000EE408 /* TransactionListViewControllerRepresentable.swift */; };
 		76E4A4472D5A99DE000EE408 /* TransactionListViewControllerRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76E4A4452D5A99D6000EE408 /* TransactionListViewControllerRepresentable.swift */; };
 /* End PBXBuildFile section */
@@ -2030,7 +2030,6 @@
 		1505E5FD2836365C007B98D8 /* FRWAPI+AddressBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+AddressBook.swift"; sourceTree = "<group>"; };
 		1507A66E28BFA4CA009B050A /* WalletSendButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSendButtonView.swift; sourceTree = "<group>"; };
 		1507C7EE275634C900890C5D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTEmptyView_dev.swift; sourceTree = "<group>"; };
 		152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizableLottieView.swift; sourceTree = "<group>"; };
 		152EEC6828E4F26300C37A67 /* FRWWebEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRWWebEndpoint.swift; sourceTree = "<group>"; };
 		152EEC6C28E4F2AB00C37A67 /* TxTemplateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxTemplateRequest.swift; sourceTree = "<group>"; };
@@ -3404,7 +3403,6 @@
 				4E8DD9F7282E2FBB0016A931 /* NFTEmptyView.swift */,
 				4EF5129828329ADA0014F4EC /* NFTDetailPage.swift */,
 				4E8E3F7C2D82A1C8000916A6 /* NFTSearchView.swift */,
-				1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */,
 				4EF5129B28333A230014F4EC /* NFTTagsView.swift */,
 				6A95CFB028B7258100267F86 /* NFTTransferView.swift */,
 				4E24BC702AAF6392009CE21F /* NFTCatalogCache.swift */,
@@ -6327,7 +6325,6 @@
 				4E2FA6B72CF4177C00D46EA7 /* WalletConnectVerify */,
 				4EB94AA82D115F6C00AEF3C9 /* SwiftyDropbox */,
 				15F6F4BC2D683FF100D62D7F /* TrustWeb3Provider */,
-				4E6224792D7F2D8100BABC28 /* FlowWalletKit */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
 			);
 			productName = "FlowReferenceWallet-lite";
@@ -6990,6 +6987,7 @@
 				4E1DE2C62C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */,
 				4E2381022B186FD600756874 /* DeviceInfoItem.swift in Sources */,
 				15DC20A927819C56000B187A /* VWebLink.swift in Sources */,
+				76644C232D891F7C00B1591D /* NFTEmptyView.swift in Sources */,
 				4E131AA12CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */,
 				4EB9A7C12AE9EF53004DA67F /* AccountKeyRevokeView.swift in Sources */,
 				158832DB2894287700142B35 /* SessionItem.swift in Sources */,
@@ -7051,7 +7049,6 @@
 				1507A67028BFA4CA009B050A /* WalletSendButtonView.swift in Sources */,
 				4EF3FAE12A7B8D8400D7B09B /* FlowModel.swift in Sources */,
 				6AE0841E284F58F3003BEEF0 /* UserModel.swift in Sources */,
-				152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */,
 				15D874DD28C5C3740072C6EA /* DragGestureViewModifier.swift in Sources */,
 				15DC21D127819C56000B187A /* VPickableItems.swift in Sources */,
 				6A164F622845F1CB0026B31E /* EnvironmentValues+Extensions.swift in Sources */,

@@ -5,7 +5,6 @@
 //  Created by cat on 2022/5/13.
 //
 
-import RiveRuntime
 import SwiftUI
 
 struct NFTEmptyView: View {
