@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "34808C3A-5D79-4DD8-B902-6C78931AE747",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:FRW.xcodeproj",
+        "identifier" : "1500783A286830EF00A00109",
+        "name" : "FRWTests"
+      }
+    }
+  ],
+  "version" : 1
+}
