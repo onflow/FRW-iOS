@@ -14,6 +14,7 @@ protocol NFTMask {
     var maskId: String { get }
     var maskFlowIdentifier: String? { get }
     var maskName: String? { get }
+    var maskSearchContent: String { get }
 }
 
 // MARK: - CollectionMask
@@ -52,6 +53,10 @@ extension NFTResponse: NFTMask {
 
     var maskName: String? {
         name
+    }
+
+    var maskSearchContent: String {
+        searchText
     }
 }
 
@@ -103,6 +108,10 @@ extension NFTModel: NFTMask {
     var maskName: String? {
         title
     }
+
+    var maskSearchContent: String {
+        title + " " + response.searchText
+    }
 }
 
 // MARK: - EVMNFT + NFTMask
@@ -121,6 +130,10 @@ extension EVMNFT: NFTMask {
     }
 
     var maskName: String? {
+        name
+    }
+
+    var maskSearchContent: String {
         name
     }
 }
