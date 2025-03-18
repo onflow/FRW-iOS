@@ -600,10 +600,11 @@ extension WalletHomeView {
 
                         HStack {
                             HStack {
-                                Text(coin.priceValue)
-                                    .foregroundColor(.LL.Neutrals.neutrals7)
-                                    .font(.inter(size: 14, weight: .regular))
-
+                                if let priceValue = coin.priceValue {
+                                    Text(priceValue)
+                                        .foregroundColor(.LL.Neutrals.neutrals7)
+                                        .font(.inter(size: 14, weight: .regular))
+                                }
                                 Text(coin.changeString)
                                     .foregroundColor(coin.changeColor)
                                     .font(.inter(size: 12, weight: .semibold))
