@@ -111,6 +111,12 @@ class TransferListHandler: TransactionListBaseHandler {
         }
 
         collectionView.beginRefreshing()
+        
+        Task { [weak self] in
+            for await _ in NotificationCenter.default.notifications(named: .accountDataDidUpdate) {
+                await self?.collectionView.beginRefreshing()
+            }
+        }
     }
 
     private func loadCache() {
