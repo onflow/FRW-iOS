@@ -93,6 +93,8 @@ struct WalletListView: RouteableView {
                             .foregroundStyle(Color.Theme.Text.black3)
                         Spacer()
                     }
+                    .padding(.bottom, 14)
+                    .padding(.top, 24)
                 }
 
                 Section {
@@ -102,6 +104,7 @@ struct WalletListView: RouteableView {
                         } label: {
                             WalletListView.Cell(item: item)
                         }
+                        .padding(.bottom, 8)
                     }
                 } header: {
                     HStack {
@@ -110,6 +113,8 @@ struct WalletListView: RouteableView {
                             .foregroundStyle(Color.Theme.Text.black3)
                         Spacer()
                     }
+                    .padding(.bottom, 14)
+                    .padding(.top, 24)
                 }
                 .visibility(!viewModel.multiVMWallets.isEmpty ? .visible : .gone)
             }
