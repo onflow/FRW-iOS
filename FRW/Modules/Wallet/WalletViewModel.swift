@@ -59,7 +59,7 @@ extension WalletViewModel {
         }
 
         var balanceAsCurrentCurrency: String {
-            (balance * last).formatCurrencyString(considerCustomCurrency: true)
+            (balance * last).formatCurrencyString(digits: 4, considerCustomCurrency: true)
         }
 
         static func mock() -> WalletViewModel.WalletCoinItemModel {
