@@ -18,7 +18,7 @@ extension Double {
     }()
 
     func formatCurrencyString(
-        digits: Int = 2,
+        digits: Int = 3,
         roundingMode: NumberFormatter.RoundingMode = .halfUp,
         considerCustomCurrency: Bool = false
     ) -> String {
