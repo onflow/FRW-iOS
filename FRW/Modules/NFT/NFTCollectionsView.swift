@@ -11,7 +11,6 @@ import Combine
 struct NFTCollectionsView: View {
     @StateObject var vm: NFTCollectionsViewModel
     @State private var headerHeight: CGFloat = 0
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack(spacing: 0) {
@@ -30,9 +29,9 @@ struct NFTCollectionsView: View {
     @ViewBuilder
     private var topBar: some View {
         HStack(alignment: .center, spacing: 16) {
-            Text("NFT Collections")
+            Text("nft_collections".localized)
                 .font(.inter(size: 20, weight: .semibold))
-                .foregroundStyle(colorScheme == .dark ? Color(hex: "FFFFFF") : Color.Theme.Text.black8)
+                .foregroundStyle(Color.Theme.Text.text1)
             
             Spacer()
             
@@ -113,7 +112,6 @@ extension NFTCollectionsView {
     struct NFTCollectionListCell: View {
         let item: CollectionItem
         let action: () -> ()
-        @Environment(\.colorScheme) var colorScheme
         
         var body: some View {
             Button {
@@ -129,15 +127,14 @@ extension NFTCollectionsView {
                         HStack {
                             Text(item.showName)
                                 .font(.inter(size: 14, weight: .semibold))
-                                .foregroundStyle(Color(hex: colorScheme == .dark ? "ffffff" : "333333"))
+                                .foregroundStyle(Color.Theme.Text.text1)
                             Image("flow")
                                 .foregroundStyle(Color.Theme.Accent.green)
                         }
                         
                         Text("\(item.count) Collectibles")
                             .font(.inter(size: 16, weight: .regular))
-                            .foregroundStyle(Color(hex: colorScheme == .dark ? "ffffff" : "000000"))
-                            .opacity(colorScheme == .dark ? 0.4 : 0.3)
+                            .foregroundStyle(Color.Theme.Text.text4)
                     }
                     .padding(.leading, 8)
                     
@@ -167,14 +164,12 @@ extension NFTCollectionsView {
 }
 
 struct ActionButtonStyle: SwiftUI.ButtonStyle {
-    @Environment(\.colorScheme) var colorScheme
-
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(width: 24, height: 24)
             .foregroundStyle(.white)
             .padding(4)
-            .background(colorScheme == .dark ? .white.opacity(0.3) : .Theme.Foreground.black3.opacity(0.24))
+            .background(Color.Theme.Foreground.black3.opacity(0.4))
             .opacity(configuration.isPressed ? 0.5 : 1)
             .clipShape(Circle())
     }

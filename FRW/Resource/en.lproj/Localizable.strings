@@ -1152,3 +1152,4 @@ Key Store and Private Key.";
 "error_check_refresh" = "Error, please check your internet or refresh.";
 "result" = "Result";
 "nft_no_found" = "No relevant NFT found.";
+"nft_collections" = "NFT Collections";
