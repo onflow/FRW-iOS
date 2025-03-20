@@ -1233,6 +1233,8 @@
 		4EA106742C738BB300555350 /* PrivateKeyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA106722C738BB300555350 /* PrivateKeyLoginView.swift */; };
 		4EA106762C738BEC00555350 /* PrivateKeyLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA106752C738BEC00555350 /* PrivateKeyLoginViewModel.swift */; };
 		4EA106772C738BEC00555350 /* PrivateKeyLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA106752C738BEC00555350 /* PrivateKeyLoginViewModel.swift */; };
+		4EA15E9C2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA15E9B2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift */; };
+		4EA15E9D2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA15E9B2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift */; };
 		4EA820C7286354E200DF36A8 /* remote_config_defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */; };
 		4EAD14162B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */; };
 		4EAD14172B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */; };
@@ -2552,6 +2554,7 @@
 		4EA0D0AB2A7A61B5004C6A19 /* AppPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlaceholder.swift; sourceTree = "<group>"; };
 		4EA106722C738BB300555350 /* PrivateKeyLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyLoginView.swift; sourceTree = "<group>"; };
 		4EA106752C738BEC00555350 /* PrivateKeyLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyLoginViewModel.swift; sourceTree = "<group>"; };
+		4EA15E9B2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+PropertyLabel.swift"; sourceTree = "<group>"; };
 		4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = remote_config_defaults.plist; sourceTree = "<group>"; };
 		4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupPasskeyTarget.swift; sourceTree = "<group>"; };
 		4EAF31B82845E501002AF489 /* NFTSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTSegmentControl.swift; sourceTree = "<group>"; };
@@ -4896,6 +4899,7 @@
 			children = (
 				4E09A1E92CC793FE0099606E /* EventTrack.swift */,
 				4E09A1F12CC79A5C0099606E /* EventTrackName.swift */,
+				4EA15E9B2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift */,
 				4E09A1F42CC79C600099606E /* EventTrack+General.swift */,
 				4E09A1F72CC7A12B0099606E /* EventTrack+Backup.swift */,
 				4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */,
@@ -6339,7 +6343,6 @@
 				4E2FA6B72CF4177C00D46EA7 /* WalletConnectVerify */,
 				4EB94AA82D115F6C00AEF3C9 /* SwiftyDropbox */,
 				15F6F4BC2D683FF100D62D7F /* TrustWeb3Provider */,
-				4E6224792D7F2D8100BABC28 /* FlowWalletKit */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
 			);
 			productName = "FlowReferenceWallet-lite";
@@ -7326,6 +7329,7 @@
 				15DC209127819C56000B187A /* VSheet.swift in Sources */,
 				6A2C560F290BE75C00306A6C /* CurrencyCache.swift in Sources */,
 				4E09A1FC2CC7A1FD0099606E /* EventTrack+Transaction.swift in Sources */,
+				4EA15E9D2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift in Sources */,
 				6AF2ED8F2836424400F06AD3 /* UINavigationController.swift in Sources */,
 				15DC208727819C56000B187A /* VLazyScrollViewType.swift in Sources */,
 				6A6F6A532A5FE76E006C4CCE /* ChildAccountDetailEditView.swift in Sources */,
@@ -8165,6 +8169,7 @@
 				6A2C560E290BE75C00306A6C /* CurrencyCache.swift in Sources */,
 				15C58B792868A4EE00BD4FC6 /* VLazyScrollViewType.swift in Sources */,
 				4E09A1FB2CC7A1FD0099606E /* EventTrack+Transaction.swift in Sources */,
+				4EA15E9C2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift in Sources */,
 				15C58B7A2868A4EE00BD4FC6 /* AddressBookInfoModel.swift in Sources */,
 				6A6F6A522A5FE76E006C4CCE /* ChildAccountDetailEditView.swift in Sources */,
 				15C58B7B2868A4EE00BD4FC6 /* TabBarPageModel.swift in Sources */,
