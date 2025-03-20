@@ -572,7 +572,7 @@ extension WalletHomeView {
 
         var body: some View {
             VStack(spacing: 0) {
-                HStack(spacing: 18) {
+                HStack(alignment: .center, spacing: 18) {
                     KFImage.url(coin.token.iconURL)
                         .placeholder {
                             Image("placeholder")
@@ -599,46 +599,43 @@ extension WalletHomeView {
                         }
 
                         HStack {
-                            HStack {
+                            if WalletManager.shared.accessibleManager.isAccessible(coin.token) {
                                 if let priceValue = coin.priceValue {
-                                    Text(priceValue)
-                                        .foregroundColor(.LL.Neutrals.neutrals7)
-                                        .font(.inter(size: 14, weight: .regular))
+                                    HStack {
+                                        Text(priceValue)
+                                            .foregroundColor(.LL.Neutrals.neutrals7)
+                                            .font(.inter(size: 14, weight: .regular))
+                                        
+                                        Text(coin.changeString)
+                                            .foregroundColor(coin.changeColor)
+                                            .font(.inter(size: 12, weight: .semibold))
+                                            .frame(height: 22)
+                                            .padding(.horizontal, 6)
+                                            .background(coin.changeBG)
+                                            .cornerRadius(11, style: .continuous)
+                                    }
                                 }
-                                Text(coin.changeString)
-                                    .foregroundColor(coin.changeColor)
-                                    .font(.inter(size: 12, weight: .semibold))
-                                    .frame(height: 22)
-                                    .padding(.horizontal, 6)
-                                    .background(coin.changeBG)
-                                    .cornerRadius(11, style: .continuous)
+                            } else {
+                                Text("Inaccessible".localized)
+                                    .foregroundStyle(Color.Flow.Font.inaccessible)
+                                    .font(Font.inter(size: 10, weight: .semibold))
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 5)
+                                    .background(.Flow.Font.inaccessible.opacity(0.16))
+                                    .cornerRadius(4, style: .continuous)
                             }
-                            .visibility(
-                                WalletManager.shared.accessibleManager
-                                    .isAccessible(coin.token) ? .visible : .gone
-                            )
-
-                            Text("Inaccessible".localized)
-                                .foregroundStyle(Color.Flow.Font.inaccessible)
-                                .font(Font.inter(size: 10, weight: .semibold))
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 5)
-                                .background(.Flow.Font.inaccessible.opacity(0.16))
-                                .cornerRadius(4, style: .continuous)
-                                .visibility(
-                                    WalletManager.shared.accessibleManager
-                                        .isAccessible(coin.token) ? .gone : .visible
-                                )
-
+                            
                             Spacer()
 
-                            Text(
-                                vm
-                                    .isHidden ? "****" :
-                                    "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
-                            )
-                            .foregroundColor(.LL.Neutrals.neutrals7)
-                            .font(.inter(size: 14, weight: .regular))
+                            if coin.priceValue != nil {
+                                Text(
+                                    vm
+                                        .isHidden ? "****" :
+                                        "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
+                                )
+                                .foregroundColor(.LL.Neutrals.neutrals7)
+                                .font(.inter(size: 14, weight: .regular))
+                            }
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -771,6 +768,14 @@ struct VisualEffectView: UIViewRepresentable {
         -> UIVisualEffectView { UIVisualEffectView() }
     func updateUIView(_ uiView: UIVisualEffectView, context _: UIViewRepresentableContext<Self>) {
         uiView.effect = effect
+    }
+}
+
+#Preview {
+    Group {
+        WalletHomeView.CoinCell(coin: WalletViewModel.WalletCoinItemModel.mock())
+            .environmentObject(WalletViewModel())
+            .preferredColorScheme(.dark)
     }
 }
 
