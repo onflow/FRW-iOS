@@ -12,6 +12,7 @@ import Web3Core
 class TokenBalanceHandler {
     // MARK: Lifecycle
 
+    private var cache: [String: TokenBalanceProvider] = [:]
     private init() {}
 
     // MARK: Internal
@@ -78,16 +79,16 @@ class TokenBalanceHandler {
     func getSupportTokens(address: FWAddress,
                           network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
     {
-        let provider = try generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getSupportTokens()
     }
 
     func getActivatedTokens(address: FWAddress,
-                            tokens: [TokenModel]?,
+                            tokens _: [TokenModel]?,
                             network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
     {
-        let provider = try generateProvider(address: address, network: network)
-        return try await provider.getActivatedTokens(address: address, in: tokens)
+        let provider = generateProvider(address: address, network: network)
+        return try await provider.getActivatedTokens(address: address, in: .whitelistAndCustom)
     }
 
     func getFTBalance(
@@ -130,7 +131,7 @@ class TokenBalanceHandler {
     }
 
     func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
-        guard let collection = try await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier }) else {
+        guard try (await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier })) != nil else {
             throw TokenBalanceProviderError.collectionNotFound
         }
         let provider = generateProvider(address: address, network: network)
@@ -140,18 +141,46 @@ class TokenBalanceHandler {
             progressHandler: progressHandler
         )
     }
+}
 
-    // MARK: Private
+// MARK: - Private
 
+extension TokenBalanceHandler {
     private func generateProvider(
         address: FWAddress,
         network: FlowNetworkType
     ) -> TokenBalanceProvider {
+        if let provider = cache[address.cacheKey] {
+            return provider
+        }
+        let provider: TokenBalanceProvider
         switch address.type {
         case .cadence:
-            return CadenceTokenBalanceProvider(network: network)
+            provider = CadenceTokenBalanceProvider(network: network)
         case .evm:
-            return EVMTokenBalanceProvider(network: network)
+            provider = EVMTokenBalanceProvider(network: network)
         }
+        cache[address.cacheKey] = provider
+        return provider
+    }
+}
+
+/// Types allowed for Token's display list
+struct TokenListMode: OptionSet {
+    let rawValue: Int
+
+    // Define individual token list modes with bitwise values
+    static let whitelist = TokenListMode(rawValue: 1 << 0) // 0001
+    static let unverified = TokenListMode(rawValue: 1 << 1) // 0010
+    static let custom = TokenListMode(rawValue: 1 << 2) // 0100
+
+    // Define combined modes for easier use
+    static let whitelistAndUnverified: TokenListMode = [.whitelist, .unverified] // 0011
+    static let whitelistAndCustom: TokenListMode = [.whitelist, .custom] // 0101
+    static let all: TokenListMode = [.whitelist, .unverified, .custom] // 0111
+
+    // Helper function to check if mode contains another
+    func contains(_ mode: TokenListMode) -> Bool {
+        return intersection(mode) == mode
     }
 }

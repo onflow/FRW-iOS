@@ -11,6 +11,9 @@ import Foundation
 import Web3Core
 
 class CadenceTokenBalanceProvider: TokenBalanceProvider {
+    var whiteListTokens: [TokenModel] = []
+    var activetedTokens: [TokenModel] = []
+
     // MARK: Lifecycle
 
     static let AvailableFlowToken = "availableFlowToken"
@@ -26,18 +29,24 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
     var network: FlowNetworkType
 
     func getSupportTokens() async throws -> [TokenModel] {
+        guard whiteListTokens.isEmpty else {
+            return whiteListTokens
+        }
         let coinInfo: SingleTokenResponse = try await Network
             .requestWithRawModel(GithubEndpoint.ftTokenList(network))
         let models = coinInfo.tokens.map { $0.toTokenModel(type: .cadence, network: network) }
-        let result = models.filter { $0.getAddress()?.isEmpty == false }
-        return result
+        whiteListTokens = models.filter { $0.getAddress()?.isEmpty == false }
+        return whiteListTokens
     }
 
-    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]? = nil) async throws -> [TokenModel] {
+    func getActivatedTokens(address: any FWAddress, in _: TokenListMode = .whitelist) async throws -> [TokenModel] {
         guard let addr = address as? Flow.Address else {
             throw EVMError.addressError
         }
-        var allTokens: [TokenModel] = list ?? []
+        guard activetedTokens.isEmpty else {
+            return activetedTokens
+        }
+        var allTokens: [TokenModel] = whiteListTokens
         if allTokens.isEmpty {
             let list = try await getSupportTokens()
             allTokens.append(contentsOf: list)
@@ -45,7 +54,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
         let balance = try await FlowNetwork.fetchTokenBalance(address: addr)
         let availableFlowBalance = balance[CadenceTokenBalanceProvider.AvailableFlowToken]
 
-        var activeModels: [TokenModel] = []
+        var result: [TokenModel] = []
         for key in balance.keys {
             if let value = balance[key] {
                 if var model = allTokens.first(where: { $0.vaultIdentifier == key }) {
@@ -58,23 +67,24 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
                         String(format: "%f", model.isFlowCoin ? (availableFlowBalance ?? value) : value),
                         decimals: model.decimal
                     ) ?? BigUInt(0)
-                    activeModels.append(model)
+                    result.append(model)
                 }
             }
         }
 
         // Sort by balance
-        let sorted = activeModels.sorted { lhs, rhs in
+        activetedTokens = result.sorted { lhs, rhs in
             guard let lBal = lhs.balance, let rBal = rhs.balance else {
                 return true
             }
             return lBal > rBal
         }
-        return sorted
+
+        return activetedTokens
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        let list = try await getActivatedTokens(address: address, in: nil)
+        let list = try await getActivatedTokens(address: address)
         let sorted = list.filter { model in
             guard let balance = model.balance else {
                 return false

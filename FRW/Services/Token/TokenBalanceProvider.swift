@@ -11,11 +11,17 @@ import Foundation
 
 protocol TokenBalanceProvider {
     var network: FlowNetworkType { get }
-    func getSupportTokens() async throws -> [TokenModel]
-    func getActivatedTokens(address: FWAddress, in list: [TokenModel]?) async throws -> [TokenModel]
     var nftPageSize: Int { get }
+    // cache
+    var whiteListTokens: [TokenModel] { get }
+    var activetedTokens: [TokenModel] { get }
+    // get tokens
+    func getSupportTokens() async throws -> [TokenModel]
+    func getActivatedTokens(address: FWAddress, in mode: TokenListMode) async throws -> [TokenModel]
+    // get balance > 0
     func getFTBalance(address: FWAddress) async throws -> [TokenModel]
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel?
+
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection]
 
     func getAllNFTsUnderCollection(

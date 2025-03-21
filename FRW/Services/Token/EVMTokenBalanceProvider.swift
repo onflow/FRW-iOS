@@ -9,6 +9,9 @@ import Foundation
 import Web3Core
 
 class EVMTokenBalanceProvider: TokenBalanceProvider {
+    var whiteListTokens: [TokenModel] = []
+    var activetedTokens: [TokenModel] = []
+
     // MARK: Lifecycle
 
     init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
@@ -21,24 +24,31 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
     var network: FlowNetworkType
 
     func getSupportTokens() async throws -> [TokenModel] {
+        guard whiteListTokens.isEmpty else {
+            return whiteListTokens
+        }
         let tokenResponse: SingleTokenResponse = try await Network
             .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
         var tokens: [TokenModel] = tokenResponse.conversion(type: .evm)
         if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
-            var flowModel = flowToken.toTokenModel(type: .evm, network: network)
+            let flowModel = flowToken.toTokenModel(type: .evm, network: network)
             tokens.insert(flowModel, at: 0)
         }
-        return tokens
+        whiteListTokens = tokens
+        return whiteListTokens
     }
 
-    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]? = nil) async throws -> [TokenModel] {
+    func getActivatedTokens(address: any FWAddress, in _: TokenListMode = .whitelistAndCustom) async throws -> [TokenModel] {
         guard let addr = address as? EthereumAddress,
               let web3 = try await FlowProvider.Web3.default(networkType: network)
         else {
             throw EVMError.rpcError
         }
+        guard activetedTokens.isEmpty else {
+            return activetedTokens
+        }
         // fetch all tokens
-        var allTokens: [TokenModel] = list ?? []
+        var allTokens: [TokenModel] = whiteListTokens
         if allTokens.isEmpty {
             let list = try await getSupportTokens()
             allTokens.append(contentsOf: list)
@@ -73,17 +83,17 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         }
 
         // Sort by balance
-        let sorted = updateModels.sorted { lhs, rhs in
+        activetedTokens = updateModels.sorted { lhs, rhs in
             guard let lBal = lhs.readableBalance, let rBal = rhs.readableBalance else {
                 return true
             }
             return lBal > rBal
         }
-        return sorted
+        return activetedTokens
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        let list = try await getActivatedTokens(address: address, in: nil)
+        let list = try await getActivatedTokens(address: address)
         return list
     }
 
