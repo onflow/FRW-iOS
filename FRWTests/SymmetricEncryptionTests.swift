@@ -5,8 +5,7 @@
 //  Created by Hao Fu on 7/10/2022.
 //
 
-import Flow
-@testable import FRW_dev
+@testable import Lilico_dev
 import XCTest
 
 final class SymmetricEncryptionTests: XCTestCase {
