@@ -11,7 +11,8 @@ import Combine
 struct NFTCollectionsView: View {
     @StateObject var vm: NFTCollectionsViewModel
     @State private var headerHeight: CGFloat = 0
-    
+    @AppStorage("isListView") var isListView: Bool = true
+
     var body: some View {
         VStack(spacing: 0) {
             topBar
@@ -44,9 +45,9 @@ struct NFTCollectionsView: View {
             .hidden(ChildAccountManager.shared.selectedChildAccount != nil)
             
             Button {
-                vm.toggleViewStyle()
+                isListView.toggle()
             } label: {
-                Image(vm.isListView ? "tabler-icon-grid" : "tabler-icon-list")
+                Image(isListView ? "tabler-icon-grid" : "tabler-icon-list")
                     .resizable()
                     .padding(1)
             }
@@ -61,7 +62,7 @@ struct NFTCollectionsView: View {
     @ViewBuilder
     private var content: some View {
         Group {
-            if vm.isListView || vm.dataModel.items.isEmpty {
+            if isListView || vm.dataModel.items.isEmpty {
                 listView
                     .padding(.horizontal, 18)
                     .padding(.top, 12)

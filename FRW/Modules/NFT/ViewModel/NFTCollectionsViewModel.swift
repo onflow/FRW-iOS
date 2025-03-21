@@ -10,7 +10,6 @@ import Combine
 
 @MainActor
 final class NFTCollectionsViewModel: ObservableObject {
-    @Published var isListView: Bool = true
     @Published var isRefreshing: Bool = false
     @Published var tabVM: NFTTabViewModel
     
@@ -91,10 +90,6 @@ final class NFTCollectionsViewModel: ObservableObject {
         } catch {
             // Handle error appropriately or rethrow
         }
-    }
-    
-    func toggleViewStyle() {
-        isListView.toggle()
     }
     
     func onAddButtonTap() {
