@@ -96,7 +96,6 @@
 "Are__you__sure__you__want__to__remove__this__contact::message" = "Вы уверены, что хотите удалить этот контакт?";
 "nft_empty" = "У вас еще нет ни одного NFT.";
 "You__will__no__longer__find__this__contact__in__your__address__book::message" = "Вы больше не найдете этот контакт в своей адресной книге.";
-"nft_empty_discovery" = "С нетерпением ждем ваших следующих открытий.";
 "Empty__List::message" = "Пустой список";
 "get_new_nft" = "Получите новые NFT";
 "No__results__found::message" = "Результаты не найдены!";

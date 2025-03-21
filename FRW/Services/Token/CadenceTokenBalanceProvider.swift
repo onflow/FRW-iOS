@@ -84,34 +84,58 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
         return sorted
     }
 
-    func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
-        let list: [NFTCollection] = try await Network.request(
-            FRWAPI.NFT.userCollection(
-                address.hexAddr,
-                address.type
-            )
-        )
-        let sorted = list.sorted(by: { $0.count > $1.count })
-        return sorted
-    }
+    func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
+        guard let collection = try await getNFTCollections(address: address).first(where: { $0.id == collectionIdentifier }) else {
+            throw TokenBalanceProviderError.collectionNotFound
+        }
 
-    func getNFTCollectionDetail(
-        address: FWAddress,
-        collectionIdentifier: String,
-        offset: Int
-    ) async throws -> NFTListResponse {
-        let request = NFTCollectionDetailListRequest(
-            address: address.hexAddr,
-            collectionIdentifier: collectionIdentifier,
-            offset: offset,
-            limit: EVMTokenBalanceProvider.nftLimit
-        )
-        let response: NFTListResponse = try await Network.request(
-            FRWAPI.NFT.collectionDetailList(
-                request,
-                address.type
-            )
-        )
-        return response
+        return try await withThrowingTaskGroup(of: [NFTModel].self) { group in
+            var completedCount = 0
+            group.addTask {
+                let total = collection.count
+                let pageCount = (total + self.nftPageSize - 1) / self.nftPageSize
+
+                // Parallel requests for each page of this collection
+                let nfts = try await withThrowingTaskGroup(of: NFTListResponse?.self) { subGroup in
+                    for page in 0 ..< pageCount {
+                        let offset = page * self.nftPageSize
+                        subGroup.addTask {
+                            do {
+                                let response = try await self.getNFTCollectionDetail(
+                                    address: address,
+                                    collectionIdentifier: collection.id,
+                                    offset: String(offset)
+                                )
+                                completedCount += response.nfts?.count ?? 0
+                                progressHandler(completedCount, total)
+                                return response
+                            } catch {
+                                log.error(error)
+                                return nil
+                            }
+                        }
+                    }
+
+                    var collectionNFTs = [NFTModel]()
+                    for try await subResult in subGroup {
+                        if let nftModels = subResult?.nfts?.map({ nftResponse in
+                            NFTModel(nftResponse, in: subResult?.collection)
+                        }) {
+                            collectionNFTs.append(contentsOf: nftModels)
+                        }
+                    }
+                    return collectionNFTs
+                }
+
+                return nfts
+            }
+
+            // Aggregate results from all collections
+            var finalResults = [NFTModel]()
+            for try await result in group {
+                finalResults.append(contentsOf: result)
+            }
+            return finalResults
+        }
     }
 }

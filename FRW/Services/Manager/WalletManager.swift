@@ -520,7 +520,10 @@ extension WalletManager {
 
 extension WalletManager {
     func getCurrentMnemonic() -> String? {
-        hdWallet?.mnemonic
+        guard let provider = keyProvider as? SeedPhraseKey else {
+            return nil
+        }
+        return provider.hdWallet.mnemonic
     }
 
     func getCurrentPublicKey() -> String? {

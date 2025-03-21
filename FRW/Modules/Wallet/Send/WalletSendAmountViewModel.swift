@@ -374,7 +374,7 @@ extension WalletSendAmountViewModel {
                     if token.isFlowCoin {
                         txId = try await FlowNetwork.fundCoa(amount: amount)
                     } else {
-                        guard let vaultIdentifier = token.flowIdentifier else {
+                        guard let vaultIdentifier = token.vaultIdentifier else {
                             failureBlock()
                             return
                         }
@@ -392,7 +392,7 @@ extension WalletSendAmountViewModel {
                             address: targetAddress
                         )
                     } else if targetAddress == address {
-                        guard let vaultIdentifier = token.flowIdentifier else {
+                        guard let vaultIdentifier = token.vaultIdentifier else {
                             failureBlock()
                             return
                         }
@@ -405,14 +405,14 @@ extension WalletSendAmountViewModel {
                     } else {
                         guard let bigUIntValue = amount.description
                             .parseToBigUInt(decimals: token.decimal),
-                            let flowIdentifier = self.token.flowIdentifier
+                            let vaultIdentifier = token.vaultIdentifier
                         else {
                             failureBlock()
                             return
                         }
 
                         txId = try await FlowNetwork.bridgeTokensFromEvmToFlow(
-                            identifier: flowIdentifier,
+                            identifier: vaultIdentifier,
                             amount: bigUIntValue,
                             receiver: targetAddress
                         )
@@ -433,9 +433,13 @@ extension WalletSendAmountViewModel {
                             gas: gas
                         )
                     } else {
-                        let flowIdentifier = "\(self.token.contractId).Vault"
+                        guard let vaultIdentifier = self.token.vaultIdentifier else {
+                            failureBlock()
+                            return
+                        }
+
                         txId = try await FlowNetwork.sendNoFlowTokenToEVM(
-                            vaultIdentifier: flowIdentifier,
+                            vaultIdentifier: vaultIdentifier,
                             amount: amount,
                             recipient: targetAddress
                         )

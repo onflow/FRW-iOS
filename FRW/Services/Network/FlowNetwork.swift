@@ -25,6 +25,22 @@ enum FlowNetwork {
 // MARK: - Token
 
 extension FlowNetwork {
+    // TODO: delete
+    static func checkTokensEnable(address: Flow.Address) async throws -> [String: Bool] {
+        try await fetch(
+            by: \.ft?.isTokenListEnabled,
+            arguments: [.address(address)]
+        )
+    }
+
+    // TODO: delete
+    static func fetchBalance(at address: Flow.Address) async throws -> [String: Double] {
+        try await fetch(
+            by: \.ft?.getTokenListBalance,
+            arguments: [.address(address)]
+        )
+    }
+
     static func enableToken(at _: Flow.Address, token: TokenModel) async throws -> Flow.ID {
         try await sendTransaction(
             by: \.ft?.addToken,
@@ -803,13 +819,10 @@ extension FlowNetwork {
 
 extension FlowNetwork {
     static func createEVM() async throws -> Flow.ID {
-        guard let fromAddress = WalletManager.shared.getPrimaryWalletAddress() else {
-            throw LLError.invalidAddress
-        }
         return try await sendTransaction(by: \.evm?.createCoaEmpty, argumentList: [])
     }
 
-    static func findEVMAddress() async throws -> String {
+    static func findEVMAddress() async throws -> String? {
         guard let fromAddress = WalletManager.shared.getPrimaryWalletAddress() else {
             throw LLError.invalidAddress
         }
@@ -819,6 +832,10 @@ extension FlowNetwork {
             script: Flow.Script(text: cadenceStr),
             arguments: [.address(Flow.Address(hex: fromAddress))]
         ).decode(String.self)
+
+        guard !response.isEmpty else {
+            return nil
+        }
 
         guard let checkSumAddress = EthereumAddress.toChecksumAddress(response) else {
             return response

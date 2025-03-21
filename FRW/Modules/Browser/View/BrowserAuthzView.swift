@@ -41,7 +41,7 @@ struct BrowserAuthzView: View {
             scriptView.visibility(vm.isScriptShowing ? .visible : .invisible)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color(hex: "0x1E1E1F"))
+        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var normalView: some View {
@@ -60,14 +60,14 @@ struct BrowserAuthzView: View {
                         Text(title)
                             .font(.LL.body)
                             .fontWeight(.bold)
-                            .foregroundColor(.white)
+                            .foregroundColor(Color.Theme.Text.black8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
                     if let description = template.data.messages?.messagesDescription?.i18N?.enUS {
                         Text(description)
                             .font(.LL.footnote)
-                            .foregroundColor(.LL.Neutrals.note)
+                            .foregroundColor(Color.Theme.Text.black3)
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, 8)
@@ -75,7 +75,7 @@ struct BrowserAuthzView: View {
                 }
                 .padding(.vertical, 16)
                 .padding(.horizontal, 18)
-                .background(Color(hex: "#313131"))
+                .background(.Theme.BG.bg2)
                 .cornerRadius(12)
                 .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
             } else {
@@ -102,9 +102,9 @@ struct BrowserAuthzView: View {
             vm.formatCode()
             vm.formatArguments()
         }
+        .preferredColorScheme(.dark)
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var verifiedView: some View {
@@ -137,11 +137,11 @@ struct BrowserAuthzView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("browser_transaction_request_from".localized)
                     .font(.inter(size: 14))
-                    .foregroundColor(Color(hex: "#808080"))
+                    .foregroundColor(.Theme.Text.black3)
 
                 Text(vm.title)
                     .font(.inter(size: 16, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(.Theme.Text.black)
                     .lineLimit(1)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -202,19 +202,21 @@ struct BrowserAuthzView: View {
                 Image("icon-script")
 
                 Text("browser_script".localized)
-                    .font(.inter(size: 14, weight: .regular))
-                    .foregroundColor(Color(hex: "#F2F2F2"))
+                    .font(.inter(size: 14, weight: .semibold))
+                    .foregroundColor(.Theme.Text.black8)
                     .lineLimit(1)
 
                 Spacer()
 
                 Image("icon-search-arrow")
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(Color.Theme.Accent.green)
                     .frame(width: 12, height: 12)
             }
             .frame(height: 46)
             .padding(.horizontal, 18)
-            .background(Color(hex: "#313131"))
+            .background(.Theme.BG.bg2)
             .cornerRadius(12)
         }
     }
@@ -272,6 +274,7 @@ struct BrowserAuthzView: View {
                     .cornerRadius(12)
             }
         }
+        .preferredColorScheme(.dark)
         .padding(.horizontal, 18)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

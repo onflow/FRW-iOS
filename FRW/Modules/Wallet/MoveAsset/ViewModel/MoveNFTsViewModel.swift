@@ -5,6 +5,7 @@
 //  Created by cat on 2024/5/17.
 //
 
+import Combine
 import Flow
 import Foundation
 import Kingfisher
@@ -18,6 +19,20 @@ final class MoveNFTsViewModel: ObservableObject {
     init() {
         loadUserInfo()
         checkForInsufficientStorage()
+
+        $searchText
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] searchText in
+                self?.filterNFTs(query: searchText)
+            }
+            .store(in: &cancellables)
+        $nfts
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.filterNFTs(query: self.searchText)
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: Internal
@@ -26,13 +41,8 @@ final class MoveNFTsViewModel: ObservableObject {
     private(set) var selectedCollection: CollectionMask?
     // NFTModel
     @Published
-    private(set) var nfts: [MoveNFTsViewModel.NFT] = [
-        MoveNFTsViewModel.NFT.mock(),
-        MoveNFTsViewModel.NFT.mock(),
-        MoveNFTsViewModel.NFT.mock(),
-    ]
-    @Published
-    private(set) var isMock = true
+    private(set) var nfts: [MoveNFTsViewModel.NFT] = []
+
     @Published
     private(set) var showHint = false
     @Published
@@ -42,6 +52,13 @@ final class MoveNFTsViewModel: ObservableObject {
     private(set) var buttonState: VPrimaryButtonState = .disabled
 
     let limitCount = 10
+
+    @Published var searchText: String = ""
+    @Published var loadingState: NFTLoadingState = .idle
+    @Published var filteredNFTItems: [MoveNFTsViewModel.NFT] = []
+    private var cancellables = Set<AnyCancellable>()
+    @Published var loadedCount: Int = 0
+    @Published var totalCount: Int = 0
 
     @Published
     private(set) var fromContact = Contact(
@@ -110,28 +127,29 @@ final class MoveNFTsViewModel: ObservableObject {
         Task {
             do {
                 guard let identifier = collection.maskFlowIdentifier ?? nfts.first?.model
-                    .maskFlowIdentifier else {
+                    .maskFlowIdentifier
+                else {
                     HUD.error(MoveError.invalidateIdentifier)
                     return
                 }
-                
+
                 guard let toAddress = toContact.address else {
                     HUD.error(MoveError.invalidateToAddress)
                     return
                 }
-                
+
                 guard let fromAddress = fromContact.address else {
                     HUD.error(MoveError.invalidateFromAddress)
                     return
                 }
-                
+
                 guard let nftCollection = collection as? NFTCollection else {
                     HUD.error(MoveError.invalidateNftCollectionInfo)
                     return
                 }
-                
+
                 let nftCollectionInfo = nftCollection.collection
-                
+
                 let ids: [UInt64] = nfts.compactMap { nft in
                     if !nft.isSelected {
                         return nil
@@ -238,49 +256,43 @@ final class MoveNFTsViewModel: ObservableObject {
         resetButtonState()
     }
 
-    func fetchNFTs(_ offset: Int = 0) async {
-        await MainActor.run {
-            self.buttonState = .loading
-        }
-
+    func fetchNFTs(_: Int = 0) async {
         guard let collection = selectedCollection else {
             return
         }
+        guard let from = FWAddressDector.create(address: fromContact.address) else {
+            return
+        }
+
+        await MainActor.run {
+            self.buttonState = .loading
+            self.loadingState = .loading
+        }
 
         do {
-            guard let from = FWAddressDector.create(address: fromContact.address) else {
-                return
-            }
-
-            await MainActor.run {
-                self.isMock = true
-            }
-
-            let response = try await TokenBalanceHandler.shared.getNFTCollectionDetail(
-                address: from,
-                collectionIdentifier: collection.maskId,
-                offset: offset
-            )
-            await MainActor.run {
-                if let list = response.nfts {
-                    self.nfts = list.map { MoveNFTsViewModel.NFT(isSelected: false, model: $0) }
-                } else {
-                    self.nfts = []
+            let result = try await TokenBalanceHandler.shared.getAllNFTsUnderCollection(address: from, collectionIdentifier: collection.maskId) { cur, total in
+                runOnMain {
+                    self.loadedCount = cur
+                    self.totalCount = total
                 }
-                self.isMock = false
+            }
+
+            await MainActor.run {
+                self.nfts = result.map { MoveNFTsViewModel.NFT(isSelected: false, model: $0) }
+                self.loadingState = .success
                 self.resetButtonState()
             }
         } catch {
             await MainActor.run {
                 self.nfts = []
-                self.isMock = false
+                self.loadingState = .failure(error)
                 self.resetButtonState()
             }
             log.error("[MoveAsset] fetch NFTs failed:\(error)")
         }
     }
 
-    func handleFromContact(_ contact: Contact) {
+    func handleFromContact(_: Contact) {
         let model = MoveAccountsViewModel(
             selected: fromContact.address ?? ""
         ) { newContact in
@@ -291,7 +303,7 @@ final class MoveNFTsViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.chooseChild(model))
     }
 
-    func handleToContact(_ contact: Contact) {
+    func handleToContact(_: Contact) {
         let model = MoveAccountsViewModel(
             selected: toContact.address ?? ""
         ) { newContact in
@@ -358,7 +370,8 @@ final class MoveNFTsViewModel: ObservableObject {
         }
 
         if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil {
+            .selectedAccount != nil
+        {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             toContact = Contact(
                 address: primaryAddr,
@@ -406,7 +419,8 @@ final class MoveNFTsViewModel: ObservableObject {
 
     private func updateCollection(item: CollectionMask) {
         if item.maskId == selectedCollection?.maskId,
-           item.maskContractName == selectedCollection?.maskContractName {
+           item.maskContractName == selectedCollection?.maskContractName
+        {
             return
         }
         selectedCollection = item
@@ -429,7 +443,7 @@ final class MoveNFTsViewModel: ObservableObject {
             }
 
             await MainActor.run {
-                self.isMock = true
+                self.loadingState = .loading
             }
 
             let list = try await TokenBalanceHandler.shared.getNFTCollections(address: from)
@@ -437,7 +451,7 @@ final class MoveNFTsViewModel: ObservableObject {
             if list.isEmpty {
                 await MainActor.run {
                     self.nfts = []
-                    self.isMock = false
+                    self.loadingState = .success
                     self.resetButtonState()
                 }
                 return
@@ -530,6 +544,32 @@ extension MoveNFTsViewModel {
 
         static func mock() -> MoveNFTsViewModel.NFT {
             MoveNFTsViewModel.NFT(isSelected: false, model: NFTResponse.mock())
+        }
+    }
+}
+
+extension MoveNFTsViewModel {
+    private func filterNFTs(query: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            guard let self = self else { return }
+
+            withAnimation(.easeInOut(duration: 0.3)) {
+                if query.isEmpty {
+                    self.filteredNFTItems = self.nfts
+                } else {
+                    self.filteredNFTItems = self.nfts.filter {
+                        let name = $0.model.maskSearchContent
+                        return name.lowercased().contains(query.lowercased())
+                    }
+                    log.debug("\(self.filteredNFTItems)")
+                }
+            }
+        }
+    }
+
+    func retry() {
+        Task {
+            await fetchNFTs()
         }
     }
 }
