@@ -529,7 +529,7 @@ struct WalletHomeView: View {
             }
 
             VStack(spacing: 5) {
-                ForEach(vm.mCoinItems, id: \.token.symbol) { coin in
+                ForEach(vm.mCoinItems, id: \.token.contractId) { coin in
                     Button {
                         Router.route(to: RouteMap.Wallet.tokenDetail(
                             coin.token,

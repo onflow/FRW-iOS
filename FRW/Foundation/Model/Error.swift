@@ -157,7 +157,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
-
+    case argument
     var baseCode: Int { 9000 }
 }
 
@@ -173,11 +173,10 @@ enum MoveError: String, BaseError {
     var baseCode: Int { 10000 }
 }
 
-
 // MARK: - Errors
 
 enum TokenBalanceProviderError: String, BaseError {
     case collectionNotFound
-    
+
     var baseCode: Int { 11000 }
 }

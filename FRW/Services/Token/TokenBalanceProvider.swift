@@ -12,14 +12,22 @@ import Foundation
 protocol TokenBalanceProvider {
     var network: FlowNetworkType { get }
     var nftPageSize: Int { get }
+    // cache
+    var whiteListTokens: [TokenModel] { get }
+    var activetedTokens: [TokenModel] { get }
+    // get tokens
+    func getSupportTokens() async throws -> [TokenModel]
+    func getActivatedTokens(address: FWAddress, in mode: TokenListMode) async throws -> [TokenModel]
+    // get balance > 0
     func getFTBalance(address: FWAddress) async throws -> [TokenModel]
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel?
+
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection]
 
     func getAllNFTsUnderCollection(
         address: FWAddress,
         collectionIdentifier: String,
-        progressHandler: @escaping (_ current: Int, _ total: Int) -> ()
+        progressHandler: @escaping (_ current: Int, _ total: Int) -> Void
     ) async throws -> [NFTModel]
 
     func getNFTCollectionDetail(
@@ -30,14 +38,13 @@ protocol TokenBalanceProvider {
 }
 
 extension TokenBalanceProvider {
-    
     var nftPageSize: Int { 50 }
-    
+
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel? {
         let models = try await getFTBalance(address: address)
         return models.first { $0.id == tokenId }
     }
-    
+
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {
         let list: [NFTCollection] = try await Network.request(
             FRWAPI.NFT.userCollection(
@@ -48,7 +55,7 @@ extension TokenBalanceProvider {
         let sorted = list.sorted(by: { $0.count > $1.count })
         return sorted
     }
-    
+
     func getNFTCollectionDetail(
         address: FWAddress,
         collectionIdentifier: String,

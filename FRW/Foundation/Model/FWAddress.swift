@@ -11,7 +11,7 @@ import Web3Core
 
 // MARK: - VMType
 
-enum VMType {
+enum VMType: String {
     case cadence
     case evm
 
@@ -32,6 +32,14 @@ enum VMType {
 protocol FWAddress {
     var type: VMType { get }
     var hexAddr: String { get }
+
+    var cacheKey: String { get }
+}
+
+extension FWAddress {
+    var cacheKey: String {
+        "\(type.rawValue)-\(hexAddr)"
+    }
 }
 
 // MARK: - FWAddressDector

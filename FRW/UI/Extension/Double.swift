@@ -8,6 +8,8 @@
 import Foundation
 
 extension Double {
+    private var maxDigitsAllowed: Int { 4 }
+
     static let currencyFormatter: NumberFormatter = {
         let f = NumberFormatter()
         f.maximumFractionDigits = 3

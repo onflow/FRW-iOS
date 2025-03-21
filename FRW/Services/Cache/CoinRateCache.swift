@@ -114,10 +114,7 @@ extension CoinRateCache {
             return
         }
 
-        guard let supportedCoins = WalletManager.shared.supportedCoins else {
-            return
-        }
-        let evmCoins = WalletManager.shared.evmSupportedCoins
+        let supportedCoins = WalletManager.shared.activatedCoins
 
         log.debug("CoinRateCache -> start refreshing")
         isRefreshing = true
@@ -127,50 +124,15 @@ extension CoinRateCache {
             } catch {
                 log.error("[Wallet] CoinRateCache -> fetch add price", context: error)
             }
-            // flow token
-            if EVMAccountManager.shared.selectedAccount == nil {
-                await withTaskGroup(of: Void.self) { group in
-                    for coin in supportedCoins {
-                        group.addTask { [weak self] in
-                            do {
-                                try await self?.fetchCoinRate(coin)
-                            } catch {
-                                debugPrint(
-                                    "CoinRateCache -> fetchCoinRate:\(coin.contractId ?? "") failed: \(error)"
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            // evm token
-            if EVMAccountManager.shared.selectedAccount != nil {
-                await withTaskGroup(of: Void.self) { group in
-
-                    for coin in supportedCoins {
-                        if coin.isFlowCoin {
-                            group.addTask { [weak self] in
-                                do {
-                                    try await self?.fetchCoinRate(coin)
-                                } catch {
-                                    debugPrint(
-                                        "CoinRateCache -> fetchCoinRate:\(coin.contractId) failed: \(error)"
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    evmCoins?.forEach { coin in
-                        group.addTask { [weak self] in
-                            do {
-                                try await self?.fetchCoinRate(coin)
-                            } catch {
-                                log
-                                    .debug(
-                                        "CoinRateCache -> fetchCoinRate:\(coin.contractId) failed: \(error)"
-                                    )
-                            }
+            await withTaskGroup(of: Void.self) { group in
+                for coin in supportedCoins {
+                    group.addTask { [weak self] in
+                        do {
+                            try await self?.fetchCoinRate(coin)
+                        } catch {
+                            log.debug(
+                                "CoinRateCache -> fetchCoinRate:\(coin.contractId) failed: \(error)"
+                            )
                         }
                     }
                 }

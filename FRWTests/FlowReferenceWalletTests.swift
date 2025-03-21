@@ -6,7 +6,7 @@
 //
 
 import Flow
-@testable import Lilico_dev
+@testable import FRW_dev
 import WalletCore
 import XCTest
 
@@ -26,6 +26,24 @@ struct NewStakingInfoInner: Codable {
 // MARK: - LilicoTests
 
 final class LilicoTests: XCTestCase {
+//    func testStakeDecode() async throws {
+//        do {
+//            flow.configure(chainID: .mainnet)
+//            let address = Flow.Address(hex: "0x84221fe0294044d7")
+//            let replacedCadence = CadenceTemplate.queryStakeInfo
+//                .replace(by: ScriptAddress.addressMap(on: .mainnet))
+//            let model = try await flow.accessAPI.executeScriptAtLatestBlock(
+//                script: Flow.Script(text: replacedCadence),
+//                arguments: [.address(address)]
+//            )
+//            .decode([NewStakingInfoInner].self)
+//
+//            print(model)
+//        } catch {
+//            print(error)
+//        }
+//    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

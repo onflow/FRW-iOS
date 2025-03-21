@@ -198,7 +198,7 @@ class TokenDetailViewModel: ObservableObject {
             }
         }.store(in: &cancelSets)
 
-        WalletManager.shared.$coinBalances.sink { [weak self] _ in
+        WalletManager.shared.$activatedCoins.sink { [weak self] _ in
             DispatchQueue.main.async {
                 self?.refreshSummary()
             }
@@ -250,7 +250,7 @@ extension TokenDetailViewModel {
 
 extension TokenDetailViewModel {
     func sendAction() {
-        LocalUserDefaults.shared.recentToken = token.symbol
+        LocalUserDefaults.shared.recentToken = token.vaultIdentifier
         Router.route(to: RouteMap.Wallet.send())
     }
 
@@ -359,7 +359,7 @@ extension TokenDetailViewModel {
 
     private func refreshSummary() {
         balance = WalletManager.shared
-            .getBalance(byId: token.contractId).doubleValue
+            .getBalance(with: token).doubleValue
         rate = CoinRateCache.cache
             .getSummary(by: token.contractId)?
             .getLastRate() ?? 0
@@ -475,7 +475,8 @@ extension TokenDetailViewModel {
         if (RemoteConfigManager.shared.config?.features.swap ?? false) == true {
             // don't show when current is Linked account
             if ChildAccountManager.shared.selectedChildAccount != nil || ChildAccountManager.shared
-                .selectedChildAccount != nil {
+                .selectedChildAccount != nil
+            {
                 showSwapButton = false
             } else {
                 showSwapButton = true
@@ -486,7 +487,8 @@ extension TokenDetailViewModel {
 
         // buy
         if RemoteConfigManager.shared.config?.features.onRamp ?? false == true,
-           flow.chainID == .mainnet {
+           flow.chainID == .mainnet
+        {
             if ChildAccountManager.shared.selectedChildAccount != nil {
                 showBuyButton = false
             } else {

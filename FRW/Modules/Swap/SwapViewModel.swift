@@ -38,7 +38,7 @@ class SwapViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(defaultFromToken: TokenModel?) {
-        self.fromToken = defaultFromToken
+        fromToken = defaultFromToken
     }
 
     // MARK: Internal
@@ -91,12 +91,14 @@ class SwapViewModel: ObservableObject {
 
     var rateText: String {
         guard let fromToken = fromToken, let toToken = toToken,
-              let response = estimateResponse else {
+              let response = estimateResponse
+        else {
             return ""
         }
 
         guard let amountIn = response.routes.first??.routeAmountIn,
-              let amountOut = response.routes.first??.routeAmountOut else {
+              let amountOut = response.routes.first??.routeAmountOut
+        else {
             return ""
         }
 
@@ -183,7 +185,8 @@ extension SwapViewModel {
 
                     if fromToken.contractId != self.fromToken?.contractId || toToken
                         .contractId != self.toToken?.contractId || localIsFromInput != self
-                        .requestIsFromInput {
+                        .requestIsFromInput
+                    {
                         // invalid response
                         return
                     }
@@ -240,7 +243,7 @@ extension SwapViewModel {
     }
 
     private func refreshInput() {
-        guard let contractId = fromToken?.contractId else {
+        guard let fromToken = fromToken else {
             return
         }
 
@@ -250,7 +253,8 @@ extension SwapViewModel {
         }
 
         if fromAmount > WalletManager.shared
-            .getBalance(byId: contractId).doubleValue {
+            .getBalance(with: fromToken).doubleValue
+        {
             errorType = .insufficientBalance
         } else {
             errorType = .none
@@ -350,12 +354,12 @@ extension SwapViewModel {
     }
 
     func maxAction() {
-        guard let contractId = fromToken?.contractId else {
+        guard let fromToken = fromToken else {
             return
         }
 
         inputFromText = WalletManager.shared
-            .getBalance(byId: contractId).doubleValue
+            .getBalance(with: fromToken).doubleValue
             .formatCurrencyString()
     }
 
@@ -365,7 +369,8 @@ extension SwapViewModel {
 
     func confirmSwapAction() {
         guard let response = estimateResponse, let fromToken = fromToken,
-              let toToken = toToken else {
+              let toToken = toToken
+        else {
             return
         }
 
