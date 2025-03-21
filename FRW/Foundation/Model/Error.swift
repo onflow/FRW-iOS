@@ -157,7 +157,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
-
+    case argument
     var baseCode: Int { 9000 }
 }
 

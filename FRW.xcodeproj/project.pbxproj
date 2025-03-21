@@ -9686,7 +9686,7 @@
 			repositoryURL = "https://github.com/outblock/flow-swift";
 			requirement = {
 				kind = revision;
-				revision = 50b60826c4ce18adaa151946d11d468ac1fc98dd;
+				revision = e766fa36c45b62537acac53b679ec7db948aeb22;
 			};
 		};
 		15F517F928C6574C00504FDC /* XCRemoteSwiftPackageReference "atlantis" */ = {

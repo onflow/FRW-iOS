@@ -33,7 +33,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
         return result
     }
 
-    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]?) async throws -> [TokenModel] {
+    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]? = nil) async throws -> [TokenModel] {
         guard let addr = address as? Flow.Address else {
             throw EVMError.addressError
         }
@@ -70,7 +70,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
             }
             return lBal > rBal
         }
-        return activeModels
+        return sorted
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {

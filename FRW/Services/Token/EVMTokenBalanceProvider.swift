@@ -33,7 +33,7 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         return tokens
     }
 
-    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]?) async throws -> [TokenModel] {
+    func getActivatedTokens(address: any FWAddress, in list: [TokenModel]? = nil) async throws -> [TokenModel] {
         guard let addr = address as? EthereumAddress,
               let web3 = try await FlowProvider.Web3.default(networkType: network)
         else {
