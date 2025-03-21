@@ -36,13 +36,11 @@ struct FlowScanTransfer: Codable {
     let type: Int?
     let contractAddress: String?
 
-
     private var isSealed: Bool {
         status?.lowercased() == "Sealed".lowercased() || status?.lowercased() == "success"
     }
 
     var statusColor: UIColor {
-
         guard isSealed else {
             return UIColor.LL.Neutrals.text3
         }
@@ -99,8 +97,8 @@ struct FlowScanTransfer: Codable {
     }
 
     var amountString: String {
-        if let amountString = amount, !amountString.isEmpty, let formattedString = Double(amountString)?.formatCurrencyString(digits: 4) {
-            return formattedString
+        if let amountString = amount, !amountString.isEmpty {
+            return amountString
         } else {
             return "-"
         }
