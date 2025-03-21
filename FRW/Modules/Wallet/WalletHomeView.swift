@@ -375,7 +375,7 @@ struct WalletHomeView: View {
                     Text(
                         vm
                             .isHidden ? "****" :
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(digits: 2, considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: true))"
                     )
                     .font(.Ukraine(size: 30, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black)
@@ -572,7 +572,7 @@ extension WalletHomeView {
 
         var body: some View {
             VStack(spacing: 0) {
-                HStack(spacing: 18) {
+                HStack(alignment: .center, spacing: 18) {
                     KFImage.url(coin.token.iconURL)
                         .placeholder {
                             Image("placeholder")
@@ -592,52 +592,50 @@ extension WalletHomeView {
                             Spacer()
 
                             Text(
-                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString(digits: 2)) \(coin.token.symbol?.uppercased() ?? "?")"
+                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString()) \(coin.token.symbol?.uppercased() ?? "?")"
                             )
                             .foregroundColor(.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .medium))
                         }
 
                         HStack {
-                            HStack {
-                                Text(coin.priceValue)
-                                    .foregroundColor(.LL.Neutrals.neutrals7)
-                                    .font(.inter(size: 14, weight: .regular))
+                            if WalletManager.shared.accessibleManager.isAccessible(coin.token) {
+                                if let priceValue = coin.priceValue {
+                                    HStack {
+                                        Text(priceValue)
+                                            .foregroundColor(.LL.Neutrals.neutrals7)
+                                            .font(.inter(size: 14, weight: .regular))
 
-                                Text(coin.changeString)
-                                    .foregroundColor(coin.changeColor)
-                                    .font(.inter(size: 12, weight: .semibold))
-                                    .frame(height: 22)
-                                    .padding(.horizontal, 6)
-                                    .background(coin.changeBG)
-                                    .cornerRadius(11, style: .continuous)
+                                        Text(coin.changeString)
+                                            .foregroundColor(coin.changeColor)
+                                            .font(.inter(size: 12, weight: .semibold))
+                                            .frame(height: 22)
+                                            .padding(.horizontal, 6)
+                                            .background(coin.changeBG)
+                                            .cornerRadius(11, style: .continuous)
+                                    }
+                                }
+                            } else {
+                                Text("Inaccessible".localized)
+                                    .foregroundStyle(Color.Flow.Font.inaccessible)
+                                    .font(Font.inter(size: 10, weight: .semibold))
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 5)
+                                    .background(.Flow.Font.inaccessible.opacity(0.16))
+                                    .cornerRadius(4, style: .continuous)
                             }
-                            .visibility(
-                                WalletManager.shared.accessibleManager
-                                    .isAccessible(coin.token) ? .visible : .gone
-                            )
-
-                            Text("Inaccessible".localized)
-                                .foregroundStyle(Color.Flow.Font.inaccessible)
-                                .font(Font.inter(size: 10, weight: .semibold))
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 5)
-                                .background(.Flow.Font.inaccessible.opacity(0.16))
-                                .cornerRadius(4, style: .continuous)
-                                .visibility(
-                                    WalletManager.shared.accessibleManager
-                                        .isAccessible(coin.token) ? .gone : .visible
-                                )
 
                             Spacer()
 
-                            Text(
-                                vm
-                                    .isHidden ? "****" :
-                                    "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
-                            )
-                            .foregroundColor(.LL.Neutrals.neutrals7)
-                            .font(.inter(size: 14, weight: .regular))
+                            if coin.priceValue != nil {
+                                Text(
+                                    vm
+                                        .isHidden ? "****" :
+                                        "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
+                                )
+                                .foregroundColor(.LL.Neutrals.neutrals7)
+                                .font(.inter(size: 14, weight: .regular))
+                            }
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -674,7 +672,7 @@ extension WalletHomeView {
                             Spacer()
 
                             Text(
-                                "\(vm.isHidden ? "****" : stakingManager.stakingCount.formatCurrencyString(digits: 2)) FLOW"
+                                "\(vm.isHidden ? "****" : stakingManager.stakingCount.formatCurrencyString()) FLOW"
                             )
                             .foregroundColor(.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .medium))
@@ -770,6 +768,14 @@ struct VisualEffectView: UIViewRepresentable {
         -> UIVisualEffectView { UIVisualEffectView() }
     func updateUIView(_ uiView: UIVisualEffectView, context _: UIViewRepresentableContext<Self>) {
         uiView.effect = effect
+    }
+}
+
+#Preview {
+    Group {
+        WalletHomeView.CoinCell(coin: WalletViewModel.WalletCoinItemModel.mock())
+            .environmentObject(WalletViewModel())
+            .preferredColorScheme(.dark)
     }
 }
 

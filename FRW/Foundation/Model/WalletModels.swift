@@ -164,6 +164,15 @@ struct TokenModel: Codable, Identifiable, Mockable {
         return bal.doubleValue.formatted(.number.precision(.fractionLength(0 ... 3)))
     }
 
+    var precision: Int {
+        switch type {
+        case .cadence:
+            return min(decimal, 8)
+        case .evm:
+            return min(decimal, 18)
+        }
+    }
+
     // Identifiable
     var id: String {
         getId(by: type)

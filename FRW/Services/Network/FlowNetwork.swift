@@ -949,9 +949,7 @@ extension FlowNetwork {
     }
 
     // transferFlowToEvmAddress
-    static func sendFlowToEvm(evmAddress: String, amount: Decimal, gas: UInt64) async throws -> Flow
-        .ID
-    {
+    static func sendFlowToEvm(evmAddress: String, amount: Decimal, gas: UInt64) async throws -> Flow.ID {
         try await sendTransaction(by: \.evm?.transferFlowToEvmAddress, argumentList: [
             .string(evmAddress),
             .ufix64(amount),
@@ -960,9 +958,7 @@ extension FlowNetwork {
     }
 
     /// transferFlowFromCoaToFlow
-    static func sendFlowTokenFromCoaToFlow(amount: Decimal, address: String) async throws -> Flow
-        .ID
-    {
+    static func sendFlowTokenFromCoaToFlow(amount: Decimal, address: String) async throws -> Flow.ID {
         try await sendTransaction(by: \.evm?.transferFlowFromCoaToFlow, argumentList: [
             .ufix64(amount),
             .address(Flow.Address(hex: address)),
