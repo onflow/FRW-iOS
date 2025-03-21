@@ -95,7 +95,7 @@ class SideMenuViewModel: ObservableObject {
         }
         Task {
             let color = await ImageHelper.mostFrequentColor(from: url)
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.colorsMap[url] = color
                 self.userInfoBackgroudColor = color
             }
@@ -284,11 +284,7 @@ struct SideMenuView: View {
                     AccountSideCell(
                         address: WalletManager.shared.getPrimaryWalletAddress() ?? "",
                         currentAddress: vm.currentAddress,
-                        detail: vm
-                            .balanceValue(
-                                at: WalletManager.shared
-                                    .getPrimaryWalletAddress() ?? ""
-                            )
+                        detail: vm.balanceValue(at: WalletManager.shared.getPrimaryWalletAddress() ?? "")
                     ) { _, action in
                         if action == .card {
                             vm.switchProfile()
@@ -481,7 +477,7 @@ class SideContainerViewModel: ObservableObject {
             object: nil
         )
 
-        self.isLinkedAccount = ChildAccountManager.shared.selectedChildAccount != nil
+        isLinkedAccount = ChildAccountManager.shared.selectedChildAccount != nil
         ChildAccountManager.shared.$selectedChildAccount
             .receive(on: DispatchQueue.main)
             .map { $0 }
