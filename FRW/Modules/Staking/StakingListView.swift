@@ -236,7 +236,7 @@ struct StakingListView: RouteableView {
         ]
 
         let numStr = NSMutableAttributedString(
-            string: "\(num.formatCurrencyString(digits: 3)) ",
+            string: "\(num.formatCurrencyStringForDisplay(digits: 3)) ",
             attributes: boldAttrs
         )
         let normalStr = NSAttributedString(string: "Flow", attributes: normalAttrs)

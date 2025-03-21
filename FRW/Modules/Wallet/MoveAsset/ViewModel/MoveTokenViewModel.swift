@@ -103,7 +103,7 @@ final class MoveTokenViewModel: ObservableObject {
     }
 
     var currentBalance: String {
-        let totalStr = amountBalance.doubleValue.formatCurrencyString()
+        let totalStr = amountBalance.doubleValue.formatCurrencyStringForDisplay()
         return "\(totalStr)"
     }
 
@@ -195,7 +195,7 @@ final class MoveTokenViewModel: ObservableObject {
         Task {
             let num = await updateAmountIfNeed(inputAmount: amountBalance)
             await MainActor.run {
-                self.showBalance = num.doubleValue.formatCurrencyString()
+                self.showBalance = num.doubleValue.formatCurrencyStringForDisplay()
                 self.actualBalance = num
                 self.refreshSummary()
                 self.updateState()
@@ -409,7 +409,7 @@ extension MoveTokenViewModel {
     }
 
     var balanceAsCurrentCurrencyString: String {
-        inputDollarNum.formatCurrencyString(considerCustomCurrency: true)
+        inputDollarNum.formatCurrencyStringForDisplay(considerCustomCurrency: true)
     }
 
     var showFee: Bool {

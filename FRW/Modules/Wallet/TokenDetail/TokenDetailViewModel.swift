@@ -22,7 +22,7 @@ extension TokenDetailView {
 
         var generateChartPoint: LineChartDataPoint {
             let date = Date(timeIntervalSince1970: closeTime)
-            let price = Double(closePrice.formatCurrencyString(
+            let price = Double(closePrice.formatCurrencyStringForTransaction(
                 digits: 2,
                 considerCustomCurrency: true
             )) ?? 0
@@ -215,11 +215,11 @@ extension TokenDetailViewModel {
     }
 
     var balanceString: String {
-        balance.formatCurrencyString()
+        balance.formatCurrencyStringForDisplay()
     }
 
     var balanceAsCurrentCurrencyString: String {
-        balanceAsUSD.formatCurrencyString(considerCustomCurrency: true)
+        balanceAsUSD.formatCurrencyStringForDisplay(considerCustomCurrency: true)
     }
 
     var changeIsNegative: Bool {

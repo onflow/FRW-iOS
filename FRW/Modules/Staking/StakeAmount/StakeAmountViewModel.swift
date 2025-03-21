@@ -85,11 +85,11 @@ class StakeAmountViewModel: ObservableObject {
     }
 
     var inputNumAsCurrencyString: String {
-        "\(CurrencyCache.cache.currencySymbol)\(inputNumAsUSD.formatCurrencyString(considerCustomCurrency: true)) \(CurrencyCache.cache.currentCurrency.rawValue)"
+        "\(CurrencyCache.cache.currencySymbol)\(inputNumAsUSD.formatCurrencyStringForDisplay(considerCustomCurrency: true)) \(CurrencyCache.cache.currentCurrency.rawValue)"
     }
 
     var inputNumAsCurrencyStringInConfirmSheet: String {
-        "\(CurrencyCache.cache.currencySymbol)\(inputNumAsUSD.formatCurrencyString(considerCustomCurrency: true))"
+        "\(CurrencyCache.cache.currencySymbol)\(inputNumAsUSD.formatCurrencyStringForDisplay(considerCustomCurrency: true))"
     }
 
     var yearReward: Double {
@@ -97,12 +97,12 @@ class StakeAmountViewModel: ObservableObject {
     }
 
     var yearRewardFlowString: String {
-        yearReward.formatCurrencyString()
+        yearReward.formatCurrencyStringForDisplay()
     }
 
     var yearRewardWithCurrencyString: String {
         let numString = (inputNumAsUSD * provider.rate)
-            .formatCurrencyString(considerCustomCurrency: true)
+            .formatCurrencyStringForDisplay(considerCustomCurrency: true)
         return "\(CurrencyCache.cache.currencySymbol)\(numString) \(CurrencyCache.cache.currentCurrency.rawValue)"
     }
 
@@ -140,7 +140,7 @@ extension StakeAmountViewModel {
     }
 
     func percentAction(percent: Double) {
-        inputText = "\((balance * percent).formatCurrencyString())"
+        inputText = "\((balance * percent).formatCurrencyStringForTransaction())"
     }
 
     func confirmSetupAction() {

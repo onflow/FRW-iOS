@@ -268,7 +268,7 @@ extension WalletSendAmountViewModel: InsufficientStorageToastViewModel {
 
 extension WalletSendAmountViewModel {
     func inputTextDidChangeAction(text _: String) {
-        actualBalance = inputText.doubleValue.formatCurrencyString(digits: token.decimal)
+        actualBalance = inputText.doubleValue.formatCurrencyStringForTransaction(digits: token.decimal)
         refreshInput()
     }
 
@@ -285,37 +285,37 @@ extension WalletSendAmountViewModel {
                         0
                     )
                     DispatchQueue.main.async {
-                        self.inputText = num.formatCurrencyString()
+                        self.inputText = num.formatCurrencyStringForTransaction()
                     }
 
-                    actualBalance = num.formatCurrencyString(digits: token.decimal)
+                    actualBalance = num.formatCurrencyStringForTransaction(digits: token.decimal)
                 } catch {
                     let num = max(amountBalance - minBalance.doubleValue, 0)
                     DispatchQueue.main.async {
-                        self.inputText = num.formatCurrencyString()
+                        self.inputText = num.formatCurrencyStringForTransaction()
                     }
-                    actualBalance = num.formatCurrencyString(digits: token.decimal)
+                    actualBalance = num.formatCurrencyStringForTransaction(digits: token.decimal)
                     log.error("[Flow] min flow balance error")
                 }
             }
         } else {
             let num = max(amountBalance, 0)
-            inputText = num.formatCurrencyString()
-            actualBalance = num.formatCurrencyString(digits: token.decimal)
+            inputText = num.formatCurrencyStringForTransaction()
+            actualBalance = num.formatCurrencyStringForTransaction(digits: token.decimal)
         }
     }
 
     func toggleExchangeTypeAction() {
         if exchangeType == .token, coinRate != 0 {
             exchangeType = .dollar
-            inputText = inputDollarNum.formatCurrencyString()
+            inputText = inputDollarNum.formatCurrencyStringForTransaction()
             actualBalance = inputDollarNum
-                .formatCurrencyString(digits: token.decimal)
+                .formatCurrencyStringForTransaction(digits: token.decimal)
         } else {
             exchangeType = .token
-            inputText = inputTokenNum.formatCurrencyString()
+            inputText = inputTokenNum.formatCurrencyStringForTransaction()
             actualBalance = inputTokenNum
-                .formatCurrencyString(digits: token.decimal)
+                .formatCurrencyStringForTransaction(digits: token.decimal)
         }
     }
 
