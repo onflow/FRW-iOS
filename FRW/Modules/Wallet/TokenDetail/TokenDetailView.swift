@@ -773,6 +773,7 @@ extension TokenDetailView {
 struct BorderStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
+        //TODO: this should be background, not overlay
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))

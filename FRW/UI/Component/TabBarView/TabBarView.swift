@@ -68,7 +68,6 @@ struct TabBarView<T: Hashable>: View {
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .background(Color(uiColor: UIColor.LL.Neutrals.background))
-        .cornerRadius(20, corners: [.bottomLeft, .bottomRight])
         .ignoresSafeArea()
         .animation(.none, value: current)
         .onChange(of: current) { _ in
