@@ -646,19 +646,6 @@ extension UserManager {
 
 extension UserManager {
     func switchAccount(withUID uid: String) async throws {
-        defer {
-            runOnMain {
-                self.isProfileSwitching = false
-            }
-        }
-
-        // Only set this flag when it is switch profile, not login
-        if isLoggedIn {
-            await MainActor.run {
-                isProfileSwitching = true
-            }
-        }
-
         if !currentNetwork.isMainnet {
             WalletManager.shared.changeNetwork(.mainnet)
         }
