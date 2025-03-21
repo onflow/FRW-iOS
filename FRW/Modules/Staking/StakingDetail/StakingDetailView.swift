@@ -517,7 +517,7 @@ struct StakingDetailView: RouteableView {
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_apr".localized,
-                value: "\((vm.provider.rate * 100).formatCurrencyString()) %"
+                value: "\((vm.provider.rate * 100).formatCurrencyString(digits: 2)) %"
             )
         }
         .padding(.horizontal, 18)
