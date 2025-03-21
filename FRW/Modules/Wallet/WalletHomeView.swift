@@ -375,7 +375,7 @@ struct WalletHomeView: View {
                     Text(
                         vm
                             .isHidden ? "****" :
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(digits: 2, considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: true))"
                     )
                     .font(.Ukraine(size: 30, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black)
@@ -592,7 +592,7 @@ extension WalletHomeView {
                             Spacer()
 
                             Text(
-                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString(digits: 2)) \(coin.token.symbol?.uppercased() ?? "?")"
+                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString()) \(coin.token.symbol?.uppercased() ?? "?")"
                             )
                             .foregroundColor(.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .medium))
@@ -605,7 +605,7 @@ extension WalletHomeView {
                                         Text(priceValue)
                                             .foregroundColor(.LL.Neutrals.neutrals7)
                                             .font(.inter(size: 14, weight: .regular))
-                                        
+
                                         Text(coin.changeString)
                                             .foregroundColor(coin.changeColor)
                                             .font(.inter(size: 12, weight: .semibold))
@@ -624,7 +624,7 @@ extension WalletHomeView {
                                     .background(.Flow.Font.inaccessible.opacity(0.16))
                                     .cornerRadius(4, style: .continuous)
                             }
-                            
+
                             Spacer()
 
                             if coin.priceValue != nil {
@@ -672,7 +672,7 @@ extension WalletHomeView {
                             Spacer()
 
                             Text(
-                                "\(vm.isHidden ? "****" : stakingManager.stakingCount.formatCurrencyString(digits: 2)) FLOW"
+                                "\(vm.isHidden ? "****" : stakingManager.stakingCount.formatCurrencyString()) FLOW"
                             )
                             .foregroundColor(.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .medium))

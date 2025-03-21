@@ -1226,6 +1226,7 @@
 		4E9E21B3282644B200E1BACD /* WalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9E21B1282644B100E1BACD /* WalletViewModel.swift */; };
 		4E9E21DB282A5B9400E1BACD /* SecureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9E21D9282A586500E1BACD /* SecureView.swift */; };
 		4E9E21E0282A71B500E1BACD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E9E21DC282A68CB00E1BACD /* Colors.xcassets */; };
+		4E9F6CCC2D8D5B9800395F94 /* FlowWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */; };
 		4EA0D0A32A7A357E004C6A19 /* LLSegmenControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A22A7A357E004C6A19 /* LLSegmenControl.swift */; };
 		4EA0D0A42A7A357E004C6A19 /* LLSegmenControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A22A7A357E004C6A19 /* LLSegmenControl.swift */; };
 		4EA0D0A62A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A52A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift */; };
@@ -3042,6 +3043,7 @@
 				1552DC6A2787090D00EAA7D5 /* Introspect in Frameworks */,
 				15D3BA7228C3B90A009AEA6E /* ViewAnimator in Frameworks */,
 				4E5F2F0F2C11F036008589C4 /* CrowdinSDK in Frameworks */,
+				4E9F6CCC2D8D5B9800395F94 /* FlowWalletKit in Frameworks */,
 				4E660F1E2C80B43E00E5239E /* CollectionViewPagingLayout in Frameworks */,
 				154B8920276A1EEB00780E93 /* SwiftUIX in Frameworks */,
 				6AC1AE6B289BAD0600F76C7A /* SnapKit in Frameworks */,
@@ -6375,6 +6377,7 @@
 				4EB94AA82D115F6C00AEF3C9 /* SwiftyDropbox */,
 				15F6F4BC2D683FF100D62D7F /* TrustWeb3Provider */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
+				4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */,
 			);
 			productName = "FlowReferenceWallet-lite";
 			productReference = 154B8928276A1EEB00780E93 /* FRW-dev.app */;
@@ -10444,6 +10447,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
+		};
+		4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */;
+			productName = FlowWalletKit;
 		};
 		4EB94AA62D115F5C00AEF3C9 /* SwiftyDropbox */ = {
 			isa = XCSwiftPackageProductDependency;

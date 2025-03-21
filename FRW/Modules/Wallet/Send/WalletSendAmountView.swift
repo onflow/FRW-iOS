@@ -495,11 +495,9 @@ extension WalletSendAmountView {
                 HStack {
                     Spacer()
 
-                    Text(
-                        "\(CurrencyCache.cache.currentCurrency.rawValue) \(CurrencyCache.cache.currencySymbol) \(vm.inputDollarNum.formatCurrencyString())"
-                    )
-                    .foregroundColor(.LL.Neutrals.neutrals8)
-                    .font(.inter(size: 14, weight: .medium))
+                    Text("\(CurrencyCache.cache.currentCurrency.rawValue) \(CurrencyCache.cache.currencySymbol) \(vm.inputDollarNum.formatCurrencyString())")
+                        .foregroundColor(.LL.Neutrals.neutrals8)
+                        .font(.inter(size: 14, weight: .medium))
                 }
                 .padding(.top, 14)
             }
