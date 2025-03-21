@@ -129,22 +129,16 @@ struct MoveSingleNFTView: RouteableView, PresentActionDelegate {
                 .background(.Theme.BG.bg3)
                 .cornerRadius(16)
             }
-            
-            VStack(spacing: 0) {
-                InsufficientStorageToastView<MoveSingleNFTViewModel>()
-                    .padding(.horizontal, 22)
-                    .environmentObject(self.viewModel)
                 
-                VPrimaryButton(
-                    model: ButtonStyle.primary,
-                    state: viewModel.buttonState,
-                    action: {
-                        viewModel.moveAction()
-                    },
-                    title: "move".localized
-                )
-                .padding(.horizontal, 18)
-            }
+            VPrimaryButton(
+                model: ButtonStyle.primary,
+                state: viewModel.buttonState,
+                action: {
+                    viewModel.moveAction()
+                },
+                title: "move".localized
+            )
+//                .padding(.horizontal, 18)
         }
         .padding(.horizontal, 18)
         .hideKeyboardWhenTappedAround()

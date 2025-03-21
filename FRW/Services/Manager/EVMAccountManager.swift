@@ -202,7 +202,7 @@ extension EVMAccountManager {
     func refreshBalance(address: String) async throws {
         log.info("[EVM] refresh balance at \(address)")
         let balance = try await fetchBalance(address)
-        DispatchQueue.main.async {
+        await MainActor.run {
             log.info("[EVM] refresh balance success")
             self.balance = balance
         }

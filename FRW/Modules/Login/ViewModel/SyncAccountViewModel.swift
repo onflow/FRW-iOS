@@ -43,14 +43,15 @@ class SyncAccountViewModel: ObservableObject {
             let uri = try await WalletConnectSyncDevice.createAndPair()
             WalletConnectManager.shared.prepareSyncAccount()
 
-            log.info("[sync device] connect to topic: \(uri.absoluteString)")
             log.info("[sync device] connect to topic: \(uri)")
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.topic = uri.topic
                 self.uriString = uri.absoluteString
             }
         } catch {
             // TODO: handle error to UI
+            EventTrack.Dev.deviceBackup(progress: .connect,
+                                        message: "\(error.localizedDescription)")
             log.error("[sync device] create uri error:\(error)")
         }
     }

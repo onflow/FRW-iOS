@@ -545,7 +545,7 @@ struct SideContainerView: View {
     }
 
     var body: some View {
-        if !um.isLoggedIn && !um.isProfileSwitching {
+        if !um.isLoggedIn {
             EmptyWalletView()
         } else {
             ZStack {

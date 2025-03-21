@@ -14,7 +14,7 @@ struct WalletSettingView: RouteableView {
 
     init(address: String) {
         self.address = address
-        self.user = WalletManager.shared.walletAccount.readInfo(at: address)
+        user = WalletManager.shared.walletAccount.readInfo(at: address)
     }
 
     // MARK: Internal
@@ -27,6 +27,14 @@ struct WalletSettingView: RouteableView {
 
     var title: String {
         "account".localized.capitalized
+    }
+
+    var isSecureEnclave: Bool {
+        WalletManager.shared.keyProvider?.keyType == .secureEnclave
+    }
+
+    var isSeedPhrase: Bool {
+        WalletManager.shared.keyProvider?.keyType == .seedPhrase
     }
 
     var body: some View {
@@ -64,6 +72,7 @@ struct WalletSettingView: RouteableView {
                             }
 
                             Divider().foregroundColor(.LL.Neutrals.background)
+                                .visibility(isSeedPhrase ? .visible : .gone)
 
                             Button {
                                 Task {
@@ -81,10 +90,11 @@ struct WalletSettingView: RouteableView {
                                 )
                                 .contentShape(Rectangle())
                             }
+                            .visibility(isSeedPhrase ? .visible : .gone)
                         }
                         .padding(.horizontal, 16)
                         .roundedBg()
-                        .visibility(UserManager.shared.userType == .phrase ? .visible : .gone)
+                        .visibility(isSecureEnclave ? .gone : .visible)
 
                         VStack(spacing: 0) {
                             Button {
@@ -102,7 +112,7 @@ struct WalletSettingView: RouteableView {
                         .frame(height: 64)
                         .padding(.horizontal, 16)
                         .roundedBg()
-                        .visibility(UserManager.shared.userType == .secure ? .visible : .gone)
+                        .visibility(isSecureEnclave ? .visible : .gone)
 
                         VStack(spacing: 0) {
                             Button {
