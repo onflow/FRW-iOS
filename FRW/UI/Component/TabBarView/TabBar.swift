@@ -40,6 +40,7 @@ extension TabBarView {
             }
             .frame(height: 46)
             .padding(.horizontal, 16)
+            .padding(.bottom, 4)
         }
 
         // MARK: Private

@@ -78,7 +78,7 @@ class NFTSearchViewModel: ObservableObject {
                     self.filteredNFTItems = self.nftItems
                 } else {
                     self.filteredNFTItems = self.nftItems.filter {
-                        $0.title.lowercased().contains(query.lowercased())
+                        $0.response.searchText.lowercased().contains(query.lowercased())
                     }
                 }
             }

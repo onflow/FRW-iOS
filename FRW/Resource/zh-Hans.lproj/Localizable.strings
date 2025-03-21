@@ -96,7 +96,6 @@
 "Are__you__sure__you__want__to__remove__this__contact::message" = "确定要删除此联系人吗？";
 "nft_empty" = "你还没有任何 NFT。";
 "You__will__no__longer__find__this__contact__in__your__address__book::message" = "您将无法在通讯录中找到此联系人。";
-"nft_empty_discovery" = "期待你的下一个发现。";
 "Empty__List::message" = "空列表";
 "get_new_nft" = "获取新的 NFT";
 "No__results__found::message" = "未找到结果！";

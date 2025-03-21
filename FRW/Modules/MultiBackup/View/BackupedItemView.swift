@@ -77,25 +77,10 @@ struct BackupedItemView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    VStack(spacing: 10) {
-                        Text("not_share_secret_tips".localized)
-                            .font(.LL.caption)
-                            .bold()
-                        Text("not_share_secret_desc".localized)
-                            .font(.LL.footnote)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 16)
-                    .foregroundColor(.LL.warning2)
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .foregroundColor(.LL.warning6)
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.top)
-                    .padding(.bottom)
+                    PrivateKeyWarning()
+                        .padding(.horizontal, 10)
+                        .padding(.top)
+                        .padding(.bottom)
                 }
             }
         }

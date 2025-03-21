@@ -22,38 +22,33 @@ struct SecureEnclavePrivateKeyView: RouteableView {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 16) {
                 Section {
                     HStack {
                         Text(publicKey)
                             .font(.inter(size: 12))
                             .foregroundColor(.Theme.Text.black8)
-
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 20)
                         Spacer()
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(16)
-                    .background(.Theme.Background.grey)
+                    .background(Color.Theme.Fill.fill1)
                     .cornerRadius(16)
                     .padding(.bottom, 24)
 
                 } header: {
                     HStack {
                         Text("account_key_key".localized)
-                            .font(.inter(size: 14, weight: .bold))
-                            .foregroundColor(.Theme.Text.black3)
+                            .font(.inter(size: 14, weight: .semibold))
+                            .foregroundColor(.Theme.Text.text4)
 
                         Spacer()
-
-                        Button {
+                        CopyButton {
                             UIPasteboard.general.string = publicKey
                             HUD.success(title: "copied".localized)
-                        } label: {
-                            Label(LocalizedStringKey("Copy".localized), colorImage: "Copy")
-                                .foregroundColor(.Theme.Accent.grey)
                         }
                     }
-                    .padding(.bottom, 12)
                 }
                 .visibility(publicKey.isEmpty ? .gone : .visible)
 
@@ -83,8 +78,8 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                 } header: {
                     HStack(spacing: 4) {
                         Text("Private Key".localized)
-                            .font(.inter(size: 14, weight: .bold))
-                            .foregroundColor(.Theme.Text.black3)
+                            .font(.inter(size: 14, weight: .semibold))
+                            .foregroundColor(.Theme.Text.text4)
 
                         Spacer()
 
@@ -95,7 +90,6 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                             .foregroundStyle(Color.Theme.Accent.green)
                             .font(.inter(size: 12, weight: .bold))
                     }
-                    .padding(.bottom, 12)
                 }
 
                 HStack {
@@ -103,12 +97,12 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                         Divider()
                         VStack(alignment: .leading) {
                             Text("Hash__Algorithm::message".localized)
-                                .font(.inter(size: 12))
-                                .foregroundColor(Color.Theme.Text.black3)
+                                .font(.inter(size: 14))
+                                .foregroundColor(Color.Theme.Text.text4)
 
                             Text(WalletManager.shared.hashAlgo.algorithm)
-                                .font(.inter(size: 12))
-                                .foregroundColor(Color.Theme.Text.black3)
+                                .font(.inter(size: 14))
+                                .foregroundColor(Color.Theme.Text.text4)
                         }
                     }
 
@@ -118,18 +112,19 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                         Divider()
                         VStack(alignment: .leading) {
                             Text("Sign__Algorithm::message".localized)
-                                .font(.inter(size: 12))
-                                .foregroundColor(Color.Theme.Text.black3)
+                                .font(.inter(size: 14))
+                                .foregroundColor(Color.Theme.Text.text4)
 
                             Text(WalletManager.shared.signatureAlgo.id)
-                                .font(.inter(size: 12))
-                                .foregroundColor(Color.Theme.Text.black3)
+                                .font(.inter(size: 14))
+                                .foregroundColor(Color.Theme.Text.text4)
                         }
                     }
                 }
                 .padding(.vertical, 10)
             }
             .padding(.horizontal, 18)
+            .padding(.top, 8)
         }
         .backgroundFill(.LL.background)
         .applyRouteable(self)

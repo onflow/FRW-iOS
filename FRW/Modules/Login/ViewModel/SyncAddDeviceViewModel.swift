@@ -56,6 +56,8 @@ class SyncAddDeviceViewModel: ObservableObject {
                     signers: WalletManager.shared.defaultSigners
                 )
                 guard let data = try? JSONEncoder().encode(model) else {
+                    EventTrack.Dev.deviceBackup(progress: .addKeyToChain,
+                                                message: "encoder failed")
                     return
                 }
                 let holder = TransactionManager.TransactionHolder(
@@ -70,10 +72,14 @@ class SyncAddDeviceViewModel: ObservableObject {
                 if result.isComplete {
                     sendSuccessStatus()
                 } else {
+                    EventTrack.Dev.deviceBackup(progress: .addKeyToChain,
+                                                message: "transction failed.")
                     sendFaildStatus()
                 }
                 HUD.dismissLoading()
             } catch {
+                EventTrack.Dev.deviceBackup(progress: .addKeyToChain,
+                                            message: "error:\(error), publicKey:\(model.accountKey.publicKey.prefix(8))")
                 HUD.dismissLoading()
                 HUD.error(title: "restore_account_failed".localized)
             }
@@ -86,23 +92,26 @@ class SyncAddDeviceViewModel: ObservableObject {
 
     func sendSuccessStatus() {
         Task {
+            let publicKey = self.model.accountKey.publicKey
             do {
                 let response: Network.EmptyResponse = try await Network
                     .requestWithRawModel(FRWAPI.User.syncDevice(self.model))
                 if response.httpCode != 200 {
-                    log.info("[Sync Device] add device failed. publicKey: \(self.model.accountKey.publicKey)")
-                    DispatchQueue.main.async {
+                    log.info("[Sync Device] add device failed. publicKey: \(publicKey)")
+                    EventTrack.Dev.deviceBackup(progress: .addKeyToBackend, message: "code:\(response.httpCode), publicKey:\(publicKey.prefix(8))")
+                    await MainActor.run {
                         self.result = "add device failed."
                     }
                     callback?(false)
                 } else {
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.dismiss()
                     }
                     callback?(true)
                 }
             } catch {
                 callback?(false)
+                EventTrack.Dev.deviceBackup(progress: .addKeyToBackend, message: "error:\(error), publicKey:\(publicKey.prefix(8))")
                 log.error("[sync account] error \(error.localizedDescription)")
             }
         }

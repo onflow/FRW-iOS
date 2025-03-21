@@ -219,7 +219,7 @@ struct StakingDetailView: RouteableView {
         VStack(spacing: 10) {
             // progress bar
             HStack(spacing: 2) {
-                ForEach(0..<progressMax, id: \.self) { index in
+                ForEach(0 ..< progressMax, id: \.self) { index in
                     Rectangle()
                         .foregroundColor(
                             index < vm.currentProgress ? Color.LL.stakeMain : Color
@@ -517,7 +517,7 @@ struct StakingDetailView: RouteableView {
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_apr".localized,
-                value: "\((vm.provider.rate * 100).formatCurrencyString(digits: 2)) %"
+                value: "\((vm.provider.rate * 100).formatCurrencyString()) %"
             )
         }
         .padding(.horizontal, 18)

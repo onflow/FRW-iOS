@@ -81,8 +81,9 @@ extension EventTrack {
 }
 
 extension EventTrack {
-    enum Dev: String,EventTrackNameProtocol {
+    enum Dev: String, EventTrackNameProtocol {
         case restoreLogin = "restore_login"
+        case deviceBackup = "device_backup"
 
         var name: String {
             rawValue

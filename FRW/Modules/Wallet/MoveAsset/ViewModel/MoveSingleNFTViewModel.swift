@@ -62,30 +62,33 @@ final class MoveSingleNFTViewModel: ObservableObject {
     }
 
     func moveAction() {
+        defer {
+            runOnMain {
+                self.buttonState = .enabled
+            }
+        }
+        
         guard let nftId = UInt64(nft.response.id) else {
             HUD.error(title: "invalid data")
             return
         }
-        buttonState = .loading
+        
         Task {
+            await MainActor.run {
+                self.buttonState = .loading
+            }
+            
             if fromContact.walletType == .link || toContact.walletType == .link {
                 await moveForLinkedAccount(nftId: nftId)
-            } else {
-                let identifier = nft.collection?.flowIdentifier ?? nft.response.maskFlowIdentifier
-                guard let identifier = identifier else {
-                    log.error("Empty identifier on NFT>collection>")
-                    HUD.debugError(title: "Empty identifier on NFT>collection>")
-                    DispatchQueue.main.async {
-                        self.buttonState = .enabled
-                    }
-                    return
-                }
-
-                await moveForEVM(identifier: identifier, nftId: nftId)
+                return
             }
-            DispatchQueue.main.async {
-                self.buttonState = .enabled
+            
+            guard let identifier = nft.collection?.flowIdentifier ?? nft.response.maskFlowIdentifier else {
+                HUD.error(MoveError.invalidateIdentifier)
+                return
             }
+            
+            await moveForEVM(identifier: identifier, nftId: nftId)
         }
     }
 
@@ -228,69 +231,82 @@ final class MoveSingleNFTViewModel: ObservableObject {
             collection = NFTCatalogCache.cache
                 .find(by: nft.collectionName)?.collection
         }
+        
         guard let collection = collection else {
-            log.error("[NFT] nft \(nft.collectionName) not found")
-
+            HUD.error(MoveError.invalidateNftCollectionInfo)
             return
         }
-        let identifier = nft.publicIdentifier
+        
+        guard let toAddress = toContact.address else {
+            HUD.error(MoveError.invalidateToAddress)
+            return
+        }
+        
+        guard let fromAddress = toContact.address else {
+            HUD.error(MoveError.invalidateFromAddress)
+            return
+        }
+        
+        guard let identifier = nft.response.flowIdentifier ?? nft.publicIdentifier else {
+            HUD.error(MoveError.invalidateIdentifier)
+            return
+        }
+        
         do {
-            var tid = Flow.ID(hex: "")
+            var tid: Flow.ID? = nil
             switch (fromContact.walletType, toContact.walletType) {
             case (.flow, .link):
                 tid = try await FlowNetwork.moveNFTToChild(
                     nftId: nftId,
-                    childAddress: toContact.address ?? "",
+                    childAddress: toAddress,
                     identifier: identifier,
                     collection: collection
                 )
             case (.link, .flow):
                 tid = try await FlowNetwork.moveNFTToParent(
                     nftId: nftId,
-                    childAddress: fromContact.address ?? "",
+                    childAddress: fromAddress,
                     identifier: identifier,
                     collection: collection
                 )
             case (.link, .link):
                 tid = try await FlowNetwork.sendChildNFTToChild(
                     nftId: nftId,
-                    childAddress: fromContact.address ?? "",
-                    toAddress: toContact.address ?? "",
+                    childAddress: fromAddress,
+                    toAddress: toAddress,
                     identifier: identifier,
                     collection: collection
                 )
             case (.link, .evm):
-                guard let nftIdentifier = nft.response.flowIdentifier else {
-                    return
-                }
                 tid = try await FlowNetwork
                     .bridgeChildNFTToEvm(
-                        nft: nftIdentifier,
+                        nft: identifier,
                         id: nftId,
-                        child: fromContact
-                            .address ?? ""
+                        child: fromAddress
                     )
             case (.evm, .link):
-                guard let nftIdentifier = nft.response.flowIdentifier else {
-                    return
-                }
                 tid = try await FlowNetwork
                     .bridgeChildNFTFromEvm(
-                        nft: nftIdentifier,
+                        nft: identifier,
                         id: nftId,
-                        child: toContact
-                            .address ?? ""
+                        child:toAddress
                     )
             default:
                 log.info("===")
             }
+            
+            guard let tid else {
+                HUD.error(MoveError.failedToSubmitTransaction)
+                return
+            }
+            
             let holder = TransactionManager.TransactionHolder(id: tid, type: .moveAsset)
             TransactionManager.shared.newTransaction(holder: holder)
             EventTrack.Transaction
                 .NFTTransfer(
-                    from: fromContact.address ?? "",
-                    to: toContact.address ?? "",
-                    identifier: nft.response.flowIdentifier ?? "",
+                    from: fromAddress,
+                    to: toAddress,
+                    identifier: identifier,
                     txId: tid.hex,
                     fromType: fromContact.walletType?.trackName ?? "",
                     toType: toContact.walletType?.trackName ?? "",
@@ -301,6 +317,7 @@ final class MoveSingleNFTViewModel: ObservableObject {
         } catch {
             log.error("[Move NFT] Move NFT failed on Linked Account. ")
             log.error(error)
+            HUD.error(title: error.localizedDescription)
         }
     }
 }

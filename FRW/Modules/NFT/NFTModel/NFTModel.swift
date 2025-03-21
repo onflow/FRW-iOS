@@ -257,11 +257,11 @@ struct NFTModel: Codable, Hashable, Identifiable {
         return name.hasSuffix(".meow") || url.hasSuffix(".meow")
     }
 
-    var publicIdentifier: String {
+    var publicIdentifier: String? {
         guard let path = collection?.path?.privatePath,
               let identifier = path.split(separator: "/").last
         else {
-            return ""
+            return nil
         }
         return String(identifier)
     }

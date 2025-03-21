@@ -114,6 +114,10 @@ struct NFTResponse: Codable, Hashable {
     func video() -> String? {
         postMedia?.video ?? ""
     }
+
+    var searchText: String {
+        return "\(name ?? "") \(description ?? "")" + (traits?.reduce("") { $0 + ($1.value ?? "") + " " } ?? "")
+    }
 }
 
 // MARK: - NFTRoyalty
@@ -206,16 +210,16 @@ struct NFTTrait: Codable, Hashable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String?.self, forKey: .name)
-        self.displayType = try container.decode(String?.self, forKey: .displayType)
+        name = try container.decode(String?.self, forKey: .name)
+        displayType = try container.decode(String?.self, forKey: .displayType)
         if let intValue = try? container.decode(Int.self, forKey: .value) {
-            self.value = String(intValue)
+            value = String(intValue)
         } else if let boolValue = try? container.decode(Bool.self, forKey: .value) {
-            self.value = String(boolValue)
+            value = String(boolValue)
         } else if let stringValue = try? container.decodeIfPresent(String.self, forKey: .value) {
-            self.value = stringValue
+            value = stringValue
         } else {
-            self.value = ""
+            value = ""
         }
     }
 

@@ -767,14 +767,6 @@ extension NFTUIKitListStyleHandler {
             return view
         }()
 
-        private lazy var descLabel: UILabel = {
-            let view = UILabel()
-            view.font = .inter(size: 14)
-            view.textColor = UIColor.LL.Neutrals.neutrals8
-            view.text = "nft_empty_discovery".localized
-            return view
-        }()
-
         private func setup() {
             addSubview(bgImageView)
             bgImageView.snp.makeConstraints { make in
@@ -791,12 +783,6 @@ extension NFTUIKitListStyleHandler {
             titleLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.top.equalTo(iconImageView.snp.bottom).offset(16)
-            }
-
-            addSubview(descLabel)
-            descLabel.snp.makeConstraints { make in
-                make.centerX.equalToSuperview()
-                make.top.equalTo(titleLabel.snp.bottom).offset(4)
             }
 
             // Hide it for now
