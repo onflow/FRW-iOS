@@ -42,7 +42,7 @@ class BalanceProvider: ObservableObject {
             else {
                 return
             }
-            balances[address] = model.value.formatCurrencyString()
+            balances[address] = model.value.formatCurrencyStringForDisplay()
         } catch {
             log.error("[Balance] fetch Flow flow balance :\(error)")
         }
@@ -59,7 +59,7 @@ class BalanceProvider: ObservableObject {
                     else {
                         return
                     }
-                    balances[address] = model.value.formatCurrencyString()
+                    balances[address] = model.value.formatCurrencyStringForDisplay()
                 }
             }
         } catch {
@@ -72,7 +72,7 @@ class BalanceProvider: ObservableObject {
             guard let evmAccount = EVMAccountManager.shared.accounts.first else { return }
             try await EVMAccountManager.shared.refreshBalance(address: evmAccount.address)
             let balance = EVMAccountManager.shared.balance
-            balances[evmAccount.showAddress] = balance.doubleValue.formatCurrencyString()
+            balances[evmAccount.showAddress] = balance.doubleValue.formatCurrencyStringForDisplay()
         } catch {
             log.error("[Balance] fetch EVM flow balance :\(error)")
         }

@@ -99,7 +99,7 @@ struct SwapConfirmView: View {
 
                 Text(
                     ((vm.estimateResponse?.priceImpact ?? 0.0) * -100)
-                        .formatCurrencyString(digits: 4) + "%"
+                        .formatCurrencyStringForDisplay(digits: 4) + "%"
                 )
                 .font(.inter(size: 14, weight: .medium))
                 .foregroundColor(Color.LL.Success.success1)
@@ -114,7 +114,7 @@ struct SwapConfirmView: View {
 //
 //                Spacer()
 //
-//                Text(vm.estimateResponse?.priceImpact.formatCurrencyString(digits: 4) ?? "0")
+//                Text(vm.estimateResponse?.priceImpact.formatCurrencyStringForDisplay(digits: 4) ?? "0")
 //                    .font(.inter(size: 14, weight: .medium))
 //                    .foregroundColor(Color.LL.Neutrals.text)
 //                    .lineLimit(1)

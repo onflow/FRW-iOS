@@ -100,7 +100,7 @@ class SwapViewModel: ObservableObject {
             return ""
         }
 
-        return "1 \(fromToken.symbol?.uppercased() ?? "") ≈ \((amountOut / amountIn).formatCurrencyString()) \(toToken.symbol?.uppercased() ?? "")"
+        return "1 \(fromToken.symbol?.uppercased() ?? "") ≈ \((amountOut / amountIn).formatCurrencyStringForDisplay()) \(toToken.symbol?.uppercased() ?? "")"
     }
 
     var fromAmount: Double {
@@ -124,7 +124,7 @@ class SwapViewModel: ObservableObject {
     }
 
     var fromPriceAmountString: String {
-        (fromAmount * fromTokenRate).formatCurrencyString(considerCustomCurrency: true)
+        (fromAmount * fromTokenRate).formatCurrencyStringForDisplay(considerCustomCurrency: true)
     }
 
     // MARK: Private
@@ -199,11 +199,11 @@ extension SwapViewModel {
                     }
 
                     if localIsFromInput {
-                        self.oldInputToText = "\(response.tokenOutAmount.formatCurrencyString())"
-                        self.inputToText = "\(response.tokenOutAmount.formatCurrencyString())"
+                        self.oldInputToText = "\(response.tokenOutAmount.formatCurrencyStringForTransaction())"
+                        self.inputToText = "\(response.tokenOutAmount.formatCurrencyStringForTransaction())"
                     } else {
-                        self.oldInputFromText = "\(response.tokenInAmount.formatCurrencyString())"
-                        self.inputFromText = "\(response.tokenInAmount.formatCurrencyString())"
+                        self.oldInputFromText = "\(response.tokenInAmount.formatCurrencyStringForTransaction())"
+                        self.inputFromText = "\(response.tokenInAmount.formatCurrencyStringForTransaction())"
                     }
 
                     self.estimateResponse = response
@@ -356,7 +356,7 @@ extension SwapViewModel {
 
         inputFromText = WalletManager.shared
             .getBalance(byId: contractId).doubleValue
-            .formatCurrencyString()
+            .formatCurrencyStringForTransaction()
     }
 
     func swapAction() {

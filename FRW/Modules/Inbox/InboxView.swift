@@ -139,7 +139,7 @@ extension InboxView {
                     Spacer()
 
                     Text(
-                        "\(CurrencyCache.cache.currencySymbol)\(item.marketPrice.formatCurrencyString(considerCustomCurrency: true))"
+                        "\(CurrencyCache.cache.currencySymbol)\(item.marketPrice.formatCurrencyStringForDisplay(considerCustomCurrency: true))"
                     )
                     .font(.inter(size: 16, weight: .medium))
                     .foregroundColor(Color.LL.Neutrals.text)
