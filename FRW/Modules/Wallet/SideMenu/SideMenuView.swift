@@ -331,7 +331,8 @@ struct SideMenuView: View {
                                 address: address,
                                 currentAddress: vm.currentAddress,
                                 name: childAccount.aName,
-                                logo: childAccount.icon
+                                logo: childAccount.icon,
+                                detail: vm.balanceValue(at: address)
                             ) { _, action in
                                 if action == .card {
                                     vm.switchProfile()
