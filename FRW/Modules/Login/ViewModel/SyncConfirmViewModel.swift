@@ -49,7 +49,10 @@ class SyncConfirmViewModel: ObservableObject {
         Task {
             do {
                 guard let currentSession = WalletConnectManager.shared
-                    .findSession(method: FCLWalletConnectMethod.accountInfo.rawValue) else {
+                    .findSession(method: FCLWalletConnectMethod.accountInfo.rawValue)
+                else {
+                    EventTrack.Dev.deviceBackup(progress: .accountInfo,
+                                                message: "find session failed.")
                     return
                 }
                 let methods: String = FCLWalletConnectMethod.addDeviceInfo.rawValue
@@ -66,9 +69,11 @@ class SyncConfirmViewModel: ObservableObject {
                 try await Sign.instance.request(params: request)
                 WalletConnectManager.shared.currentRequest = request
             } catch {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.status = .idle
                 }
+                EventTrack.Dev.deviceBackup(progress: .accountInfo,
+                                            message: "\(error.localizedDescription)")
                 log.error("[sync account] error \(error.localizedDescription)")
                 HUD.error(title: "sync_confirm_failed".localized)
             }
@@ -86,17 +91,18 @@ class SyncConfirmViewModel: ObservableObject {
             Task {
                 do {
                     try await UserManager.shared.restoreLogin(userId: self.userId)
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.status = .success
                     }
                 } catch {
-                    log
-                        .error(
-                            "[Sync Device] login with \(self.userId) failed. reason:\(error.localizedDescription)"
-                        )
+                    EventTrack.Dev.deviceBackup(progress: .login,
+                                                message: "\(error.localizedDescription)")
+                    log.error("[Sync Device] login with \(self.userId) failed. reason:\(error.localizedDescription)")
                 }
             }
         case let .failed(msg):
+            EventTrack.Dev.deviceBackup(progress: .login,
+                                        message: "\(msg)")
             HUD.error(title: "sync_confirm_failed".localized)
         }
     }

@@ -103,7 +103,8 @@ final class LilicoTests: XCTestCase {
     func testMnemonicEncryptAndDecrypt() throws {
         let wallet = HDWallet(strength: WalletManager.mnemonicStrength, passphrase: "")
         guard let mnemonic = wallet?.mnemonic, !mnemonic.isEmpty,
-              let mnemonicData = mnemonic.data(using: .utf8) else {
+              let mnemonicData = mnemonic.data(using: .utf8)
+        else {
             XCTAssert(false)
             return
         }
@@ -118,7 +119,8 @@ final class LilicoTests: XCTestCase {
     func testMnemonicDecryptWithWrongPassword() throws {
         let wallet = HDWallet(strength: WalletManager.mnemonicStrength, passphrase: "")
         guard let mnemonic = wallet?.mnemonic, !mnemonic.isEmpty,
-              let mnemonicData = mnemonic.data(using: .utf8) else {
+              let mnemonicData = mnemonic.data(using: .utf8)
+        else {
             XCTAssert(false)
             return
         }

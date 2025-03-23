@@ -34,10 +34,10 @@ class UserManager: ObservableObject {
     init() {
         checkIfHasOldAccount()
 
-        self.loginUIDList = LocalUserDefaults.shared.loginUIDList
+        loginUIDList = LocalUserDefaults.shared.loginUIDList
 
         if let activatedUID = activatedUID {
-            self.userInfo = MultiAccountStorage.shared.getUserInfo(activatedUID)
+            userInfo = MultiAccountStorage.shared.getUserInfo(activatedUID)
             uploadUserNameIfNeeded()
             initRefreshUserInfo()
             verifyUserType(by: activatedUID)
@@ -87,9 +87,6 @@ class UserManager: ObservableObject {
     var isLoggedIn: Bool {
         activatedUID != nil
     }
-    
-    @Published
-    var isProfileSwitching: Bool = false
 
     func verifyUserType(by _: String) {
         Task {
@@ -144,7 +141,8 @@ class UserManager: ObservableObject {
         let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
 
         if let mnemonic = WalletManager.shared.getMnemonicFromKeychain(uid: uid),
-           !mnemonic.isEmpty {
+           !mnemonic.isEmpty
+        {
             let hdWallet = WalletManager.shared.createHDWallet(mnemonic: mnemonic)
             let accountKeys = account.keys
                 .first { $0.publicKey.description == hdWallet?.getPublicKey() }
@@ -191,14 +189,6 @@ extension UserManager {
 
 extension UserManager {
     func register(_ userName: String) async throws -> String? {
-        if Auth.auth().currentUser?.isAnonymous != true {
-            try await Auth.auth().signInAnonymously()
-            await MainActor.run {
-                self.activatedUID = nil
-                self.userInfo = nil
-            }
-        }
-
         let secureKey = try SecureEnclaveKey.create()
         let key = try secureKey.flowAccountKey(index: 0)
         if IPManager.shared.info == nil {
@@ -254,7 +244,8 @@ extension UserManager {
             let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
             for key in seKeylist {
                 if let se = try? SecureEnclaveKey.wallet(id: key),
-                   let publicKey = try? se.publicKey()?.hexValue {
+                   let publicKey = try? se.publicKey()?.hexValue
+                {
                     let response: AccountResponse = try await Network
                         .requestWithRawModel(FRWAPI.Utils.flowAddress(publicKey))
                     let account = response.accounts?
@@ -284,7 +275,8 @@ extension UserManager {
                         continue
                     }
                     guard let publicKey = try? provider.publicKey(signAlgo: .ECDSA_SECP256k1)?
-                        .hexString else {
+                        .hexString
+                    else {
                         log.error("[Launch] seed phrase restore failed.\(key): public key")
                         continue
                     }
@@ -379,7 +371,8 @@ extension UserManager {
     func restoreLogin(withMnemonic mnemonic: String, userId: String? = nil) async throws {
         if let uid = userId {
             if let address = MultiAccountStorage.shared.getWalletInfo(uid)?
-                .currentNetworkWalletModel?.getAddress {
+                .currentNetworkWalletModel?.getAddress
+            {
                 try? await WalletManager.shared.findFlowAccount(with: uid, at: address)
             }
         }
@@ -436,7 +429,8 @@ extension UserManager {
         }
 
         guard let customToken = response.data?.customToken, !customToken.isEmpty,
-              let uid = response.data?.id else {
+              let uid = response.data?.id
+        else {
             throw LLError.restoreLoginFailed
         }
         let storeUser = StoreUser(
@@ -452,14 +446,6 @@ extension UserManager {
     }
 
     func restoreLogin(with userId: String) async throws {
-        if Auth.auth().currentUser?.isAnonymous != true {
-            try await Auth.auth().signInAnonymously()
-            DispatchQueue.main.async {
-                self.activatedUID = nil
-                self.userInfo = nil
-            }
-        }
-
         guard let token = try? await getIDToken(), !token.isEmpty else {
             loginAnonymousIfNeeded()
             throw LLError.restoreLoginFailed
@@ -660,37 +646,21 @@ extension UserManager {
 
 extension UserManager {
     func switchAccount(withUID uid: String) async throws {
-        
-        defer {
-            runOnMain {
-                self.isProfileSwitching = false
-            }
-        }
-        
-        // Only set this flag when it is switch profile, not login
-        if isLoggedIn {
-            await MainActor.run {
-                isProfileSwitching = true
-            }
-        }
-        
         if !currentNetwork.isMainnet {
             WalletManager.shared.changeNetwork(.mainnet)
         }
-        
+
         if uid == activatedUID {
             log.warning("switching the same account")
             return
         }
-        
         if WalletManager.shared.keyProvider(with: uid) != nil {
             try await restoreLogin(with: uid)
             return
         }
-        
+
         try await restoreLogin(userId: uid)
-            
-            
+
         // FIXME: data migrate from device to other device,the private key is destructive
 //        let allModel = try WallectSecureEnclave.Store.fetchAllModel(by: uid)
 //        let model = try WallectSecureEnclave.Store.fetchModel(by: uid)

@@ -209,7 +209,8 @@ class WalletManager: ObservableObject {
                 self.walletInfo = cacheWalletInfo
 
                 if let cacheSupportedCoins = cacheSupportedCoins,
-                   let cacheActivatedCoins = cacheActivatedCoins {
+                   let cacheActivatedCoins = cacheActivatedCoins
+                {
                     self.supportedCoins = cacheSupportedCoins
                     self.activatedCoins = cacheActivatedCoins
                 }
@@ -531,12 +532,15 @@ extension WalletManager {
 
 extension WalletManager {
     func getCurrentMnemonic() -> String? {
-        hdWallet?.mnemonic
+        guard let provider = keyProvider as? SeedPhraseKey else {
+            return nil
+        }
+        return provider.hdWallet.mnemonic
     }
 
     func getCurrentPublicKey() -> String? {
         if let provider = keyProvider, let key = accountKey {
-            let publicKey = try? provider.publicKey(signAlgo: key.signAlgo)
+            let publicKey = provider.publicKey(signAlgo: key.signAlgo)
             return publicKey?.hexString
         }
         if let accountkey = flowAccountKey {
@@ -546,7 +550,10 @@ extension WalletManager {
     }
 
     func getCurrentPrivateKey() -> String? {
-        hdWallet?.getPrivateKey()
+        guard let signAlgo = accountKey?.signAlgo else {
+            return nil
+        }
+        return keyProvider?.privateKey(signAlgo: signAlgo)?.hexValue
     }
 
     func getCurrentFlowAccountKey() -> Flow.AccountKey? {
@@ -779,7 +786,8 @@ extension WalletManager {
                key: uid,
                data: encryptedData
            ),
-           var mnemonic = String(data: decryptedData, encoding: .utf8) {
+           var mnemonic = String(data: decryptedData, encoding: .utf8)
+        {
             defer {
                 encryptedData = Data()
                 decryptedData = Data()
@@ -1038,19 +1046,19 @@ extension WalletManager {
         log.info("[EVM] load balance")
         guard let evmAccount = EVMAccountManager.shared.selectedAccount else { return }
         try await EVMAccountManager.shared.refreshBalance(address: evmAccount.address)
+        let network = LocalUserDefaults.shared.flowNetwork
+        let tokenModel = TokenBalanceHandler.getFlowTokenModel(network: network)?.toTokenModel(type: .evm, network: network)
 
-        let tokenModel = supportedCoins?.first { $0.name.lowercased() == "flow" }
         let balance = EVMAccountManager.shared.balance
-        guard var tokenModel = tokenModel else {
+        guard let tokenModel = tokenModel else {
             return
         }
         let flowTokenKey = tokenModel.contractId
 
         let list = try await EVMAccountManager.shared.fetchTokens()
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             log.info("[EVM] load balance success \(balance)")
-            tokenModel.flowIdentifier = tokenModel.contractId
             self.activatedCoins = [tokenModel]
             self.coinBalances = [flowTokenKey: balance]
 
@@ -1459,7 +1467,8 @@ extension WalletManager: FlowSigner {
     @discardableResult
     func warningIfKeyIsInvalid(userId: String, markHide _: Bool = false) -> Bool {
         if let mnemonic = WalletManager.shared.getMnemonicFromKeychain(uid: userId),
-           !mnemonic.isEmpty, mnemonic.split(separator: " ").count != 15 {
+           !mnemonic.isEmpty, mnemonic.split(separator: " ").count != 15
+        {
             return false
         }
         // FIXME: private key migrate from device to device, it's destructive, this only for fix bugs, move to migrate
