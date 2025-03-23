@@ -1046,19 +1046,19 @@ extension WalletManager {
         log.info("[EVM] load balance")
         guard let evmAccount = EVMAccountManager.shared.selectedAccount else { return }
         try await EVMAccountManager.shared.refreshBalance(address: evmAccount.address)
+        let network = LocalUserDefaults.shared.flowNetwork
+        let tokenModel = TokenBalanceHandler.getFlowTokenModel(network: network)?.toTokenModel(type: .evm, network: network)
 
-        let tokenModel = supportedCoins?.first { $0.name.lowercased() == "flow" }
         let balance = EVMAccountManager.shared.balance
-        guard var tokenModel = tokenModel else {
+        guard let tokenModel = tokenModel else {
             return
         }
         let flowTokenKey = tokenModel.contractId
 
         let list = try await EVMAccountManager.shared.fetchTokens()
 
-        DispatchQueue.main.async {
+        await MainActor.run {
             log.info("[EVM] load balance success \(balance)")
-            tokenModel.flowIdentifier = tokenModel.contractId
             self.activatedCoins = [tokenModel]
             self.coinBalances = [flowTokenKey: balance]
 

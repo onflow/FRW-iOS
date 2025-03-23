@@ -28,6 +28,8 @@
 		152EEC7528E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
 		152EEC7628E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
 		1544C62828C812E700B6BA52 /* GoogleOAuth2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1544C62728C812E500B6BA52 /* GoogleOAuth2.plist */; };
+		1545705029461AB7004A278E /* MJRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 1545704F29461AB7004A278E /* MJRefresh */; };
+		1545705229461ABD004A278E /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 1545705129461ABD004A278E /* FMDB */; };
 		154866EC28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EB28D0ECE400D012B8 /* FlixAuditEndpoint.swift */; };
 		154866ED28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EB28D0ECE400D012B8 /* FlixAuditEndpoint.swift */; };
 		154866F028D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EF28D0EEF000D012B8 /* FlowTransactionTemplate.swift */; };
@@ -118,6 +120,7 @@
 		157D91BE293E102C00AC102B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 157D91BD293E102C00AC102B /* GoogleSignIn */; };
 		15832B642867641D0066046D /* GTMSessionFetcherCore in Frameworks */ = {isa = PBXBuildFile; productRef = 15832B632867641D0066046D /* GTMSessionFetcherCore */; };
 		15832D5A286816ED0066046D /* FlowAddressRegistor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15832D58286816ED0066046D /* FlowAddressRegistor.swift */; };
+		158637082D6A275D0083A068 /* TokenBalanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158637072D6A275D0083A068 /* TokenBalanceTest.swift */; };
 		1586370C2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586370B2D6BF1EC0083A068 /* TokenBalanceListView.swift */; };
 		1586370D2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586370B2D6BF1EC0083A068 /* TokenBalanceListView.swift */; };
 		1586370F2D6BF2540083A068 /* TokenBalanceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1586370E2D6BF2540083A068 /* TokenBalanceListViewModel.swift */; };
@@ -1222,6 +1225,7 @@
 		4E9E21B3282644B200E1BACD /* WalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9E21B1282644B100E1BACD /* WalletViewModel.swift */; };
 		4E9E21DB282A5B9400E1BACD /* SecureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9E21D9282A586500E1BACD /* SecureView.swift */; };
 		4E9E21E0282A71B500E1BACD /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E9E21DC282A68CB00E1BACD /* Colors.xcassets */; };
+		4E9F6CCC2D8D5B9800395F94 /* FlowWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */; };
 		4EA0D0A32A7A357E004C6A19 /* LLSegmenControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A22A7A357E004C6A19 /* LLSegmenControl.swift */; };
 		4EA0D0A42A7A357E004C6A19 /* LLSegmenControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A22A7A357E004C6A19 /* LLSegmenControl.swift */; };
 		4EA0D0A62A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA0D0A52A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift */; };
@@ -1456,6 +1460,7 @@
 		6A06CB0B28AA485200C81BE1 /* NFTUIKitListStyleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A06CB0928AA485200C81BE1 /* NFTUIKitListStyleHandler.swift */; };
 		6A074E382922962D00D976F1 /* SelectProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A074E372922962D00D976F1 /* SelectProviderView.swift */; };
 		6A074E392922962D00D976F1 /* SelectProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A074E372922962D00D976F1 /* SelectProviderView.swift */; };
+		6A0B10442A664A1E00023767 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 6A0B10432A664A1E00023767 /* FirebaseMessaging */; };
 		6A0B104C2A66679100023767 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B104B2A66679100023767 /* NotificationService.swift */; };
 		6A0B10602A6675A600023767 /* FRWDevNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6A0B10592A6675A600023767 /* FRWDevNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6A0B10672A66763C00023767 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0B104B2A66679100023767 /* NotificationService.swift */; };
@@ -1786,6 +1791,15 @@
 		6AC476ED28F40E50008503E6 /* BrowserBookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC476EB28F40E50008503E6 /* BrowserBookmarkView.swift */; };
 		6AC476EF28F41563008503E6 /* BrowserBookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC476EE28F41563008503E6 /* BrowserBookmarkViewModel.swift */; };
 		6AC476F028F41563008503E6 /* BrowserBookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC476EE28F41563008503E6 /* BrowserBookmarkViewModel.swift */; };
+		6AC62AF2286AE92B000876D9 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AF1286AE92B000876D9 /* FirebaseDynamicLinks */; };
+		6AC62AF4286AE936000876D9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AF3286AE936000876D9 /* FirebaseAuth */; };
+		6AC62AF6286AE948000876D9 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AF5286AE948000876D9 /* FirebaseCrashlytics */; };
+		6AC62AF8286AE955000876D9 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AF7286AE955000876D9 /* FirebaseRemoteConfig */; };
+		6AC62AFA286AE964000876D9 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AF9286AE964000876D9 /* FirebaseStorage */; };
+		6AC62AFC286AE98E000876D9 /* GTMSessionFetcherCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AFB286AE98E000876D9 /* GTMSessionFetcherCore */; };
+		6AC62AFE286AE9B6000876D9 /* GoogleAPIClientForREST_Drive in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AFD286AE9B6000876D9 /* GoogleAPIClientForREST_Drive */; };
+		6AC62B00286AE9D2000876D9 /* GoogleAPIClientForRESTCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62AFF286AE9D2000876D9 /* GoogleAPIClientForRESTCore */; };
+		6AC62B02286AEA04000876D9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC62B01286AEA04000876D9 /* GoogleSignIn */; };
 		6AC62B03286AEFB5000876D9 /* FlowReferenceWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1500783D286830EF00A00109 /* FlowReferenceWalletTests.swift */; };
 		6AC717E2287EA61100AA5040 /* WalletSendAmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC717E1287EA61100AA5040 /* WalletSendAmountViewModel.swift */; };
 		6AC717E3287EA61100AA5040 /* WalletSendAmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC717E1287EA61100AA5040 /* WalletSendAmountViewModel.swift */; };
@@ -1917,8 +1931,6 @@
 		6AFED02A2906794000221F95 /* WalletSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFED0282906794000221F95 /* WalletSettingViewModel.swift */; };
 		760F78462D6D5DA600F733E6 /* WalletActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760F78452D6D5DA600F733E6 /* WalletActionBar.swift */; };
 		760F78472D6D5DA600F733E6 /* WalletActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760F78452D6D5DA600F733E6 /* WalletActionBar.swift */; };
-		76345CEC2D843C4500E956CE /* FlowWallet-dev.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 76345CEB2D843C4500E956CE /* FlowWallet-dev.xctestplan */; };
-		76345CEE2D843CC400E956CE /* CurrencyFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76345CED2D843CC400E956CE /* CurrencyFormattingTests.swift */; };
 		7652E32A2D6AA3F000AECFEF /* CreatingAccount.json in Resources */ = {isa = PBXBuildFile; fileRef = 7652E3292D6AA3F000AECFEF /* CreatingAccount.json */; };
 		7652E32B2D6AA3F000AECFEF /* CreatingAccount.json in Resources */ = {isa = PBXBuildFile; fileRef = 7652E3292D6AA3F000AECFEF /* CreatingAccount.json */; };
 		7652E32D2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7652E32C2D6AAE2400AECFEF /* AccountCreatedView.swift */; };
@@ -2083,6 +2095,7 @@
 		1575A73E28B29BA200ADC513 /* SVGWebUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGWebUIView.swift; sourceTree = "<group>"; };
 		1575A74228B29D2700ADC513 /* SVGWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGWebView.swift; sourceTree = "<group>"; };
 		15832D58286816ED0066046D /* FlowAddressRegistor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowAddressRegistor.swift; sourceTree = "<group>"; };
+		158637072D6A275D0083A068 /* TokenBalanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceTest.swift; sourceTree = "<group>"; };
 		1586370B2D6BF1EC0083A068 /* TokenBalanceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceListView.swift; sourceTree = "<group>"; };
 		1586370E2D6BF2540083A068 /* TokenBalanceListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceListViewModel.swift; sourceTree = "<group>"; };
 		158637222D6C9D570083A068 /* FWAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FWAddress.swift; sourceTree = "<group>"; };
@@ -2938,8 +2951,6 @@
 		6AFE1D072A38540300824D5C /* AccountSwitchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSwitchViewModel.swift; sourceTree = "<group>"; };
 		6AFED0282906794000221F95 /* WalletSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSettingViewModel.swift; sourceTree = "<group>"; };
 		760F78452D6D5DA600F733E6 /* WalletActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletActionBar.swift; sourceTree = "<group>"; };
-		76345CEB2D843C4500E956CE /* FlowWallet-dev.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FlowWallet-dev.xctestplan"; sourceTree = "<group>"; };
-		76345CED2D843CC400E956CE /* CurrencyFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormattingTests.swift; sourceTree = "<group>"; };
 		7652E3292D6AA3F000AECFEF /* CreatingAccount.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CreatingAccount.json; sourceTree = "<group>"; };
 		7652E32C2D6AAE2400AECFEF /* AccountCreatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreatedView.swift; sourceTree = "<group>"; };
 		7690FCCF2D78533C00C578F3 /* NFTCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionsView.swift; sourceTree = "<group>"; };
@@ -2952,6 +2963,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AC62AFE286AE9B6000876D9 /* GoogleAPIClientForREST_Drive in Frameworks */,
+				6AC62AF6286AE948000876D9 /* FirebaseCrashlytics in Frameworks */,
+				6AC62AF2286AE92B000876D9 /* FirebaseDynamicLinks in Frameworks */,
+				6AC62AF4286AE936000876D9 /* FirebaseAuth in Frameworks */,
+				6AC62AFC286AE98E000876D9 /* GTMSessionFetcherCore in Frameworks */,
+				1545705029461AB7004A278E /* MJRefresh in Frameworks */,
+				6AC62AFA286AE964000876D9 /* FirebaseStorage in Frameworks */,
+				6A0B10442A664A1E00023767 /* FirebaseMessaging in Frameworks */,
+				6AC62B00286AE9D2000876D9 /* GoogleAPIClientForRESTCore in Frameworks */,
+				6AC62AF8286AE955000876D9 /* FirebaseRemoteConfig in Frameworks */,
+				1545705229461ABD004A278E /* FMDB in Frameworks */,
+				6AC62B02286AEA04000876D9 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3011,13 +3034,13 @@
 				1500783428682BF700A00109 /* SPIndicator in Frameworks */,
 				4E09A1F02CC7949E0099606E /* Mixpanel in Frameworks */,
 				15D3BA6D28C3B217009AEA6E /* ColorKit in Frameworks */,
-				76E335632D84437200A655A7 /* FlowWalletKit in Frameworks */,
 				4E2FA6A82CF410BF00D46EA7 /* ReownRouter in Frameworks */,
 				4E62247A2D7F2D8100BABC28 /* (null) in Frameworks */,
 				15DE22F1277F133B00B5EE03 /* SkeletonUI in Frameworks */,
 				1552DC6A2787090D00EAA7D5 /* Introspect in Frameworks */,
 				15D3BA7228C3B90A009AEA6E /* ViewAnimator in Frameworks */,
 				4E5F2F0F2C11F036008589C4 /* CrowdinSDK in Frameworks */,
+				4E9F6CCC2D8D5B9800395F94 /* FlowWalletKit in Frameworks */,
 				4E660F1E2C80B43E00E5239E /* CollectionViewPagingLayout in Frameworks */,
 				154B8920276A1EEB00780E93 /* SwiftUIX in Frameworks */,
 				6AC1AE6B289BAD0600F76C7A /* SnapKit in Frameworks */,
@@ -3150,10 +3173,9 @@
 		1500783C286830EF00A00109 /* FRWTests */ = {
 			isa = PBXGroup;
 			children = (
-				76345CEB2D843C4500E956CE /* FlowWallet-dev.xctestplan */,
 				15ADAE2C28F51ECE0014B722 /* SymmetricEncryptionTests.swift */,
 				1500783D286830EF00A00109 /* FlowReferenceWalletTests.swift */,
-				76345CED2D843CC400E956CE /* CurrencyFormattingTests.swift */,
+				158637072D6A275D0083A068 /* TokenBalanceTest.swift */,
 			);
 			path = FRWTests;
 			sourceTree = "<group>";
@@ -6240,6 +6262,18 @@
 			);
 			name = FRWTests;
 			packageProductDependencies = (
+				6AC62AF1286AE92B000876D9 /* FirebaseDynamicLinks */,
+				6AC62AF3286AE936000876D9 /* FirebaseAuth */,
+				6AC62AF5286AE948000876D9 /* FirebaseCrashlytics */,
+				6AC62AF7286AE955000876D9 /* FirebaseRemoteConfig */,
+				6AC62AF9286AE964000876D9 /* FirebaseStorage */,
+				6AC62AFB286AE98E000876D9 /* GTMSessionFetcherCore */,
+				6AC62AFD286AE9B6000876D9 /* GoogleAPIClientForREST_Drive */,
+				6AC62AFF286AE9D2000876D9 /* GoogleAPIClientForRESTCore */,
+				6AC62B01286AEA04000876D9 /* GoogleSignIn */,
+				1545704F29461AB7004A278E /* MJRefresh */,
+				1545705129461ABD004A278E /* FMDB */,
+				6A0B10432A664A1E00023767 /* FirebaseMessaging */,
 			);
 			productName = FlowReferenceWalletTests;
 			productReference = 1500783B286830EF00A00109 /* FRWTests.xctest */;
@@ -6330,6 +6364,7 @@
 				4EB94AA82D115F6C00AEF3C9 /* SwiftyDropbox */,
 				15F6F4BC2D683FF100D62D7F /* TrustWeb3Provider */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
+				4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */,
 			);
 			productName = "FlowReferenceWallet-lite";
 			productReference = 154B8928276A1EEB00780E93 /* FRW-dev.app */;
@@ -6618,7 +6653,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76345CEC2D843C4500E956CE /* FlowWallet-dev.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6866,7 +6900,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				76345CEE2D843CC400E956CE /* CurrencyFormattingTests.swift in Sources */,
+				158637082D6A275D0083A068 /* TokenBalanceTest.swift in Sources */,
 				6A19E61E2A25DE4800392206 /* SymmetricEncryptionTests.swift in Sources */,
 				6AC62B03286AEFB5000876D9 /* FlowReferenceWalletTests.swift in Sources */,
 			);
@@ -8719,7 +8753,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -8762,7 +8796,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -9050,7 +9084,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9078,7 +9112,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9108,7 +9142,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9138,7 +9172,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.4.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9675,7 +9709,7 @@
 			repositoryURL = "https://github.com/Outblock/flow-swift";
 			requirement = {
 				kind = revision;
-				revision = 50b60826c4ce18adaa151946d11d468ac1fc98dd;
+				revision = e766fa36c45b62537acac53b679ec7db948aeb22;
 			};
 		};
 		15F517F928C6574C00504FDC /* XCRemoteSwiftPackageReference "atlantis" */ = {
@@ -9879,6 +9913,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 152BB09228AE8FD100B2A2AA /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		1545704F29461AB7004A278E /* MJRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6AEA373E28A49DBD004545D4 /* XCRemoteSwiftPackageReference "MJRefresh" */;
+			productName = MJRefresh;
+		};
+		1545705129461ABD004A278E /* FMDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A46754428F2D44800F705A8 /* XCRemoteSwiftPackageReference "fmdb" */;
+			productName = FMDB;
 		};
 		1549CF02299A10C2002B37A5 /* Gzip */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -10389,6 +10433,11 @@
 			package = 4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */;
 			productName = web3swift;
 		};
+		4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */;
+			productName = FlowWalletKit;
+		};
 		4EB94AA62D115F5C00AEF3C9 /* SwiftyDropbox */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */;
@@ -10422,6 +10471,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6A0454CB28768E9E00A9131C /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
 			productName = SwiftUIPager;
+		};
+		6A0B10432A664A1E00023767 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		6A0C6E3129542EC9005F0EF6 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -10508,6 +10562,51 @@
 			package = 6AC1AE67289BACDF00F76C7A /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
+		6AC62AF1286AE92B000876D9 /* FirebaseDynamicLinks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDynamicLinks;
+		};
+		6AC62AF3286AE936000876D9 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		6AC62AF5286AE948000876D9 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		6AC62AF7286AE955000876D9 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
+		6AC62AF9286AE964000876D9 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		6AC62AFB286AE98E000876D9 /* GTMSessionFetcherCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 156AC7AF278042DE00ED5E3E /* XCRemoteSwiftPackageReference "gtm-session-fetcher" */;
+			productName = GTMSessionFetcherCore;
+		};
+		6AC62AFD286AE9B6000876D9 /* GoogleAPIClientForREST_Drive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_Drive;
+		};
+		6AC62AFF286AE9D2000876D9 /* GoogleAPIClientForRESTCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForRESTCore;
+		};
+		6AC62B01286AEA04000876D9 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 15DE22F7277FF55C00B5EE03 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
 		6AE1D48D287690E7000FA0B7 /* SwiftUIPager */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6A0454CB28768E9E00A9131C /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
@@ -10527,11 +10626,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6AEA373E28A49DBD004545D4 /* XCRemoteSwiftPackageReference "MJRefresh" */;
 			productName = MJRefresh;
-		};
-		76E335622D84437200A655A7 /* FlowWalletKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */;
-			productName = FlowWalletKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
