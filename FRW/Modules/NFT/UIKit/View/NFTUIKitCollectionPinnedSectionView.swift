@@ -11,7 +11,7 @@ import UIKit
 class NFTUIKitCollectionPinnedSectionView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.LL.Neutrals.background
+        backgroundColor = UIColor.Theme.BG.bg1
     }
 
     @available(*, unavailable)

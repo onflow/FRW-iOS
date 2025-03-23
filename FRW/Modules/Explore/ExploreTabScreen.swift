@@ -85,7 +85,7 @@ struct ExploreTabScreen: View {
             if vm.state.list.isEmpty && vm.webBookmarkList.isEmpty {
                 Spacer()
                 ExploreEmptyScreen()
-                    .background(.LL.Neutrals.background)
+                    .background(.Theme.BG.bg1)
                 Spacer()
             } else {
                 ScrollView(.vertical) {
@@ -103,11 +103,11 @@ struct ExploreTabScreen: View {
                         dappList
                             .visibility(vm.state.list.isEmpty ? .gone : .visible)
                     }
-                    .background(.LL.Neutrals.background)
+                    .background(.Theme.BG.bg1)
                     .padding(.bottom, 18)
                     .padding(.horizontal, 18)
                 }
-                .background(.LL.Neutrals.background)
+                .background(.Theme.BG.bg1)
                 .listStyle(.plain)
             }
         }
@@ -118,7 +118,7 @@ struct ExploreTabScreen: View {
             vm.trigger(.fetchList)
         })
         .background(
-            Color.LL.Neutrals.background.ignoresSafeArea()
+            Color.Theme.BG.bg1.ignoresSafeArea()
         )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarHidden(true)
@@ -132,6 +132,7 @@ struct ExploreTabScreen: View {
 
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 8)
     }
 
     var dAppCategory: some View {
@@ -164,6 +165,7 @@ struct ExploreTabScreen: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 40)
+        .padding(.bottom, 12)
     }
 
     var dappList: some View {
@@ -220,7 +222,7 @@ struct ExploreTabScreen: View {
                             .padding(.trailing, 12)
                     }
                 }
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 6)
                 .padding(.top, 12)
                 .background(.clear)
                 .cornerRadius(16)

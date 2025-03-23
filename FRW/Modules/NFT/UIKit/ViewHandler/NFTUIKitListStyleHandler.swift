@@ -40,7 +40,7 @@ class NFTUIKitListStyleHandler: NSObject {
 
     lazy var containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.LL.Neutrals.background
+        view.backgroundColor = UIColor.Theme.BG.bg1
         return view
     }()
 
@@ -52,6 +52,7 @@ class NFTUIKitListStyleHandler: NSObject {
         view.dataSource = self
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
+        view.backgroundView = nil
         view.register(
             NFTUIKitCollectionPinnedSectionView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,

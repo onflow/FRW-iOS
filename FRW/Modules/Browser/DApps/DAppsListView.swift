@@ -24,7 +24,7 @@ struct DAppsListView: RouteableView {
             contentList
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(.LL.Neutrals.background)
+        .backgroundFill(Color.Theme.BG.bg1)
         .applyRouteable(self)
     }
 

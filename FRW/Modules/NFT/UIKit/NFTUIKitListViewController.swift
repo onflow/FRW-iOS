@@ -81,7 +81,7 @@ class NFTUIKitListViewController: UIViewController {
     
     private lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.LL.Neutrals.background
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -111,7 +111,7 @@ class NFTUIKitListViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.backgroundColor = UIColor.LL.Neutrals.background
+        view.backgroundColor = .clear
         hero.isEnabled = true
         
         view.addSubview(contentView)

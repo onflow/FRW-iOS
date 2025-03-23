@@ -78,7 +78,7 @@ public enum RefreshState {
 public typealias RefreshProgressBuilder<Progress: View> = (RefreshState) -> Progress
 
 // Default color of the rectangle behind the progress spinner
-public let defaultLoadingViewBackgroundColor = Color.LL.Neutrals.background
+public let defaultLoadingViewBackgroundColor = Color.Theme.BG.bg1
 
 // MARK: - RefreshableScrollView
 

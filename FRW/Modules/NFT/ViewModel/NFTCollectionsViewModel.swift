@@ -83,12 +83,15 @@ final class NFTCollectionsViewModel: ObservableObject {
         if isRefreshing {
             return
         }
+        isRefreshing = true
+        defer {
+            isRefreshing = false            
+        }
         do {
-            isRefreshing = true
             try await dataModel.refreshCollectionAction()
-            isRefreshing = false
         } catch {
-            // Handle error appropriately or rethrow
+            log.error(error)
+            HUD.error(title: "request_failed".localized)
         }
     }
     

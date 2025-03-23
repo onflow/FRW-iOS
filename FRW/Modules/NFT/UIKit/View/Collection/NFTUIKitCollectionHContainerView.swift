@@ -63,7 +63,7 @@ class NFTUIKitCollectionHContainerView: UIView {
     }()
 
     private func setup() {
-        backgroundColor = UIColor.LL.Neutrals.background
+        backgroundColor = UIColor.Theme.BG.bg1
 
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in

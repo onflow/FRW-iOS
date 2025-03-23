@@ -676,12 +676,6 @@ extension TokenDetailView {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .background(.clear)
                     .cornerRadius(16)
-                    .shadow(
-                        color: Color(red: 0.2, green: 0.2, blue: 0.2).opacity(0.08),
-                        radius: 2.5,
-                        x: 0,
-                        y: 2
-                    )
                 }
             }
             .padding(.horizontal, 18)
@@ -771,14 +765,24 @@ extension TokenDetailView {
 // MARK: - BorderStyle
 
 struct BorderStyle: ViewModifier {
+    @Environment(\.colorScheme) var colorScheme
+    
     func body(content: Content) -> some View {
         content
-        //TODO: this should be background, not overlay
-            .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))
-                    .foregroundColor(Color.Theme.Line.stroke)
+            .background {
+                if colorScheme == .light {
+                    RoundedRectangle(cornerRadius: 16)
+                        .foregroundColor(.clear)
+                        .background(Color.Theme.BG.bg1)
+                        .cornerRadius(16)
+                        .shadow(color: Color(red: 0.2, green: 0.2, blue: 0.2).opacity(0.08), radius: 2.5, x: 0, y: 2)
+                } else {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))
+                        .foregroundColor(Color.Theme.Line.stroke)
+                }
             }
+            .padding(.horizontal, 4)
     }
 }
 

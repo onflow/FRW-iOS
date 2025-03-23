@@ -10,12 +10,12 @@ import Combine
 
 struct NFTCollectionsView: View {
     @StateObject var vm: NFTCollectionsViewModel
-    @State private var headerHeight: CGFloat = 0
     @AppStorage("isListView") var isListView: Bool = true
 
     var body: some View {
         VStack(spacing: 0) {
             topBar
+                .padding(.bottom, 4)
             
             content
         }
@@ -25,6 +25,7 @@ struct NFTCollectionsView: View {
         .if(vm.dataModel.items.isEmpty) { view in
             return view.backgroundFill(NFTEmptyView())
         }
+        .backgroundFill(Color.Theme.BG.bg1)
     }
     
     @ViewBuilder
@@ -58,6 +59,7 @@ struct NFTCollectionsView: View {
         .padding(.vertical, 8)
         .padding(.bottom, 8)
         .background(.clear)
+        .hideNavigationBar()
     }
     
     @ViewBuilder
@@ -65,8 +67,8 @@ struct NFTCollectionsView: View {
         Group {
             if isListView || vm.dataModel.items.isEmpty {
                 listView
-                    .padding(.horizontal, 18)
-                    .padding(.top, 12)
+                    .padding(.horizontal, 14)
+                    .padding(.top, 4)
             } else {
                 gridView
                     .padding(.top, -10)
@@ -74,12 +76,6 @@ struct NFTCollectionsView: View {
             }
         }
         .background(.clear)
-    }
-    
-    @ViewBuilder
-    private var emptyView: some View {
-        NFTEmptyView()
-            .ignoresSafeArea()
     }
     
     @ViewBuilder
@@ -99,6 +95,7 @@ struct NFTCollectionsView: View {
                     }
                 }
             }
+            .padding(.top, 4)
         }
     }
     
@@ -172,7 +169,7 @@ struct ActionButtonStyle: SwiftUI.ButtonStyle {
             .frame(width: 24, height: 24)
             .foregroundStyle(.white)
             .padding(4)
-            .background(Color.Theme.Foreground.black3.opacity(0.4))
+            .background(Color.Theme.Background.black3.opacity(0.3))
             .opacity(configuration.isPressed ? 0.5 : 1)
             .clipShape(Circle())
     }
