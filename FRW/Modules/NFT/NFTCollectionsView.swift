@@ -56,6 +56,7 @@ struct NFTCollectionsView: View {
         .padding(.leading, 24)
         .padding(.trailing, 18)
         .padding(.vertical, 8)
+        .padding(.bottom, 8)
         .background(.clear)
     }
     
@@ -104,6 +105,7 @@ struct NFTCollectionsView: View {
     @ViewBuilder
     private var gridView: some View {
         NFTUIKitListView(vm: vm.tabVM)
+            .padding(.top, 4)
     }
 }
 

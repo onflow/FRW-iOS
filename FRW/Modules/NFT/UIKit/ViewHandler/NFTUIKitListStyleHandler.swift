@@ -16,7 +16,7 @@ private let CollecitonTitleViewHeight: CGFloat = 32
 // MARK: - NFTUIKitListStyleHandler.Section
 
 extension NFTUIKitListStyleHandler {
-    enum Section: Int {
+    enum Section {
         case other
         case nft
     }
@@ -396,16 +396,28 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
     }
 
     func numberOfSections(in _: UICollectionView) -> Int {
-        2
+        if showFavoriteView {
+            2
+        } else {
+            1
+        }
+    }
+    
+    private var showFavoriteView: Bool {
+        NFTUIKitCache.cache.favList.isEmpty == false
+    }
+    
+    private var sectionIndexForFavoriteView: Int? {
+        showFavoriteView ? 0 : nil
+    }
+    
+    private var sectionIndexForGridView: Int? {
+        showFavoriteView ? 1 : 0
     }
 
     func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == Section.other.rawValue {
-            return NFTUIKitCache.cache.favList.isEmpty ? 0 : 1
-        }
-
-        if dataModel.isCollectionListStyle {
-            return dataModel.items.count
+        if section == sectionIndexForFavoriteView {
+            return 1
         }
 
         return dataModel.selectedCollectionItem?.nfts.count ?? 0
@@ -415,7 +427,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        if indexPath.section == Section.other.rawValue {
+        if indexPath.section == sectionIndexForFavoriteView {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "UICollectionViewCell",
                 for: indexPath
@@ -466,7 +478,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         layout _: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        if indexPath.section == Section.other.rawValue {
+        if indexPath.section == sectionIndexForFavoriteView {
             return CGSize(
                 width: collectionView.bounds.size.width,
                 height: NFTUIKitFavContainerView.calculateViewHeight()
@@ -485,7 +497,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         layout _: UICollectionViewLayout,
         referenceSizeForHeaderInSection section: Int
     ) -> CGSize {
-        if section == Section.other.rawValue {
+        if section == sectionIndexForFavoriteView {
             return .zero
         }
 
@@ -501,7 +513,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         layout _: UICollectionViewLayout,
         referenceSizeForFooterInSection section: Int
     ) -> CGSize {
-        if section == Section.other.rawValue, !dataModel.isCollectionListStyle,
+        if section == sectionIndexForFavoriteView, !dataModel.isCollectionListStyle,
            !dataModel.items.isEmpty
         {
             return CGSize(width: 0, height: CollecitonTitleViewHeight)
@@ -515,7 +527,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        if indexPath.section == Section.other.rawValue {
+        if indexPath.section == sectionIndexForFavoriteView {
             if !dataModel.isCollectionListStyle, kind == UICollectionView.elementKindSectionFooter {
                 let footer = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
@@ -571,7 +583,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
         layout _: UICollectionViewLayout,
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
-        if section == Section.other.rawValue {
+        if section == sectionIndexForFavoriteView {
             return .zero
         }
 
@@ -579,7 +591,7 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
     }
 
     func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section != Section.nft.rawValue {
+        if indexPath.section != sectionIndexForGridView {
             return
         }
 
