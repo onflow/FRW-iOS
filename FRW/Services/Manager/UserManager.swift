@@ -654,7 +654,6 @@ extension UserManager {
             log.warning("switching the same account")
             return
         }
-
         if WalletManager.shared.keyProvider(with: uid) != nil {
             try await restoreLogin(with: uid)
             return
