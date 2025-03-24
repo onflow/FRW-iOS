@@ -683,7 +683,6 @@ extension WalletHomeView {
                     .visibility(coin.token.isFlowCoin && stakingManager.isStaked ? .visible : .gone)
                 }
             }
-            .padding(.horizontal, 16)
             .background(.clear)
             .cornerRadius(16)
         }
