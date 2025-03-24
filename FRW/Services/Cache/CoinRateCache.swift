@@ -73,7 +73,8 @@ class CoinRateCache {
         guard !contractId.isEmpty else {
             return nil
         }
-        return summarys.first { $0.contractId == contractId }?.summary
+        let response = summarys.first { $0.contractId.contains(contractId) }?.summary
+        return response
     }
 
     // MARK: Private
