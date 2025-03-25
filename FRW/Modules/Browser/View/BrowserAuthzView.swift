@@ -391,6 +391,7 @@ extension BrowserAuthzView {
                 Text(model.value.content)
                     .font(.inter(size: 14, weight: .semibold))
                     .lineLimit(1)
+                    .truncationMode(.middle)
                     .foregroundStyle(Color.Theme.Text.black)
                     .visibility(model.value.contentIsArrayOrDic ? .gone : .visible)
                 Image("check_circle_border")
