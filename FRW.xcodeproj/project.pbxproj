@@ -9740,8 +9740,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Outblock/trust-web3-provider";
 			requirement = {
-				branch = old;
-				kind = branch;
+				kind = revision;
+				revision = 0d58818bae73d6996b6a8caae15dc2e5a0ff88f8;
 			};
 		};
 		4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {

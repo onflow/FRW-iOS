@@ -21,6 +21,10 @@ extension TrustWeb3Provider {
             chainId: chainId,
             rpcUrl: url
         )
-        return TrustWeb3Provider(config: .init(ethereum: config))
+        var isDebug = false
+        #if DEBUG
+        isDebug = true
+        #endif
+        return TrustWeb3Provider(config: .init(ethereum: config, isDebug: isDebug))
     }
 }

@@ -431,7 +431,6 @@ extension WalletConnectEVMHandler {
         }
 
         let chainId = LocalUserDefaults.shared.flowNetwork.networkID
-        let evmGasLimit = 30000000
         let evmGasPrice = 0
         let directCallTxType = 255
         let contractCallSubType = 5
@@ -443,7 +442,7 @@ extension WalletConnectEVMHandler {
             chainID: BigUInt(chainId),
             value: model.bigAmount,
             data: model.dataValue ?? Data(),
-            gasLimit: BigUInt(evmGasLimit),
+            gasLimit: BigUInt(model.gasValue),
             gasPrice: BigUInt(evmGasPrice),
             v: BigUInt(directCallTxType),
             r: BigUInt(address.stripHexPrefix(), radix: 16)!,
