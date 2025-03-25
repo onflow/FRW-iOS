@@ -81,7 +81,8 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
             }
             return nil
         }
-
+        let customToken = await fetchCustomBalance()
+        activetedTokens.append(contentsOf: customToken)
         // Sort by balance
         activetedTokens = updateModels.sorted { lhs, rhs in
             guard let lBal = lhs.readableBalance, let rBal = rhs.readableBalance else {
@@ -133,5 +134,17 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
             }
         }
         return nfts
+    }
+}
+
+// MARK: - fetch custom token
+
+extension EVMTokenBalanceProvider {
+    private func fetchCustomBalance() async -> [TokenModel] {
+        let manager = CustomTokenManager()
+        await manager.fetchAllEVMBalance()
+        let list = manager.list.map { $0.toToken() }
+        let filterList = Dictionary(grouping: list, by: { $0.contractId }).values.compactMap { $0.last }
+        return filterList
     }
 }

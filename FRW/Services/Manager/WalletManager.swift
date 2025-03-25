@@ -972,28 +972,7 @@ extension WalletManager {
     }
 
     func fetchBalance() async throws {
-        let address = selectedAccountAddress
-        guard !address.isEmpty else {
-            return
-        }
         balanceProvider.refreshBalance()
-        if isSelectedEVMAccount {
-            try await fetchCustomBalance()
-            return
-        }
-    }
-
-    private func fetchCustomBalance() async throws {
-        guard (EVMAccountManager.shared.selectedAccount?.showAddress) != nil else {
-            return
-        }
-        await customTokenManager.fetchAllEVMBalance()
-        let list = customTokenManager.list
-        await MainActor.run {
-            for token in list {
-                self.addCustomToken(token: token)
-            }
-        }
     }
 
     func addCustomToken(token: CustomToken) {
