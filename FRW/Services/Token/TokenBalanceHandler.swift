@@ -77,25 +77,28 @@ class TokenBalanceHandler {
     }
 
     func getSupportTokens(address: FWAddress,
-                          network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
+                          network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                          ignoreCache: Bool = true) async throws -> [TokenModel]
     {
-        let provider = generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
         return try await provider.getSupportTokens()
     }
 
+    /// `ignoreCache` it should be with the expiration of time or other,ensure the validity of the data
     func getActivatedTokens(address: FWAddress,
-                            tokens _: [TokenModel]?,
-                            network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) async throws -> [TokenModel]
+                            network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                            ignoreCache: Bool = true) async throws -> [TokenModel]
     {
-        let provider = generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
         return try await provider.getActivatedTokens(address: address, in: .whitelistAndCustom)
     }
 
     func getFTBalance(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork
+        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+        ignoreCache: Bool = true
     ) async throws -> [TokenModel] {
-        let provider = generateProvider(address: address, network: network)
+        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
         return try await provider.getFTBalance(address: address)
     }
 
@@ -148,8 +151,12 @@ class TokenBalanceHandler {
 extension TokenBalanceHandler {
     private func generateProvider(
         address: FWAddress,
-        network: FlowNetworkType
+        network: FlowNetworkType,
+        ignoreCache: Bool = false
     ) -> TokenBalanceProvider {
+        if ignoreCache {
+            cache[address.cacheKey] = nil
+        }
         if let provider = cache[address.cacheKey] {
             return provider
         }

@@ -919,7 +919,7 @@ extension WalletManager {
             return
         }
 
-        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address, tokens: supportedCoins)
+        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address)
         await MainActor.run {
             self.activatedCoins = availableTokens
         }
