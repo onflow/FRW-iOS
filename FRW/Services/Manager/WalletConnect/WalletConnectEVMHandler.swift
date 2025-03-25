@@ -442,7 +442,7 @@ extension WalletConnectEVMHandler {
             chainID: BigUInt(chainId),
             value: model.bigAmount,
             data: model.dataValue ?? Data(),
-            gasLimit: BigUInt(model.gasValue),
+            gasLimit: model.gasValue,
             gasPrice: BigUInt(evmGasPrice),
             v: BigUInt(directCallTxType),
             r: BigUInt(address.stripHexPrefix(), radix: 16)!,
