@@ -11,5 +11,7 @@ extension String {
     enum Track {
         static let message = "message"
         static let progress = "progress"
+        static let error = "error"
+        static let module = "module"
     }
 }
