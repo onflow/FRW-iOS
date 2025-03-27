@@ -34,7 +34,7 @@ extension WalletViewModel {
             guard last != 0 || token.symbol == "fusd" else {
                 return nil
             }
-            return "\(CurrencyCache.cache.currencySymbol)\(token.symbol == "fusd" ? CurrencyCache.cache.currentCurrencyRate.formatCurrencyString(digits: 4) : last.formatCurrencyString(digits: 4, considerCustomCurrency: true))"
+            return "\(CurrencyCache.cache.currencySymbol)\(token.symbol == "fusd" ? CurrencyCache.cache.currentCurrencyRate.formatCurrencyStringForDisplay(digits: 4) : last.formatCurrencyStringForDisplay(digits: 4, considerCustomCurrency: true))"
         }
 
         var changeString: String {
@@ -59,7 +59,7 @@ extension WalletViewModel {
         }
 
         var balanceAsCurrentCurrency: String {
-            (balance * last).formatCurrencyString(digits: 4, considerCustomCurrency: true)
+            (balance * last).formatCurrencyStringForDisplay(digits: 4, considerCustomCurrency: true)
         }
 
         static func mock() -> WalletViewModel.WalletCoinItemModel {

@@ -96,7 +96,7 @@ struct StakeAmountView: RouteableView {
                     .frame(width: 12, height: 12)
 
                 Text(
-                    "\(vm.balance.formatCurrencyString()) \(vm.isUnstake ? "staked_flow".localized : "stake_flow_available".localized)"
+                    "\(vm.balance.formatCurrencyStringForDisplay()) \(vm.isUnstake ? "staked_flow".localized : "stake_flow_available".localized)"
                 )
                 .font(.inter(size: 14, weight: .medium))
                 .foregroundColor(Color.LL.Neutrals.text2)
@@ -300,7 +300,7 @@ extension StakeAmountView {
                     .background(Color.LL.Neutrals.note)
 
                 HStack(spacing: 0) {
-                    Text(vm.inputTextNum.formatCurrencyString())
+                    Text(vm.inputTextNum.formatCurrencyStringForDisplay())
                         .font(.inter(size: 24, weight: .bold))
                         .foregroundColor(Color.LL.Neutrals.text)
 
