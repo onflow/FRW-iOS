@@ -60,7 +60,8 @@ struct EVMTokenResponse: Codable {
             website: nil,
             evmAddress: address,
             flowIdentifier: flowIdentifier,
-            balance: BigUInt(balance ?? "-1")
+            balance: BigUInt(balance ?? "-1"),
+            avaibleBalance: BigUInt(balance ?? "-1")
         )
         return model
     }

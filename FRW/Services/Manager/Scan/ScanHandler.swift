@@ -22,8 +22,8 @@ class ScanHandler {
             case let .flowWallet(address):
                 vc.stopRunning()
                 vc.presentingViewController?.dismiss(animated: true, completion: {
-                    let symbol = LocalUserDefaults.shared.recentToken ?? "flow"
-                    guard let token = WalletManager.shared.getToken(bySymbol: symbol) else {
+                    let vaultIdentifier = LocalUserDefaults.shared.recentToken
+                    guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
                         return
                     }
                     let contract = Contact(
@@ -41,8 +41,8 @@ class ScanHandler {
             case let .ethWallet(address):
                 vc.stopRunning()
                 vc.presentingViewController?.dismiss(animated: true, completion: {
-                    let symbol = LocalUserDefaults.shared.recentToken ?? "flow"
-                    guard let token = WalletManager.shared.getToken(bySymbol: symbol) else {
+                    let vaultIdentifier = LocalUserDefaults.shared.recentToken
+                    guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
                         return
                     }
                     let contract = Contact(
@@ -76,8 +76,8 @@ class ScanHandler {
             case let .flowWallet(address):
                 vc.stopRunning()
                 vc.presentingViewController?.dismiss(animated: true, completion: {
-                    let symbol = LocalUserDefaults.shared.recentToken ?? "flow"
-                    guard let token = WalletManager.shared.getToken(bySymbol: symbol) else {
+                    let vaultIdentifier = LocalUserDefaults.shared.recentToken
+                    guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
                         return
                     }
                     let contract = Contact(

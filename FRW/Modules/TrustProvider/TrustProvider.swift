@@ -23,7 +23,7 @@ extension TrustWeb3Provider {
         )
         var isDebug = false
         #if DEBUG
-        isDebug = true
+            isDebug = true
         #endif
         return TrustWeb3Provider(config: .init(ethereum: config, isDebug: isDebug))
     }

@@ -203,6 +203,7 @@ extension CadenceModel {
         let isTokenStorageEnabled: String?
         let revokeKey: String?
         let getAccountMinFlow: String?
+        let getFlowBalanceForAnyAccounts: String?
     }
 
     struct Account: Codable {
@@ -220,6 +221,8 @@ extension CadenceModel {
         let getNFTMetadataViews: String?
         let sendNbaNFTV3: String?
         let sendNFTV3: String?
+        /// 2.6+, replace checkNFTListEnabled
+        let getNFTBalanceStorage: String?
     }
 
     struct Contract: Codable {
@@ -244,7 +247,8 @@ extension CadenceModel {
 
         let isTokenListEnabled: String?
         let getTokenListBalance: String?
-        let isLinkedAccountTokenListEnabled: String?
+
+        let getTokenBalanceStorage: String?
     }
 
     struct HybridCustody: Codable {
@@ -333,7 +337,6 @@ extension CadenceModel {
     }
 
     struct NFT: Codable {
-        let checkNFTListEnabledNew: String?
         let checkNFTListEnabled: String?
     }
 

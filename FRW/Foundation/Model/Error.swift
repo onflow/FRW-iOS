@@ -157,6 +157,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
+    case argument
     case contractNameIsEmpty
     case tokenAddressEmpty
     case storagePathEmpty

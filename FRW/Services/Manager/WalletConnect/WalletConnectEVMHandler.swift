@@ -215,7 +215,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 .string(toAddr),
                 .uint256(receiveModel.amount),
                 receiveModel.dataValue?.cadenceValue ?? .array([]),
-                .uint64(receiveModel.gasValue),
+                .uint64(receiveModel.gasIntValue),
             ]
 
             let vm = BrowserAuthzViewModel(
@@ -235,7 +235,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,
                         toAddress: toAddr,
-                        gas: receiveModel.gasValue
+                        gas: receiveModel.gasIntValue
                     )
                     let holder = TransactionManager.TransactionHolder(id: txid, type: .transferCoin)
                     TransactionManager.shared.newTransaction(holder: holder)
