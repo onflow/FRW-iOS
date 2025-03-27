@@ -29,7 +29,7 @@ extension String {
     func replaceExactMatch(target: String, replacement: String) -> String {
         let pattern = "\\b\(NSRegularExpression.escapedPattern(for: target))\\b"
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return self }
-        let range = NSRange(self.startIndex..<self.endIndex, in: self)
+        let range = NSRange(startIndex ..< endIndex, in: self)
         return regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: replacement)
     }
 }
@@ -45,10 +45,10 @@ extension NFTCollectionInfo {
         if let path = path {
             newScript = newScript
                 .replacingOccurrences(of: "<CollectionStoragePath>", with: path.storagePath)
-                .replacingOccurrences(of: "<CollectionPublic>",with: path.publicCollectionName ?? "")
+                .replacingOccurrences(of: "<CollectionPublic>", with: path.publicCollectionName ?? "")
                 .replacingOccurrences(of: "<CollectionPublicPath>", with: path.publicPath)
                 .replacingOccurrences(of: "<TokenCollectionStoragePath>", with: path.storagePath)
-                .replacingOccurrences(of: "<TokenCollectionPublic>",with: path.publicCollectionName ?? "")
+                .replacingOccurrences(of: "<TokenCollectionPublic>", with: path.publicCollectionName ?? "")
                 .replacingOccurrences(of: "<TokenCollectionPublicPath>", with: path.publicPath)
                 .replacingOccurrences(of: "<CollectionPublicType>", with: path.publicType ?? "")
                 .replacingOccurrences(of: "<CollectionPrivateType>", with: path.privateType ?? "")
@@ -58,10 +58,18 @@ extension NFTCollectionInfo {
 }
 
 extension TokenModel {
-    func formatCadence(cadence: String) -> String {
+    func formatCadence(cadence: String) throws -> String {
+        guard !contractName.isEmpty else {
+            EventTrack.Dev.cadence(CadenceError.contractNameIsEmpty, message: "")
+            throw CadenceError.contractNameIsEmpty
+        }
+        guard let address = getAddress() else {
+            EventTrack.Dev.cadence(CadenceError.tokenAddressEmpty, message: "")
+            throw CadenceError.tokenAddressEmpty
+        }
         let dict = [
             "<Token>": contractName,
-            "<TokenAddress>": getAddress() ?? "0x",
+            "<TokenAddress>": address,
             "<TokenReceiverPath>": storagePath.receiver,
             "<TokenBalancePath>": storagePath.balance,
             "<TokenStoragePath>": storagePath.vault,

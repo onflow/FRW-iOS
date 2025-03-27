@@ -77,7 +77,7 @@ class CadenceManager {
             do {
                 let response: CadenceRemoteResponse = try await Network
                     .requestWithRawModel(FRWAPI.Cadence.list)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     // first call before
                     self.saveCache(response: response.data)
                     self.scripts = response.data.scripts

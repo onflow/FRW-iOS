@@ -158,6 +158,10 @@ enum CadenceError: String, BaseError {
     case empty
     case transactionFailed
     case argument
+    case contractNameIsEmpty
+    case tokenAddressEmpty
+    case storagePathEmpty
+
     var baseCode: Int { 9000 }
 }
 

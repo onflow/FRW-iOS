@@ -47,6 +47,7 @@ extension WalletSendAmountView {
 
 // MARK: - WalletSendAmountViewModel
 
+@MainActor
 final class WalletSendAmountViewModel: ObservableObject {
     // MARK: Lifecycle
 
@@ -151,6 +152,9 @@ extension WalletSendAmountViewModel {
     }
 
     private func checkToken() {
+        if token.isFlowCoin {
+            isValidToken = true
+        }
         Task {
             if let address = targetContact.address {
                 if address.isEVMAddress {
@@ -307,17 +311,6 @@ extension WalletSendAmountViewModel {
         DispatchQueue.main.async {
             self.doSend()
         }
-//        Task {
-//            let result = await SecurityManager.shared.SecurityVerify()
-//            if !result {
-//                HUD.error(title: "verify_failed".localized)
-//                return
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.doSend()
-//            }
-//        }
     }
 
     private func doSend() {
@@ -540,6 +533,7 @@ extension WalletSendAmountViewModel {
         LocalUserDefaults.shared.recentToken = token.vaultIdentifier
 
         self.token = token
+        checkAddress()
         refreshTokenData()
         refreshInput()
     }

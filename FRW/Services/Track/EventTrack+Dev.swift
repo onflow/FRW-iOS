@@ -9,7 +9,11 @@ import Foundation
 
 extension EventTrack.Dev {
     static func restoreLogin(userId: String) {
-        EventTrack.send(event: EventTrack.Dev.restoreLogin, properties: ["user_id": userId])
+        EventTrack.send(event: EventTrack.Dev.develop,
+                        properties: [
+                            "user_id": userId,
+                            .Track.module: EventTrack.Dev.Module.restoreLogin,
+                        ])
     }
 }
 
@@ -24,8 +28,20 @@ extension EventTrack.Dev {
     }
 
     static func deviceBackup(progress: DeviceBackupProgress, message: String) {
-        EventTrack.send(event: EventTrack.Dev.deviceBackup, properties: [
+        EventTrack.send(event: EventTrack.Dev.develop, properties: [
+            .Track.module: EventTrack.Dev.Module.deviceBackup,
             .Track.progress: progress.rawValue,
+            .Track.message: message,
+        ])
+    }
+}
+
+// All Cadence
+extension EventTrack.Dev {
+    static func cadence(_ error: Error, message: String) {
+        EventTrack.send(event: EventTrack.Dev.develop, properties: [
+            .Track.module: EventTrack.Dev.Module.cadence,
+            .Track.error: error.localizedDescription,
             .Track.message: message,
         ])
     }

@@ -354,7 +354,7 @@ extension TrustJSMessageHandler {
             logo: url?.absoluteString.toFavIcon()?.absoluteString,
             cadence: originCadence,
             arguments: args.toArguments(),
-            toAddress: toAddr,
+            toAddress: toAddr.addHexPrefix(),
             data: receiveModel.data,
             amount: receiveModel.amountValue
         ) { [weak self] result in

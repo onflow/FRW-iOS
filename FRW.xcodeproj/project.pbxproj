@@ -1073,7 +1073,6 @@
 		4E411DC02CB91C3A005AD540 /* MoveComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E411DBE2CB91C3A005AD540 /* MoveComponentView.swift */; };
 		4E42DC5F2B22AEB700EF0A75 /* BackupListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */; };
 		4E42DC602B22AEB700EF0A75 /* BackupListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */; };
-		4E4409232CBFB59A0041AC06 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		4E4409272CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
 		4E4409282CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
 		4E4A6B642CA68D7100231A85 /* SeedPhraseLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */; };
@@ -3081,7 +3080,6 @@
 				4E1DD8C72B1622030055E510 /* Instabug in Frameworks */,
 				15C58C422868A4EE00BD4FC6 /* UIKit.framework in Frameworks */,
 				6A0454CD28768E9E00A9131C /* SwiftUIPager in Frameworks */,
-				4E4409232CBFB59A0041AC06 /* (null) in Frameworks */,
 				152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */,
 				6AEA374028A49DBE004545D4 /* MJRefresh in Frameworks */,
 				4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */,
@@ -9741,8 +9739,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Outblock/trust-web3-provider";
 			requirement = {
-				branch = old;
-				kind = branch;
+				kind = revision;
+				revision = 0d58818bae73d6996b6a8caae15dc2e5a0ff88f8;
 			};
 		};
 		4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {

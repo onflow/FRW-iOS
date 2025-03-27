@@ -712,7 +712,7 @@ extension WalletConnectManager {
                     }
                 }
             } cancel: {
-                log.error("[EVM] Request cancel: [sendTransaction]")
+                log.info("[EVM] Request cancel: [sendTransaction]")
                 self.rejectRequest(request: sessionRequest)
             }
         case WalletConnectEVMMethod.signTypedData.rawValue:
