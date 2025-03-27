@@ -194,15 +194,13 @@ extension BrowserViewController {
     func postAuthzPayloadSignResponse(response: FCLAuthzResponse) async throws {
         guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
             log.error("primary address is nil")
-            return
+            throw WalletError.noPrimaryWalletAddress
         }
 
         let data = Data(hex: response.body.message)
         let signData = try await WalletManager.shared.sign(signableData: data)
 
         let keyId = WalletManager.shared.keyIndex
-//        let keyId = try await FlowNetwork.getLastBlockAccountKeyId(address: address)
-
         let message = FCLScripts.generateAuthzResponse(
             address: address,
             signature: signData.hexValue,
