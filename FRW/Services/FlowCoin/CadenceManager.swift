@@ -77,7 +77,7 @@ class CadenceManager {
             do {
                 let response: CadenceRemoteResponse = try await Network
                     .requestWithRawModel(FRWAPI.Cadence.list)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     // first call before
                     self.saveCache(response: response.data)
                     self.scripts = response.data.scripts
@@ -402,13 +402,13 @@ extension CadenceModel {
     }
 }
 
-extension String {
-    public func fromBase64() -> String? {
+public extension String {
+    func fromBase64() -> String? {
         guard let data = Data(base64Encoded: self) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
-    public func toFunc() -> String? {
+    func toFunc() -> String? {
         guard let decodeStr = fromBase64() else {
             log.error("[Cadence] base decode failed")
             return nil

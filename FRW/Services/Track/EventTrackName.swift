@@ -82,11 +82,17 @@ extension EventTrack {
 
 extension EventTrack {
     enum Dev: String, EventTrackNameProtocol {
-        case restoreLogin = "restore_login"
-        case deviceBackup = "device_backup"
-
+        case develop
         var name: String {
             rawValue
         }
+    }
+}
+
+extension EventTrack.Dev {
+    enum Module {
+        static let restoreLogin = "restore_login"
+        static let deviceBackup = "device_backup"
+        static let cadence = "cadence"
     }
 }

@@ -6,17 +6,17 @@
 //
 
 import Flow
+import FlowWalletKit
 import Foundation
 import KeychainAccess
 import UIKit
 import WalletCore
-import FlowWalletKit
 
 class ThingsNeedKnowViewModel: ObservableObject {
     // MARK: Lifecycle
-    
+
     init() {
-        self.keyProvider = try? SeedPhraseKey.createBackup()
+        keyProvider = try? SeedPhraseKey.createBackup()
     }
 
     // MARK: Internal
@@ -26,7 +26,7 @@ class ThingsNeedKnowViewModel: ObservableObject {
             HUD.error(title: "init keyProvider failed.")
             return
         }
-        guard let publicKey = try? keyProvider.publicKey(signAlgo: signAlgo)?.hexString else {
+        guard let publicKey = keyProvider.publicKey(signAlgo: signAlgo)?.hexString else {
             HUD.error(title: "fetch public key failed.")
             return
         }
@@ -36,19 +36,18 @@ class ThingsNeedKnowViewModel: ObservableObject {
                 let addStatus = try await addKeyToFlow(publicKey: publicKey)
                 if !addStatus {
                     HUD.error(title: "add key failed.")
+                    HUD.dismissLoading()
                     return
                 }
                 try await addKeyToService(publicKey: publicKey)
                 try addKeyToLocal()
-                DispatchQueue.main.async {
+                await MainActor.run {
                     HUD.dismissLoading()
                     Router.route(to: RouteMap.Backup.showRecoveryPhraseBackup(keyProvider.hdWallet.mnemonic))
                 }
             } catch {
+                HUD.dismissLoading()
                 HUD.error(title: "\(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    HUD.dismissLoading()
-                }
             }
         }
     }
@@ -59,7 +58,6 @@ class ThingsNeedKnowViewModel: ObservableObject {
     private var signAlgo: Flow.SignatureAlgorithm = .ECDSA_SECP256k1
 
     private func addKeyToFlow(publicKey: String) async throws -> Bool {
-
         let address = WalletManager.shared.address
 
         let flowKey = flowKey(with: publicKey)
@@ -81,7 +79,6 @@ class ThingsNeedKnowViewModel: ObservableObject {
     }
 
     private func addKeyToService(publicKey: String) async throws {
-
         let type = BackupType.fullWeightSeedPhrase
         let backupName = type.title
         let flowKey = flowKey(with: publicKey)
@@ -132,6 +129,5 @@ class ThingsNeedKnowViewModel: ObservableObject {
         } catch {
             log.error("[Back] create 12 Phrase backup failed.\(error.localizedDescription)")
         }
-
     }
 }
