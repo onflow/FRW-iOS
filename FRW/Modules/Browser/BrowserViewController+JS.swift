@@ -214,6 +214,15 @@ extension BrowserViewController {
             log.debug("did post authz payload sign response")
         }
     }
+    
+    func rejectRspsonse(reason: String) {
+        DispatchQueue.syncOnMain {
+            let message = FCLScripts.genertateRejectResponse(reason: reason)
+            log.debug("will post reject response")
+            self.postMessage(message)
+            log.debug("did post reject response")
+        }
+    }
 
     func postAuthzEnvelopeSignResponse(sign: FCLVoucher.Signature) {
         let message = FCLScripts.generateAuthzResponse(
