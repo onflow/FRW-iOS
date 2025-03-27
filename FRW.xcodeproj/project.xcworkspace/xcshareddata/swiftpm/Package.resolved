@@ -130,7 +130,7 @@
     {
       "identity" : "flow-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/outblock/flow-swift",
+      "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
         "revision" : "e766fa36c45b62537acac53b679ec7db948aeb22"
       }
