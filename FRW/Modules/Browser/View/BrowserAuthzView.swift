@@ -321,6 +321,7 @@ struct BrowserAuthzView: View {
                 .font(.inter(size: 14))
                 .lineLimit(4)
                 .foregroundStyle(Color.Theme.Text.black8)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
                 .background(Color.Theme.BG.bg1)
                 .cornerRadius(16)

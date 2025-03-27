@@ -103,7 +103,7 @@ struct NetworkSwitchPopView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 20)
         }
-        .backgroundFill(Color.LL.Neutrals.background)
+        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var fromToView: some View {

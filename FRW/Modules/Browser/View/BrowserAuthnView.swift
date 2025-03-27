@@ -45,7 +45,7 @@ struct BrowserAuthnView: View {
         .preferredColorScheme(.dark)
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(.Theme.Background.white)
+        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var titleView: some View {
