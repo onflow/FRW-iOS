@@ -16,9 +16,8 @@ class FlowLog {
     // MARK: Lifecycle
 
     private init() {
-
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-        let logFileUrl = url?.appendingPathComponent("FlowWallet.log",isDirectory: false)
+        let logFileUrl = url?.appendingPathComponent("FlowWallet.log", isDirectory: false)
 
         let console = ConsoleDestination()
         console.format = "[Flow] $DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M - $X"
@@ -26,6 +25,8 @@ class FlowLog {
 
         file = FileDestination(logFileURL: logFileUrl)
         file.format = console.format
+        file.logFileAmount = 2
+        file.logFileMaxSize = (10 * 1024 * 1024)
 
         SwiftyBeaver.addDestination(console)
         SwiftyBeaver.addDestination(file)
@@ -54,9 +55,9 @@ class FlowLog {
     private let file: FileDestination
 }
 
-extension NSPredicate {
+public extension NSPredicate {
     /// Predicate for fetching from OSLogStore, allow to condition subsystem, and set if empty subsystem should be filtered.
-    public static func library(_ values: [String]) -> NSPredicate {
+    static func library(_ values: [String]) -> NSPredicate {
         NSPredicate(format: "library in $LIST")
             .withSubstitutionVariables(["LIST": values])
     }

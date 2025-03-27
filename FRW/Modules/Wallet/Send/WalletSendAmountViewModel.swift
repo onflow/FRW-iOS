@@ -47,6 +47,7 @@ extension WalletSendAmountView {
 
 // MARK: - WalletSendAmountViewModel
 
+@MainActor
 final class WalletSendAmountViewModel: ObservableObject {
     // MARK: Lifecycle
 
@@ -138,7 +139,7 @@ extension WalletSendAmountViewModel {
                     isValidAddr = await FlowNetwork.addressVerify(address: address)
                 }
                 let isValid = isValidAddr
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.addressIsValid = isValid
                     if isValid == false {
                         self.errorType = .invalidAddress
@@ -151,6 +152,9 @@ extension WalletSendAmountViewModel {
     }
 
     private func checkToken() {
+        if token.isFlowCoin {
+            isValidToken = true
+        }
         Task {
             if let address = targetContact.address {
                 if address.isEVMAddress {
@@ -335,17 +339,6 @@ extension WalletSendAmountViewModel {
         DispatchQueue.main.async {
             self.doSend()
         }
-//        Task {
-//            let result = await SecurityManager.shared.SecurityVerify()
-//            if !result {
-//                HUD.error(title: "verify_failed".localized)
-//                return
-//            }
-//
-//            DispatchQueue.main.async {
-//                self.doSend()
-//            }
-//        }
     }
 
     private func doSend() {
@@ -465,7 +458,7 @@ extension WalletSendAmountViewModel {
                             failureBlock()
                             return
                         }
-                        
+
                         txId = try await FlowNetwork.sendNoFlowTokenToEVM(
                             vaultIdentifier: vaultIdentifier,
                             amount: amount,
@@ -568,6 +561,7 @@ extension WalletSendAmountViewModel {
         LocalUserDefaults.shared.recentToken = token.symbol
 
         self.token = token
+        checkAddress()
         refreshTokenData()
         refreshInput()
     }
