@@ -14,11 +14,11 @@ struct ChildAccount: Codable {
     // MARK: Lifecycle
 
     init(address: String, name: String?, desc: String?, icon: String?, pinTime: TimeInterval) {
-        self.addr = address
+        addr = address
         self.name = name
-        self.description = desc
-        self.thumbnail = Thumbnail(url: icon)
-        self.time = pinTime
+        description = desc
+        thumbnail = Thumbnail(url: icon)
+        time = pinTime
     }
 
     // MARK: Internal
@@ -58,7 +58,8 @@ struct ChildAccount: Codable {
 
     var isSelected: Bool {
         if let selectedChildAccount = ChildAccountManager.shared.selectedChildAccount,
-           selectedChildAccount.addr == addr, let addr = addr, !addr.isEmpty {
+           selectedChildAccount.addr == addr, let addr = addr, !addr.isEmpty
+        {
             return true
         }
 
@@ -153,7 +154,8 @@ class ChildAccountManager: ObservableObject {
 
     @Published
     var selectedChildAccount: ChildAccount? = LocalUserDefaults.shared
-        .selectedChildAccount {
+        .selectedChildAccount
+    {
         didSet {
             LocalUserDefaults.shared.selectedChildAccount = selectedChildAccount
         }
@@ -164,6 +166,12 @@ class ChildAccountManager: ObservableObject {
     }
 
     func refresh() {
+        Task {
+            await refreshAsync()
+        }
+    }
+
+    func refreshAsync() async {
         guard let uid = UserManager.shared.activatedUID,
               let address = WalletManager.shared.getPrimaryWalletAddress()
         else {
@@ -173,49 +181,45 @@ class ChildAccountManager: ObservableObject {
         }
 
         let network = LocalUserDefaults.shared.flowNetwork
-
-        log.debug("start refresh")
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.isLoading = true
         }
+        log.debug("start refresh")
+        do {
+            let list = try await FlowNetwork.queryChildAccountMeta(address)
 
-        Task {
-            do {
-                let list = try await FlowNetwork.queryChildAccountMeta(address)
+            await MainActor.run {
+                if UserManager.shared.activatedUID != uid { return }
+                if LocalUserDefaults.shared.flowNetwork != network { return }
 
-                DispatchQueue.main.async {
-                    if UserManager.shared.activatedUID != uid { return }
-                    if LocalUserDefaults.shared.flowNetwork != network { return }
-
-                    let oldList = MultiAccountStorage.shared.getChildAccounts(
-                        uid: uid,
-                        address: address
-                    ) ?? []
-                    let finalList = list.map { newAccount in
-                        if let oldAccount = oldList.first(where: { $0.addr == newAccount.addr }) {
-                            return ChildAccount(
-                                address: newAccount.addr ?? "",
-                                name: newAccount.name,
-                                desc: newAccount.description,
-                                icon: newAccount.icon,
-                                pinTime: oldAccount.pinTime
-                            )
-                        } else {
-                            return newAccount
-                        }
+                let oldList = MultiAccountStorage.shared.getChildAccounts(
+                    uid: uid,
+                    address: address
+                ) ?? []
+                let finalList = list.map { newAccount in
+                    if let oldAccount = oldList.first(where: { $0.addr == newAccount.addr }) {
+                        return ChildAccount(
+                            address: newAccount.addr ?? "",
+                            name: newAccount.name,
+                            desc: newAccount.description,
+                            icon: newAccount.icon,
+                            pinTime: oldAccount.pinTime
+                        )
+                    } else {
+                        return newAccount
                     }
-
-                    self.childAccounts = finalList
-                    self.saveToCache(finalList, uid: uid, address: address)
-                    self.isLoading = false
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self.isLoading = false
                 }
 
-                log.error("refresh failed", context: error)
+                self.childAccounts = finalList
+                self.saveToCache(finalList, uid: uid, address: address)
+                self.isLoading = false
             }
+        } catch {
+            await MainActor.run {
+                self.isLoading = false
+            }
+
+            log.error("refresh failed", context: error)
         }
     }
 

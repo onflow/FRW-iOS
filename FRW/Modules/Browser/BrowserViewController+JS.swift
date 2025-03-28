@@ -173,7 +173,8 @@ extension BrowserViewController {
         if let nonce = response.body.nonce,
            !nonce.isEmpty,
            let proofSign = response.encodeAccountProof(address: address),
-           let sign = WalletManager.shared.signSync(signableData: proofSign) {
+           let sign = WalletManager.shared.signSync(signableData: proofSign)
+        {
             accountProofSign = sign.hexValue
         }
         let keyIndex = WalletManager.shared.keyIndex
@@ -194,15 +195,13 @@ extension BrowserViewController {
     func postAuthzPayloadSignResponse(response: FCLAuthzResponse) async throws {
         guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
             log.error("primary address is nil")
-            return
+            throw WalletError.noPrimaryWalletAddress
         }
 
         let data = Data(hex: response.body.message)
         let signData = try await WalletManager.shared.sign(signableData: data)
 
         let keyId = WalletManager.shared.keyIndex
-//        let keyId = try await FlowNetwork.getLastBlockAccountKeyId(address: address)
-
         let message = FCLScripts.generateAuthzResponse(
             address: address,
             signature: signData.hexValue,
@@ -212,6 +211,15 @@ extension BrowserViewController {
             log.debug("will post authz payload sign response")
             self.postMessage(message)
             log.debug("did post authz payload sign response")
+        }
+    }
+
+    func rejectRspsonse(reason: String) {
+        DispatchQueue.syncOnMain {
+            let message = FCLScripts.genertateRejectResponse(reason: reason)
+            log.debug("will post reject response")
+            self.postMessage(message)
+            log.debug("did post reject response")
         }
     }
 

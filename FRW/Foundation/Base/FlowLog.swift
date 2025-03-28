@@ -28,6 +28,8 @@ class FlowLog {
 
         file = FileDestination(logFileURL: logFileUrl)
         file.format = console.format
+        file.logFileAmount = 2
+        file.logFileMaxSize = (10 * 1024 * 1024)
 
         SwiftyBeaver.addDestination(console)
         SwiftyBeaver.addDestination(file)

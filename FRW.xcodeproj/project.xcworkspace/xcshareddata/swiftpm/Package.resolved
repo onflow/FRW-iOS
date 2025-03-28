@@ -650,8 +650,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/trust-web3-provider",
       "state" : {
-        "branch" : "old",
-        "revision" : "b3c37b53ebb677e3622ce3c1c2023ec9ed8d16c8"
+        "revision" : "0d58818bae73d6996b6a8caae15dc2e5a0ff88f8"
       }
     },
     {
