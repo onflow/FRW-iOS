@@ -1202,7 +1202,7 @@ extension WalletManager: FlowSigner {
             )
             return signature
         }
-        
+
         // Old logic
         if userSecretSign() {
             if let userId = walletInfo?.id {
