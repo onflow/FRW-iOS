@@ -9819,8 +9819,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Outblock/Flow-Wallet-Kit";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = revision;
+				revision = 0111a0e15e13b97ed2cccba1af2cfce7801454bd;
 			};
 		};
 		4E660F1A2C80B42F00E5239E /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */ = {

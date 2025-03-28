@@ -57,42 +57,43 @@ class WalletManager: ObservableObject {
             object: nil
         )
 
-        if UserManager.shared.activatedUID != nil {
-            restoreMnemonicForCurrentUser()
-            loadCacheData()
-        }
-
         UserManager.shared.$activatedUID
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { _ in
                 self.reloadWallet()
-                self.clearFlowAccount()
                 self.reloadWalletInfo()
+            }.store(in: &cancellableSet)
+        
+        walletEntity?.$accounts
+            .receive(on: DispatchQueue.main)
+            .map { $0 }
+            .sink { account in
+//                self.reloadWallet()
+//                self.reloadWalletInfo()
+                print(account?.values)
             }.store(in: &cancellableSet)
     }
 
     // MARK: Internal
-
     static let shared = WalletManager()
-
+    
     @Published
     var supportedCoins: [TokenModel]?
+    
     @Published
     var activatedCoins: [TokenModel] = []
 
     @Published
     var childAccount: ChildAccount? = nil
+    
     @Published
     var evmAccount: EVMAccountManager.Account? = nil
+    
     @Published
     var accountInfo: Flow.AccountInfo?
 
     var accessibleManager: ChildAccountManager.AccessibleManager = .init()
-
-    var flowAccountKey: Flow.AccountKey?
-    // TODO: remove after update Flow Wallet SDK
-    var phraseAccountkey: Flow.AccountKey?
 
     var mainKeychain =
         Keychain(service: (Bundle.main.bundleIdentifier ?? defaultBundleID) + ".local")
@@ -101,25 +102,18 @@ class WalletManager: ObservableObject {
             .accessibility(.whenUnlocked)
 
     var walletAccount: WalletAccount = .init()
+    
     @Published
     var balanceProvider = BalanceProvider()
-
     var walletEntity: FlowWalletKit.Wallet?
+    var currenFlowAccount: FlowWalletKit.Account?
     var accountKey: UserManager.Accountkey?
     var keyProvider: (any KeyProtocol)?
-    // rename to currentAccount
-
-//    @Published var account: FlowWalletKit.Account? = nil
 
     var customTokenManager: CustomTokenManager = .init()
 
     @Published
-    var walletInfo: UserWalletResponse? {
-        didSet {
-            // TODO: remove after update new Flow Wallet SDK
-            updateFlowAccount()
-        }
-    }
+    var walletInfo: UserWalletResponse?
 
     var currentAccount: WalletAccount.User {
         WalletManager.shared.walletAccount
@@ -176,8 +170,8 @@ class WalletManager: ObservableObject {
 
     private var childAccountInited: Bool = false
 
-    private var hdWallet: HDWallet?
     private var walletInfoRetryTimer: Timer?
+    
     private var cancellableSet = Set<AnyCancellable>()
 
     private var retryCheckCount = 1
@@ -218,10 +212,23 @@ extension WalletManager {
     private func reloadWallet() {
         if let uid = UserManager.shared.activatedUID {
             keyProvider = keyProvider(with: uid)
-            if let provider = keyProvider, let user = userStore(with: uid) {
-                updateKeyProvider(provider: provider, storeUser: user)
-            } else {
+            guard let provider = keyProvider, let user = userStore(with: uid) else {
                 log.error("[Wallet] not found provider or user at \(uid)")
+                return
+            }
+            updateKeyProvider(provider: provider, storeUser: user)
+            
+            HUD.error(WalletError.emptyKeyProvider)
+            
+            walletEntity = FlowWalletKit.Wallet(type: .key(provider))
+            Task {
+                
+                do {
+                    try await walletEntity?.fetchAccount()
+                } catch {
+                    print("AAA===>", error)
+                    HUD.error(WalletError.emptyAccountKey)
+                }
             }
         }
     }
@@ -229,94 +236,6 @@ extension WalletManager {
     func updateKeyProvider(provider: any KeyProtocol, storeUser: UserManager.StoreUser) {
         keyProvider = provider
         accountKey = storeUser.account
-        log.debug("[user] \(String(describing: accountKey))")
-        guard accountKey == nil else {
-            return
-        }
-        Task {
-            if let address = storeUser.address {
-                do {
-                    let accountKey = try await findKey(address: address, with: storeUser.publicKey)
-                    self.accountKey = accountKey?.toStoreKey()
-                    LocalUserDefaults.shared.updateUser(
-                        by: storeUser.userId,
-                        publicKey: storeUser.publicKey,
-                        account: self.accountKey
-                    )
-                } catch {
-                    log
-                        .error(
-                            "[Wallet] not find account key by \(address) with \(storeUser.publicKey)"
-                        )
-                }
-            }
-            if self.accountKey == nil {
-                do {
-                    let result = try await findKey(provider: provider, with: storeUser.publicKey)
-                    self.accountKey = result.1?.toStoreKey()
-                    let address = result.0?.address.description
-                    LocalUserDefaults.shared.updateUser(
-                        by: storeUser.userId,
-                        publicKey: storeUser.publicKey,
-                        address: address,
-                        account: accountKey
-                    )
-                } catch {
-                    log
-                        .error(
-                            "[Wallet] not find account key by \(provider.keyType) with \(storeUser.publicKey)"
-                        )
-                }
-            }
-        }
-    }
-
-    func accountKey(with uid: String) async -> UserManager.Accountkey? {
-        guard let user = userStore(with: uid) else {
-            return nil
-        }
-        var accountKey = user.account
-        log.debug("[user] \(String(describing: self.accountKey))")
-        if accountKey == nil, let address = user.address {
-            accountKey = try? await findKey(address: address, with: user.publicKey)?.toStoreKey()
-        }
-        if accountKey == nil, let keyProvider = keyProvider(with: uid) {
-            accountKey = try? await findKey(provider: keyProvider, with: user.publicKey).1?
-                .toStoreKey()
-        }
-
-        return accountKey
-    }
-
-    private func findKey(address: String, with publicKey: String) async throws -> Flow.AccountKey? {
-        let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
-        let sortedAccount = account.keys.filter { $0.weight >= 1000 }
-        let accountKey = sortedAccount.filter { $0.publicKey.description == publicKey }.first
-        log.debug("[user] \(String(describing: accountKey))")
-        return accountKey
-    }
-
-    private func findKey(
-        provider: any KeyProtocol,
-        with publicKey: String
-    ) async throws -> (Flow.Account?, Flow.AccountKey?) {
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
-        let walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: [chainId])
-        _ = try? await walletEntity.fetchAllNetworkAccounts()
-        let list = walletEntity.flowAccounts?[chainId]
-        var flowAccount: Flow.Account?
-        var accountKey: Flow.AccountKey?
-        list?.forEach { account in
-            for key in account.keys {
-                if key.publicKey.description == publicKey {
-                    flowAccount = account
-                    accountKey = key
-                    break
-                }
-            }
-        }
-        log.debug("[user] \(String(describing: accountKey))")
-        return (flowAccount, accountKey)
     }
 
     func userStore(with uid: String) -> UserManager.StoreUser? {
@@ -431,18 +350,10 @@ extension WalletManager {
 
         LocalUserDefaults.shared.flowNetwork = type
         FlowNetwork.setup()
-        clearFlowAccount()
         if getPrimaryWalletAddress() == nil {
             WalletManager.shared.reloadWalletInfo()
         } else {
             walletInfo = walletInfo
-        }
-        Task {
-            do {
-                try await findFlowAccount()
-            } catch {
-                log.error("[wallet] fetch flow account failed.")
-            }
         }
 
         NotificationCenter.default.post(name: .networkChange)
@@ -479,14 +390,7 @@ extension WalletManager {
 
 extension WalletManager {
     private func resetProperties() {
-        hdWallet = nil
         walletInfo = nil
-        supportedCoins = nil
-        activatedCoins = []
-    }
-
-    func clearFlowAccount() {
-        flowAccountKey = nil
     }
 
     @objc
@@ -527,14 +431,7 @@ extension WalletManager {
     }
 
     func getCurrentPublicKey() -> String? {
-        if let provider = keyProvider, let key = accountKey {
-            let publicKey = provider.publicKey(signAlgo: key.signAlgo)
-            return publicKey?.hexString
-        }
-        if let accountkey = flowAccountKey {
-            return accountkey.publicKey.description
-        }
-        return hdWallet?.getPublicKey()
+        return currenFlowAccount?.fullWeightKey?.publicKey.hex
     }
 
     func getCurrentPrivateKey() -> String? {
@@ -544,21 +441,8 @@ extension WalletManager {
         return keyProvider?.privateKey(signAlgo: signAlgo)?.hexValue
     }
 
-    func getCurrentFlowAccountKey() -> Flow.AccountKey? {
-        hdWallet?.flowAccountKey
-    }
-
     func getPrimaryWalletAddress() -> String? {
-        if let uid = UserManager.shared.activatedUID, let user = userStore(with: uid) {
-            if user.address != nil {
-                return user.address
-            }
-        }
-        return walletInfo?.currentNetworkWalletModel?.getAddress
-    }
-
-    func getFlowNetworkTypeAddress(network: FlowNetworkType) -> String? {
-        walletInfo?.getNetworkWalletModel(network: network)?.getAddress
+        return currenFlowAccount?.address.hexAddr
     }
 
     /// get custom watch address first, then primary address, this method is only used for tab2.
@@ -736,119 +620,6 @@ extension WalletManager {
     }
 }
 
-// MARK: - Mnemonic Create & Save
-
-extension WalletManager {
-    func createHDWallet(mnemonic: String? = nil, passphrase: String = "") -> HDWallet? {
-        if let mnemonic = mnemonic {
-            return HDWallet(mnemonic: mnemonic, passphrase: passphrase)
-        }
-
-        return HDWallet(strength: WalletManager.mnemonicStrength, passphrase: passphrase)
-    }
-
-    func storeAndActiveMnemonicToKeychain(_ mnemonic: String, uid: String) throws {
-        guard var data = mnemonic.data(using: .utf8) else {
-            throw WalletError.storeAndActiveMnemonicFailed
-        }
-
-        defer {
-            data = Data()
-        }
-
-        var encodedData = try WalletManager.encryptionChaChaPoly(key: uid, data: data)
-        defer {
-            encodedData = Data()
-        }
-
-        try set(
-            toMainKeychain: encodedData,
-            forKey: getMnemonicStoreKey(uid: uid),
-            comment: "Lilico user uid: \(uid)"
-        )
-
-        DispatchQueue.main.async {
-            self.resetProperties()
-            _ = self.activeMnemonic(mnemonic)
-        }
-    }
-}
-
-// MARK: - Mnemonic Restore
-
-extension WalletManager {
-    func getMnemonicFromKeychain(uid: String) -> String? {
-        if var encryptedData = getEncryptedMnemonicData(uid: uid),
-           var decryptedData = try? WalletManager.decryptionChaChaPoly(
-               key: uid,
-               data: encryptedData
-           ),
-           var mnemonic = String(data: decryptedData, encoding: .utf8)
-        {
-            defer {
-                encryptedData = Data()
-                decryptedData = Data()
-                mnemonic = ""
-            }
-
-            return mnemonic
-        }
-
-        return nil
-    }
-
-    private func restoreMnemonicForCurrentUser() {
-        if let uid = UserManager.shared.activatedUID {
-            if !restoreMnemonicFromKeychain(uid: uid), UserManager.shared.userType == .phrase {
-                HUD.error(title: "no_private_key".localized)
-            }
-            reloadWallet()
-        }
-    }
-
-    private func restoreMnemonicFromKeychain(uid: String) -> Bool {
-        do {
-            if var encryptedData = getEncryptedMnemonicData(uid: uid) {
-                debugPrint(
-                    "WalletManager -> start restore mnemonic from keychain, uid = \(uid), encryptedData.count = \(encryptedData.count)"
-                )
-
-                var decryptedData = try WalletManager.decryptionChaChaPoly(
-                    key: uid,
-                    data: encryptedData
-                )
-                defer {
-                    encryptedData = Data()
-                    decryptedData = Data()
-                }
-
-                if var mnemonic = String(data: decryptedData, encoding: .utf8) {
-                    defer {
-                        mnemonic = ""
-                    }
-
-                    return activeMnemonic(mnemonic)
-                }
-            }
-        } catch {
-            debugPrint(
-                "WalletManager -> restoreMnemonicFromKeyChain failed: uid = \(uid), error = \(error)"
-            )
-        }
-
-        return false
-    }
-
-    private func activeMnemonic(_ mnemonic: String) -> Bool {
-        guard let model = createHDWallet(mnemonic: mnemonic) else {
-            return false
-        }
-
-        hdWallet = model
-        return true
-    }
-}
-
 // MARK: - Internal Getter
 
 extension WalletManager {
@@ -875,14 +646,8 @@ extension WalletManager {
 
         try await fetchSupportedTokens()
         try await fetchActivatedTokens()
-
         try await fetchBalance()
-
         try await fetchAccessible()
-
-        flowAccountKey = nil
-        try await findFlowAccount()
-
         try? await fetchAccountInfo()
     }
 
@@ -1096,93 +861,16 @@ extension WalletManager {
 // MARK: FlowSigner
 
 extension WalletManager: FlowSigner {
+    var keyIndex: Int {
+        currenFlowAccount?.keyIndex ?? 0
+    }
+    
     public var address: Flow.Address {
-        guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
-            return Flow.Address(hex: "")
-        }
-        return Flow.Address(hex: address)
-    }
-
-    public var hashAlgo: Flow.HashAlgorithm {
-        if let key = accountKey {
-            return key.hashAlgo
-        }
-        if userSecretSign() {
-            return flowAccountKey?.hashAlgo ?? .SHA2_256
-        }
-        return phraseAccountkey?.hashAlgo ?? .SHA2_256
-    }
-
-    public var signatureAlgo: Flow.SignatureAlgorithm {
-        if let key = accountKey {
-            return key.signAlgo
-        }
-
-        if userSecretSign() {
-            return flowAccountKey?.signAlgo ?? .ECDSA_P256
-        }
-        return phraseAccountkey?.signAlgo ?? .ECDSA_SECP256k1
-    }
-
-    public var keyIndex: Int {
-        if let key = accountKey {
-            return key.index
-        }
-        if userSecretSign() {
-            return flowAccountKey?.index ?? 0
-        }
-        return phraseAccountkey?.index ?? 0
+        currenFlowAccount?.address ?? .init(hex: "")
     }
 
     public func sign(transaction _: Flow.Transaction, signableData: Data) async throws -> Data {
-        let result = await SecurityManager.shared.SecurityVerify()
-        if result == false {
-            HUD.error(title: "verify_failed".localized)
-            throw WalletError.securityVerifyFailed
-        }
-
-        if flowAccountKey == nil {
-            try await findFlowAccount()
-        }
-
-        if let provider = keyProvider, let key = accountKey {
-            let signature = try provider.sign(
-                data: signableData,
-                signAlgo: key.signAlgo,
-                hashAlgo: key.hashAlgo
-            )
-            return signature
-        }
-        // TODO: Ready to delete below
-        if userSecretSign() {
-            if let userId = walletInfo?.id {
-                let secureKey = try SecureEnclaveKey.wallet(id: userId)
-                let signature = try secureKey.sign(data: signableData, hashAlgo: .SHA2_256)
-                return signature
-            }
-        }
-
-        guard let hdWallet = hdWallet else {
-            throw LLError.emptyWallet
-        }
-
-        var privateKey = hdWallet.getKeyByCurve(
-            curve: .secp256k1,
-            derivationPath: WalletManager.flowPath
-        )
-        let hashedData = Hash.sha256(data: signableData)
-
-        defer {
-            privateKey = PrivateKey()
-        }
-
-        guard var signature = privateKey.sign(digest: hashedData, curve: .secp256k1) else {
-            throw LLError.signFailed
-        }
-
-        signature.removeLast()
-
-        return signature
+        return try await sign(signableData: signableData)
     }
 
     public func sign(signableData: Data) async throws -> Data {
@@ -1191,278 +879,25 @@ extension WalletManager: FlowSigner {
             HUD.error(title: "verify_failed".localized)
             throw WalletError.securityVerifyFailed
         }
-        if flowAccountKey == nil {
-            try await findFlowAccount()
-        }
-        if let provider = keyProvider, let key = accountKey {
-            let signature = try provider.sign(
-                data: signableData,
-                signAlgo: key.signAlgo,
-                hashAlgo: key.hashAlgo
-            )
-            return signature
+        
+        guard let provider = keyProvider else {
+            throw WalletError.emptyKeyProvider
         }
         
-        // Old logic
-        if userSecretSign() {
-            if let userId = walletInfo?.id {
-                let secureKey = try SecureEnclaveKey.wallet(id: userId)
-                let signature = try secureKey.sign(data: signableData, hashAlgo: .SHA2_256)
-                return signature
-            }
+        guard let key = accountKey else {
+            throw WalletError.emptyAccountKey
         }
-
-        guard let hdWallet = hdWallet else {
-            throw LLError.emptyWallet
-        }
-
-        var privateKey = hdWallet.getKeyByCurve(
-            curve: .secp256k1,
-            derivationPath: WalletManager.flowPath
+        
+        let signature = try provider.sign(
+            data: signableData,
+            signAlgo: key.signAlgo,
+            hashAlgo: key.hashAlgo
         )
-        let hashedData = Hash.sha256(data: signableData)
-
-        defer {
-            privateKey = PrivateKey()
-        }
-
-        guard var signature = privateKey.sign(digest: hashedData, curve: .secp256k1) else {
-            throw LLError.signFailed
-        }
-
-        signature.removeLast()
-
-        return signature
-    }
-
-    public func signSync(signableData: Data) -> Data? {
-        if let provider = keyProvider, let key = accountKey {
-            do {
-                let signature = try provider.sign(
-                    data: signableData,
-                    signAlgo: key.signAlgo,
-                    hashAlgo: key.hashAlgo
-                )
-                return signature
-            } catch {
-                return nil
-            }
-        }
-
-        if userSecretSign() {
-            do {
-                if let userId = walletInfo?.id {
-                    let secureKey = try SecureEnclaveKey.wallet(id: userId)
-                    let signature = try secureKey.sign(data: signableData, hashAlgo: .SHA2_256)
-                    return signature
-                }
-            } catch {
-                return nil
-            }
-        }
-
-        guard let hdWallet = hdWallet else {
-            return nil
-        }
-
-        var privateKey = hdWallet.getKeyByCurve(
-            curve: .secp256k1,
-            derivationPath: WalletManager.flowPath
-        )
-        let hashedData = Hash.sha256(data: signableData)
-
-        defer {
-            privateKey = PrivateKey()
-        }
-
-        guard var signature = privateKey.sign(digest: hashedData, curve: .secp256k1) else {
-            return nil
-        }
-        signature.removeLast()
         return signature
     }
 
     private func userSecretSign() -> Bool {
-        if UserManager.shared.userType == .phrase {
-            return false
-        }
-        return true
-    }
-
-    func findFlowAccount() async throws {
-        guard let userId = walletInfo?.id else {
-            return
-        }
-        let address = getPrimaryWalletAddress() ?? ""
-        try await findFlowAccount(with: userId, at: address)
-    }
-
-    func findFlowAccount(with _: String, at address: String) async throws {
-        guard let provider = keyProvider,
-              let key = accountKey,
-              let publicKey = try? provider.publicKey(signAlgo: key.signAlgo)?.hexValue
-        else {
-            return
-        }
-
-        let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
-        let sortedAccount = account.keys.sorted { $0.weight > $1.weight }
-        flowAccountKey = sortedAccount.filter {
-            $0.publicKey.description == publicKey
-        }.first
-        if flowAccountKey == nil {
-            log.error("[Account] not find account")
-        }
-    }
-
-    func updateFlowAccount() {
-        guard let userId = walletInfo?.id,
-              let hdWallet = hdWallet,
-              let address = getPrimaryWalletAddress()
-        else {
-            return
-        }
-        Task {
-            do {
-                let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
-                let sortedAccount = account.keys.filter { $0.weight >= 1000 }
-                phraseAccountkey = sortedAccount.filter {
-                    $0.publicKey.description == hdWallet.getPublicKey()
-                }.first
-                if phraseAccountkey == nil {
-                    log.error("[Account] import Phrase flow account key not find.")
-                }
-            } catch {
-                log.error("[Account] import Phrase fetch fail.\(error.localizedDescription)")
-            }
-        }
-    }
-
-    @discardableResult
-    func warningIfKeyIsInvalid(userId: String, markHide _: Bool = false) -> Bool {
-        if let mnemonic = WalletManager.shared.getMnemonicFromKeychain(uid: userId),
-           !mnemonic.isEmpty, mnemonic.split(separator: " ").count != 15
-        {
-            return false
-        }
-        // FIXME: private key migrate from device to device, it's destructive, this only for fix bugs, move to migrate
-        return false
-        /*
-         do {
-             let model = try WallectSecureEnclave.Store.fetchModel(by: userId)
-             let list = try WallectSecureEnclave.Store.fetchAllModel(by: userId)
-             if model == nil && list.count > 0 {
-                 DispatchQueue.main.async {
-                     if self.isShow {
-                         return
-                     }
-                     self.isShow = true
-                     let alertVC = BetterAlertController(title: "Something__is__wrong::message".localized, message: "profile_key_invalid".localized, preferredStyle: .alert)
-
-                     let cancelAction = UIAlertAction(title: "action_cancel".localized, style: .cancel) { _ in
-                         self.isShow = false
-                     }
-
-                     let restoreAction = UIAlertAction(title: "Restore Profile".localized, style: .default) { _ in
-                         self.isShow = false
-                         Router.route(to: RouteMap.RestoreLogin.restoreList)
-                     }
-                     alertVC.modalPresentationStyle = .overFullScreen
-                     alertVC.addAction(cancelAction)
-                     alertVC.addAction(restoreAction)
-
-                     if markHide {
-                         let hideAction = UIAlertAction(title: "Hide Profile".localized, style: .default) { _ in
-                             self.isShow = false
-                             do {
-                                 try WallectSecureEnclave.Store.hideInvalidKey(by: userId)
-                                 UserManager.shared.deleteLoginUID(userId)
-                             }catch {
-                                 log.error("[SecureEnclave] hide key for \(userId) failed. \(error.localizedDescription)")
-                             }
-                         }
-                         alertVC.addAction(hideAction)
-                     }
-                     Router.topNavigationController()?.present(alertVC, animated: true)
-                 }
-
-                 return true
-             }
-         }catch {
-             return true
-         }
-
-         return false
-          */
-    }
-}
-
-extension HDWallet {
-    func getPublicKey() -> String {
-        let p256PublicKey = getKeyByCurve(curve: .secp256k1, derivationPath: WalletManager.flowPath)
-            .getPublicKeySecp256k1(compressed: false)
-            .uncompressed
-            .data
-            .hexValue
-            .dropPrefix("04")
-        return p256PublicKey
-    }
-
-    func getPrivateKey() -> String {
-        let privateKey = getKeyByCurve(curve: .secp256k1, derivationPath: WalletManager.flowPath)
-        return privateKey.data.hexValue
-    }
-
-    func sign(_ text: String) -> String? {
-        guard let textData = text.data(using: .utf8) else {
-            return nil
-        }
-
-        let data = Flow.DomainTag.user.normalize + textData
-        return sign(data)
-    }
-
-    func sign(_ data: Data) -> String? {
-        var privateKey = getKeyByCurve(curve: .secp256k1, derivationPath: WalletManager.flowPath)
-
-        defer {
-            privateKey = PrivateKey()
-        }
-
-        let hashedData = Hash.sha256(data: data)
-        guard var signature = privateKey.sign(digest: hashedData, curve: .secp256k1) else {
-            return nil
-        }
-
-        signature.removeLast()
-        return signature.hexValue
-    }
-
-    var flowAccountKey: Flow.AccountKey {
-        let p256PublicKey = getPublicKey()
-        let key = Flow.PublicKey(hex: String(p256PublicKey))
-        return Flow.AccountKey(
-            publicKey: key,
-            signAlgo: .ECDSA_SECP256k1,
-            hashAlgo: .SHA2_256,
-            weight: 1000
-        )
-    }
-
-    var flowAccountP256Key: Flow.AccountKey {
-        let p256PublicKey = getKeyByCurve(curve: .nist256p1, derivationPath: WalletManager.flowPath)
-            .getPublicKeyNist256p1()
-            .uncompressed
-            .data
-            .hexValue
-            .dropPrefix("04")
-        let key = Flow.PublicKey(hex: String(p256PublicKey))
-        return Flow.AccountKey(
-            publicKey: key,
-            signAlgo: .ECDSA_P256,
-            hashAlgo: .SHA2_256,
-            weight: 1000
-        )
+        UserManager.shared.userType != .phrase
     }
 }
 
@@ -1476,14 +911,3 @@ extension Flow.AccountKey {
         )
     }
 }
-
-extension String {
-    func dropPrefix(_ prefix: String) -> Self {
-        if hasPrefix(prefix) {
-            return String(dropFirst(prefix.count))
-        }
-        return self
-    }
-}
-
-// MARK: Account

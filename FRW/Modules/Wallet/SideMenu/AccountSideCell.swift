@@ -147,11 +147,3 @@ struct AccountSideCell: View {
         return false
     }
 }
-
-#Preview {
-    AccountSideCell(
-        address: WalletManager.shared.getFlowNetworkTypeAddress(network: .mainnet) ?? "",
-        currentAddress: "",
-        onClick: { _, _ in }
-    )
-}

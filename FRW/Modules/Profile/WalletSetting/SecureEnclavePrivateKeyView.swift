@@ -92,36 +92,38 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                     }
                 }
 
-                HStack {
-                    HStack(spacing: 16) {
-                        Divider()
-                        VStack(alignment: .leading) {
-                            Text("Hash__Algorithm::message".localized)
-                                .font(.inter(size: 14))
-                                .foregroundColor(Color.Theme.Text.text4)
-
-                            Text(WalletManager.shared.hashAlgo.algorithm)
-                                .font(.inter(size: 14))
-                                .foregroundColor(Color.Theme.Text.text4)
+                if let key = WalletManager.shared.currenFlowAccount?.fullWeightKey {
+                    HStack {
+                        HStack(spacing: 16) {
+                            Divider()
+                            VStack(alignment: .leading) {
+                                Text("Hash__Algorithm::message".localized)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(Color.Theme.Text.text4)
+                                
+                                Text(key.hashAlgo.algorithm)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(Color.Theme.Text.text4)
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        HStack(spacing: 16) {
+                            Divider()
+                            VStack(alignment: .leading) {
+                                Text("Sign__Algorithm::message".localized)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(Color.Theme.Text.text4)
+                                
+                                Text(key.signAlgo.id)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(Color.Theme.Text.text4)
+                            }
                         }
                     }
-
-                    Spacer()
-
-                    HStack(spacing: 16) {
-                        Divider()
-                        VStack(alignment: .leading) {
-                            Text("Sign__Algorithm::message".localized)
-                                .font(.inter(size: 14))
-                                .foregroundColor(Color.Theme.Text.text4)
-
-                            Text(WalletManager.shared.signatureAlgo.id)
-                                .font(.inter(size: 14))
-                                .foregroundColor(Color.Theme.Text.text4)
-                        }
-                    }
+                    .padding(.vertical, 10)
                 }
-                .padding(.vertical, 10)
             }
             .padding(.horizontal, 18)
             .padding(.top, 8)

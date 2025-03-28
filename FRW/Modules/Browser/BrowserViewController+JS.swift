@@ -173,7 +173,7 @@ extension BrowserViewController {
         if let nonce = response.body.nonce,
            !nonce.isEmpty,
            let proofSign = response.encodeAccountProof(address: address),
-           let sign = WalletManager.shared.signSync(signableData: proofSign) {
+           let sign = try? await WalletManager.shared.sign(signableData: proofSign) {
             accountProofSign = sign.hexValue
         }
         let keyIndex = WalletManager.shared.keyIndex
@@ -240,22 +240,24 @@ extension BrowserViewController {
     }
 
     func postSignMessageResponse(_ response: FCLSignMessageResponse) {
-        let keyIndex = WalletManager.shared.keyIndex
-        guard let address = WalletManager.shared.getPrimaryWalletAddress(),
-              let message = response.body?.message,
-              let js = FCLScripts.generateSignMessageResponse(
-                  message: message,
-                  address: address,
-                  keyId: keyIndex
-              )
-        else {
-            log.error("generate js failed")
-            return
+        Task {
+            let keyIndex = WalletManager.shared.keyIndex
+            guard let address = WalletManager.shared.getPrimaryWalletAddress(),
+                  let message = response.body?.message,
+                  let js = await FCLScripts.generateSignMessageResponse(
+                    message: message,
+                    address: address,
+                    keyId: keyIndex
+                  )
+            else {
+                log.error("generate js failed")
+                return
+            }
+            
+            log.debug("will post sign message response")
+            postMessage(js)
+            log.debug("did post sign message response")
         }
-
-        log.debug("will post sign message response")
-        postMessage(js)
-        log.debug("did post sign message response")
     }
 
     func postMessage(_ message: String) {

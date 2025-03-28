@@ -80,7 +80,7 @@ extension FlowNetwork {
     /// get avaiblabe account balance for all type: coa,flow,link
     static func getFlowBalanceForAnyAccount(address: [String]) async throws -> [String: Double?] {
         let list = address.map { Flow.Cadence.FValue.string($0) }
-        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [Flow.Cadence.FValue.array(list)])
+        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [.array(list)])
     }
 }
 

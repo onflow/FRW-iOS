@@ -237,28 +237,31 @@ extension TrustJSMessageHandler {
                     return
                 }
 
-                let address = Flow.Address(hex: addrStr)
-                guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
-                let joinData = Flow.DomainTag.user.normalize + hashedData
-                guard let sig = signWithMessage(data: joinData) else {
-                    HUD.error(title: "sign failed")
-                    return
+                Task {
+                    let address = Flow.Address(hex: addrStr)
+                    guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
+                    let joinData = Flow.DomainTag.user.normalize + hashedData
+                    guard let sig = try? await self.signWithMessage(data: joinData) else {
+                        HUD.error(title: "sign failed")
+                        return
+                    }
+                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let proof = COAOwnershipProof(
+                        keyIninces: [keyIndex],
+                        address: address.data,
+                        capabilityPath: "evm",
+                        signatures: [sig]
+                    )
+                    guard let encoded = RLP.encode(proof.rlpList) else {
+                        return
+                    }
+                    
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: encoded.hexString.addHexPrefix(),
+                        to: id
+                    )
                 }
-                let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                let proof = COAOwnershipProof(
-                    keyIninces: [keyIndex],
-                    address: address.data,
-                    capabilityPath: "evm",
-                    signatures: [sig]
-                )
-                guard let encoded = RLP.encode(proof.rlpList) else {
-                    return
-                }
-                webVC?.webView.tw.send(
-                    network: .ethereum,
-                    result: encoded.hexString.addHexPrefix(),
-                    to: id
-                )
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
             }
@@ -291,27 +294,30 @@ extension TrustJSMessageHandler {
                     HUD.error(title: "invalid_address".localized)
                     return
                 }
-                let address = Flow.Address(hex: addrStr)
-                let joinData = Flow.DomainTag.user.normalize + data
-                guard let sig = signWithMessage(data: joinData) else {
-                    HUD.error(title: "sign failed")
-                    return
+                
+                Task {
+                    let address = Flow.Address(hex: addrStr)
+                    let joinData = Flow.DomainTag.user.normalize + data
+                    guard let sig = try? await self.signWithMessage(data: joinData) else {
+                        HUD.error(title: "sign failed")
+                        return
+                    }
+                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let proof = COAOwnershipProof(
+                        keyIninces: [keyIndex],
+                        address: address.data,
+                        capabilityPath: "evm",
+                        signatures: [sig]
+                    )
+                    guard let encoded = RLP.encode(proof.rlpList) else {
+                        return
+                    }
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: encoded.hexString.addHexPrefix(),
+                        to: id
+                    )
                 }
-                let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                let proof = COAOwnershipProof(
-                    keyIninces: [keyIndex],
-                    address: address.data,
-                    capabilityPath: "evm",
-                    signatures: [sig]
-                )
-                guard let encoded = RLP.encode(proof.rlpList) else {
-                    return
-                }
-                webVC?.webView.tw.send(
-                    network: .ethereum,
-                    result: encoded.hexString.addHexPrefix(),
-                    to: id
-                )
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
             }
@@ -440,8 +446,8 @@ extension TrustJSMessageHandler {
         }
     }
 
-    private func signWithMessage(data: Data) -> Data? {
-        WalletManager.shared.signSync(signableData: data)
+    private func signWithMessage(data: Data) async throws -> Data? {
+        return try await WalletManager.shared.sign(signableData: data)
     }
 
     private func cancel(id: Int64) {

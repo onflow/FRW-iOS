@@ -406,7 +406,7 @@ extension WalletViewModel {
         guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
             return
         }
-        UserManager.shared.verifyUserType(by: "")
+        UserManager.shared.verifyUserType()
         if isReloading {
             return
         }

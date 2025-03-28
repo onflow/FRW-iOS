@@ -55,6 +55,7 @@ enum LLError: String, BaseError {
     case invalidCadence
     case signFailed
     case decodeFailed
+    case cannotFindFlowAccount
     case unknown
 
     var baseCode: Int { 1000 }
@@ -73,6 +74,10 @@ enum WalletError: String, BaseError {
     case securityVerifyFailed
     case collectionIsNil
     case noPrimaryWalletAddress
+    case emptyKeyProvider
+    case emptyAccountKey
+    case invalidMnemonic
+    case invaildPublicKey
 
     var baseCode: Int { 2000 }
 }
@@ -89,6 +94,7 @@ enum BackupError: String, BaseError {
     case fileIsNotExistOnCloud
     case cloudFileData
     case unauthorized
+    case invaildPublicKey
 
     var baseCode: Int { 3000 }
 }

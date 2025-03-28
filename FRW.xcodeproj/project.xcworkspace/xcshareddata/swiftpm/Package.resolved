@@ -140,8 +140,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/Flow-Wallet-Kit",
       "state" : {
-        "branch" : "master",
-        "revision" : "54624d35603b9b6106aae24a6a59aa0f7926d7f1"
+        "revision" : "0111a0e15e13b97ed2cccba1af2cfce7801454bd"
       }
     },
     {

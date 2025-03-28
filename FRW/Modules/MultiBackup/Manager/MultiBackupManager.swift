@@ -123,7 +123,7 @@ extension MultiBackupManager {
             throw BackupError.missingMnemonic
         }
 
-        guard let hdWallet = WalletManager.shared.createHDWallet(),
+        guard let hdWallet = HDWallet(strength: WalletManager.mnemonicStrength, passphrase: ""),
               let mnemonicData = hdWallet.mnemonic.data(using: .utf8)
         else {
             HUD.error(title: "empty_wallet_key".localized)
@@ -136,13 +136,16 @@ extension MultiBackupManager {
         guard let pinCode = SecurityManager.shared.currentPinCode.toPassword() else {
             throw BackupError.hexStringToDataFailed
         }
+        
+        guard let publicKey = hdWallet.getPublicKey(signAlgo: .ECDSA_P256)?.description else {
+            throw BackupError.invaildPublicKey
+        }
 
         let dataHexString = try encryptMnemonic(
             mnemonicData,
             password: type.needPin ? pinCode : password
         )
-        let publicKey = hdWallet.flowAccountP256Key.publicKey.description
-
+        
         let result = try await addKeyToFlow(key: publicKey)
         if !result {
             return false
@@ -734,10 +737,7 @@ extension MultiBackupManager {
                 password: key
             )
 
-            guard let hdWallet = WalletManager.shared.createHDWallet(mnemonic: mnemonic) else {
-                throw BackupError.missingMnemonic
-            }
-            self.hdWallet = hdWallet
+            self.hdWallet = HDWallet(mnemonic: mnemonic, passphrase: "")
         }
     }
 }
