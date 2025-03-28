@@ -803,9 +803,6 @@ extension WalletManager {
                 HUD.error(title: "no_private_key".localized)
             }
             reloadWallet()
-            if let hdWallet = hdWallet {
-                // TODO:
-            }
         }
     }
 
@@ -1205,6 +1202,8 @@ extension WalletManager: FlowSigner {
             )
             return signature
         }
+        
+        // Old logic
         if userSecretSign() {
             if let userId = walletInfo?.id {
                 let secureKey = try SecureEnclaveKey.wallet(id: userId)

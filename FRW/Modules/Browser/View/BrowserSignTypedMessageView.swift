@@ -47,7 +47,7 @@ struct BrowserSignTypedMessageView: View {
             actionView
         }
         .padding(18)
-        .background(Color.Theme.Background.bg2)
+        .backgroundFill(Color.Theme.BG.bg1)
     }
 
     var titleView: some View {
