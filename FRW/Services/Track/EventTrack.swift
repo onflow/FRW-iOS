@@ -21,7 +21,7 @@ class EventTrack {
         EventTrack.shared.registerAllSuper()
         EventTrack.shared.monitor()
         #if DEBUG
-        Mixpanel.mainInstance().loggingEnabled = true
+//        Mixpanel.mainInstance().loggingEnabled = true
         #endif
     }
 
@@ -33,7 +33,7 @@ class EventTrack {
         UserManager.shared.$activatedUID
             .receive(on: DispatchQueue.main)
             .map { $0 }
-            .sink { [weak self] userId in
+            .sink { [weak self] _ in
                 self?.switchUser()
             }.store(in: &cancellableSet)
 

@@ -50,7 +50,14 @@ struct EVMTransactionReceive: Codable {
         return value
     }
 
-    var gasValue: UInt64 {
+    var gasValue: BigUInt {
+        let defaultValue = BigUInt(WalletManager.defaultGas)
+        guard let gasStr = gas else { return defaultValue }
+        guard let value = BigUInt(gasStr.stripHexPrefix(), radix: 16) else { return defaultValue }
+        return value
+    }
+
+    var gasIntValue: UInt64 {
         let defaultValue: UInt64 = WalletManager.defaultGas
         guard let gasStr = gas else { return defaultValue }
         guard let value = UInt64(gasStr.stripHexPrefix(), radix: 16) else { return defaultValue }

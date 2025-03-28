@@ -64,15 +64,15 @@ enum JSONValue: Codable {
         switch self {
         case .null:
             try container.encodeNil()
-        case .bool(let value):
+        case let .bool(value):
             try container.encode(value)
-        case .number(let value):
+        case let .number(value):
             try container.encode(value)
-        case .string(let value):
+        case let .string(value):
             try container.encode(value)
-        case .array(let value):
+        case let .array(value):
             try container.encode(value)
-        case .object(let value):
+        case let .object(value):
             try container.encode(value)
         }
     }
@@ -155,6 +155,11 @@ extension JSONValue {
     var title: String {
         switch self {
         case let .object(dictionary):
+            if let value = dictionary["name"] {
+                if case let .string(name) = value {
+                    return name
+                }
+            }
             return dictionary.keys.first ?? ""
         default:
             return ""
@@ -164,12 +169,13 @@ extension JSONValue {
     var content: String {
         switch self {
         case let .object(dictionary):
+
             let subtitle = dictionary[title]
             switch subtitle {
             case .object:
                 return ""
             case let .array(model):
-                if case .object(_) = model.first {
+                if case .object = model.first {
                     return ""
                 }
                 return subtitle?.toString() ?? ""
@@ -190,7 +196,7 @@ extension JSONValue {
             switch subtitle {
             case let .array(model):
                 return true
-            case .object(_):
+            case .object:
                 return true
             default:
                 return false
@@ -211,9 +217,8 @@ extension JSONValue {
 }
 
 extension String {
-
     func uppercasedAllFirstLetter() -> String {
-        let words = self.components(separatedBy: " ")
+        let words = components(separatedBy: " ")
         let capitalizedWords = words.map { word in
             guard !word.isEmpty else { return word }
             return word.prefix(1).uppercased() + word.dropFirst()

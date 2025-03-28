@@ -117,7 +117,7 @@ class UserManager: ObservableObject {
                 let userInfo = info
                 if activatedUID != uid { return }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.userInfo = userInfo
                 }
 
@@ -379,7 +379,7 @@ extension UserManager {
 
         if Auth.auth().currentUser?.isAnonymous != true {
             try await Auth.auth().signInAnonymously()
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.activatedUID = nil
                 self.userInfo = nil
             }
@@ -398,7 +398,7 @@ extension UserManager {
             hdWallet: hdWallet,
             storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
         )
-        let secpPublicKey = try provider.publicKey(signAlgo: .ECDSA_SECP256k1)
+        let secpPublicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)
         guard var publicKey = secpPublicKey?.hexString else {
             throw WalletError.emptyPublicKey
         }

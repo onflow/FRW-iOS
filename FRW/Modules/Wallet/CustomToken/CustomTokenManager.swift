@@ -29,7 +29,7 @@ class CustomTokenManager: ObservableObject {
     }
 
     func isInWhite(token: CustomToken) -> Bool {
-        guard let support = WalletManager.shared.evmSupportedCoins else {
+        guard let support = WalletManager.shared.supportedCoins else {
             return true
         }
         let filterList = support.filter { model in
@@ -229,10 +229,10 @@ struct CustomToken: Codable {
         self.balance = balance
         self.flowIdentifier = flowIdentifier
 
-        self.userId = UserManager.shared.activatedUID ?? ""
-        self.belongAddress = WalletManager.shared
+        userId = UserManager.shared.activatedUID ?? ""
+        belongAddress = WalletManager.shared
             .getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
-        self.network = LocalUserDefaults.shared.flowNetwork
+        network = LocalUserDefaults.shared.flowNetwork
     }
 
     // MARK: Internal
@@ -240,7 +240,7 @@ struct CustomToken: Codable {
     enum Belong: Codable {
         case flow
         case evm
-        
+
         var tokenType: TokenModel.TokenType {
             return switch self {
             case .flow: .cadence
@@ -288,7 +288,9 @@ struct CustomToken: Codable {
             icon: nil,
             symbol: symbol,
             website: nil,
-            evmAddress: nil
+            evmAddress: nil,
+            balance: balance,
+            avaibleBalance: balance
         )
     }
 }

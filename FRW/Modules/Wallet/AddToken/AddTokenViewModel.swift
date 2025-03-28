@@ -46,7 +46,7 @@ class AddTokenViewModel: ObservableObject {
         self.selectCallback = selectCallback
 
         if selectCallback != nil {
-            self.mode = .selectToken
+            mode = .selectToken
         }
 
         WalletManager.shared.$activatedCoins.sink { _ in
@@ -243,7 +243,7 @@ extension AddTokenViewModel {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.confirmSheetIsPresented = false
                     let holder = TransactionManager.TransactionHolder(
@@ -254,8 +254,8 @@ extension AddTokenViewModel {
                     TransactionManager.shared.newTransaction(holder: holder)
                 }
             } catch {
-                debugPrint("AddTokenViewModel -> confirmActiveTokenAction error: \(error)")
-                DispatchQueue.main.async {
+                log.debug("AddTokenViewModel -> confirmActiveTokenAction error: \(error)")
+                await MainActor.run {
                     self.isRequesting = false
                 }
 

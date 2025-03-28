@@ -77,7 +77,7 @@ class CadenceManager {
             do {
                 let response: CadenceRemoteResponse = try await Network
                     .requestWithRawModel(FRWAPI.Cadence.list)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     // first call before
                     self.saveCache(response: response.data)
                     self.scripts = response.data.scripts
@@ -203,6 +203,7 @@ extension CadenceModel {
         let isTokenStorageEnabled: String?
         let revokeKey: String?
         let getAccountMinFlow: String?
+        let getFlowBalanceForAnyAccounts: String?
     }
 
     struct Account: Codable {
@@ -220,6 +221,8 @@ extension CadenceModel {
         let getNFTMetadataViews: String?
         let sendNbaNFTV3: String?
         let sendNFTV3: String?
+        /// 2.6+, replace checkNFTListEnabled
+        let getNFTBalanceStorage: String?
     }
 
     struct Contract: Codable {
@@ -244,7 +247,8 @@ extension CadenceModel {
 
         let isTokenListEnabled: String?
         let getTokenListBalance: String?
-        let isLinkedAccountTokenListEnabled: String?
+
+        let getTokenBalanceStorage: String?
     }
 
     struct HybridCustody: Codable {
@@ -333,7 +337,6 @@ extension CadenceModel {
     }
 
     struct NFT: Codable {
-        let checkNFTListEnabledNew: String?
         let checkNFTListEnabled: String?
     }
 
@@ -402,13 +405,13 @@ extension CadenceModel {
     }
 }
 
-extension String {
-    public func fromBase64() -> String? {
+public extension String {
+    func fromBase64() -> String? {
         guard let data = Data(base64Encoded: self) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
-    public func toFunc() -> String? {
+    func toFunc() -> String? {
         guard let decodeStr = fromBase64() else {
             log.error("[Cadence] base decode failed")
             return nil

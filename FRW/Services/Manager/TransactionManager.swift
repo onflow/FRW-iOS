@@ -123,7 +123,7 @@ extension TransactionManager {
             type: TransactionManager.TransactionType,
             data: Data = Data()
         ) {
-            self.transactionId = id
+            transactionId = id
             self.createTime = createTime
             self.type = type
             self.data = data
@@ -161,7 +161,8 @@ extension TransactionManager {
             switch type {
             case .transferCoin:
                 guard let model = decodedObject(CoinTransferModel.self),
-                      let token = WalletManager.shared.getToken(bySymbol: model.symbol) else {
+                      let token = WalletManager.shared.getToken(by: model.symbol)
+                else {
                     return nil
                 }
 
@@ -174,14 +175,16 @@ extension TransactionManager {
                 return decodedObject(NFTTransferModel.self)?.nft.logoUrl
             case .fclTransaction:
                 guard let model = decodedObject(AuthzTransaction.self),
-                      let urlString = model.url else {
+                      let urlString = model.url
+                else {
                     return nil
                 }
 
                 return urlString.toFavIcon()
             case .unlinkAccount:
                 guard let iconString = decodedObject(ChildAccount.self)?.icon,
-                      let url = URL(string: iconString) else {
+                      let url = URL(string: iconString)
+                else {
                     return nil
                 }
 
@@ -251,7 +254,7 @@ extension TransactionManager {
                                 fromId: self.transactionId.hex
                             )
                             debugPrint("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
-                            
+
                             switch result.errorCode {
                             case .storageCapacityExceeded:
                                 AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
@@ -281,7 +284,7 @@ extension TransactionManager {
             }
         }
 
-        private func trackResult(result: Flow.TransactionResult, fromId: String) {
+        private func trackResult(result: Flow.TransactionResult, fromId _: String) {
             EventTrack.Transaction
                 .transactionResult(
                     txId: transactionId.hex,
@@ -456,7 +459,8 @@ extension TransactionManager {
     func isTokenEnabling(symbol: String) -> Bool {
         for holder in holders {
             if holder.type == .addToken, let token = holder.decodedObject(TokenModel.self),
-               token.symbol == symbol {
+               token.symbol == symbol
+            {
                 return true
             }
         }
@@ -468,7 +472,8 @@ extension TransactionManager {
         for holder in holders {
             if holder.type == .addCollection,
                let collection = holder.decodedObject(NFTCollectionInfo.self),
-               collection.contractName == contractName {
+               collection.contractName == contractName
+            {
                 return true
             }
         }
@@ -479,7 +484,8 @@ extension TransactionManager {
     func isNFTTransfering(id: String) -> Bool {
         for holder in holders {
             if holder.type == .transferNFT, let model = holder.decodedObject(NFTTransferModel.self),
-               model.nft.id == id {
+               model.nft.id == id
+            {
                 return true
             }
         }

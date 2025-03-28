@@ -94,7 +94,7 @@ final class WalletViewModel: ObservableObject {
                 self?.updateMoveAsset()
             }.store(in: &cancelSets)
 
-        WalletManager.shared.$coinBalances
+        WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
@@ -265,15 +265,17 @@ final class WalletViewModel: ObservableObject {
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
         for token in WalletManager.shared.activatedCoins {
-            let summary = CoinRateCache.cache.getSummary(by: token.contractId)
-            let item = WalletCoinItemModel(
-                token: token,
-                balance: WalletManager.shared
-                    .getBalance(byId: token.contractId).doubleValue,
-                last: summary?.getLastRate() ?? 0,
-                changePercentage: summary?.getChangePercentage() ?? 0
-            )
-            list.append(item)
+            if token.hasBalance {
+                let summary = CoinRateCache.cache.getSummary(by: token.contractId)
+                let item = WalletCoinItemModel(
+                    token: token,
+                    balance: WalletManager.shared
+                        .getBalance(with: token).doubleValue,
+                    last: summary?.getLastRate() ?? 0,
+                    changePercentage: summary?.getChangePercentage() ?? 0
+                )
+                list.append(item)
+            }
         }
         list.sort { first, second in
             if first.balance * first.last == second.balance * second.last {
@@ -312,7 +314,7 @@ final class WalletViewModel: ObservableObject {
             return
         }
 
-        if WalletManager.shared.coinBalances.isEmpty {
+        if WalletManager.shared.activatedCoins.isEmpty {
             return
         }
 
@@ -334,7 +336,7 @@ final class WalletViewModel: ObservableObject {
 
         let result = WalletManager.shared.activatedCoins.filter { tokenModel in
             if !tokenModel.isFlowCoin {
-                return WalletManager.shared.getBalance(byId: tokenModel.contractId) > 0.0
+                return WalletManager.shared.getBalance(with: tokenModel).doubleValue > 0.0
             }
             return false
         }
@@ -431,7 +433,6 @@ extension WalletViewModel {
                 }
             } catch {
                 log.error("reload wallet data failed", context: error)
-                HUD.error(title: "fetch_wallet_error".localized)
                 await MainActor.run {
                     self.walletState = .error
                     self.isReloading = false
