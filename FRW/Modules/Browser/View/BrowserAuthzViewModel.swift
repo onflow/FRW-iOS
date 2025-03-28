@@ -153,10 +153,10 @@ final class BrowserAuthzViewModel: ObservableObject {
         guard !EVMAccountManager.shared.accounts.isEmpty else {
             return
         }
-        showEvmCard = true
         guard let address = address, let data = data else {
             return
         }
+        showEvmCard = true
         Task {
             do {
                 let response: DecodeResponse = try await Network

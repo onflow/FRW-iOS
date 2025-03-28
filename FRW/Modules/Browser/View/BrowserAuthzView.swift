@@ -264,7 +264,7 @@ struct BrowserAuthzView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 Text(attributeString())
                     .font(.inter(
-                        size: selection == .cadence ? 8 : 14,
+                        size: selection == .cadence ? 6 : 14,
                         weight: selection == .cadence ? .light : .regular
                     ))
                     .foregroundColor(Color(hex: "#B2B2B2"))
@@ -278,7 +278,6 @@ struct BrowserAuthzView: View {
         .padding(.horizontal, 18)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundFill(.Theme.Background.white)
         .transition(.move(edge: .trailing))
     }
 
@@ -322,6 +321,7 @@ struct BrowserAuthzView: View {
                 .font(.inter(size: 14))
                 .lineLimit(4)
                 .foregroundStyle(Color.Theme.Text.black8)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(16)
                 .background(Color.Theme.BG.bg1)
                 .cornerRadius(16)

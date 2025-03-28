@@ -72,6 +72,7 @@ enum WalletError: String, BaseError {
     case insufficientBalance
     case securityVerifyFailed
     case collectionIsNil
+    case noPrimaryWalletAddress
 
     var baseCode: Int { 2000 }
 }
