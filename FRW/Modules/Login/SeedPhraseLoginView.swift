@@ -28,8 +28,8 @@ struct SeedPhraseLoginView: RouteableView {
                         ImportTextView(
                             content: $viewModel.words,
                             placeholder: "seedphrase_hint".localized
-                        ) { _ in
-                            viewModel.updateState()
+                        ) { text in
+                            viewModel.updateWords(text)
                         }
                         .frame(height: 120)
 
@@ -113,6 +113,35 @@ struct SeedPhraseLoginView: RouteableView {
                 title: "import_btn_text".localized.lowercased()
                     .uppercasedFirstLetter()
             )
+            .padding(.bottom)
+
+            Spacer()
+
+            ScrollView(.horizontal, showsIndicators: false, content: {
+                LazyHStack(alignment: .center, spacing: 10, content: {
+                    Text("  ")
+                    ForEach(viewModel.suggestions, id: \.self) { word in
+
+                        Button {
+                            let last = viewModel.words.split(separator: " ").last ?? ""
+                            viewModel.words.removeLast(last.count)
+                            viewModel.words.append(word)
+                            viewModel.words.append(" ")
+
+                        } label: {
+                            Text(word)
+                                .foregroundColor(.LL.text)
+                                .font(.LL.subheadline)
+                                .padding(5)
+                                .padding(.horizontal, 5)
+                                .background(.LL.outline)
+                                .cornerRadius(10)
+                        }
+                    }
+                    Text("  ")
+                })
+            })
+            .frame(height: 30, alignment: .leading)
             .padding(.bottom)
         }
         .padding(.horizontal, 24)

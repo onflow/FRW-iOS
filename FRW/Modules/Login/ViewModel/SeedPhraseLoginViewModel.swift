@@ -30,6 +30,30 @@ final class SeedPhraseLoginViewModel: ObservableObject {
     @Published
     var isAdvanced: Bool = false
 
+    @Published var suggestions: [String] = []
+    @Published var hasError: Bool = false
+
+    func updateWords(_ text: String) {
+        let original = text.condenseWhitespace()
+        let words = original.split(separator: " ")
+        hasError = false
+        for word in words {
+            if Mnemonic.search(prefix: String(word)).isEmpty {
+                hasError = true
+                break
+            }
+        }
+
+        let valid = Mnemonic.isValid(mnemonic: original)
+
+        if text.last == " " || valid {
+            suggestions = []
+        } else {
+            suggestions = Mnemonic.search(prefix: String(words.last ?? ""))
+        }
+        updateState()
+    }
+
     func updateState() {
         if isAdvanced {
             buttonState = words.isEmpty || derivationPath.isEmpty ? .disabled : .enabled
@@ -112,9 +136,9 @@ final class SeedPhraseLoginViewModel: ObservableObject {
 
     func checkPublicKey() {
         let keys = account?.keys.filter {
-                $0.publicKey.description == p256PublicKey || $0.publicKey
-                    .description == secp256PublicKey
-            }
+            $0.publicKey.description == p256PublicKey || $0.publicKey
+                .description == secp256PublicKey
+        }
         guard let selectedKey = keys?.first,
               let address = account?.address.hex, let privateKey = providerKey
         else {

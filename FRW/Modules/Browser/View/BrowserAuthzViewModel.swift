@@ -56,6 +56,7 @@ final class BrowserAuthzViewModel: ObservableObject {
 
     deinit {
         callback?(false)
+        callback = nil
         WalletConnectManager.shared.reloadPendingRequests()
     }
 
