@@ -199,16 +199,16 @@ class FCLScripts {
           "type": "FCL:VIEW:RESPONSE"
         }
     """
-    
+
     private static let rejectResponse = """
-        {
-          "f_type": "PollingResponse",
-          "f_vsn": "1.0.0",
-          "status": "DECLINED",
-          "reason": "$REASON",
-          "type": "FCL:VIEW:RESPONSE"
-        }
-        """
+    {
+      "f_type": "PollingResponse",
+      "f_vsn": "1.0.0",
+      "status": "DECLINED",
+      "reason": "$REASON",
+      "type": "FCL:VIEW:RESPONSE"
+    }
+    """
 }
 
 extension FCLScripts {
@@ -325,7 +325,7 @@ extension FCLScripts {
         ]
         return FCLScripts.authzResponse.replace(from: dict)
     }
-    
+
     static func genertateRejectResponse(reason: String) -> String {
         return FCLScripts.rejectResponse.replace(from: [ReasonReplacement: reason])
     }
