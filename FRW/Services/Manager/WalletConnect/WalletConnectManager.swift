@@ -934,10 +934,13 @@ extension WalletConnectManager {
 
         Task {
             do {
+                let isEVM = EVMAccountManager.shared.selectedAccount != nil
+                let response: RPCResult = isEVM ? .error(.init(code: 400, message: reason)) : .response(AnyCodable(result))
+
                 try await Sign.instance.respond(
                     topic: request.topic,
                     requestId: request.id,
-                    response: .response(AnyCodable(result))
+                    response: response
                 )
                 HUD.success(title: "rejected".localized)
             } catch {
