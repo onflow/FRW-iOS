@@ -476,8 +476,10 @@ extension RouteMap.Profile: RouterTarget {
         case .accountSetting:
             navi.push(content: AccountSettingView())
         case let .accountDetail(childAccount):
-            let vm = ChildAccountDetailViewModel(childAccount: childAccount)
-            navi.push(content: ChildAccountDetailView(vm: vm))
+            DispatchQueue.main.async {
+                let vm = ChildAccountDetailViewModel(childAccount: childAccount)
+                navi.push(content: ChildAccountDetailView(vm: vm))
+            }
         case .switchProfile:
             let vc = PresentHostingController(rootView: AccountSwitchView())
             Router.topPresentedController().present(vc, animated: true, completion: nil)
