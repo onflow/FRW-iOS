@@ -25,26 +25,15 @@ class EVMAccountManager: ObservableObject {
                 }
             }.store(in: &cancelSets)
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$currentMainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { walletInfo in
                 if walletInfo != nil {
-//                    if !self.cacheLoaded {
-//                        self.loadCache()
-//                        return
-//                    }
-
                     self.refresh()
                 }
             }.store(in: &cancelSets)
-
-//        NotificationCenter.default.publisher(for: .networkChange)
-//            .receive(on: DispatchQueue.main)
-//            .sink { _ in
-//                self.clean()
-//            }.store(in: &cancelSets)
 
         NotificationCenter.default.addObserver(
             self,

@@ -11,22 +11,17 @@ import SwiftUI
 struct AccountSideCell: View {
     // MARK: Internal
 
-    enum Action {
-        case card
-        case arrow
-    }
-
     var address: String
     var currentAddress: String
     var name: String? = nil
     var logo: String? = nil
     var detail: String? = nil
-    var onClick: (String, AccountSideCell.Action) -> Void
+    var onClick: (String) -> Void
 
     var body: some View {
         Button {
             NotificationCenter.default.post(name: .toggleSideMenu)
-            onClick(address, .card)
+            onClick(address)
 
         } label: {
             HStack(spacing: 0) {

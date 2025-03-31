@@ -174,7 +174,7 @@ struct WalletHomeView: View {
                                 .frame(width: 28, height: 28)
                                 .cornerRadius(14)
                         } else {
-                            wm.currentAccount.emoji.icon(size: 24)
+                             wm.walletMetadata.emoji.icon(size: 24)
                         }
                     }
                     .frame(width: 40, height: 40)

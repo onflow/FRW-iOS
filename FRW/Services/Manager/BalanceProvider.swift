@@ -17,7 +17,7 @@ class BalanceProvider: ObservableObject {
     func refreshBalance() {
         Task {
             var list: [String] = []
-            if let primaryAddress = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() {
+            if let primaryAddress = WalletManager.shared.currentMainAccount?.address.hexAddr {
                 list.append(primaryAddress)
             }
             let child = ChildAccountManager.shared.childAccounts.compactMap { $0.addr }

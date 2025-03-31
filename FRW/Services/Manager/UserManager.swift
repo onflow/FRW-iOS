@@ -866,6 +866,12 @@ extension UserManager {
     }
 }
 
+extension UserManager.Accountkey {
+    func toFlowKey() -> Flow.AccountKey {
+        .init(index: index, publicKey: .init(hex: ""), signAlgo: signAlgo, hashAlgo: hashAlgo, weight: weight)
+    }
+}
+
 extension Flow.AccountKey {
     func toStoreKey() -> UserManager.Accountkey {
         UserManager.Accountkey(index: index, signAlgo: signAlgo, hashAlgo: hashAlgo, weight: weight)

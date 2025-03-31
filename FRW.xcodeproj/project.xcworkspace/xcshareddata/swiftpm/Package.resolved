@@ -1,5 +1,5 @@
 {
-  "originHash" : "c8cb155c6164a57781e81a0ac4fbdd7678b321957c60ca75133cd1f10f48d5a2",
+  "originHash" : "181839c9b0431d9c945d057821ec50f509fd07a316f211af13661aaa34e3db58",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -132,7 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "e766fa36c45b62537acac53b679ec7db948aeb22"
+        "revision" : "8c745c676c6063204ea05e4ec71bc04ccc6a87b1",
+        "version" : "0.4.1"
       }
     },
     {
@@ -140,7 +141,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/Flow-Wallet-Kit",
       "state" : {
-        "revision" : "0111a0e15e13b97ed2cccba1af2cfce7801454bd"
+        "revision" : "7eaec20d6373b3ba6b86b528eb5f01b13f3dcad2"
       }
     },
     {
@@ -466,15 +467,6 @@
       }
     },
     {
-      "identity" : "skeletonui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CSolanaM/SkeletonUI.git",
-      "state" : {
-        "revision" : "e3cf87cb96a10562bc660c9d48418a395d8385ed",
-        "version" : "1.0.11"
-      }
-    },
-    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit",
@@ -561,24 +553,6 @@
       "state" : {
         "revision" : "2b1980b825f08a81ccc762b0c4d17fcde9d5e953",
         "version" : "2.0.2"
-      }
-    },
-    {
-      "identity" : "swift-snapshot-testing",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
-      "state" : {
-        "revision" : "42a086182681cf661f5c47c9b7dc3931de18c6d7",
-        "version" : "1.17.6"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax",
-      "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
       }
     },
     {

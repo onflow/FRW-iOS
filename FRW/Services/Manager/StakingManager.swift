@@ -33,7 +33,7 @@ class StakingManager: ObservableObject {
                 self.refresh()
             }.store(in: &cancelSet)
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$currentMainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
@@ -158,7 +158,7 @@ class StakingManager: ObservableObject {
             }
 
             let isSetup = try await FlowNetwork.setupAccountStaking()
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.isSetup = isSetup
                 self.saveCache()
             }
@@ -246,7 +246,7 @@ extension StakingManager {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.apy = apy
                     self.saveCache()
                 }
@@ -266,21 +266,21 @@ extension StakingManager {
                         return
                     }
 
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         log.debug("queryStakingInfo success")
                         self.nodeInfos = response
                         self.saveCache()
                     }
                 } else {
                     log.debug("queryStakingInfo is empty")
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.nodeInfos = []
                         self.saveCache()
                     }
                 }
             } catch {
                 log.error("queryStakingInfo failed", context: error)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.nodeInfos = []
                     self.saveCache()
                 }
@@ -297,7 +297,7 @@ extension StakingManager {
             }
 
             debugPrint("StakingManager -> refreshDelegatorInfo success, \(response)")
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.delegatorIds = response
             }
         } else {
@@ -315,7 +315,7 @@ extension StakingManager {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isSetup = isSetup
                     self.saveCache()
                 }

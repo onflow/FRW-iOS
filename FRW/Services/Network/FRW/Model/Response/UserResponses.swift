@@ -42,21 +42,8 @@ struct UserInfoResponse: Codable {
 
 struct UserWalletResponse: Codable {
     let id: String
-//    let primaryWallet: Int
     let username: String?
     let wallets: [WalletResponse]?
-
-//    var primaryWalletModel: WalletResponse? {
-//        if let wallets = wallets {
-//            for wallet in wallets {
-//                if wallet.id == primaryWallet {
-//                    return wallet
-//                }
-//            }
-//        }
-//
-//        return nil
-//    }
 
     var currentNetworkWalletModel: WalletResponse? {
         wallets?

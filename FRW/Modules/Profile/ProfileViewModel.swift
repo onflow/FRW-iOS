@@ -65,7 +65,7 @@ extension ProfileView {
                     self.state.isPushEnabled = isEnabled
                 }.store(in: &cancelSets)
 
-            WalletManager.shared.$walletInfo
+            WalletManager.shared.$currentMainAccount
                 .receive(on: DispatchQueue.main)
                 .map { $0 }
                 .sink { [weak self] _ in

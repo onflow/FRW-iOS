@@ -52,7 +52,7 @@ class NFTUIKitListViewController: UIViewController {
             object: nil
         )
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$currentMainAccount
             .dropFirst()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
@@ -60,6 +60,7 @@ class NFTUIKitListViewController: UIViewController {
                 log.debug("[NFT] wallet info refresh triggerd a upload token action")
                 self.walletInfoDidChanged()
             }.store(in: &cancelSets)
+        
         EVMAccountManager.shared.$selectedAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)

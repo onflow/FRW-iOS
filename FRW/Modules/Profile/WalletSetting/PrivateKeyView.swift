@@ -84,7 +84,7 @@ struct PrivateKeyView: RouteableView {
                     }
                 }
 
-                if let key = WalletManager.shared.currenFlowAccount?.fullWeightKey {
+                if let key = WalletManager.shared.currentMainAccount?.fullWeightKey {
                     HStack {
                         HStack {
                             Divider()

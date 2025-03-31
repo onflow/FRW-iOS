@@ -79,14 +79,14 @@ final class WalletViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$currentMainAccount
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { [weak self] newInfo in
-                guard newInfo?.currentNetworkWalletModel?.getAddress != nil else {
-                    self?.walletState = .noAddress
-                    self?.balance = 0
-                    self?.coinItems = []
+                guard newInfo != nil else {
+//                    self?.walletState = .noAddress
+//                    self?.balance = 0
+//                    self?.coinItems = []
                     return
                 }
                 self?.refreshButtonState()
@@ -98,12 +98,6 @@ final class WalletViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
-            }.store(in: &cancelSets)
-
-        WalletConnectManager.shared.$pendingRequests
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.pendingRequestCount = WalletConnectManager.shared.pendingRequests.count
             }.store(in: &cancelSets)
 
         ThemeManager.shared.$style.sink { _ in
@@ -187,10 +181,10 @@ final class WalletViewModel: ObservableObject {
     var coinItems: [WalletCoinItemModel] = []
     @Published
     var walletState: WalletState = .noAddress
+
     @Published
     var transactionCount: Int = LocalUserDefaults.shared.transactionCount
-    @Published
-    var pendingRequestCount: Int = 0
+
     @Published
     var backupTipsPresent: Bool = false
 
@@ -353,28 +347,6 @@ final class WalletViewModel: ObservableObject {
         backupTipsShown = true
     }
 
-    private func reloadTransactionCount() {
-        Task {
-            do {
-                var count = try await FRWAPI.Account.fetchAccountTransferCount()
-                count += TransactionManager.shared.holders.count
-
-                if count < LocalUserDefaults.shared.transactionCount {
-                    return
-                }
-
-                let finalCount = count
-                DispatchQueue.main.async {
-                    LocalUserDefaults.shared.transactionCount = finalCount
-                }
-            } catch {
-                debugPrint(
-                    "WalletViewModel -> reloadTransactionCount, fetch transaction count failed: \(error)"
-                )
-            }
-        }
-    }
-
     @objc
     private func transactionCountDidChanged() {
         DispatchQueue.syncOnMain {
@@ -425,7 +397,6 @@ extension WalletViewModel {
         Task {
             do {
                 try await WalletManager.shared.fetchWalletDatas()
-                self.reloadTransactionCount()
 
                 await MainActor.run {
                     self.isMock = false

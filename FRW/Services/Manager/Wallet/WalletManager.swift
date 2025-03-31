@@ -16,6 +16,7 @@ import UIKit
 import WalletCore
 import Web3Core
 import web3swift
+import SwiftUI
 
 // MARK: - Define
 
@@ -65,14 +66,28 @@ class WalletManager: ObservableObject {
                 self.reloadWalletInfo()
             }.store(in: &cancellableSet)
         
-        walletEntity?.$accounts
+        // Add observation for walletEntity changes
+        $walletEntity
+            .compactMap { $0 }  // Filter out nil values
             .receive(on: DispatchQueue.main)
-            .map { $0 }
-            .sink { account in
-//                self.reloadWallet()
-//                self.reloadWalletInfo()
-                print(account?.values)
-            }.store(in: &cancellableSet)
+            .sink { [weak self] entity in
+                print("Wallet Entity Changed")
+                guard let self = self else { return }
+                
+                // Cancel existing subscription
+                self.accountsSubscription?.cancel()
+                
+                // Set up new observation for the entity's accounts
+                self.accountsSubscription = entity.$accounts
+                    .compactMap { $0 }
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] accounts in
+                        guard let self = self else { return }
+                        print("Wallet Entity Accounts Updated")
+                        self.loadRecentFlowAccount()
+                    }
+            }
+            .store(in: &cancellableSet)
     }
 
     // MARK: Internal
@@ -101,23 +116,43 @@ class WalletManager: ObservableObject {
             .synchronizable(false)
             .accessibility(.whenUnlocked)
 
-    var walletAccount: WalletAccount = .init()
+    var walletAccount = WalletAccount()
     
     @Published
     var balanceProvider = BalanceProvider()
+    
+    @Published
     var walletEntity: FlowWalletKit.Wallet?
-    var currenFlowAccount: FlowWalletKit.Account?
-    var accountKey: UserManager.Accountkey?
+    
+    @Published
+    var currentMainAccount: FlowWalletKit.Account?
+    
+    var currentNetworkAccounts: [FlowWalletKit.Account] {
+        walletEntity?.accounts?[currentNetwork.toFlowType()] ?? []
+    }
+    
+    @AppStorage(LocalUserDefaults.Keys.selectedAddress.rawValue)
+    var cachedSelectedAddress: String?
+    
+    var selectedAccount: FWAccount? {
+        get { .init(cachedSelectedAddress) }
+        set { cachedSelectedAddress = newValue?.value }
+    }
+    
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()
 
-    @Published
-    var walletInfo: UserWalletResponse?
-
-    var currentAccount: WalletAccount.User {
-        WalletManager.shared.walletAccount
-            .readInfo(at: getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "")
+//    @Published
+//    var walletInfo: UserWalletResponse?
+    
+//    var selectedAccount: WalletAccount.User {
+//        WalletManager.shared.walletAccount
+//            .readInfo(at: getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "")
+//    }
+    
+    var walletMetadata: WalletAccount.User {
+        walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
     }
 
     var defaultSigners: [FlowSigner] {
@@ -160,8 +195,6 @@ class WalletManager: ObservableObject {
                         try? await self.fetchWalletDatas()
                     }
                 }
-
-                // TODO: #six send changed?
             }
             .store(in: &cancellableSet)
     }
@@ -169,18 +202,14 @@ class WalletManager: ObservableObject {
     // MARK: Private
 
     private var childAccountInited: Bool = false
-
     private var walletInfoRetryTimer: Timer?
-    
     private var cancellableSet = Set<AnyCancellable>()
-
+    private var accountsSubscription: AnyCancellable?
     private var retryCheckCount = 1
-
     private var isShow: Bool = false
 
     private func loadCacheData() {
-        guard let uid = UserManager.shared.activatedUID else { return }
-        let cacheWalletInfo = MultiAccountStorage.shared.getWalletInfo(uid)
+//        guard let uid = UserManager.shared.activatedUID else { return }
 
         Task {
             let cacheSupportedCoins = try? await PageCache.cache.get(
@@ -193,8 +222,6 @@ class WalletManager: ObservableObject {
             )
 
             await MainActor.run {
-                self.walletInfo = cacheWalletInfo
-
                 if let cacheSupportedCoins = cacheSupportedCoins,
                    let cacheActivatedCoins = cacheActivatedCoins
                 {
@@ -217,25 +244,37 @@ extension WalletManager {
                 return
             }
             updateKeyProvider(provider: provider, storeUser: user)
-            
-            HUD.error(WalletError.emptyKeyProvider)
-            
             walletEntity = FlowWalletKit.Wallet(type: .key(provider))
             Task {
-                
                 do {
-                    try await walletEntity?.fetchAccount()
+                    try walletEntity?.loadCahe()
                 } catch {
-                    print("AAA===>", error)
-                    HUD.error(WalletError.emptyAccountKey)
+//                    print("AAA===>", error)
+//                    HUD.error(WalletError.emptyAccountKey)
+                    let _ = try await walletEntity?.fetchAllNetworkAccounts()
                 }
             }
+        }
+    }
+    
+    private func loadRecentFlowAccount() {
+        guard let accounts = walletEntity?.accounts else { return }
+        guard let accounts = accounts[currentNetwork.toFlowType()], let account = accounts.first else {
+            // TODO: Handle newtork swicth
+            return
+        }
+
+        currentMainAccount = account
+        
+        // If there is no selected
+        if selectedAccount == nil {
+            selectedAccount = .main(account.address)
         }
     }
 
     func updateKeyProvider(provider: any KeyProtocol, storeUser: UserManager.StoreUser) {
         keyProvider = provider
-        accountKey = storeUser.account
+//        accountKey = storeUser.account
     }
 
     func userStore(with uid: String) -> UserManager.StoreUser? {
@@ -303,60 +342,56 @@ extension WalletManager {
     }
 
     var selectedAccountWalletName: String {
-        if let childAccount = childAccount {
-            return "\(childAccount.aName) Wallet"
-        }
-
-        if let evmAccount = evmAccount {
-            return evmAccount.showName
-        }
-
-        if let walletInfo = walletInfo?.currentNetworkWalletModel {
-            return walletInfo.getName ?? "wallet".localized
-        }
+//        if let childAccount = childAccount {
+//            return "\(childAccount.aName) Wallet"
+//        }
+//
+//        if let evmAccount = evmAccount {
+//            return evmAccount.showName
+//        }
+//
+//        if let walletInfo = walletInfo?.currentNetworkWalletModel {
+//            return walletInfo.getName ?? "wallet".localized
+//        }
 
         return "wallet".localized
     }
 
     var selectedAccountAddress: String {
-        if let childAccount = childAccount {
-            return childAccount.addr ?? ""
+        return selectedAccount?.address.hexAddr ?? ""
+    }
+    
+    func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
+        guard let address = FWAddressDector.create(address: address) else {
+            HUD.error(WalletError.invaildAddress)
+            return
         }
-
-        if let evmAccount = evmAccount {
-            return evmAccount.showAddress
-        }
-
-        if let walletInfo = walletInfo?.currentNetworkWalletModel {
-            return walletInfo.getAddress ?? "0x"
-        }
-
-        return "0x"
+        selectedAccount = .init(type: type, addr: address)
     }
 
     func changeNetwork(_ type: FlowNetworkType) {
-        if LocalUserDefaults.shared.flowNetwork == type {
-            if isSelectedChildAccount {
-                ChildAccountManager.shared.select(nil)
-            }
-            if !isSelectedEVMAccount {
-                return
-            }
+        if currentNetwork == type {
+            return
         }
-
-        if isSelectedEVMAccount {
-            EVMAccountManager.shared.select(nil)
-        }
-
         LocalUserDefaults.shared.flowNetwork = type
         FlowNetwork.setup()
-        if getPrimaryWalletAddress() == nil {
-            WalletManager.shared.reloadWalletInfo()
-        } else {
-            walletInfo = walletInfo
-        }
-
         NotificationCenter.default.post(name: .networkChange)
+        
+//        if LocalUserDefaults.shared.flowNetwork == type {
+//            if isSelectedChildAccount {
+//                ChildAccountManager.shared.select(nil)
+//            }
+//            if !isSelectedEVMAccount {
+//                return
+//            }
+//        }
+//
+//        if isSelectedEVMAccount {
+//            EVMAccountManager.shared.select(nil)
+//        }
+//        if getPrimaryWalletAddress() == nil {
+//            WalletManager.shared.reloadWalletInfo()
+//        }
     }
 }
 
@@ -389,15 +424,15 @@ extension WalletManager {
 // MARK: - Reset
 
 extension WalletManager {
-    private func resetProperties() {
-        walletInfo = nil
-    }
+//    private func resetProperties() {
+//        walletInfo = nil
+//    }
 
     @objc
     private func reset() {
         debugPrint("WalletManager: reset start")
 
-        resetProperties()
+//        resetProperties()
 
         debugPrint("WalletManager: wallet info clear success")
 
@@ -416,7 +451,7 @@ extension WalletManager {
             return
         }
 
-        try mainKeychain.remove(getMnemonicStoreKey(uid: uid))
+//        try mainKeychain.remove(getMnemonicStoreKey(uid: uid))
     }
 }
 
@@ -431,23 +466,27 @@ extension WalletManager {
     }
 
     func getCurrentPublicKey() -> String? {
-        return currenFlowAccount?.fullWeightKey?.publicKey.hex
+        return currentMainAccount?.fullWeightKey?.publicKey.hex
     }
 
     func getCurrentPrivateKey() -> String? {
-        guard let signAlgo = accountKey?.signAlgo else {
+        guard let signAlgo = currentMainAccount?.fullWeightKey?.signAlgo else {
             return nil
         }
         return keyProvider?.privateKey(signAlgo: signAlgo)?.hexValue
     }
 
     func getPrimaryWalletAddress() -> String? {
-        return currenFlowAccount?.address.hexAddr
+        return currentMainAccount?.address.hexAddr
+    }
+    
+    func getAddress() -> String? {
+        return selectedAccount?.address.hexAddr
     }
 
     /// get custom watch address first, then primary address, this method is only used for tab2.
     func getPrimaryWalletAddressOrCustomWatchAddress() -> String? {
-        LocalUserDefaults.shared.customWatchAddress ?? getPrimaryWalletAddress()
+        LocalUserDefaults.shared.customWatchAddress ?? getAddress()
     }
 
     /// watch address -> child account address -> primary address
@@ -456,19 +495,7 @@ extension WalletManager {
             return customAddress
         }
 
-        if let childAccount = childAccount {
-            return childAccount.addr
-        }
-
-        if let evmAccount = evmAccount {
-            return evmAccount.showAddress
-        }
-
-        if let walletInfo = walletInfo?.currentNetworkWalletModel {
-            return walletInfo.getAddress
-        }
-
-        return nil
+        return getAddress()
     }
 
     func isTokenActivated(model: TokenModel) -> Bool {
@@ -567,36 +594,46 @@ extension WalletManager {
     func reloadWalletInfo() {
         log.debug("reloadWalletInfo")
         stopWalletInfoRetryTimer()
-        guard let uid = UserManager.shared.activatedUID else { return }
-
+        
         Task {
             do {
-                let response: UserWalletResponse = try await Network.request(FRWAPI.User.userWallet)
-
-                if UserManager.shared.activatedUID != uid { return }
-
-                await MainActor.run {
-                    self.walletInfo = response
-                    try? MultiAccountStorage.shared.saveWalletInfo(response, uid: uid)
-                    self.pollingWalletInfoIfNeeded()
-                }
+                let _ = try await walletEntity?.fetchAllNetworkAccounts()
+//                try? MultiAccountStorage.shared.saveWalletInfo(response, uid: uid)
+                self.pollingWalletInfoIfNeeded()
             } catch {
-                if UserManager.shared.activatedUID != uid { return }
-                log.error("reloadWalletInfo failed", context: error)
-
-                await MainActor.run {
-                    self.startWalletInfoRetryTimer()
-                }
+                self.startWalletInfoRetryTimer()
             }
         }
+        
+//        guard let uid = UserManager.shared.activatedUID else { return }
+//
+//        Task {
+//            do {
+//                let response: UserWalletResponse = try await Network.request(FRWAPI.User.userWallet)
+//
+//                if UserManager.shared.activatedUID != uid { return }
+//
+//                await MainActor.run {
+//                    self.walletInfo = response
+//                    try? MultiAccountStorage.shared.saveWalletInfo(response, uid: uid)
+//                    self.pollingWalletInfoIfNeeded()
+//                }
+//            } catch {
+//                if UserManager.shared.activatedUID != uid { return }
+//                log.error("reloadWalletInfo failed", context: error)
+//
+//                await MainActor.run {
+//                    self.startWalletInfoRetryTimer()
+//                }
+//            }
+//        }
     }
 
     /// polling wallet info, if wallet address is not exists
 
     private func pollingWalletInfoIfNeeded() {
         debugPrint("WalletManager -> pollingWalletInfoIfNeeded")
-        let isEmptyBlockChain = walletInfo?.currentNetworkWalletModel?.isEmptyBlockChain ?? true
-        if isEmptyBlockChain {
+        if currentNetworkAccounts.isEmpty {
             startWalletInfoRetryTimer()
 
             Task {
@@ -611,12 +648,13 @@ extension WalletManager {
                 }
             }
 
-        } else {
-            // is valid data, save to page cache
-            if let info = walletInfo {
-                PageCache.cache.set(value: info, forKey: CacheKeys.walletInfo.rawValue)
-            }
         }
+//        else {
+            // is valid data, save to page cache
+//            if let info = walletInfo {
+//                PageCache.cache.set(value: info, forKey: CacheKeys.walletInfo.rawValue)
+//            }
+//        }
     }
 }
 
@@ -627,9 +665,9 @@ extension WalletManager {
         "\(WalletManager.mnemonicStoreKeyPrefix).\(uid)"
     }
 
-    private func getEncryptedMnemonicData(uid: String) -> Data? {
-        getData(fromMainKeychain: getMnemonicStoreKey(uid: uid))
-    }
+//    private func getEncryptedMnemonicData(uid: String) -> Data? {
+//        getData(fromMainKeychain: getMnemonicStoreKey(uid: uid))
+//    }
 }
 
 // MARK: - Coins
@@ -775,30 +813,30 @@ extension WalletManager {
     }
 
     // MARK: -
-
-    private func set(toMainKeychain value: String, forKey key: String) throws {
-        try mainKeychain.set(value, key: key)
-    }
-
-    private func set(
-        toMainKeychain value: Data,
-        forKey key: String,
-        comment: String? = nil
-    ) throws {
-        if let comment = comment {
-            try mainKeychain.comment(comment).set(value, key: key)
-        } else {
-            try mainKeychain.set(value, key: key)
-        }
-    }
-
-    private func getString(fromMainKeychain key: String) -> String? {
-        try? mainKeychain.getString(key)
-    }
-
-    private func getData(fromMainKeychain key: String) -> Data? {
-        try? mainKeychain.getData(key)
-    }
+//
+//    private func set(toMainKeychain value: String, forKey key: String) throws {
+//        try mainKeychain.set(value, key: key)
+//    }
+//
+//    private func set(
+//        toMainKeychain value: Data,
+//        forKey key: String,
+//        comment: String? = nil
+//    ) throws {
+//        if let comment = comment {
+//            try mainKeychain.comment(comment).set(value, key: key)
+//        } else {
+//            try mainKeychain.set(value, key: key)
+//        }
+//    }
+    
+//    private func getString(fromMainKeychain key: String) -> String? {
+//        try? mainKeychain.getString(key)
+//    }
+//
+//    private func getData(fromMainKeychain key: String) -> Data? {
+//        try? mainKeychain.getData(key)
+//    }
 
     static func encryptionAES(
         key: String,
@@ -862,11 +900,11 @@ extension WalletManager {
 
 extension WalletManager: FlowSigner {
     var keyIndex: Int {
-        currenFlowAccount?.keyIndex ?? 0
+        currentMainAccount?.keyIndex ?? 0
     }
     
     public var address: Flow.Address {
-        currenFlowAccount?.address ?? .init(hex: "")
+        currentMainAccount?.address ?? .init(hex: "")
     }
 
     public func sign(transaction _: Flow.Transaction, signableData: Data) async throws -> Data {
@@ -884,7 +922,7 @@ extension WalletManager: FlowSigner {
             throw WalletError.emptyKeyProvider
         }
         
-        guard let key = accountKey else {
+        guard let key = currentMainAccount?.fullWeightKey else {
             throw WalletError.emptyAccountKey
         }
         
