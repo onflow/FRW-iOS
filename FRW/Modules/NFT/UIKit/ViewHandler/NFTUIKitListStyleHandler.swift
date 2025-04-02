@@ -333,7 +333,7 @@ extension NFTUIKitListStyleHandler {
             do {
                 try await dataModel.refreshCollectionAction()
                 try? await WalletManager.shared.accessibleManager.fetchNFT()
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.isInitRequested = true
 
@@ -350,7 +350,7 @@ extension NFTUIKitListStyleHandler {
 
             } catch {
                 log.debug("[NFT] \(error)")
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.isInitRequested = true
 
