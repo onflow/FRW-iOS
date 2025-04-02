@@ -72,6 +72,7 @@ enum WalletError: String, BaseError {
     case insufficientBalance
     case securityVerifyFailed
     case collectionIsNil
+    case noPrimaryWalletAddress
 
     var baseCode: Int { 2000 }
 }
@@ -157,6 +158,10 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
+    case argument
+    case contractNameIsEmpty
+    case tokenAddressEmpty
+    case storagePathEmpty
 
     var baseCode: Int { 9000 }
 }
@@ -173,11 +178,10 @@ enum MoveError: String, BaseError {
     var baseCode: Int { 10000 }
 }
 
-
 // MARK: - Errors
 
 enum TokenBalanceProviderError: String, BaseError {
     case collectionNotFound
-    
+
     var baseCode: Int { 11000 }
 }

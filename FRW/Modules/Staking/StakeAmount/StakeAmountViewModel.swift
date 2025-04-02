@@ -45,8 +45,8 @@ class StakeAmountViewModel: ObservableObject {
         self.isUnstake = isUnstake
 
         let token = WalletManager.shared.flowToken
-        self.balance = isUnstake ? (provider.currentNode?.stakingCount ?? 0) : WalletManager.shared
-            .getBalance(byId: token?.contractId ?? "").doubleValue
+        balance = isUnstake ? (provider.currentNode?.stakingCount ?? 0) : WalletManager.shared
+            .getBalance(with: token).doubleValue
     }
 
     // MARK: Internal
@@ -115,11 +115,6 @@ class StakeAmountViewModel: ObservableObject {
     private func refreshState() {
         if inputTextNum > balance {
             errorType = .insufficientBalance
-            return
-        }
-
-        if balance - inputTextNum < 0.001, !isUnstake {
-            errorType = .belowMinimumBalance
             return
         }
 

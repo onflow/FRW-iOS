@@ -32,12 +32,12 @@ final class BrowserAuthzViewModel: ObservableObject {
         callback: @escaping BrowserAuthnViewModel.Callback
     ) {
         self.title = title
-        self.urlString = url
+        urlString = url
         self.logo = logo
         self.cadence = cadence
         self.arguments = arguments
         self.callback = callback
-        self.callData = data
+        callData = data
 
         checkForInsufficientStorage()
         fetchEVMDecodeData(to: toAddress, data: data)
@@ -56,6 +56,7 @@ final class BrowserAuthzViewModel: ObservableObject {
 
     deinit {
         callback?(false)
+        callback = nil
         WalletConnectManager.shared.reloadPendingRequests()
     }
 
@@ -152,10 +153,10 @@ final class BrowserAuthzViewModel: ObservableObject {
         guard !EVMAccountManager.shared.accounts.isEmpty else {
             return
         }
-        showEvmCard = true
         guard let address = address, let data = data else {
             return
         }
+        showEvmCard = true
         Task {
             do {
                 let response: DecodeResponse = try await Network
@@ -163,26 +164,27 @@ final class BrowserAuthzViewModel: ObservableObject {
                         address,
                         data
                     ))
-                var tmp: [[FormItem]] = []
+                var tmp: [FormItem] = []
                 let isVerified = response.isVerified ?? false
 
-                if let topValue = response.decodedData?.allPossibilities {
-                    let topItem = FormItem(
-                        value: .object(["Contact": .string(response.name ?? "")]),
-                        isCheck: isVerified
+                let contactItem = FormItem(
+                    value: .object(["Contact": .string(response.name ?? "")]),
+                    isCheck: isVerified
+                )
+                tmp.append(contactItem)
+
+                if let funcName = response.funcName {
+                    let funcItem = FormItem(
+                        value: .object(["Function": .string(funcName)])
                     )
-                    switch topValue {
-                    case let .object(dictionary):
-                        let list = parseTopDic(item: dictionary, topItem: topItem)
-                        tmp.append(list)
-                    case let .array(array):
-                        let list = parseTopArray(items: array, topItem: topItem)
-                        tmp.append(contentsOf: list)
-                    default:
-                        break
-                    }
+                    tmp.append(funcItem)
                 }
-                let result = tmp
+                if let param = response.parameters {
+                    let parameters = FormItem(value: .object(["Parameters": param]))
+                    tmp.append(parameters)
+                }
+
+                let result = [tmp]
                 await MainActor.run {
                     withAnimation {
                         self.decodedDataList = result
@@ -241,11 +243,54 @@ extension BrowserAuthzViewModel {
     struct DecodeResponse: Codable {
         let name: String?
         let isVerified: Bool?
-        let abi: [String]?
         let decodedData: DecodeData?
+
+        var funcName: String? {
+            decodedData?.funcName()
+        }
+
+        var parameters: JSONValue? {
+            decodedData?.allPossibilities ?? decodedData?.filterParams()
+        }
     }
 
     struct DecodeData: Codable {
         let allPossibilities: JSONValue?
+
+        let name: String?
+        let params: JSONValue?
+
+        func funcName() -> String? {
+            if let name = name {
+                return name
+            }
+            if case let .array(list) = allPossibilities {
+                for item in list {
+                    if case let .object(dictionary) = item {
+                        if case let .string(name) = dictionary["function"] {
+                            return name
+                        }
+                    }
+                }
+            }
+            return nil
+        }
+
+        func filterParams() -> JSONValue? {
+            switch params {
+            case let .array(array):
+                var result: [JSONValue] = []
+                for item in array {
+                    if case let .object(dictionary) = item {
+                        if case let .string(name) = dictionary["name"], let value = dictionary["value"] {
+                            result.append(.object([name: value]))
+                        }
+                    }
+                }
+                return .array(result)
+            default:
+                return nil
+            }
+        }
     }
 }

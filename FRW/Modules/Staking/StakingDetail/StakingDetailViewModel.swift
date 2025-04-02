@@ -22,7 +22,8 @@ class StakingDetailViewModel: ObservableObject {
 
             DispatchQueue.main.async {
                 if let newNode = nodes
-                    .first(where: { $0.id == self.node.id && $0.nodeID == self.node.nodeID }) {
+                    .first(where: { $0.id == self.node.id && $0.nodeID == self.node.nodeID })
+                {
                     self.node = newNode
                 }
             }
@@ -37,8 +38,10 @@ class StakingDetailViewModel: ObservableObject {
     var node: StakingNode
 
     var availableAmount: Double {
-        let token = WalletManager.shared.flowToken
-        let balance = WalletManager.shared.getBalance(byId: token?.contractId ?? "")
+        guard let token = WalletManager.shared.flowToken else {
+            return 0
+        }
+        let balance = WalletManager.shared.getBalance(with: token)
         return balance.doubleValue
     }
 

@@ -203,7 +203,7 @@ final class MoveTokenViewModel: ObservableObject {
         }
     }
 
-    func handleFromContact(_ contact: Contact) {
+    func handleFromContact(_: Contact) {
         let model = MoveAccountsViewModel(
             selected: fromContact.address ?? ""
         ) { newContact in
@@ -214,7 +214,7 @@ final class MoveTokenViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.chooseChild(model))
     }
 
-    func handleToContact(_ contact: Contact) {
+    func handleToContact(_: Contact) {
         let model = MoveAccountsViewModel(
             selected: toContact.address ?? ""
         ) { newContact in
@@ -282,7 +282,8 @@ final class MoveTokenViewModel: ObservableObject {
         }
 
         if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil {
+            .selectedAccount != nil
+        {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             toContact = Contact(
                 address: primaryAddr,
@@ -340,7 +341,7 @@ final class MoveTokenViewModel: ObservableObject {
     }
 
     private func refreshTokenData() {
-        amountBalance = token.readableBalance ?? 0
+        amountBalance = token.showBalance ?? 0
         coinRate = CoinRateCache.cache
             .getSummary(by: token.contractId)?
             .getLastRate() ?? 0
@@ -361,18 +362,8 @@ final class MoveTokenViewModel: ObservableObject {
         guard isFromFlowToCoa() else {
             return max(inputAmount, 0)
         }
-        if minBalance == nil {
-            HUD.loading()
-            await fetchMinFlowBalance()
-            HUD.dismissLoading()
-        }
         // move fee
-        let num = max(
-            inputAmount - (
-                minBalance ?? WalletManager.minFlowBalance
-            ) - WalletManager.fixedMoveFee,
-            0
-        )
+        let num = max(inputAmount - WalletManager.fixedMoveFee, 0)
         return num
     }
 

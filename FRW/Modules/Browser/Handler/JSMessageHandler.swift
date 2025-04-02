@@ -133,7 +133,8 @@ extension JSMessageHandler {
                let jsonDict = try JSONSerialization.jsonObject(
                    with: msgData,
                    options: .mutableContainers
-               ) as? [String: AnyObject] {
+               ) as? [String: AnyObject]
+            {
                 if messageIsServce(jsonDict) {
                     log.debug("will handle service")
                     handleService(message)
@@ -221,7 +222,8 @@ extension JSMessageHandler {
                 finishService()
 
                 if let network = fcl.network,
-                   let toNetwork = FlowNetworkType(rawValue: network.lowercased()) {
+                   let toNetwork = FlowNetworkType(rawValue: network.lowercased())
+                {
                     Router.route(to: RouteMap.Explore.switchNetwork(current, toNetwork, nil))
                 }
 
@@ -293,6 +295,7 @@ extension JSMessageHandler {
                     self.didConfirmAuthn(response: authnResponse)
                 } else {
                     log.debug("handle authn cancelled")
+                    self.rejectRequest()
                 }
 
                 self.finishService()
@@ -398,6 +401,8 @@ extension JSMessageHandler {
 
                 if result {
                     self.webVC?.postSignMessageResponse(response)
+                } else {
+                    self.rejectRequest()
                 }
 
                 self.finishService()
@@ -433,6 +438,8 @@ extension JSMessageHandler {
                         voucher: authzResponse.body.voucher
                     )
                     self.didConfirmSignPayload(authzResponse)
+                } else {
+                    self.rejectRequest()
                 }
             }
 
@@ -459,8 +466,9 @@ extension JSMessageHandler {
             if result {
                 self.didConfirmSignPayload(authzResponse)
             } else {
-                self.finishService()
+                self.rejectRequest()
             }
+            self.finishService()
         }
 
         processingLinkAccountViewModel = vm
@@ -485,8 +493,10 @@ extension JSMessageHandler {
             if result {
                 self.didConfirmSignPayload(authzResponse)
             } else {
-                self.finishService()
+                self.rejectRequest()
             }
+
+            self.finishService()
         }
 
         Router.route(to: RouteMap.Explore.authz(vm))
@@ -502,6 +512,10 @@ extension JSMessageHandler {
                 HUD.error(title: "browser_request_failed".localized)
             }
         }
+    }
+
+    private func rejectRequest(reason: String = "User reject request") {
+        webVC?.rejectRspsonse(reason: reason)
     }
 
     private func signEnvelope(_ authzResponse: FCLAuthzResponse, url: URL?) {

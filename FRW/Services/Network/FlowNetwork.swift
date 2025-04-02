@@ -25,6 +25,7 @@ enum FlowNetwork {
 // MARK: - Token
 
 extension FlowNetwork {
+    // TODO: delete
     static func checkTokensEnable(address: Flow.Address) async throws -> [String: Bool] {
         try await fetch(
             by: \.ft?.isTokenListEnabled,
@@ -32,6 +33,7 @@ extension FlowNetwork {
         )
     }
 
+    // TODO: delete
     static func fetchBalance(at address: Flow.Address) async throws -> [String: Double] {
         try await fetch(
             by: \.ft?.getTokenListBalance,
@@ -69,17 +71,27 @@ extension FlowNetwork {
         )
         return result.doubleValue
     }
+
+    /// fetch all valid token and balance
+    static func fetchTokenBalance(address: Flow.Address) async throws -> [String: Double] {
+        try await fetch(by: \.ft?.getTokenBalanceStorage, arguments: [.address(address)])
+    }
+
+    /// get avaiblabe account balance for all type: coa,flow,link
+    static func getFlowBalanceForAnyAccount(address: [String]) async throws -> [String: Double?] {
+        let list = address.map { Flow.Cadence.FValue.string($0) }
+        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [Flow.Cadence.FValue.array(list)])
+    }
 }
 
 // MARK: - NFT
 
 extension FlowNetwork {
-    static func checkCollectionEnable(address: Flow.Address) async throws -> [String: Bool] {
-        let result: [String: Bool] = try await fetch(
-            by: \.nft?.checkNFTListEnabled,
+    static func checkCollectionEnable(address: Flow.Address) async throws -> [String: Int] {
+        try await fetch(
+            by: \.collection?.getNFTBalanceStorage,
             arguments: [.address(address)]
         )
-        return result
     }
 
     static func addCollection(
@@ -582,15 +594,6 @@ extension FlowNetwork {
         )
     }
 
-    static func linkedAccountEnabledTokenList(address: String) async throws -> [String: Bool] {
-        let cadence = CadenceManager.shared.current.ft?.isLinkedAccountTokenListEnabled?
-            .toFunc() ?? ""
-        return try await fetch(
-            by: \.ft?.isLinkedAccountTokenListEnabled,
-            arguments: [.address(Flow.Address(hex: address))]
-        )
-    }
-
     static func checkChildLinkedCollections(
         parent: String,
         child: String,
@@ -828,9 +831,11 @@ extension FlowNetwork {
             script: Flow.Script(text: cadenceStr),
             arguments: [.address(Flow.Address(hex: fromAddress))]
         ).decode(String.self)
+
         guard !response.isEmpty else {
             return nil
         }
+
         guard let checkSumAddress = EthereumAddress.toChecksumAddress(response) else {
             return response
         }
@@ -1208,7 +1213,7 @@ extension FlowNetwork {
                     error: CadenceError.empty.errorLog,
                     scriptId: funcName
                 )
-            log.error("[Cadence] empty script on \(funcName)")
+            log.error("[Cadence] empty script on \(funcName),version:\(CadenceManager.shared.version)")
             throw CadenceError.empty
         }
         let replacedCadence = cadence.replace(by: ScriptAddress.addressMap())
@@ -1285,7 +1290,7 @@ extension FlowNetwork {
             log.error("[Cadence] empty script on \(funcName)")
             throw CadenceError.empty
         }
-        let replacedCadence = token.formatCadence(cadence: cadence)
+        let replacedCadence = try token.formatCadence(cadence: cadence)
         log.info("[Cadence] transaction start on \(funcName)")
         return try await sendTransaction(
             funcName: funcName,

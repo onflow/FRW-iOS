@@ -21,7 +21,7 @@ final class MoveSingleNFTViewModel: ObservableObject {
         loadUserInfo()
 
         let accountViewModel = MoveAccountsViewModel(selected: "") { _ in }
-        self.accountCount = accountViewModel.list.count
+        accountCount = accountViewModel.list.count
         checkForInsufficientStorage()
     }
 
@@ -67,27 +67,27 @@ final class MoveSingleNFTViewModel: ObservableObject {
                 self.buttonState = .enabled
             }
         }
-        
+
         guard let nftId = UInt64(nft.response.id) else {
             HUD.error(title: "invalid data")
             return
         }
-        
+
         Task {
             await MainActor.run {
                 self.buttonState = .loading
             }
-            
+
             if fromContact.walletType == .link || toContact.walletType == .link {
                 await moveForLinkedAccount(nftId: nftId)
                 return
             }
-            
+
             guard let identifier = nft.collection?.flowIdentifier ?? nft.response.maskFlowIdentifier else {
                 HUD.error(MoveError.invalidateIdentifier)
                 return
             }
-            
+
             await moveForEVM(identifier: identifier, nftId: nftId)
         }
     }
@@ -157,7 +157,8 @@ final class MoveSingleNFTViewModel: ObservableObject {
         }
 
         if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil || fromChildAccount != nil {
+            .selectedAccount != nil || fromChildAccount != nil
+        {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             toContact = Contact(
                 address: primaryAddr,
@@ -231,27 +232,27 @@ final class MoveSingleNFTViewModel: ObservableObject {
             collection = NFTCatalogCache.cache
                 .find(by: nft.collectionName)?.collection
         }
-        
+
         guard let collection = collection else {
             HUD.error(MoveError.invalidateNftCollectionInfo)
             return
         }
-        
+
         guard let toAddress = toContact.address else {
             HUD.error(MoveError.invalidateToAddress)
             return
         }
-        
-        guard let fromAddress = toContact.address else {
+
+        guard let fromAddress = fromContact.address else {
             HUD.error(MoveError.invalidateFromAddress)
             return
         }
-        
+
         guard let identifier = nft.response.flowIdentifier ?? nft.publicIdentifier else {
             HUD.error(MoveError.invalidateIdentifier)
             return
         }
-        
+
         do {
             var tid: Flow.ID? = nil
             switch (fromContact.walletType, toContact.walletType) {
@@ -289,17 +290,17 @@ final class MoveSingleNFTViewModel: ObservableObject {
                     .bridgeChildNFTFromEvm(
                         nft: identifier,
                         id: nftId,
-                        child:toAddress
+                        child: toAddress
                     )
             default:
                 log.info("===")
             }
-            
+
             guard let tid else {
                 HUD.error(MoveError.failedToSubmitTransaction)
                 return
             }
-            
+
             let holder = TransactionManager.TransactionHolder(id: tid, type: .moveAsset)
             TransactionManager.shared.newTransaction(holder: holder)
             EventTrack.Transaction
@@ -326,9 +327,9 @@ final class MoveSingleNFTViewModel: ObservableObject {
 
 extension MoveSingleNFTViewModel: InsufficientStorageToastViewModel {
     var variant: InsufficientStorageFailure? { _insufficientStorageFailure }
-    
+
     private func checkForInsufficientStorage() {
-        self._insufficientStorageFailure = insufficientStorageCheckForMove(token: .nft(self.nft), from: self.fromContact.walletType, to: self.toContact.walletType)
+        _insufficientStorageFailure = insufficientStorageCheckForMove(token: .nft(nft), from: fromContact.walletType, to: toContact.walletType)
     }
 }
 

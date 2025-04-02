@@ -345,7 +345,8 @@ extension WalletConnectManager {
         }
 
         if pairings
-            .contains(where: { $0.topic == sessionProposal.pairingTopic }) {
+            .contains(where: { $0.topic == sessionProposal.pairingTopic })
+        {
             approveSession(proposal: sessionProposal)
             return
         }
@@ -413,7 +414,8 @@ extension WalletConnectManager {
                            nonce: nonce,
                            appIdentifier: appIdentifier
                        ),
-                       let signedData = try? await WalletManager.shared.sign(signableData: data) {
+                       let signedData = try? await WalletManager.shared.sign(signableData: data)
+                    {
                         services.append(accountProofServiceDefinition(
                             address: address,
                             keyId: keyId,
@@ -508,7 +510,8 @@ extension WalletConnectManager {
                 var model: Signable?
                 if let data = Data(base64Encoded: json),
                    data.isGzipped,
-                   let uncompressData = try? data.gunzipped() {
+                   let uncompressData = try? data.gunzipped()
+                {
                     model = try JSONDecoder().decode(Signable.self, from: uncompressData)
                 } else if let data = json.data(using: .utf8) {
                     model = try JSONDecoder().decode(Signable.self, from: data)
@@ -582,7 +585,8 @@ extension WalletConnectManager {
                 var model: SignableMessage?
                 if let data = Data(base64Encoded: json),
                    data.isGzipped,
-                   let uncompressData = try? data.gunzipped() {
+                   let uncompressData = try? data.gunzipped()
+                {
                     model = try JSONDecoder().decode(SignableMessage.self, from: uncompressData)
                 } else if let data = json.data(using: .utf8) {
                     model = try JSONDecoder().decode(SignableMessage.self, from: data)
@@ -708,7 +712,7 @@ extension WalletConnectManager {
                     }
                 }
             } cancel: {
-                log.error("[EVM] Request cancel: [sendTransaction]")
+                log.info("[EVM] Request cancel: [sendTransaction]")
                 self.rejectRequest(request: sessionRequest)
             }
         case WalletConnectEVMMethod.signTypedData.rawValue:
@@ -930,10 +934,13 @@ extension WalletConnectManager {
 
         Task {
             do {
+                let isEVM = EVMAccountManager.shared.selectedAccount != nil
+                let response: RPCResult = isEVM ? .error(.init(code: 400, message: reason)) : .response(AnyCodable(result))
+
                 try await Sign.instance.respond(
                     topic: request.topic,
                     requestId: request.id,
-                    response: .response(AnyCodable(result))
+                    response: response
                 )
                 HUD.success(title: "rejected".localized)
             } catch {

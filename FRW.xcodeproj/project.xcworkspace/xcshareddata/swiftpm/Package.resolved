@@ -132,7 +132,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "e766fa36c45b62537acac53b679ec7db948aeb22"
+        "revision" : "880d9c44af7ba42181954c7288c7f3ef235458dc"
       }
     },
     {
@@ -650,8 +650,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/trust-web3-provider",
       "state" : {
-        "branch" : "old",
-        "revision" : "b3c37b53ebb677e3622ce3c1c2023ec9ed8d16c8"
+        "revision" : "0d58818bae73d6996b6a8caae15dc2e5a0ff88f8"
       }
     },
     {
