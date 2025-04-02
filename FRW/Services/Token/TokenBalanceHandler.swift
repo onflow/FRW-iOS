@@ -12,6 +12,8 @@ import Web3Core
 class TokenBalanceHandler {
     // MARK: Lifecycle
 
+    // ADD: Thread-safe queue for cache access
+    private let cacheQueue = DispatchQueue(label: "com.outblock.frw.tokenbalance.cache", attributes: .concurrent)
     private var cache: [String: TokenBalanceProvider] = [:]
     private init() {}
 
@@ -134,7 +136,6 @@ class TokenBalanceHandler {
     }
 
     func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
-
         let provider = generateProvider(address: address, network: network)
         return try await provider.getAllNFTsUnderCollection(
             address: address,
@@ -153,20 +154,35 @@ extension TokenBalanceHandler {
         ignoreCache: Bool = false
     ) -> TokenBalanceProvider {
         if ignoreCache {
-            cache[address.cacheKey] = nil
+            cacheQueue.async(flags: .barrier) {
+                self.cache[address.cacheKey] = nil
+            }
         }
-        if let provider = cache[address.cacheKey] {
-            return provider
+
+        // Read access to cache
+        var provider: TokenBalanceProvider?
+        cacheQueue.sync {
+            provider = cache[address.cacheKey]
         }
-        let provider: TokenBalanceProvider
+
+        if let existingProvider = provider {
+            return existingProvider
+        }
+
+        let newProvider: TokenBalanceProvider
         switch address.type {
         case .cadence:
-            provider = CadenceTokenBalanceProvider(network: network)
+            newProvider = CadenceTokenBalanceProvider(network: network)
         case .evm:
-            provider = EVMTokenBalanceProvider(network: network)
+            newProvider = EVMTokenBalanceProvider(network: network)
         }
-        cache[address.cacheKey] = provider
-        return provider
+
+        // Write access to cache
+        cacheQueue.async(flags: .barrier) {
+            self.cache[address.cacheKey] = newProvider
+        }
+
+        return newProvider
     }
 }
 
