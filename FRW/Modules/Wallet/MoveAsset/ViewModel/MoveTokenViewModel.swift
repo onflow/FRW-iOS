@@ -19,11 +19,6 @@ final class MoveTokenViewModel: ObservableObject {
         _isPresent = isPresent
         loadUserInfo()
         refreshTokenData()
-        Task {
-            await fetchMinFlowBalance()
-            await updateTokenModel()
-        }
-
         checkForInsufficientStorage()
     }
 
@@ -117,19 +112,18 @@ final class MoveTokenViewModel: ObservableObject {
             }
             let tokens = try await TokenBalanceHandler.shared.getFTBalance(address: address)
             let tokenId = token.getId(by: address.type.toTokenType())
-            var selectedToken: TokenModel = token
+            let selectedToken: TokenModel
             if let target = tokens.first(where: { $0.id == tokenId }) {
                 selectedToken = target
+            } else if let flowToken = tokens.first(where: { $0.isFlowCoin }) {
+                selectedToken = flowToken
             } else {
-                // Fallback to flow token
-                if let flowToken = tokens.first(where: { $0.isFlowCoin }) {
-                    selectedToken = flowToken
-                }
+                selectedToken = token
             }
 
             await MainActor.run {
-                self.loadingBalance = false
                 self.changeTokenModelAction(token: selectedToken)
+                self.loadingBalance = false
             }
 
         } catch {
@@ -150,14 +144,15 @@ final class MoveTokenViewModel: ObservableObject {
             actualBalance = Decimal(
                 string: showBalance
             ) // showBalance.doubleValue
+            maxButtonClickedOnce = false
+            return
         }
-        maxButtonClickedOnce = false
+
         refreshSummary()
         updateState()
     }
 
     func refreshSummary() {
-        log.info("[refreshSummary]")
         if showBalance.isEmpty {
             inputTokenNum = 0
             inputDollarNum = 0.0
@@ -192,15 +187,11 @@ final class MoveTokenViewModel: ObservableObject {
 
     func maxAction() {
         maxButtonClickedOnce = true
-        Task {
-            let num = await updateAmountIfNeed(inputAmount: amountBalance)
-            await MainActor.run {
-                self.showBalance = num.doubleValue.formatCurrencyString()
-                self.actualBalance = num
-                self.refreshSummary()
-                self.updateState()
-            }
-        }
+        let num = updateAmountIfNeed(inputAmount: amountBalance)
+        showBalance = num.doubleValue.formatCurrencyString()
+        actualBalance = num
+        refreshSummary()
+        updateState()
     }
 
     func handleFromContact(_: Contact) {
@@ -233,7 +224,6 @@ final class MoveTokenViewModel: ObservableObject {
 
     // MARK: Private
 
-    private var minBalance: Decimal? = nil
     private var maxButtonClickedOnce = false
     private var _insufficientStorageFailure: InsufficientStorageFailure?
 
@@ -323,15 +313,6 @@ final class MoveTokenViewModel: ObservableObject {
         }
     }
 
-    private func fetchMinFlowBalance() async {
-        do {
-            minBalance = try await FlowNetwork.minFlowBalance().decimalValue
-            log.debug("[Flow] min balance:\(minBalance ?? 0.001)")
-        } catch {
-            minBalance = 0.001
-        }
-    }
-
     private func updateBalance(_ text: String) {
         guard !text.isEmpty else {
             showBalance = ""
@@ -358,10 +339,7 @@ final class MoveTokenViewModel: ObservableObject {
         return false
     }
 
-    private func updateAmountIfNeed(inputAmount: Decimal) async -> Decimal {
-        guard isFromFlowToCoa() else {
-            return max(inputAmount, 0)
-        }
+    private func updateAmountIfNeed(inputAmount: Decimal) -> Decimal {
         // move fee
         let num = max(inputAmount - WalletManager.fixedMoveFee, 0)
         return num
@@ -533,9 +511,7 @@ extension MoveTokenViewModel {
         Task {
             do {
                 log.info("[EVM] fund Coa balance")
-                let maxAmount = await updateAmountIfNeed(
-                    inputAmount: amountBalance
-                )
+                let maxAmount = updateAmountIfNeed(inputAmount: amountBalance)
                 guard maxAmount >= self.inputTokenNum else {
                     HUD.error(title: "Insufficient_balance::message".localized)
                     return
