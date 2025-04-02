@@ -362,11 +362,6 @@ final class MoveTokenViewModel: ObservableObject {
         guard isFromFlowToCoa() else {
             return max(inputAmount, 0)
         }
-        if minBalance == nil {
-            HUD.loading()
-            await fetchMinFlowBalance()
-            HUD.dismissLoading()
-        }
         // move fee
         let num = max(inputAmount - WalletManager.fixedMoveFee, 0)
         return num
