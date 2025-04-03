@@ -60,7 +60,7 @@ class NFTUIKitFavItemCell: UICollectionViewCell {
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         view.layer.cornerRadius = 8
-        view.backgroundColor = UIColor.LL.Neutrals.background
+        view.backgroundColor = UIColor.Theme.BG.bg1
         return view
     }()
 

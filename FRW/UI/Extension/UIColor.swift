@@ -170,6 +170,10 @@ extension UIColor {
             static let black8 = UIColor(named: "text.black.8")
             static let white9 = UIColor(named: "text.white.9")
         }
+        
+        enum BG {
+            static let bg1 = UIColor(named: "bg1")
+        }
 
         static let evm = UIColor(named: "evm")
     }

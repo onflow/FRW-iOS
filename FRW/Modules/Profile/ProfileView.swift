@@ -78,6 +78,12 @@ struct ProfileView: RouteableView {
         .environmentObject(userManager)
         .applyRouteable(self)
     }
+    
+    @ViewBuilder
+    static private var divider: some View {
+        Divider()
+            .background(Color.Theme.BorderLine.line)
+    }
 
     // MARK: Private
 
@@ -318,7 +324,7 @@ extension ProfileView {
                                 desc: Row.linkedAccount.desc
                             )
                         }
-                        Divider().background(Color.LL.Neutrals.background)
+                        ProfileView.divider
 
                         Button {
                             if !isDevModel && LocalUserDefaults.shared.flowNetwork != .mainnet {
@@ -345,7 +351,7 @@ extension ProfileView {
                             Text("wrong_network_des".localized)
                         }
 
-                        Divider().background(Color.LL.Neutrals.background)
+                        ProfileView.divider
                     }
 
                     Button {
@@ -401,7 +407,7 @@ extension ProfileView {
                         }
                         .buttonStyle(ScaleButtonStyle())
 
-                        Divider().background(Color.LL.Neutrals.background)
+                        ProfileView.divider
                     }
 
                     Button {
@@ -600,7 +606,7 @@ extension ProfileView {
                         }
 
                         if row != .theme {
-                            Divider().background(Color.LL.Neutrals.background)
+                            ProfileView.divider
                         }
                     }
                 }
@@ -752,7 +758,7 @@ extension ProfileView {
                         )
                     }
 
-                    Divider().background(Color.LL.Neutrals.background)
+                    ProfileView.divider
 
                     Button {
                         UIApplication.shared
@@ -773,7 +779,7 @@ extension ProfileView {
                         )
                     }
 
-                    Divider().background(Color.LL.Neutrals.background)
+                    ProfileView.divider
 
                     Button {
                         Router.route(to: RouteMap.Profile.about)
@@ -1001,7 +1007,6 @@ extension ProfileView {
             .frame(height: 64)
             .padding(.horizontal, 16)
             .contentShape(Rectangle())
-            .backgroundFill(Color.Theme.Background.white)
         }
     }
 

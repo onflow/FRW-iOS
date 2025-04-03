@@ -287,6 +287,11 @@ extension Color {
         enum Fill {
             static let fill1 = Color("fill.fill1")
         }
+        
+        enum BorderLine {
+            static let line = Color("borderline/line")
+            static let stroke = Color("borderline/stroke")
+        }
 
         static let evm = Color("evm")
     }
