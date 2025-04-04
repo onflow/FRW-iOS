@@ -16,7 +16,6 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
         self.network = network
-        // TODO: Add token list cache
     }
 
     // MARK: Internal

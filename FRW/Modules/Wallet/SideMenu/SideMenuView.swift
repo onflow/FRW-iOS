@@ -151,15 +151,14 @@ struct SideMenuView: View {
         VStack(spacing: 0) {
             Section {
                 VStack(spacing: 0) {
-                    AccountSideCell(
-                        address: WalletManager.shared.getPrimaryWalletAddress() ?? "",
-                        currentAddress: vm.currentAddress,
-                        detail: vm.balanceValue(at: WalletManager.shared.getPrimaryWalletAddress() ?? "")
-                    ) { address in
-                        WalletManager.shared.changeSelectedAccount(address: address, type: .main)
-                            vm.switchProfile()
-                            WalletManager.shared
-                                .changeNetwork(LocalUserDefaults.shared.flowNetwork)
+                    ForEach(wm.currentNetworkAccounts, id: \.address) { account in
+                        AccountSideCell(
+                            address: account.address.hexAddr,
+                            currentAddress: wm.selectedAccountAddress,
+                            detail: vm.balanceValue(at: account.address.hex)
+                        ) { address in
+                            WalletManager.shared.changeSelectedAccount(address: address, type: .main)
+                        }
                     }
                 }
                 .cornerRadius(12)
@@ -179,34 +178,27 @@ struct SideMenuView: View {
 
             Section {
                 VStack(spacing: 0) {
-                    ForEach(evmManager.accounts, id: \.address) { account in
-                        let address = account.showAddress
+                    if let coa = wm.coa {
                         AccountSideCell(
-                            address: address,
+                            address: coa.address,
                             currentAddress: vm.currentAddress,
-                            detail: vm.balanceValue(at: address)
+                            detail: vm.balanceValue(at: coa.address)
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
-                            vm.switchProfile()
-                            ChildAccountManager.shared.select(nil)
-                            EVMAccountManager.shared.select(account)
                         }
                     }
 
-                    ForEach(cm.childAccounts, id: \.addr) { childAccount in
-                        if let address = childAccount.addr {
-                            AccountSideCell(
-                                address: address,
-                                currentAddress: vm.currentAddress,
-                                name: childAccount.aName,
-                                logo: childAccount.icon,
-                                detail: vm.balanceValue(at: address)
-                            ) { address in
-                                WalletManager.shared.changeSelectedAccount(address: address, type: .child)
-                                vm.switchProfile()
-                                EVMAccountManager.shared.select(nil)
-                                ChildAccountManager.shared.select(childAccount)
-                            }
+                    if let childs = wm.childs, !childs.isEmpty {
+                        ForEach(childs, id: \.address) { child in
+                                AccountSideCell(
+                                    address: child.address.hex,
+                                    currentAddress: vm.currentAddress,
+                                    name: child.name,
+                                    logo: child.icon?.absoluteString,
+                                    detail: vm.balanceValue(at: child.address.hex)
+                                ) { address in
+                                    WalletManager.shared.changeSelectedAccount(address: address, type: .child)
+                                }
                         }
                     }
                 }

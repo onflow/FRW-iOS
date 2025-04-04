@@ -79,19 +79,14 @@ final class WalletViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        WalletManager.shared.$currentMainAccount
+        WalletManager.shared.$selectedAccount
             .receive(on: DispatchQueue.main)
-            .map { $0 }
+            .compactMap { $0 }
             .sink { [weak self] newInfo in
-                guard newInfo != nil else {
-//                    self?.walletState = .noAddress
-//                    self?.balance = 0
-//                    self?.coinItems = []
-                    return
-                }
                 self?.refreshButtonState()
                 self?.reloadWalletData()
                 self?.updateMoveAsset()
+                self?.refreshCoinItems()
             }.store(in: &cancelSets)
 
         WalletManager.shared.$activatedCoins
@@ -263,8 +258,7 @@ final class WalletViewModel: ObservableObject {
                 let summary = CoinRateCache.cache.getSummary(by: token.contractId)
                 let item = WalletCoinItemModel(
                     token: token,
-                    balance: WalletManager.shared
-                        .getBalance(with: token).doubleValue,
+                    balance: WalletManager.shared.getBalance(with: token).doubleValue,
                     last: summary?.getLastRate() ?? 0,
                     changePercentage: summary?.getChangePercentage() ?? 0
                 )
@@ -279,7 +273,6 @@ final class WalletViewModel: ObservableObject {
             }
         }
         coinItems = list
-
         refreshTotalBalance()
 
         // Disable this backup tip for now, cause it show sometime incorrect
@@ -475,52 +468,30 @@ extension WalletViewModel {
 
 extension WalletViewModel {
     func refreshButtonState() {
-        let canAddToken = ChildAccountManager.shared
-            .selectedChildAccount == nil // && EVMAccountManager.shared.selectedAccount == nil
-        if canAddToken {
-            showAddTokenButton = true
-        } else {
-            showAddTokenButton = false
-        }
-
-        let isChild = ChildAccountManager.shared.selectedChildAccount != nil
-        let isNotPrimary = ChildAccountManager.shared
-            .selectedChildAccount != nil || EVMAccountManager.shared.selectedAccount != nil
+        let isChild = WalletManager.shared.selectedAccount?.type == .child
+        showAddTokenButton = !isChild
+        
         // Swap
-        if (RemoteConfigManager.shared.config?.features.swap ?? false) == true {
-            // don't show when current is Linked account
-            if isChild {
-                showSwapButton = false
-            } else {
-                showSwapButton = true
-            }
-        } else {
-            showSwapButton = false
-        }
+        let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
+        showSwapButton = swapFlag ? !isChild : false
 
+        
+        let isMainAccount = WalletManager.shared.selectedAccount?.type != .main
+        
         // Stake
-        if currentNetwork.isMainnet {
-            if isNotPrimary {
-                showStakeButton = false
-            } else {
-                showStakeButton = true
-            }
-        } else {
-            showStakeButton = false
-        }
+        showStakeButton = currentNetwork.isMainnet ? isMainAccount : false
 
+        
         showHorLayout = (showSwapButton == false && showStakeButton == false)
 
         // buy
-        if RemoteConfigManager.shared.config?.features.onRamp ?? false == true,
-           flow.chainID == .mainnet
-        {
-            if isNotPrimary {
+        let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false
+        if bugFlag && flow.chainID == .mainnet {
+            if isMainAccount {
                 showBuyButton = false
             } else {
                 showBuyButton = true
             }
-
         } else {
             showBuyButton = false
         }

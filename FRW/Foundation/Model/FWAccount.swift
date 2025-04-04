@@ -9,11 +9,21 @@ import Foundation
 import Flow
 import Web3Core
 
-enum FWAccount {
+enum FWAccount: RawRepresentable, Codable {
     case main(Flow.Address)
     case child(Flow.Address)
     case coa(EthereumAddress)
   
+    // MARK: - RawRepresentable
+    
+    init?(rawValue: String) {
+        self.init(rawValue)
+    }
+    
+    var rawValue: String {
+        value
+    }
+    
     enum AccountType: String, Codable {
         case main
         case child
@@ -94,5 +104,29 @@ enum FWAccount {
     
     var addressHex: String {
         return address.hexAddr
+    }
+    
+    // MARK: - Codable
+    
+    enum CodingKeys: String, CodingKey {
+        case type, address
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        try container.encode(addressHex, forKey: .address)
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(AccountType.self, forKey: .type)
+        let address = try container.decode(String.self, forKey: .address)
+        
+        guard let addr = FWAddressDector.create(address: address) else {
+            throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "Invalid address"))
+        }
+        
+        self.init(type: type, addr: addr)!
     }
 }

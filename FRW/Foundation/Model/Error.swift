@@ -79,6 +79,9 @@ enum WalletError: String, BaseError {
     case invalidMnemonic
     case invaildPublicKey
     case invaildAddress
+    case fetchLinkedAccountsFailed
+    case emptyAddress
+    case emptyScript
 
     var baseCode: Int { 2000 }
 }
