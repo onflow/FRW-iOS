@@ -241,6 +241,12 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 }
 
+extension TokenModel: Equatable {
+    static func == (lhs: TokenModel, rhs: TokenModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
 extension TokenModel {
     func evmBridgeAddress() -> String? {
         guard let addr = flowIdentifier?.split(separator: ".")[1] else {

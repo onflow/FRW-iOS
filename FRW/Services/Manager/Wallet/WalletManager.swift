@@ -68,7 +68,7 @@ class WalletManager: ObservableObject {
     var supportedCoins: [TokenModel]?
     
     @Published
-    var activatedCoins: [TokenModel] = []
+    private(set) var activatedCoins: [TokenModel] = []
 
     @Published
     var childAccount: ChildAccount? = nil
@@ -149,7 +149,6 @@ class WalletManager: ObservableObject {
                 self.reloadWalletInfo()
             }.store(in: &cancellableSet)
         
-        
         $walletEntity
             .compactMap { $0 }
             .flatMap { entity in
@@ -157,45 +156,13 @@ class WalletManager: ObservableObject {
                     .compactMap { $0 }
             }
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] accounts in
                 print("Wallet Entity Accounts Updated")
                 self?.loadRecentFlowAccount()
             }
             .store(in: &cancellableSet)
     }
-    
-//    func bindChildAccountManager() {
-//        ChildAccountManager.shared.$selectedChildAccount
-//            .receive(on: DispatchQueue.main)
-//            .map { $0 }
-//            .sink(receiveValue: { newChildAccount in
-//                log.info("change account did changed")
-//                self.childAccount = newChildAccount
-//
-//                if self.childAccountInited {
-//                    Task {
-//                        try? await self.fetchWalletDatas()
-//                    }
-//                }
-//
-//                self.childAccountInited = true
-//                NotificationCenter.default.post(name: .childAccountChanged)
-//            }).store(in: &cancellableSet)
-//
-//        EVMAccountManager.shared.$selectedAccount
-//            .receive(on: DispatchQueue.main)
-//            .map { $0 }
-//            .sink { account in
-//                log.info("[EVM] account did changed to \(account?.address ?? "")")
-//                self.evmAccount = account
-//                if account != nil {
-//                    Task {
-//                        try? await self.fetchWalletDatas()
-//                    }
-//                }
-//            }
-//            .store(in: &cancellableSet)
-//    }
 
     // MARK: Private
 
@@ -360,19 +327,7 @@ extension WalletManager {
     }
 
     var selectedAccountWalletName: String {
-//        if let childAccount = childAccount {
-//            return "\(childAccount.aName) Wallet"
-//        }
-//
-//        if let evmAccount = evmAccount {
-//            return evmAccount.showName
-//        }
-//
-//        if let walletInfo = walletInfo?.currentNetworkWalletModel {
-//            return walletInfo.getName ?? "wallet".localized
-//        }
-
-        return "wallet".localized
+        return childs?.first{ $0.address.hexAddr == selectedAccount?.address.hexAddr }?.name ?? "Child"
     }
 
     var selectedAccountAddress: String {

@@ -10,7 +10,6 @@ import Flow
 import FlowWalletKit
 import Foundation
 import SwiftUI
-import SwiftUIPager
 
 extension WalletViewModel {
     enum WalletState {
@@ -86,19 +85,20 @@ final class WalletViewModel: ObservableObject {
                 self?.refreshButtonState()
                 self?.reloadWalletData()
                 self?.updateMoveAsset()
-                self?.refreshCoinItems()
             }.store(in: &cancelSets)
 
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
+            .filter{ !$0.isEmpty }
+            .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
             }.store(in: &cancelSets)
 
-        ThemeManager.shared.$style.sink { _ in
-            DispatchQueue.main.async {
+        ThemeManager.shared.$style
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
                 self.updateTheme()
-            }
         }.store(in: &cancelSets)
 
         NotificationCenter.default.publisher(for: .walletHiddenFlagUpdated)
@@ -107,11 +107,11 @@ final class WalletViewModel: ObservableObject {
                 self?.refreshHiddenFlag()
             }.store(in: &cancelSets)
 
-        NotificationCenter.default.publisher(for: .coinSummarysUpdated)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refreshCoinItems()
-            }.store(in: &cancelSets)
+//        NotificationCenter.default.publisher(for: .coinSummarysUpdated)
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _ in
+//                self?.refreshCoinItems()
+//            }.store(in: &cancelSets)
 
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .receive(on: DispatchQueue.main)
@@ -131,18 +131,6 @@ final class WalletViewModel: ObservableObject {
                 }
             }.store(in: &cancelSets)
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(transactionCountDidChanged),
-            name: .transactionCountDidChanged,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(willReset),
-            name: .willResetWallet,
-            object: nil
-        )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didReset),
@@ -177,24 +165,10 @@ final class WalletViewModel: ObservableObject {
     @Published
     var walletState: WalletState = .noAddress
 
-    @Published
-    var transactionCount: Int = LocalUserDefaults.shared.transactionCount
-
-    @Published
-    var backupTipsPresent: Bool = false
-
-    @Published
     var isMock: Bool = false
 
     @Published
-    var moveAssetsPresent: Bool = false
-    @Published
-    var moveTokenPresent: Bool = false
-
-    @Published
     var currentPage: Int = 0
-    @Published
-    var page: Page = .first()
 
     @Published
     var showHeaderMask = false
@@ -205,8 +179,6 @@ final class WalletViewModel: ObservableObject {
     var showSwapButton: Bool = true
     @Published
     var showStakeButton: Bool = true
-    @Published
-    var showHorLayout: Bool = false
 
     @Published
     var showBuyButton: Bool = true
@@ -239,12 +211,7 @@ final class WalletViewModel: ObservableObject {
     private var cancelSets = Set<AnyCancellable>()
 
     private func updateTheme() {
-        showHeaderMask = false
-        if ThemeManager.shared.style == .dark {
-            showHeaderMask = true
-            return
-        }
-        // check has notification
+        showHeaderMask = ThemeManager.shared.style == .dark
     }
 
     private func refreshHiddenFlag() {
@@ -274,10 +241,6 @@ final class WalletViewModel: ObservableObject {
         }
         coinItems = list
         refreshTotalBalance()
-
-        // Disable this backup tip for now, cause it show sometime incorrect
-        // And our new backup flow is showing after account creation
-        // showBackupTipsIfNeeded()
     }
 
     private func refreshTotalBalance() {
@@ -288,68 +251,6 @@ final class WalletViewModel: ObservableObject {
         }
 
         balance = total
-    }
-
-    private func showBackupTipsIfNeeded() {
-        if !UserManager.shared.isLoggedIn {
-            return
-        }
-
-        guard let uid = UserManager.shared.activatedUID else { return }
-
-        if MultiAccountStorage.shared.getBackupType(uid) != .none {
-            return
-        }
-
-        if WalletManager.shared.activatedCoins.isEmpty {
-            return
-        }
-
-        if backupTipsShown {
-            return
-        }
-
-        if backupTipsPresent {
-            return
-        }
-
-        if balance <= 0.01 {
-            return
-        }
-
-        if WalletManager.shared.isSelectedChildAccount {
-            return
-        }
-
-        let result = WalletManager.shared.activatedCoins.filter { tokenModel in
-            if !tokenModel.isFlowCoin {
-                return WalletManager.shared.getBalance(with: tokenModel).doubleValue > 0.0
-            }
-            return false
-        }
-
-        if result.isEmpty, LocalUserDefaults.shared.nftCount == 0 {
-            return
-        }
-
-        if LocalUserDefaults.shared.backupSheetNotAsk {
-            return
-        }
-
-        backupTipsPresent = true
-        backupTipsShown = true
-    }
-
-    @objc
-    private func transactionCountDidChanged() {
-        DispatchQueue.syncOnMain {
-            self.transactionCount = LocalUserDefaults.shared.transactionCount
-        }
-    }
-
-    @objc
-    private func willReset() {
-        LocalUserDefaults.shared.transactionCount = 0
     }
 
     @objc
@@ -480,9 +381,6 @@ extension WalletViewModel {
         
         // Stake
         showStakeButton = currentNetwork.isMainnet ? isMainAccount : false
-
-        
-        showHorLayout = (showSwapButton == false && showStakeButton == false)
 
         // buy
         let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false
