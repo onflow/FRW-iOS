@@ -472,7 +472,7 @@ struct WalletHomeView: View {
                 allowClick: !wm.isSelectedChildAccount
             ) {
                 if !LocalUserDefaults.shared.stakingGuideDisplayed && !StakingManager.shared
-                    .isStaked
+                    .hasStaking
                 {
                     Router.route(to: RouteMap.Wallet.stakingSelectProvider)
                     return
