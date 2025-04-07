@@ -77,6 +77,11 @@ class StakingManager: ObservableObject {
         }
     }
 
+    // Check whether all nodes have values
+    var hasStaking: Bool {
+        nodeInfos.first { $0.allStatusCount > 0 } != nil
+    }
+
     var dayRewards: Double {
         let yearTotalRewards = nodeInfos.reduce(0.0) { partialResult, node in
             let apy = node.isLilico ? apy : StakingDefaultNormalApy
@@ -158,7 +163,7 @@ class StakingManager: ObservableObject {
             }
 
             let isSetup = try await FlowNetwork.setupAccountStaking()
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.isSetup = isSetup
                 self.saveCache()
             }
@@ -217,7 +222,8 @@ class StakingManager: ObservableObject {
     func goStakingAction() {
         if nodeInfos.count == 1, let node = nodeInfos.first,
            let provider = StakingProviderCache.cache.providers
-           .first(where: { $0.id == node.nodeID }) {
+           .first(where: { $0.id == node.nodeID })
+        {
             Router.route(to: RouteMap.Wallet.stakeDetail(provider, node))
         } else {
             Router.route(to: RouteMap.Wallet.stakingList)
@@ -246,7 +252,7 @@ extension StakingManager {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.apy = apy
                     self.saveCache()
                 }
@@ -265,22 +271,22 @@ extension StakingManager {
                     if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
                         return
                     }
-
-                    DispatchQueue.main.async {
+                    let result = response.sorted { $0.allStatusCount > $1.allStatusCount }
+                    await MainActor.run {
                         log.debug("queryStakingInfo success")
-                        self.nodeInfos = response
+                        self.nodeInfos = result
                         self.saveCache()
                     }
                 } else {
                     log.debug("queryStakingInfo is empty")
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.nodeInfos = []
                         self.saveCache()
                     }
                 }
             } catch {
                 log.error("queryStakingInfo failed", context: error)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.nodeInfos = []
                     self.saveCache()
                 }
