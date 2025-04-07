@@ -31,7 +31,7 @@ enum FWAccount: RawRepresentable, Codable {
     }
     
     var value: String {
-        "\(type.rawValue)-\(addressHex)"
+        "\(type.rawValue)-\(hexAddr)"
     }
     
     init?(type: AccountType, addr: FWAddress) {
@@ -102,7 +102,7 @@ enum FWAccount: RawRepresentable, Codable {
         }
     }
     
-    var addressHex: String {
+    var hexAddr: String {
         return address.hexAddr
     }
     
@@ -115,7 +115,7 @@ enum FWAccount: RawRepresentable, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(type, forKey: .type)
-        try container.encode(addressHex, forKey: .address)
+        try container.encode(hexAddr, forKey: .address)
     }
     
     init(from decoder: Decoder) throws {

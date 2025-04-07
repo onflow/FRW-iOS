@@ -154,8 +154,7 @@ struct SideMenuView: View {
                     ForEach(wm.currentNetworkAccounts, id: \.address) { account in
                         AccountSideCell(
                             address: account.address.hexAddr,
-                            currentAddress: wm.selectedAccountAddress,
-                            detail: vm.balanceValue(at: account.address.hex)
+                            currentAddress: vm.currentAddress
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .main)
                         }
@@ -172,6 +171,7 @@ struct SideMenuView: View {
                     Spacer()
                 }
             }
+            .mockPlaceholder(wm.walletEntity?.isLoading ?? true)
 
             Color.clear
                 .frame(height: 16)
@@ -181,8 +181,7 @@ struct SideMenuView: View {
                     if let coa = wm.coa {
                         AccountSideCell(
                             address: coa.address,
-                            currentAddress: vm.currentAddress,
-                            detail: vm.balanceValue(at: coa.address)
+                            currentAddress: vm.currentAddress
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                         }
@@ -194,8 +193,7 @@ struct SideMenuView: View {
                                     address: child.address.hex,
                                     currentAddress: vm.currentAddress,
                                     name: child.name,
-                                    logo: child.icon?.absoluteString,
-                                    detail: vm.balanceValue(at: child.address.hex)
+                                    logo: child.icon?.absoluteString
                                 ) { address in
                                     WalletManager.shared.changeSelectedAccount(address: address, type: .child)
                                 }
@@ -211,11 +209,11 @@ struct SideMenuView: View {
                     Spacer()
                 }
                 .visibility(
-                    !evmManager.accounts.isEmpty || !cm.childAccounts
-                        .isEmpty ? .visible : .gone
+                    wm.currentMainAccount?.hasLinkedAccounts ?? false
                 )
             }
         }
+        .mockPlaceholder(wm.currentMainAccount?.isLoading ?? true)
     }
 
     var bottomMenu: some View {

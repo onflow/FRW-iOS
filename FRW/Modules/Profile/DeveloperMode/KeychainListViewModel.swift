@@ -135,7 +135,7 @@ class KeychainListViewModel: ObservableObject {
                 let mnemonic = wallet.hdWallet.mnemonic
                 var result = ["userId": key,
                               "mnemonic": mnemonic,
-                              "length": String(describing:wallet.seedPhraseLength.rawValue)]
+                              "length": String(mnemonic.split(separator: " ").count)]
                 result["passphrase"] = wallet.passphrase
                 result["derivationPath"] = SeedPhraseKey.derivationPath
                 spItem.append(result)

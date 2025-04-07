@@ -168,7 +168,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
-    case argument
+    case invaildArgument
     case contractNameIsEmpty
     case tokenAddressEmpty
     case storagePathEmpty
@@ -194,4 +194,13 @@ enum TokenBalanceProviderError: String, BaseError {
     case collectionNotFound
 
     var baseCode: Int { 11000 }
+}
+
+
+// MARK: - Account
+
+enum AccountError: String, BaseError {
+    case switchAccountFailed
+
+    var baseCode: Int { 12000 }
 }

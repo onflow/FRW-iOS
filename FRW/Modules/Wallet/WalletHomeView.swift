@@ -314,32 +314,6 @@ struct WalletHomeView: View {
         Router.route(to: RouteMap.Profile.wallpaper)
     }
 
-    private var childAccountBackground: some View {
-        ZStack {
-            KFImage.url(URL(string: WalletManager.shared.selectedAccountIcon))
-                .placeholder {
-                    Image("placeholder")
-                        .resizable()
-                }
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .blur(radius: 6)
-
-            LinearGradient(
-                colors:
-                [
-                    Color(hex: "#333333"),
-                    Color(hex: "#333333"),
-                    Color(hex: "#333333").opacity(0.88),
-                    Color(hex: "#333333").opacity(0.32),
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-        }
-    }
-
     @ViewBuilder
     func IndicatorBar() -> some View {
         HStack {
@@ -384,11 +358,12 @@ struct WalletHomeView: View {
                 .frame(height: 44)
 
                 HStack {
-                    Text(WalletManager.shared.selectedAccountAddress)
+                    Text(WalletManager.shared.selectedAccount?.hexAddr ?? "")
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .font(.inter(size: 16))
                         .foregroundStyle(Color.LL.text)
+                        .mockPlaceholder(WalletManager.shared.selectedAccount?.hexAddr == nil)
                     Spacer()
 
                     Button {

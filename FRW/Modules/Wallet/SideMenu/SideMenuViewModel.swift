@@ -21,47 +21,17 @@ extension SideMenuViewModel {
 // MARK: - SideMenuViewModel
 
 class SideMenuViewModel: ObservableObject {
-    // MARK: Lifecycle
-    
-    init() {
-        UserManager.shared.$loginUIDList
-            .receive(on: DispatchQueue.main)
-            .map { $0 }
-            .sink { [weak self] uidList in
-                guard let self = self else { return }
-
-                self.accountPlaceholders = Array(uidList.dropFirst().prefix(2)).map { uid in
-                    let avatar = MultiAccountStorage.shared.getUserInfo(uid)?.avatar
-                        .convertedAvatarString() ?? ""
-                    return AccountPlaceholder(uid: uid, avatar: avatar)
-                }
-            }.store(in: &cancelSets)
-
-        WalletManager.shared.balanceProvider.$balances
-            .receive(on: DispatchQueue.main)
-            .map { $0 }
-            .sink { [weak self] balances in
-                self?.walletBalance = balances
-            }.store(in: &cancelSets)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onToggle),
-            name: .toggleSideMenu,
-            object: nil
-        )
-    }
-
     // MARK: Internal
 
     @Published
     var nftCount: Int = 0
-    @Published
-    var accountPlaceholders: [AccountPlaceholder] = []
+    
     @Published
     var isSwitchOpen = false
+    
     @Published
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
+    
     @Published
     var walletBalance: [String: String] = [:]
 
@@ -75,12 +45,16 @@ class SideMenuViewModel: ObservableObject {
     func onToggle() {
         isSwitchOpen = false
     }
-
-    func scanAction() {
-        NotificationCenter.default.post(name: .toggleSideMenu)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            ScanHandler.scan()
-        }
+    
+    // MARK: Lifecycle
+    
+    init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onToggle),
+            name: .toggleSideMenu,
+            object: nil
+        )
     }
 
     func pickColor(from url: String) {
@@ -108,7 +82,7 @@ class SideMenuViewModel: ObservableObject {
                 try await UserManager.shared.switchAccount(withUID: uid)
                 HUD.dismissLoading()
             } catch {
-                log.error("switch account failed", context: error)
+                log.error(AccountError.switchAccountFailed, context: error)
                 HUD.dismissLoading()
                 HUD.error(title: error.localizedDescription)
             }
@@ -122,13 +96,6 @@ class SideMenuViewModel: ObservableObject {
     func onClickEnableEVM() {
         NotificationCenter.default.post(name: .toggleSideMenu)
         Router.route(to: RouteMap.Wallet.enableEVM)
-    }
-
-    func balanceValue(at address: String) -> String {
-        guard let value = WalletManager.shared.balanceProvider.balanceValue(at: address) else {
-            return ""
-        }
-        return "\(value) FLOW"
     }
 
     func switchProfile() {

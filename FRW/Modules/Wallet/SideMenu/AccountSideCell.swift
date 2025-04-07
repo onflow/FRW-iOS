@@ -15,14 +15,13 @@ struct AccountSideCell: View {
     var currentAddress: String
     var name: String? = nil
     var logo: String? = nil
-    var detail: String? = nil
+    var balance: String? = nil
     var onClick: (String) -> Void
-
+    
     var body: some View {
         Button {
             NotificationCenter.default.post(name: .toggleSideMenu)
             onClick(address)
-
         } label: {
             HStack(spacing: 0) {
                 if let logoUrl = logo {
@@ -64,12 +63,13 @@ struct AccountSideCell: View {
                         .foregroundStyle(Color.Theme.Text.black3)
                         .frame(height: 20)
 
-                    Text(detail ?? "")
-                        .font(.inter(size: 12))
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .foregroundStyle(Color.Theme.Text.black8)
-                        .visibility(detail == nil ? .gone : .visible)
+                    if let balance {
+                        Text(balance)
+                            .font(.inter(size: 12))
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                            .foregroundStyle(Color.Theme.Text.black8)
+                    }
                 }
                 Spacer()
 

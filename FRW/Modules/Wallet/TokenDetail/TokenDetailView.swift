@@ -758,8 +758,7 @@ extension TokenDetailView {
 extension TokenDetailView {
     func naccessibleDesc() -> String {
         let token = vm.token.name
-        let account = WalletManager.shared.selectedAccountWalletName
-        let desc = "accessible_not_x_x".localized(token, account)
+        let desc = "accessible_not_x_x".localized(token, "Child")
         return desc
     }
 

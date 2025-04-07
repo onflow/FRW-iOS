@@ -89,8 +89,6 @@ class WalletManager: ObservableObject {
 
     var walletAccount = WalletAccount()
     
-    var balanceProvider = BalanceProvider()
-    
     @Published
     var walletEntity: FlowWalletKit.Wallet?
     
@@ -302,36 +300,8 @@ extension WalletManager {
             .selectedAccount == nil
     }
 
-    var selectedAccountIcon: String {
-        if let childAccount = childAccount {
-            return childAccount.icon
-        }
-
-        if let evmAccount = evmAccount {
-            return evmAccount.showIcon
-        }
-
-        return UserManager.shared.userInfo?.avatar.convertedAvatarString() ?? ""
-    }
-
-    var selectedAccountNickName: String {
-        if let childAccount = childAccount {
-            return childAccount.aName
-        }
-
-        if let evmAccount = evmAccount {
-            return evmAccount.showName
-        }
-
-        return UserManager.shared.userInfo?.nickname ?? "lilico".localized
-    }
-
-    var selectedAccountWalletName: String {
-        return childs?.first{ $0.address.hexAddr == selectedAccount?.address.hexAddr }?.name ?? "Child"
-    }
-
-    var selectedAccountAddress: String {
-        return selectedAccount?.address.hexAddr ?? ""
+    var selectedAccountAddress: String? {
+        return selectedAccount?.address.hexAddr
     }
     
     func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
@@ -357,21 +327,10 @@ extension WalletManager {
         FlowNetwork.setup()
         NotificationCenter.default.post(name: .networkChange)
         
-//        if LocalUserDefaults.shared.flowNetwork == type {
-//            if isSelectedChildAccount {
-//                ChildAccountManager.shared.select(nil)
-//            }
-//            if !isSelectedEVMAccount {
-//                return
-//            }
-//        }
-//
-//        if isSelectedEVMAccount {
-//            EVMAccountManager.shared.select(nil)
-//        }
-//        if getPrimaryWalletAddress() == nil {
-//            WalletManager.shared.reloadWalletInfo()
-//        }
+        if let firstAccount = currentNetworkAccounts.first {
+            currentMainAccount = firstAccount
+            selectedAccount = .main(firstAccount.address)
+        }
     }
 }
 
@@ -404,16 +363,11 @@ extension WalletManager {
 // MARK: - Reset
 
 extension WalletManager {
-//    private func resetProperties() {
-//        walletInfo = nil
-//    }
 
     @objc
     private func reset() {
         debugPrint("WalletManager: reset start")
-
-//        resetProperties()
-
+        
         debugPrint("WalletManager: wallet info clear success")
 
         do {
@@ -578,7 +532,6 @@ extension WalletManager {
         Task {
             do {
                 let _ = try await walletEntity?.fetchAllNetworkAccounts()
-//                try? MultiAccountStorage.shared.saveWalletInfo(response, uid: uid)
                 self.pollingWalletInfoIfNeeded()
             } catch {
                 self.startWalletInfoRetryTimer()
@@ -635,7 +588,6 @@ extension WalletManager {
 
         try await fetchSupportedTokens()
         try await fetchActivatedTokens()
-        try await fetchBalance()
         try await fetchAccessible()
         try? await fetchAccountInfo()
     }
@@ -661,8 +613,10 @@ extension WalletManager {
         }
 
         let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address)
-        self.activatedCoins = availableTokens
-        PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
+        await MainActor.run {
+            self.activatedCoins = availableTokens
+            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
+        }
         preloadActivatedIcons()
     }
 
@@ -710,10 +664,6 @@ extension WalletManager {
         return accountInfo.balance - amount < Self.minFlowBalance
     }
 
-    func fetchBalance() async throws {
-        balanceProvider.refreshBalance()
-    }
-
     func addCustomToken(token: CustomToken) {
         Task {
             await MainActor.run {
@@ -749,32 +699,6 @@ extension WalletManager {
             KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
         }
     }
-
-    // MARK: -
-//
-//    private func set(toMainKeychain value: String, forKey key: String) throws {
-//        try mainKeychain.set(value, key: key)
-//    }
-//
-//    private func set(
-//        toMainKeychain value: Data,
-//        forKey key: String,
-//        comment: String? = nil
-//    ) throws {
-//        if let comment = comment {
-//            try mainKeychain.comment(comment).set(value, key: key)
-//        } else {
-//            try mainKeychain.set(value, key: key)
-//        }
-//    }
-    
-//    private func getString(fromMainKeychain key: String) -> String? {
-//        try? mainKeychain.getString(key)
-//    }
-//
-//    private func getData(fromMainKeychain key: String) -> Data? {
-//        try? mainKeychain.getData(key)
-//    }
 
     static func encryptionAES(
         key: String,
