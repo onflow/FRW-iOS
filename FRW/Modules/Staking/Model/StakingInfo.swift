@@ -26,7 +26,7 @@ struct StakingNode: Codable {
     }
 
     var allStatusCount: Double {
-        tokensStaked + tokensUnstaking + tokensRewarded + tokensUnstaked + tokensRequestedToUnstake
+        tokensCommitted + tokensStaked + tokensUnstaking + tokensRewarded + tokensUnstaked + tokensRequestedToUnstake
     }
 
     var isLilico: Bool {
