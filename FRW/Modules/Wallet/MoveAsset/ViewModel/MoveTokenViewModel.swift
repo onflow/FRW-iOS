@@ -144,10 +144,8 @@ final class MoveTokenViewModel: ObservableObject {
             actualBalance = Decimal(
                 string: showBalance
             ) // showBalance.doubleValue
-            maxButtonClickedOnce = false
-            return
         }
-
+        maxButtonClickedOnce = false
         refreshSummary()
         updateState()
     }
