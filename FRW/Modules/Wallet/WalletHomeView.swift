@@ -471,8 +471,9 @@ struct WalletHomeView: View {
                 event: .stake,
                 allowClick: !wm.isSelectedChildAccount
             ) {
+                // TODO: 判断条件更新：所有node 有值
                 if !LocalUserDefaults.shared.stakingGuideDisplayed && !StakingManager.shared
-                    .isStaked
+                    .hasStaking
                 {
                     Router.route(to: RouteMap.Wallet.stakingSelectProvider)
                     return
@@ -654,7 +655,7 @@ extension WalletHomeView {
                     }
                     .padding(.leading, 24)
                     .offset(y: -5)
-                    .visibility(coin.token.isFlowCoin && stakingManager.isStaked ? .visible : .gone)
+                    .visibility(coin.token.isFlowCoin && stakingManager.hasStaking ? .visible : .gone)
 
                     Button {
                         StakingManager.shared.goStakingAction()
