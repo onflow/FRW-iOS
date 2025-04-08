@@ -48,6 +48,7 @@ extension WalletManager {
 // MARK: - WalletManager
 
 class WalletManager: ObservableObject {
+    
     // MARK: Lifecycle
     
     var supportNetworks: Set<Flow.ChainID> = [
@@ -109,13 +110,6 @@ class WalletManager: ObservableObject {
         walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
     }
 
-    var defaultSigners: [FlowSigner] {
-        if RemoteConfigManager.shared.freeGasEnabled {
-            return [WalletManager.shared, RemoteConfigManager.shared]
-        }
-        return [WalletManager.shared]
-    }
-
     // TODO: Remove this
     var flowToken: TokenModel? {
         WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })
@@ -134,15 +128,15 @@ class WalletManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { _ in
-                self.reloadWallet()
-                self.reloadWalletInfo()
+                self.initWallet()
+
             }.store(in: &cancellableSet)
         
         $walletEntity
             .compactMap { $0 }
             .flatMap { entity in
-                entity.$accounts
-                    .compactMap { $0 }
+                entity.securityDelegate = self
+                return entity.$accounts .compactMap { $0 }
             }
             .filter{ $0.count >= self.supportNetworks.count }
             .receive(on: DispatchQueue.main)
@@ -191,7 +185,7 @@ class WalletManager: ObservableObject {
 // MARK: Key Protocol
 
 extension WalletManager {
-    private func reloadWallet() {
+    private func initWallet() {
         if let uid = UserManager.shared.activatedUID {
             keyProvider = keyProvider(with: uid)
             guard let provider = keyProvider, let user = userStore(with: uid) else {
@@ -213,7 +207,8 @@ extension WalletManager {
     private func loadRecentFlowAccount() {
         guard let accounts = walletEntity?.accounts else { return }
         guard let accounts = accounts[currentNetwork.toFlowType()], let account = accounts.first else {
-            // TODO: Handle newtork swicth
+            // TODO: Handle newtork swicth, if no account
+            currentMainAccount = nil
             return
         }
 
@@ -269,21 +264,6 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
-    var isSelectedChildAccount: Bool {
-        selectedAccount?.type == .child
-    }
-
-    var isSelectedEVMAccount: Bool {
-        selectedAccount?.type == .coa
-    }
-
-    var isSelectedFlowAccount: Bool {
-        selectedAccount?.type == .main
-    }
-
-    var selectedAccountAddress: String? {
-        return selectedAccount?.address.hexAddr
-    }
     
     func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
         guard let address = FWAddressDector.create(address: address) else {
@@ -293,6 +273,7 @@ extension WalletManager {
         
         selectedAccount = .init(type: type, addr: address)
         
+        // Store selected account
         UserDefaults.standard.set(selectedAccount?.value, forKey: LocalUserDefaults.Keys.selectedAddress.rawValue)
         
         if type == .main {
@@ -311,6 +292,7 @@ extension WalletManager {
         if let firstAccount = currentNetworkAccounts.first {
             currentMainAccount = firstAccount
             selectedAccount = .main(firstAccount.address)
+            loadLinkedAccounts()
         }
     }
 }
@@ -367,99 +349,6 @@ extension WalletManager {
         }
 
         try mainKeychain.remove(getMnemonicStoreKey(uid: uid))
-    }
-}
-
-// MARK: - Getter
-
-extension WalletManager {
-    func getCurrentMnemonic() -> String? {
-        guard let provider = keyProvider as? SeedPhraseKey else {
-            return nil
-        }
-        return provider.hdWallet.mnemonic
-    }
-
-    func getCurrentPublicKey() -> String? {
-        return currentMainAccount?.fullWeightKey?.publicKey.hex
-    }
-
-    func getCurrentPrivateKey() -> String? {
-        guard let signAlgo = currentMainAccount?.fullWeightKey?.signAlgo else {
-            return nil
-        }
-        return keyProvider?.privateKey(signAlgo: signAlgo)?.hexValue
-    }
-
-    func getPrimaryWalletAddress() -> String? {
-        return currentMainAccount?.address.hexAddr
-    }
-    
-    func getAddress() -> String? {
-        return selectedAccount?.address.hexAddr
-    }
-
-    /// get custom watch address first, then primary address, this method is only used for tab2.
-    func getPrimaryWalletAddressOrCustomWatchAddress() -> String? {
-        LocalUserDefaults.shared.customWatchAddress ?? getAddress()
-    }
-
-    /// watch address -> child account address -> primary address
-    func getWatchAddressOrChildAccountAddressOrPrimaryAddress() -> String? {
-        if let customAddress = LocalUserDefaults.shared.customWatchAddress, !customAddress.isEmpty {
-            return customAddress
-        }
-
-        return getAddress()
-    }
-
-    func isTokenActivated(model: TokenModel) -> Bool {
-        for token in activatedCoins {
-            if token.vaultIdentifier?.uppercased() == model.vaultIdentifier?.uppercased() {
-                return true
-            }
-        }
-
-        return false
-    }
-
-    func getToken(by vaultIdentifier: String?) -> TokenModel? {
-        guard let identifier = vaultIdentifier else {
-            return flowToken
-        }
-        for token in activatedCoins {
-            if token.vaultIdentifier?.lowercased() == identifier.lowercased() {
-                return token
-            }
-        }
-        return nil
-    }
-
-    func getBalance(with token: TokenModel?) -> Decimal {
-        guard let token else {
-            return Decimal(0.0)
-        }
-        return token.showBalance ?? Decimal(0.0)
-    }
-
-    func currentContact() -> Contact {
-        let address = getWatchAddressOrChildAccountAddressOrPrimaryAddress()
-        var user: WalletAccount.User?
-        if let addr = address {
-            user = WalletManager.shared.walletAccount.readInfo(at: addr)
-        }
-
-        let contact = Contact(
-            address: address,
-            avatar: nil,
-            contactName: nil,
-            contactType: .user,
-            domain: nil,
-            id: UUID().hashValue,
-            username: nil,
-            user: user
-        )
-        return contact
     }
 }
 
@@ -555,9 +444,6 @@ extension WalletManager {
 
 extension WalletManager {
     func fetchWalletDatas() async throws {
-        
-        print("AAAAAAAAA =====> fetchWalletDatas ")
-        
         guard getPrimaryWalletAddress() != nil else {
             return
         }

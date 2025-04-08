@@ -16,7 +16,8 @@ struct AccountSideCell: View {
     var name: String? = nil
     var logo: String? = nil
     
-    var balance: Binding<String>? = nil
+    @Binding
+    var balance: String?
     
     var onClick: (String) -> Void
     
@@ -65,8 +66,8 @@ struct AccountSideCell: View {
                         .foregroundStyle(Color.Theme.Text.black3)
                         .frame(height: 20)
 
-                    if let balance, !balance.wrappedValue.isEmpty {
-                        Text(balance.wrappedValue)
+                    if let balance {
+                        Text(balance)
                             .font(.inter(size: 12))
                             .lineLimit(1)
                             .truncationMode(.middle)

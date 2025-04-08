@@ -86,7 +86,7 @@ struct WalletSendAmountView: RouteableView {
                             .frame(width: 44, height: 44)
                     } else if vm.targetContact.needShowLocalAvatar {
                         if let localAvatar = vm.targetContact.localAvatar {
-                            Image(vm.targetContact.localAvatar ?? "")
+                            Image(localAvatar)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 44, height: 44)

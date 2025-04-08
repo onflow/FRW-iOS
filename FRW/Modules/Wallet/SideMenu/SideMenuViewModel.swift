@@ -31,7 +31,10 @@ class SideMenuViewModel: ObservableObject {
     private var token: TokenBalanceHandler
 
     @Published
-    var nftCount: Int = 0
+    var accountLoading: Bool = false
+    
+    @Published
+    var linkLoading: Bool = false
     
     @Published
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
@@ -56,12 +59,30 @@ class SideMenuViewModel: ObservableObject {
     // MARK: Lifecycle
     
     init() {
-        WalletManager.shared.$currentMainAccount
+        wallet.$currentMainAccount
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
-            .sink {  [weak self] _ in
+            .sink { [weak self] _ in
                 self?.loadBalance()
+            }
+            .store(in: &cancellableSet)
+        
+        wallet.$walletEntity
+            .compactMap { $0 }
+            .flatMap { $0.$isLoading }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.accountLoading = value
+            }
+            .store(in: &cancellableSet)
+        
+        wallet.$currentMainAccount
+            .compactMap { $0 }
+            .flatMap { $0.$isLoading }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.linkLoading = value
             }
             .store(in: &cancellableSet)
     }

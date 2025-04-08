@@ -82,6 +82,8 @@ enum WalletError: String, BaseError {
     case fetchLinkedAccountsFailed
     case emptyAddress
     case emptyScript
+    case emptyMainAccount
+    case emptyTransaction
 
     var baseCode: Int { 2000 }
 }

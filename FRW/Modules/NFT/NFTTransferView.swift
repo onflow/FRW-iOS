@@ -213,8 +213,7 @@ class NFTTransferViewModel: ObservableObject {
                 case (.flow, .eoa):
                     log.debug("[NFT] flow to eoa send")
                     let nftId = nft.response.id
-                    guard let nftAddress = self.nft.collection?.address,
-                          let identifier = nft.collection?.flowIdentifier ?? nft.response
+                    guard let identifier = nft.collection?.flowIdentifier ?? nft.response
                           .flowIdentifier,
                           let toAddress = targetContact.address?.stripHexPrefix()
                     else {

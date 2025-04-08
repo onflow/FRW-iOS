@@ -17,6 +17,9 @@ struct SideMenuView: View {
 
     private let SideOffset: CGFloat = 65
     
+    @State
+    var reloadCount = 0
+    
     var body: some View {
         GeometryReader { proxy in
             HStack(spacing: 0) {
@@ -156,8 +159,8 @@ struct SideMenuView: View {
                         AccountSideCell(
                             address: account.hexAddr,
                             currentAddress: vm.currentAddress,
-                            balance: Binding<String>(
-                                get: { vm.walletBalance[account.hexAddr]?.doubleValue.formatDisplayFlowBalance ?? "" },
+                            balance: Binding<String?>(
+                                get: { vm.walletBalance[account.hexAddr]?.doubleValue.formatDisplayFlowBalance },
                                 set: { _ in }
                             )
                         ) { address in
@@ -167,6 +170,7 @@ struct SideMenuView: View {
                 }
                 .cornerRadius(12)
                 .animation(.easeInOut, value: WalletManager.shared.getPrimaryWalletAddress())
+                .mockPlaceholder(vm.accountLoading)
             } header: {
                 HStack {
                     Text("main_account".localized)
@@ -176,7 +180,6 @@ struct SideMenuView: View {
                     Spacer()
                 }
             }
-//            .mockPlaceholder(wm.walletEntity?.isLoading ?? true)
 
             Color.clear
                 .frame(height: 16)
@@ -186,9 +189,11 @@ struct SideMenuView: View {
                     if let coa = wallet.coa {
                         AccountSideCell(
                             address: coa.address,
-                            currentAddress: vm.currentAddress
-//                            ,
-//                            balance: vm.walletBalance[coa.address]?.doubleValue?.formatDisplayFlowBalance
+                            currentAddress: vm.currentAddress,
+                            balance: Binding<String?>(
+                                get: { vm.walletBalance[coa.address]?.doubleValue.formatDisplayFlowBalance },
+                                set: { _ in }
+                            )
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                         }
@@ -200,15 +205,18 @@ struct SideMenuView: View {
                                     address: child.address.hex,
                                     currentAddress: vm.currentAddress,
                                     name: child.name,
-                                    logo: child.icon?.absoluteString
-//                                    ,
-//                                    balance: vm.walletBalance[child.address.hex]?.doubleValue?.formatDisplayFlowBalance
+                                    logo: child.icon?.absoluteString,
+                                    balance: Binding<String?>(
+                                        get: { vm.walletBalance[child.address.hex]?.doubleValue.formatDisplayFlowBalance },
+                                        set: { _ in }
+                                    )
                                 ) { address in
                                     WalletManager.shared.changeSelectedAccount(address: address, type: .child)
                                 }
                         }
                     }
                 }
+                .mockPlaceholder(vm.linkLoading)
             } header: {
                 HStack {
                     Text("Linked_Account::message".localized)
@@ -222,7 +230,6 @@ struct SideMenuView: View {
                 )
             }
         }
-        .mockPlaceholder(wallet.currentMainAccount?.isLoading ?? true)
     }
 
     var bottomMenu: some View {
@@ -230,13 +237,38 @@ struct SideMenuView: View {
             Divider()
                 .background(.Theme.Line.line)
                 .frame(height: 1)
-                .padding(.bottom, 24)
+                .padding(.bottom, 12)
+            
+            Button {
+                reloadCount += 1
+                UIFeedbackGenerator.impactOccurred(.light)
+                wallet.reloadWalletInfo()
+                wallet.loadLinkedAccounts()
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.trianglehead.2.clockwise")
+                        .foregroundStyle(Color.Theme.Text.black8)
+                        .font(.system(size: 14).bold())
+                        .frame(width: 24, height: 24)
+                        .rotationEffect(.degrees(360 * reloadCount ))
+                        .animation(.linear(duration: 0.5), value: reloadCount)
+                    
+                    Text("Refresh Accounts".localized)
+                        .font(.inter(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.Theme.Text.black8)
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+                .frame(height: 40)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            
             if isDeveloperMode {
                 HStack {
                     Image("icon_side_link")
                         .resizable()
                         .renderingMode(.template)
-                        .aspectRatio(contentMode: .fit)
+//                        .aspectRatio(contentMode: .fit)
                         .frame(width: 24, height: 24)
                         .foregroundColor(Color.Theme.Text.black8)
                     Text("Network::message".localized)
@@ -300,8 +332,10 @@ struct SideMenuView: View {
 
                     Spacer()
                 }
+                .contentShape(Rectangle())
                 .frame(height: 40)
             }
+            .buttonStyle(ScaleButtonStyle())
         }
     }
 

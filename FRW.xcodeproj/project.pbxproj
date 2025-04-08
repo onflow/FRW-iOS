@@ -75,6 +75,10 @@
 		154E31512DA40797008A495F /* WalletManager+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E314F2DA40797008A495F /* WalletManager+Crypto.swift */; };
 		154E31532DA40816008A495F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31522DA40816008A495F /* Extension.swift */; };
 		154E31542DA40816008A495F /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31522DA40816008A495F /* Extension.swift */; };
+		154E31562DA56A1D008A495F /* WalletManager+Getter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31552DA56A1D008A495F /* WalletManager+Getter.swift */; };
+		154E31572DA56A1D008A495F /* WalletManager+Getter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31552DA56A1D008A495F /* WalletManager+Getter.swift */; };
+		154E31592DA56D24008A495F /* WalletManager+Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31582DA56D24008A495F /* WalletManager+Signer.swift */; };
+		154E315A2DA56D24008A495F /* WalletManager+Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31582DA56D24008A495F /* WalletManager+Signer.swift */; };
 		1552DC5F2786EBA100EAA7D5 /* RequestSecureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552DC5D2786EBA100EAA7D5 /* RequestSecureView.swift */; };
 		1552DC622786F49000EAA7D5 /* CreatePinCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552DC602786F49000EAA7D5 /* CreatePinCodeView.swift */; };
 		1552DC652787063100EAA7D5 /* PinStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1552DC632787063100EAA7D5 /* PinStackView.swift */; };
@@ -2085,6 +2089,8 @@
 		154E314C2DA3DAB6008A495F /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		154E314F2DA40797008A495F /* WalletManager+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+Crypto.swift"; sourceTree = "<group>"; };
 		154E31522DA40816008A495F /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		154E31552DA56A1D008A495F /* WalletManager+Getter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+Getter.swift"; sourceTree = "<group>"; };
+		154E31582DA56D24008A495F /* WalletManager+Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+Signer.swift"; sourceTree = "<group>"; };
 		1552DC5D2786EBA100EAA7D5 /* RequestSecureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSecureView.swift; sourceTree = "<group>"; };
 		1552DC602786F49000EAA7D5 /* CreatePinCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePinCodeView.swift; sourceTree = "<group>"; };
 		1552DC632787063100EAA7D5 /* PinStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinStackView.swift; sourceTree = "<group>"; };
@@ -4834,9 +4840,11 @@
 			isa = PBXGroup;
 			children = (
 				15DE22CE277DBDF800B5EE03 /* WalletManager.swift */,
+				154E31582DA56D24008A495F /* WalletManager+Signer.swift */,
 				154E314F2DA40797008A495F /* WalletManager+Crypto.swift */,
 				15E9E5D92D9A2741003A5816 /* WalletManager+Storage.swift */,
 				154E31522DA40816008A495F /* Extension.swift */,
+				154E31552DA56A1D008A495F /* WalletManager+Getter.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -7383,6 +7391,7 @@
 				4EA0D0A72A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */,
 				57312EC62CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE1A2C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
+				154E31572DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F142BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15BA24B628C785B300755CBF /* GradientButton.swift in Sources */,
 				15DC20B127819C56000B187A /* VBaseButtonState.swift in Sources */,
@@ -7631,6 +7640,7 @@
 				15DC215927819C56000B187A /* VMenu.swift in Sources */,
 				4EFBB2C12BDF49AB00359FAA /* FRWAPI+EVM.swift in Sources */,
 				1552DC622786F49000EAA7D5 /* CreatePinCodeView.swift in Sources */,
+				154E315A2DA56D24008A495F /* WalletManager+Signer.swift in Sources */,
 				15D874E828C623770072C6EA /* RemoteConfig.swift in Sources */,
 				15F2444D28CB370D00C1090E /* LowerCapsuleView.swift in Sources */,
 				15DC215127819C56000B187A /* VNavigationView.swift in Sources */,
@@ -8232,6 +8242,7 @@
 				15C58B6F2868A4EE00BD4FC6 /* VBaseButtonState.swift in Sources */,
 				57312EC52CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE192C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
+				154E31562DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F132BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15C58B702868A4EE00BD4FC6 /* HUDManager.swift in Sources */,
 				15C58B712868A4EE00BD4FC6 /* ImageName.swift in Sources */,
@@ -8480,6 +8491,7 @@
 				15C58BF22868A4EE00BD4FC6 /* CreatePinCodeView.swift in Sources */,
 				4EFBB2C02BDF49AB00359FAA /* FRWAPI+EVM.swift in Sources */,
 				15D874E728C623770072C6EA /* RemoteConfig.swift in Sources */,
+				154E31592DA56D24008A495F /* WalletManager+Signer.swift in Sources */,
 				15F2444C28CB370D00C1090E /* LowerCapsuleView.swift in Sources */,
 				15C58BF42868A4EE00BD4FC6 /* VNavigationView.swift in Sources */,
 				6AC717E2287EA61100AA5040 /* WalletSendAmountViewModel.swift in Sources */,

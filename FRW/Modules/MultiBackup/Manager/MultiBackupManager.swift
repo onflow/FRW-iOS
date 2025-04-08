@@ -653,7 +653,7 @@ extension MultiBackupManager {
             return provider.weight ?? 500
         }
 
-        public func sign(transaction _: Flow.Transaction, signableData: Data) async throws -> Data {
+        public func sign(signableData: Data, transaction: Flow.Transaction? ) async throws -> Data {
             _ = try await createHDWallet()
 
             guard let hdWallet = hdWallet else {

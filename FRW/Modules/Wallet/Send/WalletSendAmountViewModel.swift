@@ -61,9 +61,9 @@ final class WalletSendAmountViewModel: ObservableObject {
                 self?.refreshInput()
             }
         }.store(in: &cancelSets)
+        
         checkAddress()
         checkTransaction()
-        fetchMinFlowBalance()
         checkForInsufficientStorage()
 
         NotificationCenter.default.addObserver(
@@ -241,17 +241,6 @@ extension WalletSendAmountViewModel {
 
     private func saveToRecentLlist() {
         RecentListCache.cache.append(contact: targetContact)
-    }
-
-    private func fetchMinFlowBalance() {
-        Task {
-            do {
-                self.minBalance = try await FlowNetwork.minFlowBalance().decimalValue
-                log.debug("[Flow] min balance:\(self.minBalance)")
-            } catch {
-                self.minBalance = 0.001
-            }
-        }
     }
 }
 
