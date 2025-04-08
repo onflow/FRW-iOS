@@ -90,7 +90,8 @@ class StakingDetailViewModel: ObservableObject {
     }
 
     func restake() {
-        guard let delegatorId = provider.id else {
+        // TODO: FIX ME
+        guard let delegatorId = provider.delegatorId else {
             return
         }
 
@@ -104,7 +105,7 @@ class StakingDetailViewModel: ObservableObject {
                 HUD.loading("staking_reStake_rewards".localized)
                 _ = try await StakingManager.shared.reStakeReward(
                     nodeID: node.nodeID,
-                    delegatorId: provider.id,
+                    delegatorId: delegatorId,
                     amount: node.tokensRewarded.decimalValue
                 )
                 HUD.dismissLoading()
