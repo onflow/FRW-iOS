@@ -28,6 +28,7 @@ class NFTUIKitListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        updateUI(with: 0)
 
         NotificationCenter.default.addObserver(
             self,
@@ -239,10 +240,14 @@ class NFTUIKitListViewController: UIViewController {
         }
 
         listStyleHandler.dataDidUpdate = { [weak self] count in
-            self?.updateUI(with: count)
+            if self?.style == .normal {
+                self?.updateUI(with: count)
+            }
         }
         gridStyleHandler.dataDidUpdate = { [weak self] count in
-            self?.updateUI(with: count)
+            if self?.style == .grid {
+                self?.updateUI(with: count)
+            }
         }
 
         view.bringSubviewToFront(headerContainerView)
@@ -257,8 +262,9 @@ class NFTUIKitListViewController: UIViewController {
         addButton.snp.updateConstraints { make in
             make.right.equalTo(menuButton.snp.left).offset(count > 0 ? -10 : 0)
         }
-        withAnimation {
-            headerContentView.layoutIfNeeded()
+
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.headerContentView.layoutIfNeeded()
         }
     }
 

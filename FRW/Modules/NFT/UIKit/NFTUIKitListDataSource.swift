@@ -181,6 +181,7 @@ class NFTUIKitListNormalDataModel {
 
         DispatchQueue.syncOnMain {
             self.items = items
+            self.reloadCallback?()
         }
     }
 
