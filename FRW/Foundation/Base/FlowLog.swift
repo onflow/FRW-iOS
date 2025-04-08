@@ -46,7 +46,7 @@ class FlowLog {
 
         // Flow SDK Log
         FlowLogger.shared.addLogger(FlowLoggerReceiver())
-        FlowLogger.shared.minimumLogLevel = .info
+        FlowLogger.shared.minimumLogLevel = .debug
     }
 
     // MARK: Internal

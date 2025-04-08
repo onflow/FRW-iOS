@@ -1340,17 +1340,18 @@ extension FlowNetwork {
             throw LLError.invalidAddress
         }
         do {
-            let bridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
+            let needBridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
             let bridgeFeePayerAddress = Flow.Address(hex: RemoteConfigManager.shared.bridgeFeePayer)
             let fromKeyIndex = WalletManager.shared.keyIndex
+            var signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
             let tranId = try await flow
-                .sendTransaction(signers: WalletManager.shared.defaultSigners) {
+                .sendTransaction(signers: signers) {
                     cadence {
                         cadenceStr
                     }
 
                     payer {
-                        if bridgeFeePayer {
+                        if needBridgeFeePayer {
                             RemoteConfigManager.shared.bridgeFeePayer
                         } else {
                             RemoteConfigManager.shared.payer
@@ -1367,7 +1368,7 @@ extension FlowNetwork {
                     }
 
                     authorizers {
-                        if bridgeFeePayer {
+                        if needBridgeFeePayer {
                             [Flow.Address(hex: fromAddress), bridgeFeePayerAddress]
                         } else {
                             [Flow.Address(hex: fromAddress)]

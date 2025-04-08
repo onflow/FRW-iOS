@@ -956,6 +956,8 @@
 		4E0D34A42A8B4E2900BC6E43 /* e-Ukraine-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */; };
 		4E0D34A52A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
 		4E0D34A62A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
+		4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
+		4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
 		4E131A9A2CA17389002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A992CA17389002B258D /* PocketSVG */; };
 		4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A9B2CA1739A002B258D /* PocketSVG */; };
 		4E131A9E2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
@@ -2437,6 +2439,7 @@
 		4E0D349C2A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Regular.ttf"; sourceTree = "<group>"; };
 		4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Light.ttf"; sourceTree = "<group>"; };
 		4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Medium.ttf"; sourceTree = "<group>"; };
+		4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFeePayer.swift; sourceTree = "<group>"; };
 		4E131A9D2CA19567002B258D /* SVGUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGUIView.swift; sourceTree = "<group>"; };
 		4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsNeedKnowViewModel.swift; sourceTree = "<group>"; };
 		4E1914862D2E64240018BAA7 /* FormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormItem.swift; sourceTree = "<group>"; };
@@ -3717,6 +3720,7 @@
 				6A41B6A72861D06100999451 /* Define */,
 				6ABAE52C2836295100C97AE2 /* Model */,
 				159A54302753680C004BCACC /* Base */,
+				4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -7656,6 +7660,7 @@
 				15DC21DD27819C56000B187A /* StateOpacities_PD.swift in Sources */,
 				6A4BFE312893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596C288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375428A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				6A8FA4A0285B192900EE5BE3 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,
@@ -8497,6 +8502,7 @@
 				15C58C152868A4EE00BD4FC6 /* StateOpacities_PD.swift in Sources */,
 				6A4BFE302893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596B288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375328A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				15C58C172868A4EE00BD4FC6 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,

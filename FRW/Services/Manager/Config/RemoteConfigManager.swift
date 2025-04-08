@@ -250,9 +250,9 @@ extension RemoteConfigManager: FlowSigner {
             transaction: transaction.voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
-        let isBridgeFee = transaction.payer.hexAddr == bridgeFeePayer
-        let target: TargetType = isBridgeFee ? FRWAPI.Cadence.signAsBridgeFeePayer(request) : FirebaseAPI.signAsPayer(request)
-        return try await sign(target: target)
+        let signature: SignPayerResponse = try await Network
+            .requestWithRawModel(FirebaseAPI.signAsPayer(request))
+        return Data(hex: signature.envelopeSigs.sig)
     }
 
     func sign(voucher: FCLVoucher, signableData: Data) async throws -> Data {
@@ -260,14 +260,8 @@ extension RemoteConfigManager: FlowSigner {
             transaction: voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
-        let isBridgeFee = voucher.payer.hexAddr == bridgeFeePayer
-        let target: TargetType = isBridgeFee ? FRWAPI.Cadence.signAsBridgeFeePayer(request) : FirebaseAPI.signAsPayer(request)
-        return try await sign(target: target)
-    }
-
-    private func sign(target: TargetType) async throws -> Data {
         let signature: SignPayerResponse = try await Network
-            .requestWithRawModel(target)
+            .requestWithRawModel(FirebaseAPI.signAsPayer(request))
         return Data(hex: signature.envelopeSigs.sig)
     }
 }
