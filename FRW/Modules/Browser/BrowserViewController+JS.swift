@@ -212,7 +212,7 @@ extension BrowserViewController {
             log.debug("did post authz payload sign response")
         }
     }
-    
+
     func rejectRspsonse(reason: String) {
         DispatchQueue.syncOnMain {
             let message = FCLScripts.genertateRejectResponse(reason: reason)

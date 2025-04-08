@@ -126,7 +126,6 @@ final class WalletSendAmountViewModel: ObservableObject {
 
     private var addressIsValid: Bool?
 
-    private var minBalance: Decimal = 0.001
     private var _insufficientStorageFailure: InsufficientStorageFailure?
 }
 
@@ -224,16 +223,6 @@ extension WalletSendAmountViewModel {
         if inputTokenNum > amountBalance {
             errorType = .insufficientBalance
             return
-        }
-
-        if token.isFlowCoin, WalletManager.shared.isCoa(targetContact.address) {
-            let validBalance = (
-                Decimal(amountBalance) - minBalance
-            ).doubleValue
-            if validBalance < inputTokenNum {
-                errorType = .belowMinimum
-                return
-            }
         }
 
         errorType = .none

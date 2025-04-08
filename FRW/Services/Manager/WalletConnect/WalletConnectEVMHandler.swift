@@ -227,12 +227,11 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 cadence: originCadence,
                 arguments: args.toArguments()
             ) { result in
+                if !result {
+                    cancel()
+                    return
+                }
                 Task {
-                    if !result {
-                        cancel()
-                        return
-                    }
-
                     let txid = try await FlowNetwork.sendTransaction(
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,

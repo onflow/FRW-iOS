@@ -44,13 +44,13 @@ struct TokenDetailView: RouteableView {
                 summaryView
                 stakeAdView
                     .visibility(
-                        stakingManager.isStaked || !vm.token.isFlowCoin || LocalUserDefaults
+                        stakingManager.hasStaking || !vm.token.isFlowCoin || LocalUserDefaults
                             .shared.stakingGuideDisplayed || WalletManager.shared
                             .isSelectedChildAccount ? .gone : .visible
                     )
                 stakeRewardView
                     .visibility(
-                        stakingManager.isStaked && vm.token.isFlowCoin && !WalletManager
+                        stakingManager.hasStaking && vm.token.isFlowCoin && !WalletManager
                             .shared.isSelectedChildAccount ? .visible : .gone
                     )
                 activitiesView

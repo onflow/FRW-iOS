@@ -13,6 +13,7 @@ import UIKit
 
 // MARK: - ChildAccountDetailViewModel
 
+@MainActor
 class ChildAccountDetailViewModel: ObservableObject {
     // MARK: Lifecycle
 
@@ -103,14 +104,12 @@ class ChildAccountDetailViewModel: ObservableObject {
                     data: data
                 )
 
-                DispatchQueue.main.async {
-                    TransactionManager.shared.newTransaction(holder: holder)
-                    self.isUnlinking = false
-                    self.isPresent = false
+                TransactionManager.shared.newTransaction(holder: holder)
+                self.isUnlinking = false
+                self.isPresent = false
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        Router.pop()
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    Router.pop()
                 }
             } catch {
                 log.error("unlink failed", context: error)
@@ -150,7 +149,8 @@ class ChildAccountDetailViewModel: ObservableObject {
         for holder in TransactionManager.shared.holders {
             if holder.type == .unlinkAccount, holder.internalStatus == .pending,
                let holderModel = try? JSONDecoder().decode(ChildAccount.self, from: holder.data),
-               holderModel.addr == self.childAccount.addr {
+               holderModel.addr == self.childAccount.addr
+            {
                 return true
             }
         }
@@ -208,11 +208,9 @@ class ChildAccountDetailViewModel: ObservableObject {
                 }
                 let res = tmpList.sorted { $0.count > $1.count }
 
-                DispatchQueue.main.async {
-                    self.collections = res
-                    self.accessibleItems = self.collections ?? []
-                    self.isLoading = false
-                }
+                self.collections = res
+                self.accessibleItems = self.collections ?? []
+                self.isLoading = false
             } catch {
                 log.error("\(error)")
                 print("Error")
@@ -228,19 +226,15 @@ class ChildAccountDetailViewModel: ObservableObject {
             guard let parent = WalletManager.shared.getPrimaryWalletAddress(),
                   let child = childAccount.addr
             else {
-                DispatchQueue.main.async {
-                    self.coins = []
-                    self.accessibleItems = []
-                }
+                self.coins = []
+                self.accessibleItems = []
                 return
             }
 
             let result = try await FlowNetwork.fetchAccessibleFT(parent: parent, child: child)
-            DispatchQueue.main.async {
-                self.coins = result
-                self.accessibleItems = result
-                self.isLoading = false
-            }
+            self.coins = result
+            self.accessibleItems = result
+            self.isLoading = false
         }
     }
 }
@@ -413,7 +407,8 @@ struct ChildAccountDetailView: RouteableView {
                 AccessibleItemView(item: vm.accessibleItems[idx]) { item in
                     if let collectionInfo = item as? NFTCollection, let addr = vm.childAccount.addr,
                        let pathId = collectionInfo.collection.path?.storagePathId(),
-                       !collectionInfo.isEmpty {
+                       !collectionInfo.isEmpty
+                    {
                         Router.route(to: RouteMap.NFT.collectionDetail(
                             addr,
                             pathId,
@@ -632,8 +627,8 @@ extension ChildAccountManager {}
 
 // MARK: - ChildAccountDetailView.AccessibleItemView
 
-extension ChildAccountDetailView {
-    fileprivate struct AccessibleItemView: View {
+private extension ChildAccountDetailView {
+    struct AccessibleItemView: View {
         var item: ChildAccountAccessible
         var onClick: ((_ item: ChildAccountAccessible) -> Void)?
 
@@ -694,7 +689,7 @@ extension ChildAccountAccessible {
         0
     }
 
-    var isEmpty: Bool { self.isEmpty }
+    var isEmpty: Bool { count == 0 }
 }
 
 // MARK: - NFTCollection + ChildAccountAccessible

@@ -290,7 +290,7 @@ extension RouteMap.Wallet: RouterTarget {
 
             let stakingList = RouteableUIHostingController(rootView: StakingListView())
             var dest: [UIViewController] = [stakingList]
-            if StakingManager.shared.isStaked == false {
+            if StakingManager.shared.hasStaking == false {
                 let stakingProvider = RouteableUIHostingController(rootView: SelectProviderView())
                 dest.append(stakingProvider)
             }
@@ -469,8 +469,10 @@ extension RouteMap.Profile: RouterTarget {
         case .accountSetting:
             navi.push(content: AccountSettingView())
         case let .accountDetail(childAccount):
-            let vm = ChildAccountDetailViewModel(childAccount: childAccount)
-            navi.push(content: ChildAccountDetailView(vm: vm))
+            DispatchQueue.main.async {
+                let vm = ChildAccountDetailViewModel(childAccount: childAccount)
+                navi.push(content: ChildAccountDetailView(vm: vm))
+            }
         case .switchProfile:
             let vc = PresentHostingController(rootView: AccountSwitchView())
             Router.topPresentedController().present(vc, animated: true, completion: nil)

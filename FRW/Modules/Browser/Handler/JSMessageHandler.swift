@@ -133,7 +133,8 @@ extension JSMessageHandler {
                let jsonDict = try JSONSerialization.jsonObject(
                    with: msgData,
                    options: .mutableContainers
-               ) as? [String: AnyObject] {
+               ) as? [String: AnyObject]
+            {
                 if messageIsServce(jsonDict) {
                     log.debug("will handle service")
                     handleService(message)
@@ -221,7 +222,8 @@ extension JSMessageHandler {
                 finishService()
 
                 if let network = fcl.network,
-                   let toNetwork = FlowNetworkType(rawValue: network.lowercased()) {
+                   let toNetwork = FlowNetworkType(rawValue: network.lowercased())
+                {
                     Router.route(to: RouteMap.Explore.switchNetwork(current, toNetwork, nil))
                 }
 
@@ -493,7 +495,7 @@ extension JSMessageHandler {
             } else {
                 self.rejectRequest()
             }
-            
+
             self.finishService()
         }
 
@@ -511,9 +513,9 @@ extension JSMessageHandler {
             }
         }
     }
-    
-    private func rejectRequest(reason: String = "User reject request") {        
-        self.webVC?.rejectRspsonse(reason: reason)
+
+    private func rejectRequest(reason: String = "User reject request") {
+        webVC?.rejectRspsonse(reason: reason)
     }
 
     private func signEnvelope(_ authzResponse: FCLAuthzResponse, url: URL?) {
