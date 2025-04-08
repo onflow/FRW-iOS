@@ -8,6 +8,7 @@
 import Combine
 import Kingfisher
 import SwiftUI
+import Factory
 
 // MARK: - SideMenuView
 
@@ -151,10 +152,14 @@ struct SideMenuView: View {
         VStack(spacing: 0) {
             Section {
                 VStack(spacing: 0) {
-                    ForEach(wm.currentNetworkAccounts, id: \.address) { account in
+                    ForEach(wallet.currentNetworkAccounts, id: \.address) { account in
                         AccountSideCell(
-                            address: account.address.hexAddr,
-                            currentAddress: vm.currentAddress
+                            address: account.hexAddr,
+                            currentAddress: vm.currentAddress,
+                            balance: Binding<String>(
+                                get: { vm.walletBalance[account.hexAddr]?.doubleValue.formatDisplayFlowBalance ?? "" },
+                                set: { _ in }
+                            )
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .main)
                         }
@@ -171,29 +176,33 @@ struct SideMenuView: View {
                     Spacer()
                 }
             }
-            .mockPlaceholder(wm.walletEntity?.isLoading ?? true)
+//            .mockPlaceholder(wm.walletEntity?.isLoading ?? true)
 
             Color.clear
                 .frame(height: 16)
 
             Section {
                 VStack(spacing: 0) {
-                    if let coa = wm.coa {
+                    if let coa = wallet.coa {
                         AccountSideCell(
                             address: coa.address,
                             currentAddress: vm.currentAddress
+//                            ,
+//                            balance: vm.walletBalance[coa.address]?.doubleValue?.formatDisplayFlowBalance
                         ) { address in
                             WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                         }
                     }
 
-                    if let childs = wm.childs, !childs.isEmpty {
+                    if let childs = wallet.childs, !childs.isEmpty {
                         ForEach(childs, id: \.address) { child in
                                 AccountSideCell(
                                     address: child.address.hex,
                                     currentAddress: vm.currentAddress,
                                     name: child.name,
                                     logo: child.icon?.absoluteString
+//                                    ,
+//                                    balance: vm.walletBalance[child.address.hex]?.doubleValue?.formatDisplayFlowBalance
                                 ) { address in
                                     WalletManager.shared.changeSelectedAccount(address: address, type: .child)
                                 }
@@ -209,11 +218,11 @@ struct SideMenuView: View {
                     Spacer()
                 }
                 .visibility(
-                    wm.currentMainAccount?.hasLinkedAccounts ?? false
+                    wallet.currentMainAccount?.hasLinkedAccounts ?? false
                 )
             }
         }
-        .mockPlaceholder(wm.currentMainAccount?.isLoading ?? true)
+        .mockPlaceholder(wallet.currentMainAccount?.isLoading ?? true)
     }
 
     var bottomMenu: some View {
@@ -302,8 +311,10 @@ struct SideMenuView: View {
     private var vm = SideMenuViewModel()
     @StateObject
     private var um = UserManager.shared
-    @StateObject
-    private var wm = WalletManager.shared
+    
+    @Injected(\.wallet)
+    private var wallet: WalletManager
+    
     @StateObject
     private var cm = ChildAccountManager.shared
     @StateObject

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import Factory
 
 // MARK: - SideMenuViewModel.AccountPlaceholder
 
@@ -22,39 +23,73 @@ extension SideMenuViewModel {
 
 class SideMenuViewModel: ObservableObject {
     // MARK: Internal
+    
+    @Injected(\.wallet)
+    private var wallet: WalletManager
+    
+    @Injected(\.token)
+    private var token: TokenBalanceHandler
 
     @Published
     var nftCount: Int = 0
     
     @Published
-    var isSwitchOpen = false
-    
-    @Published
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
     
     @Published
-    var walletBalance: [String: String] = [:]
+    var mainAccounts: [String] = []
+    
+    @Published
+    var linkedAccounts: [String] = []
+    
+    @Published
+    var walletBalance: [String: Decimal] = [:]
 
     var colorsMap: [String: Color] = [:]
 
     var currentAddress: String {
         WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
     }
-
-    @objc
-    func onToggle() {
-        isSwitchOpen = false
-    }
+    
+    private var cancellableSet = Set<AnyCancellable>()
     
     // MARK: Lifecycle
     
     init() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onToggle),
-            name: .toggleSideMenu,
-            object: nil
-        )
+        WalletManager.shared.$currentMainAccount
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
+            .sink {  [weak self] _ in
+                self?.loadBalance()
+            }
+            .store(in: &cancellableSet)
+    }
+    
+    func loadBalance() {
+        Task {
+            let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
+            var linksAccounts: [String] = []
+            linksAccounts = wallet.childs?.compactMap(\.address.hex) ?? []
+            if let coa = wallet.coa {
+                linksAccounts.insert(coa.address, at: 0)
+            }
+            
+            let accounts = mainAccounts + linksAccounts
+            
+            if accounts.isEmpty {
+                return
+            }
+            do {
+                let result = try await token.getAvailableFlowBalance(addresses: accounts, forceReload: true)
+                print("JJJJJJJJJJ ====> \(result)")
+                await MainActor.run {
+                    walletBalance = result
+                }
+            } catch {
+                print("JJJJJJJJJJ 1111 ====> \(error)")
+            }
+        }
     }
 
     func pickColor(from url: String) {
@@ -99,6 +134,7 @@ class SideMenuViewModel: ObservableObject {
     }
 
     func switchProfile() {
+        // TODO: remove recentToken
         LocalUserDefaults.shared.recentToken = nil
     }
 

@@ -20,7 +20,7 @@ class TokenBalanceHandler: ObservableObject {
     @Published
     public var isLoadingFlowBalance: Bool = false
     
-    private init() {}
+    public init() {}
 
     // MARK: Internal
 

@@ -110,6 +110,15 @@
         }
       },
       {
+        "package": "Factory",
+        "repositoryURL": "https://github.com/hmlongco/Factory",
+        "state": {
+          "branch": null,
+          "revision": "fb04a8918848e413d3921d346a23bae7f81088d9",
+          "version": "2.4.3"
+        }
+      },
+      {
         "package": "FancyScrollView",
         "repositoryURL": "https://github.com/nerdsupremacist/FancyScrollView",
         "state": {
@@ -132,7 +141,7 @@
         "repositoryURL": "https://github.com/Outblock/flow-swift",
         "state": {
           "branch": null,
-          "revision": "5b2f5ba19eb4f42cb229a53b3bf21012d04baf70",
+          "revision": "e76a25a287f89523a085ea7662d03b8bdf60af16",
           "version": null
         }
       },

@@ -49,6 +49,11 @@ extension WalletManager {
 
 class WalletManager: ObservableObject {
     // MARK: Lifecycle
+    
+    var supportNetworks: Set<Flow.ChainID> = [
+        .mainnet,
+        .testnet
+    ]
 
     init() {
         NotificationCenter.default.addObserver(
@@ -69,12 +74,6 @@ class WalletManager: ObservableObject {
     
     @Published
     private(set) var activatedCoins: [TokenModel] = []
-
-    @Published
-    var childAccount: ChildAccount? = nil
-    
-    @Published
-    var evmAccount: EVMAccountManager.Account? = nil
     
     @Published
     var accountInfo: Flow.AccountInfo?
@@ -100,20 +99,11 @@ class WalletManager: ObservableObject {
     }
     
     @Published
-//    @AppStorage(LocalUserDefaults.Keys.selectedAddress.rawValue)
     private(set) var selectedAccount: FWAccount?
     
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()
-
-//    @Published
-//    var walletInfo: UserWalletResponse?
-    
-//    var selectedAccount: WalletAccount.User {
-//        WalletManager.shared.walletAccount
-//            .readInfo(at: getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "")
-//    }
     
     var walletMetadata: WalletAccount.User {
         walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
@@ -126,6 +116,7 @@ class WalletManager: ObservableObject {
         return [WalletManager.shared]
     }
 
+    // TODO: Remove this
     var flowToken: TokenModel? {
         WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })
     }
@@ -153,10 +144,11 @@ class WalletManager: ObservableObject {
                 entity.$accounts
                     .compactMap { $0 }
             }
+            .filter{ $0.count >= self.supportNetworks.count }
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] accounts in
-                print("Wallet Entity Accounts Updated")
+                print("Wallet Entity Accounts Updated \(accounts.count)")
                 self?.loadRecentFlowAccount()
             }
             .store(in: &cancellableSet)
@@ -207,13 +199,11 @@ extension WalletManager {
                 return
             }
             updateKeyProvider(provider: provider, storeUser: user)
-            walletEntity = FlowWalletKit.Wallet(type: .key(provider))
+            walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
             Task {
                 do {
                     try await walletEntity?.fetchAccount()
                 } catch {
-//                    print("AAA===>", error)
-//                    HUD.error(WalletError.emptyAccountKey)
                     let _ = try await walletEntity?.fetchAllNetworkAccounts()
                 }
             }
@@ -234,15 +224,7 @@ extension WalletManager {
             selectedAccount = .main(account.address)
         }
         
-        loadCacheData()
         loadLinkedAccounts()
-        Task {
-            do {
-                try await fetchWalletDatas()
-            } catch {
-                log.error(WalletError.fetchLinkedAccountsFailed)
-            }
-        }
     }
     
     func loadLinkedAccounts() {
@@ -288,16 +270,15 @@ extension WalletManager {
 
 extension WalletManager {
     var isSelectedChildAccount: Bool {
-        childAccount != nil
+        selectedAccount?.type == .child
     }
 
     var isSelectedEVMAccount: Bool {
-        evmAccount != nil
+        selectedAccount?.type == .coa
     }
 
     var isSelectedFlowAccount: Bool {
-        ChildAccountManager.shared.selectedChildAccount == nil && EVMAccountManager.shared
-            .selectedAccount == nil
+        selectedAccount?.type == .main
     }
 
     var selectedAccountAddress: String? {
@@ -568,24 +549,19 @@ extension WalletManager {
     private func getMnemonicStoreKey(uid: String) -> String {
         "\(WalletManager.mnemonicStoreKeyPrefix).\(uid)"
     }
-
-//    private func getEncryptedMnemonicData(uid: String) -> Data? {
-//        getData(fromMainKeychain: getMnemonicStoreKey(uid: uid))
-//    }
 }
 
 // MARK: - Coins
 
 extension WalletManager {
     func fetchWalletDatas() async throws {
+        
+        print("AAAAAAAAA =====> fetchWalletDatas ")
+        
         guard getPrimaryWalletAddress() != nil else {
             return
         }
-//        log.debug("fetchWalletDatas")
-        // First fetch evm and link address of this address
-//        await EVMAccountManager.shared.refreshSync()
-//        await ChildAccountManager.shared.refreshAsync()
-
+        
         try await fetchSupportedTokens()
         try await fetchActivatedTokens()
         try await fetchAccessible()
@@ -601,7 +577,7 @@ extension WalletManager {
         await MainActor.run {
             self.supportedCoins = supportedToken
         }
-        PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
+//        PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
     }
 
     /// fetch main or child activated token and balances
@@ -615,7 +591,7 @@ extension WalletManager {
         let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address)
         await MainActor.run {
             self.activatedCoins = availableTokens
-            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
+//            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
         }
         preloadActivatedIcons()
     }
@@ -689,125 +665,10 @@ extension WalletManager {
     func fetchAccessible() async throws {
         try await accessibleManager.fetchFT()
     }
-}
-
-// MARK: - Helper
-
-extension WalletManager {
+    
     private func preloadActivatedIcons() {
         for token in activatedCoins {
             KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
         }
-    }
-
-    static func encryptionAES(
-        key: String,
-        iv: String = LocalEnvManager.shared.aesIV,
-        data: Data
-    ) throws -> Data {
-        guard var keyData = key.data(using: .utf8), let ivData = iv.data(using: .utf8) else {
-            throw LLError.aesKeyEncryptionFailed
-        }
-        if keyData.count > 16 {
-            keyData = keyData.prefix(16)
-        } else {
-            keyData = keyData.paddingZeroRight(blockSize: 16)
-        }
-
-        guard let encrypted = AES.encryptCBC(key: keyData, data: data, iv: ivData, mode: .pkcs7)
-        else {
-            throw LLError.aesEncryptionFailed
-        }
-        return encrypted
-    }
-
-    static func decryptionAES(
-        key: String,
-        iv: String = LocalEnvManager.shared.aesIV,
-        data: Data
-    ) throws -> Data {
-        guard var keyData = key.data(using: .utf8), let ivData = iv.data(using: .utf8) else {
-            throw LLError.aesKeyEncryptionFailed
-        }
-
-        if keyData.count > 16 {
-            keyData = keyData.prefix(16)
-        } else {
-            keyData = keyData.paddingZeroRight(blockSize: 16)
-        }
-
-        guard let decrypted = AES.decryptCBC(key: keyData, data: data, iv: ivData, mode: .pkcs7)
-        else {
-            throw LLError.aesEncryptionFailed
-        }
-        return decrypted
-    }
-
-    static func encryptionChaChaPoly(key: String, data: Data) throws -> Data {
-        guard let cipher = ChaChaPolyCipher(key: key) else {
-            throw EncryptionError.initFailed
-        }
-        return try cipher.encrypt(data: data)
-    }
-
-    static func decryptionChaChaPoly(key: String, data: Data) throws -> Data {
-        guard let cipher = ChaChaPolyCipher(key: key) else {
-            throw EncryptionError.initFailed
-        }
-        return try cipher.decrypt(combinedData: data)
-    }
-}
-
-// MARK: FlowSigner
-
-extension WalletManager: FlowSigner {
-    var keyIndex: Int {
-        currentMainAccount?.keyIndex ?? 0
-    }
-    
-    public var address: Flow.Address {
-        currentMainAccount?.address ?? .init(hex: "")
-    }
-
-    public func sign(transaction _: Flow.Transaction, signableData: Data) async throws -> Data {
-        return try await sign(signableData: signableData)
-    }
-
-    public func sign(signableData: Data) async throws -> Data {
-        let result = await SecurityManager.shared.SecurityVerify()
-        if result == false {
-            HUD.error(title: "verify_failed".localized)
-            throw WalletError.securityVerifyFailed
-        }
-        
-        guard let provider = keyProvider else {
-            throw WalletError.emptyKeyProvider
-        }
-        
-        guard let key = currentMainAccount?.fullWeightKey else {
-            throw WalletError.emptyAccountKey
-        }
-        
-        let signature = try provider.sign(
-            data: signableData,
-            signAlgo: key.signAlgo,
-            hashAlgo: key.hashAlgo
-        )
-        return signature
-    }
-
-    private func userSecretSign() -> Bool {
-        UserManager.shared.userType != .phrase
-    }
-}
-
-extension Flow.AccountKey {
-    func toCodableModel() -> AccountKey {
-        AccountKey(
-            hashAlgo: hashAlgo.index,
-            publicKey: publicKey.hex,
-            signAlgo: signAlgo.index,
-            weight: weight
-        )
     }
 }
