@@ -102,6 +102,10 @@ final class MoveTokenViewModel: ObservableObject {
         return "\(totalStr)"
     }
 
+    var isFreeMove: Bool {
+        fromContact.walletType == toContact.walletType
+    }
+
     func updateTokenModel() async {
         guard let address = FWAddressDector.create(address: fromContact.address) else {
             return
@@ -338,7 +342,9 @@ final class MoveTokenViewModel: ObservableObject {
     }
 
     private func updateAmountIfNeed(inputAmount: Decimal) -> Decimal {
-        // move fee
+        guard isFromFlowToCoa() else {
+            return max(inputAmount, 0)
+        }
         let num = max(inputAmount - WalletManager.fixedMoveFee, 0)
         return num
     }
