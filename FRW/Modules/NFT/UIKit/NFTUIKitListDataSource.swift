@@ -38,7 +38,7 @@ class NFTUIKitListGridDataModel {
             if offset == 0 {
                 self.nfts.removeAll()
             }
-
+            self.reloadCallback?()
             self.appendGridNFTsNoDuplicated(nfts)
             self.isEnd = nfts.count < limit
             self.saveToCache()

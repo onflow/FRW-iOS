@@ -44,8 +44,8 @@ extension UIFont {
         UIFont(name: "e-Ukraine-Bold", size: size)!
     }
 
-    static func inter(size: CGFloat) -> UIFont {
-        UIFont(name: "e-Ukraine-Regular", size: size)!
+    static func inter(size: CGFloat = 16, weight: Weight = .regular) -> UIFont {
+        UIFont(name: "Inter", size: size)!.withWeight(weight)
     }
 
     static func montserratBold(size: CGFloat) -> UIFont {

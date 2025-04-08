@@ -159,7 +159,7 @@ class NFTUIKitCollectionRegularItemCell: UICollectionViewCell {
         arrowImageView.snp.makeConstraints { make in
             make.right.equalTo(-16)
             make.centerY.equalToSuperview()
-            make.size.equalTo(CGSize(width: 12, height: 12))
+            make.size.equalTo(CGSize(width: 24, height: 24))
             make.left.equalTo(stackView.snp.right).offset(Padding)
         }
 

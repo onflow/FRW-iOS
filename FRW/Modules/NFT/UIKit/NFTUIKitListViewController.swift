@@ -17,6 +17,8 @@ class NFTUIKitListViewController: UIViewController {
     var listStyleHandler = NFTUIKitListStyleHandler()
     var gridStyleHandler = NFTUIKitGridStyleHandler()
 
+    var currentViewStyle: NFTViewStyle = .list
+
     var style: NFTTabScreen.ViewStyle = .normal {
         didSet {
             reloadViews()
@@ -78,7 +80,6 @@ class NFTUIKitListViewController: UIViewController {
         switch style {
         case .normal:
             gridStyleHandler.containerView.removeFromSuperview()
-
             if listStyleHandler.containerView.superview != contentView {
                 contentView.addSubview(listStyleHandler.containerView)
                 listStyleHandler.containerView.snp.makeConstraints { make in
@@ -141,28 +142,13 @@ class NFTUIKitListViewController: UIViewController {
         return view
     }()
 
-    private lazy var segmentControl: NFTUIKitSegmentControl = {
-        let view = NFTUIKitSegmentControl(names: ["seg_list".localized, "seg_grid".localized])
-        view.callback = { [weak self] index in
-            guard let self = self else {
-                return
-            }
-
-            switch index {
-            case 0:
-                self.style = .normal
-            case 1:
-                self.style = .grid
-            default:
-                break
-            }
-
-            let feedbackGenerator = UIImpactFeedbackGenerator(style: .rigid)
-            feedbackGenerator.impactOccurred()
-
-            self.reloadViews()
-        }
-        return view
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.Theme.Text.black8
+        label.font = .inter(size: 20, weight: .semibold)
+        label.textAlignment = .left
+        label.text = "NFT Collections".localized
+        return label
     }()
 
     private lazy var addButton: UIButton = {
@@ -180,6 +166,25 @@ class NFTUIKitListViewController: UIViewController {
         }
 
         btn.addTarget(self, action: #selector(onAddButtonClick), for: .touchUpInside)
+
+        return btn
+    }()
+
+    private lazy var menuButton: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(UIImage(named: "icon-nft-dot"), for: .normal)
+
+        let bgColor = UIColor.LL.Neutrals.neutrals3.withAlphaComponent(0.24)
+        btn.setBackgroundImage(UIImage.image(withColor: bgColor), for: .normal)
+
+        btn.clipsToBounds = true
+        btn.layer.cornerRadius = 16
+
+        btn.snp.makeConstraints { make in
+            make.width.height.equalTo(32)
+        }
+
+        btn.addTarget(self, action: #selector(onClickMenu), for: .touchUpInside)
 
         return btn
     }()
@@ -233,9 +238,28 @@ class NFTUIKitListViewController: UIViewController {
             self?.offsetDidChanged(offset)
         }
 
+        listStyleHandler.dataDidUpdate = { [weak self] count in
+            self?.updateUI(with: count)
+        }
+        gridStyleHandler.dataDidUpdate = { [weak self] count in
+            self?.updateUI(with: count)
+        }
+
         view.bringSubviewToFront(headerContainerView)
 
         reloadViews()
+    }
+
+    private func updateUI(with count: Int) {
+        menuButton.snp.updateConstraints { make in
+            make.width.height.equalTo(count > 0 ? 32 : 0)
+        }
+        addButton.snp.updateConstraints { make in
+            make.right.equalTo(menuButton.snp.left).offset(count > 0 ? -10 : 0)
+        }
+        withAnimation {
+            headerContentView.layoutIfNeeded()
+        }
     }
 
     private func offsetDidChanged(_ offset: CGFloat) {
@@ -260,15 +284,21 @@ class NFTUIKitListViewController: UIViewController {
             make.left.right.bottom.equalToSuperview()
         }
 
-        headerContentView.addSubview(segmentControl)
-        segmentControl.snp.makeConstraints { make in
+        headerContentView.addSubview(titleLabel)
+        titleLabel.snp.makeConstraints { make in
             make.left.equalTo(18)
+            make.centerY.equalToSuperview()
+        }
+
+        headerContentView.addSubview(menuButton)
+        menuButton.snp.makeConstraints { make in
+            make.right.equalTo(-18)
             make.centerY.equalToSuperview()
         }
 
         headerContentView.addSubview(addButton)
         addButton.snp.makeConstraints { make in
-            make.right.equalTo(-18)
+            make.right.equalTo(menuButton.snp.left).offset(-10)
             make.centerY.equalToSuperview()
         }
 
@@ -278,5 +308,30 @@ class NFTUIKitListViewController: UIViewController {
     @objc
     private func onAddButtonClick() {
         Router.route(to: RouteMap.NFT.addCollection)
+    }
+
+    @objc
+    private func onClickMenu() {
+        NFTViewStyleMenuController.show(
+            from: self,
+            currentStyle: currentViewStyle
+        ) { [weak self] newStyle in
+            self?.currentViewStyle = newStyle
+            self?.updateViewStyle(newStyle)
+        }
+    }
+
+    private func updateViewStyle(_ style: NFTViewStyle) {
+        switch style {
+        case .list:
+            self.style = .normal
+        case .grid:
+            self.style = .grid
+        }
+
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .rigid)
+        feedbackGenerator.impactOccurred()
+
+        reloadViews()
     }
 }
