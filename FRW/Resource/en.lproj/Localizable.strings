@@ -94,7 +94,6 @@
 "Edit__Address::message" = "Edit Address";
 "top_selection" = "Top Selection";
 "Are__you__sure__you__want__to__remove__this__contact::message" = "Are you sure you want to remove this contact?";
-"nft_empty" = "You don’t have any NFTs yet.";
 "You__will__no__longer__find__this__contact__in__your__address__book::message" = "You will no longer find this contact in your address book.";
 "Empty__List::message" = "Empty List";
 "get_new_nft" = "Get new NFTs";
@@ -1150,3 +1149,6 @@ Key Store and Private Key.";
 "error_check_refresh" = "Error, please check your internet or refresh.";
 "result" = "Result";
 "nft_no_found" = "No relevant NFT found.";
+"NFT Collections" = "NFT Collections";
+"nft_empty_v2" = "Your collection is waiting to shine!";
+"nft_empty_detail" = "Start exploring and add your first NFTs today.";
