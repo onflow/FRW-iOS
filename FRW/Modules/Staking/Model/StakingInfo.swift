@@ -25,6 +25,10 @@ struct StakingNode: Codable {
         tokensCommitted + tokensStaked
     }
 
+    var allStatusCount: Double {
+        tokensCommitted + tokensStaked + tokensUnstaking + tokensRewarded + tokensUnstaked + tokensRequestedToUnstake
+    }
+
     var isLilico: Bool {
         StakingProviderCache.cache.providers.first { $0.isLilico }?.id == nodeID
     }

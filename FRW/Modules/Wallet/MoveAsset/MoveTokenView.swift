@@ -70,8 +70,7 @@ struct MoveTokenView: RouteableView, PresentActionDelegate {
 
                 MoveTokenView
                     .AccountView(
-                        isFree: viewModel.fromContact.walletType == viewModel
-                            .toContact.walletType
+                        isFree: viewModel.isFreeMove
                     ) { _ in
                     }
             }
@@ -232,11 +231,12 @@ extension MoveTokenView {
                         Text("max".localized)
                             .font(.inter(size: 12, weight: .w500))
                             .foregroundStyle(Color.Theme.Accent.grey)
-                            .padding(.horizontal, 5)
+                            .padding(.horizontal, 8)
                             .frame(height: 24)
                             .background(Color.Theme.Accent.grey.fixedOpacity())
                             .cornerRadius(16)
                     }
+                    .mockPlaceholder(viewModel.loadingBalance)
                 }
 
                 Divider()

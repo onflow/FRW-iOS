@@ -297,7 +297,7 @@ extension RouteMap.Wallet: RouterTarget {
 
             let stakingList = RouteableUIHostingController(rootView: StakingListView())
             var dest: [UIViewController] = [stakingList]
-            if StakingManager.shared.isStaked == false {
+            if StakingManager.shared.hasStaking == false {
                 let stakingProvider = RouteableUIHostingController(rootView: SelectProviderView())
                 dest.append(stakingProvider)
             }

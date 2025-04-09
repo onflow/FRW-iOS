@@ -118,11 +118,6 @@ class StakeAmountViewModel: ObservableObject {
             return
         }
 
-        if balance - inputTextNum < 0.001, !isUnstake {
-            errorType = .belowMinimumBalance
-            return
-        }
-
         if inputTextNum < 50, !isUnstake {
             errorType = .belowMinimumAmount
             return
