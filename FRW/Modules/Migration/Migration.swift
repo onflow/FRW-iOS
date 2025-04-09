@@ -54,7 +54,7 @@ extension Migration {
         }
         for uid in UserManager.shared.loginUIDList {
             do {
-                var encodedData = try WalletManager.encryptionChaChaPoly(key: uid, data: data)
+                let encodedData = try WalletManager.encryptionChaChaPoly(key: uid, data: data)
                 let newKey = "lilico.pinCode.\(uid)"
                 try localKeychain.set(encodedData, key: newKey)
                 try remoteKeychain.remove(key)

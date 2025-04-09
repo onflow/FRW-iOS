@@ -212,7 +212,6 @@ extension RouteMap {
     enum Wallet {
         case addToken
         case tokenDetail(TokenModel, Bool)
-        case receive
         case send(_ address: String = "")
         case sendAmount(Contact, TokenModel, isPush: Bool = true)
         case scan(SPQRCodeCallback, click: SPQRCodeCallback? = nil)
@@ -253,12 +252,6 @@ extension RouteMap.Wallet: RouterTarget {
             navi.push(content: AddTokenView(vm: AddTokenViewModel()))
         case let .tokenDetail(token, isAccessible):
             navi.push(content: TokenDetailView(token: token, accessible: isAccessible))
-        case .receive:
-            let vc = UIHostingController(rootView: WalletReceiveView())
-            vc.modalPresentationStyle = .overCurrentContext
-            vc.modalTransitionStyle = .coverVertical
-            vc.view.backgroundColor = .clear
-            navi.present(vc, animated: false)
         case let .send(address):
             navi.present(content: WalletSendView(address: address))
         case let .sendAmount(contact, token, isPush):

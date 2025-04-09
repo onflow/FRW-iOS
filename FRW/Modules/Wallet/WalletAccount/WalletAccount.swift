@@ -41,7 +41,7 @@ extension WalletAccount {
     mutating func readInfo(at address: String) -> WalletAccount.User {
         let currentNetwork = LocalUserDefaults.shared.flowNetwork
         if var list = storedAccount[key] {
-            var lastUser = list.last { $0.network == currentNetwork && $0.address == address }
+            let lastUser = list.last { $0.network == currentNetwork && $0.address == address }
             if let user = lastUser {
                 return user
             } else {
@@ -66,7 +66,7 @@ extension WalletAccount {
     mutating func update(at address: String, emoji: WalletAccount.Emoji, name: String? = nil) {
         let currentNetwork = LocalUserDefaults.shared.flowNetwork
         if var list = storedAccount[key] {
-            if var index = list
+            if let index = list
                 .lastIndex(where: { $0.network == currentNetwork && $0.address == address }) {
                 var user = list[index]
                 user.emoji = emoji

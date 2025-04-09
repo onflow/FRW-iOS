@@ -9,13 +9,20 @@ import Flow
 import Foundation
 import Web3Core
 
-class TokenBalanceHandler {
+class TokenBalanceHandler: ObservableObject {
     // MARK: Lifecycle
 
     // ADD: Thread-safe queue for cache access
     private let cacheQueue = DispatchQueue(label: "com.outblock.frw.tokenbalance.cache", attributes: .concurrent)
     private var cache: [String: TokenBalanceProvider] = [:]
-    private init() {}
+    
+    @Published
+    public var flowBalance: [String: Decimal] = [:]
+    
+    @Published
+    public var isLoadingFlowBalance: Bool = false
+    
+    public init() {}
 
     // MARK: Internal
 
@@ -77,12 +84,58 @@ class TokenBalanceHandler {
         }
         return try? FRWAPI.jsonDecoder.decode(SingleToken.self, from: data)
     }
+    
+    func getAvailableFlowBalance(address: String,
+                                 network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                                 forceReload: Bool = false) async throws -> Decimal? {
+        
+        if (flowBalance[address] != nil), !forceReload {
+            return flowBalance[address]
+        }
+        
+        guard let first = FWAddressDector.create(address: address) else {
+            return nil
+        }
+        
+        isLoadingFlowBalance = true
+        defer { isLoadingFlowBalance = false }
+        
+        let provider = generateProvider(address: first, network: network)
+        let dict = try await provider.getAvailableFlowBalance(addresses: [address])
+        for (key, value) in dict {
+            flowBalance[key] = value
+        }
+        return dict[address]
+    }
+    
+    func getAvailableFlowBalance(addresses: [String],
+                                 network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                                 forceReload: Bool = false) async throws -> [String: Decimal] {
+        
+        if flowBalance.keys.contains(addresses), !forceReload {
+            return Dictionary(uniqueKeysWithValues: zip(addresses, flowBalance.values))
+        }
+        
+        guard let first = FWAddressDector.create(address: addresses.first) else {
+            return [:]
+        }
+        
+        isLoadingFlowBalance = true
+        defer { isLoadingFlowBalance = false }
+        
+        let provider = generateProvider(address: first, network: network)
+        let dict = try await provider.getAvailableFlowBalance(addresses: addresses)
+        for (key, value) in dict {
+            flowBalance[key] = value
+        }
+        return dict
+    }
 
     func getSupportTokens(address: FWAddress,
                           network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
                           ignoreCache: Bool = true) async throws -> [TokenModel]
     {
-        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getSupportTokens()
     }
 
@@ -91,7 +144,7 @@ class TokenBalanceHandler {
                             network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
                             ignoreCache: Bool = true) async throws -> [TokenModel]
     {
-        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getActivatedTokens(address: address, in: .whitelistAndCustom)
     }
 
@@ -100,7 +153,7 @@ class TokenBalanceHandler {
         network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
         ignoreCache: Bool = true
     ) async throws -> [TokenModel] {
-        let provider = generateProvider(address: address, network: network, ignoreCache: ignoreCache)
+        let provider = generateProvider(address: address, network: network)
         return try await provider.getFTBalance(address: address)
     }
 
@@ -186,22 +239,3 @@ extension TokenBalanceHandler {
     }
 }
 
-/// Types allowed for Token's display list
-struct TokenListMode: OptionSet {
-    let rawValue: Int
-
-    // Define individual token list modes with bitwise values
-    static let whitelist = TokenListMode(rawValue: 1 << 0) // 0001
-    static let unverified = TokenListMode(rawValue: 1 << 1) // 0010
-    static let custom = TokenListMode(rawValue: 1 << 2) // 0100
-
-    // Define combined modes for easier use
-    static let whitelistAndUnverified: TokenListMode = [.whitelist, .unverified] // 0011
-    static let whitelistAndCustom: TokenListMode = [.whitelist, .custom] // 0101
-    static let all: TokenListMode = [.whitelist, .unverified, .custom] // 0111
-
-    // Helper function to check if mode contains another
-    func contains(_ mode: TokenListMode) -> Bool {
-        return intersection(mode) == mode
-    }
-}

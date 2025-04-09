@@ -32,7 +32,7 @@ struct ReceiveQRView: RouteableView {
                     viewModel.onChangeChain(isEvm: isOn)
                 }
             }
-            .visibility(viewModel.hasEVM ? .visible : .gone)
+            .visibility(viewModel.hasEVM)
 
             qrCodeView
                 .padding(.top, 32)

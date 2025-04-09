@@ -545,8 +545,7 @@ struct NFTDetailPage: RouteableView {
 
     private func calloutTitle() -> String {
         let token = vm.nft.title
-        let account = WalletManager.shared.selectedAccountWalletName
-        let desc = "accessible_not_x_x".localized(token, account)
+        let desc = "accessible_not_x_x".localized(token, "Child")
         return desc
     }
 }

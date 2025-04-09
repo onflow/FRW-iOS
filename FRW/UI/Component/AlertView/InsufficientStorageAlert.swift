@@ -54,7 +54,7 @@ extension AlertViewController {
                 ),
                 buttons: [
                     AlertView.ButtonItem(type: .secondaryAction, title: "Deposit::message".localized, action: {
-                        Router.route(to: RouteMap.Wallet.receive)
+                        Router.route(to: RouteMap.Wallet.receiveQR)
                     }),
                     AlertView.ButtonItem(type: .primaryAction, title: "buy_flow".localized, action: {
                         Router.route(to: RouteMap.Wallet.buyCrypto)

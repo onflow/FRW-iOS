@@ -102,7 +102,7 @@ class ChildAccountManager: ObservableObject {
                 }
             }.store(in: &cancelSets)
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$currentMainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
@@ -112,7 +112,6 @@ class ChildAccountManager: ObservableObject {
                         self.loadCache()
                         return
                     }
-
                     self.refresh()
                 }
             }.store(in: &cancelSets)

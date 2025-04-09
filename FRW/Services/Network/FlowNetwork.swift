@@ -78,9 +78,11 @@ extension FlowNetwork {
     }
 
     /// get avaiblabe account balance for all type: coa,flow,link
-    static func getFlowBalanceForAnyAccount(address: [String]) async throws -> [String: Double?] {
-        let list = address.map { Flow.Cadence.FValue.string($0) }
-        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [Flow.Cadence.FValue.array(list)])
+    static func getFlowBalanceForAnyAccount(addresses: [String]) async throws -> [String: Decimal] {
+        guard let list = Flow.Argument(addresses) else {
+            throw CadenceError.invaildArgument
+        }
+        return try await fetch(by: \.basic?.getFlowBalanceForAnyAccounts, arguments: [list.value])
     }
 }
 
@@ -116,15 +118,11 @@ extension FlowNetwork {
             throw NFTError.noCollectionInfo
         }
 
-        guard let fromAddress = WalletManager.shared.getPrimaryWalletAddress() else {
-            throw LLError.invalidAddress
-        }
-
         guard let tokenIdInt = UInt64(nft.response.id) else {
             throw NFTError.invalidTokenId
         }
 
-        var nftTransfer: KeyPath<CadenceModel, String?> = \.collection?.sendNFTV3
+        let nftTransfer: KeyPath<CadenceModel, String?> = \.collection?.sendNFTV3
         let nbaNFTTransfer: KeyPath<CadenceModel, String?> = \.collection?.sendNbaNFTV3
 
         return try await sendTransaction(
@@ -209,16 +207,13 @@ extension FlowNetwork {
         deadline: Decimal,
         isFrom: Bool
     ) async throws -> Flow.ID {
-        guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
-            throw LLError.invalidAddress
-        }
 
         let tokenName = String(swapPaths.last?.split(separator: ".").last ?? "")
         let tokenAddress = String(swapPaths.last?.split(separator: ".")[1] ?? "").addHexPrefix()
 
         let fromCadence: KeyPath<CadenceModel, String?> = \.swap?.SwapExactTokensForTokens
         let toCadence: KeyPath<CadenceModel, String?> = \.swap?.SwapTokensForExactTokens
-        var cadenceKeyPath = isFrom ? fromCadence : toCadence
+        let cadenceKeyPath = isFrom ? fromCadence : toCadence
 
         var args = [Flow.Cadence.FValue]()
         args.append(.array(swapPaths.map { .string($0) }))
@@ -236,7 +231,6 @@ extension FlowNetwork {
         args.append(.path(Flow.Argument.Path(domain: "storage", identifier: tokenOutVaultPath)))
         args.append(.path(Flow.Argument.Path(domain: "public", identifier: tokenOutReceiverPath)))
         args.append(.path(Flow.Argument.Path(domain: "public", identifier: tokenOutBalancePath)))
-        let fromKeyIndex = WalletManager.shared.keyIndex
 
         return try await sendTransaction(
             by: cadenceKeyPath,
@@ -387,33 +381,21 @@ extension FlowNetwork {
         return result.doubleValue
     }
 
-    static func getDelegatorInfo() async throws -> [String: Int]? {
-        let address = Flow.Address(hex: WalletManager.shared.getPrimaryWalletAddress() ?? "")
-        let cadence = CadenceManager.shared.current.staking?.getDelegatesIndo?.toFunc() ?? ""
-        let replacedCadence = cadence.replace(by: ScriptAddress.addressMap())
-        let rawResponse = try await flow.accessAPI.executeScriptAtLatestBlock(
-            script: Flow.Script(text: replacedCadence),
-            arguments: [.address(address)]
-        )
-
-        let response = try JSONDecoder().decode(StakingDelegatorInner.self, from: rawResponse.data)
-        debugPrint("FlowNetwork -> getDelegatorInfo, response = \(response)")
-
-        guard let values = response.value?.value else {
-            return nil
+    static func getDelegatorInfo() async throws -> [CadenceLoader.Category.Staking.StakingNode] {
+        guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
+            throw WalletError.emptyAddress
         }
-
-        let compactValues = values.compactMap { $0 }
-
-        var results: [String: Int] = [:]
-        for value in compactValues {
-            if let resultKey = value.key?.value {
-                let resultValue = Int(value.value?.value?.first??.key?.value ?? "0") ?? 0
-                results[resultKey] = resultValue
-            }
+        
+        guard let cadence = CadenceManager.shared.current.staking?.getDelegatesIndo?.toFunc() else {
+            throw WalletError.emptyScript
         }
+        
+        let response: [CadenceLoader.Category.Staking.StakingNode] = try await flow.accessAPI.executeScriptAtLatestBlock(
+            cadence: cadence,
+            arguments: [.address(.init(address))]
+        ).decode()
 
-        return results
+        return response
     }
 }
 
@@ -706,16 +688,6 @@ extension FlowNetwork {
     static func getLastBlockAccountKeyId(address: String) async throws -> Int {
         let account = try await getAccountAtLatestBlock(address: address)
         return account.keys.first?.index ?? 0
-    }
-
-    static func checkStorageInfo() async throws -> Flow.StorageInfo {
-        let address = Flow.Address(hex: WalletManager.shared.getPrimaryWalletAddress() ?? "")
-        let cadence = CadenceManager.shared.current.basic?.getStorageInfo?.toFunc() ?? ""
-        let response = try await flow.accessAPI.executeScriptAtLatestBlock(
-            cadence: cadence,
-            arguments: [.address(address)]
-        ).decode(Flow.StorageInfo.self)
-        return response
     }
 
     static func checkAccountInfo() async throws -> Flow.AccountInfo {

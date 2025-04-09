@@ -60,6 +60,13 @@ extension String {
 
         return self
     }
+    
+    func dropPrefix(_ prefix: String) -> Self {
+        if hasPrefix(prefix) {
+            return String(dropFirst(prefix.count))
+        }
+        return self
+    }
 
     func removeSuffix(_ suffix: String) -> String {
         if hasSuffix(suffix) {

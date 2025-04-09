@@ -59,6 +59,7 @@ extension LocalUserDefaults {
         case migrationFinished
 
         case userDefaultTheme
+        case selectedAddress
     }
 }
 

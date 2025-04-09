@@ -24,8 +24,6 @@ public enum NetworkError: Error {
 // MARK: - Network
 
 enum Network {
-//    var cancelllables: [AnyCancellable] = []
-
     struct Response<T: Decodable>: Decodable {
         enum CodingKeys: String, CodingKey {
             case httpCode = "status"
@@ -71,9 +69,7 @@ enum Network {
         case let .success(response):
             do {
                 let filterdResponse = try response.filterSuccessfulStatusCodes()
-
                 let model = try decoder.decode(Response<T>.self, from: filterdResponse.data)
-
                 guard let data = model.data else {
                     throw NetworkError.emptyData
                 }
@@ -112,41 +108,4 @@ enum Network {
             throw error
         }
     }
-
-//    func request<T: Codable, U: TargetType>(_ target: U) -> Future<T, Error> {
-//
-//        return Future { promise in
-//
-//            let token = try await Auth.auth().currentUser?.getIDToken()
-//
-//            let authPlugin = AccessTokenPlugin { result in
-//                ""
-//            }
-//
-//            let provider = MoyaProvider<U>(plugins: [NetworkLoggerPlugin(), authPlugin])
-//            provider.request(target, completion: { result in
-//                switch result {
-//                case let .success(response):
-//
-//                    if let designPath = path, !designPath.isEmpty {
-//                        guard let model = response.mapObject(T.self, designatedPath: designPath) else {
-//                            seal.reject(MyError.DecodeFailed)
-//                            return
-//                        }
-//                        seal.fulfill(model)
-//
-//                    } else {
-//                        guard let model = response.mapObject(T.self) else {
-//                            seal.reject(MyError.DecodeFailed)
-//                            return
-//                        }
-//                        seal.fulfill(model)
-//                    }
-//
-//                case let .failure(error):
-//                    seal.reject(error)
-//                }
-//            })
-//        }
-//    }
 }

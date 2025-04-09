@@ -320,7 +320,6 @@ extension TokenDetailViewModel {
             return
         }
         WalletManager.shared.customTokenManager.delete(token: customToken)
-        HUD.success(title: "")
     }
 }
 
@@ -330,9 +329,9 @@ extension TokenDetailViewModel {
     private func fetchAllData() {
         Task {
             await withTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    try? await WalletManager.shared.fetchBalance()
-                }
+//                group.addTask {
+//                    try? await WalletManager.shared.fetchBalance()
+//                }
 
                 group.addTask {
                     let accountInfo = try? await FlowNetwork.checkAccountInfo()

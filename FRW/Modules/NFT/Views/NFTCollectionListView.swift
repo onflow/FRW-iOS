@@ -92,16 +92,13 @@ class NFTCollectionListViewViewModel: ObservableObject {
 
     func fetch() {
         Task {
-            guard let path = collectionPath else {
+            guard let path = collectionPath, let account = WalletManager.shared.selectedAccount else {
                 return
             }
 
             do {
-                let address = address ?? WalletManager.shared.selectedAccountAddress
-                let from: VMType = EVMAccountManager.shared
-                    .selectedAccount != nil ? .evm : .cadence
                 let request = NFTCollectionDetailListRequest(
-                    address: address,
+                    address: account.hexAddr,
                     collectionIdentifier: path,
                     offset: String(0),
                     limit: 24
@@ -109,7 +106,7 @@ class NFTCollectionListViewViewModel: ObservableObject {
                 let response: NFTListResponse = try await Network
                     .request(FRWAPI.NFT.collectionDetailList(
                         request,
-                        from
+                        account.vmType
                     ))
 
                 await MainActor.run {
@@ -246,8 +243,7 @@ struct NFTCollectionListView: RouteableView {
 
     private func calloutTitle() -> String {
         let token = vm.collection.name
-        let account = WalletManager.shared.selectedAccountWalletName
-        let desc = "accessible_not_x_x".localized(token, account)
+        let desc = "accessible_not_x_x".localized(token, "Child")
         return desc
     }
 }

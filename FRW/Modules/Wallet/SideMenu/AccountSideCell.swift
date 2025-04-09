@@ -11,23 +11,20 @@ import SwiftUI
 struct AccountSideCell: View {
     // MARK: Internal
 
-    enum Action {
-        case card
-        case arrow
-    }
-
     var address: String
     var currentAddress: String
     var name: String? = nil
     var logo: String? = nil
-    var detail: String? = nil
-    var onClick: (String, AccountSideCell.Action) -> Void
-
+    
+    @Binding
+    var balance: String?
+    
+    var onClick: (String) -> Void
+    
     var body: some View {
         Button {
             NotificationCenter.default.post(name: .toggleSideMenu)
-            onClick(address, .card)
-
+            onClick(address)
         } label: {
             HStack(spacing: 0) {
                 if let logoUrl = logo {
@@ -69,12 +66,13 @@ struct AccountSideCell: View {
                         .foregroundStyle(Color.Theme.Text.black3)
                         .frame(height: 20)
 
-                    Text(detail ?? "")
-                        .font(.inter(size: 12))
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .foregroundStyle(Color.Theme.Text.black8)
-                        .visibility(detail == nil ? .gone : .visible)
+                    if let balance {
+                        Text(balance)
+                            .font(.inter(size: 12))
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                            .foregroundStyle(Color.Theme.Text.black8)
+                    }
                 }
                 Spacer()
 
@@ -146,12 +144,4 @@ struct AccountSideCell: View {
         }
         return false
     }
-}
-
-#Preview {
-    AccountSideCell(
-        address: WalletManager.shared.getFlowNetworkTypeAddress(network: .mainnet) ?? "",
-        currentAddress: "",
-        onClick: { _, _ in }
-    )
 }

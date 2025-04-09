@@ -33,27 +33,15 @@ class StakingManager: ObservableObject {
                 self.refresh()
             }.store(in: &cancelSet)
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$selectedAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
-            .map { $0 }
-            .sink { walletInfo in
-                if walletInfo != nil {
+            .compactMap { $0 }
+            .sink { account in
+                if account.type == .main {
                     self.refresh()
                 } else {
                     self.clean()
-                }
-            }.store(in: &cancelSet)
-
-        WalletManager.shared.$childAccount
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .map { $0 }
-            .sink { newChildAccount in
-                self.clean()
-
-                if newChildAccount == nil {
-                    self.refresh()
                 }
             }.store(in: &cancelSet)
     }
@@ -295,19 +283,17 @@ extension StakingManager {
     }
 
     func refreshDelegatorInfo() async throws {
-        let refAddress = WalletManager.shared.getPrimaryWalletAddress() ?? "0"
+        guard let refAddress = WalletManager.shared.getPrimaryWalletAddress() else {
+            throw WalletError.emptyAddress
+        }
+        let response = try await FlowNetwork.getDelegatorInfo()
 
-        if let response = try await FlowNetwork.getDelegatorInfo(), !response.isEmpty {
-            if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
-                return
-            }
-
-            debugPrint("StakingManager -> refreshDelegatorInfo success, \(response)")
-            DispatchQueue.main.async {
-                self.delegatorIds = response
-            }
-        } else {
-            debugPrint("StakingManager -> refreshDelegatorInfo is empty")
+        if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
+            return
+        }
+        
+        for node in response {
+            delegatorIds[node.nodeID] = node.id
         }
     }
 
@@ -321,7 +307,7 @@ extension StakingManager {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isSetup = isSetup
                     self.saveCache()
                 }

@@ -426,10 +426,14 @@ extension WalletSendViewModel {
             return
         }
 
-        let vaultIdentifier = LocalUserDefaults.shared.recentToken
-        guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
-            return
-        }
+        // TODO: - FIX ME
+//        let vaultIdentifier = LocalUserDefaults.shared.recentToken
+//        guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
+//            return
+//        }
+        
+        let token = TokenBalanceHandler.getFlowTokenModel(network: .mainnet)!
+            .toTokenModel(type: .cadence, network: .mainnet)
 
         Router.route(to: RouteMap.Wallet.sendAmount(target, token))
     }

@@ -38,4 +38,8 @@ extension Double {
         // Deal with precision issue with swift decimal
         Decimal(string: String(self)) ?? Decimal(self)
     }
+    
+    var formatDisplayFlowBalance: String {
+        formatCurrencyString() + " FLOW"
+    }
 }

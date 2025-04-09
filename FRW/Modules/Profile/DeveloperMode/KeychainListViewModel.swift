@@ -118,7 +118,7 @@ class KeychainListViewModel: ObservableObject {
         for key in keys {
             let wallet = try? SecureEnclaveKey.wallet(id: key)
             if let wallet {
-                let publicKey = (try? wallet.publicKey()?.hexString) ?? ""
+                let publicKey = (wallet.publicKey()?.hexString) ?? ""
                 seItem.append(["userId": key, "public key": publicKey])
             }else {
                 seItem.append(["userId": key, "public key": "error"])
@@ -135,13 +135,9 @@ class KeychainListViewModel: ObservableObject {
                 let mnemonic = wallet.hdWallet.mnemonic
                 var result = ["userId": key,
                               "mnemonic": mnemonic,
-                              "length": String(describing:wallet.seedPhraseLength.rawValue)]
-                if !wallet.passphrase.isEmpty {
-                    result["passphrase"] = wallet.passphrase
-                }
-                if !wallet.derivationPath.isEmpty {
-                    result["derivationPath"] = wallet.derivationPath
-                }
+                              "length": String(mnemonic.split(separator: " ").count)]
+                result["passphrase"] = wallet.passphrase
+                result["derivationPath"] = SeedPhraseKey.derivationPath
                 spItem.append(result)
             }else {
                 spItem.append(["userId": key,"mnemonic": "error"])
@@ -155,8 +151,8 @@ class KeychainListViewModel: ObservableObject {
         for key in keys {
             let wallet = try? PrivateKey.wallet(id: key)
             if let wallet {
-                let P256publicKey = (try? wallet.publicKey(signAlgo: .ECDSA_P256)?.hexString) ?? ""
-                let SECPpublicKey = (try? wallet.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString) ?? ""
+                let P256publicKey = (wallet.publicKey(signAlgo: .ECDSA_P256)?.hexString) ?? ""
+                let SECPpublicKey = (wallet.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString) ?? ""
                 pkItem.append(["userId": key,"P256": P256publicKey, "SECP256k1": SECPpublicKey])
             }else {
                 pkItem.append(["userId": key,"public key": "error"])

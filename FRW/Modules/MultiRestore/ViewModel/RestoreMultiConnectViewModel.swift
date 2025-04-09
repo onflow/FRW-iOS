@@ -7,6 +7,7 @@
 
 import Flow
 import Foundation
+import WalletCore
 
 // MARK: - RestoreMultiConnectViewModel
 
@@ -146,27 +147,37 @@ extension RestoreMultiConnectViewModel {
     }
 
     private func createStoreItem(with mnemonic: String) {
-        guard let hdWallet = WalletManager.shared.createHDWallet(mnemonic: mnemonic),
+        guard let hdWallet = HDWallet(mnemonic: mnemonic, passphrase: ""),
               let mnemonicData = hdWallet.mnemonic.data(using: .utf8)
         else {
-            HUD.error(title: "empty_wallet_key".localized)
+            HUD.error(WalletError.invalidMnemonic)
             return
         }
+        
+        let isOldAccount = hdWallet.mnemonic.words.count == 12
+        let signAlgo = isOldAccount ? Flow.SignatureAlgorithm.ECDSA_SECP256k1 : Flow
+            .SignatureAlgorithm.ECDSA_P256
+        
+        guard let publicKey = hdWallet.getPublicKey(signAlgo: signAlgo) else {
+            HUD.error(WalletError.invaildPublicKey)
+            return
+        }
+        
         let key = LocalEnvManager.shared.backupAESKey
         do {
             let dataHexString = try MultiBackupManager.shared.encryptMnemonic(
                 mnemonicData,
                 password: key
             )
-            let isOldAccount = hdWallet.mnemonic.words.count == 12
-            let publicKey = isOldAccount ? hdWallet.getPublicKey() : hdWallet.flowAccountP256Key
-                .publicKey.description
+
             let item = MultiBackupManager.StoreItem(
-                address: "", userId: "", userName: "",
-                publicKey: publicKey,
-                data: dataHexString, keyIndex: 0,
-                signAlgo: isOldAccount ? Flow.SignatureAlgorithm.ECDSA_SECP256k1.index : Flow
-                    .SignatureAlgorithm.ECDSA_P256.index,
+                address: "",
+                userId: "",
+                userName: "",
+                publicKey: publicKey.data.hexValue,
+                data: dataHexString,
+                keyIndex: 0,
+                signAlgo: signAlgo.index,
                 hashAlgo: Flow.HashAlgorithm.SHA2_256.index,
                 weight: isOldAccount ? 1000 : 500,
                 deviceInfo: IPManager.shared.toParams()
@@ -180,7 +191,9 @@ extension RestoreMultiConnectViewModel {
                 currentIndex = nextIndex
             }
             enable = true
-        } catch {}
+        } catch {
+            HUD.error(BackupError.decryptMnemonicFailed)
+        }
     }
 
     func checkValidUser() -> [[MultiBackupManager.StoreItem]] {

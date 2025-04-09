@@ -105,7 +105,11 @@ extension ChildAccountManager {
         }
 
         private var childAddr: String? {
-            WalletManager.shared.childAccount?.addr
+            guard let account = WalletManager.shared.selectedAccount,
+                  account.type == .child else {
+                return nil
+            }
+            return account.address.hexAddr
         }
 
         private func isAccessible(contractName _: String, address: String) -> Bool {

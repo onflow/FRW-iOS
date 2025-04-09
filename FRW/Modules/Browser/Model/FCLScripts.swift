@@ -270,12 +270,12 @@ extension FCLScripts {
         message: String,
         address: String,
         keyId: Int = 0
-    ) -> String? {
+    ) async -> String? {
         let data = Flow.DomainTag.user.normalize + Data(hex: message)
-        guard let signedData = WalletManager.shared.signSync(signableData: data) else {
+        guard let signedData = try? await WalletManager.shared.sign(signableData: data) else {
             return nil
         }
-
+        
         let hex = signedData.hexString
         let dict = [
             AddressReplacement: address,

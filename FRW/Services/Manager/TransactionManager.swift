@@ -380,7 +380,8 @@ class TransactionManager: ObservableObject {
             }
         case .transferCoin:
             Task {
-                try? await WalletManager.shared.fetchBalance()
+                // TODO: Reload Balance
+//                try? await WalletManager.shared.fetchBalance()
             }
         case .addToken:
             Task {
