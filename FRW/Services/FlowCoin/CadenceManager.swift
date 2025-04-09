@@ -402,6 +402,14 @@ extension CadenceModel {
 
         let getAssociatedEvmAddress: String?
         let getAssociatedFlowIdentifier: String?
+
+        let batchBridgeNFTFromEvmWithPayer: String? //
+        let batchBridgeNFTToEvmAddressWithPayer: String?
+        let batchBridgeNFTToEvmWithPayer: String? //
+        let bridgeNFTFromEvmToFlowWithPayer: String? //
+        let bridgeNFTFromEvmWithPayer: String?
+        let bridgeNFTToEvmAddressWithPayer: String? //
+        let bridgeNFTToEvmWithPayer: String?
     }
 }
 

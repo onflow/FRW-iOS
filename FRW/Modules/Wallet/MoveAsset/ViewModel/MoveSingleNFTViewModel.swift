@@ -348,7 +348,10 @@ extension MoveSingleNFTViewModel {
     }
 
     var showFee: Bool {
-        !(fromContact.walletType == .link || toContact.walletType == .link)
+        guard !RemoteConfigManager.shared.coverBridgeFee else {
+            return false
+        }
+        return !(fromContact.walletType == .link || toContact.walletType == .link)
     }
 
     var isFeeFree: Bool {
