@@ -27,9 +27,9 @@ final class BlocklistHandler {
         }
     }
 
-    func inBlacklist(url: String, withType: AccountType = .flow) -> Bool {
-        // TODO: #six This needs to be confirmed
-        let result = withType == .flow ? domains.flow.filter { url.contains($0) } : domains.evm.filter { url.contains($0) }
+    func inBlacklist(url: String) -> Bool {
+        let list = domains.flow + domains.evm
+        let result = list.filter { url.contains($0) }
         return result.count > 0
     }
 }
