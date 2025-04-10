@@ -91,6 +91,14 @@ final class BrowserAuthzViewModel: ObservableObject {
     @Published
     var showEvmCard: Bool = false
 
+    var inBlacklist: Bool {
+        BlocklistHandler.shared.inBlacklist(url: urlString)
+    }
+
+    var buttonColor: Color {
+        inBlacklist ? .Theme.Accent.red : Color.LL.Button.color
+    }
+
     func didChooseAction(_ result: Bool) {
         Router.dismiss { [weak self] in
             guard let self else { return }

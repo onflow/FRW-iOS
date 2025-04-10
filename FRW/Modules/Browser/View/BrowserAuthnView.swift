@@ -27,22 +27,28 @@ struct BrowserAuthnView: View {
         VStack(spacing: 12) {
             titleView
 
+            WarningView(content: .blocklist)
+                .padding(.top, 16)
+                .padding(.bottom, 8)
+                .visibility(vm.inBlacklist ? .visible : .gone)
+
             sourceView
 
             detailView
-//                .frame(maxHeight: .infinity)
 
-            HStack {
-                walletView
-//                if let _ = vm.network {
-                networkView
-//                }
+            if vm.inBlacklist {
+                Spacer()
+                blocklistActionsView
+            } else {
+                HStack {
+                    walletView
+                    networkView
+                }
+                .padding(.bottom, 8)
+                Spacer()
+                actionView
             }
-            .padding(.bottom, 8)
-            Spacer()
-            actionView
         }
-        .preferredColorScheme(.dark)
         .padding(.all, 18)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .backgroundFill(Color.Theme.BG.bg1)
@@ -63,11 +69,11 @@ struct BrowserAuthnView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("browser_connecting_to".localized)
                     .font(.inter(size: 14))
-                    .foregroundColor(Color(hex: "#808080"))
+                    .foregroundColor(Color.Theme.Text.text4)
 
                 Text(vm.title)
                     .font(.inter(size: 16, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(.Theme.Text.black)
                     .lineLimit(1)
             }
 
@@ -88,17 +94,17 @@ struct BrowserAuthnView: View {
     var sourceView: some View {
         HStack(spacing: 12) {
             Image(systemName: "link")
-                .foregroundColor(.white.opacity(0.2))
+                .foregroundColor(.Theme.Text.black3)
 
             Text(vm.urlString)
                 .font(.inter(size: 14, weight: .medium))
-                .foregroundColor(.white)
+                .foregroundColor(.Theme.Text.black)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineLimit(1)
         }
         .frame(height: 46)
         .padding(.horizontal, 18)
-        .background(Color(hex: "#313131"))
+        .background(.Theme.BG.bg2)
         .cornerRadius(12)
     }
 
@@ -114,9 +120,9 @@ struct BrowserAuthnView: View {
             createAuthDetailView(text: "browser_authn_tips2".localized)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .padding(.horizontal, 18)
+        .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(Color(hex: "#313131"))
+        .background(.Theme.BG.bg2)
         .cornerRadius(12)
     }
 
@@ -124,21 +130,21 @@ struct BrowserAuthnView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "network")
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(.Theme.Text.black3)
 
                 Text("network".capitalized)
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(.Theme.Text.black3)
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.white.opacity(0.5))
+                    .foregroundColor(.Theme.Text.black3)
             }
 
             HStack(spacing: 12) {
                 Text(vm.network?.name.capitalized ?? "unknown".localized)
                     .font(.inter(size: 14, weight: .medium))
-                    .foregroundColor(vm.network?.color ?? .white)
+                    .foregroundColor(vm.network?.color ?? .Theme.Text.black)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .lineLimit(1)
 
@@ -148,7 +154,7 @@ struct BrowserAuthnView: View {
         //        .frame(height: 46)
         .padding(.vertical, 8)
         .padding(.horizontal, 18)
-        .background(Color(hex: "#313131"))
+        .background(.Theme.BG.bg2)
         .cornerRadius(12)
     }
 
@@ -158,7 +164,7 @@ struct BrowserAuthnView: View {
                 user.emoji.icon(size: 20)
 
                 Text(user.name.capitalized)
-                    .foregroundColor(.white.opacity(0.3))
+                    .foregroundColor(.Theme.Text.black8)
 
                 Spacer()
             }
@@ -167,17 +173,16 @@ struct BrowserAuthnView: View {
                 Text(vm.walletAddress ?? "")
                     .truncationMode(.middle)
                     .font(.inter(size: 14, weight: .medium))
-                    .foregroundColor(.white)
+                    .foregroundColor(.Theme.Text.black)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .lineLimit(1)
 
                 Spacer()
             }
         }
-        //        .frame(height: 46)
         .padding(.vertical, 8)
         .padding(.horizontal, 18)
-        .background(Color(hex: "#313131"))
+        .background(.Theme.BG.bg2)
         .cornerRadius(12)
     }
 
@@ -213,13 +218,48 @@ struct BrowserAuthnView: View {
         }
     }
 
+    var blocklistActionsView: some View {
+        VStack(spacing: 12) {
+            Button {
+                vm.didChooseAction(true)
+            } label: {
+                ZStack {
+                    Text("blocklist_ignore_connect".localized)
+                        .font(.inter(size: 14, weight: .medium))
+                        .foregroundColor(.Theme.Accent.red)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 54)
+                .cornerRadius(12)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 16)
+                        .inset(by: 0.5)
+                        .stroke(Color(red: 0.91, green: 0.23, blue: 0.23), lineWidth: 1)
+                }
+            }
+
+            Button {
+                vm.didChooseAction(false)
+            } label: {
+                Text("cancel".localized)
+                    .font(.inter(size: 14, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(Color(hex: "#313131"))
+                    .cornerRadius(12)
+            }
+        }
+        .padding(.bottom, 8)
+    }
+
     func createAuthDetailView(text: String) -> some View {
         HStack(spacing: 12) {
             Image("icon-right-mark")
 
             Text(text)
                 .font(.inter(size: 14, weight: .medium))
-                .foregroundColor(.white)
+                .foregroundColor(.Theme.Text.black8)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineLimit(1)
         }
@@ -240,7 +280,7 @@ struct BrowserAuthnView_Previews: PreviewProvider {
 
     static var previews: some View {
         VStack(fill: .proportionally) {
-            Color.LL.background
+            Color.black
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
             BrowserAuthnView(vm: vm)
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)

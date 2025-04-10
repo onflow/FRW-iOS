@@ -51,6 +51,11 @@ struct BrowserAuthzView: View {
 //            Divider()
 //                .foregroundColor(.LL.Neutrals.neutrals8)
 
+            WarningView(content: .blocklist)
+                .padding(.top, 16)
+                .padding(.bottom, 8)
+                .visibility(vm.inBlacklist ? .visible : .gone)
+
             if let template = vm.template {
                 verifiedView
                     .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
@@ -226,7 +231,7 @@ struct BrowserAuthzView: View {
             InsufficientStorageToastView<BrowserAuthzViewModel>()
                 .environmentObject(self.vm)
 
-            WalletSendButtonView(allowEnable: .constant(true)) {
+            WalletSendButtonView(allowEnable: .constant(true), activeColor: vm.buttonColor) {
                 vm.didChooseAction(true)
             }
         }

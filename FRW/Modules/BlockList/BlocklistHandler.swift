@@ -28,6 +28,9 @@ final class BlocklistHandler {
     }
 
     func inBlacklist(url: String) -> Bool {
+        guard !url.isEmpty else {
+            return false
+        }
         let list = domains.flow + domains.evm
         let result = list.filter { url.contains($0) }
         return result.count > 0
