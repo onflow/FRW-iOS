@@ -956,6 +956,8 @@
 		4E0D34A42A8B4E2900BC6E43 /* e-Ukraine-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */; };
 		4E0D34A52A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
 		4E0D34A62A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
+		4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
+		4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
 		4E131A9A2CA17389002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A992CA17389002B258D /* PocketSVG */; };
 		4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A9B2CA1739A002B258D /* PocketSVG */; };
 		4E131A9E2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
@@ -1391,6 +1393,10 @@
 		4EE0905D2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
 		4EE0909F2DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
 		4EE090A02DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
+		4EE090572DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
+		4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
+		4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
+		4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2447,6 +2453,7 @@
 		4E0D349C2A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Regular.ttf"; sourceTree = "<group>"; };
 		4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Light.ttf"; sourceTree = "<group>"; };
 		4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Medium.ttf"; sourceTree = "<group>"; };
+		4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFeePayer.swift; sourceTree = "<group>"; };
 		4E131A9D2CA19567002B258D /* SVGUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGUIView.swift; sourceTree = "<group>"; };
 		4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsNeedKnowViewModel.swift; sourceTree = "<group>"; };
 		4E1914862D2E64240018BAA7 /* FormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormItem.swift; sourceTree = "<group>"; };
@@ -2663,6 +2670,8 @@
 		4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorStatus.swift; sourceTree = "<group>"; };
 		4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWebsiteView.swift; sourceTree = "<group>"; };
 		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
+		4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenu.swift; sourceTree = "<group>"; };
+		4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenuController.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -3735,6 +3744,7 @@
 				6A41B6A72861D06100999451 /* Define */,
 				6ABAE52C2836295100C97AE2 /* Model */,
 				159A54302753680C004BCACC /* Base */,
+				4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -6200,6 +6210,8 @@
 		6AEA374128A4ACF9004545D4 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */,
+				4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */,
 				6A06CB0828AA483A00C81BE1 /* ViewHandler */,
 				6AEA374828A4DDE2004545D4 /* View */,
 				6AEA374228A4AD20004545D4 /* NFTUIKitListViewController.swift */,
@@ -7613,6 +7625,8 @@
 				152BB09928AE91A700B2A2AA /* ResizableLottieView.swift in Sources */,
 				4EB2C6D52B4AEF6A00EB899C /* SignedRequest.swift in Sources */,
 				15DC219727819C56000B187A /* VTextFieldType.swift in Sources */,
+				4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */,
+				4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */,
 				4E8A96562B66D807007C95E8 /* DeviceManager.swift in Sources */,
 				6AE0842128505887003BEEF0 /* Error.swift in Sources */,
 				4EFF94BC2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
@@ -7689,6 +7703,7 @@
 				15DC21DD27819C56000B187A /* StateOpacities_PD.swift in Sources */,
 				6A4BFE312893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596C288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375428A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				6A8FA4A0285B192900EE5BE3 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,
@@ -8459,6 +8474,8 @@
 				4EB2C6D42B4AEF6900EB899C /* SignedRequest.swift in Sources */,
 				15C58BE82868A4EE00BD4FC6 /* VTextFieldType.swift in Sources */,
 				15C58BE92868A4EE00BD4FC6 /* Error.swift in Sources */,
+				4EE090572DA56306001515FE /* NFTViewStyleMenu.swift in Sources */,
+				4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */,
 				4E8A96552B66D807007C95E8 /* DeviceManager.swift in Sources */,
 				4EFF94BB2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
 				15C58BEB2868A4EE00BD4FC6 /* VRangeSliderState.swift in Sources */,
@@ -8535,6 +8552,7 @@
 				15C58C152868A4EE00BD4FC6 /* StateOpacities_PD.swift in Sources */,
 				6A4BFE302893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596B288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375328A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				15C58C172868A4EE00BD4FC6 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,
