@@ -40,9 +40,9 @@ class BrowserViewController: UIViewController {
         view.allowsLinkPreview = true
         view.layer.masksToBounds = true
         #if DEBUG
-        if #available(iOS 16.4, *) {
-            view.isInspectable = true
-        }
+            if #available(iOS 16.4, *) {
+                view.isInspectable = true
+            }
         #endif
         return view
     }()
@@ -136,6 +136,7 @@ class BrowserViewController: UIViewController {
 
         setupWebView()
         setupActionBarView()
+        setupBlockView()
     }
 
     private func setupWebView() {
@@ -154,6 +155,13 @@ class BrowserViewController: UIViewController {
             make.right.equalTo(0)
             make.top.equalTo(webView.snp.bottom).offset(0)
             make.bottom.equalToSuperview()
+        }
+    }
+
+    private func setupBlockView() {
+        contentView.addSubview(blockView)
+        blockView.snp.makeConstraints { make in
+            make.top.left.right.bottom.equalTo(webView)
         }
     }
 
@@ -185,12 +193,54 @@ class BrowserViewController: UIViewController {
         )
         bgMaskLayer.path = path.cgPath
     }
+
+    private lazy var blockView: BlockedWebsiteView = {
+        let view = BlockedWebsiteView()
+        view.isHidden = true
+        view.reportAction = { [weak self] in
+            self?.reportBlockedSite()
+        }
+        view.ignoreAction = { [weak self] in
+            self?.ignoreBlockWarning()
+        }
+        return view
+    }()
+}
+
+extension BrowserViewController {
+    @objc private func reportBlockedSite() {
+        let url = "https://github.com/Outblock/flow-blocklist"
+        guard let skipUrl = URL(string: url) else {
+            log.warning("skip block list failed.")
+            return
+        }
+        UIApplication.shared.open(skipUrl)
+    }
+
+    @objc private func ignoreBlockWarning() {
+        if let url = blockView.blockedURL {
+            loadAndUpdateUI(url)
+        }
+    }
 }
 
 // MARK: - Load
 
 extension BrowserViewController {
     func loadURL(_ url: URL) {
+        guard !BlocklistHandler.shared.inBlacklist(url: url.absoluteString) else {
+            blockView.setBlockedURL(url)
+            blockView.isHidden = false
+            actionBarView.progressView.isHidden = true
+            return
+        }
+        loadAndUpdateUI(url)
+    }
+
+    private func loadAndUpdateUI(_ url: URL) {
+        blockView.isHidden = true
+        actionBarView.progressView.isHidden = false
+
         let request = URLRequest(url: url)
         webView.load(request)
     }
@@ -416,7 +466,7 @@ extension BrowserViewController {
                         }
                     )
                     #if DEBUG
-                    print("WKWebsiteDataStore record deleted:", record)
+                        print("WKWebsiteDataStore record deleted:", record)
                     #endif
                 }
                 dispatch_group.notify(queue: DispatchQueue.main) {}

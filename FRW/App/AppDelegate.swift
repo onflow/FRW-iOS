@@ -21,7 +21,7 @@ import WalletConnectNotify
 import WalletCore
 
 #if DEBUG
-import Atlantis
+    import Atlantis
 #endif
 
 let log = FlowLog.shared
@@ -32,9 +32,9 @@ let log = FlowLog.shared
 class AppDelegate: NSObject, UIApplicationDelegate {
     static var isUnitTest: Bool {
         #if DEBUG
-        return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+            return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
         #else
-        return false
+            return false
         #endif
     }
 
@@ -63,11 +63,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         flowConfig()
 
         setupUI()
+        _ = BlocklistHandler.shared
 
         let migration = Migration()
         migration.start()
         #if DEBUG
-        Atlantis.start()
+            Atlantis.start()
         #endif
 
         let crowdinProviderConfig = CrowdinProviderConfig(
@@ -103,7 +104,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         if let filtered = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?
             .filter({ $0.name == "uri" && $0.value?.starts(with: "wc") ?? false }),
-            let item = filtered.first, let uri = item.value {
+            let item = filtered.first, let uri = item.value
+        {
             WalletConnectManager.shared.onClientConnected = {
                 WalletConnectManager.shared.connect(link: uri)
             }
@@ -255,9 +257,9 @@ extension AppDelegate {
 //            }
         }
         #if DEBUG
-        Messaging.messaging().setAPNSToken(deviceToken, type: .sandbox)
+            Messaging.messaging().setAPNSToken(deviceToken, type: .sandbox)
         #else
-        Messaging.messaging().setAPNSToken(deviceToken, type: .prod)
+            Messaging.messaging().setAPNSToken(deviceToken, type: .prod)
         #endif
     }
 }
