@@ -155,6 +155,7 @@ extension NFTUIKitGridStyleHandler {
                     self.isInitRequested = true
                     self.collectionView.stopRefreshing()
                     self.reloadViews()
+                    self.dataDidUpdate?(dataModel.nfts.count)
                 }
             } catch {
                 await MainActor.run {

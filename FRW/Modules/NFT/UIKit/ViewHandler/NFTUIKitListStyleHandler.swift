@@ -318,8 +318,6 @@ extension NFTUIKitListStyleHandler {
         hideErrorView()
         hideEmptyView()
 
-        NFTUIKitCache.cache.requestFav()
-
         Task {
             do {
                 try await dataModel.refreshCollectionAction()

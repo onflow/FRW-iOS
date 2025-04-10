@@ -217,6 +217,7 @@ class NFTUIKitListViewController: UIViewController {
     }
 
     private func walletInfoDidChanged() {
+        addButton.isHidden = !WalletManager.shared.isSelectedFlowAccount
         listStyleHandler.collectionView.beginRefreshing()
         gridStyleHandler.collectionView.beginRefreshing()
     }
