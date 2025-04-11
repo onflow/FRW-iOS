@@ -81,6 +81,7 @@ struct ImportTextView: View {
                 })
                 .textEditorBackground(.clear)
                 .font(.inter(size: 14))
+                .instabug_privateView()
         }
         .padding(20)
         .background {
@@ -103,7 +104,7 @@ public struct AnimatedSecureTextField: View {
         self.placeholder = placeholder
         _text = text
         self.textDidChange = textDidChange
-        self.field = .password
+        field = .password
     }
 
     // MARK: Public
@@ -154,6 +155,7 @@ public struct AnimatedSecureTextField: View {
                     .onChange(of: text) { text in
                         textDidChange(text)
                     }
+                    .instabug_privateView()
             }
 
             HStack {
