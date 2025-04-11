@@ -237,6 +237,7 @@ struct BrowserAuthnView: View {
                         .stroke(Color(red: 0.91, green: 0.23, blue: 0.23), lineWidth: 1)
                 }
             }
+            .buttonStyle(ScaleButtonStyle())
 
             Button {
                 vm.didChooseAction(false)
@@ -249,6 +250,7 @@ struct BrowserAuthnView: View {
                     .background(Color(hex: "#313131"))
                     .cornerRadius(12)
             }
+            .buttonStyle(ScaleButtonStyle())
         }
         .padding(.bottom, 8)
     }

@@ -95,6 +95,14 @@ final class BrowserAuthzViewModel: ObservableObject {
         BlocklistHandler.shared.inBlacklist(url: urlString)
     }
 
+    var buttonTextColor: Color {
+        inBlacklist ? .white : Color.LL.Button.text
+    }
+
+    var progressColor: Color {
+        inBlacklist ? .white : Color.LL.outline
+    }
+
     var buttonColor: Color {
         inBlacklist ? .Theme.Accent.red : Color.LL.Button.color
     }

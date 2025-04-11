@@ -25,7 +25,7 @@ extension WalletManager {
     static let defaultGas: UInt64 = 30_000_000
 
     static let minFlowBalance: Decimal = 0.001
-    static let fixedMoveFee: Decimal = 0.001
+    static let fixedMoveFee: Decimal = 0.0001
     static var averageTransactionFee: Decimal {
         RemoteConfigManager.shared.freeGasEnabled ? 0 : 0.001
     }

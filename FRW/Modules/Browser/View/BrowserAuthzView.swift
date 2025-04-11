@@ -231,7 +231,11 @@ struct BrowserAuthzView: View {
             InsufficientStorageToastView<BrowserAuthzViewModel>()
                 .environmentObject(self.vm)
 
-            WalletSendButtonView(allowEnable: .constant(true), activeColor: vm.buttonColor) {
+            WalletSendButtonView(allowEnable: .constant(true),
+                                 buttonColor: vm.buttonTextColor,
+                                 progressColor: vm.progressColor,
+                                 activeColor: vm.buttonColor)
+            {
                 vm.didChooseAction(true)
             }
         }
