@@ -81,6 +81,7 @@ struct RestoreMultiInputMnemonicView: RouteableView {
                             .stroke(lineWidth: 1)
                             .foregroundColor(viewModel.hasError ? .LL.error : .LL.text)
                     }
+                    .instabug_privateView()
             }
             .padding(.horizontal, 28)
 
