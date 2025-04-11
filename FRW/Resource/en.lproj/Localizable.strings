@@ -1153,7 +1153,7 @@ Key Store and Private Key.";
 "blocklist_desc" = "This website is blocked as part of a community-maintained list of malicious websites, if you believe the website has been blocked in error, please file an issue.";
 "blocklist_desc_skip" = "please file an issue.";
 "blocklist_ignore" = "Ignore warning, show anyway";
-"dapp_block_flag" = "This dApp is flagged as malicious.";
+"dapp_block_flag" = "This app has been flagged as dangerous.";
 "blocklist_ignore_connect" = "Ignore warning, connect anyway";
 "NFT Collections" = "NFT Collections";
 "nft_empty_v2" = "Your collection is waiting to shine!";
