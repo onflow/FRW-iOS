@@ -33,7 +33,7 @@ func serviceDefinition(address: String, keyId: Int, type: FCLServiceType) -> Ser
             color: "#41CC5D",
             supportEmail: "wallet@flow.com",
             website: "https://frw-link.lilico.app/wc",
-            icon: "https://lilico.app/logo_mobile.png"
+            icon: "https://web.api.wallet.flow.com/logo_mobile.png"
         )
     }
     service.endpoint = FCLWalletConnectMethod(type: type)?.rawValue

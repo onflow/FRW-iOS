@@ -31,6 +31,7 @@ extension RemoteConfigManager {
     struct Config: Codable {
         let features: Features
         let payer: Payer
+        let bridgeFeePayer: Payer
     }
 
     // MARK: - Features
@@ -46,6 +47,7 @@ extension RemoteConfigManager {
             case nftTransfer = "nft_transfer"
             case hideBrowser = "hide_browser"
             case transactionWarningPrediction = "tx_warning_prediction"
+            case coverBridgeFee = "cover_bridge_fee"
         }
 
         let freeGas: Bool
@@ -57,6 +59,7 @@ extension RemoteConfigManager {
         let nftTransfer: Bool?
         let hideBrowser: Bool?
         let transactionWarningPrediction: Bool?
+        let coverBridgeFee: Bool?
     }
 
     // MARK: - Payer
@@ -197,7 +200,8 @@ extension RemoteConfigManager {
             case .canUpgrade:
                 if let remoteVersion = RemoteConfigManager.shared.remoteVersion,
                    let currentVersion = Bundle.main
-                   .infoDictionary?["CFBundleShortVersionString"] as? String {
+                   .infoDictionary?["CFBundleShortVersionString"] as? String
+                {
                     return remoteVersion.compareVersion(to: currentVersion) == .orderedDescending
                 } else {
                     return false

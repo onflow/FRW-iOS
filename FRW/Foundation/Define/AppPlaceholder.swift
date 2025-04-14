@@ -8,6 +8,6 @@
 import Foundation
 
 enum AppPlaceholder {
-    static var image: String = "https://lilico.app/placeholder-2.0.png"
+    static var image: String = "https://web.api.wallet.flow.com/placeholder-2.0.png"
     static var imageURL = URL(string: AppPlaceholder.image)!
 }

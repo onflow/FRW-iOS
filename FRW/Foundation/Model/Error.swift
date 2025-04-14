@@ -185,3 +185,21 @@ enum TokenBalanceProviderError: String, BaseError {
 
     var baseCode: Int { 11000 }
 }
+
+enum CustomError: Error {
+    case custom(String, String)
+
+    var name: String {
+        switch self {
+        case let .custom(name, _):
+            return name
+        }
+    }
+
+    var reason: String {
+        switch self {
+        case let .custom(_, reason):
+            return reason
+        }
+    }
+}

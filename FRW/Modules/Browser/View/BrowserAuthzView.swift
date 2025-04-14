@@ -51,6 +51,11 @@ struct BrowserAuthzView: View {
 //            Divider()
 //                .foregroundColor(.LL.Neutrals.neutrals8)
 
+            WarningView(content: .blocklist)
+                .padding(.top, 16)
+                .padding(.bottom, 8)
+                .visibility(vm.inBlacklist ? .visible : .gone)
+
             if let template = vm.template {
                 verifiedView
                     .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
@@ -226,7 +231,11 @@ struct BrowserAuthzView: View {
             InsufficientStorageToastView<BrowserAuthzViewModel>()
                 .environmentObject(self.vm)
 
-            WalletSendButtonView(allowEnable: .constant(true)) {
+            WalletSendButtonView(allowEnable: .constant(true),
+                                 buttonColor: vm.buttonTextColor,
+                                 progressColor: vm.progressColor,
+                                 activeColor: vm.buttonColor)
+            {
                 vm.didChooseAction(true)
             }
         }
@@ -464,7 +473,7 @@ struct BrowserAuthzView_Previews: PreviewProvider {
     static let vm = BrowserAuthzViewModel(
         title: "This is title",
         url: "This is URL",
-        logo: "https://lilico.app/logo.png",
+        logo: "https://web.api.wallet.flow.com/logo.png",
         cadence: """
         import FungibleToken from 0x9a0766d93b6608b7
         transaction(amount: UFix64, to: Address) {

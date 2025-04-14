@@ -23,6 +23,8 @@ struct WalletSendButtonView: View {
     var allowEnable: Bool
 
     var buttonText: String = "hold_to_send".localized
+    var buttonColor: Color = Color.LL.Button.text
+    var progressColor: Color = Color.LL.outline
     var activeColor = Color.LL.Button.color
     var action: () -> Void
 
@@ -37,7 +39,7 @@ struct WalletSendButtonView: View {
                 Circle()
                     .trim(from: press ? 0.001 : 1, to: 1)
                     .stroke(
-                        Color.LL.outline,
+                        progressColor,
                         style: StrokeStyle(
                             lineWidth: 4,
                             lineCap: .round
@@ -69,7 +71,7 @@ struct WalletSendButtonView: View {
             }
             .frame(width: 25, height: 25)
             Text(buttonText)
-                .foregroundColor(Color.LL.Button.text)
+                .foregroundColor(buttonColor)
                 .font(.inter(size: 14, weight: .bold))
                 .allowsHitTesting(false)
         }

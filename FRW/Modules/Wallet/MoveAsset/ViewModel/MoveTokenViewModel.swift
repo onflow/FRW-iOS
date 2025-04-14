@@ -102,6 +102,10 @@ final class MoveTokenViewModel: ObservableObject {
         return "\(totalStr)"
     }
 
+    var isFreeMove: Bool {
+        fromContact.walletType == toContact.walletType
+    }
+
     func updateTokenModel() async {
         guard let address = FWAddressDector.create(address: fromContact.address) else {
             return
@@ -128,7 +132,7 @@ final class MoveTokenViewModel: ObservableObject {
 
         } catch {
             // TODO: Handle error
-            log.error(error)
+            log.error(error, report: true)
         }
     }
 
@@ -338,7 +342,9 @@ final class MoveTokenViewModel: ObservableObject {
     }
 
     private func updateAmountIfNeed(inputAmount: Decimal) -> Decimal {
-        // move fee
+        guard isFromFlowToCoa() else {
+            return max(inputAmount, 0)
+        }
         let num = max(inputAmount - WalletManager.fixedMoveFee, 0)
         return num
     }
@@ -390,9 +396,9 @@ extension MoveTokenViewModel {
             do {
                 try await moveToken()
             } catch {
-                let from = fromContact.walletType?.rawValue ?? ""
-                let to = toContact.walletType?.rawValue ?? ""
-                log.error(" Move Token: \(from) to  \(to) failed. \(error)")
+                let from = fromContact.address ?? ""
+                let to = toContact.address ?? ""
+                log.error(CustomError.custom("[Move Token]", "\(from) to  \(to) failed. \(error)"), report: true)
                 buttonState = .enabled
             }
         }
@@ -407,7 +413,8 @@ extension MoveTokenViewModel {
             fromIsEVM ? (token.flowIdentifier ?? "") : token
                 .contractId + ".Vault"
         )
-
+        log.info("[move] \(String(describing: fromType))->\(String(describing: toType)):\(vaultIdentifier):\(token.isFlowCoin)")
+        log.info("[move] \(String(describing: fromContact.address))->\(String(describing: toContact.address))")
         switch (fromType, toType) {
         case (.flow, .flow), (.flow, .link), (.link, .flow), (.link, .link):
             tid = try await FlowNetwork.transferToken(
@@ -443,12 +450,13 @@ extension MoveTokenViewModel {
                     decimals: token.decimal
                 )
         case (.evm, .evm):
-            break
+            log.error("[move] Shouldn't be here")
         case (_, _):
-            break
+            log.error("[move] not support \(String(describing: fromType))->\(String(describing: toType))")
         }
 
         if let txid = tid {
+            log.info("[move] transactionId:\(txid)")
             let holder = TransactionManager.TransactionHolder(
                 id: txid,
                 type: .moveAsset
@@ -500,7 +508,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error("[EVM] move transation failed \(error)")
+                log.error(error, report: true)
             }
         }
     }
@@ -540,7 +548,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error("[EVM] move transation failed \(error)")
+                log.error(error, report: true)
             }
         }
     }
@@ -587,7 +595,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error("[EVM] move transation bridge token failed \(error)")
+                log.error(error, report: true)
             }
         }
     }

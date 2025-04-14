@@ -10,9 +10,9 @@ import Instabug
 
 class InstabugConfig {
     static func start(token: String) {
-        Instabug.start(withToken: token, invocationEvents: [.shake])
-        Instabug.trackUserSteps = false
-        Instabug.setReproStepsFor(.all, with: .disable)
+        Instabug.start(withToken: token, invocationEvents: [.shake, .screenshot])
+        Instabug.trackUserSteps = true
+        Instabug.setReproStepsFor(.all, with: .enable)
         Instabug.welcomeMessageMode = .disabled
     }
 }

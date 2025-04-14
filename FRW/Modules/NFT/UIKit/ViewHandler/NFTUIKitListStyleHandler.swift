@@ -31,12 +31,14 @@ class NFTUIKitListStyleHandler: NSObject {
         let dm = NFTUIKitListNormalDataModel()
         dm.reloadCallback = { [weak self] in
             self?.reloadViews()
+            self?.dataDidUpdate?(self?.dataModel.items.count ?? 0)
         }
 
         return dm
     }()
 
     var offsetCallback: ((CGFloat) -> Void)?
+    var dataDidUpdate: ((Int) -> Void)?
 
     lazy var containerView: UIView = {
         let view = UIView()
@@ -162,17 +164,6 @@ class NFTUIKitListStyleHandler: NSObject {
         layer.startPoint = CGPoint(x: 0.5, y: 0)
         layer.endPoint = CGPoint(x: 0.5, y: 1)
         return layer
-    }()
-
-    private lazy var collectionTitleView: NFTUIKitListTitleView = {
-        let view = NFTUIKitListTitleView()
-        view.switchButton.addTarget(
-            self,
-            action: #selector(onSwitchButtonClick),
-            for: .touchUpInside
-        )
-
-        return view
     }()
 
     private lazy var collectionHContainer: NFTUIKitCollectionHContainerView = {
@@ -326,8 +317,6 @@ extension NFTUIKitListStyleHandler {
 
         hideErrorView()
         hideEmptyView()
-
-        NFTUIKitCache.cache.requestFav()
 
         Task {
             do {
@@ -563,30 +552,16 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
     func collectionView(
         _: UICollectionView,
         layout _: UICollectionViewLayout,
-        referenceSizeForHeaderInSection section: Int
+        referenceSizeForHeaderInSection _: Int
     ) -> CGSize {
-        if section == Section.other.rawValue {
-            return .zero
-        }
-
-        if dataModel.isCollectionListStyle {
-            return CGSize(width: 0, height: CollecitonTitleViewHeight)
-        }
-
-        return CGSize(width: 0, height: PinnedHeaderHeight)
+        return .zero
     }
 
     func collectionView(
         _: UICollectionView,
         layout _: UICollectionViewLayout,
-        referenceSizeForFooterInSection section: Int
+        referenceSizeForFooterInSection _: Int
     ) -> CGSize {
-        if section == Section.other.rawValue, !dataModel.isCollectionListStyle,
-           !dataModel.items.isEmpty
-        {
-            return CGSize(width: 0, height: CollecitonTitleViewHeight)
-        }
-
         return .zero
     }
 
@@ -602,13 +577,6 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
                     withReuseIdentifier: "PinFooter",
                     for: indexPath
                 )
-                if collectionTitleView.superview != footer {
-                    collectionTitleView.removeFromSuperview()
-                    footer.addSubview(collectionTitleView)
-                    collectionTitleView.snp.makeConstraints { make in
-                        make.left.right.top.bottom.equalToSuperview()
-                    }
-                }
 
                 return footer
             }
@@ -625,11 +593,6 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
                 for: indexPath
             )
             header.removeSubviews()
-            collectionTitleView.removeFromSuperview()
-            header.addSubview(collectionTitleView)
-            collectionTitleView.snp.makeConstraints { make in
-                make.left.right.top.bottom.equalToSuperview()
-            }
 
             return header
         }
@@ -761,9 +724,17 @@ extension NFTUIKitListStyleHandler {
 
         private lazy var titleLabel: UILabel = {
             let view = UILabel()
-            view.font = .montserratBold(size: 16)
-            view.textColor = UIColor.LL.Neutrals.neutrals3
-            view.text = "nft_empty".localized
+            view.font = .inter(size: 16, weight: .semibold)
+            view.textColor = UIColor.Theme.Text.black3
+            view.text = "nft_empty_v2".localized
+            return view
+        }()
+
+        private lazy var detailLabel: UILabel = {
+            let view = UILabel()
+            view.font = .inter(size: 14)
+            view.textColor = UIColor.Theme.Text.black3
+            view.text = "nft_empty_detail".localized
             return view
         }()
 
@@ -783,6 +754,12 @@ extension NFTUIKitListStyleHandler {
             titleLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.top.equalTo(iconImageView.snp.bottom).offset(16)
+            }
+
+            addSubviews(detailLabel)
+            detailLabel.snp.makeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.top.equalTo(titleLabel.snp.bottom).offset(4)
             }
 
             // Hide it for now

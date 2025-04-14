@@ -956,6 +956,8 @@
 		4E0D34A42A8B4E2900BC6E43 /* e-Ukraine-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */; };
 		4E0D34A52A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
 		4E0D34A62A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
+		4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
+		4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
 		4E131A9A2CA17389002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A992CA17389002B258D /* PocketSVG */; };
 		4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A9B2CA1739A002B258D /* PocketSVG */; };
 		4E131A9E2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
@@ -1362,6 +1364,12 @@
 		4ED40ADC2B1A0B4700C25EBF /* SyncStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED40ADA2B1A0B4700C25EBF /* SyncStatusView.swift */; };
 		4ED40AF72B1A190B00C25EBF /* Loading_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 4ED40AF62B1A190B00C25EBF /* Loading_animation.json */; };
 		4ED40AF82B1A190B00C25EBF /* Loading_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 4ED40AF62B1A190B00C25EBF /* Loading_animation.json */; };
+		4ED483132DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */; };
+		4ED483142DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */; };
+		4ED483162DA5155200AA23E6 /* BlocklistResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */; };
+		4ED483172DA5155200AA23E6 /* BlocklistResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */; };
+		4ED4831A2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483192DA515FC00AA23E6 /* BlocklistHandler.swift */; };
+		4ED4831B2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483192DA515FC00AA23E6 /* BlocklistHandler.swift */; };
 		4ED6DD10285A22A800105133 /* IrregularGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 4ED6DD0F285A22A800105133 /* IrregularGradient */; };
 		4ED9C5BA2C0464A9004276D1 /* NetworkMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED9C5B92C0464A9004276D1 /* NetworkMenuItem.swift */; };
 		4ED9C5BB2C0464A9004276D1 /* NetworkMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED9C5B92C0464A9004276D1 /* NetworkMenuItem.swift */; };
@@ -1381,6 +1389,16 @@
 		4EDEA7692C9044E800DE76B6 /* PKWallet+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */; };
 		4EDEA76B2C904F0300DE76B6 /* ErrorStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */; };
 		4EDEA76C2C904F0300DE76B6 /* ErrorStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */; };
+		4EE090572DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
+		4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
+		4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
+		4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
+		4EE0905C2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
+		4EE0905D2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
+		4EE0909F2DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
+		4EE090A02DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
+		4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
+		4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2437,6 +2455,7 @@
 		4E0D349C2A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Regular.ttf"; sourceTree = "<group>"; };
 		4E0D349D2A8B4E2900BC6E43 /* e-Ukraine-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Light.ttf"; sourceTree = "<group>"; };
 		4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Medium.ttf"; sourceTree = "<group>"; };
+		4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFeePayer.swift; sourceTree = "<group>"; };
 		4E131A9D2CA19567002B258D /* SVGUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGUIView.swift; sourceTree = "<group>"; };
 		4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsNeedKnowViewModel.swift; sourceTree = "<group>"; };
 		4E1914862D2E64240018BAA7 /* FormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormItem.swift; sourceTree = "<group>"; };
@@ -2639,6 +2658,9 @@
 		4ED2D7752850DDBE00B9A572 /* ColorsFromImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsFromImage.swift; sourceTree = "<group>"; };
 		4ED40ADA2B1A0B4700C25EBF /* SyncStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncStatusView.swift; sourceTree = "<group>"; };
 		4ED40AF62B1A190B00C25EBF /* Loading_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Loading_animation.json; sourceTree = "<group>"; };
+		4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+Blocklist.swift"; sourceTree = "<group>"; };
+		4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlocklistResponse.swift; sourceTree = "<group>"; };
+		4ED483192DA515FC00AA23E6 /* BlocklistHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlocklistHandler.swift; sourceTree = "<group>"; };
 		4ED9C5B92C0464A9004276D1 /* NetworkMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMenuItem.swift; sourceTree = "<group>"; };
 		4ED9C5BC2C0487D1004276D1 /* FloatingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 		4ED9C5BD2C0487D1004276D1 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -2648,6 +2670,11 @@
 		4EDEA7642C90305B00DE76B6 /* SecureEnclaveMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveMigration.swift; sourceTree = "<group>"; };
 		4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PKWallet+Add.swift"; sourceTree = "<group>"; };
 		4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorStatus.swift; sourceTree = "<group>"; };
+		4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenu.swift; sourceTree = "<group>"; };
+		4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenuController.swift; sourceTree = "<group>"; };
+		4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWebsiteView.swift; sourceTree = "<group>"; };
+		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
+		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -3202,6 +3229,7 @@
 				6A2C5610290BE9FF00306A6C /* FRWAPI+Utils.swift */,
 				4E9621D72B9850CF006859AD /* FRWAPI+Cadence.swift */,
 				4EFBB2BF2BDF49AB00359FAA /* FRWAPI+EVM.swift */,
+				4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */,
 			);
 			path = FRW;
 			sourceTree = "<group>";
@@ -3275,6 +3303,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4ED483182DA515C100AA23E6 /* BlockList */,
 				4E50541F2C33DB0900D4BA56 /* Review */,
 				4E9D8F062BF5DBF900E11CC7 /* Web3 */,
 				4EFBB2B22BDB720700359FAA /* Migration */,
@@ -3612,6 +3641,7 @@
 				6A7D9DD028E1923500333954 /* OtherResponses.swift */,
 				4EFF94C32AEEDD0A00365EF7 /* IPResponse.swift */,
 				4EFBB2C22BDF4A8C00359FAA /* EVMTokenResponse.swift */,
+				4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -3717,6 +3747,7 @@
 				6A41B6A72861D06100999451 /* Define */,
 				6ABAE52C2836295100C97AE2 /* Model */,
 				159A54302753680C004BCACC /* Base */,
+				4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -4731,6 +4762,7 @@
 				57E9AB762CE40B2600F04CE5 /* InsufficientStorageToastView.swift */,
 				4E815E6A2D7AE2AE00082EE1 /* PrivateKeyWarning.swift */,
 				4E815E6D2D7AE4C900082EE1 /* CopyButton.swift */,
+				4EE0909E2DA750B3001515FE /* WarningView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -5313,6 +5345,14 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		4ED483182DA515C100AA23E6 /* BlockList */ = {
+			isa = PBXGroup;
+			children = (
+				4ED483192DA515FC00AA23E6 /* BlocklistHandler.swift */,
+			);
+			path = BlockList;
+			sourceTree = "<group>";
+		};
 		4ED9C5BE2C0487D1004276D1 /* FloatingButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -5332,6 +5372,14 @@
 				4E4A6B6C2CA6ECEF00231A85 /* KeyProtocol+Add.swift */,
 			);
 			path = FlowWalletKit;
+			sourceTree = "<group>";
+		};
+		4EE090A12DA8F06F001515FE /* BugReport */ = {
+			isa = PBXGroup;
+			children = (
+				4EE090A22DA8F08C001515FE /* BugReport.swift */,
+			);
+			path = BugReport;
 			sourceTree = "<group>";
 		};
 		4EE8E4932834DC5C00DFEF59 /* NFTModel */ = {
@@ -5977,6 +6025,7 @@
 		6ABAE528283627F300C97AE2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4EE090A12DA8F06F001515FE /* BugReport */,
 				15F6F4C72D69FAFD00D62D7F /* Token */,
 				4E09A1E82CC793B10099606E /* Track */,
 				15ADAE2828F51EA50014B722 /* Crypto */,
@@ -6111,6 +6160,7 @@
 		6AE69E9028C082BF004D4709 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */,
 				6A5D99A92A4D5AFC00C43D36 /* DApps */,
 				6AC476EA28F40E12008503E6 /* Bookmark */,
 				6AE1817128C59B4B009ADDDB /* Model */,
@@ -6172,6 +6222,8 @@
 		6AEA374128A4ACF9004545D4 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */,
+				4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */,
 				6A06CB0828AA483A00C81BE1 /* ViewHandler */,
 				6AEA374828A4DDE2004545D4 /* View */,
 				6AEA374228A4AD20004545D4 /* NFTUIKitListViewController.swift */,
@@ -6944,6 +6996,7 @@
 				6AE95D522A2EDB25009F9AA4 /* BackupTipsView.swift in Sources */,
 				4E8A96592B67143D007C95E8 /* AccountKeyManager.swift in Sources */,
 				4E3670052B2A8B32000F2693 /* BackupUploadView.swift in Sources */,
+				4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */,
 				6AEDD60E2A429E22008BC5CD /* AccountSettingView.swift in Sources */,
 				6A164F742845F1CB0026B31E /* EnvironmentValues+IndexBarInsets.swift in Sources */,
 				15DC20CD27819C56000B187A /* VNavigationLink.swift in Sources */,
@@ -7025,6 +7078,7 @@
 				4EB006D62A82660C0027D1CC /* ChildAccountAccessibleManager.swift in Sources */,
 				15DC21CB27819C56000B187A /* ComponentStateManager.swift in Sources */,
 				15DC21C327819C56000B187A /* LayoutGroup_TB.swift in Sources */,
+				4EE0905C2DA73034001515FE /* BlockedWebsiteView.swift in Sources */,
 				4E4F794F2831FF0F00ED027C /* NFTSquareCard.swift in Sources */,
 				15DC21C727819C56000B187A /* LayoutGroup_HV.swift in Sources */,
 				6AEF839F28647BDC0081E285 /* CryptoRequests.swift in Sources */,
@@ -7054,6 +7108,7 @@
 				6A9D7C4D2834D7D100078F63 /* ThemeChangeView.swift in Sources */,
 				15DC207927819C56000B187A /* VBaseViewModel.swift in Sources */,
 				6A29113B28CAEADC003295BD /* AccountResponses.swift in Sources */,
+				4ED483162DA5155200AA23E6 /* BlocklistResponse.swift in Sources */,
 				6A29113828CAE7FE003295BD /* FRWAPI+Account.swift in Sources */,
 				15F22F0A278B009200FCF772 /* ChooseAccountViewModel.swift in Sources */,
 				4EF0B8E72C2E4C83003BFDD6 /* WallpaperView.swift in Sources */,
@@ -7235,6 +7290,7 @@
 				4E31380F2C658FB2003A73E5 /* DebugViewerWindow.swift in Sources */,
 				4EC4EF3C2B103A2B00217618 /* SyncAccountViewModel.swift in Sources */,
 				6A8FA4A4285B192900EE5BE3 /* CGPoint+Distance.swift in Sources */,
+				4EE090A02DA750B3001515FE /* WarningView.swift in Sources */,
 				6A5F15F12A317E3A0035AC38 /* AppPathDefine.swift in Sources */,
 				4E56465D2C0606A300890E61 /* PopupViewUtils.swift in Sources */,
 				15C11BCF28D9F6CD00FD4C06 /* AboutView.swift in Sources */,
@@ -7458,6 +7514,7 @@
 				4E5646642C06073900890E61 /* WalletAccountEditor.swift in Sources */,
 				4EB2C6C92B4A520200EB899C /* RestoreMultiConnectView.swift in Sources */,
 				6AEDD6112A42CB8D008BC5CD /* ChildAccountDetailView.swift in Sources */,
+				4ED483142DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */,
 				6A382E25289BDAFF00163564 /* SecurityManager.swift in Sources */,
 				15DC210127819C56000B187A /* VStepper.swift in Sources */,
 				4EE8E4962834DC7100DFEF59 /* NFTModel.swift in Sources */,
@@ -7470,6 +7527,7 @@
 				4E9E21DB282A5B9400E1BACD /* SecureView.swift in Sources */,
 				4EB17C8A28629DE200CA4DAE /* NFTCollectionStateManager.swift in Sources */,
 				15DE22D0277DBDF800B5EE03 /* WalletManager.swift in Sources */,
+				4ED4831B2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */,
 				6A06CB1128AA54A600C81BE1 /* NFTUIKitGridStyleHandler.swift in Sources */,
 				1586370D2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */,
 				6AC476ED28F40E50008503E6 /* BrowserBookmarkView.swift in Sources */,
@@ -7580,6 +7638,8 @@
 				152BB09928AE91A700B2A2AA /* ResizableLottieView.swift in Sources */,
 				4EB2C6D52B4AEF6A00EB899C /* SignedRequest.swift in Sources */,
 				15DC219727819C56000B187A /* VTextFieldType.swift in Sources */,
+				4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */,
+				4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */,
 				4E8A96562B66D807007C95E8 /* DeviceManager.swift in Sources */,
 				6AE0842128505887003BEEF0 /* Error.swift in Sources */,
 				4EFF94BC2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
@@ -7656,6 +7716,7 @@
 				15DC21DD27819C56000B187A /* StateOpacities_PD.swift in Sources */,
 				6A4BFE312893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596C288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375428A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				6A8FA4A0285B192900EE5BE3 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,
@@ -7785,6 +7846,7 @@
 				6AE95D512A2EDB25009F9AA4 /* BackupTipsView.swift in Sources */,
 				4E8A96582B67143D007C95E8 /* AccountKeyManager.swift in Sources */,
 				4E3670042B2A8B32000F2693 /* BackupUploadView.swift in Sources */,
+				4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */,
 				6AEDD60D2A429E22008BC5CD /* AccountSettingView.swift in Sources */,
 				15C58AB82868A4EE00BD4FC6 /* EnvironmentValues+IndexBarInsets.swift in Sources */,
 				15C58AB92868A4EE00BD4FC6 /* VNavigationLink.swift in Sources */,
@@ -7866,6 +7928,7 @@
 				4EB006D52A82660C0027D1CC /* ChildAccountAccessibleManager.swift in Sources */,
 				15C58ADC2868A4EE00BD4FC6 /* ComponentStateManager.swift in Sources */,
 				15C58ADD2868A4EE00BD4FC6 /* LayoutGroup_TB.swift in Sources */,
+				4EE0905D2DA73034001515FE /* BlockedWebsiteView.swift in Sources */,
 				15C58ADE2868A4EE00BD4FC6 /* NFTSquareCard.swift in Sources */,
 				15C58ADF2868A4EE00BD4FC6 /* LayoutGroup_HV.swift in Sources */,
 				15C58AE02868A4EE00BD4FC6 /* CryptoRequests.swift in Sources */,
@@ -7895,6 +7958,7 @@
 				15C58AE72868A4EE00BD4FC6 /* ThemeChangeView.swift in Sources */,
 				15C58AE82868A4EE00BD4FC6 /* VBaseViewModel.swift in Sources */,
 				6A29113A28CAEADC003295BD /* AccountResponses.swift in Sources */,
+				4ED483172DA5155200AA23E6 /* BlocklistResponse.swift in Sources */,
 				6A29113728CAE7FE003295BD /* FRWAPI+Account.swift in Sources */,
 				15C58AE92868A4EE00BD4FC6 /* ChooseAccountViewModel.swift in Sources */,
 				4EF0B8E62C2E4C83003BFDD6 /* WallpaperView.swift in Sources */,
@@ -8076,6 +8140,7 @@
 				4E31380E2C658FB2003A73E5 /* DebugViewerWindow.swift in Sources */,
 				15C58B412868A4EE00BD4FC6 /* VPageIndicatorAuto.swift in Sources */,
 				6A5F15F02A317E3A0035AC38 /* AppPathDefine.swift in Sources */,
+				4EE0909F2DA750B3001515FE /* WarningView.swift in Sources */,
 				15C11BCE28D9F6CD00FD4C06 /* AboutView.swift in Sources */,
 				4E56465C2C0606A300890E61 /* PopupViewUtils.swift in Sources */,
 				15C58B422868A4EE00BD4FC6 /* UserManager.swift in Sources */,
@@ -8299,6 +8364,7 @@
 				4E5646632C06073900890E61 /* WalletAccountEditor.swift in Sources */,
 				6AEDD6102A42CB8D008BC5CD /* ChildAccountDetailView.swift in Sources */,
 				15C58BA72868A4EE00BD4FC6 /* VStepper.swift in Sources */,
+				4ED483132DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */,
 				15C58BA82868A4EE00BD4FC6 /* NFTModel.swift in Sources */,
 				15C58BA92868A4EE00BD4FC6 /* VHalfModal.swift in Sources */,
 				6A99342D28C89D0400E4EF59 /* BrowserSignMessageView.swift in Sources */,
@@ -8311,6 +8377,7 @@
 				15C58BAC2868A4EE00BD4FC6 /* WalletManager.swift in Sources */,
 				6A06CB1028AA54A600C81BE1 /* NFTUIKitGridStyleHandler.swift in Sources */,
 				15C58BAD2868A4EE00BD4FC6 /* ScrollView+SnappableModifier.swift in Sources */,
+				4ED4831A2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */,
 				6AC476EC28F40E50008503E6 /* BrowserBookmarkView.swift in Sources */,
 				1586370C2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */,
 				15C58BAE2868A4EE00BD4FC6 /* VNavigationViewNavigationBar.swift in Sources */,
@@ -8421,6 +8488,8 @@
 				4EB2C6D42B4AEF6900EB899C /* SignedRequest.swift in Sources */,
 				15C58BE82868A4EE00BD4FC6 /* VTextFieldType.swift in Sources */,
 				15C58BE92868A4EE00BD4FC6 /* Error.swift in Sources */,
+				4EE090572DA56306001515FE /* NFTViewStyleMenu.swift in Sources */,
+				4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */,
 				4E8A96552B66D807007C95E8 /* DeviceManager.swift in Sources */,
 				4EFF94BB2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
 				15C58BEB2868A4EE00BD4FC6 /* VRangeSliderState.swift in Sources */,
@@ -8497,6 +8566,7 @@
 				15C58C152868A4EE00BD4FC6 /* StateOpacities_PD.swift in Sources */,
 				6A4BFE302893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596B288E710C005EF797 /* Router.swift in Sources */,
+				4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */,
 				6AEA375328A4FD2C004545D4 /* NFTUIKitItemCell.swift in Sources */,
 				4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */,
 				15C58C172868A4EE00BD4FC6 /* CoordinateSpaceNameEnvironmentKey.swift in Sources */,
@@ -8746,7 +8816,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FRW/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				ENABLE_PREVIEWS = YES;
@@ -8773,7 +8843,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -8792,7 +8862,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FRW/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				ENABLE_PREVIEWS = YES;
@@ -8816,7 +8886,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -9104,7 +9174,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9132,7 +9202,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9162,7 +9232,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9192,7 +9262,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9769,8 +9839,9 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Instabug/Instabug-SP";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 14.2.0;
+				kind = versionRange;
+				maximumVersion = 16.0.0;
+				minimumVersion = 15.0.0;
 			};
 		};
 		4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */ = {
