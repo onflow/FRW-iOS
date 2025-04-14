@@ -128,7 +128,12 @@ extension TransactionManager {
             self.createTime = createTime
             self.type = type
             self.data = data
-            self.scriptId = scriptId ?? FlowNetwork.scriptId(id)
+            self.scriptId = scriptId
+            if scriptId == nil {
+                Task {
+                    self.scriptId = await FlowNetwork.scriptId(id)
+                }
+            }
             log.info("[Cadence] txi:\(id.hex)")
         }
 

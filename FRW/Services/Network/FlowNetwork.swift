@@ -12,14 +12,32 @@ import Flow
 import Foundation
 import Web3Core
 
+private actor ScriptStore {
+    private var scriptIds: [String: String] = [:]
+
+    func getScriptId(_ txId: Flow.ID) -> String? {
+        scriptIds[txId.description]
+    }
+
+    func setScriptId(_ txId: String, _ funcName: String) {
+        scriptIds[txId] = funcName
+    }
+}
+
 // MARK: - FlowNetwork
 
 enum FlowNetwork {
-    private static var scriptIds: [String: String] = [:]
+    private static let scriptStore = ScriptStore()
     static func setup() {
         let type = LocalUserDefaults.shared.flowNetwork.toFlowType()
         log.debug("did setup flow chainID to \(LocalUserDefaults.shared.flowNetwork.rawValue)")
         flow.configure(chainID: type)
+    }
+}
+
+extension FlowNetwork {
+    static func scriptId(_ txId: Flow.ID) async -> String? {
+        await scriptStore.getScriptId(txId)
     }
 }
 
@@ -1389,7 +1407,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
-            scriptIds[tranId.description] = funcName
+            await scriptStore.setScriptId(tranId.description, funcName)
             return tranId
         } catch {
             EventTrack.General
@@ -1468,7 +1486,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
-            scriptIds[tranId.description] = funcName
+            await scriptStore.setScriptId(tranId.description, funcName)
             return tranId
         } catch {
             EventTrack.General
@@ -1498,12 +1516,6 @@ extension FlowNetwork {
         let hash = SHA256.hash(data: data)
         let hashString = hash.compactMap { String(format: "%02x", $0) }.joined()
         return hashString
-    }
-}
-
-extension FlowNetwork {
-    static func scriptId(_ txId: Flow.ID) -> String? {
-        FlowNetwork.scriptIds[txId.description]
     }
 }
 
