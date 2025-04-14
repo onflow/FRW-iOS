@@ -1086,7 +1086,7 @@ Please create backups for your wallet to ensure you retain access to your Flow a
 
 "move_fee_hint_cost" = "Charged when moving between accounts on Cadence and EVM on Flow.";
 "move_fee_hint_free" = "No fee between your Flow accounts 🤟";
-"move_fee_cost" = "~ 0.001";
+"move_fee_cost" = "~ 0.0001";
 "profile_key_invalid" = "We noticed the profile key is not available in your device secure enclave.";
 "Restore Profile" = "Restore profile";
 "Hide Profile" = "Hide Profile";
@@ -1149,6 +1149,13 @@ Key Store and Private Key.";
 "error_check_refresh" = "Error, please check your internet or refresh.";
 "result" = "Result";
 "nft_no_found" = "No relevant NFT found.";
+"blocklist_title" = "is blocked!";
+"blocklist_desc" = "This website is blocked as part of a community-maintained list of malicious websites, if you believe the website has been blocked in error, please file an issue.";
+"blocklist_desc_skip" = "please file an issue.";
+"blocklist_ignore" = "Ignore warning, show anyway";
+"dapp_block_flag" = "This app has been flagged as dangerous.";
+"blocklist_ignore_connect" = "Ignore warning, connect anyway";
 "NFT Collections" = "NFT Collections";
 "nft_empty_v2" = "Your collection is waiting to shine!";
 "nft_empty_detail" = "Start exploring and add your first NFTs today.";
+

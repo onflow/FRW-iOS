@@ -28,7 +28,7 @@ class BrowserAuthnViewModel: ObservableObject {
         callback: @escaping BrowserAuthnViewModel.Callback
     ) {
         self.title = title
-        self.urlString = url
+        urlString = url
         self.logo = logo
         self.network = network
         self.walletAddress = walletAddress
@@ -52,6 +52,10 @@ class BrowserAuthnViewModel: ObservableObject {
     var logo: String?
     @Published
     var network: Flow.ChainID?
+
+    var inBlacklist: Bool {
+        BlocklistHandler.shared.inBlacklist(url: urlString)
+    }
 
     func didChooseAction(_ result: Bool) {
         Router.dismiss { [weak self] in

@@ -63,6 +63,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         flowConfig()
 
         setupUI()
+        _ = BlocklistHandler.shared
 
         let migration = Migration()
         migration.start()
