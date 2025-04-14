@@ -219,5 +219,6 @@ struct WordListView: View {
             Spacer()
         }
         .frame(minWidth: 0, maxWidth: .infinity)
+        .instabug_privateView()
     }
 }

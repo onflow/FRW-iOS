@@ -473,7 +473,7 @@ struct BrowserAuthzView_Previews: PreviewProvider {
     static let vm = BrowserAuthzViewModel(
         title: "This is title",
         url: "This is URL",
-        logo: "https://lilico.app/logo.png",
+        logo: "https://web.api.wallet.flow.com/logo.png",
         cadence: """
         import FungibleToken from 0x9a0766d93b6608b7
         transaction(amount: UFix64, to: Address) {

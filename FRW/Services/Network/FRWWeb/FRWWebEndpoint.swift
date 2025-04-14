@@ -23,7 +23,7 @@ extension FRWWebEndpoint: TargetType {
     }
 
     var baseURL: URL {
-        URL(string: "https://lilico.app/api/")!
+        URL(string: "https://web.api.wallet.flow.com/api/")!
     }
 
     var path: String {
