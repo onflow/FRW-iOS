@@ -97,7 +97,7 @@ class CadenceManager {
                 }
                 
                 // If signature is not valid, don't update local script.
-                guard let verified = verifySignature(signature: signature, data: response.data), verified == true else {
+                guard let verified = try? verifySignature(signature: signature, data: response.data), verified else {
                     log.error(CadenceError.invaildScriptSignature)
                     return
                 }
