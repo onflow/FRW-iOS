@@ -89,10 +89,7 @@ class CadenceManager {
     private func fetchScript() {
         Task {
             do {
-                let response = try await Network
-                    .requestWithRawResponse(FRWAPI.Cadence.list)
-                
-                response.response?.allHeaderFields
+                let response = try await Network.requestWithRawResponse(FRWAPI.Cadence.list)
                 
                 guard let signature = response.response?.value(forHTTPHeaderField: CadenceManager.signatureHeader) else {
                     log.error(CadenceError.emptyScriptSignature)
@@ -100,7 +97,7 @@ class CadenceManager {
                 }
                 
                 // If signature is not valid, don't update local script.
-                guard let verified = verifySignature(signature: signature, data: response.data), verified else {
+                guard let verified = verifySignature(signature: signature, data: response.data), verified == true else {
                     log.error(CadenceError.invaildScriptSignature)
                     return
                 }
