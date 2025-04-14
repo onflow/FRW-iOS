@@ -11,6 +11,7 @@ import FirebaseAnalytics
 import FirebaseMessaging
 import Foundation
 import GoogleSignIn
+import Instabug
 import ReownWalletKit
 import Resolver
 import SwiftUI
@@ -43,7 +44,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(
         _: UIApplication,
-        didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
@@ -87,6 +88,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.jailbreakDetect()
+        }
+
+        if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            let isInstabugNotification = Replies.didReceiveRemoteNotification(notification)
         }
 
         return true
@@ -261,6 +266,12 @@ extension AppDelegate {
         #else
             Messaging.messaging().setAPNSToken(deviceToken, type: .prod)
         #endif
+
+        Replies.didRegisterForRemoteNotifications(withDeviceToken: deviceToken)
+    }
+
+    func application(_: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        let isInstabugNotification = Replies.didReceiveRemoteNotification(userInfo)
     }
 }
 

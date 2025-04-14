@@ -68,6 +68,12 @@ extension ServiceConfig {
             report.setUserAttribute(childAddress, withKey: "Childs")
             return report
         }
+        // Enabling Proactive Reporting
+        let configurations = ProactiveReportingConfigurations()
+        configurations.enabled = true // Enable/disable
+        configurations.gapBetweenModals = 5 // Time in seconds
+        configurations.modalDelayAfterDetection = 5 // Time in seconds
+        BugReporting.setProactiveReportingConfigurations(configurations)
     }
 
     private func setupMixPanel() {

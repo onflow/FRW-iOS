@@ -262,14 +262,14 @@ extension TransactionManager {
                                 result: result,
                                 fromId: self.transactionId.hex
                             )
-                            debugPrint("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
+                            log.warning("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
 
                             let errorCode = String(describing: result.errorCode).trimError()
                             let group = "\(scriptId ?? "empty")" + ".tx." + "\(errorCode)"
-                            log.critical(CustomError.custom("\(errorCode)", "scriptId: " + (scriptId ?? "") + " ,txid: " + transactionId.description),
-                                         group: .custom(group),
-                                         report: true,
-                                         reportUserAttribute: ["scriptId": scriptId ?? ""])
+                            log.error(CustomError.custom("\(errorCode)", "scriptId: " + (scriptId ?? "") + " ,txid: " + transactionId.description),
+                                      group: .custom(group),
+                                      report: true,
+                                      reportUserAttribute: ["scriptId": scriptId ?? ""])
                             switch result.errorCode {
                             case .storageCapacityExceeded:
                                 AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
