@@ -68,4 +68,11 @@ extension ServiceConfig {
         }
         return appKey
     }
+    
+    var scriptPublicKey: String {
+        guard let key = dict["scripts-publicKey"] else {
+            fatalError("Can't find scripts publicKey at ServiceConfig.plist")
+        }
+        return key
+    }
 }

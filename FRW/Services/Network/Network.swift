@@ -112,41 +112,24 @@ enum Network {
             throw error
         }
     }
-
-//    func request<T: Codable, U: TargetType>(_ target: U) -> Future<T, Error> {
-//
-//        return Future { promise in
-//
-//            let token = try await Auth.auth().currentUser?.getIDToken()
-//
-//            let authPlugin = AccessTokenPlugin { result in
-//                ""
-//            }
-//
-//            let provider = MoyaProvider<U>(plugins: [NetworkLoggerPlugin(), authPlugin])
-//            provider.request(target, completion: { result in
-//                switch result {
-//                case let .success(response):
-//
-//                    if let designPath = path, !designPath.isEmpty {
-//                        guard let model = response.mapObject(T.self, designatedPath: designPath) else {
-//                            seal.reject(MyError.DecodeFailed)
-//                            return
-//                        }
-//                        seal.fulfill(model)
-//
-//                    } else {
-//                        guard let model = response.mapObject(T.self) else {
-//                            seal.reject(MyError.DecodeFailed)
-//                            return
-//                        }
-//                        seal.fulfill(model)
-//                    }
-//
-//                case let .failure(error):
-//                    seal.reject(error)
-//                }
-//            })
-//        }
-//    }
+    
+    static func requestWithRawResponse<U: TargetType>(
+        _ target: U,
+        needToken: Bool = true
+    ) async throws -> Moya.Response {
+        let token = try await fetchIDToken()
+        let authPlugin = AccessTokenPlugin { _ in token }
+        let provider =
+            MoyaProvider<U>(
+                plugins: needToken ? [NetworkLoggerPlugin(), authPlugin] :
+                    [NetworkLoggerPlugin()]
+            )
+        let result = await provider.asyncRequest(target)
+        switch result {
+        case let .success(response):
+            return response
+        case let .failure(error):
+            throw error
+        }
+    }
 }
