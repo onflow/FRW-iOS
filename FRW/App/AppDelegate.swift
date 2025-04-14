@@ -88,21 +88,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             self.jailbreakDetect()
         }
 
-        #if DEBUG
-            func test() throws {
-                let name = "test"
-                guard name.isEmpty else {
-                    throw CustomError.custom("i'm name", "i'm reson")
-                }
-            }
-
-            do {
-                try test()
-            } catch {
-                BugReport.build(error: error)?.report()
-            }
-        #endif
-
         return true
     }
 
