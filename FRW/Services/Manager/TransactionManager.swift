@@ -132,6 +132,7 @@ extension TransactionManager {
             if scriptId == nil {
                 Task {
                     self.scriptId = await FlowNetwork.scriptId(id)
+                    await FlowNetwork.removeScriptId(id)
                 }
             }
             log.info("[Cadence] txi:\(id.hex)")

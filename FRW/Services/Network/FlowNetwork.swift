@@ -22,6 +22,10 @@ private actor ScriptStore {
     func setScriptId(_ txId: String, _ funcName: String) {
         scriptIds[txId] = funcName
     }
+
+    func removeScriptId(_ txId: String) {
+        scriptIds.removeValue(forKey: txId)
+    }
 }
 
 // MARK: - FlowNetwork
@@ -38,6 +42,10 @@ enum FlowNetwork {
 extension FlowNetwork {
     static func scriptId(_ txId: Flow.ID) async -> String? {
         await scriptStore.getScriptId(txId)
+    }
+
+    static func removeScriptId(_ txId: Flow.ID) async {
+        await scriptStore.removeScriptId(txId.description)
     }
 }
 
