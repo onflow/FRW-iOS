@@ -9840,8 +9840,8 @@
 			repositoryURL = "https://github.com/Instabug/Instabug-SP";
 			requirement = {
 				kind = versionRange;
-				maximumVersion = 16.0.0;
-				minimumVersion = 15.0.0;
+				maximumVersion = 15.0.0;
+				minimumVersion = 14.2.0;
 			};
 		};
 		4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */ = {
