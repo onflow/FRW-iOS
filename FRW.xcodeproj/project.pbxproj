@@ -1389,14 +1389,14 @@
 		4EDEA7692C9044E800DE76B6 /* PKWallet+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */; };
 		4EDEA76B2C904F0300DE76B6 /* ErrorStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */; };
 		4EDEA76C2C904F0300DE76B6 /* ErrorStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */; };
-		4EE0905C2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
-		4EE0905D2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
-		4EE0909F2DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
-		4EE090A02DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
 		4EE090572DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
 		4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
 		4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
 		4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
+		4EE0905C2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
+		4EE0905D2DA73034001515FE /* BlockedWebsiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */; };
+		4EE0909F2DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
+		4EE090A02DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
 		4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
 		4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
@@ -2670,10 +2670,10 @@
 		4EDEA7642C90305B00DE76B6 /* SecureEnclaveMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclaveMigration.swift; sourceTree = "<group>"; };
 		4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PKWallet+Add.swift"; sourceTree = "<group>"; };
 		4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorStatus.swift; sourceTree = "<group>"; };
-		4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWebsiteView.swift; sourceTree = "<group>"; };
-		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenu.swift; sourceTree = "<group>"; };
 		4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenuController.swift; sourceTree = "<group>"; };
+		4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWebsiteView.swift; sourceTree = "<group>"; };
+		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
@@ -9839,8 +9839,9 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Instabug/Instabug-SP";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 14.2.0;
+				kind = versionRange;
+				maximumVersion = 16.0.0;
+				minimumVersion = 15.0.0;
 			};
 		};
 		4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */ = {

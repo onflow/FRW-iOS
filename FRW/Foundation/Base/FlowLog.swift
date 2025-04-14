@@ -186,9 +186,10 @@ extension FlowLog {
         context: Any? = nil,
         group: BugReport.Group = .app,
         report: Bool = false,
+        reportUserAttribute: [String: String] = [:],
         showHUD: Bool = false
     ) {
-        log(error, file: file, function: function, line: line, context: context, level: .error, group: group, report: report, showHUD: showHUD)
+        log(error, file: file, function: function, line: line, context: context, level: .error, group: group, report: report, reportUserAttribute: reportUserAttribute, showHUD: showHUD)
     }
 
     func critical(
@@ -199,9 +200,10 @@ extension FlowLog {
         context: Any? = nil,
         group: BugReport.Group = .app,
         report: Bool = false,
+        reportUserAttribute: [String: String] = [:],
         showHUD: Bool = false
     ) {
-        log(error, file: file, function: function, line: line, context: context, level: .critical, group: group, report: report, showHUD: showHUD)
+        log(error, file: file, function: function, line: line, context: context, level: .critical, group: group, report: report, reportUserAttribute: reportUserAttribute, showHUD: showHUD)
     }
 
     private func log(
@@ -213,6 +215,7 @@ extension FlowLog {
         level: NonFatalLevel = .error,
         group: BugReport.Group = .app,
         report: Bool = false,
+        reportUserAttribute _: [String: String] = [:],
         showHUD: Bool = false
     ) {
         SwiftyBeaver.custom(

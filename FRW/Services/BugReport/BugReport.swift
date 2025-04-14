@@ -9,7 +9,7 @@ import Foundation
 import Instabug
 
 enum BugReport {
-    static func build(error: Error, level: NonFatalLevel = .error, group: BugReport.Group = .app) -> NonFatalException? {
+    static func build(error: Error, level: NonFatalLevel = .error, userAttribute: [String: String] = [:], group: BugReport.Group = .app) -> NonFatalException? {
         let exception: NSException
         if let baseError = error as? (any BaseError) {
             exception = NSException(name: NSExceptionName(baseError.rawValue), reason: "\(baseError.errorLog)")
@@ -22,6 +22,8 @@ enum BugReport {
             nonFatalException.stackTraceMode = .full
             nonFatalException.level = level
             nonFatalException.groupingString = group.name
+            nonFatalException.userAttributes = userAttribute
+            nonFatalException.stackFramesToTrim = 2
             return nonFatalException
         }
         return nil

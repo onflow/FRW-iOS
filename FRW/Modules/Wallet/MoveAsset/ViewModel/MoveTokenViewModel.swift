@@ -132,7 +132,7 @@ final class MoveTokenViewModel: ObservableObject {
 
         } catch {
             // TODO: Handle error
-            log.error(error)
+            log.error(error, report: true)
         }
     }
 
@@ -398,7 +398,7 @@ extension MoveTokenViewModel {
             } catch {
                 let from = fromContact.address ?? ""
                 let to = toContact.address ?? ""
-                log.error(CustomError.custom("[Move Token]", "\(from) to  \(to) failed. \(error)"))
+                log.error(CustomError.custom("[Move Token]", "\(from) to  \(to) failed. \(error)"), report: true)
                 buttonState = .enabled
             }
         }
@@ -508,7 +508,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error(error)
+                log.error(error, report: true)
             }
         }
     }
@@ -548,7 +548,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error(error)
+                log.error(error, report: true)
             }
         }
     }
@@ -595,7 +595,7 @@ extension MoveTokenViewModel {
                 await MainActor.run {
                     self.buttonState = .enabled
                 }
-                log.error(error)
+                log.error(error, report: true)
             }
         }
     }

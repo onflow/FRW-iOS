@@ -263,8 +263,13 @@ extension TransactionManager {
                                 fromId: self.transactionId.hex
                             )
                             debugPrint("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
-                            let group = "\(scriptId ?? "")" + ".tx." + "\(result.errorCode ?? FvmErrorCode.unknownError)"
-                            log.critical(CustomError.custom("\(String(describing: result.errorCode))", result.errorMessage), group: .custom(group))
+
+                            let errorCode = String(describing: result.errorCode).trimError()
+                            let group = "\(scriptId ?? "empty")" + ".tx." + "\(errorCode)"
+                            log.critical(CustomError.custom("\(errorCode)", "scriptId: " + (scriptId ?? "") + " ,txid: " + transactionId.description),
+                                         group: .custom(group),
+                                         report: true,
+                                         reportUserAttribute: ["scriptId": scriptId ?? ""])
                             switch result.errorCode {
                             case .storageCapacityExceeded:
                                 AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
@@ -551,5 +556,12 @@ extension TransactionManager {
         } catch {
             debugPrint("TransactionManager -> saveHoldersToCache error: \(error)")
         }
+    }
+}
+
+private extension String {
+    func trimError() -> String {
+        let result = removePrefix("Optional(").removeSuffix(")")
+        return result
     }
 }
