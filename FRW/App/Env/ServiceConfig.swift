@@ -18,7 +18,7 @@ class ServiceConfig {
         guard let filePath = Bundle.main.path(forResource: "ServiceConfig", ofType: "plist") else {
             fatalError("fatalError ===> Can't find ServiceConfig.plist")
         }
-        self.dict = NSDictionary(contentsOfFile: filePath) as? [String: String] ?? [:]
+        dict = NSDictionary(contentsOfFile: filePath) as? [String: String] ?? [:]
     }
 
     // MARK: Internal
@@ -45,6 +45,35 @@ extension ServiceConfig {
         }
 
         InstabugConfig.start(token: token)
+        Instabug.willSendReportHandler = { report in
+            if let uid = UserManager.shared.activatedUID {
+                report.setUserAttribute(uid, withKey: "uid")
+            }
+            if let userName = UserManager.shared.userInfo?.username {
+                report.setUserAttribute(userName, withKey: "username")
+            }
+            let selectedAccount = WalletManager.shared.selectedAccountAddress
+            if selectedAccount.count > 2 {
+                report.setUserAttribute(selectedAccount, withKey: "SelectedAccount")
+            }
+
+            if let address = WalletManager.shared.getPrimaryWalletAddress() {
+                report.setUserAttribute(address, withKey: "FlowAccount")
+            }
+
+            if let address = EVMAccountManager.shared.accounts.first?.showAddress {
+                report.setUserAttribute(address, withKey: "COA")
+            }
+            let childAddress = ChildAccountManager.shared.childAccounts.reduce("") { $0 + "," + $1.showAddress }
+            report.setUserAttribute(childAddress, withKey: "Childs")
+            return report
+        }
+        // Enabling Proactive Reporting
+        let configurations = ProactiveReportingConfigurations()
+        configurations.enabled = true // Enable/disable
+        configurations.gapBetweenModals = 5 // Time in seconds
+        configurations.modalDelayAfterDetection = 5 // Time in seconds
+        BugReporting.setProactiveReportingConfigurations(configurations)
     }
 
     private func setupMixPanel() {
@@ -53,7 +82,7 @@ extension ServiceConfig {
         }
         EventTrack.start(token: token)
     }
-    
+
     private func setupDropbox() {
         let appKey = ServiceConfig.shared.dropboxAppKey
         DropboxClientsManager.setupWithTeamAppKey(appKey)
@@ -61,7 +90,6 @@ extension ServiceConfig {
 }
 
 extension ServiceConfig {
-
     var dropboxAppKey: String {
         guard let appKey = dict["dropbox-appkey"] else {
             fatalError("Can't find Dropbox appKey at ServiceConfig.plist")

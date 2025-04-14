@@ -12,13 +12,40 @@ import Flow
 import Foundation
 import Web3Core
 
+private actor ScriptStore {
+    private var scriptIds: [String: String] = [:]
+
+    func getScriptId(_ txId: Flow.ID) -> String? {
+        scriptIds[txId.description]
+    }
+
+    func setScriptId(_ txId: String, _ funcName: String) {
+        scriptIds[txId] = funcName
+    }
+
+    func removeScriptId(_ txId: String) {
+        scriptIds.removeValue(forKey: txId)
+    }
+}
+
 // MARK: - FlowNetwork
 
 enum FlowNetwork {
+    private static let scriptStore = ScriptStore()
     static func setup() {
         let type = LocalUserDefaults.shared.flowNetwork.toFlowType()
         log.debug("did setup flow chainID to \(LocalUserDefaults.shared.flowNetwork.rawValue)")
         flow.configure(chainID: type)
+    }
+}
+
+extension FlowNetwork {
+    static func scriptId(_ txId: Flow.ID) async -> String? {
+        await scriptStore.getScriptId(txId)
+    }
+
+    static func removeScriptId(_ txId: Flow.ID) async {
+        await scriptStore.removeScriptId(txId.description)
     }
 }
 
@@ -644,7 +671,6 @@ extension FlowNetwork {
     ) async throws -> Flow.ID {
         let accessible = CadenceManager.shared.current.hybridCustody?.batchTransferNFTToChild?
             .toFunc() ?? ""
-        let cadenceString = collection.formatCadence(script: accessible)
         let childAddress = Flow.Address(hex: address)
         let idMaped = ids.map { Flow.Cadence.FValue.uint64($0) }
         let ident = identifier.split(separator: "/").last.map { String($0) } ?? identifier
@@ -1343,7 +1369,7 @@ extension FlowNetwork {
             let needBridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
             let bridgeFeePayerAddress = Flow.Address(hex: RemoteConfigManager.shared.bridgeFeePayer)
             let fromKeyIndex = WalletManager.shared.keyIndex
-            var signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
+            let signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
             let tranId = try await flow
                 .sendTransaction(signers: signers) {
                     cadence {
@@ -1389,6 +1415,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
+            await scriptStore.setScriptId(tranId.description, funcName)
             return tranId
         } catch {
             EventTrack.General
@@ -1467,6 +1494,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
+            await scriptStore.setScriptId(tranId.description, funcName)
             return tranId
         } catch {
             EventTrack.General
