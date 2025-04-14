@@ -274,7 +274,7 @@ struct BrowserAuthnView_Previews: PreviewProvider {
     static let vm = BrowserAuthnViewModel(
         title: "This is title",
         url: "https://core.flow.com",
-        logo: "https://lilico.app/logo_mobile.png",
+        logo: "https://web.api.wallet.flow.com/logo_mobile.png",
         walletAddress: "sadasdssadasdasda",
         network: .testnet
     ) { _ in
