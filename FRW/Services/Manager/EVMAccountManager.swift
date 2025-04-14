@@ -25,7 +25,7 @@ class EVMAccountManager: ObservableObject {
                 }
             }.store(in: &cancelSets)
 
-        WalletManager.shared.$currentMainAccount
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }

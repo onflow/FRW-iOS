@@ -22,7 +22,7 @@ class PushHandler: NSObject, ObservableObject {
 
         refreshPushStatus()
 
-        WalletManager.shared.$currentMainAccount
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)

@@ -21,7 +21,7 @@ class CreateProfileWaitingViewModel: ObservableObject {
         self.txId = Flow.ID(hex: txId)
         self.callback = callback
 
-        WalletManager.shared.$currentMainAccount
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }

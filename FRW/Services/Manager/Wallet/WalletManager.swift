@@ -93,7 +93,7 @@ class WalletManager: ObservableObject {
     var walletEntity: FlowWalletKit.Wallet?
     
     @Published
-    var currentMainAccount: FlowWalletKit.Account?
+    var mainAccount: FlowWalletKit.Account?
     
     var currentNetworkAccounts: [FlowWalletKit.Account] {
         walletEntity?.accounts?[currentNetwork.toFlowType()] ?? []
@@ -116,11 +116,11 @@ class WalletManager: ObservableObject {
     }
     
     var coa: COA? {
-        currentMainAccount?.coa
+        mainAccount?.coa
     }
     
     var childs: [FlowWalletKit.ChildAccount]? {
-        currentMainAccount?.childs
+        mainAccount?.childs
     }
     
     func start() {
@@ -208,11 +208,11 @@ extension WalletManager {
         guard let accounts = walletEntity?.accounts else { return }
         guard let accounts = accounts[currentNetwork.toFlowType()], let account = accounts.first else {
             // TODO: Handle newtork swicth, if no account
-            currentMainAccount = nil
+            mainAccount = nil
             return
         }
 
-        currentMainAccount = account
+        mainAccount = account
         
         // If there is no selected
         if selectedAccount == nil {
@@ -225,7 +225,7 @@ extension WalletManager {
     func loadLinkedAccounts() {
         Task {
             do {
-                try await currentMainAccount?.loadLinkedAccounts()
+                try await mainAccount?.loadLinkedAccounts()
             } catch {
                 log.error(WalletError.fetchLinkedAccountsFailed)
             }
@@ -290,7 +290,7 @@ extension WalletManager {
         NotificationCenter.default.post(name: .networkChange)
         
         if let firstAccount = currentNetworkAccounts.first {
-            currentMainAccount = firstAccount
+            mainAccount = firstAccount
             selectedAccount = .main(firstAccount.address)
             loadLinkedAccounts()
         }

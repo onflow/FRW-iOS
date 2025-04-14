@@ -52,7 +52,7 @@ class NFTUIKitListViewController: UIViewController {
             object: nil
         )
 
-        WalletManager.shared.$currentMainAccount
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)

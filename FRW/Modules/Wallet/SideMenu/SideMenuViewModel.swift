@@ -59,7 +59,7 @@ class SideMenuViewModel: ObservableObject {
     // MARK: Lifecycle
     
     init() {
-        wallet.$currentMainAccount
+        wallet.$mainAccount
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
@@ -77,7 +77,7 @@ class SideMenuViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
         
-        wallet.$currentMainAccount
+        wallet.$mainAccount
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
             .receive(on: DispatchQueue.main)

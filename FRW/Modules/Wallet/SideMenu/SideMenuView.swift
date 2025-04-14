@@ -226,7 +226,7 @@ struct SideMenuView: View {
                     Spacer()
                 }
                 .visibility(
-                    wallet.currentMainAccount?.hasLinkedAccounts ?? false
+                    wallet.mainAccount?.hasLinkedAccounts ?? false
                 )
             }
         }

@@ -36,18 +36,18 @@ extension WalletManager {
     }
 
     func getCurrentPublicKey() -> String? {
-        return currentMainAccount?.fullWeightKey?.publicKey.hex
+        return mainAccount?.fullWeightKey?.publicKey.hex
     }
 
     func getCurrentPrivateKey() -> String? {
-        guard let signAlgo = currentMainAccount?.fullWeightKey?.signAlgo else {
+        guard let signAlgo = mainAccount?.fullWeightKey?.signAlgo else {
             return nil
         }
         return keyProvider?.privateKey(signAlgo: signAlgo)?.hexValue
     }
 
     func getPrimaryWalletAddress() -> String? {
-        return currentMainAccount?.address.hexAddr
+        return mainAccount?.address.hexAddr
     }
     
     func getAddress() -> String? {

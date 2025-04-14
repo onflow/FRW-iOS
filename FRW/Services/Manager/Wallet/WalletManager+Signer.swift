@@ -21,11 +21,11 @@ extension WalletManager: FlowSigner {
     }
     
     var keyIndex: Int {
-        currentMainAccount?.keyIndex ?? 0
+        mainAccount?.keyIndex ?? 0
     }
     
     var address: Flow.Address {
-        currentMainAccount?.address ?? .init(hex: "")
+        mainAccount?.address ?? .init(hex: "")
     }
 
     public func sign(signableData: Data, transaction: Flow.Transaction?) async throws -> Data {
@@ -33,7 +33,7 @@ extension WalletManager: FlowSigner {
     }
 
     public func sign(signableData: Data) async throws -> Data {
-        guard let account = currentMainAccount else {
+        guard let account = mainAccount else {
             throw WalletError.emptyMainAccount
         }
         
