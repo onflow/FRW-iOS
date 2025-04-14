@@ -1387,6 +1387,8 @@
 		4EE090582DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
 		4EE090592DA56306001515FE /* NFTViewStyleMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */; };
 		4EE0905A2DA56306001515FE /* NFTViewStyleMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */; };
+		4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
+		4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2657,6 +2659,7 @@
 		4EDEA76A2C904F0300DE76B6 /* ErrorStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorStatus.swift; sourceTree = "<group>"; };
 		4EE090552DA56306001515FE /* NFTViewStyleMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenu.swift; sourceTree = "<group>"; };
 		4EE090562DA56306001515FE /* NFTViewStyleMenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTViewStyleMenuController.swift; sourceTree = "<group>"; };
+		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -5344,6 +5347,14 @@
 			path = FlowWalletKit;
 			sourceTree = "<group>";
 		};
+		4EE090A12DA8F06F001515FE /* BugReport */ = {
+			isa = PBXGroup;
+			children = (
+				4EE090A22DA8F08C001515FE /* BugReport.swift */,
+			);
+			path = BugReport;
+			sourceTree = "<group>";
+		};
 		4EE8E4932834DC5C00DFEF59 /* NFTModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -5987,6 +5998,7 @@
 		6ABAE528283627F300C97AE2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4EE090A12DA8F06F001515FE /* BugReport */,
 				15F6F4C72D69FAFD00D62D7F /* Token */,
 				4E09A1E82CC793B10099606E /* Track */,
 				15ADAE2828F51EA50014B722 /* Crypto */,
@@ -6956,6 +6968,7 @@
 				6AE95D522A2EDB25009F9AA4 /* BackupTipsView.swift in Sources */,
 				4E8A96592B67143D007C95E8 /* AccountKeyManager.swift in Sources */,
 				4E3670052B2A8B32000F2693 /* BackupUploadView.swift in Sources */,
+				4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */,
 				6AEDD60E2A429E22008BC5CD /* AccountSettingView.swift in Sources */,
 				6A164F742845F1CB0026B31E /* EnvironmentValues+IndexBarInsets.swift in Sources */,
 				15DC20CD27819C56000B187A /* VNavigationLink.swift in Sources */,
@@ -7800,6 +7813,7 @@
 				6AE95D512A2EDB25009F9AA4 /* BackupTipsView.swift in Sources */,
 				4E8A96582B67143D007C95E8 /* AccountKeyManager.swift in Sources */,
 				4E3670042B2A8B32000F2693 /* BackupUploadView.swift in Sources */,
+				4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */,
 				6AEDD60D2A429E22008BC5CD /* AccountSettingView.swift in Sources */,
 				15C58AB82868A4EE00BD4FC6 /* EnvironmentValues+IndexBarInsets.swift in Sources */,
 				15C58AB92868A4EE00BD4FC6 /* VNavigationLink.swift in Sources */,
@@ -8764,7 +8778,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FRW/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				ENABLE_PREVIEWS = YES;
@@ -8810,7 +8824,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"FRW/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				ENABLE_PREVIEWS = YES;

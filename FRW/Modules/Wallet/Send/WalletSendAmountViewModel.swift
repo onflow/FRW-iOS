@@ -298,12 +298,14 @@ extension WalletSendAmountViewModel {
         }
 
         if isSending {
+            log.info("[Send] isSending")
             return
         }
 
         guard let address = WalletManager.shared.getPrimaryWalletAddress(),
               let targetAddress = targetContact.address
         else {
+            log.info("[Send] empty target address:\(String(describing: targetContact.address))")
             return
         }
 
@@ -332,7 +334,7 @@ extension WalletSendAmountViewModel {
                 {
                     toAccountType = .eoa
                 }
-
+                log.info("\(fromAccountType)->\(toAccountType): Token:{\(String(describing: token.vaultIdentifier))}")
                 switch (fromAccountType, toAccountType) {
                 case (.flow, .flow):
                     txId = try await FlowNetwork.transferToken(
@@ -450,11 +452,13 @@ extension WalletSendAmountViewModel {
                         )
                     }
                 default:
+                    log.warning("[send] not match type")
                     failureBlock()
                     return
                 }
 
                 guard let id = txId else {
+                    log.warning("[send] fetch txid failed")
                     failureBlock()
                     return
                 }
@@ -476,7 +480,7 @@ extension WalletSendAmountViewModel {
                         from: address
                     )
                     guard let data = try? JSONEncoder().encode(obj) else {
-                        debugPrint("WalletSendAmountViewModel -> obj encode failed")
+                        log.error("WalletSendAmountViewModel -> obj encode failed")
                         failureBlock()
                         return
                     }
@@ -499,7 +503,7 @@ extension WalletSendAmountViewModel {
                     TransactionManager.shared.newTransaction(holder: holder)
                 }
             } catch {
-                debugPrint("WalletSendAmountViewModel -> sendAction error: \(error)")
+                log.error(error)
                 failureBlock()
                 showConfirmView = false
             }

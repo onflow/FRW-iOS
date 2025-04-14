@@ -121,12 +121,14 @@ extension TransactionManager {
             id: Flow.ID,
             createTime: TimeInterval = Date().timeIntervalSince1970,
             type: TransactionManager.TransactionType,
-            data: Data = Data()
+            data: Data = Data(),
+            scriptId: String? = nil
         ) {
             transactionId = id
             self.createTime = createTime
             self.type = type
             self.data = data
+            self.scriptId = scriptId ?? FlowNetwork.scriptId(id)
             log.info("[Cadence] txi:\(id.hex)")
         }
 
@@ -148,6 +150,7 @@ extension TransactionManager {
         var type: TransactionManager.TransactionType
         var data: Data = .init()
         var errorMsg: String?
+        var scriptId: String?
 
         var flowStatus: Flow.Transaction.Status {
             Flow.Transaction.Status(status)
@@ -254,7 +257,8 @@ extension TransactionManager {
                                 fromId: self.transactionId.hex
                             )
                             debugPrint("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
-
+                            let group = "\(scriptId ?? "")" + ".tx." + "\(result.errorCode ?? FvmErrorCode.unknownError)"
+                            log.critical(CustomError.custom("\(String(describing: result.errorCode))", result.errorMessage), group: .custom(group))
                             switch result.errorCode {
                             case .storageCapacityExceeded:
                                 AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
@@ -276,7 +280,7 @@ extension TransactionManager {
                     }
                 } catch {
                     debugPrint("TransactionHolder -> onCheck failed: \(error)")
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.retryTimes += 1
                         self.startTimer()
                     }

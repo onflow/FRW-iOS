@@ -178,6 +178,68 @@ extension FlowLog {
         IBGLog.logError("\(fileNameWithoutSuffix(file)): \(stripParams(function)): \(line): \(message()) : \(context ?? "")")
     }
 
+    func error(
+        _ error: Error,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line,
+        context: Any? = nil,
+        group: BugReport.Group = .app,
+        report: Bool = false,
+        showHUD: Bool = false
+    ) {
+        log(error, file: file, function: function, line: line, context: context, level: .error, group: group, report: report, showHUD: showHUD)
+    }
+
+    func critical(
+        _ error: Error,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line,
+        context: Any? = nil,
+        group: BugReport.Group = .app,
+        report: Bool = false,
+        showHUD: Bool = false
+    ) {
+        log(error, file: file, function: function, line: line, context: context, level: .critical, group: group, report: report, showHUD: showHUD)
+    }
+
+    private func log(
+        _ error: Error,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line,
+        context: Any? = nil,
+        level: NonFatalLevel = .error,
+        group: BugReport.Group = .app,
+        report: Bool = false,
+        showHUD: Bool = false
+    ) {
+        SwiftyBeaver.custom(
+            level: level == .error ? .error : .critical,
+            message: error.localizedDescription,
+            file: file,
+            function: function,
+            line: line,
+            context: context
+        )
+        addLogModel(category: .error, viewModel: DebugViewModel(
+            name: "\(error)",
+            detail: (context as? Error)?
+                .localizedDescription ?? ""
+        ))
+        IBGLog.logError("\(fileNameWithoutSuffix(file)): \(stripParams(function)): \(line): \(error.localizedDescription) : \(context ?? "")")
+        if report {
+            BugReport.build(error: error, level: level, group: group)?.report()
+        }
+        if showHUD {
+            if let baseError = error as? (any BaseError) {
+                HUD.error(baseError)
+            } else if let customError = error as? CustomError {}
+            else {}
+        }
+    }
+
     private func addLogModel(category: FlowLog.Category, viewModel: DebugViewModel) {
         if LocalUserDefaults.shared.openLogWindow {
             DebugViewer.shared.addViewModel(category: category.rawValue, viewModel: viewModel)

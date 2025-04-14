@@ -15,6 +15,7 @@ import Web3Core
 // MARK: - FlowNetwork
 
 enum FlowNetwork {
+    private static var scriptIds: [String: String] = [:]
     static func setup() {
         let type = LocalUserDefaults.shared.flowNetwork.toFlowType()
         log.debug("did setup flow chainID to \(LocalUserDefaults.shared.flowNetwork.rawValue)")
@@ -644,7 +645,6 @@ extension FlowNetwork {
     ) async throws -> Flow.ID {
         let accessible = CadenceManager.shared.current.hybridCustody?.batchTransferNFTToChild?
             .toFunc() ?? ""
-        let cadenceString = collection.formatCadence(script: accessible)
         let childAddress = Flow.Address(hex: address)
         let idMaped = ids.map { Flow.Cadence.FValue.uint64($0) }
         let ident = identifier.split(separator: "/").last.map { String($0) } ?? identifier
@@ -1343,7 +1343,7 @@ extension FlowNetwork {
             let needBridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
             let bridgeFeePayerAddress = Flow.Address(hex: RemoteConfigManager.shared.bridgeFeePayer)
             let fromKeyIndex = WalletManager.shared.keyIndex
-            var signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
+            let signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
             let tranId = try await flow
                 .sendTransaction(signers: signers) {
                     cadence {
@@ -1389,6 +1389,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
+            scriptIds[tranId.description] = funcName
             return tranId
         } catch {
             EventTrack.General
@@ -1467,6 +1468,7 @@ extension FlowNetwork {
                     payer: RemoteConfigManager.shared.payer,
                     success: true
                 )
+            scriptIds[tranId.description] = funcName
             return tranId
         } catch {
             EventTrack.General
@@ -1496,6 +1498,12 @@ extension FlowNetwork {
         let hash = SHA256.hash(data: data)
         let hashString = hash.compactMap { String(format: "%02x", $0) }.joined()
         return hashString
+    }
+}
+
+extension FlowNetwork {
+    static func scriptId(_ txId: Flow.ID) -> String? {
+        FlowNetwork.scriptIds[txId.description]
     }
 }
 
