@@ -13,6 +13,6 @@ class InstabugConfig {
         Instabug.start(withToken: token, invocationEvents: [.shake, .screenshot])
         Instabug.trackUserSteps = true
         Instabug.setReproStepsFor(.all, with: .enable)
-        Instabug.welcomeMessageMode = .beta
+        Instabug.welcomeMessageMode = .disabled
     }
 }

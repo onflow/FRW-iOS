@@ -14,11 +14,13 @@ import UIKit
 class NFTUIKitGridStyleHandler: NSObject {
     // MARK: Internal
 
+    var dataDidUpdate: ((Int) -> Void)?
     var vm: NFTTabViewModel?
     lazy var dataModel: NFTUIKitListGridDataModel = {
         let dm = NFTUIKitListGridDataModel()
         dm.reloadCallback = { [weak self] in
             self?.reloadViews()
+            self?.dataDidUpdate?(self?.dataModel.nfts.count ?? 0)
         }
 
         return dm
@@ -148,14 +150,15 @@ extension NFTUIKitGridStyleHandler {
         Task {
             do {
                 try await dataModel.requestGridAction(offset: 0)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.isInitRequested = true
                     self.collectionView.stopRefreshing()
                     self.reloadViews()
+                    self.dataDidUpdate?(dataModel.nfts.count)
                 }
             } catch {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.isInitRequested = true
                     self.collectionView.stopRefreshing()
@@ -175,7 +178,7 @@ extension NFTUIKitGridStyleHandler {
             do {
                 let offset = dataModel.nfts.count
                 try await dataModel.requestGridAction(offset: offset)
-                DispatchQueue.main.async {
+                await MainActor.run {
                     if self.collectionView.isLoading() {
                         self.collectionView.stopLoading()
                     }
@@ -183,7 +186,7 @@ extension NFTUIKitGridStyleHandler {
                     self.reloadViews()
                 }
             } catch {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.collectionView.stopLoading()
 
                     if self.dataModel.nfts.isEmpty {

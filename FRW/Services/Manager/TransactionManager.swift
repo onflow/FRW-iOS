@@ -121,12 +121,20 @@ extension TransactionManager {
             id: Flow.ID,
             createTime: TimeInterval = Date().timeIntervalSince1970,
             type: TransactionManager.TransactionType,
-            data: Data = Data()
+            data: Data = Data(),
+            scriptId: String? = nil
         ) {
             transactionId = id
             self.createTime = createTime
             self.type = type
             self.data = data
+            self.scriptId = scriptId
+            if scriptId == nil {
+                Task {
+                    self.scriptId = await FlowNetwork.scriptId(id)
+                    await FlowNetwork.removeScriptId(id)
+                }
+            }
             log.info("[Cadence] txi:\(id.hex)")
         }
 
@@ -148,6 +156,7 @@ extension TransactionManager {
         var type: TransactionManager.TransactionType
         var data: Data = .init()
         var errorMsg: String?
+        var scriptId: String?
 
         var flowStatus: Flow.Transaction.Status {
             Flow.Transaction.Status(status)
@@ -253,8 +262,14 @@ extension TransactionManager {
                                 result: result,
                                 fromId: self.transactionId.hex
                             )
-                            debugPrint("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
+                            log.warning("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
 
+                            let errorCode = String(describing: result.errorCode).trimError()
+                            let group = "\(scriptId ?? "empty")" + ".tx." + "\(errorCode)"
+                            log.error(CustomError.custom("\(errorCode)", "scriptId: " + (scriptId ?? "") + " ,txid: " + transactionId.description),
+                                      group: .custom(group),
+                                      report: true,
+                                      reportUserAttribute: ["scriptId": scriptId ?? ""])
                             switch result.errorCode {
                             case .storageCapacityExceeded:
                                 AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
@@ -276,7 +291,7 @@ extension TransactionManager {
                     }
                 } catch {
                     debugPrint("TransactionHolder -> onCheck failed: \(error)")
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.retryTimes += 1
                         self.startTimer()
                     }
@@ -542,5 +557,12 @@ extension TransactionManager {
         } catch {
             debugPrint("TransactionManager -> saveHoldersToCache error: \(error)")
         }
+    }
+}
+
+private extension String {
+    func trimError() -> String {
+        let result = removePrefix("Optional(").removeSuffix(")")
+        return result
     }
 }

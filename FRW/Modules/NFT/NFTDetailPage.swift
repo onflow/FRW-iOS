@@ -232,67 +232,6 @@ struct NFTDetailPage: RouteableView {
                                 }
                             }
                             Spacer()
-
-//                            Button {
-//                                Task {
-//                                    let image = await vm.image()
-//                                    Router.route(to: RouteMap.NFT.AR(image))
-//                                }
-//                            } label: {
-//                                ZStack(alignment: .center) {
-//                                    Circle()
-//                                        .stroke(theColor, lineWidth: 2)
-//                                        .frame(width: 44, height: 44)
-//
-//                                    ResizableLottieView(lottieView: vm.animationView,
-//                                                        color: theColor)
-//                                        .aspectRatio(contentMode: .fit)
-//                                        .frame(width: 44, height: 44)
-//                                        .frame(maxWidth: .infinity)
-//                                        .contentShape(Rectangle())
-//                                }
-//                                .frame(width: 44, height: 44)
-//                            }
-//                            .padding(.horizontal, 6)
-//                            .sheet(isPresented: $isSharePresented) {} content: {
-//                                ShareSheet(items: $items)
-//                            }
-
-                            Button {
-                                if NFTUIKitCache.cache.isFav(id: vm.nft.id) {
-                                    NFTUIKitCache.cache.removeFav(id: vm.nft.id)
-                                    isFavorited = false
-                                } else {
-                                    NFTUIKitCache.cache.addFav(nft: vm.nft)
-                                    isFavorited = true
-                                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                                }
-                            } label: {
-                                ZStack(alignment: .center) {
-                                    Circle()
-                                        .strokeBorder(
-                                            isFavorited ? theColor : Color.LL.outline,
-                                            lineWidth: 2
-                                        )
-                                        .background(
-                                            Circle()
-                                                .fill(isFavorited ? theColor.opacity(0.2) : .clear)
-                                        )
-                                        .frame(width: 44, height: 44)
-
-                                    DOFavoriteButtonView(
-                                        isSelected: isFavorited,
-                                        imageColor: UIColor(theColor)
-                                    )
-                                }
-                                .frame(width: 44, height: 44)
-                                .foregroundColor(theColor)
-                            }
-                            .padding(.horizontal, 6)
-                            .visibility(
-                                WalletManager.shared
-                                    .isSelectedChildAccount ? .gone : .visible
-                            )
                         }
                         .padding(.top, 16)
                         .padding(.horizontal, 26)

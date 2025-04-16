@@ -70,8 +70,7 @@ struct MoveTokenView: RouteableView, PresentActionDelegate {
 
                 MoveTokenView
                     .AccountView(
-                        isFree: viewModel.fromContact.walletType == viewModel
-                            .toContact.walletType
+                        isFree: viewModel.isFreeMove
                     ) { _ in
                     }
             }

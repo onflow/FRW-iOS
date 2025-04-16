@@ -37,7 +37,7 @@ private func generateFCLExtensionInject() -> String {
       provider: {
         address: "0x33f75ff0b830dcec",
         name: "Flow Wallet",
-        icon: "https://lilico.app/logo_mobile.png",
+        icon: "https://web.api.wallet.flow.com/logo_mobile.png",
         description: "Digital wallet created for everyone.",
       },
     };

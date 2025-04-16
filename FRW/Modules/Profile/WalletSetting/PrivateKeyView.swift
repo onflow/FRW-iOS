@@ -68,6 +68,7 @@ struct PrivateKeyView: RouteableView {
                     .cornerRadius(16)
                     .onTapGesture {}
                     .animation(.easeInOut, value: isBlur)
+                    .instabug_privateView()
 
                 } header: {
                     HStack {

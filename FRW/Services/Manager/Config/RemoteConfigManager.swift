@@ -5,8 +5,10 @@
 //  Created by Selina on 5/9/2022.
 //
 
+import Combine
 import CryptoKit
 import Flow
+import Moya
 import SwiftUI
 import UIKit
 import WalletCore
@@ -60,6 +62,13 @@ class RemoteConfigManager {
         return true
     }
 
+    var coverBridgeFee: Bool {
+        if let bridgeFee = config?.features.coverBridgeFee {
+            return bridgeFee
+        }
+        return false
+    }
+
     var payer: String {
         if !freeGasEnabled {
             return WalletManager.shared.getPrimaryWalletAddress() ?? emptyAddress
@@ -92,6 +101,28 @@ class RemoteConfigManager {
         }
     }
 
+    var bridgeFeePayer: String {
+        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        case .mainnet:
+            return config?.bridgeFeePayer.mainnet.address ?? emptyAddress
+        case .testnet:
+            return config?.bridgeFeePayer.testnet.address ?? emptyAddress
+        default:
+            return emptyAddress
+        }
+    }
+
+    var bridgeFeePayerId: Int {
+        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        case .mainnet:
+            return config?.bridgeFeePayer.mainnet.keyID ?? 0
+        case .testnet:
+            return config?.bridgeFeePayer.testnet.keyID ?? 0
+        default:
+            return 0
+        }
+    }
+
     func getContarctAddress(_ network: FlowNetworkType) -> [String: String]? {
         switch network {
         case .mainnet:
@@ -107,7 +138,8 @@ class RemoteConfigManager {
             let data: String = try FirebaseConfig.ENVConfig.fetch()
             let key = LocalEnvManager.shared.backupAESKey
             if let keyData = key.data(using: .utf8),
-               let ivData = key.sha256().prefix(16).data(using: .utf8) {
+               let ivData = key.sha256().prefix(16).data(using: .utf8)
+            {
                 let decodeData = AES.decryptCBC(
                     key: keyData,
                     data: Data(hex: data),
@@ -121,7 +153,8 @@ class RemoteConfigManager {
                 isStaging = false
                 if let currentVersion = Bundle.main
                     .infoDictionary?["CFBundleShortVersionString"] as? String,
-                    let version = envConfig?.version {
+                    let version = envConfig?.version
+                {
                     if version.compareVersion(to: currentVersion) == .orderedDescending {
                         self.config = envConfig?.prod
                     }
@@ -147,7 +180,7 @@ class RemoteConfigManager {
     }
 
     func fetchNews() {
-        Task {
+        _Concurrency.Task {
             do {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
@@ -174,7 +207,8 @@ class RemoteConfigManager {
             let data: String = try FirebaseConfig.ENVConfig.fetch()
             let key = LocalEnvManager.shared.backupAESKey
             if let keyData = key.data(using: .utf8),
-               let ivData = key.sha256().prefix(16).data(using: .utf8) {
+               let ivData = key.sha256().prefix(16).data(using: .utf8)
+            {
                 let decodeData = AES.decryptCBC(
                     key: keyData,
                     data: Data(hex: data),

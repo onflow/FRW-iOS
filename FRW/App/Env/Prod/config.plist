@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>lilico-web</key>
-	<string>https://lilico.app/api/</string>
+	<string>https://web.api.wallet.flow.com/api/</string>
 	<key>lilico</key>
 	<string>https://api.lilico.app</string>
 	<key>firebase-function</key>
