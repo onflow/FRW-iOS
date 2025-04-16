@@ -23,8 +23,8 @@ class TrustJSMessageHandler: NSObject {
     weak var webVC: BrowserViewController?
 
     var supportChainID: [Int: Flow.ChainID] = [
-        FlowNetworkType.mainnet.networkID: .mainnet,
-        FlowNetworkType.testnet.networkID: .testnet,
+        Flow.ChainID.mainnet.networkID: .mainnet,
+        Flow.ChainID.testnet.networkID: .testnet,
     ]
 }
 
@@ -171,7 +171,7 @@ extension TrustJSMessageHandler {
             let address = webVC?.trustProvider?.config.ethereum.address ?? ""
 
             let title = webVC?.webView.title ?? "unknown"
-            let chainID = LocalUserDefaults.shared.flowNetwork.toFlowType()
+            let chainID = currentNetwork
             let vm = BrowserAuthnViewModel(
                 title: title,
                 url: url?.host ?? "unknown",
@@ -417,20 +417,15 @@ extension TrustJSMessageHandler {
             return
         }
 
-        let currentChainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let currentChainId = currentNetwork
 
         if targetID == currentChainId {
             log.info("No need to switch, already on chain \(chainId)")
             webVC?.webView.tw.sendNull(network: .ethereum, id: id)
         } else {
-            guard let fromId = currentChainId.networkType, let toId = targetID.networkType else {
-                log.error("Unknown chain id: \(chainId)")
-                HUD.error(title: "Unsupported ChainId: \(chainId)")
-                webVC?.webView.tw.send(network: .ethereum, error: "Unknown chain id", to: id)
-                return
-            }
+            let toId = targetID
             let callback: SwitchNetworkClosure = { [weak self] curId in
-                if curId.toFlowType() == targetID {
+                if curId == targetID {
                     log.info("Switch to \(chainId)")
                     self?.webVC?.webView.tw.sendNull(network: .ethereum, id: id)
                 } else {
@@ -442,7 +437,7 @@ extension TrustJSMessageHandler {
                     )
                 }
             }
-            Router.route(to: RouteMap.Explore.switchNetwork(fromId, toId, callback))
+            Router.route(to: RouteMap.Explore.switchNetwork(currentChainId, toId, callback))
         }
     }
 

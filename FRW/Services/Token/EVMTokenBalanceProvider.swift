@@ -7,6 +7,7 @@
 
 import Foundation
 import Web3Core
+import Flow
 
 class EVMTokenBalanceProvider: TokenBalanceProvider {
     var whiteListTokens: [TokenModel] = []
@@ -14,20 +15,20 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     // MARK: Lifecycle
 
-    init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
+    init(network: Flow.ChainID = currentNetwork) {
         self.network = network
     }
 
     // MARK: Internal
 
-    var network: FlowNetworkType
+    var network: Flow.ChainID
 
     func getSupportTokens() async throws -> [TokenModel] {
         guard whiteListTokens.isEmpty else {
             return whiteListTokens
         }
         let tokenResponse: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
+            .requestWithRawModel(GithubEndpoint.EVMTokenList(network), needAuthToken: false)
         var tokens: [TokenModel] = tokenResponse.conversion(type: .evm)
         if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
             let flowModel = flowToken.toTokenModel(type: .evm, network: network)
@@ -71,7 +72,7 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         let updateModels: [TokenModel] = models.compactMap { model in
 
             if let metadata = allTokens.first(where: { token in
-                token.address.addressByNetwork(network.toFlowType())?.lowercased() == model.address.addressByNetwork(network.toFlowType())?.lowercased()
+                token.address.addressByNetwork(network)?.lowercased() == model.address.addressByNetwork(network)?.lowercased()
             }) {
                 var newModel = model
                 newModel.icon = metadata.iconURL

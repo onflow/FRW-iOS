@@ -621,7 +621,7 @@ extension UserManager {
 
 extension UserManager {
     func switchAccount(withUID uid: String) async throws {
-        if !currentNetwork.isMainnet {
+        if currentNetwork != .mainnet {
             WalletManager.shared.changeNetwork(.mainnet)
         }
 
@@ -683,7 +683,7 @@ extension UserManager {
     }
 
     private func insertLoginUID(_ uid: String) {
-        if LocalUserDefaults.shared.flowNetwork != .mainnet {
+        if currentNetwork != .mainnet {
             return
         }
         var oldList = loginUIDList

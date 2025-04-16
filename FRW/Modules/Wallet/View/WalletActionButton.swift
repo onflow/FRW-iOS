@@ -34,7 +34,7 @@ struct WalletActionButton: View {
         // MARK: Private
 
         private func incrementUrl() -> String {
-            if LocalUserDefaults.shared.flowNetwork == .mainnet {
+            if LocalUserDefaults.shared.network == .mainnet {
                 return "https://app.increment.fi/swap"
             } else {
                 return "https://demo.increment.fi/swap"

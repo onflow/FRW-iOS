@@ -85,13 +85,13 @@ enum Network {
     static func requestWithRawModel<T: Decodable, U: TargetType>(
         _ target: U,
         decoder: JSONDecoder = FRWAPI.jsonDecoder,
-        needToken: Bool = true
+        needAuthToken: Bool = true
     ) async throws -> T {
         let token = try await fetchIDToken()
         let authPlugin = AccessTokenPlugin { _ in token }
         let provider =
             MoyaProvider<U>(
-                plugins: needToken ? [NetworkLoggerPlugin(), authPlugin] :
+                plugins: needAuthToken ? [NetworkLoggerPlugin(), authPlugin] :
                     [NetworkLoggerPlugin()]
             )
         let result = await provider.asyncRequest(target)

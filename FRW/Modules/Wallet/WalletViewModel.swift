@@ -376,11 +376,10 @@ extension WalletViewModel {
         let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
         showSwapButton = swapFlag ? !isChild : false
 
-        
         let isMainAccount = WalletManager.shared.selectedAccount?.type != .main
         
         // Stake
-        showStakeButton = currentNetwork.isMainnet ? isMainAccount : false
+        showStakeButton = currentNetwork == .mainnet ? isMainAccount : false
 
         // buy
         let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false

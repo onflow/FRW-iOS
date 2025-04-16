@@ -18,6 +18,10 @@ import Web3Core
 import web3swift
 import SwiftUI
 
+var currentNetwork: Flow.ChainID {
+    WalletManager.shared.currentNetwork
+}
+
 // MARK: - Define
 
 extension WalletManager {
@@ -63,7 +67,7 @@ class WalletManager: ObservableObject {
             name: .willResetWallet,
             object: nil
         )
-        
+        flow.configure(chainID: LocalUserDefaults.shared.network)
         start()
     }
 
@@ -96,11 +100,14 @@ class WalletManager: ObservableObject {
     var mainAccount: FlowWalletKit.Account?
     
     var currentNetworkAccounts: [FlowWalletKit.Account] {
-        walletEntity?.accounts?[currentNetwork.toFlowType()] ?? []
+        walletEntity?.accounts?[currentNetwork] ?? []
     }
     
     @Published
     private(set) var selectedAccount: FWAccount?
+    
+    @Published
+    private(set) var currentNetwork: Flow.ChainID = .mainnet
     
     var keyProvider: (any KeyProtocol)?
 
@@ -129,7 +136,6 @@ class WalletManager: ObservableObject {
             .map { $0 }
             .sink { _ in
                 self.initWallet()
-
             }.store(in: &cancellableSet)
         
         $walletEntity
@@ -206,7 +212,7 @@ extension WalletManager {
     
     private func loadRecentFlowAccount() {
         guard let accounts = walletEntity?.accounts else { return }
-        guard let accounts = accounts[currentNetwork.toFlowType()], let account = accounts.first else {
+        guard let accounts = accounts[currentNetwork], let account = accounts.first else {
             // TODO: Handle newtork swicth, if no account
             mainAccount = nil
             return
@@ -266,27 +272,36 @@ extension WalletManager {
 extension WalletManager {
     
     func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
-        guard let address = FWAddressDector.create(address: address) else {
+        UIFeedbackGenerator.impactOccurred(.selectionChanged)
+        guard let fwAddress = FWAddressDector.create(address: address) else {
             HUD.error(WalletError.invaildAddress)
             return
         }
         
-        selectedAccount = .init(type: type, addr: address)
+        selectedAccount = .init(type: type, addr: fwAddress)
         
         // Store selected account
         UserDefaults.standard.set(selectedAccount?.value, forKey: LocalUserDefaults.Keys.selectedAddress.rawValue)
         
-        if type == .main {
+        // If it's main account, reload the linked account
+        if type == .main,
+           let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
+            account.hexAddr == address
+        }){
+            mainAccount = account
             loadLinkedAccounts()
         }
     }
 
-    func changeNetwork(_ type: FlowNetworkType) {
-        if currentNetwork == type {
+    func changeNetwork(_ network: Flow.ChainID) {
+        if currentNetwork == network {
             return
         }
-        LocalUserDefaults.shared.flowNetwork = type
-        FlowNetwork.setup()
+        
+        LocalUserDefaults.shared.network = network
+        
+        flow.configure(chainID: network)
+        
         NotificationCenter.default.post(name: .networkChange)
         
         if let firstAccount = currentNetworkAccounts.first {
@@ -330,25 +345,21 @@ extension WalletManager {
     @objc
     private func reset() {
         debugPrint("WalletManager: reset start")
-        
-        debugPrint("WalletManager: wallet info clear success")
-
         do {
-            try removeCurrentMnemonicDataFromKeyChain()
+            guard let uid = UserManager.shared.activatedUID else {
+                debugPrint("WalletManager: no uid")
+                return
+            }
+            let keyId = "\(WalletManager.mnemonicStoreKeyPrefix).\(uid)"
+            
+            try mainKeychain.remove(keyId)
+            
             debugPrint("WalletManager: mnemonic remove success")
         } catch {
             debugPrint("WalletManager: remove mnemonic failed")
         }
 
         debugPrint("WalletManager: reset finished")
-    }
-
-    private func removeCurrentMnemonicDataFromKeyChain() throws {
-        guard let uid = UserManager.shared.activatedUID else {
-            return
-        }
-
-        try mainKeychain.remove(getMnemonicStoreKey(uid: uid))
     }
 }
 
@@ -359,8 +370,10 @@ extension WalletManager {
     func asyncCreateWalletAddressFromServer() {
         Task {
             do {
-                let _: Network.EmptyResponse = try await Network
-                    .requestWithRawModel(FRWAPI.User.userAddress)
+                let result: UserAddressV2Response = try await Network.request(FRWAPI.User.userAddressV2)
+                let txId = Flow.ID(hex: result.txId)
+                _ = try await txId.onceSealed()
+                try? await walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
             } catch {
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
@@ -429,14 +442,6 @@ extension WalletManager {
             }
 
         }
-    }
-}
-
-// MARK: - Internal Getter
-
-extension WalletManager {
-    private func getMnemonicStoreKey(uid: String) -> String {
-        "\(WalletManager.mnemonicStoreKeyPrefix).\(uid)"
     }
 }
 

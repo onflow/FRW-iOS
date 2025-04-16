@@ -25,10 +25,12 @@ class CadenceManager {
     var scripts: CadenceScript!
 
     var current: CadenceModel {
-        switch LocalUserDefaults.shared.flowNetwork {
+        switch currentNetwork {
         case .testnet:
             return scripts.testnet
         case .mainnet:
+            return scripts.mainnet
+        default:
             return scripts.mainnet
         }
     }

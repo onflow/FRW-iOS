@@ -55,9 +55,8 @@ class FlowTransactionViewMoreFooter: UICollectionReusableView {
         guard let address = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
             return
         }
-        let network = LocalUserDefaults.shared.flowNetwork
         let accountType = AccountType.current
-        let url = network.getAccountUrl(accountType: accountType, address: address)
+        let url = currentNetwork.getAccountUrl(accountType: accountType, address: address)
 
         url.map { UIApplication.shared.open($0) }
     }

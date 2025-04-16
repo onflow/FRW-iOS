@@ -32,11 +32,6 @@ private actor ScriptStore {
 
 enum FlowNetwork {
     private static let scriptStore = ScriptStore()
-    static func setup() {
-        let type = LocalUserDefaults.shared.flowNetwork.toFlowType()
-        log.debug("did setup flow chainID to \(LocalUserDefaults.shared.flowNetwork.rawValue)")
-        flow.configure(chainID: type)
-    }
 }
 
 extension FlowNetwork {

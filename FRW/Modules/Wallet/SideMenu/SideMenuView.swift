@@ -287,7 +287,7 @@ struct SideMenuView: View {
                             } label: {
                                 NetworkMenuItem(
                                     network: .mainnet,
-                                    currentNetwork: LocalUserDefaults.shared.flowNetwork
+                                    currentNetwork: currentNetwork
                                 )
                             }
 
@@ -298,18 +298,18 @@ struct SideMenuView: View {
                             } label: {
                                 NetworkMenuItem(
                                     network: .testnet,
-                                    currentNetwork: LocalUserDefaults.shared.flowNetwork
+                                    currentNetwork: currentNetwork
                                 )
                             }
                         }
 
                     } label: {
-                        Text(LocalUserDefaults.shared.flowNetwork.rawValue.uppercasedFirstLetter())
+                        Text(currentNetwork.rawValue.uppercasedFirstLetter())
                             .font(.inter(size: 12))
-                            .foregroundStyle(LocalUserDefaults.shared.flowNetwork.color)
+                            .foregroundStyle(currentNetwork.color)
                             .frame(height: 24)
                             .padding(.horizontal, 8)
-                            .background(LocalUserDefaults.shared.flowNetwork.color.opacity(0.08))
+                            .background(currentNetwork.color.opacity(0.08))
                             .cornerRadius(8)
                     }
                 }

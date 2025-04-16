@@ -31,17 +31,16 @@ struct DAppModel: Codable, Identifiable {
     }
 
     var networkURL: URL? {
-        switch currentNetwork {
-        case .mainnet:
-            return url
-        case .testnet:
-            return testnetURL
+        return switch currentNetwork {
+        case .mainnet: url
+        case .testnet: testnetURL
+        default: url
         }
     }
 
     var host: String? {
         var host = url.host
-        if LocalUserDefaults.shared.flowNetwork == .testnet {
+        if currentNetwork == .testnet {
             host = testnetURL?.host
         }
         return host

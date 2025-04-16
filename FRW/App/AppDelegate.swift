@@ -61,7 +61,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         appConfig()
         commonConfig()
-        flowConfig()
 
         setupUI()
         _ = BlocklistHandler.shared
@@ -197,10 +196,6 @@ extension AppDelegate {
 
         HUD.setupProgressHUD()
     }
-
-    private func flowConfig() {
-        FlowNetwork.setup()
-    }
 }
 
 // MARK: - UI
@@ -230,7 +225,7 @@ extension AppDelegate {
 
         delay(.seconds(5)) {
             UIView.animate(withDuration: 0.2) {
-                self.window?.backgroundColor = currentNetwork.isMainnet ? UIColor.LL.Neutrals
+                self.window?.backgroundColor = currentNetwork == .mainnet ? UIColor.LL.Neutrals
                     .background : UIColor(currentNetwork.color)
             }
         }
@@ -238,7 +233,7 @@ extension AppDelegate {
 
     @objc
     func handleNetworkChange() {
-        window?.backgroundColor = currentNetwork.isMainnet ? UIColor.LL.Neutrals
+        window?.backgroundColor = currentNetwork == .mainnet ? UIColor.LL.Neutrals
             .background : UIColor(currentNetwork.color)
     }
 }

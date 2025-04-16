@@ -7,6 +7,7 @@
 
 import Kingfisher
 import SwiftUI
+import Flow
 
 struct AccountSideCell: View {
     // MARK: Internal
@@ -123,8 +124,8 @@ struct AccountSideCell: View {
 
     // MARK: Private
 
-    private var network: FlowNetworkType {
-        LocalUserDefaults.shared.flowNetwork
+    private var network: Flow.ChainID {
+        currentNetwork
     }
 
     private var user: WalletAccount.User {

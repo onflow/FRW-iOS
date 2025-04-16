@@ -250,7 +250,7 @@ extension FCLScripts {
             SignatureReplacement: accountProofSign,
             NonceReplacement: nonce,
             KeyIDReplacement: "\(keyId)",
-            NetworkReplacement: LocalUserDefaults.shared.flowNetwork.rawValue,
+            NetworkReplacement: currentNetwork.rawValue,
         ]
         return FCLScripts.authnResponseAccountProof.replace(from: dict)
     }

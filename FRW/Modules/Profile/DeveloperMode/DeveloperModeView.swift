@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Flow
 
 // MARK: - DeveloperModeView_Previews
 
@@ -52,8 +53,8 @@ struct DeveloperModeView: RouteableView {
                         .padding(.vertical, 8)
                     VStack(spacing: 0) {
                         Section {
-                            let isMainnet = lud.flowNetwork == .mainnet
-                            let isTestnet = lud.flowNetwork == .testnet
+                            let isMainnet = lud.network == .mainnet
+                            let isTestnet = lud.network == .testnet
 
                             Cell(
                                 sysImageTuple: (
@@ -73,7 +74,7 @@ struct DeveloperModeView: RouteableView {
                                 sysImageTuple: (
                                     isTestnet ? .checkmarkSelected :
                                         .checkmarkUnselected,
-                                    isTestnet ? FlowNetworkType.testnet
+                                    isTestnet ? Flow.ChainID.testnet
                                         .color : .LL.Neutrals.neutrals1
                                 ),
                                 title: "Testnet",

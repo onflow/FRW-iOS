@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Flow
 
 // MARK: - NetworkSwitchPopViewModel
 
@@ -13,8 +14,8 @@ class NetworkSwitchPopViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
-        fromNetwork: FlowNetworkType,
-        toNetwork: FlowNetworkType,
+        fromNetwork: Flow.ChainID,
+        toNetwork: Flow.ChainID,
         callback: SwitchNetworkClosure? = nil
     ) {
         self.fromNetwork = fromNetwork
@@ -25,9 +26,9 @@ class NetworkSwitchPopViewModel: ObservableObject {
     // MARK: Internal
 
     @Published
-    var fromNetwork: FlowNetworkType
+    var fromNetwork: Flow.ChainID
     @Published
-    var toNetwork: FlowNetworkType
+    var toNetwork: Flow.ChainID
 
     var callback: SwitchNetworkClosure?
 
@@ -67,8 +68,8 @@ struct NetworkSwitchPopView: View {
     // MARK: Lifecycle
 
     init(
-        from: FlowNetworkType,
-        to: FlowNetworkType,
+        from: Flow.ChainID,
+        to: Flow.ChainID,
         callback: SwitchNetworkClosure? = nil
     ) {
         _vm = StateObject(wrappedValue: NetworkSwitchPopViewModel(

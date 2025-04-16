@@ -434,7 +434,7 @@ extension WalletConnectEVMHandler {
             return nil
         }
 
-        let chainId = LocalUserDefaults.shared.flowNetwork.networkID
+        let chainId = currentNetwork.networkID
         let evmGasPrice = 0
         let directCallTxType = 255
         let contractCallSubType = 5

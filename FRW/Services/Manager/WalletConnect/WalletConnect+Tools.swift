@@ -11,7 +11,7 @@ import WalletConnectSign
 extension Sign {
     enum FlowWallet {
         static var blockchain: Blockchain {
-            Blockchain(currentNetwork.isMainnet ? "flow:mainnet" : "flow:testnet")!
+            Blockchain("flow:\(currentNetwork.name)")!
         }
 
         static func namespaces(

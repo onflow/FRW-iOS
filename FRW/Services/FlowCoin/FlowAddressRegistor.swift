@@ -32,16 +32,16 @@ enum ScriptAddress: String, CaseIterable {
     // MARK: Internal
 
     static func addressMap(
-        on network: FlowNetworkType = LocalUserDefaults.shared
-            .flowNetwork
+        on network: Flow.ChainID = LocalUserDefaults.shared
+            .network
     ) -> [String: String] {
         return RemoteConfigManager.shared.getContarctAddress(network) ?? [:]
 
     }
 
     func address(
-        on network: FlowNetworkType = LocalUserDefaults.shared
-            .flowNetwork
+        on network: Flow.ChainID = LocalUserDefaults.shared
+            .network
     ) -> Flow.Address? {
         guard let addressMap = RemoteConfigManager.shared.getContarctAddress(network),
               let address = addressMap[rawValue], !address.isEmpty else {

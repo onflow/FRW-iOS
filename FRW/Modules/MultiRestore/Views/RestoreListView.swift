@@ -41,7 +41,7 @@ struct RestoreListView: RouteableView {
                     title: "restore_device_title".localized,
                     des: "restore_device_desc_2".localized
                 ) {
-                    if LocalUserDefaults.shared.flowNetwork != .mainnet {
+                    if currentNetwork != .mainnet {
                         showSwitchUserAlert = true
                     } else {
                         Router.route(to: RouteMap.RestoreLogin.syncQC)
@@ -53,7 +53,7 @@ struct RestoreListView: RouteableView {
                     title: "restore_multi_title".localized,
                     des: "restore_multi_desc".localized
                 ) {
-                    if LocalUserDefaults.shared.flowNetwork != .mainnet {
+                    if currentNetwork != .mainnet {
                         showSwitchUserAlert = true
                     } else {
                         Router.route(to: RouteMap.RestoreLogin.restoreMulti)
@@ -65,7 +65,7 @@ struct RestoreListView: RouteableView {
                     title: "restore_phrase_title_2".localized,
                     des: "restore_phrase_desc_2".localized
                 ) {
-                    if LocalUserDefaults.shared.flowNetwork != .mainnet {
+                    if currentNetwork != .mainnet {
                         showSwitchUserAlert = true
                     } else {
                         Router.route(to: RouteMap.RestoreLogin.root)

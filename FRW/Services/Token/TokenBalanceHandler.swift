@@ -65,16 +65,18 @@ class TokenBalanceHandler: ObservableObject {
 
     static let shared = TokenBalanceHandler()
 
-    static func flowTokenAddress(network: FlowNetworkType) -> String {
+    static func flowTokenAddress(network: Flow.ChainID) -> String {
         switch network {
         case .mainnet:
             return "0x1654653399040a61"
         case .testnet:
             return "0x7e60df042a9c0868"
+        default:
+            return "0x1654653399040a61"
         }
     }
 
-    static func getFlowTokenModel(network: FlowNetworkType) -> SingleToken? {
+    static func getFlowTokenModel(network: Flow.ChainID) -> SingleToken? {
         let address = flowTokenAddress(network: network).stripHexPrefix()
         guard let data = flowTokenJsonStr
             .replacingOccurrences(of: "<FlowTokenAddress>", with: address)
@@ -86,7 +88,7 @@ class TokenBalanceHandler: ObservableObject {
     }
     
     func getAvailableFlowBalance(address: String,
-                                 network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                                 network: Flow.ChainID = currentNetwork,
                                  forceReload: Bool = false) async throws -> Decimal? {
         
         if (flowBalance[address] != nil), !forceReload {
@@ -109,7 +111,7 @@ class TokenBalanceHandler: ObservableObject {
     }
     
     func getAvailableFlowBalance(addresses: [String],
-                                 network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                                 network: Flow.ChainID = currentNetwork,
                                  forceReload: Bool = false) async throws -> [String: Decimal] {
         
         if flowBalance.keys.contains(addresses), !forceReload {
@@ -132,7 +134,7 @@ class TokenBalanceHandler: ObservableObject {
     }
 
     func getSupportTokens(address: FWAddress,
-                          network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                          network: Flow.ChainID = currentNetwork,
                           ignoreCache: Bool = true) async throws -> [TokenModel]
     {
         let provider = generateProvider(address: address, network: network)
@@ -141,7 +143,7 @@ class TokenBalanceHandler: ObservableObject {
 
     /// `ignoreCache` it should be with the expiration of time or other,ensure the validity of the data
     func getActivatedTokens(address: FWAddress,
-                            network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+                            network: Flow.ChainID = currentNetwork,
                             ignoreCache: Bool = true) async throws -> [TokenModel]
     {
         let provider = generateProvider(address: address, network: network)
@@ -150,7 +152,7 @@ class TokenBalanceHandler: ObservableObject {
 
     func getFTBalance(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+        network: Flow.ChainID = currentNetwork,
         ignoreCache: Bool = true
     ) async throws -> [TokenModel] {
         let provider = generateProvider(address: address, network: network)
@@ -159,7 +161,7 @@ class TokenBalanceHandler: ObservableObject {
 
     func getFTBalanceWithId(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+        network: Flow.ChainID = currentNetwork,
         tokenId: String
     ) async throws -> TokenModel? {
         let models = try await getFTBalance(address: address, network: network)
@@ -168,7 +170,7 @@ class TokenBalanceHandler: ObservableObject {
 
     func getNFTCollections(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork
+        network: Flow.ChainID = currentNetwork
     ) async throws -> [NFTCollection] {
         let provider = generateProvider(address: address, network: network)
         return try await provider.getNFTCollections(address: address)
@@ -176,7 +178,7 @@ class TokenBalanceHandler: ObservableObject {
 
     func getNFTCollectionDetail(
         address: FWAddress,
-        network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork,
+        network: Flow.ChainID = currentNetwork,
         collectionIdentifier: String,
         offset: String
     ) async throws -> NFTListResponse {
@@ -188,7 +190,12 @@ class TokenBalanceHandler: ObservableObject {
         )
     }
 
-    func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {
+    func getAllNFTsUnderCollection(
+        address: FWAddress,
+        collectionIdentifier: String,
+        network: Flow.ChainID = currentNetwork,
+        progressHandler: @escaping (Int, Int) -> Void
+    ) async throws -> [NFTModel] {
         let provider = generateProvider(address: address, network: network)
         return try await provider.getAllNFTsUnderCollection(
             address: address,
@@ -203,7 +210,7 @@ class TokenBalanceHandler: ObservableObject {
 extension TokenBalanceHandler {
     private func generateProvider(
         address: FWAddress,
-        network: FlowNetworkType,
+        network: Flow.ChainID,
         ignoreCache: Bool = false
     ) -> TokenBalanceProvider {
         if ignoreCache {

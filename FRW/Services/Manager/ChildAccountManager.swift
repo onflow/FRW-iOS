@@ -179,7 +179,7 @@ class ChildAccountManager: ObservableObject {
             return
         }
 
-        let network = LocalUserDefaults.shared.flowNetwork
+        let network = currentNetwork
         await MainActor.run {
             self.isLoading = true
         }
@@ -189,7 +189,7 @@ class ChildAccountManager: ObservableObject {
 
             await MainActor.run {
                 if UserManager.shared.activatedUID != uid { return }
-                if LocalUserDefaults.shared.flowNetwork != network { return }
+                if currentNetwork != network { return }
 
                 let oldList = MultiAccountStorage.shared.getChildAccounts(
                     uid: uid,

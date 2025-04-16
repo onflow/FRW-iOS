@@ -39,7 +39,7 @@ extension WalletManager: FlowSigner {
         
         do {
             return try await account.sign(signableData: signableData)
-        } catch FlowWalletKit.WalletError.failedPassSecurityCheck {
+        } catch FlowWalletKit.FWKError.failedPassSecurityCheck {
             HUD.error(title: "verify_failed".localized)
             throw WalletError.securityVerifyFailed
         } catch {

@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Flow
 
 // MARK: - TokenBalanceProvider
 
 protocol TokenBalanceProvider {
-    var network: FlowNetworkType { get }
+    var network: Flow.ChainID { get }
     var nftPageSize: Int { get }
     // cache
     var whiteListTokens: [TokenModel] { get }

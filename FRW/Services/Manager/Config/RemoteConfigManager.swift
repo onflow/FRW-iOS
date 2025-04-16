@@ -38,7 +38,7 @@ class RemoteConfigManager {
     var isStaging: Bool = false
 
     var emptyAddress: String {
-        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        switch currentNetwork {
         case .mainnet:
             return "0x319e67f2ef9d937f"
         case .testnet:
@@ -74,7 +74,7 @@ class RemoteConfigManager {
             return WalletManager.shared.getPrimaryWalletAddress() ?? emptyAddress
         }
 
-        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        switch currentNetwork {
         case .mainnet:
             return config?.payer.mainnet.address ?? emptyAddress
         case .testnet:
@@ -89,7 +89,7 @@ class RemoteConfigManager {
             return 0
         }
 
-        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        switch currentNetwork {
         case .mainnet:
             return config?.payer.mainnet.keyID ?? 0
         case .testnet:
@@ -102,7 +102,7 @@ class RemoteConfigManager {
     }
 
     var bridgeFeePayer: String {
-        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        switch currentNetwork {
         case .mainnet:
             return config?.bridgeFeePayer.mainnet.address ?? emptyAddress
         case .testnet:
@@ -113,7 +113,7 @@ class RemoteConfigManager {
     }
 
     var bridgeFeePayerId: Int {
-        switch LocalUserDefaults.shared.flowNetwork.toFlowType() {
+        switch currentNetwork {
         case .mainnet:
             return config?.bridgeFeePayer.mainnet.keyID ?? 0
         case .testnet:
@@ -123,12 +123,14 @@ class RemoteConfigManager {
         }
     }
 
-    func getContarctAddress(_ network: FlowNetworkType) -> [String: String]? {
+    func getContarctAddress(_ network: Flow.ChainID) -> [String: String]? {
         switch network {
         case .mainnet:
             return contractAddress?.mainnet
         case .testnet:
             return contractAddress?.testnet
+        default:
+            return contractAddress?.mainnet
         }
     }
 

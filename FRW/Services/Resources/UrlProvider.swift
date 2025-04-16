@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Flow
 
 enum AccountType {
     case flow, evm
@@ -28,7 +29,7 @@ enum AccountType {
     }
 }
 
-extension FlowNetworkType {
+extension Flow.ChainID {
     func getTransactionHistoryUrl(accountType: AccountType, transactionId: String) -> URL? {
         let baseUrl = getHistoryBaseUrl(accountType: accountType)
         return URL(string: "\(baseUrl)/tx/\(transactionId)")
@@ -47,6 +48,8 @@ extension FlowNetworkType {
             
         case (.flow, .testnet): "https://testnet.flowscan.io"
         case (.flow, .mainnet): "https://www.flowscan.io"
+        default:
+            "https://www.flowscan.io"
         }
     }
 }

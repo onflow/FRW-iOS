@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Flow
 
 // MARK: - CheckUserResponse
 
@@ -48,11 +49,11 @@ struct UserWalletResponse: Codable {
     var currentNetworkWalletModel: WalletResponse? {
         wallets?
             .first(where: {
-                $0.chainId == LocalUserDefaults.shared.flowNetwork.rawValue && $0.blockchain != nil
+                $0.chainId == currentNetwork.rawValue && $0.blockchain != nil
             })
     }
 
-    func getNetworkWalletModel(network: FlowNetworkType) -> WalletResponse? {
+    func getNetworkWalletModel(network: Flow.ChainID) -> WalletResponse? {
         wallets?.first(where: { $0.chainId == network.rawValue && $0.blockchain != nil })
     }
 }

@@ -7,14 +7,15 @@
 
 import Foundation
 import Moya
+import Flow
 
 // MARK: - GithubEndpoint
 
 enum GithubEndpoint {
     case collections
-    case ftTokenList(FlowNetworkType)
-    case EVMNFTList(FlowNetworkType)
-    case EVMTokenList(FlowNetworkType)
+    case ftTokenList(Flow.ChainID)
+    case EVMNFTList(Flow.ChainID)
+    case EVMTokenList(Flow.ChainID)
 }
 
 // MARK: TargetType

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Flow
 
 // MARK: - WalletAccount
 
@@ -39,7 +40,7 @@ struct WalletAccount {
 
 extension WalletAccount {
     mutating func readInfo(at address: String) -> WalletAccount.User {
-        let currentNetwork = LocalUserDefaults.shared.flowNetwork
+        let currentNetwork = currentNetwork
         if var list = storedAccount[key] {
             let lastUser = list.last { $0.network == currentNetwork && $0.address == address }
             if let user = lastUser {
@@ -64,7 +65,7 @@ extension WalletAccount {
     }
 
     mutating func update(at address: String, emoji: WalletAccount.Emoji, name: String? = nil) {
-        let currentNetwork = LocalUserDefaults.shared.flowNetwork
+        let currentNetwork = currentNetwork
         if var list = storedAccount[key] {
             if let index = list
                 .lastIndex(where: { $0.network == currentNetwork && $0.address == address }) {
@@ -168,7 +169,7 @@ extension WalletAccount {
             self.emoji = emoji
             self.name = emoji.name
             self.address = address
-            self.network = LocalUserDefaults.shared.flowNetwork
+            self.network = currentNetwork
         }
 
         init(from decoder: any Decoder) throws {
@@ -192,7 +193,7 @@ extension WalletAccount {
                 forKey: WalletAccount.User.CodingKeys.address
             )
             self.network = try container.decode(
-                FlowNetworkType.self,
+                Flow.ChainID.self,
                 forKey: WalletAccount.User.CodingKeys.network
             )
         }
@@ -202,7 +203,7 @@ extension WalletAccount {
         var emoji: WalletAccount.Emoji
         var name: String
         var address: String
-        var network: FlowNetworkType
+        var network: Flow.ChainID
     }
 }
 

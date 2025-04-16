@@ -56,8 +56,10 @@ class EVMAccountManager: ObservableObject {
 
     @Published
     var hasAccount: Bool = false
+    
     @Published
     var showEVM: Bool = false
+    
     var balance: Decimal = 0
 
     @Published

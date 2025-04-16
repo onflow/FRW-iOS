@@ -95,7 +95,7 @@ struct ReceiveQRView: RouteableView {
             .overlay(
                 RoundedRectangle(cornerRadius: 25)
                     .stroke(
-                        currentNetwork.isMainnet ? Color.LL.Neutrals.background : currentNetwork
+                        currentNetwork == .mainnet ? Color.LL.Neutrals.background : currentNetwork
                             .color,
                         lineWidth: 5
                     )

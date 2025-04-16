@@ -43,7 +43,7 @@ final class PrivateKeyLoginViewModel: ObservableObject {
         HUD.loading()
         Task {
             do {
-                let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+                let chainId = currentNetwork
                 guard let data = Data(hexString: key.stripHexPrefix()) else {
                     HUD.dismissLoading()
                     HUD.error(title: "invalid_data".localized)
@@ -59,15 +59,14 @@ final class PrivateKeyLoginViewModel: ObservableObject {
                     HUD.error(title: "invalid_data".localized)
                     return
                 }
-                wallet = FlowWalletKit.Wallet(type: .key(privateKey), networks: [chainId])
+                wallet = FlowWalletKit.Wallet(type: .key(privateKey))
 
                 try await fetchAllAddresses()
                 HUD.dismissLoading()
                 if wantedAddress.isEmpty {
                     await self.showAllAccounts()
                 } else {
-                    let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
-                    guard let keys = wallet?.flowAccounts?[chainId] else {
+                    guard let keys = wallet?.flowAccounts?[currentNetwork] else {
                         return
                     }
                     guard let account = keys.filter({ $0.address.hex == wantedAddress }).first
@@ -192,7 +191,7 @@ final class PrivateKeyLoginViewModel: ObservableObject {
     // select one address
     @MainActor
     private func showAllAccounts() {
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let chainId = currentNetwork
         let list = wallet?.flowAccounts?[chainId] ?? []
 
         let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in

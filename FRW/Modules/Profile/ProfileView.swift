@@ -321,7 +321,7 @@ extension ProfileView {
                         Divider().background(Color.LL.Neutrals.background)
 
                         Button {
-                            if !isDevModel && LocalUserDefaults.shared.flowNetwork != .mainnet {
+                            if !isDevModel && currentNetwork != .mainnet {
                                 showAlert = true
                             } else {
                                 Router.route(to: RouteMap.Backup.backupList)
@@ -834,7 +834,7 @@ extension ProfileView.AboutSectionView.Row {
         case .plugin:
             return ""
         case let .developerMode(lud):
-            return lud.flowNetwork.rawValue.capitalized
+            return lud.network.rawValue.capitalized
         }
     }
 
