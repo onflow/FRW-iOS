@@ -134,8 +134,9 @@ class NFTDetailPageViewModel: ObservableObject {
         guard let contractAddress = nft.response.contractAddress else {
             return
         }
-        Task {
+        Task { [weak self] in
             let nftCollection = await NFTCollectionConfig.share.get(from: contractAddress)
+            guard let self = self else { return }
             if self.nft.collection == nil {
                 self.nft.collection = nftCollection
             }
