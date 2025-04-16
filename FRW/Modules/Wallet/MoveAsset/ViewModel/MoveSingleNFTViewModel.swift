@@ -69,6 +69,7 @@ final class MoveSingleNFTViewModel: ObservableObject {
         }
 
         guard let nftId = UInt64(nft.response.id) else {
+            log.critical(CustomError.custom("MoveNFT", "invalid nft.response.id"))
             HUD.error(title: "invalid data")
             return
         }
@@ -222,7 +223,7 @@ final class MoveSingleNFTViewModel: ObservableObject {
             closeAction()
         } catch {
             log.error(" Move NFT =====")
-            log.error(error)
+            log.critical(error, report: true)
         }
     }
 
@@ -317,7 +318,7 @@ final class MoveSingleNFTViewModel: ObservableObject {
             closeAction()
         } catch {
             log.error("[Move NFT] Move NFT failed on Linked Account. ")
-            log.error(error)
+            log.critical(error, report: true)
             HUD.error(title: error.localizedDescription)
         }
     }
