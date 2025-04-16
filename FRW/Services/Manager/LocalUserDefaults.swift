@@ -14,7 +14,6 @@ import UIKit
 extension LocalUserDefaults {
     enum Keys: String {
         case activatedUID
-        case flowNetwork
         case network
         case legacyUserInfo = "userInfo"
         case walletHidden
@@ -83,7 +82,7 @@ class LocalUserDefaults: ObservableObject {
     var network: Flow.ChainID = .testnet
     #else
     @AppStorage(Keys.flowNetwork.rawValue)
-    var flowNetwork: Flow.ChainID = .mainnet
+    var network: Flow.ChainID = .mainnet
     #endif
 
     @AppStorage(Keys.shouldShowConfettiOnHome.rawValue)

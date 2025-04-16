@@ -67,7 +67,8 @@ class WalletManager: ObservableObject {
             name: .willResetWallet,
             object: nil
         )
-        flow.configure(chainID: LocalUserDefaults.shared.network)
+        currentNetwork = LocalUserDefaults.shared.network
+        flow.configure(chainID: currentNetwork)
         start()
     }
 
@@ -233,6 +234,7 @@ extension WalletManager {
             do {
                 try await mainAccount?.loadLinkedAccounts()
             } catch {
+                print(error)
                 log.error(WalletError.fetchLinkedAccountsFailed)
             }
         }
@@ -298,8 +300,8 @@ extension WalletManager {
             return
         }
         
+        currentNetwork = network
         LocalUserDefaults.shared.network = network
-        
         flow.configure(chainID: network)
         
         NotificationCenter.default.post(name: .networkChange)
@@ -308,6 +310,8 @@ extension WalletManager {
             mainAccount = firstAccount
             selectedAccount = .main(firstAccount.address)
             loadLinkedAccounts()
+        } else {
+            // TODO: Handle no account
         }
     }
 }
