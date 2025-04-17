@@ -64,6 +64,10 @@ extension ServiceConfig {
             if let address = EVMAccountManager.shared.accounts.first?.showAddress {
                 report.setUserAttribute(address, withKey: "COA")
             }
+            if let url = try? ZipFile.zipLogFile() {
+                report.addFileAttachment(with: url)
+            }
+
             let childAddress = ChildAccountManager.shared.childAccounts.reduce("") { $0 + "," + $1.showAddress }
             report.setUserAttribute(childAddress, withKey: "Childs")
             return report
