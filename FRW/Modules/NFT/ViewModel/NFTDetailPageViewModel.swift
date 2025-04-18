@@ -27,15 +27,15 @@ class NFTDetailPageViewModel: ObservableObject {
 
             Task {
                 if let svg = await SVGCache.cache.getSVG(rawSVGURL) {
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.svgString = svg
                     }
                 } else if let svg = nft.imageSVGStr {
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.svgString = svg
                     }
                 } else {
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.nft.isSVG = false
                         self.nft.response.postMedia?.image = self.nft.response.postMedia?.image?
                             .convertedSVGURL()?.absoluteString
@@ -134,8 +134,9 @@ class NFTDetailPageViewModel: ObservableObject {
         guard let contractAddress = nft.response.contractAddress else {
             return
         }
-        Task {
+        Task { [weak self] in
             let nftCollection = await NFTCollectionConfig.share.get(from: contractAddress)
+            guard let self = self else { return }
             if self.nft.collection == nil {
                 self.nft.collection = nftCollection
             }

@@ -369,7 +369,8 @@ extension TokenDetailViewModel {
     }
 
     private func fetchChartData() {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             let pair = token.getPricePair(market: market)
             if pair.isEmpty {
                 return
@@ -387,13 +388,12 @@ extension TokenDetailViewModel {
             do {
                 let response: CryptoHistoryResponse = try await Network
                     .request(FRWAPI.Crypto.history(request))
-
                 if currentRangeType != self.selectedRangeType {
                     // selectedRangeType is changed, this is an outdated response
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.generateChartData(response: response)
                 }
             } catch {
@@ -436,12 +436,13 @@ extension TokenDetailViewModel {
     }
 
     private func fetchTransactionsData() {
-        Task {
+        Task { [weak self] in
+            guard let self = self else { return }
             if let cachedTransactions = try? await PageCache.cache.get(
                 forKey: self.transactionsCacheKey,
                 type: [FlowScanTransfer].self
             ), !cachedTransactions.isEmpty {
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.recentTransfers = cachedTransactions
                 }
             }
@@ -459,7 +460,7 @@ extension TokenDetailViewModel {
                 let list = response.transactions ?? []
                 PageCache.cache.set(value: list, forKey: self.transactionsCacheKey)
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.recentTransfers = list
                 }
             } catch {

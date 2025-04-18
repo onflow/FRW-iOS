@@ -221,6 +221,9 @@ extension WalletManager {
             if let provider = keyProvider, let user = userStore(with: uid) {
                 updateKeyProvider(provider: provider, storeUser: user)
             } else {
+                if keyProvider == nil {
+                    log.critical(CustomError.custom("PrivateKey", "not found provider or user at"))
+                }
                 log.error("[Wallet] not found provider or user at \(uid)")
             }
         }

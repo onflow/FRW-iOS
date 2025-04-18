@@ -130,21 +130,25 @@ final class MoveNFTsViewModel: ObservableObject {
                     .maskFlowIdentifier
                 else {
                     HUD.error(MoveError.invalidateIdentifier)
+                    log.error(MoveError.invalidateIdentifier)
                     return
                 }
 
                 guard let toAddress = toContact.address else {
                     HUD.error(MoveError.invalidateToAddress)
+                    log.error(MoveError.invalidateToAddress)
                     return
                 }
 
                 guard let fromAddress = fromContact.address else {
                     HUD.error(MoveError.invalidateFromAddress)
+                    log.error(MoveError.invalidateFromAddress)
                     return
                 }
 
                 guard let nftCollection = collection as? NFTCollection else {
                     HUD.error(MoveError.invalidateNftCollectionInfo)
+                    log.error(MoveError.invalidateNftCollectionInfo)
                     return
                 }
 
@@ -212,6 +216,7 @@ final class MoveNFTsViewModel: ObservableObject {
                             child: toAddress
                         )
                 default:
+                    log.error("invalid type:\(String(describing: fromContact.walletType))-\(String(describing: toContact.walletType))")
                     HUD.info(title: "Feature_Coming_Soon::message".localized)
                 }
                 if let txid = tid {
@@ -220,8 +225,7 @@ final class MoveNFTsViewModel: ObservableObject {
                 }
                 closeAction()
             } catch {
-                log.error(" Move NFTs =====")
-                log.error(error)
+                log.critical(error, report: true)
                 buttonState = .enabled
             }
         }

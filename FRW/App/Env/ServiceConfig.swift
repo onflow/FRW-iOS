@@ -64,6 +64,10 @@ extension ServiceConfig {
             if let address = EVMAccountManager.shared.accounts.first?.showAddress {
                 report.setUserAttribute(address, withKey: "COA")
             }
+            if let url = try? ZipFile.zipLogFile() {
+                report.addFileAttachment(with: url)
+            }
+
             let childAddress = ChildAccountManager.shared.childAccounts.reduce("") { $0 + "," + $1.showAddress }
             report.setUserAttribute(childAddress, withKey: "Childs")
             return report
@@ -95,5 +99,12 @@ extension ServiceConfig {
             fatalError("Can't find Dropbox appKey at ServiceConfig.plist")
         }
         return appKey
+    }
+    
+    var scriptPublicKey: String {
+        guard let key = dict["scripts-publicKey"] else {
+            fatalError("Can't find scripts publicKey at ServiceConfig.plist")
+        }
+        return key
     }
 }

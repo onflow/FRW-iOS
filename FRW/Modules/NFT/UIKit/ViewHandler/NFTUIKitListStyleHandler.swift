@@ -503,31 +503,40 @@ extension NFTUIKitListStyleHandler: UICollectionViewDelegateFlowLayout, UICollec
 
         if dataModel.isCollectionListStyle {
             let collection = dataModel.items[indexPath.item]
-            let cell = collectionView.dequeueReusableCell(
+
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "NFTUIKitCollectionRegularItemCell",
                 for: indexPath
-            ) as! NFTUIKitCollectionRegularItemCell
+            ) as? NFTUIKitCollectionRegularItemCell else {
+                return defaultCell(collectionView, at: indexPath)
+            }
             cell.config(collection)
             return cell
         }
 
         if let nftList = dataModel.selectedCollectionItem?.nfts, indexPath.item < nftList.count {
             let nft = nftList[indexPath.item]
-            let cell = collectionView.dequeueReusableCell(
+            guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "NFTUIKitItemCell",
                 for: indexPath
-            ) as! NFTUIKitItemCell
+            ) as? NFTUIKitItemCell else {
+                return defaultCell(collectionView, at: indexPath)
+            }
             cell.config(nft)
             return cell
         } else {
-            log.info("[NFT] data may be is invalid.")
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "UICollectionViewCell",
-                for: indexPath
-            )
-            cell.contentView.backgroundColor = .clear
-            return cell
+            return defaultCell(collectionView, at: indexPath)
         }
+    }
+
+    private func defaultCell(_ collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
+        log.warning("[NFT] data may be is invalid.")
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "UICollectionViewCell",
+            for: indexPath
+        )
+        cell.contentView.backgroundColor = .clear
+        return cell
     }
 
     func collectionView(

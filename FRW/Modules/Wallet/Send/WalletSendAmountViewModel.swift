@@ -503,7 +503,7 @@ extension WalletSendAmountViewModel {
                     TransactionManager.shared.newTransaction(holder: holder)
                 }
             } catch {
-                log.error(error, report: true)
+                log.critical(error, report: true)
                 failureBlock()
                 showConfirmView = false
             }
