@@ -398,7 +398,7 @@ extension MoveTokenViewModel {
             } catch {
                 let from = fromContact.address ?? ""
                 let to = toContact.address ?? ""
-                log.error(CustomError.custom("[Move Token]", "\(from) to  \(to) failed. \(error)"), report: true)
+                log.critical(CustomError.custom("[Move Token]", "\(from) to  \(to) failed. \(error)"), report: true)
                 buttonState = .enabled
             }
         }

@@ -174,6 +174,11 @@ enum CadenceError: String, BaseError {
     case contractNameIsEmpty
     case tokenAddressEmpty
     case storagePathEmpty
+    case emptyScriptSignature
+    case invaildScriptSignature
+    case decodeScriptFailed
+    case emptyLocalFile
+    case decodeLocalFileFailed
 
     var baseCode: Int { 9000 }
 }

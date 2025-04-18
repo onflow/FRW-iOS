@@ -108,4 +108,24 @@ enum Network {
             throw error
         }
     }
+    
+    static func requestWithRawResponse<U: TargetType>(
+        _ target: U,
+        needToken: Bool = true
+    ) async throws -> Moya.Response {
+        let token = try await fetchIDToken()
+        let authPlugin = AccessTokenPlugin { _ in token }
+        let provider =
+            MoyaProvider<U>(
+                plugins: needToken ? [NetworkLoggerPlugin(), authPlugin] :
+                    [NetworkLoggerPlugin()]
+            )
+        let result = await provider.asyncRequest(target)
+        switch result {
+        case let .success(response):
+            return response
+        case let .failure(error):
+            throw error
+        }
+    }
 }

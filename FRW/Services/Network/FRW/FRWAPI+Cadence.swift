@@ -44,7 +44,7 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         switch self {
         case .list:
             return .get
-        case let .signAsBridgeFeePayer(signPayerRequest):
+        case .signAsBridgeFeePayer:
             return .post
         }
     }

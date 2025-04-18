@@ -267,7 +267,9 @@ class ChildAccountManager: ObservableObject {
 
     private func clean() {
         log.debug("cleaned")
-        childAccounts = []
+        DispatchQueue.main.async {
+            self.childAccounts = []
+        }
     }
 
     private func saveToCache(_ childAccounts: [ChildAccount], uid: String, address: String) {
