@@ -64,7 +64,7 @@ final class SeedPhraseLoginViewModel: ObservableObject {
 
     func onSubmit() {
         UIApplication.shared.endEditing()
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let chainId = currentNetwork
         let rawMnemonic = words.condenseWhitespace()
         Task {
             guard let hdWallet = HDWallet(mnemonic: rawMnemonic, passphrase: passphrase) else {
@@ -98,7 +98,7 @@ final class SeedPhraseLoginViewModel: ObservableObject {
             if wantedAddress.isEmpty {
                 await self.showAllAccounts()
             } else {
-                let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+                let chainId = currentNetwork
                 guard let keys = wallet?.flowAccounts?[chainId] else {
                     return
                 }
@@ -221,7 +221,7 @@ final class SeedPhraseLoginViewModel: ObservableObject {
     // select one address
     @MainActor
     private func showAllAccounts() {
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let chainId = currentNetwork
         let list = wallet?.flowAccounts?[chainId] ?? []
 
         let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in

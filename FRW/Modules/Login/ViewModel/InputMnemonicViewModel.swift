@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import WalletCore
 
+@MainActor
 class InputMnemonicViewModel: ViewModel {
     // MARK: Internal
 

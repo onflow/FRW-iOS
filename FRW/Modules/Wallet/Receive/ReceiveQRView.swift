@@ -32,7 +32,7 @@ struct ReceiveQRView: RouteableView {
                     viewModel.onChangeChain(isEvm: isOn)
                 }
             }
-            .visibility(viewModel.hasEVM ? .visible : .gone)
+            .visibility(viewModel.hasEVM)
 
             qrCodeView
                 .padding(.top, 32)
@@ -95,7 +95,7 @@ struct ReceiveQRView: RouteableView {
             .overlay(
                 RoundedRectangle(cornerRadius: 25)
                     .stroke(
-                        currentNetwork.isMainnet ? Color.LL.Neutrals.background : currentNetwork
+                        currentNetwork == .mainnet ? Color.LL.Neutrals.background : currentNetwork
                             .color,
                         lineWidth: 5
                     )

@@ -22,7 +22,7 @@ class PushHandler: NSObject, ObservableObject {
 
         refreshPushStatus()
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
@@ -180,7 +180,7 @@ extension PushHandler: MessagingDelegate, UNUserNotificationCenterDelegate {
             let userInfo = response.notification.request.content.userInfo
             log.debug("user did click a notification", context: userInfo)
             if let transactionId = userInfo["transactionId"] as? String {
-                let network = LocalUserDefaults.shared.flowNetwork
+                let network = currentNetwork
                 let accountType = AccountType.current
                 let url = network.getTransactionHistoryUrl(accountType: accountType, transactionId: transactionId)
 

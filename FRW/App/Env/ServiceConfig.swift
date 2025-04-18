@@ -52,8 +52,8 @@ extension ServiceConfig {
             if let userName = UserManager.shared.userInfo?.username {
                 report.setUserAttribute(userName, withKey: "username")
             }
-            let selectedAccount = WalletManager.shared.selectedAccountAddress
-            if selectedAccount.count > 2 {
+            
+            if let selectedAccount = WalletManager.shared.selectedAccountAddress {
                 report.setUserAttribute(selectedAccount, withKey: "SelectedAccount")
             }
 

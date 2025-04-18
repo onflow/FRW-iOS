@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Flow
 
 // MARK: - TokenBalanceProvider
 
 protocol TokenBalanceProvider {
-    var network: FlowNetworkType { get }
+    var network: Flow.ChainID { get }
     var nftPageSize: Int { get }
     // cache
     var whiteListTokens: [TokenModel] { get }
@@ -18,6 +19,9 @@ protocol TokenBalanceProvider {
     // get tokens
     func getSupportTokens() async throws -> [TokenModel]
     func getActivatedTokens(address: FWAddress, in mode: TokenListMode) async throws -> [TokenModel]
+    
+    // TODO: change it to FWAddress
+    func getAvailableFlowBalance(addresses: [String]) async throws -> [String: Decimal]
     // get balance > 0
     func getFTBalance(address: FWAddress) async throws -> [TokenModel]
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel?
@@ -40,6 +44,11 @@ protocol TokenBalanceProvider {
 extension TokenBalanceProvider {
     var nftPageSize: Int { 50 }
 
+    func getAvailableFlowBalance(addresses: [String]) async throws -> [String: Decimal] {
+        let result = try await FlowNetwork.getFlowBalanceForAnyAccount(addresses: addresses)
+        return result
+    }
+    
     func getFTBalanceWithId(address: FWAddress, tokenId: String) async throws -> TokenModel? {
         let models = try await getFTBalance(address: address)
         return models.first { $0.id == tokenId }

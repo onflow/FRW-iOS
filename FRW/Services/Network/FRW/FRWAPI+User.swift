@@ -16,6 +16,7 @@ extension FRWAPI {
         case register(RegisterRequest)
         case checkUsername(String)
         case userAddress
+        case userAddressV2
         case userInfo
         case userWallet
         case search(String)
@@ -52,6 +53,8 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
             return "/v3/register"
         case .userAddress:
             return "/v1/user/address"
+        case .userAddressV2:
+            return "/v2/user/address"
         case .userInfo:
             return "/v1/user/info"
         case .userWallet:
@@ -83,7 +86,7 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
         switch self {
         case .checkUsername, .userInfo, .userWallet, .search, .keys, .devices, .checkimport:
             return .get
-        case .login, .register, .userAddress, .manualCheck, .crescendo, .syncDevice, .addSigned,
+        case .login, .register, .userAddress, .userAddressV2, .manualCheck, .crescendo, .syncDevice, .addSigned,
              .updateDevice, .loginWithImport:
             return .post
         }
@@ -91,7 +94,7 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
 
     var task: Task {
         switch self {
-        case .userAddress, .userInfo, .userWallet, .manualCheck, .keys:
+        case .userAddress, .userInfo, .userWallet, .manualCheck, .keys, .userAddressV2:
             return .requestPlain
         case let .checkUsername(username):
             return .requestParameters(

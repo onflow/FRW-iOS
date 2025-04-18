@@ -25,7 +25,11 @@ class BridgeFeePayer: FlowSigner {
         RemoteConfigManager.shared.bridgeFeePayerId
     }
 
-    func sign(transaction: Flow.Transaction, signableData: Data) async throws -> Data {
+    func sign(signableData: Data, transaction: Flow.Transaction?) async throws -> Data {
+        guard let transaction else {
+            throw WalletError.emptyTransaction
+        }
+        
         let request = SignPayerRequest(
             transaction: transaction.voucher,
             message: .init(envelopeMessage: signableData.hexValue)

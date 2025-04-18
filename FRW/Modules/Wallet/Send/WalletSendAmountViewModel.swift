@@ -61,6 +61,7 @@ final class WalletSendAmountViewModel: ObservableObject {
                 self?.refreshInput()
             }
         }.store(in: &cancelSets)
+        
         checkAddress()
         checkTransaction()
         checkForInsufficientStorage()

@@ -9,16 +9,12 @@ import Flow
 import SwiftUI
 import UIKit
 
-var currentNetwork: FlowNetworkType {
-    LocalUserDefaults.shared.flowNetwork
-}
-
 // MARK: - LocalUserDefaults.Keys
 
 extension LocalUserDefaults {
     enum Keys: String {
         case activatedUID
-        case flowNetwork
+        case network
         case legacyUserInfo = "userInfo"
         case walletHidden
         case quoteMarket
@@ -59,12 +55,7 @@ extension LocalUserDefaults {
         case migrationFinished
 
         case userDefaultTheme
-    }
-}
-
-extension Flow.ChainID {
-    var networkType: FlowNetworkType? {
-        .init(chainId: self)
+        case selectedAddress
     }
 }
 
@@ -85,13 +76,13 @@ class LocalUserDefaults: ObservableObject {
     // MARK: Internal
 
     static let shared = LocalUserDefaults()
-
+    
     #if DEBUG
-    @AppStorage(Keys.flowNetwork.rawValue)
-    var flowNetwork: FlowNetworkType = .testnet
+    @AppStorage(Keys.network.rawValue)
+    var network: Flow.ChainID = .testnet
     #else
     @AppStorage(Keys.flowNetwork.rawValue)
-    var flowNetwork: FlowNetworkType = .mainnet
+    var network: Flow.ChainID = .mainnet
     #endif
 
     @AppStorage(Keys.shouldShowConfettiOnHome.rawValue)

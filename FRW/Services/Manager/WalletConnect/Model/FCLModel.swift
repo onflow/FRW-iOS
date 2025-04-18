@@ -278,7 +278,7 @@ struct Service: Codable {
         self.fType = fType
         self.fVsn = fVsn
         self.type = type
-        self.network = LocalUserDefaults.shared.flowNetwork.rawValue
+        self.network = currentNetwork.rawValue
         self.method = method
         self.endpoint = endpoint
         self.uid = uid
@@ -338,7 +338,7 @@ struct Service: Codable {
     var provider: Provider?
     var params: [String: String]?
     var data: AccountProof?
-    var network: String? = LocalUserDefaults.shared.flowNetwork.rawValue
+    var network: String? = currentNetwork.rawValue
 }
 
 // MARK: - AccountProof

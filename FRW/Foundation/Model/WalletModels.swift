@@ -128,8 +128,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var contractId: String {
-        let network = LocalUserDefaults.shared.flowNetwork.toFlowType()
-        let addressString = address.addressByNetwork(network)?.stripHexPrefix() ?? ""
+        let addressString = address.addressByNetwork(currentNetwork)?.stripHexPrefix() ?? ""
         return "A.\(addressString).\(contractName)"
     }
 
@@ -217,7 +216,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     func getAddress() -> String? {
-        address.addressByNetwork(LocalUserDefaults.shared.flowNetwork.toFlowType())
+        address.addressByNetwork(currentNetwork)
     }
 
     func getPricePair(market: QuoteMarket) -> String {
@@ -238,6 +237,12 @@ struct TokenModel: Codable, Identifiable, Mockable {
         case .cadence:
             return flowIdentifier?.removeSuffix(".Vault") ?? contractId
         }
+    }
+}
+
+extension TokenModel: Equatable {
+    static func == (lhs: TokenModel, rhs: TokenModel) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 
@@ -293,7 +298,7 @@ struct SingleTokenResponse: Codable {
     let tokens: [SingleToken]
 
     func conversion(type: TokenModel.TokenType) -> [TokenModel] {
-        let network = LocalUserDefaults.shared.flowNetwork
+        let network = currentNetwork
         let result = tokens.map { $0.toTokenModel(type: type, network: network) }
         return result
     }
@@ -318,7 +323,7 @@ struct SingleToken: Codable {
         "A.\(address.stripHexPrefix()).\(contractName ?? "")"
     }
 
-    func toTokenModel(type: TokenModel.TokenType, network: FlowNetworkType) -> TokenModel {
+    func toTokenModel(type: TokenModel.TokenType, network: Flow.ChainID) -> TokenModel {
         let logo = URL(string: logoURI ?? "")
 
         let model = TokenModel(

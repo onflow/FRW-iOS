@@ -55,6 +55,7 @@ enum LLError: String, BaseError {
     case invalidCadence
     case signFailed
     case decodeFailed
+    case cannotFindFlowAccount
     case unknown
 
     var baseCode: Int { 1000 }
@@ -73,6 +74,16 @@ enum WalletError: String, BaseError {
     case securityVerifyFailed
     case collectionIsNil
     case noPrimaryWalletAddress
+    case emptyKeyProvider
+    case emptyAccountKey
+    case invalidMnemonic
+    case invaildPublicKey
+    case invaildAddress
+    case fetchLinkedAccountsFailed
+    case emptyAddress
+    case emptyScript
+    case emptyMainAccount
+    case emptyTransaction
 
     var baseCode: Int { 2000 }
 }
@@ -89,6 +100,7 @@ enum BackupError: String, BaseError {
     case fileIsNotExistOnCloud
     case cloudFileData
     case unauthorized
+    case invaildPublicKey
 
     var baseCode: Int { 3000 }
 }
@@ -158,7 +170,7 @@ enum CadenceError: String, BaseError {
     case none
     case empty
     case transactionFailed
-    case argument
+    case invaildArgument
     case contractNameIsEmpty
     case tokenAddressEmpty
     case storagePathEmpty
@@ -189,6 +201,15 @@ enum TokenBalanceProviderError: String, BaseError {
     case collectionNotFound
 
     var baseCode: Int { 11000 }
+}
+
+
+// MARK: - Account
+
+enum AccountError: String, BaseError {
+    case switchAccountFailed
+
+    var baseCode: Int { 12000 }
 }
 
 enum CustomError: Error {

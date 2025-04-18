@@ -21,19 +21,16 @@ class CreateProfileWaitingViewModel: ObservableObject {
         self.txId = Flow.ID(hex: txId)
         self.callback = callback
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
-            .sink { [weak self] walletInfo in
-                let isEmptyBlockChain = walletInfo?.currentNetworkWalletModel?
-                    .isEmptyBlockChain ?? true
-                if !isEmptyBlockChain {
+            .sink { [weak self] account in
+                if let _ = account {
                     self?.updateWalletInfo()
                     self?.createFinished = true
                     EventTrack.Account.createdTimeEnd()
                 }
-
             }.store(in: &cancellableSet)
         EventTrack.Account.createdTimeStart()
     }

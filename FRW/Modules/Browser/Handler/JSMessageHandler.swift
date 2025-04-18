@@ -214,7 +214,7 @@ extension JSMessageHandler {
             let fcl = try JSONDecoder().decode(FCLSimpleResponse.self, from: data)
 
             if !fcl.networkIsMatch {
-                let current = LocalUserDefaults.shared.flowNetwork
+                let current = currentNetwork
                 log
                     .warning(
                         "network mismatch, current: \(current), prefer: \(fcl.network ?? "unknown")"
@@ -222,7 +222,7 @@ extension JSMessageHandler {
                 finishService()
 
                 if let network = fcl.network,
-                   let toNetwork = FlowNetworkType(rawValue: network.lowercased())
+                   let toNetwork = Flow.ChainID(rawValue: network.lowercased())
                 {
                     Router.route(to: RouteMap.Explore.switchNetwork(current, toNetwork, nil))
                 }

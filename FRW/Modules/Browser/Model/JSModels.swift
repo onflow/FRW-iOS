@@ -109,7 +109,7 @@ struct FCLSimpleResponse: Codable {
             return true
         }
 
-        return network.lowercased() == LocalUserDefaults.shared.flowNetwork.rawValue
+        return network.lowercased() == currentNetwork.rawValue
     }
 }
 

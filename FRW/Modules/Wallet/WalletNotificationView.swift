@@ -28,8 +28,8 @@ struct WalletNotificationView: View {
                         }
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 24, height: 24)
-                        .cornerRadius(12)
+                        .frame(width: 32, height: 32)
+//                        .cornerRadius(12)
                         .clipped()
                         .allowsHitTesting(false)
                 }

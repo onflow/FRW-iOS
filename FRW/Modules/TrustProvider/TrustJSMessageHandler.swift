@@ -23,8 +23,8 @@ class TrustJSMessageHandler: NSObject {
     weak var webVC: BrowserViewController?
 
     var supportChainID: [Int: Flow.ChainID] = [
-        FlowNetworkType.mainnet.networkID: .mainnet,
-        FlowNetworkType.testnet.networkID: .testnet,
+        Flow.ChainID.mainnet.networkID: .mainnet,
+        Flow.ChainID.testnet.networkID: .testnet,
     ]
 }
 
@@ -171,7 +171,7 @@ extension TrustJSMessageHandler {
             let address = webVC?.trustProvider?.config.ethereum.address ?? ""
 
             let title = webVC?.webView.title ?? "unknown"
-            let chainID = LocalUserDefaults.shared.flowNetwork.toFlowType()
+            let chainID = currentNetwork
             let vm = BrowserAuthnViewModel(
                 title: title,
                 url: url?.host ?? "unknown",
@@ -237,28 +237,31 @@ extension TrustJSMessageHandler {
                     return
                 }
 
-                let address = Flow.Address(hex: addrStr)
-                guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
-                let joinData = Flow.DomainTag.user.normalize + hashedData
-                guard let sig = signWithMessage(data: joinData) else {
-                    HUD.error(title: "sign failed")
-                    return
+                Task {
+                    let address = Flow.Address(hex: addrStr)
+                    guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
+                    let joinData = Flow.DomainTag.user.normalize + hashedData
+                    guard let sig = try? await self.signWithMessage(data: joinData) else {
+                        HUD.error(title: "sign failed")
+                        return
+                    }
+                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let proof = COAOwnershipProof(
+                        keyIninces: [keyIndex],
+                        address: address.data,
+                        capabilityPath: "evm",
+                        signatures: [sig]
+                    )
+                    guard let encoded = RLP.encode(proof.rlpList) else {
+                        return
+                    }
+                    
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: encoded.hexString.addHexPrefix(),
+                        to: id
+                    )
                 }
-                let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                let proof = COAOwnershipProof(
-                    keyIninces: [keyIndex],
-                    address: address.data,
-                    capabilityPath: "evm",
-                    signatures: [sig]
-                )
-                guard let encoded = RLP.encode(proof.rlpList) else {
-                    return
-                }
-                webVC?.webView.tw.send(
-                    network: .ethereum,
-                    result: encoded.hexString.addHexPrefix(),
-                    to: id
-                )
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
             }
@@ -291,27 +294,30 @@ extension TrustJSMessageHandler {
                     HUD.error(title: "invalid_address".localized)
                     return
                 }
-                let address = Flow.Address(hex: addrStr)
-                let joinData = Flow.DomainTag.user.normalize + data
-                guard let sig = signWithMessage(data: joinData) else {
-                    HUD.error(title: "sign failed")
-                    return
+                
+                Task {
+                    let address = Flow.Address(hex: addrStr)
+                    let joinData = Flow.DomainTag.user.normalize + data
+                    guard let sig = try? await self.signWithMessage(data: joinData) else {
+                        HUD.error(title: "sign failed")
+                        return
+                    }
+                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let proof = COAOwnershipProof(
+                        keyIninces: [keyIndex],
+                        address: address.data,
+                        capabilityPath: "evm",
+                        signatures: [sig]
+                    )
+                    guard let encoded = RLP.encode(proof.rlpList) else {
+                        return
+                    }
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: encoded.hexString.addHexPrefix(),
+                        to: id
+                    )
                 }
-                let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                let proof = COAOwnershipProof(
-                    keyIninces: [keyIndex],
-                    address: address.data,
-                    capabilityPath: "evm",
-                    signatures: [sig]
-                )
-                guard let encoded = RLP.encode(proof.rlpList) else {
-                    return
-                }
-                webVC?.webView.tw.send(
-                    network: .ethereum,
-                    result: encoded.hexString.addHexPrefix(),
-                    to: id
-                )
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
             }
@@ -411,20 +417,15 @@ extension TrustJSMessageHandler {
             return
         }
 
-        let currentChainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let currentChainId = currentNetwork
 
         if targetID == currentChainId {
             log.info("No need to switch, already on chain \(chainId)")
             webVC?.webView.tw.sendNull(network: .ethereum, id: id)
         } else {
-            guard let fromId = currentChainId.networkType, let toId = targetID.networkType else {
-                log.error("Unknown chain id: \(chainId)")
-                HUD.error(title: "Unsupported ChainId: \(chainId)")
-                webVC?.webView.tw.send(network: .ethereum, error: "Unknown chain id", to: id)
-                return
-            }
+            let toId = targetID
             let callback: SwitchNetworkClosure = { [weak self] curId in
-                if curId.toFlowType() == targetID {
+                if curId == targetID {
                     log.info("Switch to \(chainId)")
                     self?.webVC?.webView.tw.sendNull(network: .ethereum, id: id)
                 } else {
@@ -436,12 +437,12 @@ extension TrustJSMessageHandler {
                     )
                 }
             }
-            Router.route(to: RouteMap.Explore.switchNetwork(fromId, toId, callback))
+            Router.route(to: RouteMap.Explore.switchNetwork(currentChainId, toId, callback))
         }
     }
 
-    private func signWithMessage(data: Data) -> Data? {
-        WalletManager.shared.signSync(signableData: data)
+    private func signWithMessage(data: Data) async throws -> Data? {
+        return try await WalletManager.shared.sign(signableData: data)
     }
 
     private func cancel(id: Int64) {

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Flow
 
 struct NetworkMenuItem: View {
-    var network: FlowNetworkType
-    var currentNetwork: FlowNetworkType
+    var network: Flow.ChainID
+    var currentNetwork: Flow.ChainID
 
     var isSelected: Bool {
         network == currentNetwork

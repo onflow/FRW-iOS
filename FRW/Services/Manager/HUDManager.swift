@@ -57,7 +57,7 @@ class HUD {
         _ error: any BaseError
     ) {
         log.error(error.errorLog)
-        HUD.error(title: "\(error.errorCode)", message: error.localizedDescription)
+        HUD.error(title: "Error Code: \(error.errorCode)", message: error.errorMessage)
     }
 
     static func debugSuccess(

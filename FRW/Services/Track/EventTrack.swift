@@ -95,7 +95,7 @@ extension EventTrack {
     }
 
     private func registerNetwork() {
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue
+        let network = currentNetwork.rawValue
         Mixpanel.mainInstance().registerSuperProperties([Superkey.network: network])
     }
 

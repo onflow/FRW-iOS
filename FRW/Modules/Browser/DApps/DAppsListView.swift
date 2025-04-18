@@ -61,7 +61,7 @@ struct DAppsListView: RouteableView {
                         feedbackGenerator.impactOccurred()
 
                         Router.dismiss {
-                            if LocalUserDefaults.shared.flowNetwork == .testnet,
+                            if currentNetwork == .testnet,
                                let url = dApp.testnetURL {
                                 Router.route(to: RouteMap.Explore.browser(url))
                             } else {

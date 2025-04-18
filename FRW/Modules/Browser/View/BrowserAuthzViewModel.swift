@@ -138,7 +138,7 @@ final class BrowserAuthzViewModel: ObservableObject {
     }
 
     func checkTemplate() {
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue.lowercased()
+        let network = currentNetwork.rawValue.lowercased()
         guard let dataString = cadence.data(using: .utf8)?.base64EncodedString() else {
             return
         }

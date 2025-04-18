@@ -29,8 +29,6 @@ struct ProfileEditView: RouteableView {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 16) {
                 editContainer
-//                domainEnabledView
-//                claimDomainBanner
             }
         }
         .backgroundFill(.LL.Neutrals.background)
@@ -48,74 +46,6 @@ struct ProfileEditView: RouteableView {
         .background(Color.LL.bgForIcon)
         .cornerRadius(16)
         .padding(.horizontal, 18)
-    }
-
-    var domainEnabledView: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("domain_title2".localized)
-                    .font(titleFont)
-                    .foregroundColor(titleColor)
-
-                Text(UserManager.shared.userInfo?.meowDomain ?? "")
-                    .font(.inter(size: 12))
-                    .foregroundColor(.LL.Neutrals.note)
-            }
-
-            Spacer()
-
-            Image(systemName: .checkmarkSelected)
-                .foregroundColor(Color.LL.Primary.salmonPrimary)
-        }
-        .frame(height: 70)
-        .padding(.horizontal, 16)
-        .background(Color.LL.bgForIcon)
-        .cornerRadius(16)
-        .padding(.horizontal, 18)
-        .visibility(UserManager.shared.isMeowDomainEnabled ? .visible : .gone)
-    }
-
-    var claimDomainBanner: some View {
-        Button {
-            Router.route(to: RouteMap.Explore.claimDomain)
-        } label: {
-            ZStack {
-                Image("banner-claim-domain")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity)
-
-                HStack(spacing: 0) {
-                    Text("claim_free_domain_substring1".localized)
-                        .font(Font.LL.miniTitle2)
-                        .fontWeight(.w700)
-                        .foregroundColor(.LL.Neutrals.text)
-
-                    Text("claim_free_domain_substring2".localized)
-                        .font(Font.LL.miniTitle2)
-                        .fontWeight(.w700)
-                        .foregroundColor(.LL.Primary.salmonPrimary)
-
-                    Text("claim_free_domain_substring3".localized)
-                        .font(Font.LL.miniTitle2)
-                        .fontWeight(.w700)
-                        .foregroundColor(.LL.Neutrals.text)
-
-                    Spacer()
-
-                    Text("domain_claim".localized)
-                        .font(.inter(size: 12, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(height: 30)
-                        .padding(.horizontal, 15)
-                        .background(Color.LL.Primary.salmonPrimary)
-                        .cornerRadius(15)
-                }
-                .padding(.horizontal, 16)
-            }
-            .padding(.horizontal, 18)
-        }
-        .visibility(UserManager.shared.isMeowDomainEnabled ? .gone : .visible)
     }
 
     // MARK: Private

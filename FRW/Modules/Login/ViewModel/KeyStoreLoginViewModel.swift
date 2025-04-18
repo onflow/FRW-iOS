@@ -49,7 +49,6 @@ final class KeyStoreLoginViewModel: ObservableObject {
     func onSumbit() {
         UIApplication.shared.endEditing()
         HUD.loading()
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
         Task {
             do {
                 privateKey = try PrivateKey.restore(
@@ -61,7 +60,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
                     HUD.error(title: "invalid_data".localized)
                     return
                 }
-                wallet = FlowWalletKit.Wallet(type: .key(privateKey), networks: [chainId])
+                wallet = FlowWalletKit.Wallet(type: .key(privateKey))
 
                 try await fetchAllAddresses()
                 HUD.dismissLoading()
@@ -69,7 +68,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
                 if wantedAddress.isEmpty {
                     await self.showAllAccounts()
                 } else {
-                    guard let keys = wallet?.flowAccounts?[chainId] else {
+                    guard let keys = wallet?.flowAccounts?[currentNetwork] else {
                         HUD.error(title: "not_find_address".localized)
                         return
                     }
@@ -81,10 +80,10 @@ final class KeyStoreLoginViewModel: ObservableObject {
                     selectedAccount(by: account)
                 }
 
-            } catch let error as FlowWalletKit.WalletError {
-                if error == FlowWalletKit.WalletError.invaildKeyStorePassword {
+            } catch let error as FlowWalletKit.FWKError {
+                if error == FlowWalletKit.FWKError.invaildKeyStorePassword {
                     HUD.error(title: "invalid_password".localized)
-                } else if error == FlowWalletKit.WalletError.invaildKeyStoreJSON {
+                } else if error == FlowWalletKit.FWKError.invaildKeyStoreJSON {
                     HUD.error(title: "invalid_json".localized)
                 }else {
                     HUD.error(title: "invalid_data".localized)
@@ -207,7 +206,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
     // select one address
     @MainActor
     private func showAllAccounts() {
-        let chainId = LocalUserDefaults.shared.flowNetwork.toFlowType()
+        let chainId = currentNetwork
         let list = wallet?.flowAccounts?[chainId] ?? []
 
         let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in
@@ -220,11 +219,11 @@ final class KeyStoreLoginViewModel: ObservableObject {
 
 extension KeyStoreLoginViewModel {
     private var p256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_P256))?.hexValue
+        privateKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue
     }
 
     private var secp256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1))?.hexValue
+        privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue
     }
 }
 

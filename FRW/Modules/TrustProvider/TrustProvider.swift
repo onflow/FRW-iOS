@@ -14,8 +14,8 @@ extension TrustWeb3Provider {
         guard let address = EVMAccountManager.shared.accounts.first?.showAddress else {
             return nil
         }
-        let url = LocalUserDefaults.shared.flowNetwork.evmURL.absoluteString
-        let chainId = LocalUserDefaults.shared.flowNetwork.networkID
+        let url = currentNetwork.evmURL.absoluteString
+        let chainId = currentNetwork.networkID
         let config = TrustWeb3Provider.Config.EthereumConfig(
             address: address,
             chainId: chainId,

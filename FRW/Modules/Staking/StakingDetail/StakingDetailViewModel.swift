@@ -90,6 +90,7 @@ class StakingDetailViewModel: ObservableObject {
     }
 
     func restake() {
+        // TODO: FIX ME
         guard let delegatorId = provider.delegatorId else {
             return
         }

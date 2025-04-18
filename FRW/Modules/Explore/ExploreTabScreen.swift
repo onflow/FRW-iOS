@@ -114,7 +114,7 @@ struct ExploreTabScreen: View {
         .task {
             vm.trigger(.fetchList)
         }
-        .onChange(of: LocalUserDefaults.shared.flowNetwork, perform: { _ in
+        .onChange(of: currentNetwork, perform: { _ in
             vm.trigger(.fetchList)
         })
         .background(
@@ -172,7 +172,7 @@ struct ExploreTabScreen: View {
                 let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
                 feedbackGenerator.impactOccurred()
 
-                if LocalUserDefaults.shared.flowNetwork == .testnet,
+                if currentNetwork == .testnet,
                    let url = dApp.testnetURL {
                     Router.route(to: RouteMap.Explore.browser(url))
                 } else {

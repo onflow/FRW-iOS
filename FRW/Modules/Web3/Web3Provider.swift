@@ -8,12 +8,12 @@
 import BigInt
 import Foundation
 import web3swift
+import Flow
 
 enum FlowProvider {
     struct Web3 {
         static func `default`(
-            networkType: FlowNetworkType = LocalUserDefaults.shared
-                .flowNetwork
+            networkType: Flow.ChainID = currentNetwork
         ) async throws -> web3swift.Web3? {
             let provider = try await Web3HttpProvider(
                 url: networkType.evmURL,

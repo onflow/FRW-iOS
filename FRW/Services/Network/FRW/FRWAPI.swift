@@ -21,7 +21,7 @@ enum FRWAPI {
     }
 
     static var commonHeaders: [String: String] {
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue
+        let network = currentNetwork.rawValue
         return ["Network": network]
     }
 }

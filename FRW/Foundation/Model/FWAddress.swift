@@ -11,7 +11,7 @@ import Web3Core
 
 // MARK: - VMType
 
-enum VMType: String {
+enum VMType: String, Codable {
     case cadence
     case evm
 
@@ -29,10 +29,9 @@ enum VMType: String {
 
 // MARK: - FWAddress
 
-protocol FWAddress {
+protocol FWAddress: Codable {
     var type: VMType { get }
     var hexAddr: String { get }
-
     var cacheKey: String { get }
 }
 

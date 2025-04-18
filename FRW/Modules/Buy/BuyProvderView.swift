@@ -36,7 +36,7 @@ struct BuyProvderView: View {
                     .cornerRadius(12)
             }.buttonStyle(ScaleButtonStyle())
 
-            if LocalUserDefaults.shared.flowNetwork == .mainnet {
+            if currentNetwork == .mainnet {
                 Button {
                     EventTrack.General.rampClick(source: .coinbase)
                     guard let address = WalletManager.shared.getPrimaryWalletAddress(),

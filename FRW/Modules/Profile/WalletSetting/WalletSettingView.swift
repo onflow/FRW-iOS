@@ -205,7 +205,7 @@ struct WalletSettingView: RouteableView {
 
     func reload() {
         user = WalletManager.shared.walletAccount.readInfo(at: address)
-        WalletManager.shared.changeNetwork(LocalUserDefaults.shared.flowNetwork)
+        WalletManager.shared.changeNetwork(currentNetwork)
     }
 
     func onlyShowInfo() -> Bool {

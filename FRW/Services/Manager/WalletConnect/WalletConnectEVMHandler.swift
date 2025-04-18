@@ -158,35 +158,37 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
             logo: logo,
             cadence: data.hexString
         ) { result in
-            if result {
-                guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
-                    HUD.error(title: "invalid_address".localized)
+            Task {
+                if result {
+                    guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
+                        HUD.error(title: "invalid_address".localized)
+                        cancel()
+                        return
+                    }
+                    
+                    let address = Flow.Address(hex: addrStr)
+                    guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
+                    let joinData = Flow.DomainTag.user.normalize + hashedData
+                    guard let sig = try? await signWithMessage(data: joinData) else {
+                        HUD.error(title: "sign failed")
+                        cancel()
+                        return
+                    }
+                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let proof = COAOwnershipProof(
+                        keyIninces: [keyIndex],
+                        address: address.data,
+                        capabilityPath: "evm",
+                        signatures: [sig]
+                    )
+                    guard let encoded = RLP.encode(proof.rlpList) else {
+                        cancel()
+                        return
+                    }
+                    confirm(encoded.hexString.addHexPrefix())
+                } else {
                     cancel()
-                    return
                 }
-
-                let address = Flow.Address(hex: addrStr)
-                guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
-                let joinData = Flow.DomainTag.user.normalize + hashedData
-                guard let sig = signWithMessage(data: joinData) else {
-                    HUD.error(title: "sign failed")
-                    cancel()
-                    return
-                }
-                let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                let proof = COAOwnershipProof(
-                    keyIninces: [keyIndex],
-                    address: address.data,
-                    capabilityPath: "evm",
-                    signatures: [sig]
-                )
-                guard let encoded = RLP.encode(proof.rlpList) else {
-                    cancel()
-                    return
-                }
-                confirm(encoded.hexString.addHexPrefix())
-            } else {
-                cancel()
             }
         }
 
@@ -294,38 +296,39 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 logo: logo,
                 rawString: dataStr
             ) { result in
-
-                if result {
-                    do {
-                        guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
-                            HUD.error(title: "invalid_address".localized)
-                            return
+                Task {
+                    if result {
+                        do {
+                            guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
+                                HUD.error(title: "invalid_address".localized)
+                                return
+                            }
+                            let address = Flow.Address(hex: addrStr)
+                            let eip712Payload = try EIP712Parser.parse(dataStr)
+                            let data = try eip712Payload.signHash()
+                            let joinData = Flow.DomainTag.user.normalize + data
+                            guard let sig = try? await signWithMessage(data: joinData) else {
+                                HUD.error(title: "sign failed")
+                                return
+                            }
+                            let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                            let proof = COAOwnershipProof(
+                                keyIninces: [keyIndex],
+                                address: address.data,
+                                capabilityPath: "evm",
+                                signatures: [sig]
+                            )
+                            guard let encoded = RLP.encode(proof.rlpList) else {
+                                return
+                            }
+                            confirm(encoded.hexString.addHexPrefix())
+                        } catch {
+                            cancel()
                         }
-                        let address = Flow.Address(hex: addrStr)
-                        let eip712Payload = try EIP712Parser.parse(dataStr)
-                        let data = try eip712Payload.signHash()
-                        let joinData = Flow.DomainTag.user.normalize + data
-                        guard let sig = signWithMessage(data: joinData) else {
-                            HUD.error(title: "sign failed")
-                            return
-                        }
-                        let keyIndex = BigUInt(WalletManager.shared.keyIndex)
-                        let proof = COAOwnershipProof(
-                            keyIninces: [keyIndex],
-                            address: address.data,
-                            capabilityPath: "evm",
-                            signatures: [sig]
-                        )
-                        guard let encoded = RLP.encode(proof.rlpList) else {
-                            return
-                        }
-                        confirm(encoded.hexString.addHexPrefix())
-                    } catch {
+                        
+                    } else {
                         cancel()
                     }
-
-                } else {
-                    cancel()
                 }
             }
 
@@ -376,8 +379,8 @@ extension WalletConnectEVMHandler {
         return decryptedMessage
     }
 
-    private func signWithMessage(data: Data) -> Data? {
-        WalletManager.shared.signSync(signableData: data)
+    private func signWithMessage(data: Data) async throws -> Data? {
+        try await WalletManager.shared.sign(signableData: data)
     }
 }
 
@@ -431,7 +434,7 @@ extension WalletConnectEVMHandler {
             return nil
         }
 
-        let chainId = LocalUserDefaults.shared.flowNetwork.networkID
+        let chainId = currentNetwork.networkID
         let evmGasPrice = 0
         let directCallTxType = 255
         let contractCallSubType = 5

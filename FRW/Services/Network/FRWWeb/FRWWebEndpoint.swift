@@ -31,7 +31,7 @@ extension FRWWebEndpoint: TargetType {
         case .txTemplate:
             return "template"
         case .swapEstimate:
-            return "swap/v1/\(LocalUserDefaults.shared.flowNetwork.rawValue)/estimate"
+            return "swap/v1/\(LocalUserDefaults.shared.network.rawValue)/estimate"
         }
     }
 
