@@ -17,16 +17,20 @@ import SwiftyBeaver
 class FlowLog {
     // MARK: Lifecycle
 
-    private init() {
-        // config SwiftyBeaver
+    static var filePath: URL? {
         let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
         let logFileUrl = url?.appendingPathComponent("FlowWallet.log", isDirectory: false)
+        return logFileUrl
+    }
+
+    private init() {
+        // config SwiftyBeaver
 
         let console = ConsoleDestination()
         console.format = "[Flow] $DHH:mm:ss.SSS$d $C$L$c $N.$F:$l - $M - $X"
         console.logPrintWay = .logger(subsystem: "Main", category: "UI")
 
-        file = FileDestination(logFileURL: logFileUrl)
+        file = FileDestination(logFileURL: FlowLog.filePath)
         file.format = console.format
         file.logFileAmount = 2
         file.logFileMaxSize = (10 * 1024 * 1024)

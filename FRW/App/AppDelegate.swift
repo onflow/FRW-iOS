@@ -250,9 +250,10 @@ extension AppDelegate {
         _: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        let deviceTokenString = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        UserDefaults.standard.set(deviceTokenString.joined(), forKey: "deviceToken")
+        log.info("DeviceToken: \(deviceTokenString)")
         Task(priority: .high) {
-            let deviceTokenString = deviceToken.map { data in String(format: "%02.2hhx", data) }
-            UserDefaults.standard.set(deviceTokenString.joined(), forKey: "deviceToken")
             log.debug("[Push] web3wallet register before \(deviceTokenString.joined())")
 //            do {
 //                try await Web3Wallet.instance.register(deviceToken: deviceToken, enableEncrypted: true)

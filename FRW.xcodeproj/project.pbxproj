@@ -1403,6 +1403,10 @@
 		4EE090A02DA750B3001515FE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE0909E2DA750B3001515FE /* WarningView.swift */; };
 		4EE090A32DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
 		4EE090A42DA8F08C001515FE /* BugReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A22DA8F08C001515FE /* BugReport.swift */; };
+		4EE090A72DB0ABB8001515FE /* ZipFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A62DB0ABB8001515FE /* ZipFile.swift */; };
+		4EE090A82DB0ABB8001515FE /* ZipFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A62DB0ABB8001515FE /* ZipFile.swift */; };
+		4EE090AA2DB0ADB5001515FE /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE090A92DB0ADB5001515FE /* ZIPFoundation */; };
+		4EE090AC2DB0ADBD001515FE /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE090AB2DB0ADBD001515FE /* ZIPFoundation */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2681,6 +2685,7 @@
 		4EE0905B2DA73034001515FE /* BlockedWebsiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedWebsiteView.swift; sourceTree = "<group>"; };
 		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
+		4EE090A62DB0ABB8001515FE /* ZipFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipFile.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -3088,6 +3093,7 @@
 				4E2FA6AA2CF4177C00D46EA7 /* ReownWalletKit in Frameworks */,
 				6A29114428CB2AA3003295BD /* JXSegmentedView in Frameworks */,
 				4E2FA6B22CF4177C00D46EA7 /* WalletConnectNotify in Frameworks */,
+				4EE090AA2DB0ADB5001515FE /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3163,6 +3169,7 @@
 				4E2FA68E2CF40FE700D46EA7 /* ReownWalletKit in Frameworks */,
 				6A29114228CB2A87003295BD /* JXSegmentedView in Frameworks */,
 				4E2FA6962CF40FE700D46EA7 /* WalletConnectNotify in Frameworks */,
+				4EE090AC2DB0ADBD001515FE /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5151,6 +5158,7 @@
 				4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */,
 				4E411DBB2CB68488005AD540 /* JSONValue.swift */,
 				57312EC42CFD2833009A344A /* Threading.swift */,
+				4EE090A62DB0ABB8001515FE /* ZipFile.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -6441,6 +6449,7 @@
 				4E6224752D7ED4B300BABC28 /* FlowWalletKit */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
 				4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */,
+				4EE090A92DB0ADB5001515FE /* ZIPFoundation */,
 			);
 			productName = "FlowReferenceWallet-lite";
 			productReference = 154B8928276A1EEB00780E93 /* FRW-dev.app */;
@@ -6532,6 +6541,7 @@
 				4EB94AA62D115F5C00AEF3C9 /* SwiftyDropbox */,
 				15F6F4BA2D683FD700D62D7F /* TrustWeb3Provider */,
 				15DD61992D7AA6B000F96F0F /* YttriumWrapper */,
+				4EE090AB2DB0ADBD001515FE /* ZIPFoundation */,
 			);
 			productName = "FlowReferenceWallet-lite";
 			productReference = 15C58C6D2868A4EE00BD4FC6 /* FRW.app */;
@@ -6708,6 +6718,7 @@
 				4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */,
 				15F6F4B92D683FD700D62D7F /* XCRemoteSwiftPackageReference "trust-web3-provider" */,
 				4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */,
+				4EE090A52DB0AAF0001515FE /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 15EC9DEF274FD1FC00F70CD9 /* Products */;
 			projectDirPath = "";
@@ -7602,6 +7613,7 @@
 				15DC209527819C56000B187A /* _VToast.swift in Sources */,
 				4E2E8CBA2C61B32C00095D5B /* FlowLog.swift in Sources */,
 				15DC21B127819C56000B187A /* UIVIew.SafeAreas.swift in Sources */,
+				4EE090A82DB0ABB8001515FE /* ZipFile.swift in Sources */,
 				154B8913276A1EEB00780E93 /* ImageBook.swift in Sources */,
 				15DC212F27819C56000B187A /* VWheelPickerState.swift in Sources */,
 				15DC212527819C56000B187A /* VSpinnerContinous.swift in Sources */,
@@ -8454,6 +8466,7 @@
 				15C58BD42868A4EE00BD4FC6 /* ImageBook.swift in Sources */,
 				4E2E8CB92C61B32C00095D5B /* FlowLog.swift in Sources */,
 				15C58BD52868A4EE00BD4FC6 /* VWheelPickerState.swift in Sources */,
+				4EE090A72DB0ABB8001515FE /* ZipFile.swift in Sources */,
 				15C58BD62868A4EE00BD4FC6 /* VSpinnerContinous.swift in Sources */,
 				15C58BD72868A4EE00BD4FC6 /* ColorsFromImage.swift in Sources */,
 				6A15C1FF286D914000C2EBA2 /* TokenDetailView.swift in Sources */,
@@ -9928,6 +9941,14 @@
 				kind = branch;
 			};
 		};
+		4EE090A52DB0AAF0001515FE /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.19;
+			};
+		};
 		6A0454CB28768E9E00A9131C /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fermoya/SwiftUIPager.git";
@@ -10569,6 +10590,16 @@
 		4EDE41EA2CF5944500A6EAB3 /* FlowWalletKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FlowWalletKit;
+		};
+		4EE090A92DB0ADB5001515FE /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE090A52DB0AAF0001515FE /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		4EE090AB2DB0ADBD001515FE /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EE090A52DB0AAF0001515FE /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 		4EEE9DC62BD243DB00685AAA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

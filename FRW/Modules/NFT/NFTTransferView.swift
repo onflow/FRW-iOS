@@ -15,7 +15,6 @@ import web3swift
 // MARK: - NFTTransferViewModel
 
 class NFTTransferViewModel: ObservableObject {
-    
     enum AccountType {
         case flow
         case coa
@@ -35,7 +34,7 @@ class NFTTransferViewModel: ObservableObject {
             }
         }
     }
-    
+
     // MARK: Lifecycle
 
     init(nft: NFTModel, targetContact: Contact, fromChildAccount: ChildAccount? = nil) {
@@ -120,11 +119,12 @@ class NFTTransferViewModel: ObservableObject {
             return
         }
         if EVMAccountManager.shared.selectedAccount != nil,
-           let identifier = nft.response.flowIdentifier {
+           let identifier = nft.response.flowIdentifier
+        {
             isValidNFT = true
             return
         }
-        //TODO: get status result from toAddress by call `checkCollectionEnable`, and check state from `nft` on result list
+        // TODO: get status result from toAddress by call `checkCollectionEnable`, and check state from `nft` on result list
 //        let result = NFTCollectionStateManager.share.isTokenAdded(toAddress)
 //        isValidNFT = result
     }
@@ -187,7 +187,8 @@ class NFTTransferViewModel: ObservableObject {
                 }
 
                 if toAccountType == .coa,
-                   toAddress != EVMAccountManager.shared.accounts.first?.showAddress {
+                   toAddress != EVMAccountManager.shared.accounts.first?.showAddress
+                {
                     toAccountType = .eoa
                 }
 
@@ -382,7 +383,7 @@ class NFTTransferViewModel: ObservableObject {
                     return
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     let holder = TransactionManager.TransactionHolder(
                         id: tid,
                         type: .transferNFT,
@@ -394,7 +395,8 @@ class NFTTransferViewModel: ObservableObject {
                     Router.pop()
                 }
             } catch {
-                debugPrint("NFTTransferViewModel -> sendAction error: \(error)")
+                log.error("NFTTransferViewModel -> sendAction error: \(error)")
+                log.critical(error, report: true)
                 self.isRequesting = false
                 failedBlock()
             }
@@ -420,9 +422,9 @@ class NFTTransferViewModel: ObservableObject {
 
 extension NFTTransferViewModel: InsufficientStorageToastViewModel {
     var variant: InsufficientStorageFailure? { _insufficientStorageFailure }
-    
+
     private func checkForInsufficientStorage() {
-        self._insufficientStorageFailure = insufficientStorageCheckForTransfer(token: .nft(self.nft))
+        _insufficientStorageFailure = insufficientStorageCheckForTransfer(token: .nft(nft))
     }
 }
 
@@ -446,7 +448,7 @@ struct NFTTransferView: View {
 
         var body: some View {
             HStack(spacing: 12) {
-                ForEach(0..<totalNum, id: \.self) { index in
+                ForEach(0 ..< totalNum, id: \.self) { index in
                     if step == index {
                         Image("icon-right-arrow-1")
                             .renderingMode(.template)
@@ -586,7 +588,7 @@ struct NFTTransferView: View {
         VStack(spacing: 0) {
             InsufficientStorageToastView<NFTTransferViewModel>()
                 .environmentObject(self.vm)
-            
+
             WalletSendButtonView(allowEnable: $vm.isEmptyTransation) {
                 if vm.isEmptyTransation {
                     vm.sendAction()
@@ -602,7 +604,8 @@ struct NFTTransferView: View {
                 if contact.user?.emoji != nil {
                     contact.user?.emoji.icon(size: 44)
                 } else if let avatar = contact.avatar?.convertedAvatarString(),
-                          avatar.isEmpty == false {
+                          avatar.isEmpty == false
+                {
                     KFImage.url(URL(string: avatar))
                         .placeholder {
                             Image("placeholder")
