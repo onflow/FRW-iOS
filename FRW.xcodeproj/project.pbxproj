@@ -6466,7 +6466,6 @@
 				15F6F4BC2D683FF100D62D7F /* TrustWeb3Provider */,
 				15DD619B2D7AA6B600F96F0F /* YttriumWrapper */,
 				154E314A2DA3DA8F008A495F /* Factory */,
-				4E9F6CCB2D8D5B9800395F94 /* FlowWalletKit */,
 				4EE090A92DB0ADB5001515FE /* ZIPFoundation */,
 			);
 			productName = "FlowReferenceWallet-lite";
@@ -6733,7 +6732,6 @@
 				4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */,
 				15F6F4B92D683FD700D62D7F /* XCRemoteSwiftPackageReference "trust-web3-provider" */,
 				154E31472DA3DA78008A495F /* XCRemoteSwiftPackageReference "Factory" */,
-				4E6224742D7E7E8000BABC28 /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */,
 				4EE090A52DB0AAF0001515FE /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = 15EC9DEF274FD1FC00F70CD9 /* Products */;
