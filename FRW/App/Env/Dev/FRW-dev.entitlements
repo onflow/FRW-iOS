@@ -9,6 +9,7 @@
 		<string>applinks:link.lilico.app</string>
 		<string>applinks:fcw-link.lilico.app</string>
 		<string>applinks:frw-link.lilico.app</string>
+		<string>applinks:link.wallet.flow.com</string>
 	</array>
 	<key>com.apple.developer.authentication-services.autofill-credential-provider</key>
 	<true/>
