@@ -13,6 +13,7 @@ enum AppExternalLinks: String, CaseIterable {
     case lilico = "lilico://"
     case frwUL = "https://frw-link.lilico.app"
     case fcwUL = "https://fcw-link.lilico.app"
+    case wallet = "https://link.wallet.flow.com"
 
     // MARK: Internal
 
@@ -22,7 +23,7 @@ enum AppExternalLinks: String, CaseIterable {
 
     var isUniversalLink: Bool {
         switch self {
-        case .frwUL, .fcwUL:
+        case .frwUL, .fcwUL, .wallet:
             return true
         default:
             return false
