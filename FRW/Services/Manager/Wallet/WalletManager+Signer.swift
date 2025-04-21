@@ -46,10 +46,6 @@ extension WalletManager: FlowSigner {
             throw error
         }
     }
-
-    private func userSecretSign() -> Bool {
-        UserManager.shared.userType != .phrase
-    }
 }
 
 extension WalletManager: SecurityCheckDelegate {
