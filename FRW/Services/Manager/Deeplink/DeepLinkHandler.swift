@@ -103,6 +103,16 @@ extension DeepLinkHandler {
             return
         }
         let toAddress = parsedURL.parameters["recipient"]
+        var amount: Decimal?
+        if let value = parsedURL.parameters["value"] {
+            if value.hasHexPrefix() {
+                // TODO: six why handle address?
+            }
+            if value.isNumber {
+                amount = Decimal(string: value)
+            }
+        }
+
         let contract = Contact(
             address: toAddress,
             avatar: nil,
@@ -113,7 +123,7 @@ extension DeepLinkHandler {
             username: nil,
             user: nil
         )
-        Router.route(to: RouteMap.Wallet.sendAmount(contract, token, isPush: false))
+        Router.route(to: RouteMap.Wallet.sendAmount(contract, token, isPush: false, amount: amount))
     }
 
     private func handleExplore(parsedURL: ParsedURL) {
