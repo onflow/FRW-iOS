@@ -102,7 +102,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         open url: URL,
         options _: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
-        // 处理 deeplink
         if DeepLinkHandler.shared.canHandleURL(url) {
             DeepLinkHandler.shared.handleURL(url)
             return true
@@ -143,7 +142,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         continue userActivity: NSUserActivity,
         restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void
     ) -> Bool {
-        // 处理 Universal Links
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
            let url = userActivity.webpageURL
         {
