@@ -1,3 +1,4 @@
+import BigInt
 import Combine
 import Foundation
 import SwiftUI
@@ -106,9 +107,11 @@ extension DeepLinkHandler {
         var amount: Decimal?
         if let value = parsedURL.parameters["value"] {
             if value.hasHexPrefix() {
-                // TODO: six why handle address?
-            }
-            if value.isNumber {
+                let hexString = String(value.dropFirst(2))
+                if let bigUInt = BigUInt(hexString, radix: 16) {
+                    amount = Decimal(string: String(bigUInt))
+                }
+            } else if value.isNumber {
                 amount = Decimal(string: value)
             }
         }
