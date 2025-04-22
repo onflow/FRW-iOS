@@ -214,7 +214,7 @@ extension RouteMap {
         case tokenDetail(TokenModel, Bool)
         case receive
         case send(_ address: String = "")
-        case sendAmount(Contact, TokenModel, isPush: Bool = true)
+        case sendAmount(Contact, TokenModel, isPush: Bool = true, amount: Decimal? = nil)
         case scan(SPQRCodeCallback, click: SPQRCodeCallback? = nil)
         case buyCrypto
         case transactionList(String?)
@@ -261,11 +261,11 @@ extension RouteMap.Wallet: RouterTarget {
             navi.present(vc, animated: false)
         case let .send(address):
             navi.present(content: WalletSendView(address: address))
-        case let .sendAmount(contact, token, isPush):
+        case let .sendAmount(contact, token, isPush, amount):
             if isPush {
-                navi.push(content: WalletSendAmountView(target: contact, token: token))
+                navi.push(content: WalletSendAmountView(target: contact, token: token, amount: amount))
             } else {
-                navi.present(content: WalletSendAmountView(target: contact, token: token))
+                navi.present(content: WalletSendAmountView(target: contact, token: token, amount: amount))
             }
         case let .scan(handler, click):
 //            let rootVC = Router.topPresentedController()
