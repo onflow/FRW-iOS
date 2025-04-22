@@ -214,7 +214,7 @@ extension TransactionListHandler: UICollectionViewDelegateFlowLayout, UICollecti
         let item = dataList[indexPath.item]
         UISelectionFeedbackGenerator().selectionChanged()
         if let hash = item.hash {
-            let network = LocalUserDefaults.shared.flowNetwork
+            let network = currentNetwork
             let accountType = AccountType.current
             let url = network.getTransactionHistoryUrl(accountType: accountType, transactionId: hash)
             url.map { Router.route(to: RouteMap.Explore.browser($0)) }

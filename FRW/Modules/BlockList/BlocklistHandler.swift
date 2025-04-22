@@ -19,7 +19,7 @@ final class BlocklistHandler {
     func fetch() {
         Task {
             do {
-                self.domains = try await Network.requestWithRawModel(FRWAPI.Blocklist.domain)
+                self.domains = try await Network.requestWithRawModel(FRWAPI.Blocklist.domain, needAuthToken: false)
                 log.debug("Domain Block List:\(self.domains.flow.count)-\(self.domains.evm.count)")
             } catch {
                 log.error("Domain Block List:\(error.localizedDescription)")

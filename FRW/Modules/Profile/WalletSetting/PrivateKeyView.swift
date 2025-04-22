@@ -85,33 +85,35 @@ struct PrivateKeyView: RouteableView {
                     }
                 }
 
-                HStack {
+                if let key = WalletManager.shared.mainAccount?.fullWeightKey {
                     HStack {
-                        Divider()
-                        VStack(alignment: .leading) {
-                            Text("Hash__Algorithm::message".localized)
-                                .font(.inter(size: 14))
-                                .foregroundColor(.Theme.Text.text4)
-                            Text(WalletManager.shared.hashAlgo.algorithm)
-                                .font(.inter(size: 14))
-                                .foregroundColor(.Theme.Text.text4)
+                        HStack {
+                            Divider()
+                            VStack(alignment: .leading) {
+                                Text("Hash__Algorithm::message".localized)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(.Theme.Text.text4)
+                                Text(key.hashAlgo.algorithm)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(.Theme.Text.text4)
+                            }
                         }
-                    }
-
-                    Spacer()
-
-                    HStack {
-                        Divider()
-                        VStack(alignment: .leading) {
-                            Text("Sign__Algorithm::message".localized)
-                                .font(.inter(size: 14))
-                                .foregroundColor(.Theme.Text.text4)
-                            Text(WalletManager.shared.signatureAlgo.id)
-                                .font(.inter(size: 14))
-                                .foregroundColor(.Theme.Text.text4)
+                        
+                        Spacer()
+                        
+                        HStack {
+                            Divider()
+                            VStack(alignment: .leading) {
+                                Text("Sign__Algorithm::message".localized)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(.Theme.Text.text4)
+                                Text(key.signAlgo.id)
+                                    .font(.inter(size: 14))
+                                    .foregroundColor(.Theme.Text.text4)
+                            }
                         }
-                    }
-                }.padding(.vertical, 10)
+                    }.padding(.vertical, 10)
+                }
 
                 PrivateKeyWarning()
                     .padding(.top)

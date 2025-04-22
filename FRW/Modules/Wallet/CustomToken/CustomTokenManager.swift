@@ -9,6 +9,7 @@ import BigInt
 import Foundation
 import Web3Core
 import web3swift
+import Flow
 
 // MARK: - CustomTokenManager
 
@@ -93,7 +94,7 @@ class CustomTokenManager: ObservableObject {
         else {
             return []
         }
-        let currentNetwork = LocalUserDefaults.shared.flowNetwork
+        let currentNetwork = LocalUserDefaults.shared.network
         let belong = EVMAccountManager.shared.selectedAccount != nil ? CustomToken.Belong
             .evm : .flow
 
@@ -232,7 +233,7 @@ struct CustomToken: Codable {
         userId = UserManager.shared.activatedUID ?? ""
         belongAddress = WalletManager.shared
             .getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
-        network = LocalUserDefaults.shared.flowNetwork
+        network = LocalUserDefaults.shared.network
     }
 
     // MARK: Internal
@@ -257,7 +258,7 @@ struct CustomToken: Codable {
 
     var userId: String
     var belongAddress: String
-    var network: FlowNetworkType = .mainnet
+    var network: Flow.ChainID = .mainnet
     var belong: CustomToken.Belong = .flow
     // not store,
     var balance: BigUInt?

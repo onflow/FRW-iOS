@@ -18,22 +18,20 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
 
     static let AvailableFlowToken = "availableFlowToken"
 
-    init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
+    init(network: Flow.ChainID = currentNetwork) {
         self.network = network
-
-        // TODO: Add token list cache
     }
 
     // MARK: Internal
 
-    var network: FlowNetworkType
+    var network: Flow.ChainID
 
     func getSupportTokens() async throws -> [TokenModel] {
         guard whiteListTokens.isEmpty else {
             return whiteListTokens
         }
         let coinInfo: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.ftTokenList(network))
+            .requestWithRawModel(GithubEndpoint.ftTokenList(network), needAuthToken: false)
         let models = coinInfo.tokens.map { $0.toTokenModel(type: .cadence, network: network) }
         whiteListTokens = models.filter { $0.getAddress()?.isEmpty == false }
         return whiteListTokens

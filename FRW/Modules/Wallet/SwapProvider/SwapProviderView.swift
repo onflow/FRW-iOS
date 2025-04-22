@@ -131,7 +131,7 @@ struct SwapProviderModel {
     static let Increment = SwapProviderModel(
         title: "Increment Finance",
         icon: "https://raw.githubusercontent.com/Outblock/Assets/main/dapp/increment/logo.jpeg",
-        url: "https://\(LocalUserDefaults.shared.flowNetwork.isMainnet ? "app" : "demo")" +
+        url: "https://\(currentNetwork == .mainnet ? "app" : "demo")" +
             ".increment.fi/swap"
     )
 

@@ -159,6 +159,13 @@ extension View {
             }
         }
     }
+    
+    @ViewBuilder
+    func visibility(_ isVisible: Bool) -> some View {
+        if isVisible {
+            self
+        }
+    }
 
     @ViewBuilder
     func roundedBg(
