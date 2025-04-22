@@ -263,9 +263,9 @@ extension RouteMap.Wallet: RouterTarget {
             navi.present(content: WalletSendView(address: address))
         case let .sendAmount(contact, token, isPush, amount):
             if isPush {
-                navi.push(content: WalletSendAmountView(target: contact, token: token))
+                navi.push(content: WalletSendAmountView(target: contact, token: token, amount: amount))
             } else {
-                navi.present(content: WalletSendAmountView(target: contact, token: token))
+                navi.present(content: WalletSendAmountView(target: contact, token: token, amount: amount))
             }
         case let .scan(handler, click):
 //            let rootVC = Router.topPresentedController()

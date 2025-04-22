@@ -2,6 +2,7 @@ import BigInt
 import Combine
 import Foundation
 import SwiftUI
+import Web3Core
 
 // MARK: - DeepLinkHandler
 
@@ -62,6 +63,12 @@ class DeepLinkHandler {
 extension DeepLinkHandler {
     private func needHandleNetwork(_ parsedURL: ParsedURL) -> Bool {
         guard let str = parsedURL.parameters["network"], let network = FlowNetworkType(rawValue: str) else {
+            if currentNetwork != .mainnet {
+                showNetworkSwitchConfirmation(network: .mainnet, parsedURL: parsedURL)
+            }
+            return false
+        }
+        guard currentNetwork != network else {
             return false
         }
         showNetworkSwitchConfirmation(network: network, parsedURL: parsedURL)
@@ -109,7 +116,8 @@ extension DeepLinkHandler {
             if value.hasHexPrefix() {
                 let hexString = String(value.dropFirst(2))
                 if let bigUInt = BigUInt(hexString, radix: 16) {
-                    amount = Decimal(string: String(bigUInt))
+                    let balance = Utilities.formatToPrecision(bigUInt, units: .custom(18), formattingDecimals: 18)
+                    amount = Decimal(string: balance)
                 }
             } else if value.isNumber {
                 amount = Decimal(string: value)
