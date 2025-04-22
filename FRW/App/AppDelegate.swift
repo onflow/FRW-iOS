@@ -91,7 +91,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
 
         if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            let isInstabugNotification = Replies.didReceiveRemoteNotification(notification)
+            _ = Replies.didReceiveRemoteNotification(notification)
         }
 
         return true
@@ -102,6 +102,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         open url: URL,
         options _: [UIApplication.OpenURLOptionsKey: Any] = [:]
     ) -> Bool {
+        if DeepLinkHandler.shared.canHandleURL(url) {
+            DeepLinkHandler.shared.handleURL(url)
+            return true
+        }
+
         var parameters: [String: String] = [:]
         URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
             parameters[$0.name] = $0.value
@@ -137,14 +142,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         continue userActivity: NSUserActivity,
         restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void
     ) -> Bool {
-        if let url = userActivity.webpageURL {
-            let uri = AppExternalLinks.exactWCLink(link: url.absoluteString)
-            WalletConnectManager.shared.onClientConnected = {
-                WalletConnectManager.shared.connect(link: uri)
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+           let url = userActivity.webpageURL
+        {
+            if DeepLinkHandler.shared.canHandleURL(url) {
+                DeepLinkHandler.shared.handleURL(url)
+                return true
             }
-            WalletConnectManager.shared.connect(link: uri)
         }
-        return true
+        return false
     }
 }
 
