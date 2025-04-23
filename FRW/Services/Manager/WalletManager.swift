@@ -332,15 +332,22 @@ extension WalletManager {
         }
         log.debug("[user] \(userStore)")
         var provider: (any KeyProtocol)?
-        switch userStore.keyType {
-        case .secureEnclave:
-            provider = try? SecureEnclaveKey.wallet(id: uid)
-        case .seedPhrase:
-            provider = try? SeedPhraseKey.wallet(id: uid)
-        case .privateKey:
-            provider = try? PrivateKey.wallet(id: uid)
-        case .keyStore:
-            provider = try? PrivateKey.wallet(id: uid)
+        do {
+            switch userStore.keyType {
+            case .secureEnclave:
+                provider = try SecureEnclaveKey.wallet(id: uid)
+            case .seedPhrase:
+                provider = try SeedPhraseKey.wallet(id: uid)
+            case .privateKey:
+                provider = try PrivateKey.wallet(id: uid)
+            case .keyStore:
+                provider = try PrivateKey.wallet(id: uid)
+            }
+        } catch {
+            log.critical(error, report: true)
+            if let walletError = error as? FlowWalletKit.WalletError, walletError == .emptyKeychain {
+                AlertViewController.showEmptyKeychain()
+            }
         }
         return provider
     }

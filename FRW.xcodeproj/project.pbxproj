@@ -951,8 +951,6 @@
 		4E09A1FC2CC7A1FD0099606E /* EventTrack+Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */; };
 		4E09A1FE2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
 		4E09A1FF2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
-		4E09FF7C2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
-		4E09FF7D2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
 		4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
 		4E09FF812DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
 		4E0A75AF2868929C00527D08 /* AddCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */; };
@@ -2468,7 +2466,6 @@
 		4E09A1F72CC7A12B0099606E /* EventTrack+Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Backup.swift"; sourceTree = "<group>"; };
 		4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Transaction.swift"; sourceTree = "<group>"; };
 		4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Account.swift"; sourceTree = "<group>"; };
-		4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLog+Add.swift"; sourceTree = "<group>"; };
 		4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyKeychainAlert.swift; sourceTree = "<group>"; };
 		4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewModel.swift; sourceTree = "<group>"; };
 		4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Bold.ttf"; sourceTree = "<group>"; };
@@ -3329,7 +3326,6 @@
 			isa = PBXGroup;
 			children = (
 				4E09FF7E2DB9239000F2E527 /* Alert */,
-				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
 				4E50541F2C33DB0900D4BA56 /* Review */,
 				4E9D8F062BF5DBF900E11CC7 /* Web3 */,
@@ -4990,14 +4986,6 @@
 				4EEEF0712D05FE66008393E9 /* EventTrack+Dev.swift */,
 			);
 			path = Track;
-			sourceTree = "<group>";
-		};
-		4E09FF7A2DB8C8B900F2E527 /* Log */ = {
-			isa = PBXGroup;
-			children = (
-				4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */,
-			);
-			path = Log;
 			sourceTree = "<group>";
 		};
 		4E09FF7E2DB9239000F2E527 /* Alert */ = {
