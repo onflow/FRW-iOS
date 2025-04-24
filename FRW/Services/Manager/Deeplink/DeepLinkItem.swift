@@ -6,6 +6,15 @@ import Web3Core
 
 // MARK: - DeeplinkPath
 
+extension DeepLinkItem {
+    enum Result {
+        case done
+        case waiting
+        case ignore
+        case failed
+    }
+}
+
 enum DeepLinkItem {
     case send(DeepLinkMetadata)
     case dapp(DeepLinkMetadata)
@@ -30,26 +39,38 @@ enum DeepLinkItem {
     var canHandle: Bool {
         let isLogin = UserManager.shared.isLoggedIn
         switch self {
-        case let .send(item):
-            return isLogin && !WalletManager.shared.activatedCoins.isEmpty && WalletManager.shared.flowToken != nil
-        case .buy:
+        case .send, .buy:
             return isLogin
         case .dapp:
             return true
         }
     }
 
-    func handle() {
-        guard canHandle else {
-            return
+    var needWaitingData: Bool {
+        switch self {
+        case .send, .buy:
+            return WalletManager.shared.activatedCoins.isEmpty
+        default:
+            return false
         }
+    }
+
+    func handle() -> DeepLinkItem.Result {
+        guard canHandle else {
+            return .failed
+        }
+
+        guard !needWaitingData else {
+            return .waiting
+        }
+
         switch self {
         case let .send(item):
-            handleSend(item)
+            return handleSend(item)
         case let .dapp(item):
-            handleDapp(item)
+            return handleDapp(item)
         case let .buy(item):
-            handleBuy(item)
+            return handleBuy(item)
         }
     }
 }
@@ -57,52 +78,33 @@ enum DeepLinkItem {
 // MARK: - Check Network
 
 extension DeepLinkItem {
-    private func checkNetworkIfNeed(metadata: DeepLinkMetadata) -> Bool {
+    private func needSwitchNetwork(metadata: DeepLinkMetadata) -> Bool {
+        guard currentNetwork == .mainnet else {
+            return true
+        }
         guard let str = metadata.parameters["network"], let network = FlowNetworkType(rawValue: str) else {
-            if currentNetwork != .mainnet {
-                showNetworkSwitchConfirmation(network: .mainnet, metadata: metadata)
-            }
             return false
         }
         guard currentNetwork != network else {
             return false
         }
-        showNetworkSwitchConfirmation(network: network, metadata: metadata)
         return true
     }
 
-    private func showNetworkSwitchConfirmation(network: FlowNetworkType, metadata _: DeepLinkMetadata) {
-        let alert = UIAlertController(
-            title: "switch_network".localized,
-            message: "switch_to_x".localized(network.rawValue),
-            preferredStyle: .alert
-        )
-
-        alert.addAction(UIAlertAction(title: "continue".localized, style: .default) { _ in
-            self.switchNetwork(to: network)
-            self.handle()
-        })
-
-        // add cancel
-        alert.addAction(UIAlertAction(title: "action_cancel".localized, style: .cancel) { _ in
-
-        })
-
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
-            rootViewController.present(alert, animated: true)
+    private func showNetworkSwitch() {
+        AlertViewController.showSwitchNetworkAlert { _ in
         }
-    }
-
-    private func switchNetwork(to network: FlowNetworkType) {
-        log.info("[Deeplink] switch to: \(network)")
-        WalletManager.shared.changeNetwork(network)
     }
 }
 
 extension DeepLinkItem {
-    private func handleSend(_ item: DeepLinkMetadata) {
+    private func handleSend(_ item: DeepLinkMetadata) -> DeepLinkItem.Result {
         guard !WalletManager.shared.activatedCoins.isEmpty, let token = WalletManager.shared.flowToken else {
-            return
+            return .waiting
+        }
+        guard !needSwitchNetwork(metadata: item) else {
+            showNetworkSwitch()
+            return .waiting
         }
         let toAddress = item.parameters["recipient"]
         var amount: Decimal?
@@ -129,18 +131,21 @@ extension DeepLinkItem {
             user: nil
         )
         Router.route(to: RouteMap.Wallet.sendAmount(contract, token, isPush: false, amount: amount))
+        return .done
     }
 
-    private func handleDapp(_ item: DeepLinkMetadata) {
+    private func handleDapp(_ item: DeepLinkMetadata) -> DeepLinkItem.Result {
         guard let dappUrlString = item.parameters["url"], let dappUrl = URL(string: dappUrlString) else {
             log.warning("[DeepLink] invalid dapp URL:\(item.url)")
-            return
+            return .failed
         }
         Router.route(to: RouteMap.Explore.browser(dappUrl))
+        return .done
     }
 
-    private func handleBuy(_: DeepLinkMetadata) {
+    private func handleBuy(_: DeepLinkMetadata) -> DeepLinkItem.Result {
         Router.route(to: RouteMap.Wallet.buyCrypto)
+        return .done
     }
 }
 

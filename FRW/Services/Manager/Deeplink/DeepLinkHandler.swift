@@ -16,9 +16,7 @@ class DeepLinkHandler {
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { _ in
-                if let item = self.pendingItem {
-                    item.handle()
-                }
+                self.handlePaddingItem()
             }.store(in: &cancellableSet)
     }
 
@@ -28,13 +26,32 @@ class DeepLinkHandler {
         guard let item = DeepLinkItem(url: url) else {
             return false
         }
-        return item.canHandle
+        let result = item.canHandle
+        if !result {
+            HUD.info(title: "Failed to open", message: "please create a wallet first")
+        }
+        return result
     }
 
     func handleURL(_ url: URL) {
+        pendingItem = nil
         guard let item = DeepLinkItem(url: url) else {
             return
         }
-        item.handle()
+        handleItem(item)
+    }
+
+    func handlePaddingItem() {
+        if let item = pendingItem {
+            pendingItem = nil
+            handleItem(item)
+        }
+    }
+
+    private func handleItem(_ item: DeepLinkItem) {
+        let result = item.handle()
+        if result == .waiting {
+            pendingItem = item
+        }
     }
 }
