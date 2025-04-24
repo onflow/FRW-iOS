@@ -11,26 +11,33 @@ extension AlertViewController {
     static func showEmptyKeychain() {
         runOnMain {
             AlertViewController.presentOnRoot(
-                title: .init("Key Warning"),
+                title: .init("miss_key_title".localized),
                 customContentView: AnyView(
                     VStack(alignment: .center, spacing: 8) {
-                        Text(.init("restore_device_title".localized))
+                        Text("miss_key_body".localized)
                     }
                     .padding(.vertical, 8)
                 ),
                 buttons: [
-                    AlertView.ButtonItem(type: .secondaryAction, title: "tutorial".localized, action: {
+                    AlertView.ButtonItem(type: .primaryAction, title: "restore_wallet".localized, action: {
+                        Router.route(to: RouteMap.RestoreLogin.syncQC)
+                    }),
+
+                    AlertView.ButtonItem(type: .normal, title: "tutorial_restore".localized, action: {
                         if let url = URL(string: "https://docs.wallet.flow.com/tutorial/mobile-wallet-restore-guide#from-device-backup") {
                             Router.route(to: RouteMap.Explore.browser(url))
                         }
                     }),
-                    AlertView.ButtonItem(type: .primaryAction, title: "btn_sync".localized, action: {
-                        Router.route(to: RouteMap.RestoreLogin.syncQC)
-                    }),
+
+//                    AlertView.ButtonItem(type: .secondaryAction, title: "Report bug".localized, action: {
+//
+//                    }),
+
+                    AlertView.ButtonItem(type: .normal, title: "action_cancel".localized, action: {}),
                 ],
                 useDefaultCancelButton: false,
                 showCloseButton: true,
-                buttonsLayout: .horizontal,
+                buttonsLayout: .vertical,
                 textAlignment: .center
             )
         }
