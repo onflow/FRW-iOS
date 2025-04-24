@@ -93,7 +93,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
             _ = Replies.didReceiveRemoteNotification(notification)
         }
-
+        FlowLog.logEnv()
         return true
     }
 

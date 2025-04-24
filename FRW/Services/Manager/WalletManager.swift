@@ -222,7 +222,8 @@ extension WalletManager {
                 updateKeyProvider(provider: provider, storeUser: user)
             } else {
                 if keyProvider == nil {
-                    log.critical(CustomError.custom("PrivateKey", "not found provider or user at"))
+                    FlowLog.SEKeychain()
+                    log.critical(CustomError.custom("PrivateKey", "not found provider or user at"), report: true)
                 }
                 log.error("[Wallet] not found provider or user at \(uid)")
             }
@@ -247,10 +248,7 @@ extension WalletManager {
                         account: self.accountKey
                     )
                 } catch {
-                    log
-                        .error(
-                            "[Wallet] not find account key by \(address) with \(storeUser.publicKey)"
-                        )
+                    log.error("[Wallet] not find account key by \(address) with \(storeUser.publicKey)")
                 }
             }
             if self.accountKey == nil {
