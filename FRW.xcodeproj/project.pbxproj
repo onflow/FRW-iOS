@@ -952,7 +952,8 @@
 		4E09A1FE2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
 		4E09A1FF2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
 		4E09FF7C2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
-		4E09FF7D2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
+		4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
+		4E09FF822DBA016C00F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
 		4E0A75AF2868929C00527D08 /* AddCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */; };
 		4E0D349F2A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */; };
 		4E0D34A02A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */; };
@@ -2467,6 +2468,7 @@
 		4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Transaction.swift"; sourceTree = "<group>"; };
 		4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Account.swift"; sourceTree = "<group>"; };
 		4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLog+Add.swift"; sourceTree = "<group>"; };
+		4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyKeychainAlert.swift; sourceTree = "<group>"; };
 		4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewModel.swift; sourceTree = "<group>"; };
 		4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Bold.ttf"; sourceTree = "<group>"; };
 		4E0D349C2A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Regular.ttf"; sourceTree = "<group>"; };
@@ -3325,6 +3327,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
 				4E50541F2C33DB0900D4BA56 /* Review */,
@@ -4994,6 +4997,14 @@
 				4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */,
 			);
 			path = Log;
+			sourceTree = "<group>";
+		};
+		4E09FF7E2DB9239000F2E527 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */,
+			);
+			path = Alert;
 			sourceTree = "<group>";
 		};
 		4E2B704F2AF37289004F00A0 /* Model */ = {
@@ -7025,6 +7036,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E09FF822DBA016C00F2E527 /* FlowLog+Add.swift in Sources */,
 				15DC21CF27819C56000B187A /* BasicAnimation.swift in Sources */,
 				15DC209D27819C56000B187A /* VBaseHeaderFooterType.swift in Sources */,
 				15DC209F27819C56000B187A /* VSecondaryButtonModel.swift in Sources */,
@@ -7194,7 +7206,6 @@
 				15DC20E127819C56000B187A /* VListModel.swift in Sources */,
 				4E51B4FC2854A76500EDE4FE /* CaptureView.swift in Sources */,
 				4EC6260A2AE8A28100318720 /* UUIDManager.swift in Sources */,
-				4E09FF7D2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */,
 				6A382E28289CED9800163564 /* ProfileSecureViewViewModel.swift in Sources */,
 				15DC213527819C56000B187A /* VSegmentedPicker.swift in Sources */,
 				15DC21D527819C56000B187A /* StateColorsAndOpacities_EPD_PD.swift in Sources */,
@@ -7845,6 +7856,7 @@
 				4E79184A2B21518300DA832F /* BackupMultiViewModel.swift in Sources */,
 				15DC20D527819C56000B187A /* VPlainButtonModel.swift in Sources */,
 				15DC219F27819C56000B187A /* VTextFieldHighlight.swift in Sources */,
+				4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */,
 				6A074E392922962D00D976F1 /* SelectProviderView.swift in Sources */,
 				15DC217327819C56000B187A /* VDialogModel.swift in Sources */,
 				15DC219327819C56000B187A /* VCheckBoxModel.swift in Sources */,
