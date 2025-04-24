@@ -9,7 +9,12 @@ import Instabug
 import SwiftUI
 
 extension AlertViewController {
+    static var lastTime: Date?
     static func showEmptyKeychain() {
+        guard lastTime == nil else {
+            return
+        }
+        lastTime = Date.now
         runOnMain {
             AlertViewController.presentOnRoot(
                 title: .init("miss_key_title".localized),
@@ -21,7 +26,7 @@ extension AlertViewController {
                 ),
                 buttons: [
                     AlertView.ButtonItem(type: .primaryAction, title: "restore_wallet".localized, action: {
-                        Router.route(to: RouteMap.RestoreLogin.syncQC)
+                        Router.route(to: RouteMap.RestoreLogin.restoreList)
                     }),
 
                     AlertView.ButtonItem(type: .normal, title: "tutorial_restore".localized, action: {
