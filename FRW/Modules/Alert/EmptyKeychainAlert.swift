@@ -5,6 +5,7 @@
 //  Created by cat on 4/23/25.
 //
 
+import Instabug
 import SwiftUI
 
 extension AlertViewController {
@@ -29,9 +30,9 @@ extension AlertViewController {
                         }
                     }),
 
-//                    AlertView.ButtonItem(type: .secondaryAction, title: "Report bug".localized, action: {
-//
-//                    }),
+                    AlertView.ButtonItem(type: .normal, title: "contact_us".localized, action: {
+                        BugReporting.show(with: .question, options: [])
+                    }),
 
                     AlertView.ButtonItem(type: .normal, title: "action_cancel".localized, action: {}),
                 ],
