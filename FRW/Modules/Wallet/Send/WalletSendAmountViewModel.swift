@@ -56,6 +56,7 @@ final class WalletSendAmountViewModel: ObservableObject {
         self.token = token
         if let amountValue = amount?.description {
             inputText = amountValue
+            actualBalance = amountValue.doubleValue.formatCurrencyString(digits: token.decimal)
         }
 
         WalletManager.shared.$activatedCoins.sink { [weak self] _ in
