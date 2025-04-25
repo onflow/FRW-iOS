@@ -51,9 +51,13 @@ extension WalletSendAmountView {
 final class WalletSendAmountViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(target: Contact, token: TokenModel) {
+    init(target: Contact, token: TokenModel, amount: Decimal? = nil) {
         targetContact = target
         self.token = token
+        if let amountValue = amount?.description {
+            inputText = amountValue
+            actualBalance = amountValue.doubleValue.formatCurrencyString(digits: token.decimal)
+        }
 
         WalletManager.shared.$activatedCoins.sink { [weak self] _ in
             DispatchQueue.main.async {
@@ -61,7 +65,7 @@ final class WalletSendAmountViewModel: ObservableObject {
                 self?.refreshInput()
             }
         }.store(in: &cancelSets)
-        
+
         checkAddress()
         checkTransaction()
         checkForInsufficientStorage()

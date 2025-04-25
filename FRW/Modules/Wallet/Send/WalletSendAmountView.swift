@@ -22,8 +22,8 @@ import SwiftUIX
 struct WalletSendAmountView: RouteableView {
     // MARK: Lifecycle
 
-    init(target: Contact, token: TokenModel) {
-        _vm = StateObject(wrappedValue: WalletSendAmountViewModel(target: target, token: token))
+    init(target: Contact, token: TokenModel, amount: Decimal? = nil) {
+        _vm = StateObject(wrappedValue: WalletSendAmountViewModel(target: target, token: token, amount: amount))
     }
 
     // MARK: Internal

@@ -1158,4 +1158,8 @@ Key Store and Private Key.";
 "NFT Collections" = "NFT Collections";
 "nft_empty_v2" = "Your collection is waiting to shine!";
 "nft_empty_detail" = "Start exploring and add your first NFTs today.";
-
+"continue" = "continue";
+"tutorial_restore" = "Go to Restore guide";
+"miss_key_title" = "Missing Key Error";
+"miss_key_body" = "We can't locate your private key in this device.\nIf you change your device recent, you will need to restore your wallet first.";
+"Report bug" = "Report bug";
