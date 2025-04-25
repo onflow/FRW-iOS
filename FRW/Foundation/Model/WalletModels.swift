@@ -192,7 +192,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
         guard let bal = balance else {
             return false
         }
-        return bal > 0
+        return bal >= 0
     }
 
     static func mock() -> TokenModel {
