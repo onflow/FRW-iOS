@@ -30,6 +30,7 @@
 		152EEC7328E4F61600C37A67 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 152EEC7228E4F61200C37A67 /* config.plist */; };
 		152EEC7528E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
 		152EEC7628E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
+		1531AAF62DBFB8AB00CA1AE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		15362A152DA02B7E008F4E51 /* WalletActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A142DA02B7E008F4E51 /* WalletActionButton.swift */; };
 		15362A162DA02B7E008F4E51 /* WalletActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A142DA02B7E008F4E51 /* WalletActionButton.swift */; };
 		15362A182DA02BA1008F4E51 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A172DA02BA1008F4E51 /* VisualEffectView.swift */; };
@@ -65,7 +66,6 @@
 		154B891F276A1EEB00780E93 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 154B88FC276A1EEB00780E93 /* FirebaseDynamicLinks */; };
 		154B8920276A1EEB00780E93 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 154B88F1276A1EEB00780E93 /* SwiftUIX */; };
 		154B8922276A1EEB00780E93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF8274FD1FD00F70CD9 /* Preview Assets.xcassets */; };
-		154B8923276A1EEB00780E93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		154B8929276A1F4600780E93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 154B88832765EBF700780E93 /* GoogleService-Info.plist */; };
 		154E31452DA38621008A495F /* TokenListMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31442DA38621008A495F /* TokenListMode.swift */; };
 		154E31462DA38621008A495F /* TokenListMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31442DA38621008A495F /* TokenListMode.swift */; };
@@ -635,7 +635,6 @@
 		15C58C5C2868A4EE00BD4FC6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF8274FD1FD00F70CD9 /* Preview Assets.xcassets */; };
 		15C58C5D2868A4EE00BD4FC6 /* remote_config_defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */; };
 		15C58C5E2868A4EE00BD4FC6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15B1F63B2786B89800847BB5 /* Localizable.strings */; };
-		15C58C5F2868A4EE00BD4FC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		15C58C602868A4EE00BD4FC6 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CAE2787F7610062E0C6 /* Montserrat-SemiBold.ttf */; };
 		15C58C612868A4EE00BD4FC6 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CA62787F7490062E0C6 /* Montserrat-Italic.ttf */; };
 		15C58C632868A4EE00BD4FC6 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CA22787F6EA0062E0C6 /* Inter.ttf */; };
@@ -6812,6 +6811,7 @@
 			files = (
 				1565FB6A28B14F140086A652 /* Notification.json in Resources */,
 				158C9CAD2787F7490062E0C6 /* Montserrat-Regular.ttf in Resources */,
+				1531AAF62DBFB8AB00CA1AE9 /* Assets.xcassets in Resources */,
 				4E0D34A02A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */,
 				6AEF4278287537E5000A77D7 /* Localizable.strings in Resources */,
 				1575A72728B26B9600ADC513 /* index.html in Resources */,
@@ -6824,7 +6824,6 @@
 				4ED40AF82B1A190B00C25EBF /* Loading_animation.json in Resources */,
 				4EA820C7286354E200DF36A8 /* remote_config_defaults.plist in Resources */,
 				15DE214428C52FA4008AFE17 /* QRScan.json in Resources */,
-				154B8923276A1EEB00780E93 /* Assets.xcassets in Resources */,
 				158C9CB02787F7660062E0C6 /* Montserrat-SemiBold.ttf in Resources */,
 				1575A72928B26B9600ADC513 /* dat.gui.min.js in Resources */,
 				1565FB6428B14F140086A652 /* Chat.json in Resources */,
@@ -6875,7 +6874,6 @@
 				1544C62828C812E700B6BA52 /* GoogleOAuth2.plist in Resources */,
 				15CC8A6928C4EA63001D2696 /* shapes.riv in Resources */,
 				15C58C5E2868A4EE00BD4FC6 /* Localizable.strings in Resources */,
-				15C58C5F2868A4EE00BD4FC6 /* Assets.xcassets in Resources */,
 				4E3138082C658FB2003A73E5 /* .gitignore in Resources */,
 				15DE214328C52FA4008AFE17 /* QRScan.json in Resources */,
 				7652E32B2D6AA3F000AECFEF /* CreatingAccount.json in Resources */,
@@ -8922,7 +8920,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-DEV";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -8968,7 +8966,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-DEV";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
