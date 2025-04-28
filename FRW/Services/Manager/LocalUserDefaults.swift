@@ -76,13 +76,13 @@ class LocalUserDefaults: ObservableObject {
     // MARK: Internal
 
     static let shared = LocalUserDefaults()
-    
+
     #if DEBUG
-    @AppStorage(Keys.network.rawValue)
-    var network: Flow.ChainID = .testnet
+        @AppStorage(Keys.network.rawValue)
+        var network: Flow.ChainID = .testnet
     #else
-    @AppStorage(Keys.flowNetwork.rawValue)
-    var network: Flow.ChainID = .mainnet
+        @AppStorage(Keys.network.rawValue)
+        var network: Flow.ChainID = .mainnet
     #endif
 
     @AppStorage(Keys.shouldShowConfettiOnHome.rawValue)
@@ -149,7 +149,8 @@ class LocalUserDefaults: ObservableObject {
                let info = try? FRWAPI.jsonDecoder.decode(
                    UserInfo.self,
                    from: data
-               ) {
+               )
+            {
                 return info
             } else {
                 return nil
@@ -184,7 +185,8 @@ class LocalUserDefaults: ObservableObject {
                let info = try? FRWAPI.jsonDecoder.decode(
                    [CoinRateCache.CoinRateModel].self,
                    from: data
-               ) {
+               )
+            {
                 return info
             } else {
                 return nil
@@ -264,7 +266,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    ChildAccount.self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -285,7 +288,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    EVMAccountManager.Account.self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -306,7 +310,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    [String: [WalletAccount.User]].self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -375,7 +380,8 @@ class LocalUserDefaults: ObservableObject {
         }
         get {
             if let data = UserDefaults.standard.data(forKey: Keys.customToken.rawValue),
-               let list = try? JSONDecoder().decode([CustomToken].self, from: data) {
+               let list = try? JSONDecoder().decode([CustomToken].self, from: data)
+            {
                 return list
 
             } else {
