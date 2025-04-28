@@ -980,6 +980,9 @@
 		4E09A1FC2CC7A1FD0099606E /* EventTrack+Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */; };
 		4E09A1FE2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
 		4E09A1FF2CC7A5800099606E /* EventTrack+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */; };
+		4E09FF7C2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
+		4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
+		4E09FF822DBA016C00F2E527 /* FlowLog+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */; };
 		4E0A75AF2868929C00527D08 /* AddCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */; };
 		4E0D349F2A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */; };
 		4E0D34A02A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */; };
@@ -997,6 +1000,9 @@
 		4E131A9F2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
 		4E131AA12CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */; };
 		4E131AA22CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */; };
+		4E190E242DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */; };
+		4E190E252DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */; };
+		4E190E262DBA336100C2E670 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
 		4E1914872D2E64240018BAA7 /* FormItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1914862D2E64240018BAA7 /* FormItem.swift */; };
 		4E1914882D2E64240018BAA7 /* FormItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1914862D2E64240018BAA7 /* FormItem.swift */; };
 		4E1A8B662B71A47A00485EDE /* MultiBackupCreatePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1A8B652B71A47A00485EDE /* MultiBackupCreatePinView.swift */; };
@@ -1359,6 +1365,10 @@
 		4EC31183284508F200F711F5 /* NFTListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC31181284508F200F711F5 /* NFTListView.swift */; };
 		4EC482D1284A3D75000A7E1B /* ColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC482CE284A3D75000A7E1B /* ColorThief.swift */; };
 		4EC482D3284A3D75000A7E1B /* MMCQ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC482CF284A3D75000A7E1B /* MMCQ.swift */; };
+		4EC4BA5F2DB63AE40086C02C /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4BA5D2DB63AE40086C02C /* DeepLinkHandler.swift */; };
+		4EC4BA602DB63AE40086C02C /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4BA5D2DB63AE40086C02C /* DeepLinkHandler.swift */; };
+		4EC4BA622DB684F70086C02C /* DeepLinkItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4BA612DB684F70086C02C /* DeepLinkItem.swift */; };
+		4EC4BA632DB684F70086C02C /* DeepLinkItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4BA612DB684F70086C02C /* DeepLinkItem.swift */; };
 		4EC4EF382B10386800217618 /* SyncAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4EF372B10386800217618 /* SyncAccountView.swift */; };
 		4EC4EF392B10386800217618 /* SyncAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4EF372B10386800217618 /* SyncAccountView.swift */; };
 		4EC4EF3B2B103A2B00217618 /* SyncAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC4EF3A2B103A2B00217618 /* SyncAccountViewModel.swift */; };
@@ -2485,6 +2495,8 @@
 		4E09A1F72CC7A12B0099606E /* EventTrack+Backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Backup.swift"; sourceTree = "<group>"; };
 		4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Transaction.swift"; sourceTree = "<group>"; };
 		4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Account.swift"; sourceTree = "<group>"; };
+		4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLog+Add.swift"; sourceTree = "<group>"; };
+		4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyKeychainAlert.swift; sourceTree = "<group>"; };
 		4E0A75AE2868929C00527D08 /* AddCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewModel.swift; sourceTree = "<group>"; };
 		4E0D349B2A8B4E2800BC6E43 /* e-Ukraine-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Bold.ttf"; sourceTree = "<group>"; };
 		4E0D349C2A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Regular.ttf"; sourceTree = "<group>"; };
@@ -2493,6 +2505,7 @@
 		4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeFeePayer.swift; sourceTree = "<group>"; };
 		4E131A9D2CA19567002B258D /* SVGUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGUIView.swift; sourceTree = "<group>"; };
 		4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsNeedKnowViewModel.swift; sourceTree = "<group>"; };
+		4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchNetworkAlert.swift; sourceTree = "<group>"; };
 		4E1914862D2E64240018BAA7 /* FormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormItem.swift; sourceTree = "<group>"; };
 		4E1A8B652B71A47A00485EDE /* MultiBackupCreatePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupCreatePinView.swift; sourceTree = "<group>"; };
 		4E1A8B682B71A5C200485EDE /* MultiBackupCreatePinViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupCreatePinViewModel.swift; sourceTree = "<group>"; };
@@ -2671,6 +2684,8 @@
 		4EC31181284508F200F711F5 /* NFTListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTListView.swift; sourceTree = "<group>"; };
 		4EC482CE284A3D75000A7E1B /* ColorThief.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorThief.swift; sourceTree = "<group>"; };
 		4EC482CF284A3D75000A7E1B /* MMCQ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MMCQ.swift; sourceTree = "<group>"; };
+		4EC4BA5D2DB63AE40086C02C /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkHandler.swift; sourceTree = "<group>"; };
+		4EC4BA612DB684F70086C02C /* DeepLinkItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkItem.swift; sourceTree = "<group>"; };
 		4EC4EF372B10386800217618 /* SyncAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAccountView.swift; sourceTree = "<group>"; };
 		4EC4EF3A2B103A2B00217618 /* SyncAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAccountViewModel.swift; sourceTree = "<group>"; };
 		4EC56B29281D385D00246878 /* FirebaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseConfig.swift; sourceTree = "<group>"; };
@@ -3347,6 +3362,8 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4E09FF7E2DB9239000F2E527 /* Alert */,
+				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
 				4E50541F2C33DB0900D4BA56 /* Review */,
 				4E9D8F062BF5DBF900E11CC7 /* Web3 */,
@@ -4820,6 +4837,7 @@
 			children = (
 				152516F92DAFC1AF00DBC83A /* KeyStore */,
 				15E9E5D82D9A2729003A5816 /* Wallet */,
+				4EC4BA5E2DB63AE40086C02C /* Deeplink */,
 				6A5F15F22A3182290035AC38 /* Account */,
 				15D874E528C623460072C6EA /* Config */,
 				6AA78E0128A0BF2100FF6CF9 /* Scan */,
@@ -5013,6 +5031,23 @@
 				4EEEF0712D05FE66008393E9 /* EventTrack+Dev.swift */,
 			);
 			path = Track;
+			sourceTree = "<group>";
+		};
+		4E09FF7A2DB8C8B900F2E527 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				4E09FF7B2DB8C8D200F2E527 /* FlowLog+Add.swift */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
+		4E09FF7E2DB9239000F2E527 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */,
+				4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */,
+			);
+			path = Alert;
 			sourceTree = "<group>";
 		};
 		4E2B704F2AF37289004F00A0 /* Model */ = {
@@ -5340,6 +5375,15 @@
 				4EC482CF284A3D75000A7E1B /* MMCQ.swift */,
 			);
 			path = ColorThief;
+			sourceTree = "<group>";
+		};
+		4EC4BA5E2DB63AE40086C02C /* Deeplink */ = {
+			isa = PBXGroup;
+			children = (
+				4EC4BA612DB684F70086C02C /* DeepLinkItem.swift */,
+				4EC4BA5D2DB63AE40086C02C /* DeepLinkHandler.swift */,
+			);
+			path = Deeplink;
 			sourceTree = "<group>";
 		};
 		4EC56B28281D381400246878 /* Firebase */ = {
@@ -7011,6 +7055,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E09FF822DBA016C00F2E527 /* FlowLog+Add.swift in Sources */,
 				15DC21CF27819C56000B187A /* BasicAnimation.swift in Sources */,
 				15DC209D27819C56000B187A /* VBaseHeaderFooterType.swift in Sources */,
 				15DC209F27819C56000B187A /* VSecondaryButtonModel.swift in Sources */,
@@ -7315,6 +7360,7 @@
 				6A41B6AA2861D06F00999451 /* NotificationDefine.swift in Sources */,
 				15E9E5DB2D9A2741003A5816 /* WalletManager+Storage.swift in Sources */,
 				15DC20BB27819C56000B187A /* VChevronButtonState.swift in Sources */,
+				4EC4BA622DB684F70086C02C /* DeepLinkItem.swift in Sources */,
 				6AD0B27228AE121200D03822 /* NFTUIKitFavItemCell.swift in Sources */,
 				6A7F6515289A85B2007188DC /* VerifyPinViewModel.swift in Sources */,
 				4EEEF0722D05FE66008393E9 /* EventTrack+Dev.swift in Sources */,
@@ -7516,6 +7562,7 @@
 				6ACDD17A28588B3F00F406EB /* FRWAPI+Profile.swift in Sources */,
 				6AE69E9A28C090E9004D4709 /* BrowserProgressView.swift in Sources */,
 				4ED40ADC2B1A0B4700C25EBF /* SyncStatusView.swift in Sources */,
+				4E190E242DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */,
 				1588330D28943D1D00142B35 /* SPQRCameraController.swift in Sources */,
 				15DC21A727819C56000B187A /* VBaseTextField.swift in Sources */,
 				6A0137672897E7A0009BEF20 /* HalfSheetModal.swift in Sources */,
@@ -7769,6 +7816,7 @@
 				15DE22E3277EACF200B5EE03 /* ChooseAccountView.swift in Sources */,
 				6A9C34F928AB6C0A00AA41A5 /* NFTUIKitSegmentControl.swift in Sources */,
 				4E24BC6F2AAF1BE2009CE21F /* LinkedAccountView.swift in Sources */,
+				4EC4BA602DB63AE40086C02C /* DeepLinkHandler.swift in Sources */,
 				15BA24BD28C7AF1B00755CBF /* PrivateKeyView.swift in Sources */,
 				6AE1818328C5E296009ADDDB /* FCLSignMessageResponse.swift in Sources */,
 				15DC21DF27819C56000B187A /* StateColors_EPD.swift in Sources */,
@@ -7836,6 +7884,7 @@
 				4E79184A2B21518300DA832F /* BackupMultiViewModel.swift in Sources */,
 				15DC20D527819C56000B187A /* VPlainButtonModel.swift in Sources */,
 				15DC219F27819C56000B187A /* VTextFieldHighlight.swift in Sources */,
+				4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */,
 				6A074E392922962D00D976F1 /* SelectProviderView.swift in Sources */,
 				15DC217327819C56000B187A /* VDialogModel.swift in Sources */,
 				15DC219327819C56000B187A /* VCheckBoxModel.swift in Sources */,
@@ -8040,6 +8089,7 @@
 				15C58AF82868A4EE00BD4FC6 /* VListModel.swift in Sources */,
 				15C58AF92868A4EE00BD4FC6 /* CaptureView.swift in Sources */,
 				4EC626092AE8A28100318720 /* UUIDManager.swift in Sources */,
+				4E09FF7C2DB8C8D200F2E527 /* FlowLog+Add.swift in Sources */,
 				6A382E27289CED9800163564 /* ProfileSecureViewViewModel.swift in Sources */,
 				15C58AFA2868A4EE00BD4FC6 /* VSegmentedPicker.swift in Sources */,
 				15C58AFB2868A4EE00BD4FC6 /* StateColorsAndOpacities_EPD_PD.swift in Sources */,
@@ -8174,6 +8224,7 @@
 				6AD0B27128AE121200D03822 /* NFTUIKitFavItemCell.swift in Sources */,
 				15E9E5DA2D9A2741003A5816 /* WalletManager+Storage.swift in Sources */,
 				6A7F6514289A85B2007188DC /* VerifyPinViewModel.swift in Sources */,
+				4EC4BA632DB684F70086C02C /* DeepLinkItem.swift in Sources */,
 				15C58B3E2868A4EE00BD4FC6 /* View.swift in Sources */,
 				6AE69E9628C085F0004D4709 /* BrowserActionBarView.swift in Sources */,
 				4EEEF0732D05FE66008393E9 /* EventTrack+Dev.swift in Sources */,
@@ -8329,6 +8380,7 @@
 				15C58B7E2868A4EE00BD4FC6 /* VBaseListModel.swift in Sources */,
 				15C58B7F2868A4EE00BD4FC6 /* BackupPasswordView.swift in Sources */,
 				15C58B802868A4EE00BD4FC6 /* UINavigationBar.NavigationBarHeight.swift in Sources */,
+				4E190E262DBA336100C2E670 /* EmptyKeychainAlert.swift in Sources */,
 				15C58B812868A4EE00BD4FC6 /* _VSideBar.swift in Sources */,
 				4E1A8B692B71A5C200485EDE /* MultiBackupCreatePinViewModel.swift in Sources */,
 				15C58B822868A4EE00BD4FC6 /* NFTCollectionCard.swift in Sources */,
@@ -8419,6 +8471,7 @@
 				6A99342D28C89D0400E4EF59 /* BrowserSignMessageView.swift in Sources */,
 				4EAFBD7E2C104DAF0031EA20 /* CreateProfileWaitingViewModel.swift in Sources */,
 				15CB4DF928CA29650069ABB4 /* PayAsSignerModel.swift in Sources */,
+				4E190E252DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */,
 				4EFBB2B72BDB7DA400359FAA /* KeychainListView.swift in Sources */,
 				15C58BAA2868A4EE00BD4FC6 /* SecureView.swift in Sources */,
 				15C58BAB2868A4EE00BD4FC6 /* NFTCollectionStateManager.swift in Sources */,
@@ -8628,6 +8681,7 @@
 				15C58C1A2868A4EE00BD4FC6 /* ChooseAccountView.swift in Sources */,
 				6A9C34F828AB6C0A00AA41A5 /* NFTUIKitSegmentControl.swift in Sources */,
 				4E24BC6E2AAF1BE2009CE21F /* LinkedAccountView.swift in Sources */,
+				4EC4BA5F2DB63AE40086C02C /* DeepLinkHandler.swift in Sources */,
 				15BA24BC28C7AF1B00755CBF /* PrivateKeyView.swift in Sources */,
 				6AE1818228C5E296009ADDDB /* FCLSignMessageResponse.swift in Sources */,
 				15C58C1B2868A4EE00BD4FC6 /* StateColors_EPD.swift in Sources */,
@@ -8894,7 +8948,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -8937,7 +8991,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -9225,7 +9279,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9253,7 +9307,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9283,7 +9337,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9313,7 +9367,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.4;
+				MARKETING_VERSION = 2.4.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -83,13 +83,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
         let list = try await getActivatedTokens(address: address)
-        let sorted = list.filter { model in
-            guard let balance = model.balance else {
-                return false
-            }
-            return balance > 0
-        }
-        return sorted
+        return list
     }
 
     func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {

@@ -33,7 +33,7 @@ extension SecureEnclaveKey {
         signAlgo: Flow.SignatureAlgorithm = .ECDSA_P256,
         weight: Int = 1000
     ) throws -> Flow.AccountKey {
-        guard let publicData = try? publicKey() else {
+        guard let publicData = publicKey() else {
             throw WalletError.emptyPublicKey
         }
         let key = Flow.AccountKey(
@@ -48,7 +48,7 @@ extension SecureEnclaveKey {
 
     func store(id: String) throws {
         let pw = KeyProvider.password(with: id)
-        let key = self.createKey(uid: id)
+        let key = createKey(uid: id)
         try store(id: key, password: pw)
     }
 }
@@ -79,8 +79,8 @@ extension String {
     }
 }
 
-extension Data {
-    public func signUserMessage() -> Data {
+public extension Data {
+    func signUserMessage() -> Data {
         Flow.DomainTag.user.normalize + self
     }
 }
