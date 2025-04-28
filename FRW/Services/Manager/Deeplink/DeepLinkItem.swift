@@ -1,5 +1,6 @@
 import BigInt
 import Combine
+import Flow
 import Foundation
 import SwiftUI
 import Web3Core
@@ -82,7 +83,8 @@ extension DeepLinkItem {
         guard currentNetwork == .mainnet else {
             return true
         }
-        guard let str = metadata.parameters["network"], let network = FlowNetworkType(rawValue: str) else {
+
+        guard let str = metadata.parameters["network"], let network = Flow.ChainID(rawValue: str) else {
             return false
         }
         guard currentNetwork != network else {

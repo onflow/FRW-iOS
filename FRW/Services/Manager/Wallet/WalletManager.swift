@@ -12,11 +12,11 @@ import FlowWalletKit
 import Foundation
 import KeychainAccess
 import Kingfisher
+import SwiftUI
 import UIKit
 import WalletCore
 import Web3Core
 import web3swift
-import SwiftUI
 
 var currentNetwork: Flow.ChainID {
     WalletManager.shared.currentNetwork
@@ -52,12 +52,11 @@ extension WalletManager {
 // MARK: - WalletManager
 
 class WalletManager: ObservableObject {
-    
     // MARK: Lifecycle
-    
+
     var supportNetworks: Set<Flow.ChainID> = [
         .mainnet,
-        .testnet
+        .testnet,
     ]
 
     init() {
@@ -73,14 +72,15 @@ class WalletManager: ObservableObject {
     }
 
     // MARK: Internal
+
     static let shared = WalletManager()
-    
+
     @Published
     var supportedCoins: [TokenModel]?
-    
+
     @Published
     private(set) var activatedCoins: [TokenModel] = []
-    
+
     @Published
     var accountInfo: Flow.AccountInfo?
 
@@ -93,27 +93,27 @@ class WalletManager: ObservableObject {
             .accessibility(.whenUnlocked)
 
     var walletAccount = WalletAccount()
-    
+
     @Published
     var walletEntity: FlowWalletKit.Wallet?
-    
+
     @Published
     var mainAccount: FlowWalletKit.Account?
-    
+
     var currentNetworkAccounts: [FlowWalletKit.Account] {
         walletEntity?.accounts?[currentNetwork] ?? []
     }
-    
+
     @Published
     private(set) var selectedAccount: FWAccount?
-    
+
     @Published
     private(set) var currentNetwork: Flow.ChainID = .mainnet
-    
+
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()
-    
+
     var walletMetadata: WalletAccount.User {
         walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
     }
@@ -122,15 +122,15 @@ class WalletManager: ObservableObject {
     var flowToken: TokenModel? {
         WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })
     }
-    
+
     var coa: COA? {
         mainAccount?.coa
     }
-    
+
     var childs: [FlowWalletKit.ChildAccount]? {
         mainAccount?.childs
     }
-    
+
     func start() {
         UserManager.shared.$activatedUID
             .receive(on: DispatchQueue.main)
@@ -138,14 +138,14 @@ class WalletManager: ObservableObject {
             .sink { _ in
                 self.initWallet()
             }.store(in: &cancellableSet)
-        
+
         $walletEntity
             .compactMap { $0 }
             .flatMap { entity in
                 entity.securityDelegate = self
-                return entity.$accounts .compactMap { $0 }
+                return entity.$accounts.compactMap { $0 }
             }
-            .filter{ $0.count >= self.supportNetworks.count }
+            .filter { $0.count >= self.supportNetworks.count }
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] accounts in
@@ -210,7 +210,7 @@ extension WalletManager {
             }
         }
     }
-    
+
     private func loadRecentFlowAccount() {
         guard let accounts = walletEntity?.accounts else { return }
         guard let accounts = accounts[currentNetwork], let account = accounts.first else {
@@ -220,27 +220,34 @@ extension WalletManager {
         }
 
         mainAccount = account
-        
+
         // If there is no selected
         if selectedAccount == nil {
             selectedAccount = .main(account.address)
         }
-        
+
         loadLinkedAccounts()
+        Task {
+            do {
+                try await fetchWalletDatas()
+            } catch {
+                log.error(error)
+            }
+        }
     }
-    
+
     func loadLinkedAccounts() {
         Task {
             do {
                 try await mainAccount?.loadLinkedAccounts()
             } catch {
-                print(error)
+                log.error(error)
                 log.error(WalletError.fetchLinkedAccountsFailed)
             }
         }
     }
 
-    func updateKeyProvider(provider: any KeyProtocol, storeUser: UserManager.StoreUser) {
+    func updateKeyProvider(provider: any KeyProtocol, storeUser _: UserManager.StoreUser) {
         keyProvider = provider
 //        accountKey = storeUser.account
     }
@@ -272,24 +279,24 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
-    
     func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
         UIFeedbackGenerator.impactOccurred(.selectionChanged)
         guard let fwAddress = FWAddressDector.create(address: address) else {
             HUD.error(WalletError.invaildAddress)
             return
         }
-        
+
         selectedAccount = .init(type: type, addr: fwAddress)
-        
+
         // Store selected account
         UserDefaults.standard.set(selectedAccount?.value, forKey: LocalUserDefaults.Keys.selectedAddress.rawValue)
-        
+
         // If it's main account, reload the linked account
         if type == .main,
            let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
-            account.hexAddr == address
-        }){
+               account.hexAddr == address
+           })
+        {
             mainAccount = account
             loadLinkedAccounts()
         }
@@ -299,13 +306,13 @@ extension WalletManager {
         if currentNetwork == network {
             return
         }
-        
+
         currentNetwork = network
         LocalUserDefaults.shared.network = network
         flow.configure(chainID: network)
-        
+
         NotificationCenter.default.post(name: .networkChange)
-        
+
         if let firstAccount = currentNetworkAccounts.first {
             mainAccount = firstAccount
             selectedAccount = .main(firstAccount.address)
@@ -345,7 +352,6 @@ extension WalletManager {
 // MARK: - Reset
 
 extension WalletManager {
-
     @objc
     private func reset() {
         debugPrint("WalletManager: reset start")
@@ -355,9 +361,9 @@ extension WalletManager {
                 return
             }
             let keyId = "\(WalletManager.mnemonicStoreKeyPrefix).\(uid)"
-            
+
             try mainKeychain.remove(keyId)
-            
+
             debugPrint("WalletManager: mnemonic remove success")
         } catch {
             debugPrint("WalletManager: remove mnemonic failed")
@@ -415,7 +421,7 @@ extension WalletManager {
     func reloadWalletInfo() {
         log.debug("reloadWalletInfo")
         stopWalletInfoRetryTimer()
-        
+
         Task {
             do {
                 let _ = try await walletEntity?.fetchAllNetworkAccounts()
@@ -444,7 +450,6 @@ extension WalletManager {
                     debugPrint(error)
                 }
             }
-
         }
     }
 }
@@ -456,7 +461,7 @@ extension WalletManager {
         guard getPrimaryWalletAddress() != nil else {
             return
         }
-        
+
         try await fetchSupportedTokens()
         try await fetchActivatedTokens()
         try await fetchAccessible()
@@ -467,7 +472,7 @@ extension WalletManager {
         guard let address = selectedAccount?.address else {
             return
         }
-        
+
         let supportedToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
         await MainActor.run {
             self.supportedCoins = supportedToken
@@ -478,8 +483,9 @@ extension WalletManager {
     /// fetch main or child activated token and balances
     private func fetchActivatedTokens() async throws {
         guard let supportedCoins = supportedCoins, !supportedCoins.isEmpty,
-              let address = selectedAccount?.address else {
-            self.activatedCoins.removeAll()
+              let address = selectedAccount?.address
+        else {
+            activatedCoins.removeAll()
             return
         }
 
@@ -560,7 +566,7 @@ extension WalletManager {
     func fetchAccessible() async throws {
         try await accessibleManager.fetchFT()
     }
-    
+
     private func preloadActivatedIcons() {
         for token in activatedCoins {
             KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
