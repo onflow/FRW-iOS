@@ -41,21 +41,21 @@ struct WalletHomeView: View {
 
     @StateObject
     var um = UserManager.shared
-    
+
     @StateObject
     var wm = WalletManager.shared
-    
+
     @StateObject
     private var vm = WalletViewModel()
-    
+
     @StateObject
     var newsHandler = WalletNewsHandler.shared
-    
+
     @State
     var isRefreshing: Bool = false
     @State
     private var showActionSheet = false
-    
+
     @AppStorage("WalletCardBackrgound")
     private var walletCardBackrgound: String = "fade:0"
 
@@ -76,13 +76,13 @@ struct WalletHomeView: View {
         GeometryReader { proxy in
             NormalView()
                 .visibility(um.isLoggedIn ? .visible : .gone)
-            .onAppear {
-                safeArea = proxy.safeAreaInsets
-                size = proxy.size
-                self.vm.viewWillAppear()
-            }
-            .navigationBarHidden(true)
-            .ignoresSafeArea(.container, edges: .top)
+                .onAppear {
+                    safeArea = proxy.safeAreaInsets
+                    size = proxy.size
+                    self.vm.viewWillAppear()
+                }
+                .navigationBarHidden(true)
+                .ignoresSafeArea(.container, edges: .top)
         }
     }
 
@@ -122,7 +122,7 @@ struct WalletHomeView: View {
             VStack(spacing: 0) {
                 JailbreakTipsView()
                     .visibility(UIDevice.isJailbreak ? .visible : .gone)
-                
+
                 HeaderView()
                     .zIndex(1)
                 WalletInfo()
@@ -163,7 +163,7 @@ struct WalletHomeView: View {
                                 .frame(width: 28, height: 28)
                                 .cornerRadius(14)
                         } else {
-                             wm.walletMetadata.emoji.icon(size: 24)
+                            wm.walletMetadata.emoji.icon(size: 24)
                         }
                     }
                     .frame(width: 40, height: 40)
@@ -442,6 +442,15 @@ struct WalletHomeView: View {
                 Router.route(to: RouteMap.Wallet.stakingList)
             }
             .visibility(vm.showStakeButton ? .visible : .gone)
+
+            WalletActionButton(
+                event: .buy,
+                allowClick: !wm.isSelectedChildAccount
+            ) {
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                Router.route(to: RouteMap.Wallet.buyCrypto)
+            }
+            .visibility(vm.showBuyButton ? .visible : .gone)
         }
     }
 
@@ -455,24 +464,15 @@ struct WalletHomeView: View {
                 Spacer()
 
                 Button {
-                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                    Router.route(to: RouteMap.Wallet.buyCrypto)
+                    vm.onClickManagerToken()
                 } label: {
-                    HStack(spacing: 4) {
-                        Image("icon_wallet_action_buy")
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(Color.Theme.Text.black3)
-                            .background(.clear)
-                            .frame(width: 24, height: 24)
-
-                        Text("buy_uppercase".localized)
-                            .font(.inter(size: 14, weight: .semibold))
-                            .foregroundColor(Color.Theme.Text.black3)
-                    }
-                    .padding(.horizontal, 8)
-                    .background(Color.Theme.Background.grey)
-                    .cornerRadius(12)
+                    Text("manage".localized)
+                        .font(.inter(size: 14, weight: .semibold))
+                        .foregroundColor(Color.Theme.Text.black3)
+                        .padding(.horizontal, 8)
+                        .frame(height: 24)
+                        .background(Color.Theme.Background.grey)
+                        .cornerRadius(12)
                 }
                 .buttonStyle(ScaleButtonStyle())
                 .visibility(vm.showBuyButton ? .visible : .gone)
@@ -503,11 +503,28 @@ struct WalletHomeView: View {
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
-
+            tokenManagerView()
             Spacer(minLength: headerHeight + safeArea.top)
         }
         .padding(.horizontal, 16)
         .background(.Theme.Background.white)
+    }
+
+    @ViewBuilder
+    func tokenManagerView() -> some View {
+        HStack(alignment: .center, spacing: 2) {
+            Spacer()
+            Image("tabler-icon-adjustments-horizontal")
+                .resizable()
+                .frame(width: 22, height: 22)
+            Text("manage_token_list".localized)
+                .font(.inter(size: 14))
+                .foregroundStyle(Color.Theme.Text.black8)
+            Spacer()
+        }
+        .onTapGesture {
+            vm.onClickManagerToken()
+        }
     }
 
     @ViewBuilder

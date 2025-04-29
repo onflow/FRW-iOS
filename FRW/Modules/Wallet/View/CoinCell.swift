@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 private let CoinIconHeight: CGFloat = 44
 private let CoinCellHeight: CGFloat = 76
@@ -35,12 +35,15 @@ extension WalletHomeView {
                         .frame(width: CoinIconHeight, height: CoinIconHeight)
                         .clipShape(Circle())
 
-                    VStack(spacing: 7) {
-                        HStack {
+                    VStack(spacing: 4) {
+                        HStack(spacing: 0) {
                             Text(coin.token.name)
-                                .foregroundColor(.LL.Neutrals.text)
+                                .foregroundColor(Color.Theme.Text.text1)
                                 .font(.inter(size: 14, weight: .bold))
-
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .visibility(coin.token.isVerifiedValue ? .visible : .gone)
                             Spacer()
 
                             Text(

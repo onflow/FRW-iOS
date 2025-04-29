@@ -5,16 +5,21 @@
 //  Created by Hao Fu on 16/1/22.
 //
 
+import Flow
 import Foundation
 import Moya
-import Flow
 
 // MARK: - GithubEndpoint
 
 enum GithubEndpoint {
     case collections
+
+    @available(*, deprecated, message: "replace by api")
     case ftTokenList(Flow.ChainID)
+
     case EVMNFTList(Flow.ChainID)
+
+    @available(*, deprecated, message: "replace by api")
     case EVMTokenList(Flow.ChainID)
 }
 

@@ -5,13 +5,12 @@
 //  Created by Hao Fu on 9/4/2025.
 //
 
-import Foundation
 import FlowWalletKit
+import Foundation
 
 // MARK: - Getter
 
 extension WalletManager {
-    
     var isSelectedChildAccount: Bool {
         selectedAccount?.type == .child
     }
@@ -27,7 +26,7 @@ extension WalletManager {
     var selectedAccountAddress: String? {
         return selectedAccount?.address.hexAddr
     }
-    
+
     func getCurrentMnemonic() -> String? {
         guard let provider = keyProvider as? SeedPhraseKey else {
             return nil
@@ -49,7 +48,7 @@ extension WalletManager {
     func getPrimaryWalletAddress() -> String? {
         return mainAccount?.address.hexAddr
     }
-    
+
     func getAddress() -> String? {
         return selectedAccount?.address.hexAddr
     }
@@ -74,7 +73,6 @@ extension WalletManager {
                 return true
             }
         }
-
         return false
     }
 

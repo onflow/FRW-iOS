@@ -64,6 +64,9 @@ class AddTokenViewModel: ObservableObject {
     var searchText: String = ""
 
     @Published
+    var isAll: Bool = true
+
+    @Published
     var confirmSheetIsPresented = false
     var pendingActiveToken: TokenModel?
 
@@ -80,22 +83,28 @@ class AddTokenViewModel: ObservableObject {
     private var cancelSets = Set<AnyCancellable>()
 
     private func reloadData() {
-        guard let supportedTokenList = WalletManager.shared.supportedCoins else {
-            sections = []
-            return
-        }
+        Task {
+            do {
+                let result: FTResponse = try await Network.requestWithRawModel(FRWAPI.Token.all(.cadence, currentNetwork))
+                let supportedTokenList = result.tokens.map { $0.toTokenModel() }
+                var seenNames = Set<String>()
+                var uniqueList = [TokenModel]()
 
-        var seenNames = Set<String>()
-        var uniqueList = [TokenModel]()
+                for token in supportedTokenList {
+                    if !seenNames.contains(token.contractId) {
+                        uniqueList.append(token)
+                        seenNames.insert(token.contractId)
+                    }
+                }
 
-        for token in supportedTokenList {
-            if !seenNames.contains(token.contractId) {
-                uniqueList.append(token)
-                seenNames.insert(token.contractId)
+                regroup(uniqueList)
+            } catch {
+                log.error("Fetch All Token failed.")
+                await MainActor.run {
+                    sections = []
+                }
             }
         }
-
-        regroup(uniqueList)
     }
 
     private func regroup(_ tokens: [TokenModel]) {
@@ -127,7 +136,7 @@ class AddTokenViewModel: ObservableObject {
 
 extension AddTokenViewModel {
     var searchResults: [AddTokenViewModel.Section] {
-        if searchText.isEmpty {
+        if searchText.isEmpty, isAll {
             return sections
         }
 
@@ -137,6 +146,9 @@ extension AddTokenViewModel {
             var list = [TokenModel]()
 
             for token in section.tokenList {
+                if !isAll, !token.isVerifiedValue {
+                    continue
+                }
                 if token.name.localizedCaseInsensitiveContains(searchText) {
                     list.append(token)
                     continue
@@ -148,6 +160,11 @@ extension AddTokenViewModel {
                 }
 
                 if let symbol = token.symbol, symbol.localizedCaseInsensitiveContains(searchText) {
+                    list.append(token)
+                    continue
+                }
+
+                if searchText.isEmpty, !isAll, token.isVerifiedValue {
                     list.append(token)
                     continue
                 }
@@ -194,6 +211,13 @@ extension AddTokenViewModel {
 
         selectCallback?(token)
         Router.dismiss()
+    }
+
+    func onClickTag(isAllTokens: Bool) {
+        guard isAllTokens != isAll else {
+            return
+        }
+        isAll = isAllTokens
     }
 
     func willActiveTokenAction(_ token: TokenModel) {

@@ -81,7 +81,7 @@ final class WalletViewModel: ObservableObject {
         WalletManager.shared.$selectedAccount
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
-            .sink { [weak self] newInfo in
+            .sink { [weak self] _ in
                 self?.refreshButtonState()
                 self?.reloadWalletData()
                 self?.updateMoveAsset()
@@ -89,7 +89,7 @@ final class WalletViewModel: ObservableObject {
 
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
-            .filter{ !$0.isEmpty }
+            .filter { !$0.isEmpty }
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
@@ -99,7 +99,7 @@ final class WalletViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.updateTheme()
-        }.store(in: &cancelSets)
+            }.store(in: &cancelSets)
 
         NotificationCenter.default.publisher(for: .walletHiddenFlagUpdated)
             .receive(on: DispatchQueue.main)
@@ -221,16 +221,14 @@ final class WalletViewModel: ObservableObject {
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
         for token in WalletManager.shared.activatedCoins {
-            if token.hasBalance {
-                let summary = CoinRateCache.cache.getSummary(by: token.contractId)
-                let item = WalletCoinItemModel(
-                    token: token,
-                    balance: WalletManager.shared.getBalance(with: token).doubleValue,
-                    last: summary?.getLastRate() ?? 0,
-                    changePercentage: summary?.getChangePercentage() ?? 0
-                )
-                list.append(item)
-            }
+            let summary = CoinRateCache.cache.getSummary(by: token.contractId)
+            let item = WalletCoinItemModel(
+                token: token,
+                balance: WalletManager.shared.getBalance(with: token).doubleValue,
+                last: summary?.getLastRate() ?? 0,
+                changePercentage: summary?.getChangePercentage() ?? 0
+            )
+            list.append(item)
         }
         list.sort { first, second in
             if first.balance * first.last == second.balance * second.last {
@@ -363,6 +361,10 @@ extension WalletViewModel {
             ConfettiManager.show()
         }
     }
+
+    func onClickManagerToken() {
+        // TODO: #six #246 route to manager page
+    }
 }
 
 // MARK: - Change
@@ -371,19 +373,19 @@ extension WalletViewModel {
     func refreshButtonState() {
         let isChild = WalletManager.shared.selectedAccount?.type == .child
         showAddTokenButton = !isChild
-        
+
         // Swap
         let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
         showSwapButton = swapFlag ? !isChild : false
 
         let isMainAccount = WalletManager.shared.selectedAccount?.type != .main
-        
+
         // Stake
         showStakeButton = currentNetwork == .mainnet ? isMainAccount : false
 
         // buy
         let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false
-        if bugFlag && flow.chainID == .mainnet {
+        if bugFlag, flow.chainID == .mainnet {
             if isMainAccount {
                 showBuyButton = false
             } else {

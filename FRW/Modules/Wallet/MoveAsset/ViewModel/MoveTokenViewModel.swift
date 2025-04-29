@@ -410,7 +410,7 @@ extension MoveTokenViewModel {
         var tid: Flow.ID?
         let amount = inputTokenNum //
         let vaultIdentifier = (
-            fromIsEVM ? (token.flowIdentifier ?? "") : token
+            fromIsEVM ? (token.identifier ?? "") : token
                 .contractId + ".Vault"
         )
         log.info("[move] \(String(describing: fromType))->\(String(describing: toType)):\(vaultIdentifier):\(token.isFlowCoin)")
@@ -447,7 +447,7 @@ extension MoveTokenViewModel {
                     vaultIdentifier: vaultIdentifier,
                     child: toContact.address ?? "",
                     amount: amount,
-                    decimals: token.decimal
+                    decimals: token.decimalValue
                 )
         case (.evm, .evm):
             log.error("[move] Shouldn't be here")
@@ -572,7 +572,7 @@ extension MoveTokenViewModel {
                     vaultIdentifier: vaultIdentifier,
                     amount: amount,
                     fromEvm: fromIsEVM,
-                    decimals: token.decimal
+                    decimals: token.decimalValue
                 )
                 let holder = TransactionManager.TransactionHolder(id: txid, type: .transferCoin)
                 TransactionManager.shared.newTransaction(holder: holder)

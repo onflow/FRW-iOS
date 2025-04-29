@@ -15,93 +15,34 @@ class TokenBalanceHandler: ObservableObject {
     // ADD: Thread-safe queue for cache access
     private let cacheQueue = DispatchQueue(label: "com.outblock.frw.tokenbalance.cache", attributes: .concurrent)
     private var cache: [String: TokenBalanceProvider] = [:]
-    
+
     @Published
     public var flowBalance: [String: Decimal] = [:]
-    
+
     @Published
     public var isLoadingFlowBalance: Bool = false
-    
+
     public init() {}
 
     // MARK: Internal
 
-    // Default Flow token metadata from token list
-    // https://github.com/Outblock/token-list-jsons/blob/outblock/jsons/mainnet/flow/default.json#L6-L35
-    static let flowTokenJsonStr =
-        """
-        {
-          "chainId": 747,
-          "address": "0x<FlowTokenAddress>",
-          "contractName": "",
-          "path": {
-            "vault": "/storage/flowTokenVault",
-            "receiver": "/public/flowTokenReceiver",
-            "balance": "/public/flowTokenBalance"
-          },
-          "symbol": "FLOW",
-          "name": "Flow",
-          "description": "",
-          "decimals": 18,
-          "flowIdentifier": "A.<FlowTokenAddress>.FlowToken",
-          "logoURI": "https://cdn.jsdelivr.net/gh/FlowFans/flow-token-list@main/token-registry/A.1654653399040a61.FlowToken/logo.svg",
-          "tags": [
-            "Verified",
-            "Featured",
-            "utility-token"
-          ],
-          "extensions": {
-            "coingeckoId": "flow",
-            "discord": "http://discord.gg/flow",
-            "documentation": "https://developers.flow.com/references/core-contracts/flow-token",
-            "github": "https://github.com/onflow/flow-core-contracts",
-            "twitter": "https://twitter.com/flow_blockchain",
-            "website": "https://flow.com/",
-            "displaySource": "0xa2de93114bae3e73",
-            "pathSource": "0xa2de93114bae3e73"
-          }
-        }
-        """
-
     static let shared = TokenBalanceHandler()
 
-    static func flowTokenAddress(network: Flow.ChainID) -> String {
-        switch network {
-        case .mainnet:
-            return "0x1654653399040a61"
-        case .testnet:
-            return "0x7e60df042a9c0868"
-        default:
-            return "0x1654653399040a61"
-        }
-    }
-
-    static func getFlowTokenModel(network: Flow.ChainID) -> SingleToken? {
-        let address = flowTokenAddress(network: network).stripHexPrefix()
-        guard let data = flowTokenJsonStr
-            .replacingOccurrences(of: "<FlowTokenAddress>", with: address)
-            .data(using: .utf8)
-        else {
-            return nil
-        }
-        return try? FRWAPI.jsonDecoder.decode(SingleToken.self, from: data)
-    }
-    
     func getAvailableFlowBalance(address: String,
                                  network: Flow.ChainID = currentNetwork,
-                                 forceReload: Bool = false) async throws -> Decimal? {
-        
-        if (flowBalance[address] != nil), !forceReload {
+                                 forceReload: Bool = false) async throws -> Decimal?
+    {
+        if flowBalance[address] != nil, !forceReload {
             return flowBalance[address]
         }
-        
+
         guard let first = FWAddressDector.create(address: address) else {
             return nil
         }
-        
+
         isLoadingFlowBalance = true
         defer { isLoadingFlowBalance = false }
-        
+
         let provider = generateProvider(address: first, network: network)
         let dict = try await provider.getAvailableFlowBalance(addresses: [address])
         for (key, value) in dict {
@@ -109,22 +50,22 @@ class TokenBalanceHandler: ObservableObject {
         }
         return dict[address]
     }
-    
+
     func getAvailableFlowBalance(addresses: [String],
                                  network: Flow.ChainID = currentNetwork,
-                                 forceReload: Bool = false) async throws -> [String: Decimal] {
-        
+                                 forceReload: Bool = false) async throws -> [String: Decimal]
+    {
         if flowBalance.keys.contains(addresses), !forceReload {
             return Dictionary(uniqueKeysWithValues: zip(addresses, flowBalance.values))
         }
-        
+
         guard let first = FWAddressDector.create(address: addresses.first) else {
             return [:]
         }
-        
+
         isLoadingFlowBalance = true
         defer { isLoadingFlowBalance = false }
-        
+
         let provider = generateProvider(address: first, network: network)
         let dict = try await provider.getAvailableFlowBalance(addresses: addresses)
         for (key, value) in dict {
@@ -133,27 +74,15 @@ class TokenBalanceHandler: ObservableObject {
         return dict
     }
 
-    func getSupportTokens(address: FWAddress,
-                          network: Flow.ChainID = currentNetwork,
-                          ignoreCache: Bool = true) async throws -> [TokenModel]
-    {
+    func fetchUserTokens(address: FWAddress, network: Flow.ChainID = currentNetwork, ignoreCache _: Bool = true) async throws -> [TokenModel] {
         let provider = generateProvider(address: address, network: network)
-        return try await provider.getSupportTokens()
-    }
-
-    /// `ignoreCache` it should be with the expiration of time or other,ensure the validity of the data
-    func getActivatedTokens(address: FWAddress,
-                            network: Flow.ChainID = currentNetwork,
-                            ignoreCache: Bool = true) async throws -> [TokenModel]
-    {
-        let provider = generateProvider(address: address, network: network)
-        return try await provider.getActivatedTokens(address: address, in: .whitelistAndCustom)
+        return try await provider.fetchUserTokens(address: address)
     }
 
     func getFTBalance(
         address: FWAddress,
         network: Flow.ChainID = currentNetwork,
-        ignoreCache: Bool = true
+        ignoreCache _: Bool = true
     ) async throws -> [TokenModel] {
         let provider = generateProvider(address: address, network: network)
         return try await provider.getFTBalance(address: address)
@@ -245,4 +174,3 @@ extension TokenBalanceHandler {
         return newProvider
     }
 }
-

@@ -38,7 +38,21 @@ struct AddTokenView: RouteableView {
 
     var body: some View {
         ZStack {
-            listView
+            VStack {
+                HStack(spacing: 8) {
+                    FilterButton(title: "all_tokens".localized, isSelected: vm.isAll) { _ in
+                        vm.onClickTag(isAllTokens: true)
+                    }
+
+                    FilterButton(title: "verified".localized, isSelected: !vm.isAll, icon: "icon-token-valid") { _ in
+                        vm.onClickTag(isAllTokens: false)
+                    }
+
+                    Spacer()
+                }
+                .padding(.leading, 18)
+                listView
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .halfSheet(
@@ -248,7 +262,8 @@ extension AddTokenView {
             .task {
                 Task { @MainActor in
                     if let color = await ImageHelper
-                        .colors(from: token.icon?.absoluteString ?? placeholder).first {
+                        .colors(from: token.iconURL.absoluteString).first
+                    {
                         self.color = color.opacity(0.1)
                     }
                 }

@@ -787,7 +787,8 @@ extension FlowModel.NFTCollection: ChildAccountAccessible {
 
 extension FlowModel.TokenInfo: ChildAccountAccessible {
     var img: String {
-        if let model = theToken, let url = model.icon?.absoluteString {
+        if let model = theToken {
+            let url = model.iconURL.absoluteString
             return url
         }
         return AppPlaceholder.image

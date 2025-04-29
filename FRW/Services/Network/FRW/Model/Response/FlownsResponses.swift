@@ -68,7 +68,7 @@ struct InboxToken: Codable {
     let amount: Double
 
     var iconURL: URL? {
-        matchedCoin?.icon
+        matchedCoin?.iconURL
     }
 
     var amountText: String {
@@ -77,7 +77,8 @@ struct InboxToken: Codable {
 
     var marketPrice: Double {
         guard let coin = matchedCoin,
-              let rate = CoinRateCache.cache.getSummary(by: coin.contractId) else {
+              let rate = CoinRateCache.cache.getSummary(by: coin.contractId)
+        else {
             return 0
         }
 

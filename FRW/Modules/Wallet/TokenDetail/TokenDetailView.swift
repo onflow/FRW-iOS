@@ -42,6 +42,11 @@ struct TokenDetailView: RouteableView {
                 .visibility(showAccessibleWarning() ? .visible : .gone)
 
                 summaryView
+                unverifiedTokenView
+                    .padding(.vertical, 16)
+                    .padding(.bottom, 18)
+                    .visibility(vm.token.isVerifiedValue ? .gone : .visible)
+
                 stakeAdView
                     .visibility(
                         stakingManager.hasStaking || !vm.token.isFlowCoin || LocalUserDefaults
@@ -61,6 +66,7 @@ struct TokenDetailView: RouteableView {
                 chartContainerView.visibility(vm.hasRateAndChartData ? .visible : .gone)
                 storageView
                     .visibility(self.vm.showStorageView ? .visible : .gone)
+                securityView
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)
@@ -132,6 +138,11 @@ struct TokenDetailView: RouteableView {
                     .padding(.leading, -18)
                 }
                 .allowsHitTesting(self.vm.isTokenDetailsButtonEnabled)
+
+                Image("icon-token-valid")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .visibility(vm.token.isVerifiedValue ? .visible : .gone)
 
                 Spacer()
 
@@ -343,6 +354,62 @@ struct TokenDetailView: RouteableView {
             .borderStyle()
         }
         .padding(.bottom, 12)
+    }
+
+    var securityView: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack {
+                Text("security".localized)
+                    .font(.inter(size: 16, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+            }
+
+            HStack {
+                Text("verified".localized.uppercasedAllFirstLetter())
+                    .font(.inter(size: 14, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+                Text(vm.verifiedValue)
+                    .font(.inter(size: 14))
+                    .foregroundStyle(Color.Theme.Text.black)
+            }
+
+            HStack {
+                Text("contract_address".localized)
+                    .font(.inter(size: 14, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+                Text(vm.contractAddress)
+                    .font(.inter(size: 14))
+                    .truncationMode(.middle)
+                    .underline()
+                    .lineLimit(1)
+                    .foregroundStyle(Color.Theme.Text.black)
+            }
+            .onTapGesture {
+                vm.onClickAddress()
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 18)
+        .borderStyle()
+        .padding(.bottom, 8)
+    }
+
+    var unverifiedTokenView: some View {
+        HStack {
+            Image("icon_warning_line")
+                .resizable()
+                .frame(width: 20, height: 20)
+            Text("unverified_token_hint".localized)
+                .font(.inter(size: 12))
+                .foregroundColor(Color.Theme.Text.black8)
+                + Text("view_more".localized)
+                .underline()
+                .font(.inter(size: 12))
+                .foregroundColor(Color.Theme.Text.black8)
+        }
     }
 
     // MARK: Private
