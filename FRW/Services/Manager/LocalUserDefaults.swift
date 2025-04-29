@@ -76,14 +76,9 @@ class LocalUserDefaults: ObservableObject {
     // MARK: Internal
 
     static let shared = LocalUserDefaults()
-
-    #if DEBUG
-        @AppStorage(Keys.network.rawValue)
-        var network: Flow.ChainID = .testnet
-    #else
-        @AppStorage(Keys.network.rawValue)
-        var network: Flow.ChainID = .mainnet
-    #endif
+    
+    @AppStorage(Keys.network.rawValue)
+    var network: Flow.ChainID = .mainnet
 
     @AppStorage(Keys.shouldShowConfettiOnHome.rawValue)
     var shouldShowConfettiOnHome: Bool = false

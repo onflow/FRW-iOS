@@ -9,4 +9,8 @@ import Foundation
 
 struct UserAddressV2Response: Codable {
     let txId: String
+    
+    enum CodingKeys: String, CodingKey {
+        case txId = "txid"
+    }
 }

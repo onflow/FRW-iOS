@@ -2100,6 +2100,7 @@
 		152EEC6F28E4F5EC00C37A67 /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		152EEC7228E4F61200C37A67 /* config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		152EEC7428E4F68100C37A67 /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
+		1531AAF72DC0632A00CA1AE9 /* flow-wallet-kit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "flow-wallet-kit"; path = "/Users/lmcmz/flow/flow-wallet-kit"; sourceTree = "<absolute>"; };
 		15362A142DA02B7E008F4E51 /* WalletActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletActionButton.swift; sourceTree = "<group>"; };
 		15362A172DA02BA1008F4E51 /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		15362A1A2DA02BCD008F4E51 /* CoinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinCell.swift; sourceTree = "<group>"; };
@@ -4913,6 +4914,7 @@
 		15EC9DE5274FD1FC00F70CD9 = {
 			isa = PBXGroup;
 			children = (
+				1531AAF72DC0632A00CA1AE9 /* flow-wallet-kit */,
 				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
 				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
 				15EC9DF0274FD1FC00F70CD9 /* FRW */,
