@@ -1,5 +1,5 @@
 {
-  "originHash" : "14089008b918d55ca9306a6db1764afc386653d86ac77dab909f8564ea2b4eb1",
+  "originHash" : "c6287e7f5d6dd5f9e4c5e107d322009e14090a86cde614eea1615362d201102b",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -147,10 +147,10 @@
     {
       "identity" : "flow-wallet-kit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Outblock/Flow-Wallet-Kit",
+      "location" : "https://github.com/onflow/Flow-Wallet-Kit",
       "state" : {
         "branch" : "master",
-        "revision" : "78ca3496f0aebd588307d2896f004fba25ebbe6c"
+        "revision" : "0fdb3906b28cb191d477c2c98336853370fe86ad"
       }
     },
     {

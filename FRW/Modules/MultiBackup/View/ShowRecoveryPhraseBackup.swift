@@ -20,6 +20,9 @@ struct ShowRecoveryPhraseBackup: RouteableView {
     @StateObject
     var viewModel: CreateRecoveryPhraseBackupViewModel
 
+    @State
+    var isBlur: Bool = true
+    
     var title: String {
         "backup".localized
     }
@@ -49,16 +52,50 @@ struct ShowRecoveryPhraseBackup: RouteableView {
                             WordListView(data: Array(viewModel.dataSource.suffix(from: 6)))
                             Spacer()
                         }
+                        
+                        Text("hide".localized)
+                            .padding(5)
+                            .padding(.horizontal, 5)
+                            .foregroundColor(.LL.background)
+                            .font(.LL.body)
+                            .background(.LL.note)
+                            .cornerRadius(12)
+                            .onTapGesture {
+                                isBlur = true
+                            }
                     }
+                    .onTapGesture {
+                        isBlur.toggle()
+                    }
+                    .blur(radius: isBlur ? 10 : 0)
                     .padding(.vertical, 20)
                     .padding(.horizontal, 20)
                     .overlay {
                         ZStack {
                             RoundedRectangle(cornerRadius: 16)
                                 .strokeBorder(lineWidth: 0.5)
+                            VStack(spacing: 10) {
+                                Image(systemName: "eyes")
+                                    .font(.largeTitle)
+                                Text("private_place_tips".localized)
+                                    .foregroundColor(.LL.note)
+                                    .font(.LL.body)
+                                    .fontWeight(.semibold)
+                                Text("reveal".localized)
+                                    .padding(5)
+                                    .padding(.horizontal, 2)
+                                    .foregroundColor(.LL.background)
+                                    .font(.LL.body)
+                                    .background(.LL.note)
+                                    .cornerRadius(12)
+                                    .padding(.top, 10)
+                            }
+                            .opacity(isBlur ? 1 : 0)
+                            .foregroundColor(.LL.note)
                         }
                         .allowsHitTesting(false)
                     }
+                    .animation(.linear(duration: 0.2), value: isBlur)
                     .padding(.top, 20)
 
                     VStack(alignment: .leading) {

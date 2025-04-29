@@ -137,7 +137,7 @@ extension MultiBackupManager {
             throw BackupError.hexStringToDataFailed
         }
         
-        guard let publicKey = hdWallet.getPublicKey(signAlgo: .ECDSA_P256)?.description else {
+        guard let publicKey = hdWallet.getPublicKey(signAlgo: .ECDSA_P256)?.format() else {
             throw BackupError.invaildPublicKey
         }
 

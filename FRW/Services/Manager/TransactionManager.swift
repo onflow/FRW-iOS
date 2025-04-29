@@ -13,11 +13,11 @@ extension Flow.Transaction.Status {
     var progressPercent: CGFloat {
         switch self {
         case .pending, .unknown:
-            return 0.25
+            return 0.33
         case .finalized:
-            return 0.5
+            return 0.66
         case .executed:
-            return 0.75
+            return 1.0
         case .sealed:
             return 1.0
         default:

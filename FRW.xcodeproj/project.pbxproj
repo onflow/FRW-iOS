@@ -9954,10 +9954,10 @@
 		};
 		4E490F9F2DBF43DA0027E33E /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Outblock/Flow-Wallet-Kit";
+			repositoryURL = "https://github.com/onflow/Flow-Wallet-Kit";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = revision;
+				revision = 0fdb3906b28cb191d477c2c98336853370fe86ad;
 			};
 		};
 		4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */ = {

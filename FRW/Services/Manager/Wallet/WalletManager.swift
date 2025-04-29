@@ -145,7 +145,7 @@ class WalletManager: ObservableObject {
                 entity.securityDelegate = self
                 return entity.$accounts.compactMap { $0 }
             }
-            .filter { $0.count >= self.supportNetworks.count }
+//            .filter { $0.count >= self.supportNetworks.count }
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] accounts in
@@ -212,7 +212,7 @@ extension WalletManager {
     }
 
     private func loadRecentFlowAccount() {
-        guard let accounts = walletEntity?.accounts else { return }
+        guard let accounts = walletEntity?.accounts, !accounts.isEmpty else { return }
         guard let accounts = accounts[currentNetwork], let account = accounts.first else {
             // TODO: Handle newtork swicth, if no account
             mainAccount = nil
@@ -382,10 +382,11 @@ extension WalletManager {
             do {
                 let result: UserAddressV2Response = try await Network.request(FRWAPI.User.userAddressV2)
                 let txId = Flow.ID(hex: result.txId)
-                _ = try await txId.onceSealed()
+                _ = try await txId.onceExecuted()
                 try? await walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
             } catch {
+                print(error)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
             }
         }
