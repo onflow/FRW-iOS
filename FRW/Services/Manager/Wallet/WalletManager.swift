@@ -212,7 +212,10 @@ extension WalletManager {
     }
 
     private func loadRecentFlowAccount() {
-        guard let accounts = walletEntity?.accounts, !accounts.isEmpty else { return }
+        guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
+            reloadWalletInfo()
+            return
+        }
         guard let accounts = accounts[currentNetwork], let account = accounts.first else {
             // TODO: Handle newtork swicth, if no account
             mainAccount = nil
@@ -382,7 +385,7 @@ extension WalletManager {
             do {
                 let result: UserAddressV2Response = try await Network.request(FRWAPI.User.userAddressV2)
                 let txId = Flow.ID(hex: result.txId)
-                _ = try await txId.onceExecuted()
+                _ = try await txId.onceSealed()
                 try? await walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
             } catch {
@@ -393,17 +396,16 @@ extension WalletManager {
     }
 
     private func startWalletInfoRetryTimer() {
-        debugPrint("WalletManager -> startWalletInfoRetryTimer")
         stopWalletInfoRetryTimer()
-        let timer = Timer.scheduledTimer(
+        let timer = Timer(
             timeInterval: WalletManager.walletFetchInterval,
             target: self,
-            selector: #selector(onWalletInfoRetryTimer),
+            selector: #selector(reloadWalletInfo),
             userInfo: nil,
-            repeats: false
+            repeats: true
         )
         walletInfoRetryTimer = timer
-        RunLoop.main.add(timer, forMode: .common)
+        RunLoop.main.add(walletInfoRetryTimer!, forMode: .common)
     }
 
     private func stopWalletInfoRetryTimer() {
@@ -414,21 +416,25 @@ extension WalletManager {
     }
 
     @objc
-    private func onWalletInfoRetryTimer() {
-        debugPrint("WalletManager -> onWalletInfoRetryTimer")
-        reloadWalletInfo()
-    }
-
     func reloadWalletInfo() {
-        log.debug("reloadWalletInfo")
-        stopWalletInfoRetryTimer()
-
         Task {
             do {
-                let _ = try await walletEntity?.fetchAllNetworkAccounts()
-                self.pollingWalletInfoIfNeeded()
+                let result = try await walletEntity?.fetchAllNetworkAccounts()
+                
+                if currentNetworkAccounts.isEmpty {
+                    startWalletInfoRetryTimer()
+                    pollingWalletInfoIfNeeded()
+                } else {
+                    stopWalletInfoRetryTimer()
+                    await MainActor.run {
+                        loadRecentFlowAccount()
+                    }
+                }
+                
             } catch {
-                self.startWalletInfoRetryTimer()
+                debugPrint("WalletManager -> Fetch error: \(error)")
+                debugPrint(error)
+                startWalletInfoRetryTimer()
             }
         }
     }
@@ -436,10 +442,7 @@ extension WalletManager {
     /// polling wallet info, if wallet address is not exists
 
     private func pollingWalletInfoIfNeeded() {
-        debugPrint("WalletManager -> pollingWalletInfoIfNeeded")
         if currentNetworkAccounts.isEmpty {
-            startWalletInfoRetryTimer()
-
             Task {
                 do {
                     if retryCheckCount % 4 == 0 {
@@ -448,7 +451,7 @@ extension WalletManager {
                     }
                     retryCheckCount += 1
                 } catch {
-                    debugPrint(error)
+                    debugPrint("WalletManager -> Manual check error: \(error)")
                 }
             }
         }

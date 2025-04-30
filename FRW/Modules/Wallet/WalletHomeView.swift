@@ -125,11 +125,14 @@ struct WalletHomeView: View {
                 
                 HeaderView()
                     .zIndex(1)
+                
                 WalletInfo()
                     .zIndex(10)
+                    .mockPlaceholder(vm.needShowPlaceholder)
 
                 CoinListView()
                     .zIndex(20)
+                    .mockPlaceholder(vm.needShowPlaceholder)
             }
             .overlay(alignment: .top) {
                 TopMenuView()
@@ -137,7 +140,6 @@ struct WalletHomeView: View {
         }
         .coordinateSpace(name: scrollName)
         .environmentObject(vm)
-        .mockPlaceholder(vm.needShowPlaceholder)
     }
 
     @ViewBuilder
