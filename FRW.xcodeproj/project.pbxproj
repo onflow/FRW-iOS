@@ -1253,6 +1253,8 @@
 		4EA820C7286354E200DF36A8 /* remote_config_defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */; };
 		4EA85D752D952771002CB8A7 /* FlowLoggerReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA85D742D952771002CB8A7 /* FlowLoggerReceiver.swift */; };
 		4EA85D762D952771002CB8A7 /* FlowLoggerReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA85D742D952771002CB8A7 /* FlowLoggerReceiver.swift */; };
+		4EA885E82DC1F8870070CE14 /* WalletConnect+DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA885E72DC1F8870070CE14 /* WalletConnect+DeepLink.swift */; };
+		4EA885E92DC1F8870070CE14 /* WalletConnect+DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA885E72DC1F8870070CE14 /* WalletConnect+DeepLink.swift */; };
 		4EAD14162B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */; };
 		4EAD14172B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */; };
 		4EAF31BA2845E501002AF489 /* NFTSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAF31B82845E501002AF489 /* NFTSegmentControl.swift */; };
@@ -2612,6 +2614,7 @@
 		4EA15E9B2D8AB0DE00F3009A /* EventTrack+PropertyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+PropertyLabel.swift"; sourceTree = "<group>"; };
 		4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = remote_config_defaults.plist; sourceTree = "<group>"; };
 		4EA85D742D952771002CB8A7 /* FlowLoggerReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLoggerReceiver.swift; sourceTree = "<group>"; };
+		4EA885E72DC1F8870070CE14 /* WalletConnect+DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+DeepLink.swift"; sourceTree = "<group>"; };
 		4EAD14152B61DD940076B318 /* MultiBackupPasskeyTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupPasskeyTarget.swift; sourceTree = "<group>"; };
 		4EAF31B82845E501002AF489 /* NFTSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTSegmentControl.swift; sourceTree = "<group>"; };
 		4EAF31BD28464ACE002AF489 /* BackAppBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackAppBar.swift; sourceTree = "<group>"; };
@@ -3565,6 +3568,7 @@
 			children = (
 				158832DC28942BE800142B35 /* Model */,
 				158832CD2894269E00142B35 /* WalletConnectManager.swift */,
+				4EA885E72DC1F8870070CE14 /* WalletConnect+DeepLink.swift */,
 				4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */,
 				158832D6289427EF00142B35 /* Websocket.swift */,
 				4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */,
@@ -7882,6 +7886,7 @@
 				6AF95B472848C8D70012C837 /* BMChineseUtils.swift in Sources */,
 				6AE69E9328C08310004D4709 /* BrowserViewController.swift in Sources */,
 				6AAFFEDF292544BD00B5A264 /* StakeAmountView.swift in Sources */,
+				4EA885E82DC1F8870070CE14 /* WalletConnect+DeepLink.swift in Sources */,
 				4ECF45352BB4F20E00F5B3B7 /* WalletHomeView.swift in Sources */,
 				6AB5FBA328926C9100FA2261 /* iCloudAPI.swift in Sources */,
 				4EE6FA8D2B196B16006A827B /* Dictionary+Add.swift in Sources */,
@@ -8740,6 +8745,7 @@
 				15C58C392868A4EE00BD4FC6 /* BMChineseUtils.swift in Sources */,
 				6AE69E9228C08310004D4709 /* BrowserViewController.swift in Sources */,
 				6AAFFEDE292544BD00B5A264 /* StakeAmountView.swift in Sources */,
+				4EA885E92DC1F8870070CE14 /* WalletConnect+DeepLink.swift in Sources */,
 				4ECF45342BB4F20E00F5B3B7 /* WalletHomeView.swift in Sources */,
 				6AB5FBA228926C9100FA2261 /* iCloudAPI.swift in Sources */,
 				4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */,
@@ -8922,7 +8928,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -8965,7 +8971,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -9253,7 +9259,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9281,7 +9287,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9311,7 +9317,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9341,7 +9347,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.5;
+				MARKETING_VERSION = 2.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9936,7 +9942,7 @@
 			repositoryURL = "https://github.com/reown-com/reown-swift/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.2;
+				minimumVersion = 1.6.0;
 			};
 		};
 		4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */ = {
