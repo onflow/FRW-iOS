@@ -22,6 +22,7 @@ class CreateProfileWaitingViewModel: ObservableObject {
         self.callback = callback
 
         WalletManager.shared.$mainAccount
+            .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { [weak self] account in

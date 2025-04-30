@@ -212,7 +212,10 @@ extension WalletManager {
     }
 
     private func loadRecentFlowAccount() {
-        guard let accounts = walletEntity?.accounts, !accounts.isEmpty else { return }
+        guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
+            reloadWalletInfo()
+            return
+        }
         guard let accounts = accounts[currentNetwork], let account = accounts.first else {
             // TODO: Handle newtork swicth, if no account
             mainAccount = nil
@@ -382,7 +385,7 @@ extension WalletManager {
             do {
                 let result: UserAddressV2Response = try await Network.request(FRWAPI.User.userAddressV2)
                 let txId = Flow.ID(hex: result.txId)
-                _ = try await txId.onceExecuted()
+                _ = try await txId.onceSealed()
                 try? await walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
             } catch {
@@ -400,7 +403,7 @@ extension WalletManager {
             target: self,
             selector: #selector(onWalletInfoRetryTimer),
             userInfo: nil,
-            repeats: false
+            repeats: true
         )
         walletInfoRetryTimer = timer
         RunLoop.main.add(timer, forMode: .common)
@@ -425,8 +428,12 @@ extension WalletManager {
 
         Task {
             do {
-                let _ = try await walletEntity?.fetchAllNetworkAccounts()
-                self.pollingWalletInfoIfNeeded()
+                let result = try await walletEntity?.fetchAllNetworkAccounts()
+                if result?.isEmpty ?? true {
+                    self.startWalletInfoRetryTimer()
+                } else {
+                    self.pollingWalletInfoIfNeeded()
+                }
             } catch {
                 self.startWalletInfoRetryTimer()
             }

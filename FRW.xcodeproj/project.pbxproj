@@ -15,6 +15,7 @@
 		150D3E372A58718700F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E362A58718700F7F2DC /* QRCode */; };
 		150D3E392A58719A00F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E382A58719A00F7F2DC /* QRCode */; };
 		15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */ = {isa = PBXBuildFile; productRef = 15185ED7278A73A3006B74A9 /* SPConfetti */; };
+		15192C5D2DC1EB4B00DA47BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		152516FB2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152516FC2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
@@ -30,7 +31,6 @@
 		152EEC7328E4F61600C37A67 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 152EEC7228E4F61200C37A67 /* config.plist */; };
 		152EEC7528E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
 		152EEC7628E4F68100C37A67 /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC7428E4F68100C37A67 /* Env.swift */; };
-		1531AAF62DBFB8AB00CA1AE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		15362A152DA02B7E008F4E51 /* WalletActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A142DA02B7E008F4E51 /* WalletActionButton.swift */; };
 		15362A162DA02B7E008F4E51 /* WalletActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A142DA02B7E008F4E51 /* WalletActionButton.swift */; };
 		15362A182DA02BA1008F4E51 /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A172DA02BA1008F4E51 /* VisualEffectView.swift */; };
@@ -6811,7 +6811,6 @@
 			files = (
 				1565FB6A28B14F140086A652 /* Notification.json in Resources */,
 				158C9CAD2787F7490062E0C6 /* Montserrat-Regular.ttf in Resources */,
-				1531AAF62DBFB8AB00CA1AE9 /* Assets.xcassets in Resources */,
 				4E0D34A02A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */,
 				6AEF4278287537E5000A77D7 /* Localizable.strings in Resources */,
 				1575A72728B26B9600ADC513 /* index.html in Resources */,
@@ -6894,6 +6893,7 @@
 				1575A72A28B26B9600ADC513 /* script.js in Resources */,
 				1565FBB328B171BB0086A652 /* Copy-soild.json in Resources */,
 				6A998DA6293674FC00EF133B /* staking_provider.json in Resources */,
+				15192C5D2DC1EB4B00DA47BC /* Assets.xcassets in Resources */,
 				1565FBB128B171BB0086A652 /* Copy.json in Resources */,
 				15D3BA6728C39454009AEA6E /* Matrix Code NFI.ttf in Resources */,
 				4E0D34A12A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf in Resources */,
