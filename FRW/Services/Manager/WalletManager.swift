@@ -558,7 +558,7 @@ extension WalletManager {
 
     func getPrimaryWalletAddress() -> String? {
         if let uid = UserManager.shared.activatedUID, let user = userStore(with: uid) {
-            if user.address != nil {
+            if user.address != nil, currentNetwork == .mainnet {
                 return user.address
             }
         }
