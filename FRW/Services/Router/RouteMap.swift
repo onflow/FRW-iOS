@@ -240,6 +240,7 @@ extension RouteMap {
         case showCustomToken(CustomToken)
         case addTokenSheet(CustomToken, BoolClosure)
         case swapProvider(TokenModel?)
+        case managerTokens
     }
 }
 
@@ -362,6 +363,8 @@ extension RouteMap.Wallet: RouterTarget {
         case let .swapProvider(token):
             let vc = PresentHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
+        case .managerTokens:
+            navi.push(content: ManagerTokensView())
         }
     }
 }

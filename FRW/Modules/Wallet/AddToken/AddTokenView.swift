@@ -39,18 +39,19 @@ struct AddTokenView: RouteableView {
     var body: some View {
         ZStack {
             VStack {
-                HStack(spacing: 8) {
-                    FilterButton(title: "all_tokens".localized, isSelected: vm.isAll) { _ in
-                        vm.onClickTag(isAllTokens: true)
+                HStack {
+                    Toggle(isOn: $vm.onlyShowVerified) {
+                        HStack(spacing: 0) {
+                            Text("only_show_tokens".localized)
+                                .font(.inter(size: 14))
+                                .foregroundStyle(Color.Theme.Text.black)
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                        }
                     }
-
-                    FilterButton(title: "verified".localized, isSelected: !vm.isAll, icon: "icon-token-valid") { _ in
-                        vm.onClickTag(isAllTokens: false)
-                    }
-
-                    Spacer()
+                    .padding(.horizontal, 16)
                 }
-                .padding(.leading, 18)
                 listView
             }
         }
@@ -151,9 +152,15 @@ extension AddTokenView {
                         .clipShape(Circle())
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(token.name)
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(size: 14, weight: .semibold))
+                        HStack {
+                            Text(token.name)
+                                .foregroundColor(.LL.Neutrals.text)
+                                .font(.inter(size: 14, weight: .semibold))
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .visibility(token.isVerifiedValue ? .visible : .gone)
+                        }
 
                         Text(token.symbol?.uppercased() ?? "")
                             .foregroundColor(.LL.Neutrals.note)

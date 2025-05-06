@@ -64,7 +64,7 @@ class AddTokenViewModel: ObservableObject {
     var searchText: String = ""
 
     @Published
-    var isAll: Bool = true
+    var onlyShowVerified: Bool = false
 
     @Published
     var confirmSheetIsPresented = false
@@ -85,6 +85,7 @@ class AddTokenViewModel: ObservableObject {
     private func reloadData() {
         Task {
             do {
+                HUD.loading()
                 let result: FTResponse = try await Network.requestWithRawModel(FRWAPI.Token.all(.cadence, currentNetwork))
                 let supportedTokenList = result.tokens.map { $0.toTokenModel() }
                 var seenNames = Set<String>()
@@ -98,7 +99,9 @@ class AddTokenViewModel: ObservableObject {
                 }
 
                 regroup(uniqueList)
+                HUD.dismissLoading()
             } catch {
+                HUD.dismissLoading()
                 log.error("Fetch All Token failed.")
                 await MainActor.run {
                     sections = []
@@ -136,7 +139,7 @@ class AddTokenViewModel: ObservableObject {
 
 extension AddTokenViewModel {
     var searchResults: [AddTokenViewModel.Section] {
-        if searchText.isEmpty, isAll {
+        if searchText.isEmpty, !onlyShowVerified {
             return sections
         }
 
@@ -146,7 +149,7 @@ extension AddTokenViewModel {
             var list = [TokenModel]()
 
             for token in section.tokenList {
-                if !isAll, !token.isVerifiedValue {
+                if onlyShowVerified, !token.isVerifiedValue {
                     continue
                 }
                 if token.name.localizedCaseInsensitiveContains(searchText) {
@@ -164,7 +167,7 @@ extension AddTokenViewModel {
                     continue
                 }
 
-                if searchText.isEmpty, !isAll, token.isVerifiedValue {
+                if searchText.isEmpty, onlyShowVerified, token.isVerifiedValue {
                     list.append(token)
                     continue
                 }
@@ -211,13 +214,6 @@ extension AddTokenViewModel {
 
         selectCallback?(token)
         Router.dismiss()
-    }
-
-    func onClickTag(isAllTokens: Bool) {
-        guard isAllTokens != isAll else {
-            return
-        }
-        isAll = isAllTokens
     }
 
     func willActiveTokenAction(_ token: TokenModel) {

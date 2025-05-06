@@ -463,30 +463,14 @@ struct WalletHomeView: View {
                     .foregroundStyle(Color.Theme.Text.black3)
                 Spacer()
 
-                Button {
+                CircleButton(image: .menu) {
                     vm.onClickManagerToken()
-                } label: {
-                    Text("manage".localized)
-                        .font(.inter(size: 14, weight: .semibold))
-                        .foregroundColor(Color.Theme.Text.black3)
-                        .padding(.horizontal, 8)
-                        .frame(height: 24)
-                        .background(Color.Theme.Background.grey)
-                        .cornerRadius(12)
                 }
-                .buttonStyle(ScaleButtonStyle())
-                .visibility(vm.showBuyButton ? .visible : .gone)
 
-                Button {
+                CircleButton(image: .add) {
                     vm.onAddToken()
-                } label: {
-                    Image("icon-wallet-coin-add")
-                        .renderingMode(.template)
-                        .foregroundColor(Color.Theme.Text.black3)
-                        .frame(width: 24, height: 24)
                 }
                 .visibility(vm.showAddTokenButton ? .visible : .gone)
-                .buttonStyle(ScaleButtonStyle())
             }
 
             VStack(spacing: 5) {
@@ -503,7 +487,6 @@ struct WalletHomeView: View {
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
-            tokenManagerView()
             Spacer(minLength: headerHeight + safeArea.top)
         }
         .padding(.horizontal, 16)

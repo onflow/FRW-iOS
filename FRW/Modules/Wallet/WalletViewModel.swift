@@ -363,7 +363,7 @@ extension WalletViewModel {
     }
 
     func onClickManagerToken() {
-        // TODO: #six #246 route to manager page
+        Router.route(to: RouteMap.Wallet.managerTokens)
     }
 }
 

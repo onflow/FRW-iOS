@@ -1169,3 +1169,7 @@ Key Store and Private Key.";
 "contract_address" = "Contract Address";
 "unverified_token_hint" = "This is an unverified token, only interact with tokens you trust. ";
 "all_tokens" = "All Tokens";
+"manager_tokens" = "Manager Tokens";
+"hide_dust_tokens" = "Hide Dust Tokens (<1$ USD Balance)";
+"only_show_tokens" = "Only show verified tokens";
+"Filters" = "Filters";

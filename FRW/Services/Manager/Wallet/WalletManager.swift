@@ -110,6 +110,8 @@ class WalletManager: ObservableObject {
     @Published
     private(set) var currentNetwork: Flow.ChainID = .mainnet
 
+    @ObservedObject var filterToken: TokenFilterModel = .init()
+
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()

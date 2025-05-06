@@ -136,6 +136,7 @@ struct TokenDetailView: RouteableView {
                             .padding(.leading, 18)
                     }
                     .padding(.leading, -18)
+                    .zIndex(10)
                 }
                 .allowsHitTesting(self.vm.isTokenDetailsButtonEnabled)
 
