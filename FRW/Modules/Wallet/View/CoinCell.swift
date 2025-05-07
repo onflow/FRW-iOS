@@ -24,7 +24,66 @@ extension WalletHomeView {
 
         var body: some View {
             VStack(spacing: 0) {
-                TokenInfoCell(token: coin.token, isHidden: vm.isHidden)
+                HStack(alignment: .center, spacing: 18) {
+                    KFImage.url(coin.token.iconURL)
+                        .placeholder {
+                            Image("placeholder")
+                                .resizable()
+                        }
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: CoinIconHeight, height: CoinIconHeight)
+                        .clipShape(Circle())
+
+                    VStack(spacing: 4) {
+                        HStack(spacing: 0) {
+                            Text(coin.token.name)
+                                .foregroundColor(Color.Theme.Text.text1)
+                                .font(.inter(size: 14, weight: .bold))
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .visibility(coin.token.isVerifiedValue ? .visible : .gone)
+                            Spacer()
+
+                            Text(
+                                "\(vm.isHidden ? "****" : coin.token.showBalanceStr) \(coin.token.symbol?.uppercased() ?? "?")"
+                            )
+                            .foregroundColor(.LL.Neutrals.text)
+                            .font(.inter(size: 14, weight: .medium))
+                        }
+
+                        HStack {
+                            if WalletManager.shared.accessibleManager.isAccessible(coin.token) {
+                                if let priceValue = coin.token.priceInCurrencyStr {
+                                    HStack {
+                                        Text(priceValue)
+                                            .foregroundColor(.LL.Neutrals.neutrals7)
+                                            .font(.inter(size: 14, weight: .regular))
+                                    }
+                                }
+                            } else {
+                                Text("Inaccessible".localized)
+                                    .foregroundStyle(Color.Flow.Font.inaccessible)
+                                    .font(Font.inter(size: 10, weight: .semibold))
+                                    .padding(.horizontal, 5)
+                                    .padding(.vertical, 5)
+                                    .background(.Flow.Font.inaccessible.opacity(0.16))
+                                    .cornerRadius(4, style: .continuous)
+                            }
+
+                            Spacer()
+
+                            if let balance = coin.token.balanceInCurrencyStr {
+                                Text(vm.isHidden ? "****" : "\(balance)")
+                                    .foregroundColor(.LL.Neutrals.neutrals7)
+                                    .font(.inter(size: 14, weight: .regular))
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .frame(minHeight: CoinCellHeight)
 
                 if WalletManager.shared.isSelectedFlowAccount {
                     HStack(spacing: 0) {

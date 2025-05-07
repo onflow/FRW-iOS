@@ -89,6 +89,7 @@ final class WalletViewModel: ObservableObject {
 
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
+            .filter { !$0.isEmpty }
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
@@ -227,6 +228,9 @@ final class WalletViewModel: ObservableObject {
         for token in WalletManager.shared.activatedCoins {
             guard !filter.contains(token.contractId) else {
                 continue
+            }
+            if token.isFlowCoin {
+                log.debug("[token] 1\n \(token)")
             }
             let summary = CoinRateCache.cache.getSummary(by: token.contractId)
             let item = WalletCoinItemModel(

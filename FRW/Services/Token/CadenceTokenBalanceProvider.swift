@@ -30,9 +30,9 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
         let query = FRWAPI.TokenQuery(address: addr.hexAddr, currency: currency, network: network)
         let response: TokenModelResponse = try await Network.request(FRWAPI.Token.cadence(query))
         var availableBalanceToUse = response.storage?.availableBalanceToUse
-        let result = response.result ?? []
+        var tokenList: [TokenModel] = response.result ?? []
         if let balance = availableBalanceToUse {
-            tokens = result.map { token in
+            tokenList = tokenList.map { token in
                 var model = token
                 if model.isFlowCoin {
                     model.availableBalanceToUse = balance
@@ -40,13 +40,14 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
                 return model
             }
         }
-        tokens.sort { lhs, rhs in
+        tokenList.sort { lhs, rhs in
             guard let lBal = lhs.balanceInUSD?.doubleValue, let rBal = rhs.balanceInUSD?.doubleValue else {
                 return true
             }
             return lBal > rBal
         }
-        return tokens
+        tokens = tokenList
+        return tokenList
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
