@@ -26,7 +26,7 @@ class CreateProfileWaitingViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { [weak self] account in
-                if let _ = account {
+                if let account {
                     self?.updateWalletInfo()
                     self?.createFinished = true
                     EventTrack.Account.createdTimeEnd()
@@ -64,7 +64,8 @@ class CreateProfileWaitingViewModel: ObservableObject {
     private var cancellableSet = Set<AnyCancellable>()
 
     private func updateWalletInfo() {
-        guard let uid = UserManager.shared.activatedUID, let address = WalletManager.shared.getPrimaryWalletAddress() else {
+        guard let uid = UserManager.shared.activatedUID,
+              let address = WalletManager.shared.getPrimaryWalletAddress() else {
             return
         }
         LocalUserDefaults.shared.updateSEUser(by: uid, address: address)

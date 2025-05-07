@@ -717,7 +717,7 @@ extension Flow.TransactionResult {
     }
 
     var isComplete: Bool {
-        status == .sealed && errorMessage.isEmpty
+        status == .executed && errorMessage.isEmpty
     }
 
     var isExpired: Bool {

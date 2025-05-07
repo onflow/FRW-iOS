@@ -15,6 +15,8 @@
 		150D3E372A58718700F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E362A58718700F7F2DC /* QRCode */; };
 		150D3E392A58719A00F7F2DC /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 150D3E382A58719A00F7F2DC /* QRCode */; };
 		15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */ = {isa = PBXBuildFile; productRef = 15185ED7278A73A3006B74A9 /* SPConfetti */; };
+		15192C5D2DC1EB4B00DA47BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
+		15192C5F2DC20BF500DA47BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		152516FB2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152516FC2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
@@ -65,7 +67,6 @@
 		154B891F276A1EEB00780E93 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 154B88FC276A1EEB00780E93 /* FirebaseDynamicLinks */; };
 		154B8920276A1EEB00780E93 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 154B88F1276A1EEB00780E93 /* SwiftUIX */; };
 		154B8922276A1EEB00780E93 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF8274FD1FD00F70CD9 /* Preview Assets.xcassets */; };
-		154B8923276A1EEB00780E93 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		154B8929276A1F4600780E93 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 154B88832765EBF700780E93 /* GoogleService-Info.plist */; };
 		154E31452DA38621008A495F /* TokenListMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31442DA38621008A495F /* TokenListMode.swift */; };
 		154E31462DA38621008A495F /* TokenListMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154E31442DA38621008A495F /* TokenListMode.swift */; };
@@ -635,7 +636,6 @@
 		15C58C5C2868A4EE00BD4FC6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF8274FD1FD00F70CD9 /* Preview Assets.xcassets */; };
 		15C58C5D2868A4EE00BD4FC6 /* remote_config_defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA820C5286354E200DF36A8 /* remote_config_defaults.plist */; };
 		15C58C5E2868A4EE00BD4FC6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15B1F63B2786B89800847BB5 /* Localizable.strings */; };
-		15C58C5F2868A4EE00BD4FC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		15C58C602868A4EE00BD4FC6 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CAE2787F7610062E0C6 /* Montserrat-SemiBold.ttf */; };
 		15C58C612868A4EE00BD4FC6 /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CA62787F7490062E0C6 /* Montserrat-Italic.ttf */; };
 		15C58C632868A4EE00BD4FC6 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 158C9CA22787F6EA0062E0C6 /* Inter.ttf */; };
@@ -6876,6 +6876,7 @@
 			files = (
 				1565FB6A28B14F140086A652 /* Notification.json in Resources */,
 				158C9CAD2787F7490062E0C6 /* Montserrat-Regular.ttf in Resources */,
+				15192C5F2DC20BF500DA47BC /* Assets.xcassets in Resources */,
 				4E0D34A02A8B4E2900BC6E43 /* e-Ukraine-Bold.ttf in Resources */,
 				6AEF4278287537E5000A77D7 /* Localizable.strings in Resources */,
 				1575A72728B26B9600ADC513 /* index.html in Resources */,
@@ -6888,7 +6889,6 @@
 				4ED40AF82B1A190B00C25EBF /* Loading_animation.json in Resources */,
 				4EA820C7286354E200DF36A8 /* remote_config_defaults.plist in Resources */,
 				15DE214428C52FA4008AFE17 /* QRScan.json in Resources */,
-				154B8923276A1EEB00780E93 /* Assets.xcassets in Resources */,
 				158C9CB02787F7660062E0C6 /* Montserrat-SemiBold.ttf in Resources */,
 				1575A72928B26B9600ADC513 /* dat.gui.min.js in Resources */,
 				1565FB6428B14F140086A652 /* Chat.json in Resources */,
@@ -6939,7 +6939,6 @@
 				1544C62828C812E700B6BA52 /* GoogleOAuth2.plist in Resources */,
 				15CC8A6928C4EA63001D2696 /* shapes.riv in Resources */,
 				15C58C5E2868A4EE00BD4FC6 /* Localizable.strings in Resources */,
-				15C58C5F2868A4EE00BD4FC6 /* Assets.xcassets in Resources */,
 				4E3138082C658FB2003A73E5 /* .gitignore in Resources */,
 				15DE214328C52FA4008AFE17 /* QRScan.json in Resources */,
 				7652E32B2D6AA3F000AECFEF /* CreatingAccount.json in Resources */,
@@ -6960,6 +6959,7 @@
 				1575A72A28B26B9600ADC513 /* script.js in Resources */,
 				1565FBB328B171BB0086A652 /* Copy-soild.json in Resources */,
 				6A998DA6293674FC00EF133B /* staking_provider.json in Resources */,
+				15192C5D2DC1EB4B00DA47BC /* Assets.xcassets in Resources */,
 				1565FBB128B171BB0086A652 /* Copy.json in Resources */,
 				15D3BA6728C39454009AEA6E /* Matrix Code NFI.ttf in Resources */,
 				4E0D34A12A8B4E2900BC6E43 /* e-Ukraine-Regular.ttf in Resources */,
@@ -9006,7 +9006,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-DEV";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -9052,7 +9052,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-DEV";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "FRW/App/Env/Dev/FRW-dev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -10027,7 +10027,7 @@
 			repositoryURL = "https://github.com/reown-com/reown-swift/";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.2;
+				minimumVersion = 1.6.0;
 			};
 		};
 		4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */ = {
@@ -10040,10 +10040,10 @@
 		};
 		4E490F9F2DBF43DA0027E33E /* XCRemoteSwiftPackageReference "Flow-Wallet-Kit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Outblock/Flow-Wallet-Kit";
+			repositoryURL = "https://github.com/onflow/Flow-Wallet-Kit";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = revision;
+				revision = 6c6d06e89afb9d039036a4f69210942f0fe34168;
 			};
 		};
 		4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */ = {

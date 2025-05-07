@@ -34,9 +34,9 @@ struct PersistentToastView: View {
     }
 }
 
-#Preview {
-    PersistentToastView(
-        message: "Insufficient Funds.",
-        imageRes: .Storage.insufficient
-    )
-}
+//#Preview {
+//    PersistentToastView(
+//        message: "Insufficient Funds.",
+//        imageRes: .Storage.insufficient
+//    )
+//}

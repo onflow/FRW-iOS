@@ -1,5 +1,5 @@
 {
-  "originHash" : "14089008b918d55ca9306a6db1764afc386653d86ac77dab909f8564ea2b4eb1",
+  "originHash" : "c6287e7f5d6dd5f9e4c5e107d322009e14090a86cde614eea1615362d201102b",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -141,16 +141,15 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "489177ca2f3fee133cf3c1ce7d6c0cc2892c34ef"
+        "revision" : "82b3d2c72b1fd2f945b5bd16dcef6635351e062a"
       }
     },
     {
       "identity" : "flow-wallet-kit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Outblock/Flow-Wallet-Kit",
+      "location" : "https://github.com/onflow/Flow-Wallet-Kit",
       "state" : {
-        "branch" : "master",
-        "revision" : "78ca3496f0aebd588307d2896f004fba25ebbe6c"
+        "revision" : "6c6d06e89afb9d039036a4f69210942f0fe34168"
       }
     },
     {
@@ -444,8 +443,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/reown-com/reown-swift/",
       "state" : {
-        "revision" : "193fe47626608b1f77de127adf9af5859f84bc1a",
-        "version" : "1.5.2"
+        "revision" : "20bd38e6d07ca5381a854e72d04bced722e65a8c",
+        "version" : "1.6.2"
       }
     },
     {
@@ -675,8 +674,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/reown-com/yttrium",
       "state" : {
-        "revision" : "331244f5a569787452be5ec05b5699927c646878",
-        "version" : "0.8.35"
+        "revision" : "f6566a2b028ae60746254298ce1d5ba822ca5388",
+        "version" : "0.9.0"
       }
     },
     {
