@@ -30,9 +30,7 @@ class CustomTokenManager: ObservableObject {
     }
 
     func isInWhite(token: CustomToken) -> Bool {
-        guard let support = WalletManager.shared.supportedCoins else {
-            return true
-        }
+        let support = WalletManager.shared.activatedCoins
         let filterList = support.filter { model in
             model.getAddress()?.lowercased() == token.address.lowercased()
         }

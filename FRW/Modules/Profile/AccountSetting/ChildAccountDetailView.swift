@@ -821,7 +821,6 @@ extension FlowModel.TokenInfo: ChildAccountAccessible {
     private var theToken: TokenModel? {
         let contractName = id.split(separator: ".")[safe: 2] ?? "empty"
         let address = id.split(separator: ".")[safe: 1] ?? "empty_error"
-        return WalletManager.shared.supportedCoins?
-            .filter { $0.contractName == contractName && ($0.getAddress() ?? "") == address }.first
+        return WalletManager.shared.activatedCoins.filter { $0.contractName == contractName && ($0.getAddress() ?? "") == address }.first
     }
 }

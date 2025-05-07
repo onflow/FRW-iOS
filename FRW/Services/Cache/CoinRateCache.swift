@@ -166,7 +166,7 @@ extension CoinRateCache {
                 .request(FRWAPI.Crypto.summary(request))
             await set(summary: response, forContractId: contractId)
         case let .mirror(token):
-            guard let mirrorTokenModel = WalletManager.shared.supportedCoins?
+            guard let mirrorTokenModel = WalletManager.shared.activatedCoins
                 .first(where: { $0.symbol == token.rawValue })
             else {
                 break

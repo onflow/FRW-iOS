@@ -76,9 +76,6 @@ class WalletManager: ObservableObject {
     static let shared = WalletManager()
 
     @Published
-    var supportedCoins: [TokenModel]?
-
-    @Published
     private(set) var activatedCoins: [TokenModel] = []
 
     @Published
@@ -169,20 +166,13 @@ class WalletManager: ObservableObject {
 //        guard let uid = UserManager.shared.activatedUID else { return }
 
         Task {
-            let cacheSupportedCoins = try? await PageCache.cache.get(
-                forKey: CacheKeys.supportedCoins.rawValue,
-                type: [TokenModel].self
-            )
             let cacheActivatedCoins = try? await PageCache.cache.get(
                 forKey: CacheKeys.activatedCoins.rawValue,
                 type: [TokenModel].self
             )
 
             await MainActor.run {
-                if let cacheSupportedCoins = cacheSupportedCoins,
-                   let cacheActivatedCoins = cacheActivatedCoins
-                {
-                    self.supportedCoins = cacheSupportedCoins
+                if let cacheActivatedCoins = cacheActivatedCoins {
                     self.activatedCoins = cacheActivatedCoins
                 }
             }
@@ -333,6 +323,7 @@ extension WalletManager {
     /// called when switch profile
     func resetAfterSwitchProfile() {
         selectedAccount = nil
+        activatedCoins = []
     }
 }
 

@@ -86,9 +86,7 @@ struct InboxToken: Codable {
     }
 
     var matchedCoin: TokenModel? {
-        guard let coins = WalletManager.shared.supportedCoins else {
-            return nil
-        }
+        let coins = WalletManager.shared.activatedCoins
 
         for coin in coins {
             if let addr = coin.getAddress(), addr == coinAddress {
