@@ -49,11 +49,7 @@ class AddTokenViewModel: ObservableObject {
             mode = .selectToken
         }
 
-        WalletManager.shared.$activatedCoins.sink { _ in
-            DispatchQueue.main.async {
-                self.reloadData()
-            }
-        }.store(in: &cancelSets)
+        reloadData()
     }
 
     // MARK: Internal
@@ -78,14 +74,18 @@ class AddTokenViewModel: ObservableObject {
     @Published
     var isRequesting: Bool = false
 
-    // MARK: Private
+    @Published
+    var isMocking: Bool = false
 
-    private var cancelSets = Set<AnyCancellable>()
+    // MARK: Private
 
     private func reloadData() {
         Task {
             do {
-                HUD.loading()
+                await MainActor.run {
+                    isMocking = true
+                }
+
                 let result: FTResponse = try await Network.requestWithRawModel(FRWAPI.Token.all(.cadence, currentNetwork))
                 let supportedTokenList = result.tokens.map { $0.toTokenModel() }
                 var seenNames = Set<String>()
@@ -99,9 +99,13 @@ class AddTokenViewModel: ObservableObject {
                 }
 
                 regroup(uniqueList)
-                HUD.dismissLoading()
+                await MainActor.run {
+                    isMocking = false
+                }
             } catch {
-                HUD.dismissLoading()
+                await MainActor.run {
+                    isMocking = false
+                }
                 log.error("Fetch All Token failed.")
                 await MainActor.run {
                     sections = []
@@ -262,16 +266,22 @@ extension AddTokenViewModel {
                     failedBlock()
                     return
                 }
-
+                let holder = TransactionManager.TransactionHolder(
+                    id: transactionId,
+                    type: .addToken,
+                    data: data
+                )
+                TransactionManager.shared.newTransaction(holder: holder)
+                await MainActor.run {
+                    self.confirmSheetIsPresented = false
+                }
+                let reuslt = try await transactionId.onceSealed()
+                if !reuslt.isFailed {
+                    try await WalletManager.shared.fetchWalletDatas()
+                    self.sections = self.sections
+                }
                 await MainActor.run {
                     self.isRequesting = false
-                    self.confirmSheetIsPresented = false
-                    let holder = TransactionManager.TransactionHolder(
-                        id: transactionId,
-                        type: .addToken,
-                        data: data
-                    )
-                    TransactionManager.shared.newTransaction(holder: holder)
                 }
             } catch {
                 log.debug("AddTokenViewModel -> confirmActiveTokenAction error: \(error)")

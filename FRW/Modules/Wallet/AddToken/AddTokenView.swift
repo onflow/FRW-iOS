@@ -69,6 +69,7 @@ struct AddTokenView: RouteableView {
         )
         .environmentObject(vm)
         .disabled(vm.isRequesting)
+        .mockPlaceholder(vm.isMocking)
         .applyRouteable(self)
     }
 
