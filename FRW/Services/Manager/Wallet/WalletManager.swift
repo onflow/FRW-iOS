@@ -327,6 +327,15 @@ extension WalletManager {
     }
 }
 
+// MARK: - Account
+
+extension WalletManager {
+    /// called when switch profile
+    func resetAfterSwitchProfile() {
+        selectedAccount = nil
+    }
+}
+
 // MARK: - account type
 
 extension WalletManager {
@@ -421,7 +430,7 @@ extension WalletManager {
         Task {
             do {
                 let result = try await walletEntity?.fetchAllNetworkAccounts()
-                
+
                 if currentNetworkAccounts.isEmpty {
                     startWalletInfoRetryTimer()
                     pollingWalletInfoIfNeeded()
@@ -431,7 +440,7 @@ extension WalletManager {
                         loadRecentFlowAccount()
                     }
                 }
-                
+
             } catch {
                 debugPrint("WalletManager -> Fetch error: \(error)")
                 debugPrint(error)
