@@ -125,7 +125,7 @@ struct WalletHomeView: View {
 
                 HeaderView()
                     .zIndex(1)
-                
+
                 WalletInfo()
                     .zIndex(10)
                     .mockPlaceholder(vm.needShowPlaceholder)
@@ -337,7 +337,7 @@ struct WalletHomeView: View {
                     Text(
                         vm
                             .isHidden ? "****" :
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: false))"
                     )
                     .font(.Ukraine(size: 30, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black)

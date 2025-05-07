@@ -18,32 +18,8 @@ struct ManagerTokensItemView: View {
     var body: some View {
         VStack {
             Toggle(isOn: .init(get: { item.isOpen }, set: { callback(item.token, $0) })) {
-                VStack(spacing: 0) {
-                    HStack(alignment: .center, spacing: 18) {
-                        KFImage.url(item.token.iconURL)
-                            .placeholder {
-                                Image("placeholder")
-                                    .resizable()
-                            }
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: CoinIconHeight, height: CoinIconHeight)
-                            .clipShape(Circle())
-
-                        HStack(spacing: 0) {
-                            Text(item.token.name)
-                                .foregroundColor(Color.Theme.Text.text1)
-                                .font(.inter(size: 14, weight: .bold))
-                            Image("icon-token-valid")
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .visibility(item.token.isVerifiedValue ? .visible : .gone)
-                            Spacer()
-                        }
-                    }
-                    .frame(minHeight: CoinCellHeight)
-                }
-                .background(.clear)
+                TokenInfoCell(token: item.token, isHidden: false)
+                    .background(.clear)
             }
             .padding(2)
             Divider()

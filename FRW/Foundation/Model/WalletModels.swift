@@ -256,6 +256,32 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 }
 
+// MARK: - UI
+
+extension TokenModel {
+    var showBalanceStr: String {
+        guard let bal = availableBalanceToUse ?? displayBalance else {
+            return "0"
+        }
+        return bal.doubleValue.formatCurrencyString()
+    }
+
+    var priceInCurrencyStr: String? {
+        guard let bal = priceInCurrency else {
+            return nil
+        }
+
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
+    }
+
+    var balanceInCurrencyStr: String? {
+        guard let bal = balanceInCurrency else {
+            return nil
+        }
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
+    }
+}
+
 extension TokenModel: Equatable {
     static func == (lhs: TokenModel, rhs: TokenModel) -> Bool {
         return lhs.id == rhs.id

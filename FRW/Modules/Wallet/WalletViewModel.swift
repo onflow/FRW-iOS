@@ -94,7 +94,11 @@ final class WalletViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
             }.store(in: &cancelSets)
-
+        WalletManager.shared.filterToken.$hideTokens
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshCoinItems()
+            }.store(in: &cancelSets)
         ThemeManager.shared.$style
             .receive(on: DispatchQueue.main)
             .sink { _ in
@@ -220,7 +224,11 @@ final class WalletViewModel: ObservableObject {
 
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
+        var filter = WalletManager.shared.filterToken.hideTokens
         for token in WalletManager.shared.activatedCoins {
+            guard !filter.contains(token.contractId) else {
+                continue
+            }
             let summary = CoinRateCache.cache.getSummary(by: token.contractId)
             let item = WalletCoinItemModel(
                 token: token,
@@ -230,21 +238,15 @@ final class WalletViewModel: ObservableObject {
             )
             list.append(item)
         }
-        list.sort { first, second in
-            if first.balance * first.last == second.balance * second.last {
-                return first.last > second.last
-            } else {
-                return first.balance * first.last > second.balance * second.last
-            }
-        }
+
         coinItems = list
         refreshTotalBalance()
     }
 
     private func refreshTotalBalance() {
         var total: Double = 0
-        for item in coinItems {
-            let asUSD = item.balance * item.last
+        for token in WalletManager.shared.activatedCoins {
+            let asUSD = token.balanceInCurrency?.doubleValue ?? 0
             total += asUSD
         }
 
