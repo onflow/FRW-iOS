@@ -96,24 +96,50 @@ struct TokenModel: Codable, Identifiable, Mockable {
 
     // MARK: Internal
 
-    let type: TokenType
+    @available(*, deprecated, message: "Use typeValue")
+    var type: TokenType? = .cadence
+
     let name: String
-    var address: FlowNetworkModel
-    let contractName: String
-    let storagePath: FlowTokenStoragePath
-    let decimal: Int
-    var icon: URL?
     let symbol: String?
-    let website: URL?
+    let description: String?
+
+    var balance: String?
+    let contractAddress: String?
+    let contractName: String
+    let storagePath: FlowPath?
+    let receiverPath: FlowPath?
+    let balancePath: FlowPath?
+    let identifier: String?
+
+    @available(*, deprecated, message: "Use isVerifiedValue")
+    let isVerified: Bool?
+    let logoURI: String?
+    /// 0.405351
+    let priceInUSD: String?
+    /// "3468.0638534703663244"
+    let balanceInUSD: String?
+    /// 1
+    let priceInFLOW: String?
+    /// "8550.73240919"
+    let balanceInFLOW: String?
+    let currency: String?
+    /// "0.40558676"
+    let priceInCurrency: String?
+    /// "3468.0638534703663244"
+    let balanceInCurrency: String?
+    /// e.g. 0.9998085919
+    let displayBalance: String?
+    var availableBalanceToUse: String?
+
+    @available(*, deprecated, message: "Use decimalValue")
+    var decimal: Int?
+
     let evmAddress: String?
-    var flowIdentifier: String?
-    var balance: BigUInt?
-    // This property is the amount that can be transferred out
-    var avaibleBalance: BigUInt?
+    let website: URL?
 
     var vaultIdentifier: String? {
         if type == .evm {
-            return flowIdentifier
+            return identifier
         }
 
         return "\(contractId).Vault"
@@ -128,12 +154,12 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var contractId: String {
-        let addressString = address.addressByNetwork(currentNetwork)?.stripHexPrefix() ?? ""
+        let addressString = contractAddress?.stripHexPrefix() ?? ""
         return "A.\(addressString).\(contractName)"
     }
 
     var iconURL: URL {
-        if let logoString = icon?.absoluteString {
+        if let logoString = logoURI {
             if logoString.hasSuffix("svg") {
                 return logoString.convertedSVGURL() ?? URL(string: placeholder)!
             }
@@ -145,13 +171,14 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var readableBalance: Decimal? {
-        guard let bal = balance else {
+        guard let bal = balance, let bigBal = bal.parseToBigUInt(decimals: decimalValue) else {
             return nil
         }
 
         let result = Utilities.formatToPrecision(
-            bal,
-            units: .custom(decimal)
+            bigBal,
+            units: .custom(decimalValue),
+            formattingDecimals: decimalValue
         )
         return Decimal(string: result)
     }
@@ -164,17 +191,29 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var precision: Int {
-        switch type {
+        switch typeValue {
         case .cadence:
-            return min(decimal, 8)
+            return min(decimalValue, 8)
         case .evm:
-            return min(decimal, 18)
+            return min(decimalValue, 18)
         }
+    }
+
+    var typeValue: TokenType {
+        type ?? .cadence
+    }
+
+    var decimalValue: Int {
+        decimal ?? (typeValue == .cadence ? 8 : 18)
+    }
+
+    var isVerifiedValue: Bool {
+        isVerified ?? false
     }
 
     // Identifiable
     var id: String {
-        getId(by: type)
+        getId(by: typeValue)
     }
 
     var isActivated: Bool {
@@ -182,41 +221,18 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var showBalance: Decimal? {
-        guard let bal = avaibleBalance else {
+        guard let bal = availableBalanceToUse ?? displayBalance, let bigBal = bal.parseToBigUInt(decimals: decimalValue) else {
             return nil
         }
-        return Decimal(string: Utilities.formatToPrecision(bal, units: .custom(decimal), formattingDecimals: decimal))
-    }
-
-    var hasBalance: Bool {
-        guard let bal = balance else {
-            return false
-        }
-        return bal >= 0
+        return Decimal(string: Utilities.formatToPrecision(bigBal, units: .custom(decimalValue), formattingDecimals: decimalValue))
     }
 
     static func mock() -> TokenModel {
-        TokenModel(
-            type: .cadence,
-            name: "mockname",
-            address: FlowNetworkModel(
-                mainnet: nil,
-                testnet: nil,
-                crescendo: nil
-            ),
-            contractName: UUID().uuidString,
-            storagePath: FlowTokenStoragePath(balance: "", vault: "", receiver: ""),
-            decimal: 999,
-            icon: nil,
-            symbol: randomString(),
-            website: nil,
-            evmAddress: nil,
-            flowIdentifier: nil
-        )
+        TokenModel(type: .cadence, name: "mockname", symbol: nil, description: nil, contractAddress: nil, contractName: "", storagePath: nil, receiverPath: nil, balancePath: nil, identifier: nil, isVerified: nil, logoURI: nil, priceInUSD: nil, balanceInUSD: nil, priceInFLOW: nil, balanceInFLOW: nil, currency: nil, priceInCurrency: nil, balanceInCurrency: nil, displayBalance: nil, decimal: 8, evmAddress: nil, website: nil,)
     }
 
     func getAddress() -> String? {
-        address.addressByNetwork(currentNetwork)
+        contractAddress
     }
 
     func getPricePair(market: QuoteMarket) -> String {
@@ -233,10 +249,36 @@ struct TokenModel: Codable, Identifiable, Mockable {
     func getId(by type: TokenType) -> String {
         switch type {
         case .evm:
-            return evmAddress ?? ""
+            return contractAddress ?? ""
         case .cadence:
-            return flowIdentifier?.removeSuffix(".Vault") ?? contractId
+            return identifier?.removeSuffix(".Vault") ?? contractId
         }
+    }
+}
+
+// MARK: - UI
+
+extension TokenModel {
+    var showBalanceStr: String {
+        guard let bal = availableBalanceToUse ?? displayBalance else {
+            return "0"
+        }
+        return bal.doubleValue.formatCurrencyString()
+    }
+
+    var priceInCurrencyStr: String? {
+        guard let bal = priceInCurrency else {
+            return nil
+        }
+
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
+    }
+
+    var balanceInCurrencyStr: String? {
+        guard let bal = balanceInCurrency else {
+            return nil
+        }
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
     }
 }
 
@@ -248,127 +290,43 @@ extension TokenModel: Equatable {
 
 extension TokenModel {
     func evmBridgeAddress() -> String? {
-        guard let addr = flowIdentifier?.split(separator: ".")[1] else {
+        guard let addr = identifier?.split(separator: ".")[1] else {
             return nil
         }
         return String(addr).addHexPrefix()
     }
 
     func evmBridgeContractName() -> String? {
-        guard let name = flowIdentifier?.split(separator: ".")[2] else {
+        guard let name = identifier?.split(separator: ".")[2] else {
             return nil
         }
         return String(name)
     }
 }
 
-// MARK: - FlowNetworkModel
-
-struct FlowNetworkModel: Codable {
-    let mainnet: String?
-    var testnet: String?
-    let crescendo: String?
-
-    func addressByNetwork(_ network: Flow.ChainID) -> String? {
-        switch network {
-        case .mainnet:
-            return mainnet
-        case .testnet:
-            return testnet
-        default:
+extension TokenModel {
+    func aboutTokenUrl() -> URL? {
+        let host = currentNetwork.baseUrl(accountType: AccountType.current)
+        let path = AccountType.current == .flow ? "/ft/token" : "/token"
+        guard let target = AccountType.current == .flow ? identifier : evmAddress else {
+            HUD.error(title: "invalid identifier")
+            log.error("invalid identifier")
             return nil
         }
+        return URL(string: "\(host)\(path)/\(target)")
     }
 }
 
-// MARK: - FlowTokenStoragePath
+// MARK: - FlowPath
 
-struct FlowTokenStoragePath: Codable {
-    let balance: String
-    let vault: String
-    let receiver: String
-}
+struct FlowPath: Codable {
+    let domain: String?
+    let identifier: String?
 
-// MARK: - SingleTokenResponse
-
-struct SingleTokenResponse: Codable {
-    let name: String
-    let network: String?
-    let chainId: Int?
-    let tokens: [SingleToken]
-
-    func conversion(type: TokenModel.TokenType) -> [TokenModel] {
-        let network = currentNetwork
-        let result = tokens.map { $0.toTokenModel(type: type, network: network) }
-        return result
+    var value: String? {
+        guard let domain, let identifier else {
+            return ""
+        }
+        return "/" + domain + "/" + identifier
     }
-}
-
-// MARK: - SingleToken
-
-struct SingleToken: Codable {
-    let chainId: Int
-    let address: String
-    let contractName: String?
-    let path: FlowTokenStoragePath?
-    let symbol: String?
-    let name: String
-    let decimals: Int
-    let logoURI: String?
-    let extensions: TokenExtension?
-    let evmAddress: String?
-    let flowIdentifier: String?
-
-    var cadenceId: String {
-        "A.\(address.stripHexPrefix()).\(contractName ?? "")"
-    }
-
-    func toTokenModel(type: TokenModel.TokenType, network: Flow.ChainID) -> TokenModel {
-        let logo = URL(string: logoURI ?? "")
-
-        let model = TokenModel(
-            type: type,
-            name: name,
-            address: FlowNetworkModel(
-                mainnet: network == .mainnet ? address : nil,
-                testnet: network == .testnet ? address : nil,
-                crescendo: nil
-            ),
-            contractName: contractName ?? "",
-            storagePath: path ??
-                FlowTokenStoragePath(balance: "", vault: "", receiver: ""),
-            decimal: decimals,
-            icon: logo,
-            symbol: symbol,
-            website: extensions?.website,
-            evmAddress: type == .cadence ? evmAddress : address,
-            flowIdentifier: type == .cadence ? cadenceId : flowIdentifier
-        )
-        return model
-    }
-}
-
-// MARK: - TokenExtension
-
-struct TokenExtension: Codable {
-    // MARK: Lifecycle
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        website = try? container.decode(URL.self, forKey: .website)
-        twitter = try? container.decode(URL.self, forKey: .twitter)
-        discord = try? container.decode(URL.self, forKey: .discord)
-    }
-
-    // MARK: Internal
-
-    enum CodingKeys: String, CodingKey {
-        case website
-        case twitter
-        case discord
-    }
-
-    let website: URL?
-    let twitter: URL?
-    let discord: URL?
 }

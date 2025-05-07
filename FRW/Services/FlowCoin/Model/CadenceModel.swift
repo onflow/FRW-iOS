@@ -84,7 +84,6 @@ extension CadenceModel {
     }
 
     struct Domain: Codable {
-        let claimFTFromInbox: String?
         let claimNFTFromInbox: String?
         let getAddressOfDomain: String?
         let getDefaultDomainsOfAddress: String?

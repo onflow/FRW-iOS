@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 private let CoinIconHeight: CGFloat = 44
 private let CoinCellHeight: CGFloat = 76
@@ -35,16 +35,19 @@ extension WalletHomeView {
                         .frame(width: CoinIconHeight, height: CoinIconHeight)
                         .clipShape(Circle())
 
-                    VStack(spacing: 7) {
-                        HStack {
+                    VStack(spacing: 4) {
+                        HStack(spacing: 0) {
                             Text(coin.token.name)
-                                .foregroundColor(.LL.Neutrals.text)
+                                .foregroundColor(Color.Theme.Text.text1)
                                 .font(.inter(size: 14, weight: .bold))
-
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .visibility(coin.token.isVerifiedValue ? .visible : .gone)
                             Spacer()
 
                             Text(
-                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString()) \(coin.token.symbol?.uppercased() ?? "?")"
+                                "\(vm.isHidden ? "****" : coin.token.showBalanceStr) \(coin.token.symbol?.uppercased() ?? "?")"
                             )
                             .foregroundColor(.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .medium))
@@ -52,19 +55,11 @@ extension WalletHomeView {
 
                         HStack {
                             if WalletManager.shared.accessibleManager.isAccessible(coin.token) {
-                                if let priceValue = coin.priceValue {
+                                if let priceValue = coin.token.priceInCurrencyStr {
                                     HStack {
                                         Text(priceValue)
                                             .foregroundColor(.LL.Neutrals.neutrals7)
                                             .font(.inter(size: 14, weight: .regular))
-
-                                        Text(coin.changeString)
-                                            .foregroundColor(coin.changeColor)
-                                            .font(.inter(size: 12, weight: .semibold))
-                                            .frame(height: 22)
-                                            .padding(.horizontal, 6)
-                                            .background(coin.changeBG)
-                                            .cornerRadius(11, style: .continuous)
                                     }
                                 }
                             } else {
@@ -79,14 +74,10 @@ extension WalletHomeView {
 
                             Spacer()
 
-                            if coin.priceValue != nil {
-                                Text(
-                                    vm
-                                        .isHidden ? "****" :
-                                        "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
-                                )
-                                .foregroundColor(.LL.Neutrals.neutrals7)
-                                .font(.inter(size: 14, weight: .regular))
+                            if let balance = coin.token.balanceInCurrencyStr {
+                                Text(vm.isHidden ? "****" : "\(balance)")
+                                    .foregroundColor(.LL.Neutrals.neutrals7)
+                                    .font(.inter(size: 14, weight: .regular))
                             }
                         }
                     }
@@ -94,9 +85,7 @@ extension WalletHomeView {
                 }
                 .frame(minHeight: CoinCellHeight)
 
-                if EVMAccountManager.shared.selectedAccount == nil && ChildAccountManager.shared
-                    .selectedChildAccount == nil
-                {
+                if WalletManager.shared.isSelectedFlowAccount {
                     HStack(spacing: 0) {
                         Divider()
                             .frame(width: 1, height: 10)
@@ -138,5 +127,72 @@ extension WalletHomeView {
             .background(.clear)
             .cornerRadius(16)
         }
+    }
+}
+
+struct TokenInfoCell: View {
+    let token: TokenModel
+    var isHidden: Bool = false
+    var body: some View {
+        HStack(alignment: .center, spacing: 18) {
+            KFImage.url(token.iconURL)
+                .placeholder {
+                    Image("placeholder")
+                        .resizable()
+                }
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: CoinIconHeight, height: CoinIconHeight)
+                .clipShape(Circle())
+
+            VStack(spacing: 4) {
+                HStack(spacing: 0) {
+                    Text(token.name)
+                        .foregroundColor(Color.Theme.Text.text1)
+                        .font(.inter(size: 14, weight: .bold))
+                    Image("icon-token-valid")
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                        .visibility(token.isVerifiedValue ? .visible : .gone)
+                    Spacer()
+
+                    Text(
+                        "\(isHidden ? "****" : token.showBalanceStr) \(token.symbol?.uppercased() ?? "?")"
+                    )
+                    .foregroundColor(.LL.Neutrals.text)
+                    .font(.inter(size: 14, weight: .medium))
+                }
+
+                HStack {
+                    if WalletManager.shared.accessibleManager.isAccessible(token) {
+                        if let priceValue = token.priceInCurrencyStr {
+                            HStack {
+                                Text(priceValue)
+                                    .foregroundColor(.LL.Neutrals.neutrals7)
+                                    .font(.inter(size: 14, weight: .regular))
+                            }
+                        }
+                    } else {
+                        Text("Inaccessible".localized)
+                            .foregroundStyle(Color.Flow.Font.inaccessible)
+                            .font(Font.inter(size: 10, weight: .semibold))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 5)
+                            .background(.Flow.Font.inaccessible.opacity(0.16))
+                            .cornerRadius(4, style: .continuous)
+                    }
+
+                    Spacer()
+
+                    if let balance = token.balanceInCurrencyStr {
+                        Text(isHidden ? "****" : "\(balance)")
+                            .foregroundColor(.LL.Neutrals.neutrals7)
+                            .font(.inter(size: 14, weight: .regular))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .frame(minHeight: CoinCellHeight)
     }
 }

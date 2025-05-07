@@ -5,10 +5,10 @@
 //  Created by Hao Fu on 1/4/2025.
 //
 
-import Foundation
-import SwiftUI
 import Combine
 import Factory
+import Foundation
+import SwiftUI
 
 // MARK: - SideMenuViewModel.AccountPlaceholder
 
@@ -23,28 +23,28 @@ extension SideMenuViewModel {
 
 class SideMenuViewModel: ObservableObject {
     // MARK: Internal
-    
+
     @Injected(\.wallet)
     private var wallet: WalletManager
-    
+
     @Injected(\.token)
     private var token: TokenBalanceHandler
 
     @Published
     var accountLoading: Bool = false
-    
+
     @Published
     var linkLoading: Bool = false
-    
+
     @Published
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
-    
+
     @Published
     var mainAccounts: [String] = []
-    
+
     @Published
     var linkedAccounts: [String] = []
-    
+
     @Published
     var walletBalance: [String: Decimal] = [:]
 
@@ -53,11 +53,11 @@ class SideMenuViewModel: ObservableObject {
     var currentAddress: String {
         WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
     }
-    
+
     private var cancellableSet = Set<AnyCancellable>()
-    
+
     // MARK: Lifecycle
-    
+
     init() {
         wallet.$mainAccount
             .compactMap { $0 }
@@ -67,7 +67,7 @@ class SideMenuViewModel: ObservableObject {
                 self?.loadBalance()
             }
             .store(in: &cancellableSet)
-        
+
         wallet.$walletEntity
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
@@ -76,7 +76,7 @@ class SideMenuViewModel: ObservableObject {
                 self?.accountLoading = value
             }
             .store(in: &cancellableSet)
-        
+
         wallet.$mainAccount
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
@@ -86,7 +86,7 @@ class SideMenuViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
     }
-    
+
     func loadBalance() {
         Task {
             let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
@@ -95,9 +95,9 @@ class SideMenuViewModel: ObservableObject {
             if let coa = wallet.coa {
                 linksAccounts.insert(coa.address, at: 0)
             }
-            
+
             let accounts = mainAccounts + linksAccounts
-            
+
             if accounts.isEmpty {
                 return
             }
@@ -127,20 +127,6 @@ class SideMenuViewModel: ObservableObject {
             await MainActor.run {
                 self.colorsMap[url] = color
                 self.userInfoBackgroudColor = color
-            }
-        }
-    }
-
-    func switchAccountAction(_ uid: String) {
-        Task {
-            do {
-                HUD.loading()
-                try await UserManager.shared.switchAccount(withUID: uid)
-                HUD.dismissLoading()
-            } catch {
-                log.error(AccountError.switchAccountFailed, context: error)
-                HUD.dismissLoading()
-                HUD.error(title: error.localizedDescription)
             }
         }
     }

@@ -69,7 +69,7 @@ class NFTUIKitListGridDataModel {
             return []
         }
 
-//        if EVMAccountManager.shared.selectedAccount != nil {
+//        if WalletManager.shared.isSelectedEVMAccount {
 //            let response: [EVMCollection] =  try await Network.request(FRWAPI.EVM.nfts(address))
 //            let list = response.map { $0.toNFTCollection() }
 //            let nfts = list.compactMap { $0.evmNFTs }
@@ -77,7 +77,7 @@ class NFTUIKitListGridDataModel {
 //        }
 
         let request = NFTGridDetailListRequest(address: address, offset: offset, limit: limit)
-        let from: VMType = EVMAccountManager.shared.selectedAccount != nil ? .evm : .cadence
+        let from: VMType = WalletManager.shared.isSelectedEVMAccount ? .evm : .cadence
         let response: Network.Response<NFTListResponse> = try await Network
             .requestWithRawModel(FRWAPI.NFT.gridDetailList(
                 request,

@@ -84,7 +84,9 @@ final class MoveSingleNFTViewModel: ObservableObject {
                 return
             }
 
-            guard let identifier = nft.collection?.flowIdentifier ?? nft.response.maskFlowIdentifier else {
+            guard let identifier = nft.collection?.flowIdentifier ?? nft.response
+                .maskFlowIdentifier
+            else {
                 HUD.error(MoveError.invalidateIdentifier)
                 return
             }
@@ -103,10 +105,6 @@ final class MoveSingleNFTViewModel: ObservableObject {
     private var _insufficientStorageFailure: InsufficientStorageFailure?
 
     private func loadUserInfo() {
-        guard let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress()
-        else {
-            return
-        }
         if let account = fromChildAccount {
             fromContact = Contact(
                 address: account.showAddress,
@@ -118,91 +116,31 @@ final class MoveSingleNFTViewModel: ObservableObject {
                 username: account.showName,
                 walletType: .link
             )
-        } else if let account = ChildAccountManager.shared.selectedChildAccount {
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
-        } else if let account = EVMAccountManager.shared.selectedAccount {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
-        } else {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
-            fromContact = Contact(
-                address: primaryAddr,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: user.name,
-                user: user,
-                walletType: .flow
-            )
+        } else if let account = WalletManager.shared.selectedChildAccount {
+            fromContact = account.toContact()
+        } else if let account = WalletManager.shared.selectedEVMAccount {
+            fromContact = account.toContact()
+        } else if let contact = WalletManager.shared.toContact() {
+            fromContact = contact
         }
 
-        if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil || fromChildAccount != nil
+        if WalletManager.shared.isSelectedChildAccount || WalletManager.shared
+            .isSelectedEVMAccount || fromChildAccount != nil
         {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
-            toContact = Contact(
-                address: primaryAddr,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: user.name,
-                user: user,
-                walletType: .flow
-            )
-        } else if let account = EVMAccountManager.shared.accounts.first {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
-        } else if let account = ChildAccountManager.shared.childAccounts.first {
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
+            if let contact = WalletManager.shared.toContact() {
+                toContact = contact
+            }
+        } else if let account = WalletManager.shared.coa {
+            toContact = account.toContact()
+        } else if let account = WalletManager.shared.childs?.first {
+            toContact = account.toContact()
         }
     }
 
     private func moveForEVM(identifier: String, nftId: UInt64) async {
         do {
             let ids: [UInt64] = [nftId]
-            let fromEvm = EVMAccountManager.shared.selectedAccount != nil
+            let fromEvm = WalletManager.shared.isSelectedEVMAccount
             let tid = try await FlowNetwork.bridgeNFTToEVM(
                 identifier: identifier,
                 ids: ids,
@@ -324,27 +262,31 @@ final class MoveSingleNFTViewModel: ObservableObject {
     }
 }
 
-// MARK: - InsufficientStorageToastViewModel
+// MARK: InsufficientStorageToastViewModel
 
 extension MoveSingleNFTViewModel: InsufficientStorageToastViewModel {
     var variant: InsufficientStorageFailure? { _insufficientStorageFailure }
 
     private func checkForInsufficientStorage() {
-        _insufficientStorageFailure = insufficientStorageCheckForMove(token: .nft(nft), from: fromContact.walletType, to: toContact.walletType)
+        _insufficientStorageFailure = insufficientStorageCheckForMove(
+            token: .nft(nft),
+            from: fromContact.walletType,
+            to: toContact.walletType
+        )
     }
 }
 
 extension MoveSingleNFTViewModel {
     var fromIsEVM: Bool {
-        EVMAccountManager.shared.accounts.contains { $0.showAddress == fromContact.address }
+        fromContact.walletType == .evm
     }
 
     var toIsEVM: Bool {
-        EVMAccountManager.shared.accounts.contains { $0.showAddress == toContact.address }
+        toContact.walletType == .evm
     }
 
     func logo() -> Image {
-        let isSelectedEVM = EVMAccountManager.shared.selectedAccount != nil
+        let isSelectedEVM = WalletManager.shared.isSelectedEVMAccount
         return isSelectedEVM ? Image("icon_qr_evm") : Image("Flow")
     }
 

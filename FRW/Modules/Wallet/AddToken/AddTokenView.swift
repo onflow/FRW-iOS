@@ -38,7 +38,22 @@ struct AddTokenView: RouteableView {
 
     var body: some View {
         ZStack {
-            listView
+            VStack {
+                HStack {
+                    Toggle(isOn: $vm.onlyShowVerified) {
+                        HStack(spacing: 0) {
+                            Text("only_show_tokens".localized)
+                                .font(.inter(size: 14))
+                                .foregroundStyle(Color.Theme.Text.black)
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                listView
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .halfSheet(
@@ -54,6 +69,7 @@ struct AddTokenView: RouteableView {
         )
         .environmentObject(vm)
         .disabled(vm.isRequesting)
+        .mockPlaceholder(vm.isMocking)
         .applyRouteable(self)
     }
 
@@ -137,9 +153,15 @@ extension AddTokenView {
                         .clipShape(Circle())
 
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(token.name)
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(size: 14, weight: .semibold))
+                        HStack {
+                            Text(token.name)
+                                .foregroundColor(.LL.Neutrals.text)
+                                .font(.inter(size: 14, weight: .semibold))
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .visibility(token.isVerifiedValue ? .visible : .gone)
+                        }
 
                         Text(token.symbol?.uppercased() ?? "")
                             .foregroundColor(.LL.Neutrals.note)
@@ -168,7 +190,7 @@ extension AddTokenView {
         }
 
         var isEVMAccount: Bool {
-            EVMAccountManager.shared.selectedAccount != nil
+            WalletManager.shared.isSelectedEVMAccount
         }
     }
 }
@@ -248,7 +270,8 @@ extension AddTokenView {
             .task {
                 Task { @MainActor in
                     if let color = await ImageHelper
-                        .colors(from: token.icon?.absoluteString ?? placeholder).first {
+                        .colors(from: token.iconURL.absoluteString).first
+                    {
                         self.color = color.opacity(0.1)
                     }
                 }

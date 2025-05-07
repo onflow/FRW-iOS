@@ -242,7 +242,15 @@ extension TokenDetailViewModel {
     var movable: Bool {
         EVMAccountManager.shared
             .hasAccount &&
-            (token.evmAddress != nil || token.flowIdentifier != nil || token.isFlowCoin)
+            (token.evmAddress != nil || token.identifier != nil || token.isFlowCoin)
+    }
+
+    var verifiedValue: String {
+        token.isVerifiedValue ? "Yes" : "No"
+    }
+
+    var contractAddress: String {
+        token.contractAddress ?? ""
     }
 }
 
@@ -320,6 +328,13 @@ extension TokenDetailViewModel {
             return
         }
         WalletManager.shared.customTokenManager.delete(token: customToken)
+    }
+
+    func onClickAddress() {
+        guard let url = token.aboutTokenUrl() else {
+            return
+        }
+        Router.route(to: RouteMap.Explore.browser(url))
     }
 }
 

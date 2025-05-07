@@ -787,7 +787,8 @@ extension FlowModel.NFTCollection: ChildAccountAccessible {
 
 extension FlowModel.TokenInfo: ChildAccountAccessible {
     var img: String {
-        if let model = theToken, let url = model.icon?.absoluteString {
+        if let model = theToken {
+            let url = model.iconURL.absoluteString
             return url
         }
         return AppPlaceholder.image
@@ -820,7 +821,6 @@ extension FlowModel.TokenInfo: ChildAccountAccessible {
     private var theToken: TokenModel? {
         let contractName = id.split(separator: ".")[safe: 2] ?? "empty"
         let address = id.split(separator: ".")[safe: 1] ?? "empty_error"
-        return WalletManager.shared.supportedCoins?
-            .filter { $0.contractName == contractName && ($0.getAddress() ?? "") == address }.first
+        return WalletManager.shared.activatedCoins.filter { $0.contractName == contractName && ($0.getAddress() ?? "") == address }.first
     }
 }

@@ -139,9 +139,9 @@ extension RemoteConfigManager {
     }
 
     enum NewDisplayType: String, Codable {
-        case once // 只显示一次
-        case click // 用户点击，或者关闭后，不再显示
-        case expiry // 一直显示直到过期，用户关闭后，下次启动再显示
+        case once
+        case click
+        case expiry
 
         // MARK: Lifecycle
 

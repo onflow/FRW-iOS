@@ -6,10 +6,10 @@
 //
 
 import BigInt
+import Flow
 import Foundation
 import Web3Core
 import web3swift
-import Flow
 
 // MARK: - CustomTokenManager
 
@@ -30,9 +30,7 @@ class CustomTokenManager: ObservableObject {
     }
 
     func isInWhite(token: CustomToken) -> Bool {
-        guard let support = WalletManager.shared.supportedCoins else {
-            return true
-        }
+        let support = WalletManager.shared.activatedCoins
         let filterList = support.filter { model in
             model.getAddress()?.lowercased() == token.address.lowercased()
         }
@@ -95,7 +93,7 @@ class CustomTokenManager: ObservableObject {
             return []
         }
         let currentNetwork = LocalUserDefaults.shared.network
-        let belong = EVMAccountManager.shared.selectedAccount != nil ? CustomToken.Belong
+        let belong = WalletManager.shared.isSelectedEVMAccount ? CustomToken.Belong
             .evm : .flow
 
         let result = list.filter { token in
@@ -278,20 +276,27 @@ struct CustomToken: Codable {
         TokenModel(
             type: belong.tokenType,
             name: name,
-            address: FlowNetworkModel(
-                mainnet: address,
-                testnet: address,
-                crescendo: nil
-            ),
-            contractName: "",
-            storagePath: FlowTokenStoragePath(balance: "", vault: "", receiver: ""),
-            decimal: decimals,
-            icon: nil,
             symbol: symbol,
-            website: nil,
+            description: nil,
+            contractAddress: address,
+            contractName: "",
+            storagePath: FlowPath(domain: nil, identifier: nil),
+            receiverPath: FlowPath(domain: nil, identifier: nil),
+            balancePath: nil,
+            identifier: "",
+            isVerified: false,
+            logoURI: nil,
+            priceInUSD: nil,
+            balanceInUSD: nil,
+            priceInFLOW: nil,
+            balanceInFLOW: nil,
+            currency: nil,
+            priceInCurrency: nil,
+            balanceInCurrency: nil,
+            displayBalance: balanceValue,
+            decimal: decimals,
             evmAddress: nil,
-            balance: balance,
-            avaibleBalance: balance
+            website: nil
         )
     }
 }

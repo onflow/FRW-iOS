@@ -81,7 +81,7 @@ final class WalletViewModel: ObservableObject {
         WalletManager.shared.$selectedAccount
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
-            .sink { [weak self] newInfo in
+            .sink { [weak self] _ in
                 self?.refreshButtonState()
                 self?.reloadWalletData()
                 self?.updateMoveAsset()
@@ -89,17 +89,21 @@ final class WalletViewModel: ObservableObject {
 
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
-            .filter{ !$0.isEmpty }
+            .filter { !$0.isEmpty }
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
             }.store(in: &cancelSets)
-
+        WalletManager.shared.filterToken.$hideTokens
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshCoinItems()
+            }.store(in: &cancelSets)
         ThemeManager.shared.$style
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.updateTheme()
-        }.store(in: &cancelSets)
+            }.store(in: &cancelSets)
 
         NotificationCenter.default.publisher(for: .walletHiddenFlagUpdated)
             .receive(on: DispatchQueue.main)
@@ -220,33 +224,32 @@ final class WalletViewModel: ObservableObject {
 
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
+        var filter = WalletManager.shared.filterToken.hideTokens
         for token in WalletManager.shared.activatedCoins {
-            if token.hasBalance {
-                let summary = CoinRateCache.cache.getSummary(by: token.contractId)
-                let item = WalletCoinItemModel(
-                    token: token,
-                    balance: WalletManager.shared.getBalance(with: token).doubleValue,
-                    last: summary?.getLastRate() ?? 0,
-                    changePercentage: summary?.getChangePercentage() ?? 0
-                )
-                list.append(item)
+            guard !filter.contains(token.contractId) else {
+                continue
             }
-        }
-        list.sort { first, second in
-            if first.balance * first.last == second.balance * second.last {
-                return first.last > second.last
-            } else {
-                return first.balance * first.last > second.balance * second.last
+            if token.isFlowCoin {
+                log.debug("[token] 1\n \(token)")
             }
+            let summary = CoinRateCache.cache.getSummary(by: token.contractId)
+            let item = WalletCoinItemModel(
+                token: token,
+                balance: WalletManager.shared.getBalance(with: token).doubleValue,
+                last: summary?.getLastRate() ?? 0,
+                changePercentage: summary?.getChangePercentage() ?? 0
+            )
+            list.append(item)
         }
+
         coinItems = list
         refreshTotalBalance()
     }
 
     private func refreshTotalBalance() {
         var total: Double = 0
-        for item in coinItems {
-            let asUSD = item.balance * item.last
+        for token in WalletManager.shared.activatedCoins {
+            let asUSD = token.balanceInCurrency?.doubleValue ?? 0
             total += asUSD
         }
 
@@ -339,7 +342,7 @@ extension WalletViewModel {
         guard ChildAccountManager.shared.selectedChildAccount == nil else {
             return
         }
-        if EVMAccountManager.shared.selectedAccount != nil {
+        if WalletManager.shared.isSelectedEVMAccount {
             Router.route(to: RouteMap.Wallet.addCustomToken)
         } else {
             Router.route(to: RouteMap.Wallet.addToken)
@@ -363,6 +366,10 @@ extension WalletViewModel {
             ConfettiManager.show()
         }
     }
+
+    func onClickManagerToken() {
+        Router.route(to: RouteMap.Wallet.managerTokens)
+    }
 }
 
 // MARK: - Change
@@ -371,23 +378,23 @@ extension WalletViewModel {
     func refreshButtonState() {
         let isChild = WalletManager.shared.selectedAccount?.type == .child
         showAddTokenButton = !isChild
-        
+
         // Swap
         let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
         showSwapButton = swapFlag ? !isChild : false
 
-        let isMainAccount = WalletManager.shared.selectedAccount?.type != .main
-        
+        let isMainAccount = WalletManager.shared.selectedAccount?.type == .main
+
         // Stake
         showStakeButton = currentNetwork == .mainnet ? isMainAccount : false
 
         // buy
         let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false
-        if bugFlag && flow.chainID == .mainnet {
+        if bugFlag, flow.chainID == .mainnet {
             if isMainAccount {
-                showBuyButton = false
-            } else {
                 showBuyButton = true
+            } else {
+                showBuyButton = false
             }
         } else {
             showBuyButton = false

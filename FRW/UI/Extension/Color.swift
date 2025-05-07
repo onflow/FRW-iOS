@@ -288,6 +288,10 @@ extension Color {
             static let fill1 = Color("fill.fill1")
         }
 
+        enum Special {
+            static let white1 = Color("special.white1")
+        }
+
         static let evm = Color("evm")
     }
 

@@ -188,7 +188,7 @@ struct WalletSendAmountView: RouteableView {
                                 if let dotIndex = text.firstIndex(of: Character(decimalSeparator)) {
                                     let decimals = text[text.index(after: dotIndex)...].count
                                     if decimals > vm.token.precision {
-                                        vm.inputText = String(text.prefix(text.distance(from: text.startIndex, to: dotIndex) + vm.token.decimal + 1))
+                                        vm.inputText = String(text.prefix(text.distance(from: text.startIndex, to: dotIndex) + vm.token.decimalValue + 1))
                                     }
                                 }
                                 vm.inputTextDidChangeAction(text: vm.inputText)

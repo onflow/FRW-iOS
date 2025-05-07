@@ -177,7 +177,7 @@ extension TransactionManager {
 
                 return token.iconURL
             case .addToken:
-                return decodedObject(TokenModel.self)?.icon
+                return decodedObject(TokenModel.self)?.iconURL
             case .addCollection:
                 return decodedObject(NFTCollectionInfo.self)?.logoURL
             case .transferNFT:

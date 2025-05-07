@@ -179,25 +179,6 @@ extension FlowNetwork {
 // MARK: - Inbox
 
 extension FlowNetwork {
-    static func claimInboxToken(
-        domain: String,
-        key: String,
-        coin: TokenModel,
-        amount: Decimal,
-        root: String = Contact.DomainType.meow.domain
-    ) async throws -> Flow.ID {
-        try await sendTransaction(
-            by: \.domain?.claimFTFromInbox,
-            with: coin,
-            argumentList: [
-                .string(domain),
-                .string(root),
-                .string(key),
-                .ufix64(amount),
-            ]
-        )
-    }
-
     static func claimInboxNFT(
         domain: String,
         key: String,
@@ -229,7 +210,6 @@ extension FlowNetwork {
         deadline: Decimal,
         isFrom: Bool
     ) async throws -> Flow.ID {
-
         let tokenName = String(swapPaths.last?.split(separator: ".").last ?? "")
         let tokenAddress = String(swapPaths.last?.split(separator: ".")[1] ?? "").addHexPrefix()
 
@@ -407,11 +387,11 @@ extension FlowNetwork {
         guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
             throw WalletError.emptyAddress
         }
-        
+
         guard let cadence = CadenceManager.shared.current.staking?.getDelegatesIndo?.toFunc() else {
             throw WalletError.emptyScript
         }
-        
+
         let response: [CadenceLoader.Category.Staking.StakingNode] = try await flow.accessAPI.executeScriptAtLatestBlock(
             cadence: cadence,
             arguments: [.address(.init(address))]

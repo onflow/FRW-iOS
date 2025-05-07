@@ -76,9 +76,6 @@ class WalletManager: ObservableObject {
     static let shared = WalletManager()
 
     @Published
-    var supportedCoins: [TokenModel]?
-
-    @Published
     private(set) var activatedCoins: [TokenModel] = []
 
     @Published
@@ -110,6 +107,8 @@ class WalletManager: ObservableObject {
     @Published
     private(set) var currentNetwork: Flow.ChainID = .mainnet
 
+    @ObservedObject var filterToken: TokenFilterModel = LocalUserDefaults.shared.filterTokens ?? TokenFilterModel()
+
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()
@@ -118,7 +117,6 @@ class WalletManager: ObservableObject {
         walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
     }
 
-    // TODO: Remove this
     var flowToken: TokenModel? {
         WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })
     }
@@ -168,20 +166,13 @@ class WalletManager: ObservableObject {
 //        guard let uid = UserManager.shared.activatedUID else { return }
 
         Task {
-            let cacheSupportedCoins = try? await PageCache.cache.get(
-                forKey: CacheKeys.supportedCoins.rawValue,
-                type: [TokenModel].self
-            )
             let cacheActivatedCoins = try? await PageCache.cache.get(
                 forKey: CacheKeys.activatedCoins.rawValue,
                 type: [TokenModel].self
             )
 
             await MainActor.run {
-                if let cacheSupportedCoins = cacheSupportedCoins,
-                   let cacheActivatedCoins = cacheActivatedCoins
-                {
-                    self.supportedCoins = cacheSupportedCoins
+                if let cacheActivatedCoins = cacheActivatedCoins {
                     self.activatedCoins = cacheActivatedCoins
                 }
             }
@@ -326,6 +317,16 @@ extension WalletManager {
     }
 }
 
+// MARK: - Account
+
+extension WalletManager {
+    /// called when switch profile
+    func resetAfterSwitchProfile() {
+        selectedAccount = nil
+        activatedCoins = []
+    }
+}
+
 // MARK: - account type
 
 extension WalletManager {
@@ -420,7 +421,7 @@ extension WalletManager {
         Task {
             do {
                 let result = try await walletEntity?.fetchAllNetworkAccounts()
-                
+
                 if currentNetworkAccounts.isEmpty {
                     startWalletInfoRetryTimer()
                     pollingWalletInfoIfNeeded()
@@ -430,7 +431,7 @@ extension WalletManager {
                         loadRecentFlowAccount()
                     }
                 }
-                
+
             } catch {
                 debugPrint("WalletManager -> Fetch error: \(error)")
                 debugPrint(error)
@@ -463,40 +464,23 @@ extension WalletManager {
 extension WalletManager {
     func fetchWalletDatas() async throws {
         guard getPrimaryWalletAddress() != nil else {
-            return
+            log.info("empty main address")
+            throw WalletError.emptyMainAccount
         }
 
-        try await fetchSupportedTokens()
-        try await fetchActivatedTokens()
+        try await fetchUserTokens()
         try await fetchAccessible()
         try? await fetchAccountInfo()
     }
 
-    private func fetchSupportedTokens() async throws {
-        guard let address = selectedAccount?.address else {
-            return
+    private func fetchUserTokens() async throws {
+        guard let addr = selectedAccount?.address else {
+            log.info("empty selected address")
+            throw WalletError.emptyAddress
         }
-
-        let supportedToken = try await TokenBalanceHandler.shared.getSupportTokens(address: address)
+        let list = try await TokenBalanceHandler.shared.fetchUserTokens(address: addr)
         await MainActor.run {
-            self.supportedCoins = supportedToken
-        }
-//        PageCache.cache.set(value: supportedToken, forKey: CacheKeys.supportedCoins.rawValue)
-    }
-
-    /// fetch main or child activated token and balances
-    private func fetchActivatedTokens() async throws {
-        guard let supportedCoins = supportedCoins, !supportedCoins.isEmpty,
-              let address = selectedAccount?.address
-        else {
-            activatedCoins.removeAll()
-            return
-        }
-
-        let availableTokens: [TokenModel] = try await TokenBalanceHandler.shared.getActivatedTokens(address: address)
-        await MainActor.run {
-            self.activatedCoins = availableTokens
-//            PageCache.cache.set(value: availableTokens, forKey: CacheKeys.activatedCoins.rawValue)
+            self.activatedCoins = list
         }
         preloadActivatedIcons()
     }
@@ -515,36 +499,20 @@ extension WalletManager {
         }
     }
 
-    var minimumStorageBalance: Decimal {
-        guard let accountInfo else { return Self.fixedMoveFee }
-        return accountInfo.storageFlow + Self.fixedMoveFee
+    func fetchAccessible() async throws {
+        try await accessibleManager.fetchFT()
     }
 
-    var isStorageInsufficient: Bool {
-        guard isSelectedFlowAccount else { return false }
-        guard let accountInfo else { return false }
-        guard accountInfo.storageCapacity >= accountInfo.storageUsed else { return true }
-        return accountInfo.storageCapacity - accountInfo.storageUsed < Self.mininumStorageThreshold
+    private func preloadActivatedIcons() {
+        for token in activatedCoins {
+            KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
+        }
     }
+}
 
-    var isBalanceInsufficient: Bool {
-        guard isSelectedFlowAccount else { return false }
-        guard let accountInfo else { return false }
-        return accountInfo.balance < Self.minFlowBalance
-    }
+// MARK: - Custom Token
 
-    func isBalanceInsufficient(for amount: Decimal) -> Bool {
-        guard isSelectedFlowAccount else { return false }
-        guard let accountInfo else { return false }
-        return accountInfo.availableBalance - amount < Self.averageTransactionFee
-    }
-
-    func isFlowInsufficient(for amount: Decimal) -> Bool {
-        guard isSelectedFlowAccount else { return false }
-        guard let accountInfo else { return false }
-        return accountInfo.balance - amount < Self.minFlowBalance
-    }
-
+extension WalletManager {
     func addCustomToken(token: CustomToken) {
         Task {
             await MainActor.run {
@@ -564,16 +532,6 @@ extension WalletManager {
             self.activatedCoins.removeAll { model in
                 model.getAddress() == token.address && model.name == token.name
             }
-        }
-    }
-
-    func fetchAccessible() async throws {
-        try await accessibleManager.fetchFT()
-    }
-
-    private func preloadActivatedIcons() {
-        for token in activatedCoins {
-            KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
         }
     }
 }

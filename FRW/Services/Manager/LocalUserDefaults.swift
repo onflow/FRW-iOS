@@ -56,6 +56,8 @@ extension LocalUserDefaults {
 
         case userDefaultTheme
         case selectedAddress
+
+        case filterToken
     }
 }
 
@@ -76,7 +78,7 @@ class LocalUserDefaults: ObservableObject {
     // MARK: Internal
 
     static let shared = LocalUserDefaults()
-    
+
     @AppStorage(Keys.network.rawValue)
     var network: Flow.ChainID = .mainnet
 
@@ -381,6 +383,25 @@ class LocalUserDefaults: ObservableObject {
 
             } else {
                 return []
+            }
+        }
+    }
+
+    var filterTokens: TokenFilterModel? {
+        set {
+            if let value = newValue, let data = try? JSONEncoder().encode(value) {
+                UserDefaults.standard.set(data, forKey: Keys.filterToken.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Keys.filterToken.rawValue)
+            }
+        }
+        get {
+            if let data = UserDefaults.standard.data(forKey: Keys.filterToken.rawValue),
+               let model = try? JSONDecoder().decode(TokenFilterModel.self, from: data)
+            {
+                return model
+            } else {
+                return nil
             }
         }
     }

@@ -12,7 +12,6 @@ import FirebaseAuth
 import Flow
 import FlowWalletKit
 import Foundation
-import Alamofire
 import WalletCore
 
 // MARK: - UserManager
@@ -123,7 +122,7 @@ class UserManager: ObservableObject {
         guard let keyProvider = WalletManager.shared.keyProvider else {
             throw WalletError.emptyKeyProvider
         }
-        
+
         return .init(keyProvider.keyType)
     }
 
@@ -342,10 +341,11 @@ extension UserManager {
         }
     }
 
-    func restoreLogin(withMnemonic mnemonic: String, userId: String? = nil) async throws {
+    func restoreLogin(withMnemonic mnemonic: String, userId _: String? = nil) async throws {
         guard let token = try? await getIDToken(),
               !token.isEmpty,
-              let tokenData = token.data(using: .utf8) else {
+              let tokenData = token.data(using: .utf8)
+        else {
             loginAnonymousIfNeeded()
             throw LLError.restoreLoginFailed
         }
@@ -358,20 +358,21 @@ extension UserManager {
             hdWallet: hdWallet,
             storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
         )
-        
+
         let secpPublicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)
         guard var publicKey = secpPublicKey?.hexString else {
             throw WalletError.emptyPublicKey
         }
-        
+
         let data = Flow.DomainTag.user.normalize + tokenData
-        
+
         let hashAlgo = Flow.HashAlgorithm.SHA2_256
         let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
 
         guard var signature = try? provider.sign(data: data,
-                                            signAlgo: signAlgo,
-                                            hashAlgo: hashAlgo) else {
+                                                 signAlgo: signAlgo,
+                                                 hashAlgo: hashAlgo)
+        else {
             throw LLError.signFailed
         }
 
@@ -389,7 +390,7 @@ extension UserManager {
             accountKey: key,
             deviceInfo: IPManager.shared.toParams()
         )
-        
+
         let response: Network.Response<LoginResponse> = try await Network
             .requestWithRawModel(FRWAPI.User.login(request))
         if response.httpCode == 404 {
@@ -421,17 +422,19 @@ extension UserManager {
         guard let keyProvider = WalletManager.shared.keyProvider(with: userId) else {
             throw LLError.restoreLoginFailed
         }
-        
+
         let wallet = Wallet(type: .key(keyProvider))
         try await wallet.fetchAccount()
         // TODO: Support other network login
-        guard let accountKey = wallet.accounts?[.mainnet]?.first?.fullWeightKey?.toStoreKey() else {
+        let accounts = wallet.accounts?[.mainnet]
+        let validAccount = accounts?.filter { $0.account.keys.filter { !$0.revoked }.count > 0 }
+        guard let accountKey = validAccount?.first?.fullWeightKey?.toStoreKey() else {
             throw LLError.cannotFindFlowAccount
         }
 
         let signAlgo = accountKey.signAlgo
         let hashAlgo = accountKey.hashAlgo
-        
+
         guard let signData = token.addUserMessage(),
               let publicKey = keyProvider.publicKey(signAlgo: signAlgo)?.hexValue,
               !publicKey.isEmpty
@@ -629,6 +632,7 @@ extension UserManager {
             log.warning("switching the same account")
             return
         }
+        WalletManager.shared.resetAfterSwitchProfile()
         if WalletManager.shared.keyProvider(with: uid) != nil {
             try await restoreLogin(with: uid)
             return
@@ -672,7 +676,7 @@ extension UserManager {
         if !loginUIDList.contains(uid), !isRegiter {
             ConfettiManager.show()
         }
-        
+
         await MainActor.run {
             self.activatedUID = uid
             self.userInfo = userInfo
@@ -885,7 +889,7 @@ extension UserManager {
         case phrase
         case secure
         case fromImport
-        
+
         init(_ keyType: KeyType) {
             switch keyType {
             case .secureEnclave:
