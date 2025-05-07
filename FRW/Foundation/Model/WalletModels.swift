@@ -301,6 +301,6 @@ struct FlowPath: Codable {
         guard let domain, let identifier else {
             return ""
         }
-        return domain + "/" + identifier
+        return "/" + domain + "/" + identifier
     }
 }

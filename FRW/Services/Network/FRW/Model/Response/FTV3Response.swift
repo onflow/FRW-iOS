@@ -51,7 +51,8 @@ extension FTTokenModel {
         }
 
         private func parsePath(value: String?) -> FlowPath? {
-            guard let list = value?.components(separatedBy: "/"), list.count == 2 else {
+            let tmp = value?.removePrefix("/")
+            guard let list = tmp?.components(separatedBy: "/"), list.count == 2 else {
                 return nil
             }
             return FlowPath(domain: list[0], identifier: list[1])
