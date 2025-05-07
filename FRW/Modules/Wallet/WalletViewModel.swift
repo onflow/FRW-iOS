@@ -89,7 +89,6 @@ final class WalletViewModel: ObservableObject {
 
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
-            .filter { !$0.isEmpty }
             .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
@@ -339,7 +338,7 @@ extension WalletViewModel {
         guard ChildAccountManager.shared.selectedChildAccount == nil else {
             return
         }
-        if EVMAccountManager.shared.selectedAccount != nil {
+        if WalletManager.shared.isSelectedEVMAccount {
             Router.route(to: RouteMap.Wallet.addCustomToken)
         } else {
             Router.route(to: RouteMap.Wallet.addToken)
@@ -380,7 +379,7 @@ extension WalletViewModel {
         let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
         showSwapButton = swapFlag ? !isChild : false
 
-        let isMainAccount = WalletManager.shared.selectedAccount?.type != .main
+        let isMainAccount = WalletManager.shared.selectedAccount?.type == .main
 
         // Stake
         showStakeButton = currentNetwork == .mainnet ? isMainAccount : false
@@ -389,9 +388,9 @@ extension WalletViewModel {
         let bugFlag = RemoteConfigManager.shared.config?.features.onRamp ?? false
         if bugFlag, flow.chainID == .mainnet {
             if isMainAccount {
-                showBuyButton = false
-            } else {
                 showBuyButton = true
+            } else {
+                showBuyButton = false
             }
         } else {
             showBuyButton = false

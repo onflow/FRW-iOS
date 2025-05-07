@@ -932,7 +932,7 @@ extension WalletConnectManager {
 
         Task {
             do {
-                let isEVM = EVMAccountManager.shared.selectedAccount != nil
+                let isEVM = WalletManager.shared.isSelectedEVMAccount
                 let response: RPCResult = isEVM ? .error(.init(code: 400, message: reason)) : .response(AnyCodable(result))
 
                 try await Sign.instance.respond(

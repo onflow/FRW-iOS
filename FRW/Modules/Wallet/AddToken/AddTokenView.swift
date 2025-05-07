@@ -190,7 +190,7 @@ extension AddTokenView {
         }
 
         var isEVMAccount: Bool {
-            EVMAccountManager.shared.selectedAccount != nil
+            WalletManager.shared.isSelectedEVMAccount
         }
     }
 }

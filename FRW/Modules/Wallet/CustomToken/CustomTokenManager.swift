@@ -93,7 +93,7 @@ class CustomTokenManager: ObservableObject {
             return []
         }
         let currentNetwork = LocalUserDefaults.shared.network
-        let belong = EVMAccountManager.shared.selectedAccount != nil ? CustomToken.Belong
+        let belong = WalletManager.shared.isSelectedEVMAccount ? CustomToken.Belong
             .evm : .flow
 
         let result = list.filter { token in

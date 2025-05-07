@@ -79,7 +79,8 @@ extension NFTAddCollectionView {
             HStack(alignment: .center) {
                 Button {
                     if let website = item.collection.officialWebsite,
-                       let url = URL(string: website) {
+                       let url = URL(string: website)
+                    {
                         if let isOn = RemoteConfigManager.shared.config?.features.browser, isOn {
                             Router.route(to: RouteMap.Explore.browser(url))
                         }
@@ -169,7 +170,7 @@ extension NFTAddCollectionView {
         }
 
         var isEVMAccount: Bool {
-            EVMAccountManager.shared.selectedAccount != nil
+            WalletManager.shared.isSelectedEVMAccount
         }
 
         // MARK: Private

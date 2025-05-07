@@ -966,6 +966,8 @@
 		4E03BE202C7334EC00EF04DC /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE1E2C7334EC00EF04DC /* TextView.swift */; };
 		4E03BE222C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
 		4E03BE232C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
+		4E093AD82DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */; };
+		4E093AD92DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */; };
 		4E09A1EA2CC793FE0099606E /* EventTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1E92CC793FE0099606E /* EventTrack.swift */; };
 		4E09A1EB2CC793FE0099606E /* EventTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1E92CC793FE0099606E /* EventTrack.swift */; };
 		4E09A1EE2CC794900099606E /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 4E09A1ED2CC794900099606E /* Mixpanel */; };
@@ -2510,6 +2512,7 @@
 		4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWDevWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		4E0860512AB8BB1D0037F582 /* FRW.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRW.entitlements; sourceTree = "<group>"; };
 		4E0860522AB8BB260037F582 /* FRW-dev.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "FRW-dev.entitlements"; sourceTree = "<group>"; };
+		4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManger+Account.swift"; sourceTree = "<group>"; };
 		4E09A1E92CC793FE0099606E /* EventTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrack.swift; sourceTree = "<group>"; };
 		4E09A1F12CC79A5C0099606E /* EventTrackName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTrackName.swift; sourceTree = "<group>"; };
 		4E09A1F42CC79C600099606E /* EventTrack+General.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+General.swift"; sourceTree = "<group>"; };
@@ -4944,6 +4947,7 @@
 				154E31522DA40816008A495F /* Extension.swift */,
 				154E31552DA56A1D008A495F /* WalletManager+Getter.swift */,
 				4E297BDA2DC9D82F006A8052 /* WalletManager+Filter.swift */,
+				4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -7868,6 +7872,7 @@
 				15DC20DF27819C56000B187A /* VListLayoutType.swift in Sources */,
 				154B8916276A1EEB00780E93 /* BackgroundModifer.swift in Sources */,
 				158CE8892782DAD7006A8394 /* UserResponses.swift in Sources */,
+				4E093AD92DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */,
 				4EEDA38E2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */,
 				6A63F9F028C9C48C00FE96C0 /* SwiftUIPullToRefresh.swift in Sources */,
 				15DC214B27819C56000B187A /* VBaseNaviationViewNavigationBar.swift in Sources */,
@@ -8742,6 +8747,7 @@
 				4E815E6C2D7AE2AE00082EE1 /* PrivateKeyWarning.swift in Sources */,
 				15C58C0B2868A4EE00BD4FC6 /* BackgroundModifer.swift in Sources */,
 				15C58C0C2868A4EE00BD4FC6 /* UserResponses.swift in Sources */,
+				4E093AD82DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */,
 				4EEDA38D2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */,
 				4E9DCE452B50E845005DE911 /* InstabugConfig.swift in Sources */,
 				6A63F9EF28C9C48C00FE96C0 /* SwiftUIPullToRefresh.swift in Sources */,

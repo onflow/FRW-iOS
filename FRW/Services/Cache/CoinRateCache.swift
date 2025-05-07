@@ -191,7 +191,7 @@ extension CoinRateCache {
     ) -> CryptoSummaryResponse {
         var model: CryptoSummaryResponse.AddPrice?
 
-        if EVMAccountManager.shared.selectedAccount != nil {
+        if WalletManager.shared.isSelectedEVMAccount {
             model = addPrices
                 .first { $0.evmAddress?.lowercased() == token.getAddress()?.lowercased() }
         } else {

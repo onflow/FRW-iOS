@@ -111,7 +111,7 @@ class TransferListHandler: TransactionListBaseHandler {
         }
 
         collectionView.beginRefreshing()
-        
+
         Task { [weak self] in
             for await _ in NotificationCenter.default.notifications(named: .accountDataDidUpdate) {
                 await self?.collectionView.beginRefreshing()
@@ -154,7 +154,7 @@ extension TransferListHandler {
                     )
                     let response: TransfersResponse = try await Network
                         .request(FRWAPI.Account.tokenTransfers(request))
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.isRequesting = false
                         self.requestSuccess(response, start: start)
                     }
@@ -164,9 +164,9 @@ extension TransferListHandler {
                         limit: Limit,
                         after: start
                     )
-                    let target = EVMAccountManager.shared.selectedAccount == nil ? FRWAPI.Account.transfers(request) : FRWAPI.Account.evmTransfers(request)
+                    let target = WalletManager.shared.isSelectedEVMAccount ? FRWAPI.Account.evmTransfers(request) : FRWAPI.Account.transfers(request)
                     let response: TransfersResponse = try await Network.request(target)
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         self.isRequesting = false
                         self.requestSuccess(response, start: start)
                     }
@@ -174,7 +174,7 @@ extension TransferListHandler {
             } catch {
                 debugPrint("TransferListHandler -> requestTransfers failed: \(error)")
 
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.isRequesting = false
                     self.collectionView.stopRefreshing()
                     self.collectionView.stopLoading()
@@ -262,12 +262,12 @@ extension TransferListHandler: UICollectionViewDelegateFlowLayout, UICollectionV
         layout _: UICollectionViewLayout,
         referenceSizeForFooterInSection _: Int
     ) -> CGSize {
-        if EVMAccountManager.shared.selectedAccount != nil && dataList.count > 0 {
+        if WalletManager.shared.isSelectedEVMAccount && dataList.count > 0 {
             return CGSize(width: 0, height: 44)
         }
         return .zero
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -279,5 +279,4 @@ extension TransferListHandler: UICollectionViewDelegateFlowLayout, UICollectionV
             for: indexPath
         )
     }
-    
 }

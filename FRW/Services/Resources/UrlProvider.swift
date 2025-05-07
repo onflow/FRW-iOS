@@ -25,7 +25,7 @@ enum AccountType {
     }
 
     static var current: Self {
-        return EVMAccountManager.shared.selectedAccount == nil ? .flow : .evm
+        return WalletManager.shared.isSelectedEVMAccount ? .evm : .flow
     }
 }
 

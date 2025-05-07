@@ -426,7 +426,9 @@ extension UserManager {
         let wallet = Wallet(type: .key(keyProvider))
         try await wallet.fetchAccount()
         // TODO: Support other network login
-        guard let accountKey = wallet.accounts?[.mainnet]?.first?.fullWeightKey?.toStoreKey() else {
+        let accounts = wallet.accounts?[.mainnet]
+        let validAccount = accounts?.filter { $0.account.keys.filter { !$0.revoked }.count > 0 }
+        guard let accountKey = validAccount?.first?.fullWeightKey?.toStoreKey() else {
             throw LLError.cannotFindFlowAccount
         }
 

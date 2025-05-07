@@ -234,84 +234,18 @@ final class MoveTokenViewModel: ObservableObject {
         else {
             return
         }
-        if let account = ChildAccountManager.shared.selectedChildAccount {
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
-        } else if let account = EVMAccountManager.shared.selectedAccount {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
-        } else {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
-            fromContact = Contact(
-                address: primaryAddr,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: user.name,
-                user: user,
-                walletType: .flow
-            )
+        if let contact = WalletManager.shared.selectedAccountContact {
+            fromContact = contact
         }
 
-        if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil
-        {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
-            toContact = Contact(
-                address: primaryAddr,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: user.name,
-                user: user,
-                walletType: .flow
-            )
-        } else if let account = EVMAccountManager.shared.accounts.first {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
-        } else if let account = ChildAccountManager.shared.childAccounts.first {
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
+        if WalletManager.shared.isSelectedEVMAccount || WalletManager.shared.isSelectedChildAccount {
+            if let contact = WalletManager.shared.toContact() {
+                toContact = contact
+            }
+        } else if let account = WalletManager.shared.coa {
+            toContact = account.toContact()
+        } else if let account = WalletManager.shared.childs?.first {
+            toContact = account.toContact()
         }
     }
 

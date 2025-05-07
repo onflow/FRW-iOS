@@ -56,10 +56,10 @@ class EVMAccountManager: ObservableObject {
 
     @Published
     var hasAccount: Bool = false
-    
+
     @Published
     var showEVM: Bool = false
-    
+
     var balance: Decimal = 0
 
     @Published
@@ -74,9 +74,7 @@ class EVMAccountManager: ObservableObject {
     }
 
     @Published
-    var selectedAccount: EVMAccountManager.Account? = LocalUserDefaults.shared
-        .selectedEVMAccount
-    {
+    var selectedAccount: EVMAccountManager.Account? = LocalUserDefaults.shared.selectedEVMAccount {
         didSet {
             LocalUserDefaults.shared.selectedEVMAccount = selectedAccount
             NotificationCenter.default.post(name: .watchAddressDidChanged, object: nil)
@@ -198,15 +196,6 @@ extension EVMAccountManager {
             self.balance = balance
         }
     }
-
-    func select(_ account: EVMAccountManager.Account?) {
-        if selectedAccount?.address.lowercased() == account?.address.lowercased() {
-            return
-        }
-        DispatchQueue.main.async {
-            self.selectedAccount = account
-        }
-    }
 }
 
 extension EVMAccountManager {
@@ -288,9 +277,14 @@ extension EVMAccountManager {
         }
 
         var isSelected: Bool {
-            if let selectedAccount = EVMAccountManager.shared.selectedAccount,
-               selectedAccount.address.lowercased() == address.lowercased(), !address.isEmpty
-            {
+            guard let selectedAccount = WalletManager.shared.selectedAccount else {
+                return false
+            }
+            guard WalletManager.shared.isSelectedEVMAccount else {
+                return false
+            }
+
+            if selectedAccount.hexAddr.lowercased() == address.lowercased(), !address.isEmpty {
                 return true
             }
             return false

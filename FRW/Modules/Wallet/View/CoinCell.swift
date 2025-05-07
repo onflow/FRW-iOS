@@ -26,9 +26,7 @@ extension WalletHomeView {
             VStack(spacing: 0) {
                 TokenInfoCell(token: coin.token, isHidden: vm.isHidden)
 
-                if EVMAccountManager.shared.selectedAccount == nil && ChildAccountManager.shared
-                    .selectedChildAccount == nil
-                {
+                if WalletManager.shared.isSelectedFlowAccount {
                     HStack(spacing: 0) {
                         Divider()
                             .frame(width: 1, height: 10)

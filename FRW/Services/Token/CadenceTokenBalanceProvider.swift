@@ -27,7 +27,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
             throw WalletError.invaildAddress
         }
         let currency = CurrencyCache.cache.currentCurrency.rawValue
-        let query = FRWAPI.TokenQuery(address: address.hexAddr, currency: currency, network: network)
+        let query = FRWAPI.TokenQuery(address: addr.hexAddr, currency: currency, network: network)
         let response: TokenModelResponse = try await Network.request(FRWAPI.Token.cadence(query))
         var availableBalanceToUse = response.storage?.availableBalanceToUse
         let result = response.result ?? []

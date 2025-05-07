@@ -15,7 +15,7 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
 
     init(token: TokenModel?) {
         var result: [SwapProviderModel] = []
-        if EVMAccountManager.shared.selectedAccount != nil {
+        if WalletManager.shared.isSelectedEVMAccount {
             result.append(SwapProviderModel.Punch)
             result.append(SwapProviderModel.Trado)
         } else {
@@ -25,7 +25,7 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
             }
             result.append(SwapProviderModel.Increment)
         }
-        self.list = result
+        list = result
     }
 
     // MARK: Internal
@@ -64,7 +64,7 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
             .padding(.bottom, 20)
 
             VStack(spacing: 8) {
-                ForEach(0..<list.count, id: \.self) { index in
+                ForEach(0 ..< list.count, id: \.self) { index in
                     let model = list[index]
                     Cell(model: model)
                         .contentShape(Rectangle())

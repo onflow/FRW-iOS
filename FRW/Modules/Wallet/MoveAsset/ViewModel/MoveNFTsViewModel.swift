@@ -529,7 +529,7 @@ extension MoveNFTsViewModel {
     }
 
     func logo() -> Image {
-        let isSelectedEVM = EVMAccountManager.shared.selectedAccount != nil
+        let isSelectedEVM = WalletManager.shared.isSelectedEVMAccount
         return isSelectedEVM ? Image("icon_qr_evm") : Image("Flow")
     }
 }
