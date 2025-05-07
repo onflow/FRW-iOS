@@ -69,6 +69,12 @@ struct ManagerTokensView: RouteableView {
         .padding(16)
         .background(.Theme.Text.black.opacity(0.1))
         .cornerRadius(16)
+        .onChange(of: $filterToken.hideDustToken) { _ in
+            filterToken.updateFilter()
+        }
+        .onChange(of: $filterToken.onlyShowVerified) { _ in
+            filterToken.updateFilter()
+        }
     }
 
     var tokenView: some View {
