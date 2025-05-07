@@ -331,7 +331,7 @@ extension TokenDetailViewModel {
     }
 
     func onClickAddress() {
-        guard let url = token.website else {
+        guard let url = token.aboutTokenUrl() else {
             return
         }
         Router.route(to: RouteMap.Explore.browser(url))

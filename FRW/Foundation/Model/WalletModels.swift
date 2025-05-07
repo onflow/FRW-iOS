@@ -279,11 +279,19 @@ extension TokenModel {
 }
 
 extension TokenModel {
-    var tokenBalancePath: String? {
-        // TODO: #246 #six get value from cao
-        storagePath?.value
+    func aboutTokenUrl() -> URL? {
+        let host = currentNetwork.baseUrl(accountType: AccountType.current)
+        let path = AccountType.current == .flow ? "/ft/token" : "/token"
+        guard let target = AccountType.current == .flow ? identifier : evmAddress else {
+            HUD.error(title: "invalid identifier")
+            log.error("invalid identifier")
+            return nil
+        }
+        return URL(string: "\(host)\(path)/\(target)")
     }
 }
+
+// MARK: - FlowPath
 
 struct FlowPath: Codable {
     let domain: String?
