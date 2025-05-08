@@ -50,7 +50,7 @@ extension Flow.ChainID {
 
 struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
     var supportNetwork: [Flow.ChainID] {
-        [currentNetwork.toFlowType()]
+        [currentNetwork]
     }
 
     var type: WalletConnectHandlerType {

@@ -10055,7 +10055,7 @@
 			repositoryURL = "https://github.com/onflow/Flow-Wallet-Kit";
 			requirement = {
 				kind = revision;
-				revision = f30175e641dd49ff9e61d158634a70967747eeb2;
+				revision = 7bd8df3e01c13b3ff57dfda39542133039fea9e0;
 			};
 		};
 		4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */ = {
