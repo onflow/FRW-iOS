@@ -140,11 +140,6 @@ class SideMenuViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.enableEVM)
     }
 
-    func switchProfile() {
-        // TODO: remove recentToken
-        LocalUserDefaults.shared.recentToken = nil
-    }
-
     // MARK: Private
 
     private var cancelSets = Set<AnyCancellable>()

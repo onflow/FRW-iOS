@@ -483,7 +483,7 @@ extension WalletSendAmountView {
 
                     Spacer()
 
-                    Text(String(format: "%.\(vm.token.decimal)f", vm.inputTokenNum) + " \(vm.token.name.uppercased())")
+                    Text("\(vm.inputTokenNum.formatCurrency(vm.token.precision)) \(vm.token.name.uppercased())")
                         .foregroundColor(.LL.Neutrals.text)
                         .font(.inter(size: 20, weight: .semibold))
                         .minimumScaleFactor(0.5)
