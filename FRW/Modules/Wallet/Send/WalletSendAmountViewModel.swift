@@ -516,8 +516,6 @@ extension WalletSendAmountViewModel {
     }
 
     func changeTokenModelAction(token: TokenModel) {
-        LocalUserDefaults.shared.recentToken = token.vaultIdentifier
-
         self.token = token
         checkAddress()
         refreshTokenData()
