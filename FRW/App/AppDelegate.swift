@@ -94,7 +94,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         FlowLog.logEnv()
         InstallInfoManager.recordInstallInfoIfNeeded()
-        InstallInfoManager.updateInstallVersionsIfNeeded()
         return true
     }
 

@@ -30,6 +30,7 @@ class InstallInfoManager {
 
     // Entry: Called when the App is started
     static func recordInstallInfoIfNeeded() {
+        updateInstallVersionsIfNeeded()
         let defaults = UserDefaults.standard
         let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
 
