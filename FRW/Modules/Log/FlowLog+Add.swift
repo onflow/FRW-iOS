@@ -36,10 +36,10 @@ extension FlowLog {
         Current Time:               \(currentTime)
         Current User ID:            \(userId)
         Current Locale:             \(locale)
-        First Install Version:      \(InstallInfoManager.firstInstallVersion)
-        Migrate from other Devic:   \(InstallInfoManager.isMigratedFromOtherDevice)
-        Migrate Version:            \(InstallInfoManager.migratedVersion)
-        installed Versions:         \(InstallInfoManager.installVersions)
+        First Install Version:      \(InstallInfoManager.firstInstallVersion ?? "")
+        Migrate from other Devic:   \(InstallInfoManager.isMigratedFromOtherDevice ?? "")
+        Migrate Version:            \(InstallInfoManager.migratedVersion ?? "")
+        installed Versions:         \(InstallInfoManager.installVersions ?? "")
         ==================
         """
 
