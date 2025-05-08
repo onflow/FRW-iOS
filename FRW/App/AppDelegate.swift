@@ -93,6 +93,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             _ = Replies.didReceiveRemoteNotification(notification)
         }
         FlowLog.logEnv()
+        InstallInfoManager.recordInstallInfoIfNeeded()
+        InstallInfoManager.updateInstallVersionsIfNeeded()
         return true
     }
 
