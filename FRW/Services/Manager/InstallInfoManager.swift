@@ -16,7 +16,7 @@ class InstallInfoManager {
     static let keychainInstallVersionKey = "installVersion_keychain"
     static let userDefaultsInstallVersionsKey = "installVersions"
 
-    private static let keychain = Keychain(service: Bundle.main.bundleIdentifier ?? "com.default.app")
+    private static let keychain = Keychain(service: Bundle.main.bundleIdentifier ?? "com.flowfoundation.wallet")
 
     private static func saveToKeychain(_ value: String, for key: String) {
         try? keychain
