@@ -210,7 +210,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     var isVerifiedValue: Bool {
         isVerified ?? false
     }
-
+ 
     // Identifiable
     var id: String {
         getId(by: typeValue)
@@ -228,7 +228,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     static func mock() -> TokenModel {
-        TokenModel(type: .cadence, name: "mockname", symbol: nil, description: nil, contractAddress: nil, contractName: "", storagePath: nil, receiverPath: nil, balancePath: nil, identifier: nil, isVerified: nil, logoURI: nil, priceInUSD: nil, balanceInUSD: nil, priceInFLOW: nil, balanceInFLOW: nil, currency: nil, priceInCurrency: nil, balanceInCurrency: nil, displayBalance: nil, decimal: 8, evmAddress: nil, website: nil,)
+        TokenModel(type: .cadence, name: "mockname", symbol: nil, description: nil, contractAddress: nil, contractName: "", storagePath: nil, receiverPath: nil, balancePath: nil, identifier: nil, isVerified: nil, logoURI: nil, priceInUSD: nil, balanceInUSD: nil, priceInFLOW: nil, balanceInFLOW: nil, currency: nil, priceInCurrency: nil, balanceInCurrency: nil, displayBalance: nil, decimal: 8, evmAddress: nil, website: nil)
     }
 
     func getAddress() -> String? {
