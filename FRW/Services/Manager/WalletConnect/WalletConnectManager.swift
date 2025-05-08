@@ -263,10 +263,10 @@ class WalletConnectManager: ObservableObject {
     private var cacheReqeust: [String] = []
 
     private func navigateBackTodApp(topic: String) {
-        if let session = findSession(topic: topic), let url = session.peer.redirect?.native {
-            ReownRouter.goBack(uri: url)
-//            WalletConnectRouter.goBack(uri: url)
+        guard let session = findSession(topic: topic), let url = session.peer.redirect?.native else {
+            return
         }
+        ReownRouter.goBack(uri: url)
     }
 }
 
