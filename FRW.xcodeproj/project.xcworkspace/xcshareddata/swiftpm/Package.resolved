@@ -1,5 +1,5 @@
 {
-  "originHash" : "c6287e7f5d6dd5f9e4c5e107d322009e14090a86cde614eea1615362d201102b",
+  "originHash" : "dfdd235bdc784c078665f085755b1ec6c1cf8e797767cc25a978a45dbb911240",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -139,17 +139,19 @@
     {
       "identity" : "flow-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Outblock/flow-swift",
+      "location" : "https://github.com/outblock/flow-swift",
       "state" : {
-        "revision" : "a72bcb13c59105de2f28e0385adeaedffcf0b058"
+        "revision" : "94ccabc5267cdc641f9f7179a6e4d550215eacff",
+        "version" : "0.4.2"
       }
     },
     {
       "identity" : "flow-wallet-kit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onflow/Flow-Wallet-Kit",
+      "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "revision" : "f30175e641dd49ff9e61d158634a70967747eeb2"
+        "branch" : "master",
+        "revision" : "6530840264c4c3b8c671e0bd05271788c4392fb3"
       }
     },
     {
@@ -373,7 +375,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/crowdin/mobile-sdk-ios.git",
       "state" : {
-        "revision" : "adac48c96aaa72e153f32b3271432c263f0da54f"
+        "revision" : "2a030a3138ade71307303b0c24e3170b741fccbf",
+        "version" : "1.12.1"
       }
     },
     {
@@ -424,9 +427,9 @@
     {
       "identity" : "qrcode",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/QRCode",
+      "location" : "https://github.com/Outblock/QRCode",
       "state" : {
-        "revision" : "94fa5c053837eb2b367316590ceaa480b0689902"
+        "revision" : "41bcc4587f504196975eca4d7ddbc54fe2a9b57c"
       }
     },
     {
@@ -541,8 +544,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/daltoniam/Starscream",
       "state" : {
-        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
-        "version" : "3.1.2"
+        "revision" : "c6bfd1af48efcc9a9ad203665db12375ba6b145a",
+        "version" : "4.0.8"
       }
     },
     {
@@ -648,8 +651,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/trustwallet/wallet-core",
       "state" : {
-        "revision" : "a75b1f1e159ca0300814c34a881872d8574c78ba",
-        "version" : "4.3.2"
+        "revision" : "302938cf4c6d740e47ca5ed67c5107e2166a6cb5",
+        "version" : "4.3.3"
       }
     },
     {
