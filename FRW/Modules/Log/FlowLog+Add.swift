@@ -39,7 +39,7 @@ extension FlowLog {
         First Install Version:      \(InstallInfoManager.firstInstallVersion ?? "")
         Migrate from other Devic:   \(InstallInfoManager.isMigratedFromOtherDevice ?? false)
         Migrate Version:            \(InstallInfoManager.migratedVersion ?? "")
-        installed Versions:         \(InstallInfoManager.installVersions ?? "")
+        installed Versions:         \(InstallInfoManager.installVersions ?? [])
         ==================
         """
 
