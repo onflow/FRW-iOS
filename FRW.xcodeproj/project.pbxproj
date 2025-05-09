@@ -10011,8 +10011,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pocketsvg/PocketSVG";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.7.3;
+				kind = exactVersion;
+				version = 2.7.3;
 			};
 		};
 		4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */ = {
