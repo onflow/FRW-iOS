@@ -210,7 +210,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     var isVerifiedValue: Bool {
         isVerified ?? false
     }
-
+ 
     // Identifiable
     var id: String {
         getId(by: typeValue)

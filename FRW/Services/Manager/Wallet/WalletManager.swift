@@ -386,7 +386,7 @@ extension WalletManager {
             do {
                 let result: UserAddressV2Response = try await Network.request(FRWAPI.User.userAddressV2)
                 let txId = Flow.ID(hex: result.txId)
-                _ = try await txId.onceSealed()
+                _ = try await txId.onceExecuted()
                 try? await walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork)
                 debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
             } catch {

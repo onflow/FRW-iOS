@@ -106,18 +106,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             return true
         }
 
-        var parameters: [String: String] = [:]
-        URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.forEach {
-            parameters[$0.name] = $0.value
-        }
-
-        if let filtered = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?
-            .filter({ $0.name == "uri" && $0.value?.starts(with: "wc") ?? false }),
-            let item = filtered.first, let uri = item.value
-        {
-            WalletConnectManager.shared.onClientConnected = {
-                WalletConnectManager.shared.connect(link: uri)
-            }
+        if WalletConnectManager.shared.canHandleURL(url) {
+            WalletConnectManager.shared.handleURL(url)
         }
 
         // callback for login by dropbox
@@ -146,6 +136,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         {
             if DeepLinkHandler.shared.canHandleURL(url) {
                 DeepLinkHandler.shared.handleURL(url)
+                return true
+            }
+
+            if WalletConnectManager.shared.canHandleURL(url) {
+                WalletConnectManager.shared.handleURL(url)
                 return true
             }
         }

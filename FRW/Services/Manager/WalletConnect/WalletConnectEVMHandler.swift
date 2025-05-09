@@ -49,7 +49,9 @@ extension Flow.ChainID {
 // MARK: - WalletConnectEVMHandler
 
 struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
-    let supportNetwork: [Flow.ChainID] = [.mainnet, .testnet]
+    var supportNetwork: [Flow.ChainID] {
+        [currentNetwork]
+    }
 
     var type: WalletConnectHandlerType {
         .evm
@@ -74,8 +76,6 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 .compactMap { $0.reference }.sorted().last
         }
         switch reference {
-        case "646":
-            return .previewnet
         case "747":
             return .mainnet
         case "545":
