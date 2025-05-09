@@ -95,7 +95,7 @@ struct AddTokenView: RouteableView {
                 sectionHeader(section)
                     .id(section.id)
             }
-            .listRowInsets(EdgeInsets(top: 6, leading: 18, bottom: 6, trailing: 27))
+            .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 27))
             .background(Color.clear)
         }
         .scrollContentBackground(.hidden)
@@ -142,46 +142,51 @@ extension AddTokenView {
                 }
                 action()
             } label: {
-                HStack {
-                    KFImage.url(token.iconURL)
-                        .placeholder {
-                            Image("placeholder")
-                                .resizable()
+                VStack {
+                    HStack {
+                        KFImage.url(token.iconURL)
+                            .placeholder {
+                                Image("placeholder")
+                                    .resizable()
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: TokenIconWidth, height: TokenIconWidth)
+                            .clipShape(Circle())
+
+                        VStack(alignment: .leading, spacing: 3) {
+                            HStack {
+                                Text(token.name)
+                                    .foregroundColor(.LL.Neutrals.text)
+                                    .font(.inter(size: 14, weight: .semibold))
+                                Image("icon-token-valid")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .visibility(token.isVerifiedValue ? .visible : .gone)
+                            }
+
+                            Text(token.symbol?.uppercased() ?? "")
+                                .foregroundColor(.LL.Neutrals.note)
+                                .font(.inter(size: 12, weight: .medium))
                         }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: TokenIconWidth, height: TokenIconWidth)
-                        .clipShape(Circle())
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack {
-                            Text(token.name)
-                                .foregroundColor(.LL.Neutrals.text)
-                                .font(.inter(size: 14, weight: .semibold))
-                            Image("icon-token-valid")
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .visibility(token.isVerifiedValue ? .visible : .gone)
-                        }
-
-                        Text(token.symbol?.uppercased() ?? "")
-                            .foregroundColor(.LL.Neutrals.note)
-                            .font(.inter(size: 12, weight: .medium))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    if isEVMAccount && vm.mode == .addToken {
-                        HStack {}
-                    } else {
-                        if isActivated {
-                            Image(systemName: .checkmarkSelected)
-                                .foregroundColor(.LL.Success.success3)
+                        if isEVMAccount && vm.mode == .addToken {
+                            HStack {}
                         } else {
-                            Image(systemName: .add).foregroundColor(.LL.Primary.salmonPrimary)
-                                .visibility(vm.mode == .addToken ? .visible : .gone)
+                            if isActivated {
+                                Image(systemName: .checkmarkSelected)
+                                    .foregroundColor(.LL.Success.success3)
+                            } else {
+                                Image(systemName: .add).foregroundColor(.LL.Primary.salmonPrimary)
+                                    .visibility(vm.mode == .addToken ? .visible : .gone)
+                            }
                         }
                     }
+                    Divider()
+                        .foregroundStyle(Color.Theme.Line.line)
                 }
+
                 .frame(height: TokenCellHeight)
             }
         }

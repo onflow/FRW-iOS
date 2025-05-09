@@ -10,6 +10,7 @@ import SwiftUI
 struct ManageTokensView: RouteableView {
     @StateObject var viewModel = ManageTokensViewModel()
     @ObservedObject var filterToken = WalletManager.shared.filterToken
+    @State private var isSearchFocused: Bool = false
 
     var title: String {
         return "manager_tokens".localized
@@ -30,7 +31,6 @@ struct ManageTokensView: RouteableView {
                     .foregroundColor(.Theme.Text.black)
             }
         })
-        .searchable(text: $viewModel.searchText)
         .padding(16)
         .background(.Theme.Background.white)
         .applyRouteable(self)
@@ -79,14 +79,14 @@ struct ManageTokensView: RouteableView {
     }
 
     var tokenView: some View {
-        VStack {
-            HStack(spacing: 0) {
+        VStack(spacing: 20) {
+            HStack {
                 Text("tokens".localized)
                     .font(.inter(size: 14, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.text4)
                 Spacer()
             }
-
+            SearchBar(placeholder: "Search_Token::message".localized, searchText: $viewModel.searchText, isFocused: $isSearchFocused)
             ScrollView {
                 VStack {
                     ForEach(viewModel.list, id: \.token.contractId) { model in
