@@ -997,8 +997,6 @@
 		4E0D34A62A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */; };
 		4E0F48472DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
 		4E0F48482DA4ABD300F5552D /* BridgeFeePayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */; };
-		4E131A9A2CA17389002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A992CA17389002B258D /* PocketSVG */; };
-		4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = 4E131A9B2CA1739A002B258D /* PocketSVG */; };
 		4E131A9E2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
 		4E131A9F2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
 		4E131AA12CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */; };
@@ -2499,6 +2497,7 @@
 		15F2443F28CB370D00C1090E /* CapusuleGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapusuleGroupView.swift; sourceTree = "<group>"; };
 		15F2444028CB370D00C1090E /* LowerCapsuleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LowerCapsuleView.swift; sourceTree = "<group>"; };
 		15F43D112753B4F6004F6F49 /* PageIndictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageIndictor.swift; sourceTree = "<group>"; };
+		15F531192DCDF896004C610A /* flow-wallet-kit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "flow-wallet-kit"; path = "/Users/lmcmz/flow/flow-wallet-kit"; sourceTree = "<absolute>"; };
 		15F6F4C52D69FAFD00D62D7F /* TokenBalanceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceHandler.swift; sourceTree = "<group>"; };
 		15F6F4C62D69FAFD00D62D7F /* EVMTokenBalanceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMTokenBalanceProvider.swift; sourceTree = "<group>"; };
 		15F6F4CC2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenceTokenBalanceProvider.swift; sourceTree = "<group>"; };
@@ -3112,7 +3111,6 @@
 				152BB09628AE900C00B2A2AA /* Lottie in Frameworks */,
 				6AEA375A28A51792004545D4 /* MJRefresh in Frameworks */,
 				15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */,
-				4E131A9A2CA17389002B258D /* PocketSVG in Frameworks */,
 				15DD619C2D7AA6B600F96F0F /* YttriumWrapper in Frameworks */,
 				6ABFE5A129A711ED00AA1688 /* Gzip in Frameworks */,
 				15832B642867641D0066046D /* GTMSessionFetcherCore in Frameworks */,
@@ -3187,7 +3185,6 @@
 				6A0454CD28768E9E00A9131C /* SwiftUIPager in Frameworks */,
 				152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */,
 				6AEA374028A49DBE004545D4 /* MJRefresh in Frameworks */,
-				4E131A9C2CA1739A002B258D /* PocketSVG in Frameworks */,
 				15C58C442868A4EE00BD4FC6 /* SPConfetti in Frameworks */,
 				1549CF03299A10C2002B37A5 /* Gzip in Frameworks */,
 				15C58C452868A4EE00BD4FC6 /* GTMSessionFetcherCore in Frameworks */,
@@ -4953,6 +4950,7 @@
 		15EC9DE5274FD1FC00F70CD9 = {
 			isa = PBXGroup;
 			children = (
+				15F531192DCDF896004C610A /* flow-wallet-kit */,
 				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
 				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
 				15EC9DF0274FD1FC00F70CD9 /* FRW */,
@@ -6561,7 +6559,6 @@
 				4EEE9DC62BD243DB00685AAA /* FirebaseAnalytics */,
 				4E2E8CBC2C61B9A800095D5B /* LogView */,
 				4E660F1D2C80B43E00E5239E /* CollectionViewPagingLayout */,
-				4E131A992CA17389002B258D /* PocketSVG */,
 				4E09A1EF2CC7949E0099606E /* Mixpanel */,
 				4E2FA6A72CF410BF00D46EA7 /* ReownRouter */,
 				4E2FA6A92CF4177C00D46EA7 /* ReownWalletKit */,
@@ -6651,7 +6648,6 @@
 				4E947C912BBEB2E300E87A85 /* web3swift */,
 				4E2E8CBE2C61BB2300095D5B /* LogView */,
 				4E660F1B2C80B42F00E5239E /* CollectionViewPagingLayout */,
-				4E131A9B2CA1739A002B258D /* PocketSVG */,
 				4E3BFD692C93F7EA00517FAB /* FlowWalletKit */,
 				4E09A1ED2CC794900099606E /* Mixpanel */,
 				4EDE41EA2CF5944500A6EAB3 /* FlowWalletKit */,
@@ -6835,7 +6831,6 @@
 				4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */,
 				4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */,
 				4E660F1A2C80B42F00E5239E /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */,
-				4E131A982CA17389002B258D /* XCRemoteSwiftPackageReference "PocketSVG" */,
 				4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
 				4E2FA68C2CF40EAB00D46EA7 /* XCRemoteSwiftPackageReference "reown-swift" */,
 				4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */,
@@ -9714,8 +9709,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onflow/flow-wallet-kit.git";
 			requirement = {
-				branch = websocket;
-				kind = branch;
+				kind = revision;
+				revision = 63f909b20a64052f08cc27c63f05baf87a3a3a33;
 			};
 		};
 		156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
@@ -10005,14 +10000,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.8.0;
-			};
-		};
-		4E131A982CA17389002B258D /* XCRemoteSwiftPackageReference "PocketSVG" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pocketsvg/PocketSVG";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.7.3;
 			};
 		};
 		4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */ = {
@@ -10511,16 +10498,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
 			productName = Mixpanel;
-		};
-		4E131A992CA17389002B258D /* PocketSVG */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E131A982CA17389002B258D /* XCRemoteSwiftPackageReference "PocketSVG" */;
-			productName = PocketSVG;
-		};
-		4E131A9B2CA1739A002B258D /* PocketSVG */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E131A982CA17389002B258D /* XCRemoteSwiftPackageReference "PocketSVG" */;
-			productName = PocketSVG;
 		};
 		4E1DD8C62B1622030055E510 /* Instabug */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -8,11 +8,14 @@
 import Flow
 import SwiftUI
 import UIKit
+import Combine
 
 extension Flow.Transaction.Status {
     var progressPercent: CGFloat {
         switch self {
-        case .pending, .unknown:
+        case .unknown:
+            return 0.01
+        case .pending:
             return 0.33
         case .finalized:
             return 0.66
@@ -27,23 +30,6 @@ extension Flow.Transaction.Status {
 }
 
 extension TransactionManager.TransactionHolder {
-    var statusString: String {
-        switch Flow.Transaction.Status(status) {
-        case .unknown:
-            return "Unknown"
-        case .pending:
-            return "Pending"
-        case .finalized:
-            return "Finalized"
-        case .executed:
-            return "Executed"
-        case .sealed:
-            return "Sealed"
-        case .expired:
-            return "Expired"
-        }
-    }
-
     var successHUDMessage: String {
         switch type {
         case .claimDomain:
@@ -73,7 +59,7 @@ extension TransactionManager.TransactionHolder {
             index: nil,
             payer: nil,
             proposer: nil,
-            status: statusString,
+            status: status.stringValue,
             time: time
         )
         return model
@@ -114,7 +100,7 @@ extension TransactionManager {
         }
     }
 
-    class TransactionHolder: Codable {
+    class TransactionHolder {
         // MARK: Lifecycle
 
         init(
@@ -135,32 +121,19 @@ extension TransactionManager {
                     await FlowNetwork.removeScriptId(id)
                 }
             }
-            log.info("[Cadence] txi:\(id.hex)")
+            log.info("[Cadence] txId:\(id.hex)")
         }
 
         // MARK: Internal
 
-        enum CodingKeys: String, CodingKey {
-            case transactionId
-            case createTime
-            case status
-            case type
-            case data
-            case internalStatus
-        }
-
         var transactionId: Flow.ID
         var createTime: TimeInterval
-        var status: Int = Flow.Transaction.Status.pending.rawValue
+        var status: Flow.Transaction.Status = .unknown
         var internalStatus: TransactionManager.InternalStatus = .pending
         var type: TransactionManager.TransactionType
         var data: Data = .init()
         var errorMsg: String?
         var scriptId: String?
-
-        var flowStatus: Flow.Transaction.Status {
-            Flow.Transaction.Status(status)
-        }
 
         func decodedObject<T: Decodable>(_ type: T.Type) -> T? {
             try? JSONDecoder().decode(type, from: data)
@@ -203,100 +176,15 @@ extension TransactionManager {
             }
         }
 
-        func startTimer() {
-            stopTimer()
-
-            if retryTimes > 5 {
-                internalStatus = .failed
-                postNotification()
-                return
-            }
-
-            let timer = Timer(
-                timeInterval: 2,
-                target: self,
-                selector: #selector(onCheck),
-                userInfo: nil,
-                repeats: false
-            )
-            RunLoop.main.add(timer, forMode: .common)
-            self.timer = timer
-
-            debugPrint("TransactionHolder -> startTimer")
-        }
-
-        func stopTimer() {
-            if let timer = timer {
-                timer.invalidate()
-                self.timer = nil
-                debugPrint("TransactionHolder -> stopTimer")
-            }
-        }
-
-        // MARK: Private
-
-        private var timer: Timer?
-        private var retryTimes: Int = 0
-
-        @objc
-        private func onCheck() {
-            debugPrint("TransactionHolder -> onCheck")
-
-            Task {
-                do {
-                    let result = try await FlowNetwork.getTransactionResult(by: transactionId.hex)
-                    debugPrint("TransactionHolder -> onCheck status: \(result.status)")
-
-                    DispatchQueue.main.async { [self] in
-                        if result.status == self.flowStatus, result.status < .sealed {
-                            self.startTimer()
-                            return
-                        }
-
-                        self.status = result.status.rawValue
-                        if result.isFailed {
-                            self.errorMsg = result.errorMessage
-                            self.internalStatus = .failed
-
-                            self.trackResult(
-                                result: result,
-                                fromId: self.transactionId.hex
-                            )
-                            log.warning("TransactionHolder -> onCheck result failed: \(result.errorMessage)")
-
-                            let errorCode = String(describing: result.errorCode).trimError()
-                            let group = "\(scriptId ?? "empty")" + ".tx." + "\(errorCode)"
-                            log.error(CustomError.custom("\(errorCode)", "scriptId: " + (scriptId ?? "") + " ,txid: " + transactionId.description),
-                                      group: .custom(group),
-                                      report: true,
-                                      reportUserAttribute: ["scriptId": scriptId ?? ""])
-                            switch result.errorCode {
-                            case .storageCapacityExceeded:
-                                AlertViewController.showInsufficientStorageError(minimumBalance: WalletManager.shared.minimumStorageBalance.doubleValue)
-                            default:
-                                break
-                            }
-                        } else if result.isComplete {
-                            self.internalStatus = .success
-                            self.trackResult(
-                                result: result,
-                                fromId: self.transactionId.hex
-                            )
-                        } else {
-                            self.internalStatus = .pending
-                            self.startTimer()
-                        }
-
-                        self.postNotification()
-                    }
-                } catch {
-                    debugPrint("TransactionHolder -> onCheck failed: \(error)")
-                    await MainActor.run {
-                        self.retryTimes += 1
-                        self.startTimer()
-                    }
+        func start() {
+           let _ = flow.websocket.subscribeToTransactionStatus(txId: transactionId)
+                .filter { $0.payload?.transactionResult.status ?? .unknown >= .sealed }
+                .first()
+                .sink { _ in
+                } receiveValue: { value in
+                    flow.websocket.unsubscribe(subscriptionId: value.subscriptionId)
                 }
-            }
+
         }
 
         private func trackResult(result: Flow.TransactionResult, fromId _: String) {
@@ -321,35 +209,23 @@ class TransactionManager: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        checkFolder()
         addNotification()
-        loadHoldersFromCache()
-        startCheckIfNeeded()
+        start()
+        flow.websocket.isDebug = true
     }
 
     // MARK: Internal
 
     static let shared = TransactionManager()
 
+    private var cancellables = Set<AnyCancellable>()
+    
     @Published
     private(set) var holders: [TransactionHolder] = []
 
     // MARK: Private
 
-    private lazy var rootFolder = FileManager.default.urls(
-        for: .cachesDirectory,
-        in: .userDomainMask
-    ).first!.appendingPathComponent("transaction_cache")
-    private lazy var transactionCacheFile = rootFolder
-        .appendingPathComponent("transaction_cache_file")
-
     private func addNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onHolderChanged(noti:)),
-            name: .transactionStatusDidChanged,
-            object: nil
-        )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(willReset),
@@ -357,26 +233,38 @@ class TransactionManager: ObservableObject {
             object: nil
         )
     }
+    
+    private func start() {
+        flow.publisher.transactionPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (id, txResult) in
+                self?.onHolderChanged(txId: id, result: txResult)
+            }
+            .store(in: &cancellables)
+    }
 
     @objc
     private func willReset() {
         holders = []
-        saveHoldersToCache()
-        postDidChangedNotification()
     }
 
-    @objc
-    private func onHolderChanged(noti: Notification) {
-        guard let holder = noti.object as? TransactionHolder else {
+    private func onHolderChanged(txId: Flow.ID, result: Flow.TransactionResult) {
+        log.info("TX Status Changed: \(result.status) - \(txId) - \(Date.now)")
+        guard let holder = holders.first(where: { $0.transactionId == txId }) else {
             return
         }
-
-        if holder.internalStatus == .pending {
+        
+        holder.status = result.status
+        
+        if result.status < .executed {
+            holder.internalStatus = .pending
             return
         }
-
-        if holder.internalStatus == .failed {
-            removeTransaction(id: holder.transactionId.hex)
+        
+        holder.internalStatus = result.isFailed ? .failed : .success
+        
+        if result.isFailed {
+            removeTransaction(id: txId)
             HUD.error(title: holder.errorHUDMessage)
             return
         }
@@ -386,7 +274,7 @@ class TransactionManager: ObservableObject {
         let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
         feedbackGenerator.impactOccurred()
 
-        removeTransaction(id: holder.transactionId.hex)
+        removeTransaction(id: holder.transactionId)
 
         switch holder.type {
         case .claimDomain:
@@ -428,7 +316,7 @@ class TransactionManager: ObservableObject {
 
     private func startCheckIfNeeded() {
         for holder in holders {
-            holder.startTimer()
+            holder.start()
         }
     }
 
@@ -444,32 +332,17 @@ class TransactionManager: ObservableObject {
 extension TransactionManager {
     func newTransaction(holder: TransactionManager.TransactionHolder) {
         holders.insert(holder, at: 0)
-        saveHoldersToCache()
         postDidChangedNotification()
-
-        holder.startTimer()
+        holder.start()
     }
 
-    func removeTransaction(id: String) {
-        for holder in holders {
-            if holder.transactionId.hex == id {
-                holder.stopTimer()
-            }
-        }
-
-        holders.removeAll { $0.transactionId.hex == id }
-        saveHoldersToCache()
+    func removeTransaction(id: Flow.ID) {
+        holders.removeAll { $0.transactionId == id }
         postDidChangedNotification()
     }
 
     func isExist(tid: String) -> Bool {
-        for holder in holders {
-            if holder.transactionId.hex == tid {
-                return true
-            }
-        }
-
-        return false
+        return holders.map { $0.transactionId.hex }.contains(tid.removePrefix("0x"))
     }
 
     func isTokenEnabling(symbol: String) -> Bool {
@@ -511,54 +384,6 @@ extension TransactionManager {
 }
 
 // MARK: - Cache
-
-extension TransactionManager {
-    private func checkFolder() {
-        do {
-            if !FileManager.default.fileExists(atPath: rootFolder.relativePath) {
-                try FileManager.default.createDirectory(
-                    at: rootFolder,
-                    withIntermediateDirectories: true
-                )
-            }
-
-        } catch {
-            debugPrint("TransactionManager -> checkFolder error: \(error)")
-        }
-    }
-
-    private func loadHoldersFromCache() {
-        if !FileManager.default.fileExists(atPath: transactionCacheFile.relativePath) {
-            return
-        }
-
-        do {
-            let data = try Data(contentsOf: transactionCacheFile)
-            let list = try JSONDecoder().decode(
-                [TransactionManager.TransactionHolder].self,
-                from: data
-            )
-            let filterdList = list.filter { $0.internalStatus == .pending }
-
-            if !filterdList.isEmpty {
-                holders = filterdList
-            }
-        } catch {
-            debugPrint("TransactionManager -> loadHoldersFromCache error: \(error)")
-        }
-    }
-
-    private func saveHoldersToCache() {
-        let filterdHolders = holders.filter { $0.internalStatus == .pending }
-
-        do {
-            let data = try JSONEncoder().encode(filterdHolders)
-            try data.write(to: transactionCacheFile)
-        } catch {
-            debugPrint("TransactionManager -> saveHoldersToCache error: \(error)")
-        }
-    }
-}
 
 private extension String {
     func trimError() -> String {
