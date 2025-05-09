@@ -43,8 +43,6 @@ struct TokenDetailView: RouteableView {
 
                 summaryView
                 unverifiedTokenView
-                    .padding(.vertical, 16)
-                    .padding(.bottom, 18)
                     .visibility(vm.token.isVerifiedValue ? .gone : .visible)
 
                 stakeAdView
@@ -72,7 +70,7 @@ struct TokenDetailView: RouteableView {
             .padding(.top, 12)
         }
         .buttonStyle(.plain)
-        .backgroundFill(Color.LL.Neutrals.background)
+        .backgroundFill(Color.Theme.Background.white)
         .applyRouteable(self)
         .halfSheet(
             showSheet: $vm.showSheet,
@@ -197,7 +195,7 @@ struct TokenDetailView: RouteableView {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
         .background(.clear)
-        .borderStyle()
+        .cardStyle(showBorder: !vm.token.isVerifiedValue)
     }
 
     var activitiesView: some View {
@@ -245,7 +243,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 18)
         .padding(.bottom, 8)
-        .borderStyle()
+        .cardStyle(showBorder: !vm.token.isVerifiedValue)
     }
 
     var chartContainerView: some View {
@@ -301,7 +299,7 @@ struct TokenDetailView: RouteableView {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 18)
-        .borderStyle()
+        .cardStyle(showBorder: !vm.token.isVerifiedValue)
     }
 
     var chartRangeView: some View {
@@ -352,7 +350,7 @@ struct TokenDetailView: RouteableView {
             .padding(.top, 16)
             .padding(.horizontal, 16)
             .padding(.bottom, 22)
-            .borderStyle()
+            .cardStyle(showBorder: !vm.token.isVerifiedValue)
         }
         .padding(.bottom, 12)
     }
@@ -394,7 +392,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 18)
-        .borderStyle()
+        .cardStyle(showBorder: !vm.token.isVerifiedValue)
         .padding(.bottom, 8)
     }
 
@@ -410,7 +408,12 @@ struct TokenDetailView: RouteableView {
                 .underline()
                 .font(.inter(size: 12))
                 .foregroundColor(Color.Theme.Text.black8)
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .cardStyle(showBorder: !vm.token.isVerifiedValue)
     }
 
     // MARK: Private
@@ -754,7 +757,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .padding(.bottom, 14)
-            .borderStyle()
+            .cardStyle(showBorder: !vm.token.isVerifiedValue)
         }
     }
 
@@ -816,7 +819,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .frame(height: 72, alignment: .topLeading)
-            .borderStyle()
+            .cardStyle(showBorder: !vm.token.isVerifiedValue)
         }
     }
 }
@@ -848,9 +851,38 @@ struct BorderStyle: ViewModifier {
     }
 }
 
+// MARK: - CardStyle
+
+struct CardStyle: ViewModifier {
+    let cornerRadius: CGFloat
+    let showBorder: Bool
+
+    func body(content: Content) -> some View {
+        if showBorder {
+            content
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))
+                        .foregroundColor(Color.Theme.Line.stroke)
+                }
+        } else {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(Color.Theme.Special.white1)
+                        .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 8)
+                )
+        }
+    }
+}
+
 extension View {
-    func borderStyle() -> some View {
+    func borderStyle(isShow _: Bool = true) -> some View {
         modifier(BorderStyle())
+    }
+
+    func cardStyle(cornerRadius: CGFloat = 12, showBorder: Bool = true) -> some View {
+        modifier(CardStyle(cornerRadius: cornerRadius, showBorder: showBorder))
     }
 }
 

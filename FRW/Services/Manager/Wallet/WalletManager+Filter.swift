@@ -21,8 +21,8 @@ final class TokenFilterModel: ObservableObject, Codable {
     }
 
     func updateFilter() {
-        var list = WalletManager.shared.activatedCoins
-        let limitTokens = hideDustToken ? list.filter { ($0.balanceInUSD?.doubleValue ?? 0) < 1 }.map { $0.contractId } : []
+        let list = WalletManager.shared.activatedCoins
+        let limitTokens = hideDustToken ? list.filter { ($0.balanceInUSD?.doubleValue ?? 0) < 0.01 }.map { $0.contractId } : []
         let unverifiedTokens = onlyShowVerified ? list.filter { !$0.isVerifiedValue }.map { $0.contractId } : []
         hideTokens = Set(limitTokens).union(Set(unverifiedTokens))
         LocalUserDefaults.shared.filterTokens = self

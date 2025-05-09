@@ -41,7 +41,7 @@ struct AddTokenView: RouteableView {
             VStack {
                 HStack {
                     Toggle(isOn: $vm.onlyShowVerified) {
-                        HStack(spacing: 0) {
+                        HStack(spacing: 4) {
                             Text("only_show_tokens".localized)
                                 .font(.inter(size: 14))
                                 .foregroundStyle(Color.Theme.Text.black)
@@ -67,6 +67,7 @@ struct AddTokenView: RouteableView {
                 }
             }
         )
+        .background(Color.Theme.Background.white)
         .environmentObject(vm)
         .disabled(vm.isRequesting)
         .mockPlaceholder(vm.isMocking)
@@ -95,10 +96,10 @@ struct AddTokenView: RouteableView {
                     .id(section.id)
             }
             .listRowInsets(EdgeInsets(top: 6, leading: 18, bottom: 6, trailing: 27))
+            .background(Color.clear)
         }
+        .scrollContentBackground(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .listStyle(.plain)
-        .background(Color.LL.background)
         .searchable(text: $vm.searchText)
     }
 
@@ -181,11 +182,7 @@ extension AddTokenView {
                         }
                     }
                 }
-                .padding(.horizontal, 12)
                 .frame(height: TokenCellHeight)
-                .background {
-                    Color.LL.Neutrals.background.cornerRadius(16)
-                }
             }
         }
 

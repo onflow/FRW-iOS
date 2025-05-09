@@ -172,5 +172,9 @@ extension UIColor {
         }
 
         static let evm = UIColor(named: "evm")
+
+        enum Special {
+            static let white1 = UIColor(named: "special.white1")
+        }
     }
 }

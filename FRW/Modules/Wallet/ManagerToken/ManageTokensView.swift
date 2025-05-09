@@ -1,5 +1,5 @@
 //
-//  ManagerTokensView.swift
+//  ManageTokensView.swift
 //  FRW
 //
 //  Created by cat on 5/6/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct ManagerTokensView: RouteableView {
-    @StateObject var viewModel = ManagerTokensViewModel()
+struct ManageTokensView: RouteableView {
+    @StateObject var viewModel = ManageTokensViewModel()
     @ObservedObject var filterToken = WalletManager.shared.filterToken
 
     var title: String {
@@ -37,7 +37,7 @@ struct ManagerTokensView: RouteableView {
     }
 
     var filterView: some View {
-        VStack {
+        VStack(spacing: 8) {
             HStack(spacing: 0) {
                 Text("Filters".localized)
                     .font(.inter(size: 14, weight: .bold))
@@ -52,6 +52,7 @@ struct ManagerTokensView: RouteableView {
                         .foregroundStyle(Color.Theme.Text.black)
                 }
             }
+            .padding(.bottom, 8)
 
             HStack {
                 Toggle(isOn: $filterToken.onlyShowVerified) {
@@ -101,5 +102,5 @@ struct ManagerTokensView: RouteableView {
 }
 
 #Preview {
-    ManagerTokensView()
+    ManageTokensView()
 }
