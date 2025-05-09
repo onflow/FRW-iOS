@@ -1,5 +1,5 @@
 {
-  "originHash" : "be3e5704db7123e1e6245690b70106558d07cdf8455f3276932d8ad2e23fa5bc",
+  "originHash" : "c476078f6e4e35d8ef50c637bbdc3c485b4798c19c5015c94fb952ce50170039",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -409,8 +409,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pocketsvg/PocketSVG",
       "state" : {
-        "revision" : "890a94e60c59cdf055b4d549dd246f60c6b25b5e",
-        "version" : "2.8.0"
+        "revision" : "10c6885e427e88d35fbb64010fbd6385cb58fef7",
+        "version" : "2.7.3"
       }
     },
     {
