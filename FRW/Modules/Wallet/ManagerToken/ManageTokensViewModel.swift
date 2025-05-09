@@ -1,5 +1,5 @@
 //
-//  ManagerTokensViewModel.swift
+//  ManageTokensViewModel.swift
 //  FRW
 //
 //  Created by cat on 5/6/25.
@@ -8,9 +8,9 @@
 import Combine
 import Foundation
 
-class ManagerTokensViewModel: ObservableObject {
+class ManageTokensViewModel: ObservableObject {
     private var cancellableSet = Set<AnyCancellable>()
-    @Published var list: [ManagerTokensViewModel.Item] = []
+    @Published var list: [ManageTokensViewModel.Item] = []
     @Published var searchText: String = "" {
         didSet {
             update()
@@ -29,8 +29,8 @@ class ManagerTokensViewModel: ObservableObject {
     private func update() {
         let allTokens = WalletManager.shared.activatedCoins
         let result = allTokens.map { token in
-            ManagerTokensViewModel.Item(token: token,
-                                        isOpen: WalletManager.shared.filterToken.isOpen(token: token))
+            ManageTokensViewModel.Item(token: token,
+                                       isOpen: WalletManager.shared.filterToken.isOpen(token: token))
         }
         list = result.filter { item in
             if searchText.isEmpty {
@@ -52,7 +52,7 @@ class ManagerTokensViewModel: ObservableObject {
     }
 }
 
-extension ManagerTokensViewModel {
+extension ManageTokensViewModel {
     struct Item: Identifiable {
         let token: TokenModel
         var isOpen: Bool

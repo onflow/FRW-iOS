@@ -36,7 +36,7 @@ extension WalletHomeView {
                         .clipShape(Circle())
 
                     VStack(spacing: 4) {
-                        HStack(spacing: 0) {
+                        HStack(spacing: 4) {
                             Text(coin.token.name)
                                 .foregroundColor(Color.Theme.Text.text1)
                                 .font(.inter(size: 14, weight: .bold))

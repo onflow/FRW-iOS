@@ -364,7 +364,7 @@ extension RouteMap.Wallet: RouterTarget {
             let vc = PresentHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
         case .managerTokens:
-            navi.push(content: ManagerTokensView())
+            navi.push(content: ManageTokensView())
         }
     }
 }

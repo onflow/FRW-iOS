@@ -1,5 +1,5 @@
 //
-//  ManagerTokensView.swift
+//  ManageTokensView.swift
 //  FRW
 //
 //  Created by cat on 5/6/25.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct ManagerTokensView: RouteableView {
-    @StateObject var viewModel = ManagerTokensViewModel()
+struct ManageTokensView: RouteableView {
+    @StateObject var viewModel = ManageTokensViewModel()
     @ObservedObject var filterToken = WalletManager.shared.filterToken
+    @State private var isSearchFocused: Bool = false
 
     var title: String {
         return "manager_tokens".localized
@@ -30,14 +31,13 @@ struct ManagerTokensView: RouteableView {
                     .foregroundColor(.Theme.Text.black)
             }
         })
-        .searchable(text: $viewModel.searchText)
         .padding(16)
         .background(.Theme.Background.white)
         .applyRouteable(self)
     }
 
     var filterView: some View {
-        VStack {
+        VStack(spacing: 8) {
             HStack(spacing: 0) {
                 Text("Filters".localized)
                     .font(.inter(size: 14, weight: .bold))
@@ -52,6 +52,7 @@ struct ManagerTokensView: RouteableView {
                         .foregroundStyle(Color.Theme.Text.black)
                 }
             }
+            .padding(.bottom, 8)
 
             HStack {
                 Toggle(isOn: $filterToken.onlyShowVerified) {
@@ -78,14 +79,14 @@ struct ManagerTokensView: RouteableView {
     }
 
     var tokenView: some View {
-        VStack {
-            HStack(spacing: 0) {
+        VStack(spacing: 20) {
+            HStack {
                 Text("tokens".localized)
                     .font(.inter(size: 14, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.text4)
                 Spacer()
             }
-
+            SearchBar(placeholder: "Search_Token::message".localized, searchText: $viewModel.searchText, isFocused: $isSearchFocused)
             ScrollView {
                 VStack {
                     ForEach(viewModel.list, id: \.token.contractId) { model in
@@ -101,5 +102,5 @@ struct ManagerTokensView: RouteableView {
 }
 
 #Preview {
-    ManagerTokensView()
+    ManageTokensView()
 }

@@ -1052,10 +1052,10 @@
 		4E2677632C9BF613008729EB /* RecoveryPhraseBackupResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2677612C9BF613008729EB /* RecoveryPhraseBackupResultView.swift */; };
 		4E297BD12DC99D3D006A8052 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD02DC99D3D006A8052 /* CircleButton.swift */; };
 		4E297BD22DC99D3D006A8052 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD02DC99D3D006A8052 /* CircleButton.swift */; };
-		4E297BD52DC9B13B006A8052 /* ManagerTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD42DC9B13B006A8052 /* ManagerTokensView.swift */; };
-		4E297BD62DC9B13B006A8052 /* ManagerTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD42DC9B13B006A8052 /* ManagerTokensView.swift */; };
-		4E297BD82DC9B14D006A8052 /* ManagerTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD72DC9B14D006A8052 /* ManagerTokensViewModel.swift */; };
-		4E297BD92DC9B14D006A8052 /* ManagerTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD72DC9B14D006A8052 /* ManagerTokensViewModel.swift */; };
+		4E297BD52DC9B13B006A8052 /* ManageTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD42DC9B13B006A8052 /* ManageTokensView.swift */; };
+		4E297BD62DC9B13B006A8052 /* ManageTokensView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD42DC9B13B006A8052 /* ManageTokensView.swift */; };
+		4E297BD82DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD72DC9B14D006A8052 /* ManageTokensViewModel.swift */; };
+		4E297BD92DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BD72DC9B14D006A8052 /* ManageTokensViewModel.swift */; };
 		4E297BDB2DC9D82F006A8052 /* WalletManager+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BDA2DC9D82F006A8052 /* WalletManager+Filter.swift */; };
 		4E297BDC2DC9D82F006A8052 /* WalletManager+Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BDA2DC9D82F006A8052 /* WalletManager+Filter.swift */; };
 		4E297BDF2DC9FDAD006A8052 /* ManagerTokensItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E297BDE2DC9FDAD006A8052 /* ManagerTokensItemView.swift */; };
@@ -2551,8 +2551,8 @@
 		4E26775E2C9BB848008729EB /* PhraseKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseKeyStore.swift; sourceTree = "<group>"; };
 		4E2677612C9BF613008729EB /* RecoveryPhraseBackupResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryPhraseBackupResultView.swift; sourceTree = "<group>"; };
 		4E297BD02DC99D3D006A8052 /* CircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
-		4E297BD42DC9B13B006A8052 /* ManagerTokensView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTokensView.swift; sourceTree = "<group>"; };
-		4E297BD72DC9B14D006A8052 /* ManagerTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTokensViewModel.swift; sourceTree = "<group>"; };
+		4E297BD42DC9B13B006A8052 /* ManageTokensView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTokensView.swift; sourceTree = "<group>"; };
+		4E297BD72DC9B14D006A8052 /* ManageTokensViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageTokensViewModel.swift; sourceTree = "<group>"; };
 		4E297BDA2DC9D82F006A8052 /* WalletManager+Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+Filter.swift"; sourceTree = "<group>"; };
 		4E297BDE2DC9FDAD006A8052 /* ManagerTokensItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTokensItemView.swift; sourceTree = "<group>"; };
 		4E2B704C2AF3727F004F00A0 /* KeyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyResponse.swift; sourceTree = "<group>"; };
@@ -5103,8 +5103,8 @@
 			isa = PBXGroup;
 			children = (
 				4E297BDD2DC9FD62006A8052 /* Views */,
-				4E297BD42DC9B13B006A8052 /* ManagerTokensView.swift */,
-				4E297BD72DC9B14D006A8052 /* ManagerTokensViewModel.swift */,
+				4E297BD42DC9B13B006A8052 /* ManageTokensView.swift */,
+				4E297BD72DC9B14D006A8052 /* ManageTokensViewModel.swift */,
 			);
 			path = ManagerToken;
 			sourceTree = "<group>";
@@ -7478,7 +7478,7 @@
 				4E9621D62B984EF3006859AD /* CadenceManager.swift in Sources */,
 				15DC21A127819C56000B187A /* UIKitTextFieldRepresentable.swift in Sources */,
 				15D874EB28C629430072C6EA /* FirebaseAPI.swift in Sources */,
-				4E297BD92DC9B14D006A8052 /* ManagerTokensViewModel.swift in Sources */,
+				4E297BD92DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */,
 				15DC20BD27819C56000B187A /* VSquareButtonModel.swift in Sources */,
 				4EC482D3284A3D75000A7E1B /* MMCQ.swift in Sources */,
 				15DC21AB27819C56000B187A /* FocusableTextField.swift in Sources */,
@@ -7538,7 +7538,7 @@
 				15DC212B27819C56000B187A /* VProgressBarModel.swift in Sources */,
 				4E297BDF2DC9FDAD006A8052 /* ManagerTokensItemView.swift in Sources */,
 				6A164F6E2845F1CB0026B31E /* View+IndexBarBackground.swift in Sources */,
-				4E297BD52DC9B13B006A8052 /* ManagerTokensView.swift in Sources */,
+				4E297BD52DC9B13B006A8052 /* ManageTokensView.swift in Sources */,
 				15DC213D27819C56000B187A /* VMenuPickerRow.swift in Sources */,
 				4E95323E2CD5501C00AAECD1 /* CustomTokenDetailView.swift in Sources */,
 				15DE22EC277F0B0C00B5EE03 /* Shimmer.swift in Sources */,
@@ -8354,7 +8354,7 @@
 				4E9621D52B984EF3006859AD /* CadenceManager.swift in Sources */,
 				15C58B4F2868A4EE00BD4FC6 /* VSquareButtonModel.swift in Sources */,
 				15C58B502868A4EE00BD4FC6 /* MMCQ.swift in Sources */,
-				4E297BD82DC9B14D006A8052 /* ManagerTokensViewModel.swift in Sources */,
+				4E297BD82DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */,
 				15C58B512868A4EE00BD4FC6 /* FocusableTextField.swift in Sources */,
 				15C58B522868A4EE00BD4FC6 /* VTextFieldActions.swift in Sources */,
 				6A98509B28C71B5D00A07C2D /* BrowserAuthnViewModel.swift in Sources */,
@@ -8414,7 +8414,7 @@
 				15C58B622868A4EE00BD4FC6 /* VMenuPickerRow.swift in Sources */,
 				4E297BE02DC9FDAD006A8052 /* ManagerTokensItemView.swift in Sources */,
 				15C58B632868A4EE00BD4FC6 /* Shimmer.swift in Sources */,
-				4E297BD62DC9B13B006A8052 /* ManagerTokensView.swift in Sources */,
+				4E297BD62DC9B13B006A8052 /* ManageTokensView.swift in Sources */,
 				15C58B642868A4EE00BD4FC6 /* NFTTabViewModel.swift in Sources */,
 				4E95323F2CD5501C00AAECD1 /* CustomTokenDetailView.swift in Sources */,
 				6AB3732C28D084EC00E8BF05 /* UIColor.swift in Sources */,

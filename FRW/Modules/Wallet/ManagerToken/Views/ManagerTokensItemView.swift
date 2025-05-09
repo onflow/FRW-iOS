@@ -12,7 +12,7 @@ private let CoinIconHeight: CGFloat = 44
 private let CoinCellHeight: CGFloat = 76
 
 struct ManagerTokensItemView: View {
-    let item: ManagerTokensViewModel.Item
+    let item: ManageTokensViewModel.Item
     var callback: (TokenModel, Bool) -> Void
 
     var body: some View {

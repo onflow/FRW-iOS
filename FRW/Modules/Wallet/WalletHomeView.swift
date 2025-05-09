@@ -431,21 +431,6 @@ struct WalletHomeView: View {
             .visibility(vm.showSwapButton ? .visible : .gone)
 
             WalletActionButton(
-                event: .stake,
-                allowClick: !wm.isSelectedChildAccount
-            ) {
-                if !LocalUserDefaults.shared.stakingGuideDisplayed && !StakingManager.shared
-                    .hasStaking
-                {
-                    Router.route(to: RouteMap.Wallet.stakingSelectProvider)
-                    return
-                }
-
-                Router.route(to: RouteMap.Wallet.stakingList)
-            }
-            .visibility(vm.showStakeButton ? .visible : .gone)
-
-            WalletActionButton(
                 event: .buy,
                 allowClick: !wm.isSelectedChildAccount
             ) {
