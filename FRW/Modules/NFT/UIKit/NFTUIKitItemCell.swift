@@ -6,7 +6,6 @@
 //
 
 import Kingfisher
-import PocketSVG
 import SnapKit
 import SwiftUI
 import UIKit
@@ -60,21 +59,6 @@ class NFTUIKitItemCell: UICollectionViewCell {
             descLabel.isHidden = false
             inaccessibleLabel.isHidden = true
         }
-    }
-
-    func generateSVGImage(svgString: String) -> UIImage? {
-        let width = NFTUIKitItemCell.itemWidth()
-
-        let svgLayer = SVGLayer()
-        svgLayer.paths = SVGBezierPath.paths(fromSVGString: svgString)
-        let originRect = SVGBoundingRectForPaths(svgLayer.paths)
-        svgLayer.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: width,
-            height: width * originRect.height / originRect.width
-        )
-        return snapshotImage(for: svgLayer)
     }
 
     func snapshotImage(for layer: CALayer) -> UIImage? {
