@@ -18,6 +18,12 @@ extension Container {
     var token: Factory<TokenBalanceHandler> {
         self {
             TokenBalanceHandler()
-        }.singleton
+        }
+    }
+    
+    var txManager: Factory<TransactionManager> {
+        self {
+            TransactionManager()
+        }
     }
 }
