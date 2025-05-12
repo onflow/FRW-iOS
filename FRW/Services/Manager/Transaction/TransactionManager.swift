@@ -5,10 +5,10 @@
 //  Created by Selina on 25/8/2022.
 //
 
+import Combine
 import Flow
 import SwiftUI
 import UIKit
-import Combine
 
 extension Flow.Transaction.Status {
     var progressPercent: CGFloat {
@@ -58,8 +58,6 @@ extension TransactionManager {
             }
         }
     }
-
-
 }
 
 // MARK: - TransactionManager
@@ -70,7 +68,7 @@ class TransactionManager: ObservableObject {
     init() {
         addNotification()
         start()
-        flow.websocket.isDebug = true
+//        flow.websocket.isDebug = true
     }
 
     // MARK: Internal
@@ -78,7 +76,7 @@ class TransactionManager: ObservableObject {
     static let shared = TransactionManager()
 
     private var cancellables = Set<AnyCancellable>()
-    
+
     @Published
     private(set) var holders: [TransactionHolder] = []
 
@@ -92,11 +90,11 @@ class TransactionManager: ObservableObject {
             object: nil
         )
     }
-    
+
     private func start() {
         flow.publisher.transactionPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] (id, txResult) in
+            .sink { [weak self] id, txResult in
                 self?.onHolderChanged(txId: id, result: txResult)
             }
             .store(in: &cancellables)
@@ -112,16 +110,16 @@ class TransactionManager: ObservableObject {
         guard let holder = holders.first(where: { $0.transactionId == txId }) else {
             return
         }
-        
+
         holder.status = result.status
-        
+
         if result.status < .executed {
             holder.internalStatus = .pending
             return
         }
-        
+
         holder.internalStatus = result.isFailed ? .failed : .success
-        
+
         if result.isFailed {
             removeTransaction(id: txId)
             HUD.error(title: holder.errorHUDMessage)
