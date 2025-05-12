@@ -969,6 +969,8 @@
 		4E03BE202C7334EC00EF04DC /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE1E2C7334EC00EF04DC /* TextView.swift */; };
 		4E03BE222C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
 		4E03BE232C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
+		4E05BFC32DCCF29000659097 /* InstallInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */; };
+		4E05BFC42DCCF29000659097 /* InstallInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */; };
 		4E093AD82DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */; };
 		4E093AD92DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */; };
 		4E09A1EA2CC793FE0099606E /* EventTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09A1E92CC793FE0099606E /* EventTrack.swift */; };
@@ -2509,6 +2511,7 @@
 		4E03BE1B2C73222A00EF04DC /* KeyStoreLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreLoginViewModel.swift; sourceTree = "<group>"; };
 		4E03BE1E2C7334EC00EF04DC /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportAccountsView.swift; sourceTree = "<group>"; };
+		4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallInfoManager.swift; sourceTree = "<group>"; };
 		4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWDevWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		4E0860512AB8BB1D0037F582 /* FRW.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRW.entitlements; sourceTree = "<group>"; };
@@ -4900,6 +4903,7 @@
 				4E8A96542B66D807007C95E8 /* DeviceManager.swift */,
 				4E8A96572B67143D007C95E8 /* AccountKeyManager.swift */,
 				4E9D8F0A2BF5E3AD00E11CC7 /* NetworkProvider.swift */,
+				4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -7227,6 +7231,7 @@
 				15DC20C527819C56000B187A /* VCloseButton.swift in Sources */,
 				4E8DD9FD282E52110016A931 /* JSONStorage.swift in Sources */,
 				4E2B704E2AF3727F004F00A0 /* KeyResponse.swift in Sources */,
+				4E05BFC42DCCF29000659097 /* InstallInfoManager.swift in Sources */,
 				155E371F28D37A7A00834C30 /* ExploreEmptyScreen.swift in Sources */,
 				4EBDF2C92BFB9F3700E56968 /* SelectCollectionViewModel.swift in Sources */,
 				6A2D35BA283B6AD7008293D9 /* ProfileViewModel.swift in Sources */,
@@ -8104,6 +8109,7 @@
 				15C58AD72868A4EE00BD4FC6 /* JSONStorage.swift in Sources */,
 				4E2B704D2AF3727F004F00A0 /* KeyResponse.swift in Sources */,
 				155E371E28D37A7A00834C30 /* ExploreEmptyScreen.swift in Sources */,
+				4E05BFC32DCCF29000659097 /* InstallInfoManager.swift in Sources */,
 				4EBDF2C82BFB9F3700E56968 /* SelectCollectionViewModel.swift in Sources */,
 				15C58AD92868A4EE00BD4FC6 /* ProfileViewModel.swift in Sources */,
 				15C58ADB2868A4EE00BD4FC6 /* VTextType.swift in Sources */,
