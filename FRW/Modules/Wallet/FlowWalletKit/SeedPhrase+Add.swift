@@ -24,42 +24,59 @@ extension SeedPhraseKey {
 
     func store(id: String) throws {
         let pw = KeyProvider.password(with: id)
-        let key = self.createKey(uid: id)
+        let key = createKey(uid: id)
         try store(id: key, password: pw)
     }
 
     static var seedPhraseStorage: FlowWalletKit.KeychainStorage {
-        let service = (Bundle.main.bundleIdentifier ?? AppBundleName) + suffix
         let storage = FlowWalletKit.KeychainStorage(
-            service: service,
-            label: "SeedPhraseKey",
-            synchronizable: false
+            service: keychainService,
+            label: keychainTag,
+            synchronizable: false,
+            deviceOnly: true
         )
         return storage
     }
 }
 
-//MARK: - For Backup
-extension SeedPhraseKey {
+// MARK: - For Backup
 
-    static func createBackup(uid: String? = nil) throws -> SeedPhraseKey {
+extension SeedPhraseKey {
+    static func createBackup(uid _: String? = nil) throws -> SeedPhraseKey {
         let key = try SeedPhraseKey.create(storage: seedPhraseBackupStorage)
         return key
     }
 
     func storeBackup(id: String) throws {
         let pw = KeyProvider.password(with: id)
-        let key = self.createKey(uid: id)
+        let key = createKey(uid: id)
         try store(id: key, password: pw)
     }
 
     static var seedPhraseBackupStorage: FlowWalletKit.KeychainStorage {
-        let service = (Bundle.main.bundleIdentifier ?? AppBundleName) + suffix + ".backup"
         let storage = FlowWalletKit.KeychainStorage(
-            service: service,
-            label: "SeedPhraseKey Backup",
+            service: keychainBackService,
+            label: keychainBackTag,
             synchronizable: false
         )
         return storage
+    }
+}
+
+extension SeedPhraseKey {
+    static var keychainService: String {
+        (Bundle.main.bundleIdentifier ?? AppBundleName) + suffix
+    }
+
+    static var keychainTag: String {
+        "SeedPhraseKey"
+    }
+
+    static var keychainBackService: String {
+        keychainService + ".backup"
+    }
+
+    static var keychainBackTag: String {
+        keychainTag + " Backup"
     }
 }
