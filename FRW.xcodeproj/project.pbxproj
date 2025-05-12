@@ -2501,7 +2501,6 @@
 		15F2443F28CB370D00C1090E /* CapusuleGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapusuleGroupView.swift; sourceTree = "<group>"; };
 		15F2444028CB370D00C1090E /* LowerCapsuleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LowerCapsuleView.swift; sourceTree = "<group>"; };
 		15F43D112753B4F6004F6F49 /* PageIndictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageIndictor.swift; sourceTree = "<group>"; };
-		15F531192DCDF896004C610A /* flow-wallet-kit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "flow-wallet-kit"; path = "/Users/lmcmz/flow/flow-wallet-kit"; sourceTree = "<absolute>"; };
 		15F5311A2DCE03A3004C610A /* TransactionHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHolder.swift; sourceTree = "<group>"; };
 		15F6F4C52D69FAFD00D62D7F /* TokenBalanceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceHandler.swift; sourceTree = "<group>"; };
 		15F6F4C62D69FAFD00D62D7F /* EVMTokenBalanceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMTokenBalanceProvider.swift; sourceTree = "<group>"; };
@@ -4957,7 +4956,6 @@
 		15EC9DE5274FD1FC00F70CD9 = {
 			isa = PBXGroup;
 			children = (
-				15F531192DCDF896004C610A /* flow-wallet-kit */,
 				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
 				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
 				15EC9DF0274FD1FC00F70CD9 /* FRW */,
@@ -9730,7 +9728,7 @@
 			repositoryURL = "https://github.com/onflow/flow-wallet-kit.git";
 			requirement = {
 				kind = revision;
-				revision = 63f909b20a64052f08cc27c63f05baf87a3a3a33;
+				revision = 2ba4eb4d451414e9dc650c18ca7e7c328ca365d0;
 			};
 		};
 		156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
