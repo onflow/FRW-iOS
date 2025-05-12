@@ -413,7 +413,9 @@ struct TokenDetailView: RouteableView {
         .frame(maxWidth: .infinity)
         .padding(16)
         .cardStyle(showBorder: false)
-        .onTapGesture {}
+        .onTapGesture {
+            vm.onClickUnverifiedToken()
+        }
     }
 
     // MARK: Private
