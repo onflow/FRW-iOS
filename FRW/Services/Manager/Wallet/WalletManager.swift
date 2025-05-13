@@ -188,6 +188,14 @@ extension WalletManager {
             keyProvider = keyProvider(with: uid)
             guard let provider = keyProvider, let user = userStore(with: uid) else {
                 log.error("[Wallet] not found provider or user at \(uid)")
+                Task {
+                    do {
+                        try await UserManager.shared.logout()
+                    } catch {
+                        log.warning("logout failed.")
+                    }
+                }
+
                 return
             }
             updateKeyProvider(provider: provider, storeUser: user)
@@ -478,6 +486,7 @@ extension WalletManager {
             log.info("empty selected address")
             throw WalletError.emptyAddress
         }
+        log.info("fetch user token \(addr)")
         let list = try await TokenBalanceHandler.shared.fetchUserTokens(address: addr)
         await MainActor.run {
             self.activatedCoins = list

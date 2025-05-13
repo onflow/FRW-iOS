@@ -46,6 +46,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        KeyChainAccessibilityUpdate.udpate()
+
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
         FirebaseApp.configure()
