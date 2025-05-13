@@ -141,7 +141,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "c97bb6b4d8f1a386eb01bd0b0599fc05867ea8c2"
+        "revision" : "1f2e8f88bc8552ba58d3c839d52ea7feb1be104b"
       }
     },
     {
@@ -149,7 +149,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "revision" : "63f909b20a64052f08cc27c63f05baf87a3a3a33"
+        "revision" : "2ba4eb4d451414e9dc650c18ca7e7c328ca365d0"
       }
     },
     {
