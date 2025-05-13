@@ -336,6 +336,14 @@ extension TokenDetailViewModel {
         }
         Router.route(to: RouteMap.Explore.browser(url))
     }
+
+    func onClickUnverifiedToken() {
+        let urlStr = "https://wallet.flow.com/post/verified-tokens-on-flow-wallet"
+        guard let url = URL(string: urlStr) else {
+            return
+        }
+        Router.route(to: RouteMap.Explore.browser(url))
+    }
 }
 
 // MARK: - Fetch & Refresh

@@ -1171,6 +1171,12 @@
 		4E5F2F232C1AD232008589C4 /* MoveAssetsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F2F212C1AD232008589C4 /* MoveAssetsAction.swift */; };
 		4E5F2F252C1AF398008589C4 /* PresentHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F2F242C1AF398008589C4 /* PresentHostingController.swift */; };
 		4E5F2F262C1AF398008589C4 /* PresentHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5F2F242C1AF398008589C4 /* PresentHostingController.swift */; };
+		4E611D142DD1E1BC000DAA74 /* GuidePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */; };
+		4E611D152DD1E1BC000DAA74 /* GuidePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */; };
+		4E611D172DD1E4B4000DAA74 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D162DD1E4B4000DAA74 /* TooltipView.swift */; };
+		4E611D182DD1E4B4000DAA74 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D162DD1E4B4000DAA74 /* TooltipView.swift */; };
+		4E611D3F2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */; };
+		4E611D402DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */; };
 		4E63A5692B8B9D1000BBD15F /* EVMEnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */; };
 		4E63A56A2B8B9D1000BBD15F /* EVMEnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */; };
 		4E63A5712B8BA1F400BBD15F /* EVMEnableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5702B8BA1F400BBD15F /* EVMEnableViewModel.swift */; };
@@ -2603,6 +2609,9 @@
 		4E5F2F1E2C193A2B008589C4 /* DefaultCryptoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCryptoProvider.swift; sourceTree = "<group>"; };
 		4E5F2F212C1AD232008589C4 /* MoveAssetsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAssetsAction.swift; sourceTree = "<group>"; };
 		4E5F2F242C1AF398008589C4 /* PresentHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentHostingController.swift; sourceTree = "<group>"; };
+		4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidePopover.swift; sourceTree = "<group>"; };
+		4E611D162DD1E4B4000DAA74 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
+		4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAccessibilityUpdate.swift; sourceTree = "<group>"; };
 		4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMEnableView.swift; sourceTree = "<group>"; };
 		4E63A5702B8BA1F400BBD15F /* EVMEnableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMEnableViewModel.swift; sourceTree = "<group>"; };
 		4E63A5732B8BB79700BBD15F /* ReceiveQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveQRView.swift; sourceTree = "<group>"; };
@@ -4857,6 +4866,8 @@
 				4E815E6A2D7AE2AE00082EE1 /* PrivateKeyWarning.swift */,
 				4E815E6D2D7AE4C900082EE1 /* CopyButton.swift */,
 				4EE0909E2DA750B3001515FE /* WarningView.swift */,
+				4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */,
+				4E611D162DD1E4B4000DAA74 /* TooltipView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -5545,6 +5556,7 @@
 				4EDEA7642C90305B00DE76B6 /* SecureEnclaveMigration.swift */,
 				4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */,
 				4E4A6B6C2CA6ECEF00231A85 /* KeyProtocol+Add.swift */,
+				4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */,
 			);
 			path = FlowWalletKit;
 			sourceTree = "<group>";
@@ -7372,6 +7384,7 @@
 				6AA2E75B289D28EC00B4DD96 /* DispatchQueue.swift in Sources */,
 				6A46754E28F2D70400F705A8 /* FileManager.swift in Sources */,
 				15DC20D327819C56000B187A /* VPlainButton.swift in Sources */,
+				4E611D402DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */,
 				15DC20ED27819C56000B187A /* VSectionListModel.swift in Sources */,
 				15DC218D27819C56000B187A /* VRadioButton.swift in Sources */,
 				4EAF31BF28464ACE002AF489 /* BackAppBar.swift in Sources */,
@@ -7778,6 +7791,7 @@
 				4EC31180284503C600F711F5 /* NFTCollectionListView.swift in Sources */,
 				6A8FA4B2285B192900EE5BE3 /* DecelerationRate.swift in Sources */,
 				4EDDAA24285F5DC600EB8AF9 /* NFTAddCollectionView.swift in Sources */,
+				4E611D172DD1E4B4000DAA74 /* TooltipView.swift in Sources */,
 				1588331D28943D1D00142B35 /* Images.swift in Sources */,
 				6A45898A28C1DF0000B1024B /* FRWAPI+Browser.swift in Sources */,
 				6AEA374428A4AD20004545D4 /* NFTUIKitListViewController.swift in Sources */,
@@ -7857,6 +7871,7 @@
 				76E4A4462D5A99DE000EE408 /* TransactionListViewControllerRepresentable.swift in Sources */,
 				1588330B28943D1D00142B35 /* SPQRDetailButton.swift in Sources */,
 				4E9532382CD3E4B300AAECD1 /* CustomTokenManager.swift in Sources */,
+				4E611D152DD1E1BC000DAA74 /* GuidePopover.swift in Sources */,
 				4E9D8F092BF5DC2100E11CC7 /* Web3Provider.swift in Sources */,
 				15DC215F27819C56000B187A /* VSideBarModel.swift in Sources */,
 				6ABAE53028362D1100C97AE2 /* Others.swift in Sources */,
@@ -8250,6 +8265,7 @@
 				15C58B162868A4EE00BD4FC6 /* VPlainButton.swift in Sources */,
 				6A46754D28F2D70400F705A8 /* FileManager.swift in Sources */,
 				15C58B172868A4EE00BD4FC6 /* VSectionListModel.swift in Sources */,
+				4E611D3F2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */,
 				15C58B182868A4EE00BD4FC6 /* VRadioButton.swift in Sources */,
 				15C58B192868A4EE00BD4FC6 /* BackAppBar.swift in Sources */,
 				15C58B1A2868A4EE00BD4FC6 /* RequestSecureViewModel.swift in Sources */,
@@ -8656,6 +8672,7 @@
 				15C58BD92868A4EE00BD4FC6 /* DecelerationRate.swift in Sources */,
 				15C58BDA2868A4EE00BD4FC6 /* NFTAddCollectionView.swift in Sources */,
 				1588331C28943D1D00142B35 /* Images.swift in Sources */,
+				4E611D182DD1E4B4000DAA74 /* TooltipView.swift in Sources */,
 				15C58BDB2868A4EE00BD4FC6 /* NFTEmptyView.swift in Sources */,
 				6A45898928C1DF0000B1024B /* FRWAPI+Browser.swift in Sources */,
 				6AEA374328A4AD20004545D4 /* NFTUIKitListViewController.swift in Sources */,
@@ -8735,6 +8752,7 @@
 				4EB2EF662C952973002E59B4 /* IntroductionView.swift in Sources */,
 				76E4A4472D5A99DE000EE408 /* TransactionListViewControllerRepresentable.swift in Sources */,
 				15C58BFE2868A4EE00BD4FC6 /* VSideBarModel.swift in Sources */,
+				4E611D142DD1E1BC000DAA74 /* GuidePopover.swift in Sources */,
 				4E9532392CD3E4B300AAECD1 /* CustomTokenManager.swift in Sources */,
 				4E9D8F082BF5DC2100E11CC7 /* Web3Provider.swift in Sources */,
 				15C58BFF2868A4EE00BD4FC6 /* Others.swift in Sources */,

@@ -156,6 +156,19 @@ extension UserManager {
             Router.popToRoot()
         }
     }
+
+    func logout() async throws {
+        log.debug("logout")
+        try await Auth.auth().signInAnonymously()
+
+        await MainActor.run {
+            NotificationCenter.default.post(name: .willResetWallet)
+            self.activatedUID = nil
+            self.userInfo = nil
+            NotificationCenter.default.post(name: .didResetWallet)
+            Router.popToRoot()
+        }
+    }
 }
 
 // MARK: - Register
@@ -217,7 +230,7 @@ extension UserManager {
             let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
             for key in seKeylist {
                 if let se = try? SecureEnclaveKey.wallet(id: key),
-                   let publicKey = try? se.publicKey()?.hexValue
+                   let publicKey = se.publicKey()?.hexValue
                 {
                     let response: AccountResponse = try await Network
                         .requestWithRawModel(FRWAPI.Utils.flowAddress(publicKey))
@@ -247,7 +260,7 @@ extension UserManager {
                         log.error("[Launch] seed phrase restore failed.\(key): not found")
                         continue
                     }
-                    guard let publicKey = try? provider.publicKey(signAlgo: .ECDSA_SECP256k1)?
+                    guard let publicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)?
                         .hexString
                     else {
                         log.error("[Launch] seed phrase restore failed.\(key): public key")
@@ -284,9 +297,9 @@ extension UserManager {
                         log.error("[Launch] Private key restore failed.\(key): not found")
                         continue
                     }
-                    let secpPublicKey = try? provider.publicKey(signAlgo: .ECDSA_SECP256k1)?
+                    let secpPublicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)?
                         .hexString
-                    let p256PublicKey = try? provider.publicKey(signAlgo: .ECDSA_P256)?
+                    let p256PublicKey = provider.publicKey(signAlgo: .ECDSA_P256)?
                         .hexString
                     let suffix = KeyProvider.getSuffix(with: key)
                     var storePublicKey: String?
