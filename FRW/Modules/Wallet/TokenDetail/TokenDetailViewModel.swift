@@ -497,7 +497,7 @@ extension TokenDetailViewModel {
         // Swap
         if (RemoteConfigManager.shared.config?.features.swap ?? false) == true {
             // don't show when current is Linked account
-            if ChildAccountManager.shared.selectedChildAccount != nil || ChildAccountManager.shared
+            if WalletManager.shared.selectedChildAccount != nil || ChildAccountManager.shared
                 .selectedChildAccount != nil
             {
                 showSwapButton = false
@@ -512,7 +512,7 @@ extension TokenDetailViewModel {
         if RemoteConfigManager.shared.config?.features.onRamp ?? false == true,
            flow.chainID == .mainnet
         {
-            if ChildAccountManager.shared.selectedChildAccount != nil {
+            if WalletManager.shared.selectedChildAccount != nil {
                 showBuyButton = false
             } else {
                 showBuyButton = token.isFlowCoin ? true : false

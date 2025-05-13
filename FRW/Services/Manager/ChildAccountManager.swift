@@ -57,8 +57,8 @@ struct ChildAccount: Codable {
     }
 
     var isSelected: Bool {
-        if let selectedChildAccount = ChildAccountManager.shared.selectedChildAccount,
-           selectedChildAccount.addr == addr, let addr = addr, !addr.isEmpty
+        if let selectedChildAccount = WalletManager.shared.selectedChildAccount,
+           selectedChildAccount.address.hex == addr, let addr = addr, !addr.isEmpty
         {
             return true
         }

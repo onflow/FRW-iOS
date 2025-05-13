@@ -63,8 +63,8 @@ class NFTUIKitListViewController: UIViewController {
                 log.debug("[NFT] wallet info refresh triggerd a upload token action")
                 self.walletInfoDidChanged()
             }.store(in: &cancelSets)
-        
-        EVMAccountManager.shared.$selectedAccount
+
+        WalletManager.shared.$selectedAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
@@ -75,7 +75,7 @@ class NFTUIKitListViewController: UIViewController {
         listStyleHandler.refreshAction()
         gridStyleHandler.refreshAction()
 
-        addButton.isHidden = ChildAccountManager.shared.selectedChildAccount != nil
+        addButton.isHidden = WalletManager.shared.isSelectedChildAccount
     }
 
     func reloadViews() {
@@ -205,7 +205,7 @@ class NFTUIKitListViewController: UIViewController {
 
     @objc
     private func onChildAccountChanged() {
-        addButton.isHidden = ChildAccountManager.shared.selectedChildAccount != nil
+        addButton.isHidden = !WalletManager.shared.isSelectedFlowAccount
         listStyleHandler.collectionView.beginRefreshing()
         gridStyleHandler.collectionView.beginRefreshing()
     }

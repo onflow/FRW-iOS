@@ -48,6 +48,6 @@ enum AppHide {
 
 extension AppHide {
     private static var isChildAccount: Bool {
-        ChildAccountManager.shared.selectedChildAccount != nil
+        WalletManager.shared.selectedChildAccount != nil
     }
 }

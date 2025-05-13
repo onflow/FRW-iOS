@@ -274,7 +274,7 @@ extension NFTUIKitCache {
 
 extension NFTUIKitCache {
     private func loadFavCache() {
-        guard ChildAccountManager.shared.selectedChildAccount == nil else {
+        guard WalletManager.shared.selectedChildAccount == nil else {
             favList = []
             return
         }
@@ -343,7 +343,7 @@ extension NFTUIKitCache {
     }
 
     func isFav(id: String) -> Bool {
-        if ChildAccountManager.shared.selectedChildAccount != nil {
+        if WalletManager.shared.selectedChildAccount != nil {
             return false
         }
         for nft in favList {
@@ -362,7 +362,8 @@ extension NFTUIKitCache {
         }
 
         guard var address = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress(),
-              let collectionId = nft.response.collectionID else {
+              let collectionId = nft.response.collectionID
+        else {
             return
         }
 
@@ -418,7 +419,7 @@ extension NFTUIKitCache {
     }
 
     func requestFav() {
-        guard ChildAccountManager.shared.selectedChildAccount == nil else {
+        guard WalletManager.shared.selectedChildAccount == nil else {
             favList = []
             return
         }
@@ -427,7 +428,8 @@ extension NFTUIKitCache {
         }
 
         guard let address = WalletManager.shared
-            .getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
+            .getWatchAddressOrChildAccountAddressOrPrimaryAddress()
+        else {
             return
         }
 
@@ -485,7 +487,8 @@ extension NFTUIKitCache {
 
             // remove collection if needed
             if var collections = getCollections(),
-               let index = collections.firstIndex(where: { $0.collection.id == collectionId }) {
+               let index = collections.firstIndex(where: { $0.collection.id == collectionId })
+            {
                 if listNFTs.isEmpty {
                     collections.removeAll { $0.collection.id == collectionId }
                 } else {

@@ -125,7 +125,7 @@ extension ProfileView {
         }
 
         private func refreshWalletAccountState() {
-            isLinkedAccount = ChildAccountManager.shared.selectedChildAccount != nil
+            isLinkedAccount = WalletManager.shared.selectedChildAccount != nil
         }
     }
 }

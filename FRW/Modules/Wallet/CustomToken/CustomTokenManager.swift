@@ -183,7 +183,7 @@ extension CustomTokenManager {
     }
 
     func fetchBalance(token: CustomToken) async throws -> BigUInt? {
-        guard let coaAddresss = EVMAccountManager.shared.selectedAccount?.showAddress else {
+        guard let coaAddresss = WalletManager.shared.selectedEVMAccount?.address.addHexPrefix() else {
             throw AddCustomTokenError.invalidProfile
         }
         guard let web3 = try await FlowProvider.Web3.default() else {

@@ -339,7 +339,7 @@ extension WalletViewModel {
     }
 
     func onAddToken() {
-        guard ChildAccountManager.shared.selectedChildAccount == nil else {
+        guard WalletManager.shared.selectedChildAccount == nil else {
             return
         }
         if WalletManager.shared.isSelectedEVMAccount {
