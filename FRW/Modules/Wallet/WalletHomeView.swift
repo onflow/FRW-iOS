@@ -154,7 +154,7 @@ struct WalletHomeView: View {
                     vm.sideToggleAction()
                 } label: {
                     HStack {
-                        if let url = WalletManager.shared.selectedChildAccount?.icon {
+                        if let url = WalletManager.shared.selectedChildAccount?.icon?.absoluteString {
                             KFImage.url(URL(string: url.convertedAvatarString()))
                                 .placeholder {
                                     Image("placeholder")
