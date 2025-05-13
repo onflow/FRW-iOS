@@ -11,8 +11,8 @@ class ReceiveQRViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        self.address = flowAddr()
-        self.name = flowName()
+        address = flowAddr()
+        name = flowName()
     }
 
     // MARK: Internal
@@ -44,16 +44,16 @@ class ReceiveQRViewModel: ObservableObject {
 
     private func flowName() -> String {
         var name = UserManager.shared.userInfo?.nickname ?? "lilico".localized
-        if let account = ChildAccountManager.shared.selectedChildAccount {
-            name = account.showName
+        if let account = WalletManager.shared.selectedChildAccount {
+            name = account.name ?? "Unknown"
         }
         return name
     }
 
     private func flowAddr() -> String {
         var address = WalletManager.shared.getPrimaryWalletAddress() ?? ""
-        if let account = ChildAccountManager.shared.selectedChildAccount {
-            address = account.showAddress
+        if let account = WalletManager.shared.selectedChildAccount {
+            address = account.address.hexAddr
         }
         return address
     }

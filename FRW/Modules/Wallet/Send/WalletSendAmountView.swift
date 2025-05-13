@@ -397,30 +397,10 @@ extension WalletSendAmountView {
         private var vm: WalletSendAmountViewModel
 
         var fromTargetContent: Contact {
-            if let account = EVMAccountManager.shared.selectedAccount {
-                let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-                let contact = Contact(
-                    address: account.showAddress,
-                    avatar: nil,
-                    contactName: user.name,
-                    contactType: .user,
-                    domain: nil,
-                    id: UUID().hashValue,
-                    username: account.showName,
-                    user: user
-                )
-                return contact
-            } else if let account = ChildAccountManager.shared.selectedChildAccount {
-                let contact = Contact(
-                    address: account.showAddress,
-                    avatar: account.icon,
-                    contactName: account.aName,
-                    contactType: .user,
-                    domain: nil,
-                    id: UUID().hashValue,
-                    username: account.showName
-                )
-                return contact
+            if let account = WalletManager.shared.selectedEVMAccount {
+                return account.toContact()
+            } else if let account = WalletManager.shared.selectedChildAccount {
+                return account.toContact()
             } else {
                 return UserManager.shared.userInfo!.toContactWithCurrentUserAddress()
             }

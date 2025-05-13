@@ -30,7 +30,8 @@ extension EventTrack.Transaction {
 
     static func evmSigned(txId: String, success: Bool) {
         guard let primaryAddress = WalletManager.shared.getPrimaryWalletAddress(),
-              let evmAddress = EVMAccountManager.shared.accounts.first?.showAddress else {
+              let evmAddress = WalletManager.shared.coa?.address.addHexPrefix()
+        else {
             return
         }
         EventTrack

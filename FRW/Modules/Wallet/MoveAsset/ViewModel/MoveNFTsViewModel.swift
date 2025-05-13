@@ -334,30 +334,11 @@ final class MoveNFTsViewModel: ObservableObject {
         else {
             return
         }
-        if let account = ChildAccountManager.shared.selectedChildAccount {
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
-        } else if let account = EVMAccountManager.shared.selectedAccount {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            fromContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
+
+        if let account = WalletManager.shared.selectedChildAccount {
+            fromContact = account.toContact()
+        } else if let account = WalletManager.shared.selectedEVMAccount {
+            fromContact = account.toContact()
         } else {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             fromContact = Contact(
@@ -373,9 +354,7 @@ final class MoveNFTsViewModel: ObservableObject {
             )
         }
 
-        if ChildAccountManager.shared.selectedChildAccount != nil || EVMAccountManager.shared
-            .selectedAccount != nil
-        {
+        if WalletManager.shared.selectedChildAccount != nil || WalletManager.shared.selectedEVMAccount != nil {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             toContact = Contact(
                 address: primaryAddr,
@@ -388,30 +367,11 @@ final class MoveNFTsViewModel: ObservableObject {
                 user: user,
                 walletType: .flow
             )
-        } else if let account = EVMAccountManager.shared.accounts.first {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user,
-                walletType: .evm
-            )
-        } else if let account = ChildAccountManager.shared.childAccounts.first {
-            toContact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                walletType: .link
-            )
+        } else if let account = WalletManager.shared.coa {
+            toContact = account.toContact()
+
+        } else if let account = WalletManager.shared.childs?.first {
+            toContact = account.toContact()
         }
 
         updateFee()

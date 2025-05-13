@@ -70,7 +70,8 @@ extension FlowWalletKit.ChildAccount {
 
 extension COA {
     func toContact() -> Contact {
-        let user = WalletManager.shared.walletAccount.readInfo(at: address)
-        return Contact(address: address, avatar: nil, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: user.name, user: user, walletType: .evm)
+        let showAddress = address.addHexPrefix()
+        let user = WalletManager.shared.walletAccount.readInfo(at: showAddress)
+        return Contact(address: showAddress, avatar: nil, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: user.name, user: user, walletType: .evm)
     }
 }
