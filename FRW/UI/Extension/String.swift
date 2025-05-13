@@ -237,7 +237,8 @@ extension String {
         guard let url = URL(string: self), let host = url.host() else {
             return nil
         }
-        let urlString = "https://icons.duckduckgo.com/ip3/\(host).ico"
+        let encodedHost = host.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? host
+        let urlString = "https://icons.duckduckgo.com/ip3/\(encodedHost).ico"
         return URL(string: urlString)
     }
 }
