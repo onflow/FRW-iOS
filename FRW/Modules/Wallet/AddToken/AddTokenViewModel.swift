@@ -60,7 +60,7 @@ class AddTokenViewModel: ObservableObject {
     var searchText: String = ""
 
     @Published
-    var onlyShowVerified: Bool = false
+    var onlyShowVerified: Bool = true
 
     @Published
     var confirmSheetIsPresented = false
