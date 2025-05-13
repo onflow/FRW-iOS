@@ -24,20 +24,29 @@ extension FlowWalletKit.PrivateKey {
 
     func store(id: String) throws {
         let pw = KeyProvider.password(with: id)
-        let key = self.createKey(uid: id)
+        let key = createKey(uid: id)
         try store(id: key, password: pw)
     }
 }
 
 extension FlowWalletKit.PrivateKey {
     static var PKStorage: FlowWalletKit.KeychainStorage {
-        let service = (Bundle.main.bundleIdentifier ?? AppBundleName) + FlowWalletKit.PrivateKey
-            .suffix
         let storage = FlowWalletKit.KeychainStorage(
-            service: service,
-            label: "PKWallet",
-            synchronizable: false
+            service: keychainService,
+            label: keychainTag,
+            synchronizable: false,
+            deviceOnly: true
         )
         return storage
+    }
+}
+
+extension FlowWalletKit.PrivateKey {
+    static var keychainService: String {
+        (Bundle.main.bundleIdentifier ?? AppBundleName) + suffix
+    }
+
+    static var keychainTag: String {
+        "PKWallet"
     }
 }
