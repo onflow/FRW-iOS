@@ -210,7 +210,7 @@ struct TokenModel: Codable, Identifiable, Mockable {
     var isVerifiedValue: Bool {
         isVerified ?? false
     }
- 
+
     // Identifiable
     var id: String {
         getId(by: typeValue)
@@ -267,16 +267,21 @@ extension TokenModel {
     }
 
     var priceInCurrencyStr: String? {
-        guard let bal = priceInCurrency else {
-            return nil
+        guard let bal = priceInCurrency, !bal.isEmpty else {
+            return ""
         }
-
+        guard bal.doubleValue != 0 else {
+            return ""
+        }
         return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
     }
 
     var balanceInCurrencyStr: String? {
-        guard let bal = balanceInCurrency else {
-            return nil
+        guard let bal = balanceInCurrency, !bal.isEmpty else {
+            return ""
+        }
+        guard bal.doubleValue != 0 else {
+            return ""
         }
         return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
     }
