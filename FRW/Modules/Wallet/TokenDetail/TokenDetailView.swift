@@ -195,7 +195,7 @@ struct TokenDetailView: RouteableView {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
         .background(.clear)
-        .cardStyle(showBorder: !vm.token.isVerifiedValue)
+        .cardStyle(showBorder: false)
     }
 
     var activitiesView: some View {
@@ -243,7 +243,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 18)
         .padding(.bottom, 8)
-        .cardStyle(showBorder: !vm.token.isVerifiedValue)
+        .cardStyle(showBorder: false)
     }
 
     var chartContainerView: some View {
@@ -299,7 +299,7 @@ struct TokenDetailView: RouteableView {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 18)
-        .cardStyle(showBorder: !vm.token.isVerifiedValue)
+        .cardStyle(showBorder: false)
     }
 
     var chartRangeView: some View {
@@ -350,7 +350,7 @@ struct TokenDetailView: RouteableView {
             .padding(.top, 16)
             .padding(.horizontal, 16)
             .padding(.bottom, 22)
-            .cardStyle(showBorder: !vm.token.isVerifiedValue)
+            .cardStyle(showBorder: false)
         }
         .padding(.bottom, 12)
     }
@@ -392,7 +392,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 18)
-        .cardStyle(showBorder: !vm.token.isVerifiedValue)
+        .cardStyle(showBorder: false)
         .padding(.bottom, 8)
     }
 
@@ -402,18 +402,20 @@ struct TokenDetailView: RouteableView {
                 .resizable()
                 .frame(width: 20, height: 20)
             Text("unverified_token_hint".localized)
-                .font(.inter(size: 12))
+                .font(.inter(size: 14, weight: .bold))
                 .foregroundColor(Color.Theme.Text.black8)
                 + Text("view_more".localized)
                 .underline()
-                .font(.inter(size: 12))
+                .font(.inter(size: 14, weight: .bold))
                 .foregroundColor(Color.Theme.Text.black8)
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .cardStyle(showBorder: !vm.token.isVerifiedValue)
+        .padding(16)
+        .cardStyle(showBorder: false)
+        .onTapGesture {
+            vm.onClickUnverifiedToken()
+        }
     }
 
     // MARK: Private
@@ -757,7 +759,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .padding(.bottom, 14)
-            .cardStyle(showBorder: !vm.token.isVerifiedValue)
+            .cardStyle(showBorder: false)
         }
     }
 
@@ -819,7 +821,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .frame(height: 72, alignment: .topLeading)
-            .cardStyle(showBorder: !vm.token.isVerifiedValue)
+            .cardStyle(showBorder: false)
         }
     }
 }

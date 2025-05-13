@@ -1170,6 +1170,7 @@ Key Store and Private Key.";
 "unverified_token_hint" = "This is an unverified token, only interact with tokens you trust. ";
 "all_tokens" = "All Tokens";
 "manager_tokens" = "Manage Tokens";
-"hide_dust_tokens" = "Hide Dust Tokens (<0.01$ USD Balance)";
+"hide_dust_tokens" = "Hide Dust Tokens";
+"hide_dust_tokens_tip" = "Tokens with less than 0.01$ USD balance";
 "only_show_tokens" = "Only show verified tokens";
 "Filters" = "Filters";

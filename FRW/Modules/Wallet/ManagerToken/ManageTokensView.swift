@@ -11,6 +11,7 @@ struct ManageTokensView: RouteableView {
     @StateObject var viewModel = ManageTokensViewModel()
     @ObservedObject var filterToken = WalletManager.shared.filterToken
     @State private var isSearchFocused: Bool = false
+    @State private var showTooltip: Bool = false
 
     var title: String {
         return "manager_tokens".localized
@@ -22,6 +23,8 @@ struct ManageTokensView: RouteableView {
                 .padding(.bottom, 20)
             tokenView
         }
+        .padding(16)
+        .background(.Theme.Background.white)
         .navigationBarItems(trailing: HStack(spacing: 6) {
             Button {
                 Router.route(to: RouteMap.Wallet.addToken)
@@ -31,8 +34,9 @@ struct ManageTokensView: RouteableView {
                     .foregroundColor(.Theme.Text.black)
             }
         })
-        .padding(16)
-        .background(.Theme.Background.white)
+        .onTapGesture {
+            showTooltip = false
+        }
         .applyRouteable(self)
     }
 
@@ -47,9 +51,33 @@ struct ManageTokensView: RouteableView {
 
             HStack {
                 Toggle(isOn: $filterToken.hideDustToken) {
-                    Text("hide_dust_tokens".localized)
-                        .font(.inter(size: 14))
-                        .foregroundStyle(Color.Theme.Text.black)
+                    HStack {
+                        Text("hide_dust_tokens".localized)
+                            .font(.inter(size: 14))
+                            .foregroundStyle(Color.Theme.Text.black)
+                        Button {
+                            showTooltip.toggle()
+                        } label: {
+                            Image(systemName: "questionmark.circle")
+                                .resizable()
+                                .foregroundStyle(Color.Theme.Text.text4)
+                                .frame(width: 16, height: 16)
+                        }
+                        .overlay {
+                            TooltipView(
+                                alignment: .bottom,
+                                isVisible: $showTooltip
+                            ) {
+                                Text("hide_dust_tokens_tip".localized)
+                                    .font(.inter(size: 10))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(8)
+                                    .padding(.top, 12)
+                            }
+                        }
+                    }
                 }
             }
             .padding(.bottom, 8)
