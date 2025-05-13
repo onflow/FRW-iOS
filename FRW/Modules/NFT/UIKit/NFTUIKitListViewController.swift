@@ -205,7 +205,7 @@ class NFTUIKitListViewController: UIViewController {
 
     @objc
     private func onChildAccountChanged() {
-        addButton.isHidden = WalletManager.shared.isSelectedChildAccount
+        addButton.isHidden = !WalletManager.shared.isSelectedFlowAccount
         listStyleHandler.collectionView.beginRefreshing()
         gridStyleHandler.collectionView.beginRefreshing()
     }
