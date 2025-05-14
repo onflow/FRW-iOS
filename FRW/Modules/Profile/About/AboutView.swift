@@ -108,16 +108,16 @@ struct AboutView: RouteableView {
                     SocialButton(imageName: "🔏",
                                  text: "privacy_policy".localized,
                                  showDivider: true,
-                                 isEmoji: true
-                    ) {
+                                 isEmoji: true)
+                    {
                         UIApplication.shared.open(URL(string: "https://wallet.flow.com/privacy-policy")!)
                     }
-                    
+
                     SocialButton(imageName: "📃",
                                  text: "terms_of_service".localized,
                                  showDivider: false,
-                                 isEmoji: true
-                    ) {
+                                 isEmoji: true)
+                    {
                         UIApplication.shared.open(URL(string: "https://wallet.flow.com/terms-of-service")!)
                     }
                 }
@@ -165,6 +165,7 @@ struct AboutView: RouteableView {
         .frame(maxHeight: .infinity, alignment: .top)
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

@@ -100,22 +100,18 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                                 Text("Hash__Algorithm::message".localized)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
-                                
                                 Text(key.hashAlgo.algorithm)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
                             }
                         }
-                        
                         Spacer()
-                        
                         HStack(spacing: 16) {
                             Divider()
                             VStack(alignment: .leading) {
                                 Text("Sign__Algorithm::message".localized)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
-                                
                                 Text(key.signAlgo.id)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
@@ -130,6 +126,7 @@ struct SecureEnclavePrivateKeyView: RouteableView {
         }
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

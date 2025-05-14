@@ -68,6 +68,7 @@ struct RestoreMultiBackupOptionView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func columns() -> [GridItem] {

@@ -44,6 +44,7 @@ struct NFTSearchView: RouteableView {
             }
         }
         .applyRouteable(self)
+        .tracedView(self)
         .padding(.horizontal, 16)
     }
 

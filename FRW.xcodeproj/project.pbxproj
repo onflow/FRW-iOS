@@ -1177,6 +1177,8 @@
 		4E611D182DD1E4B4000DAA74 /* TooltipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D162DD1E4B4000DAA74 /* TooltipView.swift */; };
 		4E611D3F2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */; };
 		4E611D402DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */; };
+		4E611D632DD4125A000DAA74 /* EventTrack+ViewName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D622DD4125A000DAA74 /* EventTrack+ViewName.swift */; };
+		4E611D642DD4125A000DAA74 /* EventTrack+ViewName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E611D622DD4125A000DAA74 /* EventTrack+ViewName.swift */; };
 		4E63A5692B8B9D1000BBD15F /* EVMEnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */; };
 		4E63A56A2B8B9D1000BBD15F /* EVMEnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */; };
 		4E63A5712B8BA1F400BBD15F /* EVMEnableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A5702B8BA1F400BBD15F /* EVMEnableViewModel.swift */; };
@@ -2612,6 +2614,7 @@
 		4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidePopover.swift; sourceTree = "<group>"; };
 		4E611D162DD1E4B4000DAA74 /* TooltipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipView.swift; sourceTree = "<group>"; };
 		4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainAccessibilityUpdate.swift; sourceTree = "<group>"; };
+		4E611D622DD4125A000DAA74 /* EventTrack+ViewName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+ViewName.swift"; sourceTree = "<group>"; };
 		4E63A5682B8B9D1000BBD15F /* EVMEnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMEnableView.swift; sourceTree = "<group>"; };
 		4E63A5702B8BA1F400BBD15F /* EVMEnableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMEnableViewModel.swift; sourceTree = "<group>"; };
 		4E63A5732B8BB79700BBD15F /* ReceiveQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveQRView.swift; sourceTree = "<group>"; };
@@ -5093,6 +5096,7 @@
 				4E09A1FA2CC7A1FD0099606E /* EventTrack+Transaction.swift */,
 				4E09A1FD2CC7A5800099606E /* EventTrack+Account.swift */,
 				4EEEF0712D05FE66008393E9 /* EventTrack+Dev.swift */,
+				4E611D622DD4125A000DAA74 /* EventTrack+ViewName.swift */,
 			);
 			path = Track;
 			sourceTree = "<group>";
@@ -7635,6 +7639,7 @@
 				4EBDF2C02BFB8DF700E56968 /* EVMTagView.swift in Sources */,
 				760F78472D6D5DA600F733E6 /* WalletActionBar.swift in Sources */,
 				15DC210B27819C56000B187A /* VRangeSlider.swift in Sources */,
+				4E611D632DD4125A000DAA74 /* EventTrack+ViewName.swift in Sources */,
 				4E8CE63D2B4BE77700E71A87 /* MultiBackupPhraseTarget.swift in Sources */,
 				6ACDD17D28588B7D00F406EB /* ProfileRequests.swift in Sources */,
 				4E2677602C9BB848008729EB /* PhraseKeyStore.swift in Sources */,
@@ -8516,6 +8521,7 @@
 				15C58B8E2868A4EE00BD4FC6 /* ProfileRequests.swift in Sources */,
 				4EBDF2BF2BFB8DF700E56968 /* EVMTagView.swift in Sources */,
 				760F78462D6D5DA600F733E6 /* WalletActionBar.swift in Sources */,
+				4E611D642DD4125A000DAA74 /* EventTrack+ViewName.swift in Sources */,
 				4E8CE63C2B4BE77700E71A87 /* MultiBackupPhraseTarget.swift in Sources */,
 				15C58B8F2868A4EE00BD4FC6 /* VLazyScrollViewModelVertical.swift in Sources */,
 				15C58B902868A4EE00BD4FC6 /* VSheetModel.swift in Sources */,
@@ -9401,7 +9407,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9429,7 +9435,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9459,7 +9465,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9489,7 +9495,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9746,7 +9752,7 @@
 			repositoryURL = "https://github.com/onflow/flow-wallet-kit.git";
 			requirement = {
 				kind = revision;
-				revision = 2ba4eb4d451414e9dc650c18ca7e7c328ca365d0;
+				revision = daab7c3e1368738a77dbd3f2f45d2b0ef639534f;
 			};
 		};
 		156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {

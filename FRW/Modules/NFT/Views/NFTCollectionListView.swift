@@ -233,6 +233,7 @@ struct NFTCollectionListView: RouteableView {
             .offset(y: -4)
         )
         .applyRouteable(self)
+        .tracedView(self)
         .environmentObject(viewModel)
         .onAppear {
             vm.fetch()

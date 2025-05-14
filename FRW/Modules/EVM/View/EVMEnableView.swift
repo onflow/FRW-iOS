@@ -95,6 +95,7 @@ struct EVMEnableView: RouteableView {
             .padding(.bottom)
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

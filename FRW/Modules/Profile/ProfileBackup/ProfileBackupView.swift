@@ -55,6 +55,7 @@ struct ProfileBackupView: RouteableView {
         }
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

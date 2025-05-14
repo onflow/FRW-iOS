@@ -80,6 +80,7 @@ struct AddTokenSheetView: RouteableView & PresentActionDelegate {
             }
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func onClose() {

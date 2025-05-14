@@ -119,6 +119,7 @@ struct WalletListView: RouteableView {
         .padding(.horizontal, 18)
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
 //        .navigationBarItems(trailing: HStack(spacing: 6) {
 //            Button {
 //                viewModel.addAccount()

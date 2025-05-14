@@ -74,6 +74,7 @@ struct EditAvatarView: RouteableView {
             .visibility(vm.mode == .preview ? .visible : .invisible)
         })
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

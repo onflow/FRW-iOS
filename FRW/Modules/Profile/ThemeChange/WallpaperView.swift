@@ -28,7 +28,7 @@ struct WallpaperView: RouteableView {
                 VStack(spacing: 8) {
                     Section {
                         LazyVGrid(columns: columns, spacing: 8) {
-                            ForEach(0..<dynamicCase.count, id: \.self) { index in
+                            ForEach(0 ..< dynamicCase.count, id: \.self) { index in
                                 let card = dynamicCase[index]
                                 Card(cardBackgroud: card)
                                     .frame(width: (proxy.size.width - 32) / 2.0)
@@ -48,7 +48,7 @@ struct WallpaperView: RouteableView {
 
                     Section {
                         LazyVGrid(columns: columns, spacing: 8) {
-                            ForEach(0..<CardBackground.imageCases.count, id: \.self) { index in
+                            ForEach(0 ..< CardBackground.imageCases.count, id: \.self) { index in
                                 let card = CardBackground.imageCases[index]
                                 Card(cardBackgroud: card)
                             }
@@ -69,6 +69,7 @@ struct WallpaperView: RouteableView {
             }
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

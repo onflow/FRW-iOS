@@ -148,6 +148,7 @@ struct SeedPhraseLoginView: RouteableView {
         .backgroundFill(Color.Theme.Background.grey)
         .hideKeyboardWhenTappedAround()
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

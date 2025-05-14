@@ -59,6 +59,7 @@ struct StakingDetailView: RouteableView {
         }
         .backgroundFill(.LL.deepBg)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var controlContainerView: some View {
