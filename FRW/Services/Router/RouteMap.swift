@@ -16,7 +16,7 @@ import UIKit
 enum RouteMap {}
 
 typealias EmptyClosure = () -> Void
-typealias SwitchNetworkClosure = (FlowNetworkType) -> Void
+typealias SwitchNetworkClosure = (Flow.ChainID) -> Void
 typealias BoolClosure = (Bool) -> Void
 
 // MARK: - RouteMap.RestoreLogin
@@ -212,7 +212,6 @@ extension RouteMap {
     enum Wallet {
         case addToken
         case tokenDetail(TokenModel, Bool)
-        case receive
         case send(_ address: String = "")
         case sendAmount(Contact, TokenModel, isPush: Bool = true, amount: Decimal? = nil)
         case scan(SPQRCodeCallback, click: SPQRCodeCallback? = nil)
@@ -241,6 +240,7 @@ extension RouteMap {
         case showCustomToken(CustomToken)
         case addTokenSheet(CustomToken, BoolClosure)
         case swapProvider(TokenModel?)
+        case managerTokens
     }
 }
 
@@ -253,12 +253,6 @@ extension RouteMap.Wallet: RouterTarget {
             navi.push(content: AddTokenView(vm: AddTokenViewModel()))
         case let .tokenDetail(token, isAccessible):
             navi.push(content: TokenDetailView(token: token, accessible: isAccessible))
-        case .receive:
-            let vc = UIHostingController(rootView: WalletReceiveView())
-            vc.modalPresentationStyle = .overCurrentContext
-            vc.modalTransitionStyle = .coverVertical
-            vc.view.backgroundColor = .clear
-            navi.present(vc, animated: false)
         case let .send(address):
             navi.present(content: WalletSendView(address: address))
         case let .sendAmount(contact, token, isPush, amount):
@@ -369,6 +363,8 @@ extension RouteMap.Wallet: RouterTarget {
         case let .swapProvider(token):
             let vc = PresentHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
+        case .managerTokens:
+            navi.push(content: ManageTokensView())
         }
     }
 }
@@ -390,7 +386,6 @@ extension RouteMap {
         case walletConnect
         case manualBackup(Bool)
         case security(Bool)
-        case inbox
         case resetWalletConfirm
         case currency
         case accountSetting
@@ -467,8 +462,6 @@ extension RouteMap.Profile: RouterTarget {
             }
 
             Router.coordinator.rootNavi?.push(content: ProfileSecureView(), animated: animated)
-        case .inbox:
-            navi.push(content: InboxView())
         case .resetWalletConfirm:
             navi.push(content: WalletResetConfirmView())
         case .currency:
@@ -638,14 +631,12 @@ extension RouteMap.Transaction: RouterTarget {
     func onPresent(navi _: UINavigationController) {
         switch self {
         case let .detail(transactionId):
-            let network = LocalUserDefaults.shared.flowNetwork
             let accountType = AccountType.current
-            let url = network.getTransactionHistoryUrl(
+            let url = currentNetwork.getTransactionHistoryUrl(
                 accountType: .flow,
                 transactionId: transactionId.hex
             )
 
-//            UIApplication.shared.open(url)
             TransactionUIHandler.shared.dismissListView()
             url.map { Router.route(to: RouteMap.Explore.browser($0)) }
         }
@@ -662,13 +653,12 @@ extension RouteMap {
         case authz(BrowserAuthzViewModel)
         case signMessage(BrowserSignMessageViewModel)
         case searchExplore
-        case claimDomain
         case bookmark
         case linkChildAccount(ChildAccountLinkViewModel)
         case dapps
         case switchNetwork(
-            FlowNetworkType,
-            FlowNetworkType,
+            Flow.ChainID,
+            Flow.ChainID,
             SwitchNetworkClosure?
         )
         case signTypedMessage(BrowserSignTypedMessageViewModel)
@@ -725,8 +715,6 @@ extension RouteMap.Explore: RouterTarget {
                 }
             }
             navi.pushViewController(inputVC, animated: false)
-        case .claimDomain:
-            navi.push(content: ClaimDomainView())
         case .bookmark:
             navi.present(content: BrowserBookmarkView())
         case let .linkChildAccount(vm):

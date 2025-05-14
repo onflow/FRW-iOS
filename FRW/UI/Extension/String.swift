@@ -61,6 +61,13 @@ extension String {
         return self
     }
 
+    func dropPrefix(_ prefix: String) -> Self {
+        if hasPrefix(prefix) {
+            return String(dropFirst(prefix.count))
+        }
+        return self
+    }
+
     func removeSuffix(_ suffix: String) -> String {
         if hasSuffix(suffix) {
             return String(dropLast(suffix.count))
@@ -75,7 +82,7 @@ extension String {
                 of: String(delimiter),
                 with: replacement,
                 options: [],
-                range: startIndex..<index
+                range: startIndex ..< index
             )
         } else {
             return self
@@ -101,10 +108,10 @@ extension String {
 
     var hexValue: [UInt8] {
         var startIndex = self.startIndex
-        return (0..<count / 2).compactMap { _ in
+        return (0 ..< count / 2).compactMap { _ in
             let endIndex = index(after: startIndex)
             defer { startIndex = index(after: endIndex) }
-            return UInt8(self[startIndex...endIndex], radix: 16)
+            return UInt8(self[startIndex ... endIndex], radix: 16)
         }
     }
 
@@ -142,7 +149,7 @@ extension String {
         while let range = range(
             of: substring,
             options: options,
-            range: (ranges.last?.upperBound ?? startIndex)..<endIndex,
+            range: (ranges.last?.upperBound ?? startIndex) ..< endIndex,
             locale: locale
         ) {
             ranges.append(range)
@@ -226,12 +233,12 @@ extension String {
         return URL(string: "https://www.google.com/search?q=\(encodedString)")
     }
 
-    func toFavIcon(size: Int = 256) -> URL? {
-        guard let url = URL(string: self) else {
+    func toFavIcon(size _: Int = 256) -> URL? {
+        guard let url = URL(string: self), let host = url.host() else {
             return nil
         }
-
-        let urlString = "https://double-indigo-crab.b-cdn.net/\(url.host ?? "")/\(size)"
+        let encodedHost = host.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? host
+        let urlString = "https://icons.duckduckgo.com/ip3/\(encodedHost).ico"
         return URL(string: urlString)
     }
 }

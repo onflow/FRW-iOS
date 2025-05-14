@@ -141,7 +141,7 @@ struct SwapConfirmView: View {
 
     private func tokenView(token: TokenModel, num: String) -> some View {
         VStack(spacing: 5) {
-            KFImage.url(token.icon)
+            KFImage.url(token.iconURL)
                 .placeholder {
                     Image("placeholder")
                         .resizable()
@@ -173,7 +173,7 @@ extension SwapConfirmView {
 
         var body: some View {
             HStack(spacing: 12) {
-                ForEach(0..<totalNum, id: \.self) { index in
+                ForEach(0 ..< totalNum, id: \.self) { index in
                     if step == index {
                         Image("icon-right-arrow-1")
                             .renderingMode(.template)

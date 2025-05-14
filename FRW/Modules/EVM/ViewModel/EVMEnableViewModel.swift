@@ -36,7 +36,9 @@ class EVMEnableViewModel: ObservableObject {
                 state = .loading
                 try await EVMAccountManager.shared.enableEVM()
                 await EVMAccountManager.shared.refreshSync()
-                EVMAccountManager.shared.select(EVMAccountManager.shared.accounts.first)
+                if let address = EVMAccountManager.shared.accounts.first?.showAddress {
+                    WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
+                }
                 state = .enabled
                 Router.pop()
                 ConfettiManager.show()

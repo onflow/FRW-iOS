@@ -5,97 +5,47 @@
 //  Created by Hao Fu on 22/2/2025.
 //
 
+import Flow
 import Foundation
 import Web3Core
 
 class EVMTokenBalanceProvider: TokenBalanceProvider {
-    var whiteListTokens: [TokenModel] = []
-    var activetedTokens: [TokenModel] = []
+    var tokens: [TokenModel] = []
 
     // MARK: Lifecycle
 
-    init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
+    init(network: Flow.ChainID = currentNetwork) {
         self.network = network
-        // TODO: Add token list cache
     }
 
     // MARK: Internal
 
-    var network: FlowNetworkType
+    var network: Flow.ChainID
 
-    func getSupportTokens() async throws -> [TokenModel] {
-        guard whiteListTokens.isEmpty else {
-            return whiteListTokens
-        }
-        let tokenResponse: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.EVMTokenList(network))
-        var tokens: [TokenModel] = tokenResponse.conversion(type: .evm)
-        if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
-            let flowModel = flowToken.toTokenModel(type: .evm, network: network)
-            tokens.insert(flowModel, at: 0)
-        }
-        whiteListTokens = tokens
-        return whiteListTokens
-    }
-
-    func getActivatedTokens(address: any FWAddress, in _: TokenListMode = .whitelistAndCustom) async throws -> [TokenModel] {
-        guard let addr = address as? EthereumAddress,
-              let web3 = try await FlowProvider.Web3.default(networkType: network)
+    func fetchUserTokens(address: any FWAddress) async throws -> [TokenModel] {
+        guard let addr = address as? EthereumAddress
         else {
-            throw EVMError.rpcError
+            throw EVMError.addressError
         }
-        guard activetedTokens.isEmpty else {
-            return activetedTokens
-        }
-        // fetch all tokens
-        var allTokens: [TokenModel] = whiteListTokens
-        if allTokens.isEmpty {
-            let list = try await getSupportTokens()
-            allTokens.append(contentsOf: list)
-        }
-        // add `flow` token
-        let flowBalance = try await web3.eth.getBalance(for: addr)
-
-        // The SimpleHash API doesn't return token metadata like logo and flowIdentifier
-        // Hence, we need fetch the metadata from token list first
-        let response: [EVMTokenResponse] = try await Network
-            .request(FRWAPI.EVM.tokenList(address.hexAddr))
-        var models = response.map { $0.toTokenModel(type: .evm) }
-
-        if let flowToken = TokenBalanceHandler.getFlowTokenModel(network: network) {
-            var flowModel = flowToken.toTokenModel(type: .evm, network: network)
-            flowModel.balance = flowBalance
-            flowModel.avaibleBalance = flowBalance
-            models.insert(flowModel, at: 0)
-        }
-
-        let updateModels: [TokenModel] = models.compactMap { model in
-
-            if let metadata = allTokens.first(where: { token in
-                token.address.addressByNetwork(network.toFlowType())?.lowercased() == model.address.addressByNetwork(network.toFlowType())?.lowercased()
-            }) {
-                var newModel = model
-                newModel.icon = metadata.iconURL
-                newModel.flowIdentifier = metadata.flowIdentifier
-                return newModel
-            }
-            return nil
-        }
+        let currency = CurrencyCache.cache.currentCurrency.rawValue
+        let response: [EVMTokenResponse] = try await Network.request(FRWAPI.Token.evm(.init(address: addr.hexAddr, currency: currency, network: network)))
+        tokens = response.compactMap { $0.toTokenModel(type: .evm) }
         let customToken = await fetchCustomBalance()
-        activetedTokens.append(contentsOf: customToken)
-        // Sort by balance
-        activetedTokens = updateModels.sorted { lhs, rhs in
-            guard let lBal = lhs.readableBalance, let rBal = rhs.readableBalance else {
+        tokens.append(contentsOf: customToken)
+        tokens.sort { lhs, rhs in
+            guard let lBal = lhs.balanceInUSD?.doubleValue, let rBal = rhs.balanceInUSD?.doubleValue else {
                 return true
             }
             return lBal > rBal
         }
-        return activetedTokens
+        return tokens
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        let list = try await getActivatedTokens(address: address)
-        return list
+        guard tokens.isEmpty else {
+            return tokens
+        }
+        return try await fetchUserTokens(address: address)
     }
 
     func getNFTCollections(address: FWAddress) async throws -> [NFTCollection] {

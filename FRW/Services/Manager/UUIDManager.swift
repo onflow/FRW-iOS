@@ -15,7 +15,7 @@ enum UUIDManager {
         let mainKeychain = Keychain(service: service)
             .label("Flow Core UUID")
             .synchronizable(false)
-            .accessibility(.whenUnlocked)
+            .accessibility(.whenUnlockedThisDeviceOnly)
         let applicationUUID = (UIDevice.current.identifierForVendor?.uuidString)!
         do {
             let key = "uuid"

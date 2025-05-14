@@ -6,6 +6,7 @@
 //
 
 import BigInt
+import Flow
 import Foundation
 import Web3Core
 import web3swift
@@ -29,9 +30,7 @@ class CustomTokenManager: ObservableObject {
     }
 
     func isInWhite(token: CustomToken) -> Bool {
-        guard let support = WalletManager.shared.supportedCoins else {
-            return true
-        }
+        let support = WalletManager.shared.activatedCoins
         let filterList = support.filter { model in
             model.getAddress()?.lowercased() == token.address.lowercased()
         }
@@ -93,8 +92,8 @@ class CustomTokenManager: ObservableObject {
         else {
             return []
         }
-        let currentNetwork = LocalUserDefaults.shared.flowNetwork
-        let belong = EVMAccountManager.shared.selectedAccount != nil ? CustomToken.Belong
+        let currentNetwork = LocalUserDefaults.shared.network
+        let belong = WalletManager.shared.isSelectedEVMAccount ? CustomToken.Belong
             .evm : .flow
 
         let result = list.filter { token in
@@ -184,7 +183,7 @@ extension CustomTokenManager {
     }
 
     func fetchBalance(token: CustomToken) async throws -> BigUInt? {
-        guard let coaAddresss = EVMAccountManager.shared.selectedAccount?.showAddress else {
+        guard let coaAddresss = WalletManager.shared.selectedEVMAccount?.address.addHexPrefix() else {
             throw AddCustomTokenError.invalidProfile
         }
         guard let web3 = try await FlowProvider.Web3.default() else {
@@ -232,7 +231,7 @@ struct CustomToken: Codable {
         userId = UserManager.shared.activatedUID ?? ""
         belongAddress = WalletManager.shared
             .getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
-        network = LocalUserDefaults.shared.flowNetwork
+        network = LocalUserDefaults.shared.network
     }
 
     // MARK: Internal
@@ -257,7 +256,7 @@ struct CustomToken: Codable {
 
     var userId: String
     var belongAddress: String
-    var network: FlowNetworkType = .mainnet
+    var network: Flow.ChainID = .mainnet
     var belong: CustomToken.Belong = .flow
     // not store,
     var balance: BigUInt?
@@ -277,20 +276,27 @@ struct CustomToken: Codable {
         TokenModel(
             type: belong.tokenType,
             name: name,
-            address: FlowNetworkModel(
-                mainnet: address,
-                testnet: address,
-                crescendo: nil
-            ),
-            contractName: "",
-            storagePath: FlowTokenStoragePath(balance: "", vault: "", receiver: ""),
-            decimal: decimals,
-            icon: nil,
             symbol: symbol,
-            website: nil,
+            description: nil,
+            contractAddress: address,
+            contractName: "",
+            storagePath: FlowPath(domain: nil, identifier: nil),
+            receiverPath: FlowPath(domain: nil, identifier: nil),
+            balancePath: nil,
+            identifier: "",
+            isVerified: false,
+            logoURI: nil,
+            priceInUSD: nil,
+            balanceInUSD: nil,
+            priceInFLOW: nil,
+            balanceInFLOW: nil,
+            currency: nil,
+            priceInCurrency: nil,
+            balanceInCurrency: nil,
+            displayBalance: balanceValue,
+            decimal: decimals,
             evmAddress: nil,
-            balance: balance,
-            avaibleBalance: balance
+            website: nil
         )
     }
 }

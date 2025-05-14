@@ -1,5 +1,5 @@
 {
-  "originHash" : "0a4087859a99b9a866cd809e2faf8ddeb4f6a4565ec4956b0c77322982a7b5d2",
+  "originHash" : "998ee3de990b48f5b2679eb61fc692136a0599eb187bcaa7ffd99a7c6fd20d05",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "e16d3481f5ed35f0472cb93350085853d754913f",
-        "version" : "5.10.1"
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS.git",
       "state" : {
-        "revision" : "c89ed571ae140f8eb1142735e6e23d7bb8c34cb2",
-        "version" : "1.7.5"
+        "revision" : "2781038865a80e2c425a1da12cc1327bcd56501f",
+        "version" : "1.7.6"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ProxymanApp/atlantis",
       "state" : {
-        "revision" : "b60fb9920e50f8f8a7e909394b09989c9d55d7ef",
-        "version" : "1.25.2"
+        "revision" : "92ca545af63a4ff96eaeb8a662ffea29e1f47f08",
+        "version" : "1.28.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/serhii-londar/BaseAPI.git",
       "state" : {
-        "revision" : "8e736fa8302647749fb1b4ebe3c59e920174a095",
-        "version" : "0.2.1"
+        "revision" : "f861b982abc38b75e2c5332e2e333a9da06bcf6a",
+        "version" : "0.2.2"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/attaswift/BigInt.git",
       "state" : {
-        "revision" : "a7ee11486233ba45f5ceee0b8cb3d6629ed450ef",
-        "version" : "5.5.0"
+        "revision" : "114343a705df4725dfe7ab8a2a326b8883cfd79c",
+        "version" : "5.5.1"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
       "state" : {
-        "revision" : "678d442c6f7828def400a70ae15968aef67ef52d",
-        "version" : "1.8.3"
+        "revision" : "729e01bc9b9dab466ac85f21fb9ee2bc1c61b258",
+        "version" : "1.8.4"
       }
     },
     {
@@ -106,7 +106,16 @@
       "location" : "https://github.com/InderKumarRathore/DeviceGuru",
       "state" : {
         "branch" : "master",
-        "revision" : "93919c5aaa6bc4a3393fe50195e1237a83da88a9"
+        "revision" : "5146e66d83babb8bb216e5c70ea95c3935fb79c3"
+      }
+    },
+    {
+      "identity" : "factory",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hmlongco/Factory",
+      "state" : {
+        "revision" : "f1e35a1672fcb71a40ef6b7aaf1ea38a458c4485",
+        "version" : "2.4.12"
       }
     },
     {
@@ -132,16 +141,15 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "880d9c44af7ba42181954c7288c7f3ef235458dc"
+        "revision" : "1f2e8f88bc8552ba58d3c839d52ea7feb1be104b"
       }
     },
     {
       "identity" : "flow-wallet-kit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Outblock/Flow-Wallet-Kit",
+      "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "branch" : "master",
-        "revision" : "54624d35603b9b6106aae24a6a59aa0f7926d7f1"
+        "revision" : "2ba4eb4d451414e9dc650c18ca7e7c328ca365d0"
       }
     },
     {
@@ -248,8 +256,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/HeroTransitions/Hero",
       "state" : {
-        "revision" : "b307e2d48d582118e5101d04f5187c91595a1095",
-        "version" : "1.6.3"
+        "revision" : "670b81ed3d95f7183bbc009d0ec67c71506557b5",
+        "version" : "1.6.4"
       }
     },
     {
@@ -266,8 +274,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Instabug/Instabug-SP",
       "state" : {
-        "revision" : "e45d82bb4b396c3b7c4f3c2b17ea009767ea4f70",
-        "version" : "14.2.0"
+        "revision" : "27b4e61ac0597b43542cdfe3272db2c512c7d36e",
+        "version" : "14.3.0"
       }
     },
     {
@@ -396,15 +404,6 @@
       }
     },
     {
-      "identity" : "pocketsvg",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pocketsvg/PocketSVG",
-      "state" : {
-        "revision" : "10c6885e427e88d35fbb64010fbd6385cb58fef7",
-        "version" : "2.7.3"
-      }
-    },
-    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
@@ -416,9 +415,9 @@
     {
       "identity" : "qrcode",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/QRCode",
+      "location" : "https://github.com/Outblock/QRCode",
       "state" : {
-        "revision" : "94fa5c053837eb2b367316590ceaa480b0689902"
+        "revision" : "41bcc4587f504196975eca4d7ddbc54fe2a9b57c"
       }
     },
     {
@@ -462,17 +461,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactiveX/RxSwift.git",
       "state" : {
-        "revision" : "c7c7d2cf50a3211fe2843f76869c698e4e417930",
-        "version" : "6.8.0"
-      }
-    },
-    {
-      "identity" : "skeletonui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CSolanaM/SkeletonUI.git",
-      "state" : {
-        "revision" : "e3cf87cb96a10562bc660c9d48418a395d8385ed",
-        "version" : "1.0.11"
+        "revision" : "5dd1907d64f0d36f158f61a466bab75067224893",
+        "version" : "6.9.0"
       }
     },
     {
@@ -551,8 +541,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "ebc7251dd5b37f627c93698e4374084d98409633",
-        "version" : "1.28.2"
+        "revision" : "d72aed98f8253ec1aa9ea1141e28150f408cf17f",
+        "version" : "1.29.0"
       }
     },
     {
@@ -562,24 +552,6 @@
       "state" : {
         "revision" : "2b1980b825f08a81ccc762b0c4d17fcde9d5e953",
         "version" : "2.0.2"
-      }
-    },
-    {
-      "identity" : "swift-snapshot-testing",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
-      "state" : {
-        "revision" : "42a086182681cf661f5c47c9b7dc3931de18c6d7",
-        "version" : "1.17.6"
-      }
-    },
-    {
-      "identity" : "swift-syntax",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swiftlang/swift-syntax",
-      "state" : {
-        "revision" : "0687f71944021d616d34d922343dcef086855920",
-        "version" : "600.0.1"
       }
     },
     {
@@ -605,8 +577,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/willdale/SwiftUICharts",
       "state" : {
-        "revision" : "01b54e54dd88f5c1fa55077a260255c6036e3dab",
-        "version" : "2.10.3"
+        "revision" : "c16f47217d1e32900f6b37c322d419945fadae9c",
+        "version" : "2.10.4"
       }
     },
     {
@@ -665,10 +637,10 @@
     {
       "identity" : "wallet-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Outblock/wallet-core",
+      "location" : "https://github.com/trustwallet/wallet-core",
       "state" : {
-        "branch" : "master",
-        "revision" : "24497b1e6f34f171ad421dae8699758bda09e78d"
+        "revision" : "302938cf4c6d740e47ca5ed67c5107e2166a6cb5",
+        "version" : "4.3.3"
       }
     },
     {

@@ -10,6 +10,7 @@ import Kingfisher
 import SnapKit
 import SwiftUI
 import UIKit
+import Combine
 
 private let CellHeight: CGFloat = 48
 
@@ -17,6 +18,8 @@ private let CellHeight: CGFloat = 48
 
 class TransactionListCell: UIView {
     // MARK: Lifecycle
+    
+    var cancellables: Set<AnyCancellable> = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -118,7 +121,7 @@ class TransactionListCell: UIView {
             make.height.equalTo(CellHeight)
         }
 
-        addNotification()
+        start()
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
         addGestureRecognizer(tap)
@@ -131,13 +134,14 @@ class TransactionListCell: UIView {
         }
     }
 
-    private func addNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onHolderStatusChanged(noti:)),
-            name: .transactionStatusDidChanged,
-            object: nil
-        )
+    private func start() {
+        flow.publisher.transactionPublisher
+            .filter{ $0.0 == self.model?.transactionId }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] (id, result) in
+                self?.refreshView()
+            })
+            .store(in: &cancellables)
     }
 
     private func reloadBgPaths() {
@@ -149,17 +153,6 @@ class TransactionListCell: UIView {
             cornerRadii: CGSize(width: 24.0, height: 24.0)
         )
         bgMaskLayer.path = path.cgPath
-    }
-
-    @objc
-    private func onHolderStatusChanged(noti: Notification) {
-        guard let holder = noti.object as? TransactionManager.TransactionHolder,
-              let current = model,
-              current.transactionId.hex == holder.transactionId.hex else {
-            return
-        }
-
-        refreshView()
     }
 
     private func refreshView() {
@@ -175,7 +168,7 @@ class TransactionListCell: UIView {
         if model?.internalStatus == .failed {
             progressView.progress = 1
         } else {
-            progressView.progress = model?.flowStatus.progressPercent ?? 0
+            progressView.progress = model?.status.progressPercent ?? 0
         }
 
         if let strokeColor = model?.internalStatus.statusColor {

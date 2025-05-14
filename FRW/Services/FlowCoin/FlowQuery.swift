@@ -67,12 +67,15 @@ extension TokenModel {
             EventTrack.Dev.cadence(CadenceError.tokenAddressEmpty, message: "")
             throw CadenceError.tokenAddressEmpty
         }
+        guard let receiverPath = receiverPath?.value, let storagePath = storagePath?.value, let balancePath = balancePath?.value else {
+            throw CadenceError.storagePathEmpty
+        }
         let dict = [
             "<Token>": contractName,
             "<TokenAddress>": address,
-            "<TokenReceiverPath>": storagePath.receiver,
-            "<TokenBalancePath>": storagePath.balance,
-            "<TokenStoragePath>": storagePath.vault,
+            "<TokenReceiverPath>": receiverPath,
+            "<TokenBalancePath>": balancePath,
+            "<TokenStoragePath>": storagePath,
         ]
 
         return cadence.replace(from: dict).replace(by: ScriptAddress.addressMap())

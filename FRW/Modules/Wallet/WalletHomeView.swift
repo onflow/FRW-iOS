@@ -41,16 +41,21 @@ struct WalletHomeView: View {
 
     @StateObject
     var um = UserManager.shared
+
     @StateObject
     var wm = WalletManager.shared
+
     @StateObject
     private var vm = WalletViewModel()
+
     @StateObject
     var newsHandler = WalletNewsHandler.shared
+
     @State
     var isRefreshing: Bool = false
     @State
     private var showActionSheet = false
+
     @AppStorage("WalletCardBackrgound")
     private var walletCardBackrgound: String = "fade:0"
 
@@ -69,32 +74,15 @@ struct WalletHomeView: View {
 
     var body: some View {
         GeometryReader { proxy in
-
-            ZStack {
-                NormalView().visibility(um.isLoggedIn ? .visible : .gone)
-            }
-            .halfSheet(
-                showSheet: $vm.backupTipsPresent,
-                autoResizing: true,
-                backgroundColor: Color.LL.Neutrals.background
-            ) {
-                BackupTipsView(closeAction: {
-                    vm.backupTipsPresent = false
-                })
-            }
-            .onAppear {
-                safeArea = proxy.safeAreaInsets
-                size = proxy.size
-                self.vm.viewWillAppear()
-            }
-//            .preferredColorScheme(forcedColorScheme)
-//            .onChange(of: colorScheme, perform: { newValue in
-//                if ThemeManager.shared.style == nil {
-//                    ThemeManager.shared.setStyle(style: newValue)
-//                }
-//            })
-            .navigationBarHidden(true)
-            .ignoresSafeArea(.container, edges: .top)
+            NormalView()
+                .visibility(um.isLoggedIn ? .visible : .gone)
+                .onAppear {
+                    safeArea = proxy.safeAreaInsets
+                    size = proxy.size
+                    self.vm.viewWillAppear()
+                }
+                .navigationBarHidden(true)
+                .ignoresSafeArea(.container, edges: .top)
         }
     }
 
@@ -134,13 +122,17 @@ struct WalletHomeView: View {
             VStack(spacing: 0) {
                 JailbreakTipsView()
                     .visibility(UIDevice.isJailbreak ? .visible : .gone)
+
                 HeaderView()
                     .zIndex(1)
+
                 WalletInfo()
                     .zIndex(10)
+                    .mockPlaceholder(vm.needShowPlaceholder)
 
                 CoinListView()
                     .zIndex(20)
+                    .mockPlaceholder(vm.needShowPlaceholder)
             }
             .overlay(alignment: .top) {
                 TopMenuView()
@@ -148,7 +140,6 @@ struct WalletHomeView: View {
         }
         .coordinateSpace(name: scrollName)
         .environmentObject(vm)
-        .mockPlaceholder(vm.needShowPlaceholder)
     }
 
     @ViewBuilder
@@ -163,7 +154,7 @@ struct WalletHomeView: View {
                     vm.sideToggleAction()
                 } label: {
                     HStack {
-                        if let url = ChildAccountManager.shared.selectedChildAccount?.icon {
+                        if let url = WalletManager.shared.selectedChildAccount?.icon?.absoluteString {
                             KFImage.url(URL(string: url.convertedAvatarString()))
                                 .placeholder {
                                     Image("placeholder")
@@ -174,7 +165,7 @@ struct WalletHomeView: View {
                                 .frame(width: 28, height: 28)
                                 .cornerRadius(14)
                         } else {
-                            wm.currentAccount.emoji.icon(size: 24)
+                            wm.walletMetadata.emoji.icon(size: 24)
                         }
                     }
                     .frame(width: 40, height: 40)
@@ -276,9 +267,6 @@ struct WalletHomeView: View {
 
                     StackPageView(newsHandler.list, selection: $selectedNewsId) { news in
                         WalletNotificationView(item: news) { idStr in
-//                            if let nextId = newsHandler.nextItem(idStr) {
-//                                selectedNewsId =  nextId
-//                            }
                             selectedNewsId = idStr
                             newsHandler.onCloseItem(idStr)
                         } onAction: { _ in
@@ -312,7 +300,7 @@ struct WalletHomeView: View {
                 isPresented: $showActionSheet,
                 titleVisibility: .hidden
             ) {
-                Button("change wallpaper") {
+                Button("Change Wallpaper") {
                     showWallpaper()
                 }
             }
@@ -326,32 +314,6 @@ struct WalletHomeView: View {
 
     private func showWallpaper() {
         Router.route(to: RouteMap.Profile.wallpaper)
-    }
-
-    private var childAccountBackground: some View {
-        ZStack {
-            KFImage.url(URL(string: WalletManager.shared.selectedAccountIcon))
-                .placeholder {
-                    Image("placeholder")
-                        .resizable()
-                }
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .blur(radius: 6)
-
-            LinearGradient(
-                colors:
-                [
-                    Color(hex: "#333333"),
-                    Color(hex: "#333333"),
-                    Color(hex: "#333333").opacity(0.88),
-                    Color(hex: "#333333").opacity(0.32),
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-        }
     }
 
     @ViewBuilder
@@ -375,7 +337,7 @@ struct WalletHomeView: View {
                     Text(
                         vm
                             .isHidden ? "****" :
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: false))"
                     )
                     .font(.Ukraine(size: 30, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black)
@@ -398,11 +360,12 @@ struct WalletHomeView: View {
                 .frame(height: 44)
 
                 HStack {
-                    Text(WalletManager.shared.selectedAccountAddress)
+                    Text(WalletManager.shared.selectedAccount?.hexAddr ?? "")
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .font(.inter(size: 16))
                         .foregroundStyle(Color.LL.text)
+                        .mockPlaceholder(WalletManager.shared.selectedAccount?.hexAddr == nil)
                     Spacer()
 
                     Button {
@@ -468,19 +431,13 @@ struct WalletHomeView: View {
             .visibility(vm.showSwapButton ? .visible : .gone)
 
             WalletActionButton(
-                event: .stake,
+                event: .buy,
                 allowClick: !wm.isSelectedChildAccount
             ) {
-                if !LocalUserDefaults.shared.stakingGuideDisplayed && !StakingManager.shared
-                    .hasStaking
-                {
-                    Router.route(to: RouteMap.Wallet.stakingSelectProvider)
-                    return
-                }
-
-                Router.route(to: RouteMap.Wallet.stakingList)
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                Router.route(to: RouteMap.Wallet.buyCrypto)
             }
-            .visibility(vm.showStakeButton ? .visible : .gone)
+            .visibility(vm.showBuyButton ? .visible : .gone)
         }
     }
 
@@ -493,39 +450,14 @@ struct WalletHomeView: View {
                     .foregroundStyle(Color.Theme.Text.black3)
                 Spacer()
 
-                Button {
-                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                    Router.route(to: RouteMap.Wallet.buyCrypto)
-                } label: {
-                    HStack(spacing: 4) {
-                        Image("icon_wallet_action_buy")
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(Color.Theme.Text.black3)
-                            .background(.clear)
-                            .frame(width: 24, height: 24)
-
-                        Text("buy_uppercase".localized)
-                            .font(.inter(size: 14, weight: .semibold))
-                            .foregroundColor(Color.Theme.Text.black3)
-                    }
-                    .padding(.horizontal, 8)
-                    .background(Color.Theme.Background.grey)
-                    .cornerRadius(12)
+                CircleButton(image: .menu) {
+                    vm.onClickManagerToken()
                 }
-                .buttonStyle(ScaleButtonStyle())
-                .visibility(vm.showBuyButton ? .visible : .gone)
 
-                Button {
+                CircleButton(image: .add) {
                     vm.onAddToken()
-                } label: {
-                    Image("icon-wallet-coin-add")
-                        .renderingMode(.template)
-                        .foregroundColor(Color.Theme.Text.black3)
-                        .frame(width: 24, height: 24)
                 }
                 .visibility(vm.showAddTokenButton ? .visible : .gone)
-                .buttonStyle(ScaleButtonStyle())
             }
 
             VStack(spacing: 5) {
@@ -542,7 +474,6 @@ struct WalletHomeView: View {
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
-
             Spacer(minLength: headerHeight + safeArea.top)
         }
         .padding(.horizontal, 16)
@@ -550,223 +481,27 @@ struct WalletHomeView: View {
     }
 
     @ViewBuilder
+    func tokenManagerView() -> some View {
+        HStack(alignment: .center, spacing: 2) {
+            Spacer()
+            Image("tabler-icon-adjustments-horizontal")
+                .resizable()
+                .frame(width: 22, height: 22)
+            Text("manage_token_list".localized)
+                .font(.inter(size: 14))
+                .foregroundStyle(Color.Theme.Text.black8)
+            Spacer()
+        }
+        .onTapGesture {
+            vm.onClickManagerToken()
+        }
+    }
+
+    @ViewBuilder
     func ErrorView() -> some View {
         Text("error")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .backgroundFill(.LL.Neutrals.background)
-    }
-}
-
-private let CoinIconHeight: CGFloat = 44
-private let CoinCellHeight: CGFloat = 76
-
-// MARK: WalletHomeView.CoinCell
-
-extension WalletHomeView {
-    struct CoinCell: View {
-        let coin: WalletViewModel.WalletCoinItemModel
-        @EnvironmentObject
-        var vm: WalletViewModel
-        @StateObject
-        var stakingManager = StakingManager.shared
-
-        var body: some View {
-            VStack(spacing: 0) {
-                HStack(alignment: .center, spacing: 18) {
-                    KFImage.url(coin.token.iconURL)
-                        .placeholder {
-                            Image("placeholder")
-                                .resizable()
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: CoinIconHeight, height: CoinIconHeight)
-                        .clipShape(Circle())
-
-                    VStack(spacing: 7) {
-                        HStack {
-                            Text(coin.token.name)
-                                .foregroundColor(.LL.Neutrals.text)
-                                .font(.inter(size: 14, weight: .bold))
-
-                            Spacer()
-
-                            Text(
-                                "\(vm.isHidden ? "****" : coin.balance.formatCurrencyString()) \(coin.token.symbol?.uppercased() ?? "?")"
-                            )
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(size: 14, weight: .medium))
-                        }
-
-                        HStack {
-                            if WalletManager.shared.accessibleManager.isAccessible(coin.token) {
-                                if let priceValue = coin.priceValue {
-                                    HStack {
-                                        Text(priceValue)
-                                            .foregroundColor(.LL.Neutrals.neutrals7)
-                                            .font(.inter(size: 14, weight: .regular))
-
-                                        Text(coin.changeString)
-                                            .foregroundColor(coin.changeColor)
-                                            .font(.inter(size: 12, weight: .semibold))
-                                            .frame(height: 22)
-                                            .padding(.horizontal, 6)
-                                            .background(coin.changeBG)
-                                            .cornerRadius(11, style: .continuous)
-                                    }
-                                }
-                            } else {
-                                Text("Inaccessible".localized)
-                                    .foregroundStyle(Color.Flow.Font.inaccessible)
-                                    .font(Font.inter(size: 10, weight: .semibold))
-                                    .padding(.horizontal, 5)
-                                    .padding(.vertical, 5)
-                                    .background(.Flow.Font.inaccessible.opacity(0.16))
-                                    .cornerRadius(4, style: .continuous)
-                            }
-
-                            Spacer()
-
-                            if coin.priceValue != nil {
-                                Text(
-                                    vm
-                                        .isHidden ? "****" :
-                                        "\(CurrencyCache.cache.currencySymbol)\(coin.balanceAsCurrentCurrency)"
-                                )
-                                .foregroundColor(.LL.Neutrals.neutrals7)
-                                .font(.inter(size: 14, weight: .regular))
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                }
-                .frame(minHeight: CoinCellHeight)
-
-                if EVMAccountManager.shared.selectedAccount == nil && ChildAccountManager.shared
-                    .selectedChildAccount == nil
-                {
-                    HStack(spacing: 0) {
-                        Divider()
-                            .frame(width: 1, height: 10)
-                            .foregroundColor(Color.LL.Neutrals.neutrals4)
-
-                        Spacer()
-                    }
-                    .padding(.leading, 24)
-                    .offset(y: -5)
-                    .visibility(coin.token.isFlowCoin && stakingManager.isStaked ? .visible : .gone)
-
-                    Button {
-                        StakingManager.shared.goStakingAction()
-                    } label: {
-                        HStack(spacing: 0) {
-                            Circle()
-                                .frame(width: 10, height: 10)
-                                .foregroundColor(Color.LL.Neutrals.neutrals4)
-
-                            Text("staked_flow".localized)
-                                .foregroundColor(.LL.Neutrals.text)
-                                .font(.inter(size: 14, weight: .semibold))
-                                .padding(.leading, 31)
-
-                            Spacer()
-
-                            Text(
-                                "\(vm.isHidden ? "****" : stakingManager.stakingCount.formatCurrencyString()) FLOW"
-                            )
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(size: 14, weight: .medium))
-                        }
-                    }
-                    .padding(.leading, 19)
-                    .padding(.bottom, 12)
-                    .visibility(coin.token.isFlowCoin && stakingManager.isStaked ? .visible : .gone)
-                }
-            }
-            .background(.clear)
-            .cornerRadius(16)
-        }
-    }
-}
-
-// MARK: - WalletActionButton
-
-struct WalletActionButton: View {
-    enum Action: String {
-        case send, receive, swap, stake, buy
-
-        // MARK: Internal
-
-        var icon: String {
-            switch self {
-            case .send:
-                return "icon_token_send"
-            case .receive:
-                return "icon_token_recieve"
-            case .swap:
-                return "wallet-swap-stroke"
-            case .stake:
-                return "icon_wallet_action_stake"
-            case .buy:
-                return "WalletIconBuy"
-            }
-        }
-
-        // MARK: Private
-
-        private func incrementUrl() -> String {
-            if LocalUserDefaults.shared.flowNetwork == .mainnet {
-                return "https://app.increment.fi/swap"
-            } else {
-                return "https://demo.increment.fi/swap"
-            }
-        }
-    }
-
-    let event: Action
-    let allowClick: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button {
-            action()
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        } label: {
-            VStack {
-                HStack(alignment: .center) {
-                    VStack {
-                        Image(event.icon)
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundStyle(.white.opacity(allowClick ? 1 : 0.3))
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 24, height: 24)
-                    }
-                }
-                .padding(.vertical, 10)
-                .frame(width: 50, height: 50, alignment: .center)
-                .background(Color.Theme.Accent.green)
-                .cornerRadius(25)
-
-                Text(event.rawValue.localized.capitalized)
-                    .font(.inter(size: 12))
-                    .foregroundStyle(Color.Theme.Text.black8.opacity(allowClick ? 1 : 0.3))
-            }
-        }
-        .buttonStyle(ScaleButtonStyle())
-        .disabled(!allowClick)
-    }
-}
-
-// MARK: - VisualEffectView
-
-struct VisualEffectView: UIViewRepresentable {
-    var effect: UIVisualEffect?
-
-    func makeUIView(context _: UIViewRepresentableContext<Self>)
-        -> UIVisualEffectView { UIVisualEffectView() }
-    func updateUIView(_ uiView: UIVisualEffectView, context _: UIViewRepresentableContext<Self>) {
-        uiView.effect = effect
     }
 }
 
@@ -782,21 +517,6 @@ struct VisualEffectView: UIViewRepresentable {
     Group {
         WalletHomeView()
             .preferredColorScheme(.dark)
-    }
-}
-
-// MARK: - VisualEffectBlur
-
-struct VisualEffectBlur: UIViewRepresentable {
-    var effect: UIBlurEffect.Style
-
-    func makeUIView(context _: Context) -> UIVisualEffectView {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: effect))
-        return view
-    }
-
-    func updateUIView(_ uiView: UIVisualEffectView, context _: Context) {
-        uiView.effect = UIBlurEffect(style: effect)
     }
 }
 

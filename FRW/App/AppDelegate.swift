@@ -46,6 +46,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        KeyChainAccessibilityUpdate.udpate()
+
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
         FirebaseApp.configure()
@@ -61,7 +63,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         appConfig()
         commonConfig()
-        flowConfig()
 
         setupUI()
         _ = BlocklistHandler.shared
@@ -94,6 +95,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             _ = Replies.didReceiveRemoteNotification(notification)
         }
         FlowLog.logEnv()
+        InstallInfoManager.recordInstallInfoIfNeeded()
         return true
     }
 
@@ -178,7 +180,7 @@ extension AppDelegate {
         _ = StakingManager.shared
 
         _ = ChildAccountManager.shared
-        WalletManager.shared.bindChildAccountManager()
+//        WalletManager.shared.bindChildAccountManager()
         NFTCatalogCache.cache.fetchIfNeed()
 
         if UserManager.shared.isLoggedIn {
@@ -197,10 +199,6 @@ extension AppDelegate {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = .orange
 
         HUD.setupProgressHUD()
-    }
-
-    private func flowConfig() {
-        FlowNetwork.setup()
     }
 }
 
@@ -231,7 +229,7 @@ extension AppDelegate {
 
         delay(.seconds(5)) {
             UIView.animate(withDuration: 0.2) {
-                self.window?.backgroundColor = currentNetwork.isMainnet ? UIColor.LL.Neutrals
+                self.window?.backgroundColor = currentNetwork == .mainnet ? UIColor.LL.Neutrals
                     .background : UIColor(currentNetwork.color)
             }
         }
@@ -239,7 +237,7 @@ extension AppDelegate {
 
     @objc
     func handleNetworkChange() {
-        window?.backgroundColor = currentNetwork.isMainnet ? UIColor.LL.Neutrals
+        window?.backgroundColor = currentNetwork == .mainnet ? UIColor.LL.Neutrals
             .background : UIColor(currentNetwork.color)
     }
 }

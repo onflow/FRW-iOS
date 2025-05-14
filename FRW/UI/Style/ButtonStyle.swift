@@ -166,3 +166,24 @@ class ButtonStyle {
         return model
     }()
 }
+
+
+// MARK: - ScaleButtonStyle
+
+struct ScaleButtonStyle: SwiftUI.ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+            .animation(.linear(duration: 0.2), value: configuration.isPressed)
+            .brightness(configuration.isPressed ? -0.05 : 0)
+    }
+}
+
+
+struct PressButtonStyle: SwiftUI.ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .animation(.linear(duration: 0.2), value: configuration.isPressed)
+            .brightness(configuration.isPressed ? -0.05 : 0)
+    }
+}

@@ -99,11 +99,11 @@ extension EditAvatarView {
                 }
             }
 
-            self.items = cachedItems
+            items = cachedItems
 
             if let first = items.first, first.type == .string {
-                self.selectedItemId = first.id
-                self.oldAvatarItem = first
+                selectedItemId = first.id
+                oldAvatarItem = first
             }
 
             loadMoreAvatarIfNeededAction()
@@ -217,7 +217,8 @@ extension EditAvatarView {
 extension EditAvatarView.EditAvatarViewModel {
     func loadMoreAvatarIfNeededAction() {
         if let lastItem = items.last, let selectId = selectedItemId, lastItem.id == selectId,
-           isRequesting == false, isEnd == false {
+           isRequesting == false, isEnd == false
+        {
             isRequesting = true
 
             Task {
@@ -257,7 +258,7 @@ extension EditAvatarView.EditAvatarViewModel {
         let address = WalletManager.shared
             .getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
         let request = NFTGridDetailListRequest(address: address, offset: offset, limit: limit)
-        let from: VMType = EVMAccountManager.shared.selectedAccount != nil ? .evm : .cadence
+        let from: VMType = WalletManager.shared.isSelectedEVMAccount ? .evm : .cadence
         let response: Network.Response<NFTListResponse> = try await Network
             .requestWithRawModel(FRWAPI.NFT.gridDetailList(
                 request,

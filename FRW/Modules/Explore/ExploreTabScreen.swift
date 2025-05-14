@@ -22,7 +22,7 @@ extension ExploreTabScreen: AppTabBarPageProtocol {
     static func iconName() -> String {
         "tabler-icon-brand-safari"
     }
-    
+
     static func title() -> String {
         "explore".localized
     }
@@ -114,7 +114,7 @@ struct ExploreTabScreen: View {
         .task {
             vm.trigger(.fetchList)
         }
-        .onChange(of: LocalUserDefaults.shared.flowNetwork, perform: { _ in
+        .onChange(of: currentNetwork, perform: { _ in
             vm.trigger(.fetchList)
         })
         .background(
@@ -129,7 +129,6 @@ struct ExploreTabScreen: View {
             Text("explore".localized)
                 .font(.inter(size: 20, weight: .semibold))
             Spacer()
-
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -144,7 +143,7 @@ struct ExploreTabScreen: View {
                         let tintColor = vm.state
                             .selectedCategory == category ? Color.Theme.Accent.green :
                             Color.Theme.Text.text4
-                        
+
                         Text(category.uppercased())
                             .font(.inter(size: 14, weight: .semibold))
                             .foregroundColor(tintColor)
@@ -172,8 +171,9 @@ struct ExploreTabScreen: View {
                 let feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
                 feedbackGenerator.impactOccurred()
 
-                if LocalUserDefaults.shared.flowNetwork == .testnet,
-                   let url = dApp.testnetURL {
+                if currentNetwork == .testnet,
+                   let url = dApp.testnetURL
+                {
                     Router.route(to: RouteMap.Explore.browser(url))
                 } else {
                     Router.route(to: RouteMap.Explore.browser(dApp.url))
@@ -227,7 +227,6 @@ struct ExploreTabScreen: View {
                 .borderStyle()
             }
             .buttonStyle(ScaleButtonStyle())
-            
         }
     }
 }
@@ -276,7 +275,7 @@ extension ExploreTabScreen {
                 Router.route(to: RouteMap.Explore.browser(url))
             }
         } label: {
-            KFImage.url(bookmark.url.toFavIcon())
+            KFImage.url(iconUrl(urlStr: bookmark.url))
                 .placeholder {
                     Image("placeholder")
                         .resizable()
@@ -286,6 +285,17 @@ extension ExploreTabScreen {
                 .frame(width: BookmarkCellWidth, height: BookmarkCellWidth)
                 .cornerRadius(28)
         }
+    }
+
+    func iconUrl(urlStr: String) -> URL? {
+        guard let url = URL(string: urlStr), let host = url.host() else {
+            return urlStr.toFavIcon()
+        }
+        let model = vm.state.filterdList.first { $0.url.host()?.contains(host) ?? false }
+        guard let model else {
+            return urlStr.toFavIcon()
+        }
+        return model.logo
     }
 }
 

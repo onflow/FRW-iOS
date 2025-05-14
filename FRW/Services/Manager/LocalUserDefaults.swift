@@ -9,16 +9,12 @@ import Flow
 import SwiftUI
 import UIKit
 
-var currentNetwork: FlowNetworkType {
-    LocalUserDefaults.shared.flowNetwork
-}
-
 // MARK: - LocalUserDefaults.Keys
 
 extension LocalUserDefaults {
     enum Keys: String {
         case activatedUID
-        case flowNetwork
+        case network
         case legacyUserInfo = "userInfo"
         case walletHidden
         case quoteMarket
@@ -59,12 +55,9 @@ extension LocalUserDefaults {
         case migrationFinished
 
         case userDefaultTheme
-    }
-}
+        case selectedAddress
 
-extension Flow.ChainID {
-    var networkType: FlowNetworkType? {
-        .init(chainId: self)
+        case filterToken
     }
 }
 
@@ -86,13 +79,8 @@ class LocalUserDefaults: ObservableObject {
 
     static let shared = LocalUserDefaults()
 
-    #if DEBUG
-    @AppStorage(Keys.flowNetwork.rawValue)
-    var flowNetwork: FlowNetworkType = .testnet
-    #else
-    @AppStorage(Keys.flowNetwork.rawValue)
-    var flowNetwork: FlowNetworkType = .mainnet
-    #endif
+    @AppStorage(Keys.network.rawValue)
+    var network: Flow.ChainID = .mainnet
 
     @AppStorage(Keys.shouldShowConfettiOnHome.rawValue)
     var shouldShowConfettiOnHome: Bool = false
@@ -158,7 +146,8 @@ class LocalUserDefaults: ObservableObject {
                let info = try? FRWAPI.jsonDecoder.decode(
                    UserInfo.self,
                    from: data
-               ) {
+               )
+            {
                 return info
             } else {
                 return nil
@@ -193,7 +182,8 @@ class LocalUserDefaults: ObservableObject {
                let info = try? FRWAPI.jsonDecoder.decode(
                    [CoinRateCache.CoinRateModel].self,
                    from: data
-               ) {
+               )
+            {
                 return info
             } else {
                 return nil
@@ -273,7 +263,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    ChildAccount.self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -294,7 +285,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    EVMAccountManager.Account.self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -315,7 +307,8 @@ class LocalUserDefaults: ObservableObject {
                let model = try? JSONDecoder().decode(
                    [String: [WalletAccount.User]].self,
                    from: data
-               ) {
+               )
+            {
                 return model
             } else {
                 return nil
@@ -384,11 +377,31 @@ class LocalUserDefaults: ObservableObject {
         }
         get {
             if let data = UserDefaults.standard.data(forKey: Keys.customToken.rawValue),
-               let list = try? JSONDecoder().decode([CustomToken].self, from: data) {
+               let list = try? JSONDecoder().decode([CustomToken].self, from: data)
+            {
                 return list
 
             } else {
                 return []
+            }
+        }
+    }
+
+    var filterTokens: TokenFilterModel? {
+        set {
+            if let value = newValue, let data = try? JSONEncoder().encode(value) {
+                UserDefaults.standard.set(data, forKey: Keys.filterToken.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Keys.filterToken.rawValue)
+            }
+        }
+        get {
+            if let data = UserDefaults.standard.data(forKey: Keys.filterToken.rawValue),
+               let model = try? JSONDecoder().decode(TokenFilterModel.self, from: data)
+            {
+                return model
+            } else {
+                return nil
             }
         }
     }

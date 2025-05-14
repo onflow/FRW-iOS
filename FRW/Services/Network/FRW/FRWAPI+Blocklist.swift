@@ -41,7 +41,7 @@ extension FRWAPI.Blocklist: TargetType, AccessTokenAuthorizable {
     }
 
     var task: Task {
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue
+        let network = currentNetwork.rawValue
 
         switch self {
         case .domain:

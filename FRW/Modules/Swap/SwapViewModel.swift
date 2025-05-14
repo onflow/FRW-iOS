@@ -368,72 +368,72 @@ extension SwapViewModel {
     }
 
     func confirmSwapAction() {
-        guard let response = estimateResponse, let fromToken = fromToken,
-              let toToken = toToken
-        else {
-            return
-        }
-
-        isConfirming = true
-
-        Task {
-            do {
-                let tokenKeyFlatSplitPath = response.tokenKeyFlatSplitPath
-                let amountInSplit = response.amountInSplit
-                let amountOutSplit = response.amountOutSplit
-                let deadline = Decimal(Date().timeIntervalSince1970 + 60 * 10)
-                let slippageRate = 0.1
-                let estimateOut = response.tokenOutAmount
-                let amountOutMin = Decimal(Double(estimateOut * (1.0 - slippageRate)))
-                let storageIn = fromToken.storagePath
-                let storageOut = toToken.storagePath
-                let estimateIn = response.tokenInAmount
-                let amountInMax = Decimal(Double(estimateIn / (1.0 - slippageRate)))
-
-                let txid = try await FlowNetwork.swapToken(
-                    swapPaths: tokenKeyFlatSplitPath,
-                    tokenInMax: amountInMax,
-                    tokenOutMin: amountOutMin,
-                    tokenInVaultPath: String(storageIn.vault.split(separator: "/").last ?? ""),
-                    tokenOutSplit: amountOutSplit,
-                    tokenInSplit: amountInSplit,
-                    tokenOutVaultPath: String(storageOut.vault.split(separator: "/").last ?? ""),
-                    tokenOutReceiverPath: String(
-                        storageOut.receiver.split(separator: "/")
-                            .last ?? ""
-                    ),
-                    tokenOutBalancePath: String(
-                        storageOut.balance.split(separator: "/")
-                            .last ?? ""
-                    ),
-                    deadline: deadline,
-                    isFrom: self.requestIsFromInput
-                )
-
-                let data = try JSONEncoder().encode(response)
-                let holder = TransactionManager.TransactionHolder(
-                    id: txid,
-                    type: .common,
-                    data: data
-                )
-
-                DispatchQueue.main.async {
-                    self.isConfirming = false
-                    self.showConfirmView = false
-                    TransactionManager.shared.newTransaction(holder: holder)
-
-                    // Wait for half sheet dismiss first
-                    delay(.seconds(1)) {
-                        Router.dismiss()
-                    }
-                }
-            } catch {
-                debugPrint("SwapViewModel -> confirmSwapAction failed: \(error)")
-                HUD.error(title: "swap_request_failed".localized)
-                DispatchQueue.main.async {
-                    self.isConfirming = false
-                }
-            }
-        }
+//        guard let response = estimateResponse, let fromToken = fromToken,
+//              let toToken = toToken
+//        else {
+//            return
+//        }
+//
+//        isConfirming = true
+//
+//        Task {
+//            do {
+//                let tokenKeyFlatSplitPath = response.tokenKeyFlatSplitPath
+//                let amountInSplit = response.amountInSplit
+//                let amountOutSplit = response.amountOutSplit
+//                let deadline = Decimal(Date().timeIntervalSince1970 + 60 * 10)
+//                let slippageRate = 0.1
+//                let estimateOut = response.tokenOutAmount
+//                let amountOutMin = Decimal(Double(estimateOut * (1.0 - slippageRate)))
+//                let storageIn = fromToken.storagePath
+//                let storageOut = toToken.storagePath
+//                let estimateIn = response.tokenInAmount
+//                let amountInMax = Decimal(Double(estimateIn / (1.0 - slippageRate)))
+//
+//                let txid = try await FlowNetwork.swapToken(
+//                    swapPaths: tokenKeyFlatSplitPath,
+//                    tokenInMax: amountInMax,
+//                    tokenOutMin: amountOutMin,
+//                    tokenInVaultPath: String(storageIn.vault.split(separator: "/").last ?? ""), // FlowPath
+//                    tokenOutSplit: amountOutSplit,
+//                    tokenInSplit: amountInSplit,
+//                    tokenOutVaultPath: String(storageOut.vault.split(separator: "/").last ?? ""),
+//                    tokenOutReceiverPath: String(
+//                        storageOut.receiver.split(separator: "/")
+//                            .last ?? ""
+//                    ),
+//                    tokenOutBalancePath: String(
+//                        storageOut.balance.split(separator: "/")
+//                            .last ?? ""
+//                    ),
+//                    deadline: deadline,
+//                    isFrom: self.requestIsFromInput
+//                )
+//
+//                let data = try JSONEncoder().encode(response)
+//                let holder = TransactionManager.TransactionHolder(
+//                    id: txid,
+//                    type: .common,
+//                    data: data
+//                )
+//
+//                DispatchQueue.main.async {
+//                    self.isConfirming = false
+//                    self.showConfirmView = false
+//                    TransactionManager.shared.newTransaction(holder: holder)
+//
+//                    // Wait for half sheet dismiss first
+//                    delay(.seconds(1)) {
+//                        Router.dismiss()
+//                    }
+//                }
+//            } catch {
+//                debugPrint("SwapViewModel -> confirmSwapAction failed: \(error)")
+//                HUD.error(title: "swap_request_failed".localized)
+//                DispatchQueue.main.async {
+//                    self.isConfirming = false
+//                }
+//            }
+//        }
     }
 }

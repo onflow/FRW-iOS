@@ -5,6 +5,7 @@
 //  Created by Hao Fu on 16/1/22.
 //
 
+import Flow
 import Foundation
 import Moya
 
@@ -12,9 +13,14 @@ import Moya
 
 enum GithubEndpoint {
     case collections
-    case ftTokenList(FlowNetworkType)
-    case EVMNFTList(FlowNetworkType)
-    case EVMTokenList(FlowNetworkType)
+
+    @available(*, deprecated, message: "replace by api")
+    case ftTokenList(Flow.ChainID)
+
+    case EVMNFTList(Flow.ChainID)
+
+    @available(*, deprecated, message: "replace by api")
+    case EVMTokenList(Flow.ChainID)
 }
 
 // MARK: TargetType

@@ -45,13 +45,13 @@ class SelectCollectionViewModel: ObservableObject {
     func fetchList() {
         Task {
             do {
-                let address = WalletManager.shared.selectedAccountAddress
-                let from: VMType = EVMAccountManager.shared
-                    .selectedAccount != nil ? .evm : .cadence
+                guard let account = WalletManager.shared.selectedAccount else {
+                    return
+                }
                 let list: [NFTCollection] = try await Network
                     .request(FRWAPI.NFT.userCollection(
-                        address,
-                        from
+                        account.hexAddr,
+                        account.vmType
                     ))
                 await MainActor.run {
                     self.list = list
@@ -66,7 +66,7 @@ class SelectCollectionViewModel: ObservableObject {
     }
 
     func logo() -> Image {
-        let isSelectedEVM = EVMAccountManager.shared.selectedAccount != nil
+        let isSelectedEVM = WalletManager.shared.isSelectedEVMAccount
         return isSelectedEVM ? Image("icon_qr_evm") : Image("Flow")
     }
 }

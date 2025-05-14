@@ -70,6 +70,10 @@ class NFTTransferViewModel: ObservableObject {
     var fromChildAccount: ChildAccount?
 
     var fromTargetContent: Contact {
+        guard let selectedAccount = WalletManager.shared.selectedAccount else {
+            return UserManager.shared.userInfo!.toContactWithCurrentUserAddress()
+        }
+
         if let account = fromChildAccount {
             let contact = Contact(
                 address: account.showAddress,
@@ -81,30 +85,10 @@ class NFTTransferViewModel: ObservableObject {
                 username: account.showName
             )
             return contact
-        } else if let account = EVMAccountManager.shared.selectedAccount {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            let contact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: user.name,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName,
-                user: user
-            )
-            return contact
-        } else if let account = ChildAccountManager.shared.selectedChildAccount {
-            let contact = Contact(
-                address: account.showAddress,
-                avatar: account.icon,
-                contactName: account.aName,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: account.showName
-            )
-            return contact
+        } else if let account = WalletManager.shared.selectedEVMAccount {
+            return account.toContact()
+        } else if let account = WalletManager.shared.selectedChildAccount {
+            return account.toContact()
         } else {
             return UserManager.shared.userInfo!.toContactWithCurrentUserAddress()
         }
@@ -118,7 +102,7 @@ class NFTTransferViewModel: ObservableObject {
             isValidNFT = true
             return
         }
-        if EVMAccountManager.shared.selectedAccount != nil,
+        if WalletManager.shared.isSelectedEVMAccount,
            let identifier = nft.response.flowIdentifier
         {
             isValidNFT = true
@@ -170,7 +154,7 @@ class NFTTransferViewModel: ObservableObject {
                 var fromAccountType = WalletManager.shared.isSelectedEVMAccount ? AccountType.coa
                     :
                     (
-                        ChildAccountManager.shared.selectedChildAccount == nil ? AccountType
+                        WalletManager.shared.selectedChildAccount == nil ? AccountType
                             .flow : AccountType.linked
                     )
                 if fromChildAccount != nil {
@@ -214,10 +198,9 @@ class NFTTransferViewModel: ObservableObject {
                 case (.flow, .eoa):
                     log.debug("[NFT] flow to eoa send")
                     let nftId = nft.response.id
-                    guard let nftAddress = self.nft.collection?.address,
-                          let identifier = nft.collection?.flowIdentifier ?? nft.response
-                          .flowIdentifier,
-                          let toAddress = targetContact.address?.stripHexPrefix()
+                    guard let identifier = nft.collection?.flowIdentifier ?? nft.response
+                        .flowIdentifier,
+                        let toAddress = targetContact.address?.stripHexPrefix()
                     else {
                         throw NFTError.sendInvalidAddress
                     }

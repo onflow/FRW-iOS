@@ -16,7 +16,7 @@ extension FlowLog {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
 
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue
+        let network = currentNetwork.rawValue
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
@@ -30,12 +30,16 @@ extension FlowLog {
 
         let info = """
         \n==================
-        System Version:     \(systemVersion)
-        App Version:        \(version)(\(buildVersion))
-        Current Network:    \(network)
-        Current Time:       \(currentTime)
-        Current User ID:    \(userId)
-        Current Locale:     \(locale)
+        System Version:             \(systemVersion)
+        App Version:                \(version)(\(buildVersion))
+        Current Network:            \(network)
+        Current Time:               \(currentTime)
+        Current User ID:            \(userId)
+        Current Locale:             \(locale)
+        First Install Version:      \(InstallInfoManager.firstInstallVersion ?? "")
+        Migrate from other Devic:   \(InstallInfoManager.isMigratedFromOtherDevice)
+        Migrate Version:            \(InstallInfoManager.migratedVersion ?? "")
+        installed Versions:         \(InstallInfoManager.installVersions)
         ==================
         """
 

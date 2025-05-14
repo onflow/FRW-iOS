@@ -13,7 +13,7 @@ extension WalletListViewModel {
     struct Item {
         var user: WalletAccount.User
         var address: String
-        var balance: String
+        var balance: String?
         var isEvm: Bool
     }
 }
@@ -26,18 +26,17 @@ class WalletListViewModel: ObservableObject {
     @Published
     var multiVMWallets: [WalletListViewModel.Item] = []
 
-    func reload() {
+    func reload() async {
         mainWallets = []
         if let mainAddress = WalletManager.shared.getPrimaryWalletAddress() {
             let user = WalletManager.shared.walletAccount.readInfo(at: mainAddress)
-            var balance = WalletManager.shared.balanceProvider.balanceValue(at: mainAddress) ?? ""
-            if !balance.isEmpty {
-                balance += " Flow"
-            }
+            let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: mainAddress)
+            var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
+            
             let mainWallet = WalletListViewModel.Item(
                 user: user,
                 address: mainAddress,
-                balance: balance,
+                balance: balanceStr,
                 isEvm: false
             )
             mainWallets.append(mainWallet)
@@ -45,15 +44,13 @@ class WalletListViewModel: ObservableObject {
         multiVMWallets = []
         for account in EVMAccountManager.shared.accounts {
             let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            var balance = WalletManager.shared.balanceProvider
-                .balanceValue(at: account.showAddress) ?? ""
-            if !balance.isEmpty {
-                balance += " Flow"
-            }
+            let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: account.showAddress)
+            var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
+            
             let model = WalletListViewModel.Item(
                 user: user,
                 address: account.showAddress,
-                balance: balance,
+                balance: balanceStr,
                 isEvm: true
             )
             multiVMWallets.append(model)
@@ -132,7 +129,9 @@ struct WalletListView: RouteableView {
 //            }
 //        })
         .onAppear(perform: {
-            viewModel.reload()
+            Task {
+                await viewModel.reload()
+            }
         })
     }
 }
@@ -161,9 +160,12 @@ extension WalletListView {
                             .visibility(item.isEvm ? .visible : .gone)
                             .padding(.leading, 8)
                     }
-                    Text("\(item.balance)")
-                        .font(.inter(size: 14))
-                        .foregroundStyle(Color.Theme.Text.black3)
+                    
+                    if let balance = item.balance {
+                        Text(balance)
+                            .font(.inter(size: 14))
+                            .foregroundStyle(Color.Theme.Text.black3)
+                    }
                 }
                 Spacer()
                 Image("icon_arrow_right_28")

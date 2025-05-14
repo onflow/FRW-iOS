@@ -335,12 +335,10 @@ extension WalletConnectManager {
             rejectSession(proposal: sessionProposal)
             return
         }
-        guard network == LocalUserDefaults.shared.flowNetwork.toFlowType() else {
+        guard network == currentNetwork else {
             rejectSession(proposal: sessionProposal)
-            let current = LocalUserDefaults.shared.flowNetwork
-            guard let toNetwork = FlowNetworkType(chainId: network)
-            else { return }
-            Router.route(to: RouteMap.Explore.switchNetwork(current, toNetwork, nil))
+            let current = currentNetwork
+            Router.route(to: RouteMap.Explore.switchNetwork(current, currentNetwork, nil))
             return
         }
 
@@ -934,7 +932,7 @@ extension WalletConnectManager {
 
         Task {
             do {
-                let isEVM = EVMAccountManager.shared.selectedAccount != nil
+                let isEVM = WalletManager.shared.isSelectedEVMAccount
                 let response: RPCResult = isEVM ? .error(.init(code: 400, message: reason)) : .response(AnyCodable(result))
 
                 try await Sign.instance.respond(

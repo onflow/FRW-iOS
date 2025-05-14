@@ -157,6 +157,28 @@ extension FlowLog {
         )
         IBGLog.logWarn("\(fileNameWithoutSuffix(file)): \(stripParams(function)): \(line): \(message()) : \(context ?? "")")
     }
+    
+    func error(
+        _ error: any BaseError,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line,
+        context: Any? = nil
+    ) {
+        SwiftyBeaver.custom(
+            level: .error,
+            message: error.errorLog,
+            file: file,
+            function: function,
+            line: line,
+            context: context
+        )
+        addLogModel(category: .error, viewModel: DebugViewModel(
+            name: error.errorLog,
+            detail: (context as? Error)?
+                .localizedDescription ?? ""
+        ))
+    }
 
     /// log something which will keep you awake at night (highest priority)
     func error(

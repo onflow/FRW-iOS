@@ -32,7 +32,7 @@ extension FRWAPI.ChildAccount: TargetType, AccessTokenAuthorizable {
 
     var path: String {
         var thePath = ""
-        let network = LocalUserDefaults.shared.flowNetwork == .testnet ? "testnet" : "mainnet"
+        let network = currentNetwork == .testnet ? "testnet" : "mainnet"
         switch self {
         case .collection:
             thePath = "/hc/{{network}}/nftIdWithDisplay"

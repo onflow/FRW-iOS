@@ -15,9 +15,15 @@ struct SearchBar: View {
 
     var body: some View {
         HStack {
+            Image("icon-search")
+                .resizable()
+                .renderingMode(.template)
+                .foregroundStyle(Color.Theme.Text.text4)
+                .frame(width: 24, height: 24)
+
             TextField(placeholder, text: $searchText)
                 .font(.inter())
-                .foregroundStyle(Color.Theme.Text.black3)
+                .foregroundStyle(Color.Theme.Text.text4)
                 .submitLabel(.search)
                 .focused($isFocusedState)
                 .onSubmit {

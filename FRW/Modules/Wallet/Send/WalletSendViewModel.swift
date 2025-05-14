@@ -425,12 +425,14 @@ extension WalletSendViewModel {
             callback(target)
             return
         }
-
-        let vaultIdentifier = LocalUserDefaults.shared.recentToken
+        guard let flowToken = WalletManager.shared.flowToken else {
+            return
+        }
+        let vaultIdentifier = LocalUserDefaults.shared.recentToken ?? flowToken.vaultIdentifier
         guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
             return
         }
-
+        LocalUserDefaults.shared.recentToken = nil
         Router.route(to: RouteMap.Wallet.sendAmount(target, token))
     }
 

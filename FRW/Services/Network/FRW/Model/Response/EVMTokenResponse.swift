@@ -19,51 +19,48 @@ struct EVMTokenResponse: Codable {
     let name: String
     let decimals: Int
     let logoURI: String
-    let balance: String?
     let flowIdentifier: String?
 
-    var flowBalance: Decimal {
-        guard let bal = balance, let value = BigUInt(bal) else {
-            return 0
-        }
-
-        let result = Utilities.formatToPrecision(
-            value,
-            units: .custom(decimals),
-            formattingDecimals: decimals
-        )
-        return Decimal(string: result) ?? Decimal(0)
-    }
-
-    var uniKey: String {
-        address
-    }
+    /// e.g. 0.9998085919
+    let displayBalance: String?
+    /// e.g. 999808591900000000
+    let rawBalance: String?
+    /// 0.405351
+    let priceInUSD: String?
+    let balanceInUSD: String?
+    let priceInFLOW: String?
+    let balanceInFLOW: String?
+    let currency: String?
+    let priceInCurrency: String?
+    let balanceInCurrency: String?
+    let isVerified: Bool?
 
     func toTokenModel(type: TokenModel.TokenType) -> TokenModel {
-        let model = TokenModel(
+        TokenModel(
             type: type,
             name: name,
-            address: FlowNetworkModel(
-                mainnet: address,
-                testnet: address,
-                crescendo: address
-            ),
-            contractName: "",
-            storagePath: FlowTokenStoragePath(
-                balance: "",
-                vault: "",
-                receiver: ""
-            ),
-            decimal: decimals,
-            icon: .init(string: logoURI),
             symbol: symbol,
-            website: nil,
-            evmAddress: address,
-            flowIdentifier: flowIdentifier,
-            balance: BigUInt(balance ?? "-1"),
-            avaibleBalance: BigUInt(balance ?? "-1")
+            description: nil,
+            contractAddress: address,
+            contractName: "",
+            storagePath: nil,
+            receiverPath: nil,
+            balancePath: nil,
+            identifier: flowIdentifier,
+            isVerified: isVerified,
+            logoURI: logoURI,
+            priceInUSD: priceInUSD,
+            balanceInUSD: balanceInUSD,
+            priceInFLOW: priceInFLOW,
+            balanceInFLOW: balanceInFLOW,
+            currency: currency,
+            priceInCurrency: priceInCurrency,
+            balanceInCurrency: balanceInCurrency,
+            displayBalance: displayBalance,
+            decimal: decimals,
+            evmAddress: nil,
+            website: nil
         )
-        return model
     }
 }
 

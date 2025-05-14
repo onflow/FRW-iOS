@@ -24,8 +24,6 @@ public enum NetworkError: Error {
 // MARK: - Network
 
 enum Network {
-//    var cancelllables: [AnyCancellable] = []
-
     struct Response<T: Decodable>: Decodable {
         enum CodingKeys: String, CodingKey {
             case httpCode = "status"
@@ -64,16 +62,14 @@ enum Network {
     ) async throws -> T {
         let token = try await fetchIDToken()
         let authPlugin = AccessTokenPlugin { _ in token }
-        let logPlugin = NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))
-        let provider = MoyaProvider<U>(plugins: needToken ? [logPlugin, authPlugin] : [logPlugin])
+//        let logPlugin = NetworkLoggerPlugin(configuration: .init(logOptions: .default))
+        let provider = MoyaProvider<U>(plugins: needToken ? [authPlugin] : [])
         let result = await provider.asyncRequest(target)
         switch result {
         case let .success(response):
             do {
                 let filterdResponse = try response.filterSuccessfulStatusCodes()
-
                 let model = try decoder.decode(Response<T>.self, from: filterdResponse.data)
-
                 guard let data = model.data else {
                     throw NetworkError.emptyData
                 }
@@ -89,13 +85,13 @@ enum Network {
     static func requestWithRawModel<T: Decodable, U: TargetType>(
         _ target: U,
         decoder: JSONDecoder = FRWAPI.jsonDecoder,
-        needToken: Bool = true
+        needAuthToken: Bool = true
     ) async throws -> T {
         let token = try await fetchIDToken()
         let authPlugin = AccessTokenPlugin { _ in token }
         let provider =
             MoyaProvider<U>(
-                plugins: needToken ? [NetworkLoggerPlugin(), authPlugin] :
+                plugins: needAuthToken ? [NetworkLoggerPlugin(), authPlugin] :
                     [NetworkLoggerPlugin()]
             )
         let result = await provider.asyncRequest(target)

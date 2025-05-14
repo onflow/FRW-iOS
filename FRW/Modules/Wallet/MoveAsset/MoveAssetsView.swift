@@ -118,10 +118,6 @@ struct MoveAssetsView: RouteableView, PresentActionDelegate {
         .edgesIgnoringSafeArea(.all)
     }
 
-    func toName() -> String {
-        EVMAccountManager.shared.selectedAccount == nil ? "Flow" : "EVM"
-    }
-
     @ViewBuilder
     func card(isNFT: Bool) -> some View {
         VStack {

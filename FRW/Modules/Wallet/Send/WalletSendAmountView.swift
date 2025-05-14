@@ -86,7 +86,7 @@ struct WalletSendAmountView: RouteableView {
                             .frame(width: 44, height: 44)
                     } else if vm.targetContact.needShowLocalAvatar {
                         if let localAvatar = vm.targetContact.localAvatar {
-                            Image(vm.targetContact.localAvatar ?? "")
+                            Image(localAvatar)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 44, height: 44)
@@ -188,7 +188,7 @@ struct WalletSendAmountView: RouteableView {
                                 if let dotIndex = text.firstIndex(of: Character(decimalSeparator)) {
                                     let decimals = text[text.index(after: dotIndex)...].count
                                     if decimals > vm.token.precision {
-                                        vm.inputText = String(text.prefix(text.distance(from: text.startIndex, to: dotIndex) + vm.token.decimal + 1))
+                                        vm.inputText = String(text.prefix(text.distance(from: text.startIndex, to: dotIndex) + vm.token.decimalValue + 1))
                                     }
                                 }
                                 vm.inputTextDidChangeAction(text: vm.inputText)
@@ -397,30 +397,10 @@ extension WalletSendAmountView {
         private var vm: WalletSendAmountViewModel
 
         var fromTargetContent: Contact {
-            if let account = EVMAccountManager.shared.selectedAccount {
-                let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-                let contact = Contact(
-                    address: account.showAddress,
-                    avatar: nil,
-                    contactName: user.name,
-                    contactType: .user,
-                    domain: nil,
-                    id: UUID().hashValue,
-                    username: account.showName,
-                    user: user
-                )
-                return contact
-            } else if let account = ChildAccountManager.shared.selectedChildAccount {
-                let contact = Contact(
-                    address: account.showAddress,
-                    avatar: account.icon,
-                    contactName: account.aName,
-                    contactType: .user,
-                    domain: nil,
-                    id: UUID().hashValue,
-                    username: account.showName
-                )
-                return contact
+            if let account = WalletManager.shared.selectedEVMAccount {
+                return account.toContact()
+            } else if let account = WalletManager.shared.selectedChildAccount {
+                return account.toContact()
             } else {
                 return UserManager.shared.userInfo!.toContactWithCurrentUserAddress()
             }
@@ -483,7 +463,7 @@ extension WalletSendAmountView {
 
                     Spacer()
 
-                    Text(String(format: "%.\(vm.token.decimal)f", vm.inputTokenNum) + " \(vm.token.name.uppercased())")
+                    Text("\(vm.inputTokenNum.formatCurrency(vm.token.precision)) \(vm.token.name.uppercased())")
                         .foregroundColor(.LL.Neutrals.text)
                         .font(.inter(size: 20, weight: .semibold))
                         .minimumScaleFactor(0.5)

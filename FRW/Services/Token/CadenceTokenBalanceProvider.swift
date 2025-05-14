@@ -11,81 +11,50 @@ import Foundation
 import Web3Core
 
 class CadenceTokenBalanceProvider: TokenBalanceProvider {
-    var whiteListTokens: [TokenModel] = []
-    var activetedTokens: [TokenModel] = []
-
     // MARK: Lifecycle
 
-    static let AvailableFlowToken = "availableFlowToken"
-
-    init(network: FlowNetworkType = LocalUserDefaults.shared.flowNetwork) {
+    init(network: Flow.ChainID = currentNetwork) {
         self.network = network
-
-        // TODO: Add token list cache
     }
 
     // MARK: Internal
 
-    var network: FlowNetworkType
+    var tokens: [TokenModel] = []
+    var network: Flow.ChainID
 
-    func getSupportTokens() async throws -> [TokenModel] {
-        guard whiteListTokens.isEmpty else {
-            return whiteListTokens
-        }
-        let coinInfo: SingleTokenResponse = try await Network
-            .requestWithRawModel(GithubEndpoint.ftTokenList(network))
-        let models = coinInfo.tokens.map { $0.toTokenModel(type: .cadence, network: network) }
-        whiteListTokens = models.filter { $0.getAddress()?.isEmpty == false }
-        return whiteListTokens
-    }
-
-    func getActivatedTokens(address: any FWAddress, in _: TokenListMode = .whitelist) async throws -> [TokenModel] {
+    func fetchUserTokens(address: any FWAddress) async throws -> [TokenModel] {
         guard let addr = address as? Flow.Address else {
-            throw EVMError.addressError
+            throw WalletError.invaildAddress
         }
-        guard activetedTokens.isEmpty else {
-            return activetedTokens
-        }
-        var allTokens: [TokenModel] = whiteListTokens
-        if allTokens.isEmpty {
-            let list = try await getSupportTokens()
-            allTokens.append(contentsOf: list)
-        }
-        let balance = try await FlowNetwork.fetchTokenBalance(address: addr)
-        let availableFlowBalance = balance[CadenceTokenBalanceProvider.AvailableFlowToken]
-
-        var result: [TokenModel] = []
-        for key in balance.keys {
-            if let value = balance[key] {
-                if var model = allTokens.first(where: { $0.vaultIdentifier == key }) {
-                    model.balance = Utilities.parseToBigUInt(
-                        String(format: "%f", value),
-                        decimals: model.decimal
-                    ) ?? BigUInt(0)
-
-                    model.avaibleBalance = Utilities.parseToBigUInt(
-                        String(format: "%f", model.isFlowCoin ? (availableFlowBalance ?? value) : value),
-                        decimals: model.decimal
-                    ) ?? BigUInt(0)
-                    result.append(model)
+        let currency = CurrencyCache.cache.currentCurrency.rawValue
+        let query = FRWAPI.TokenQuery(address: addr.hexAddr, currency: currency, network: network)
+        let response: TokenModelResponse = try await Network.request(FRWAPI.Token.cadence(query))
+        var availableBalanceToUse = response.storage?.availableBalanceToUse
+        var tokenList: [TokenModel] = response.result ?? []
+        if let balance = availableBalanceToUse {
+            tokenList = tokenList.map { token in
+                var model = token
+                if model.isFlowCoin {
+                    model.availableBalanceToUse = balance
                 }
+                return model
             }
         }
-
-        // Sort by balance
-        activetedTokens = result.sorted { lhs, rhs in
-            guard let lBal = lhs.balance, let rBal = rhs.balance else {
+        tokenList.sort { lhs, rhs in
+            guard let lBal = lhs.balanceInUSD?.doubleValue, let rBal = rhs.balanceInUSD?.doubleValue else {
                 return true
             }
             return lBal > rBal
         }
-
-        return activetedTokens
+        tokens = tokenList
+        return tokenList
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        let list = try await getActivatedTokens(address: address)
-        return list
+        guard tokens.isEmpty else {
+            return tokens
+        }
+        return try await fetchUserTokens(address: address)
     }
 
     func getAllNFTsUnderCollection(address: FWAddress, collectionIdentifier: String, progressHandler: @escaping (Int, Int) -> Void) async throws -> [NFTModel] {

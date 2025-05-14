@@ -57,8 +57,8 @@ struct ChildAccount: Codable {
     }
 
     var isSelected: Bool {
-        if let selectedChildAccount = ChildAccountManager.shared.selectedChildAccount,
-           selectedChildAccount.addr == addr, let addr = addr, !addr.isEmpty
+        if let selectedChildAccount = WalletManager.shared.selectedChildAccount,
+           selectedChildAccount.address.hex == addr, let addr = addr, !addr.isEmpty
         {
             return true
         }
@@ -102,7 +102,7 @@ class ChildAccountManager: ObservableObject {
                 }
             }.store(in: &cancelSets)
 
-        WalletManager.shared.$walletInfo
+        WalletManager.shared.$mainAccount
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .map { $0 }
@@ -112,7 +112,6 @@ class ChildAccountManager: ObservableObject {
                         self.loadCache()
                         return
                     }
-
                     self.refresh()
                 }
             }.store(in: &cancelSets)
@@ -180,7 +179,7 @@ class ChildAccountManager: ObservableObject {
             return
         }
 
-        let network = LocalUserDefaults.shared.flowNetwork
+        let network = currentNetwork
         await MainActor.run {
             self.isLoading = true
         }
@@ -190,7 +189,7 @@ class ChildAccountManager: ObservableObject {
 
             await MainActor.run {
                 if UserManager.shared.activatedUID != uid { return }
-                if LocalUserDefaults.shared.flowNetwork != network { return }
+                if currentNetwork != network { return }
 
                 let oldList = MultiAccountStorage.shared.getChildAccounts(
                     uid: uid,

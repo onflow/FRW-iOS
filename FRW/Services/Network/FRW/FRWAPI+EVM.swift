@@ -56,7 +56,7 @@ extension FRWAPI.EVM: TargetType, AccessTokenAuthorizable {
     }
 
     var task: Task {
-        let network = LocalUserDefaults.shared.flowNetwork.rawValue
+        let network = currentNetwork.rawValue
 
         switch self {
         case .tokenList, .nfts:

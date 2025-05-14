@@ -242,7 +242,15 @@ extension TokenDetailViewModel {
     var movable: Bool {
         EVMAccountManager.shared
             .hasAccount &&
-            (token.evmAddress != nil || token.flowIdentifier != nil || token.isFlowCoin)
+            (token.evmAddress != nil || token.identifier != nil || token.isFlowCoin)
+    }
+
+    var verifiedValue: String {
+        token.isVerifiedValue ? "Yes" : "No"
+    }
+
+    var contractAddress: String {
+        token.contractAddress ?? ""
     }
 }
 
@@ -281,7 +289,7 @@ extension TokenDetailViewModel {
 
     func transferDetailAction(_ model: FlowScanTransfer) {
         if let txid = model.txid {
-            let network = LocalUserDefaults.shared.flowNetwork
+            let network = currentNetwork
             let accountType = AccountType.current
             let url = network.getTransactionHistoryUrl(
                 accountType: accountType,
@@ -320,7 +328,21 @@ extension TokenDetailViewModel {
             return
         }
         WalletManager.shared.customTokenManager.delete(token: customToken)
-        HUD.success(title: "")
+    }
+
+    func onClickAddress() {
+        guard let url = token.aboutTokenUrl() else {
+            return
+        }
+        Router.route(to: RouteMap.Explore.browser(url))
+    }
+
+    func onClickUnverifiedToken() {
+        let urlStr = "https://wallet.flow.com/post/verified-tokens-on-flow-wallet"
+        guard let url = URL(string: urlStr) else {
+            return
+        }
+        Router.route(to: RouteMap.Explore.browser(url))
     }
 }
 
@@ -330,9 +352,9 @@ extension TokenDetailViewModel {
     private func fetchAllData() {
         Task {
             await withTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    try? await WalletManager.shared.fetchBalance()
-                }
+//                group.addTask {
+//                    try? await WalletManager.shared.fetchBalance()
+//                }
 
                 group.addTask {
                     let accountInfo = try? await FlowNetwork.checkAccountInfo()
@@ -475,7 +497,7 @@ extension TokenDetailViewModel {
         // Swap
         if (RemoteConfigManager.shared.config?.features.swap ?? false) == true {
             // don't show when current is Linked account
-            if ChildAccountManager.shared.selectedChildAccount != nil || ChildAccountManager.shared
+            if WalletManager.shared.selectedChildAccount != nil || ChildAccountManager.shared
                 .selectedChildAccount != nil
             {
                 showSwapButton = false
@@ -490,7 +512,7 @@ extension TokenDetailViewModel {
         if RemoteConfigManager.shared.config?.features.onRamp ?? false == true,
            flow.chainID == .mainnet
         {
-            if ChildAccountManager.shared.selectedChildAccount != nil {
+            if WalletManager.shared.selectedChildAccount != nil {
                 showBuyButton = false
             } else {
                 showBuyButton = token.isFlowCoin ? true : false

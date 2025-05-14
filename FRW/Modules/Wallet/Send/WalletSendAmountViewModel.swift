@@ -56,7 +56,7 @@ final class WalletSendAmountViewModel: ObservableObject {
         self.token = token
         if let amountValue = amount?.description {
             inputText = amountValue
-            actualBalance = amountValue.doubleValue.formatCurrencyString(digits: token.decimal)
+            actualBalance = amountValue.doubleValue.formatCurrencyString(digits: token.decimalValue)
         }
 
         WalletManager.shared.$activatedCoins.sink { [weak self] _ in
@@ -65,6 +65,7 @@ final class WalletSendAmountViewModel: ObservableObject {
                 self?.refreshInput()
             }
         }.store(in: &cancelSets)
+
         checkAddress()
         checkTransaction()
         checkForInsufficientStorage()
@@ -251,7 +252,7 @@ extension WalletSendAmountViewModel: InsufficientStorageToastViewModel {
 
 extension WalletSendAmountViewModel {
     func inputTextDidChangeAction(text _: String) {
-        actualBalance = inputText.doubleValue.formatCurrencyString(digits: token.decimal)
+        actualBalance = inputText.doubleValue.formatCurrencyString(digits: token.decimalValue)
         refreshInput()
     }
 
@@ -259,7 +260,7 @@ extension WalletSendAmountViewModel {
         exchangeType = .token
         let num = max(amountBalance, 0)
         inputText = num.formatCurrencyString()
-        actualBalance = num.formatCurrencyString(digits: token.decimal)
+        actualBalance = num.formatCurrencyString(digits: token.decimalValue)
     }
 
     func toggleExchangeTypeAction() {
@@ -267,12 +268,12 @@ extension WalletSendAmountViewModel {
             exchangeType = .dollar
             inputText = inputDollarNum.formatCurrencyString()
             actualBalance = inputDollarNum
-                .formatCurrencyString(digits: token.decimal)
+                .formatCurrencyString(digits: token.decimalValue)
         } else {
             exchangeType = .token
             inputText = inputTokenNum.formatCurrencyString()
             actualBalance = inputTokenNum
-                .formatCurrencyString(digits: token.decimal)
+                .formatCurrencyString(digits: token.decimalValue)
         }
     }
 
@@ -358,7 +359,7 @@ extension WalletSendAmountViewModel {
                             vaultIdentifier: vaultIdentifier,
                             amount: amount,
                             fromEvm: false,
-                            decimals: token.decimal
+                            decimals: token.decimalValue
                         )
                     }
                 case (.coa, .flow):
@@ -376,11 +377,11 @@ extension WalletSendAmountViewModel {
                             vaultIdentifier: vaultIdentifier,
                             amount: amount,
                             fromEvm: true,
-                            decimals: token.decimal
+                            decimals: token.decimalValue
                         )
                     } else {
                         guard let bigUIntValue = amount.description
-                            .parseToBigUInt(decimals: token.decimal),
+                            .parseToBigUInt(decimals: token.decimalValue),
                             let vaultIdentifier = token.vaultIdentifier
                         else {
                             failureBlock()
@@ -434,7 +435,7 @@ extension WalletSendAmountViewModel {
                             throw LLError.invalidAddress
                         }
                         guard let bigAmount = amount.description
-                            .parseToBigUInt(decimals: token.decimal)
+                            .parseToBigUInt(decimals: token.decimalValue)
                         else {
                             throw WalletError.insufficientBalance
                         }
@@ -515,8 +516,6 @@ extension WalletSendAmountViewModel {
     }
 
     func changeTokenModelAction(token: TokenModel) {
-        LocalUserDefaults.shared.recentToken = token.vaultIdentifier
-
         self.token = token
         checkAddress()
         refreshTokenData()

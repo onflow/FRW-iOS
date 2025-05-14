@@ -44,7 +44,7 @@ struct AccountSwitchView: PresentActionView {
                 .padding(.bottom, 30)
 
             Button {
-                if LocalUserDefaults.shared.flowNetwork != .mainnet {
+                if currentNetwork != .mainnet {
                     showAlert = true
                 } else {
                     Router.dismiss {
@@ -112,7 +112,7 @@ struct AccountSwitchView: PresentActionView {
                     ForEach(vm.placeholders, id: \.uid) { placeholder in
                         Button {
                             vm.selectedUid = placeholder.uid
-                            if LocalUserDefaults.shared.flowNetwork != .mainnet {
+                            if currentNetwork != .mainnet {
                                 showSwitchUserAlert = true
                             } else {
                                 Router.dismiss {

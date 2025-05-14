@@ -38,7 +38,22 @@ struct AddTokenView: RouteableView {
 
     var body: some View {
         ZStack {
-            listView
+            VStack {
+                HStack {
+                    Toggle(isOn: $vm.onlyShowVerified) {
+                        HStack(spacing: 4) {
+                            Text("only_show_tokens".localized)
+                                .font(.inter(size: 14))
+                                .foregroundStyle(Color.Theme.Text.black)
+                            Image("icon-token-valid")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                listView
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .halfSheet(
@@ -52,8 +67,10 @@ struct AddTokenView: RouteableView {
                 }
             }
         )
+        .background(Color.Theme.Background.white)
         .environmentObject(vm)
         .disabled(vm.isRequesting)
+        .mockPlaceholder(vm.isMocking)
         .applyRouteable(self)
     }
 
@@ -78,11 +95,11 @@ struct AddTokenView: RouteableView {
                 sectionHeader(section)
                     .id(section.id)
             }
-            .listRowInsets(EdgeInsets(top: 6, leading: 18, bottom: 6, trailing: 27))
+            .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 27))
+            .background(Color.clear)
         }
+        .scrollContentBackground(.hidden)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .listStyle(.plain)
-        .background(Color.LL.background)
         .searchable(text: $vm.searchText)
     }
 
@@ -125,50 +142,57 @@ extension AddTokenView {
                 }
                 action()
             } label: {
-                HStack {
-                    KFImage.url(token.iconURL)
-                        .placeholder {
-                            Image("placeholder")
-                                .resizable()
+                VStack {
+                    HStack {
+                        KFImage.url(token.iconURL)
+                            .placeholder {
+                                Image("placeholder")
+                                    .resizable()
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: TokenIconWidth, height: TokenIconWidth)
+                            .clipShape(Circle())
+
+                        VStack(alignment: .leading, spacing: 3) {
+                            HStack {
+                                Text(token.name)
+                                    .foregroundColor(.LL.Neutrals.text)
+                                    .font(.inter(size: 14, weight: .semibold))
+                                Image("icon-token-valid")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                    .visibility(token.isVerifiedValue ? .visible : .gone)
+                            }
+
+                            Text(token.symbol?.uppercased() ?? "")
+                                .foregroundColor(.LL.Neutrals.note)
+                                .font(.inter(size: 12, weight: .medium))
                         }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: TokenIconWidth, height: TokenIconWidth)
-                        .clipShape(Circle())
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(token.name)
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(size: 14, weight: .semibold))
-
-                        Text(token.symbol?.uppercased() ?? "")
-                            .foregroundColor(.LL.Neutrals.note)
-                            .font(.inter(size: 12, weight: .medium))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    if isEVMAccount && vm.mode == .addToken {
-                        HStack {}
-                    } else {
-                        if isActivated {
-                            Image(systemName: .checkmarkSelected)
-                                .foregroundColor(.LL.Success.success3)
+                        if isEVMAccount && vm.mode == .addToken {
+                            HStack {}
                         } else {
-                            Image(systemName: .add).foregroundColor(.LL.Primary.salmonPrimary)
-                                .visibility(vm.mode == .addToken ? .visible : .gone)
+                            if isActivated {
+                                Image(systemName: .checkmarkSelected)
+                                    .foregroundColor(.LL.Success.success3)
+                            } else {
+                                Image(systemName: .add).foregroundColor(.LL.Primary.salmonPrimary)
+                                    .visibility(vm.mode == .addToken ? .visible : .gone)
+                            }
                         }
                     }
+                    Divider()
+                        .foregroundStyle(Color.Theme.Line.line)
                 }
-                .padding(.horizontal, 12)
+
                 .frame(height: TokenCellHeight)
-                .background {
-                    Color.LL.Neutrals.background.cornerRadius(16)
-                }
             }
         }
 
         var isEVMAccount: Bool {
-            EVMAccountManager.shared.selectedAccount != nil
+            WalletManager.shared.isSelectedEVMAccount
         }
     }
 }
@@ -248,7 +272,8 @@ extension AddTokenView {
             .task {
                 Task { @MainActor in
                     if let color = await ImageHelper
-                        .colors(from: token.icon?.absoluteString ?? placeholder).first {
+                        .colors(from: token.iconURL.absoluteString).first
+                    {
                         self.color = color.opacity(0.1)
                     }
                 }

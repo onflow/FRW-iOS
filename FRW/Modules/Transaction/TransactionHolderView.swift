@@ -10,6 +10,7 @@ import Kingfisher
 import SnapKit
 import SwiftUI
 import UIKit
+import Combine
 
 private let PanelHolderViewWidth: CGFloat = 48
 
@@ -27,6 +28,8 @@ extension TransactionHolderView {
 
 class TransactionHolderView: UIView {
     // MARK: Lifecycle
+    
+    private var cancellables: Set<AnyCancellable> = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -111,16 +114,17 @@ class TransactionHolderView: UIView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
         addGestureRecognizer(tap)
 
-        addNotification()
+        start()
     }
 
-    private func addNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onHolderStatusChanged(noti:)),
-            name: .transactionStatusDidChanged,
-            object: nil
-        )
+    private func start() {
+        flow.publisher.transactionPublisher
+            .filter{ $0.0 == self.model?.transactionId }
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] (id, result) in
+                self?.refreshView(status: result.status)
+            })
+            .store(in: &cancellables)
     }
 
     private func reloadBgPaths() {
@@ -193,18 +197,7 @@ class TransactionHolderView: UIView {
         LocalUserDefaults.shared.panelHolderFrame = frame
     }
 
-    @objc
-    private func onHolderStatusChanged(noti: Notification) {
-        guard let holder = noti.object as? TransactionManager.TransactionHolder,
-              let current = model,
-              current.transactionId.hex == holder.transactionId.hex else {
-            return
-        }
-
-        refreshView()
-    }
-
-    private func refreshView() {
+    private func refreshView(status: Flow.Transaction.Status) {
         if let iconURL = model?.icon() {
             progressView.iconImageView.kf.setImage(
                 with: iconURL,
@@ -214,7 +207,7 @@ class TransactionHolderView: UIView {
             progressView.iconImageView.image = UIImage(named: "flow")
         }
 
-        progressView.progress = model?.flowStatus.progressPercent ?? 0
+        progressView.progress = status.progressPercent
     }
 }
 
@@ -249,6 +242,6 @@ extension TransactionHolderView {
         }
 
         self.model = model
-        refreshView()
+        refreshView(status: model.status)
     }
 }

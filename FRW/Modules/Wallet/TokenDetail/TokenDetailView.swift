@@ -42,6 +42,9 @@ struct TokenDetailView: RouteableView {
                 .visibility(showAccessibleWarning() ? .visible : .gone)
 
                 summaryView
+                unverifiedTokenView
+                    .visibility(vm.token.isVerifiedValue ? .gone : .visible)
+
                 stakeAdView
                     .visibility(
                         stakingManager.hasStaking || !vm.token.isFlowCoin || LocalUserDefaults
@@ -61,12 +64,13 @@ struct TokenDetailView: RouteableView {
                 chartContainerView.visibility(vm.hasRateAndChartData ? .visible : .gone)
                 storageView
                     .visibility(self.vm.showStorageView ? .visible : .gone)
+                securityView
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)
         }
         .buttonStyle(.plain)
-        .backgroundFill(Color.LL.Neutrals.background)
+        .backgroundFill(Color.Theme.Background.white)
         .applyRouteable(self)
         .halfSheet(
             showSheet: $vm.showSheet,
@@ -130,8 +134,14 @@ struct TokenDetailView: RouteableView {
                             .padding(.leading, 18)
                     }
                     .padding(.leading, -18)
+                    .zIndex(10)
                 }
                 .allowsHitTesting(self.vm.isTokenDetailsButtonEnabled)
+
+                Image("icon-token-valid")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .visibility(vm.token.isVerifiedValue ? .visible : .gone)
 
                 Spacer()
 
@@ -185,7 +195,7 @@ struct TokenDetailView: RouteableView {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
         .background(.clear)
-        .borderStyle()
+        .cardStyle(showBorder: false)
     }
 
     var activitiesView: some View {
@@ -233,7 +243,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 18)
         .padding(.bottom, 8)
-        .borderStyle()
+        .cardStyle(showBorder: false)
     }
 
     var chartContainerView: some View {
@@ -289,7 +299,7 @@ struct TokenDetailView: RouteableView {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 18)
-        .borderStyle()
+        .cardStyle(showBorder: false)
     }
 
     var chartRangeView: some View {
@@ -340,9 +350,72 @@ struct TokenDetailView: RouteableView {
             .padding(.top, 16)
             .padding(.horizontal, 16)
             .padding(.bottom, 22)
-            .borderStyle()
+            .cardStyle(showBorder: false)
         }
         .padding(.bottom, 12)
+    }
+
+    var securityView: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack {
+                Text("security".localized)
+                    .font(.inter(size: 16, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+            }
+
+            HStack {
+                Text("verified".localized.uppercasedAllFirstLetter())
+                    .font(.inter(size: 14, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+                Text(vm.verifiedValue)
+                    .font(.inter(size: 14))
+                    .foregroundStyle(Color.Theme.Text.black)
+            }
+
+            HStack {
+                Text("contract_address".localized)
+                    .font(.inter(size: 14, weight: .w600))
+                    .foregroundStyle(Color.Theme.Text.black)
+                Spacer()
+                Text(vm.contractAddress)
+                    .font(.inter(size: 14))
+                    .truncationMode(.middle)
+                    .underline()
+                    .lineLimit(1)
+                    .foregroundStyle(Color.Theme.Text.black)
+            }
+            .onTapGesture {
+                vm.onClickAddress()
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 18)
+        .cardStyle(showBorder: false)
+        .padding(.bottom, 8)
+    }
+
+    var unverifiedTokenView: some View {
+        HStack {
+            Image("icon_warning_line")
+                .resizable()
+                .frame(width: 20, height: 20)
+            Text("unverified_token_hint".localized)
+                .font(.inter(size: 14, weight: .bold))
+                .foregroundColor(Color.Theme.Text.black8)
+                + Text("view_more".localized)
+                .underline()
+                .font(.inter(size: 14, weight: .bold))
+                .foregroundColor(Color.Theme.Text.black8)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .padding(16)
+        .cardStyle(showBorder: false)
+        .onTapGesture {
+            vm.onClickUnverifiedToken()
+        }
     }
 
     // MARK: Private
@@ -686,7 +759,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .padding(.bottom, 14)
-            .borderStyle()
+            .cardStyle(showBorder: false)
         }
     }
 
@@ -748,7 +821,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .frame(height: 72, alignment: .topLeading)
-            .borderStyle()
+            .cardStyle(showBorder: false)
         }
     }
 }
@@ -758,8 +831,7 @@ extension TokenDetailView {
 extension TokenDetailView {
     func naccessibleDesc() -> String {
         let token = vm.token.name
-        let account = WalletManager.shared.selectedAccountWalletName
-        let desc = "accessible_not_x_x".localized(token, account)
+        let desc = "accessible_not_x_x".localized(token, "Child")
         return desc
     }
 
@@ -781,9 +853,38 @@ struct BorderStyle: ViewModifier {
     }
 }
 
+// MARK: - CardStyle
+
+struct CardStyle: ViewModifier {
+    let cornerRadius: CGFloat
+    let showBorder: Bool
+
+    func body(content: Content) -> some View {
+        if showBorder {
+            content
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))
+                        .foregroundColor(Color.Theme.Line.stroke)
+                }
+        } else {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(Color.Theme.Special.white1)
+                        .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 8)
+                )
+        }
+    }
+}
+
 extension View {
-    func borderStyle() -> some View {
+    func borderStyle(isShow _: Bool = true) -> some View {
         modifier(BorderStyle())
+    }
+
+    func cardStyle(cornerRadius: CGFloat = 12, showBorder: Bool = true) -> some View {
+        modifier(CardStyle(cornerRadius: cornerRadius, showBorder: showBorder))
     }
 }
 
