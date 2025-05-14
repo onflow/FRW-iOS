@@ -100,6 +100,7 @@ struct MoveTokenView: RouteableView, PresentActionDelegate {
         .hideKeyboardWhenTappedAround()
         .environmentObject(viewModel)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func customViewDidDismiss() {

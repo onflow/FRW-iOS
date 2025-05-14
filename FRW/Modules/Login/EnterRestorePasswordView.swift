@@ -95,6 +95,7 @@ struct EnterRestorePasswordView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 state = .focused

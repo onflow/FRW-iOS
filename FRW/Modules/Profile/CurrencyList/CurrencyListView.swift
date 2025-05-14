@@ -35,6 +35,7 @@ struct CurrencyListView: RouteableView {
         }
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func createCurrencyListCell(currency: Currency, selected: Bool) -> some View {

@@ -77,6 +77,7 @@ struct ProfileView: RouteableView {
         .environmentObject(lud)
         .environmentObject(userManager)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private
@@ -988,7 +989,8 @@ extension ProfileView {
                 }
 
                 if let imageName = imageName, let sysImageColor = sysImageColor,
-                   style == .sysImage {
+                   style == .sysImage
+                {
                     Image(systemName: imageName)
                         .foregroundColor(sysImageColor)
                 }

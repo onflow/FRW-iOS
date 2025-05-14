@@ -72,6 +72,7 @@ struct AddTokenView: RouteableView {
         .disabled(vm.isRequesting)
         .mockPlaceholder(vm.isMocking)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var listView: some View {

@@ -173,6 +173,7 @@ struct InputMnemonicView: RouteableView {
         }
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
         .customAlertView(
             isPresented: $viewModel.state.isAlertViewPresented,
             title: "account_not_found".localized,

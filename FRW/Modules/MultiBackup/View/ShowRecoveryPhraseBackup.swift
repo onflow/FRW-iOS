@@ -22,7 +22,7 @@ struct ShowRecoveryPhraseBackup: RouteableView {
 
     @State
     var isBlur: Bool = true
-    
+
     var title: String {
         "backup".localized
     }
@@ -52,7 +52,7 @@ struct ShowRecoveryPhraseBackup: RouteableView {
                             WordListView(data: Array(viewModel.dataSource.suffix(from: 6)))
                             Spacer()
                         }
-                        
+
                         Text("hide".localized)
                             .padding(5)
                             .padding(.horizontal, 5)
@@ -131,6 +131,7 @@ struct ShowRecoveryPhraseBackup: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

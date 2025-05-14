@@ -55,6 +55,7 @@ struct CustomTokenDetailView: RouteableView {
         .padding(16)
         .background(.Theme.Background.bg2)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func onClickImport() {

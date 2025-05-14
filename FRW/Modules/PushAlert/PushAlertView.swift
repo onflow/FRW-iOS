@@ -39,6 +39,7 @@ struct PushAlertView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var turnOnButton: some View {

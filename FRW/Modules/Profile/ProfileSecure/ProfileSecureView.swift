@@ -64,6 +64,7 @@ struct ProfileSecureView: RouteableView {
         .padding(.horizontal, 18)
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

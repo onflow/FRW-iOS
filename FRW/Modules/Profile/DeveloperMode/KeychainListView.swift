@@ -17,12 +17,11 @@ struct KeychainListView: RouteableView {
     var body: some View {
         ScrollView {
             Section {
-                ForEach(0..<viewModel.seList.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.seList.count, id: \.self) { index in
                     let item = viewModel.seList[index]
-                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { item in
+                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { _ in
 
-                    } onDelete: { userId in
-
+                    } onDelete: { _ in
                     }
                 }
             } header: {
@@ -35,10 +34,10 @@ struct KeychainListView: RouteableView {
             .visibility(!viewModel.seList.isEmpty ? .visible : .gone)
 
             Section {
-                ForEach(0..<viewModel.seItem.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.seItem.count, id: \.self) { index in
                     let item = viewModel.seItem[index]
-                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { item in
-                    } onDelete: { userId in}
+                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { _ in
+                    } onDelete: { _ in }
                 }
             } header: {
                 HStack {
@@ -50,12 +49,11 @@ struct KeychainListView: RouteableView {
             .visibility(!viewModel.seItem.isEmpty ? .visible : .gone)
 
             Section {
-                ForEach(0..<viewModel.spItem.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.spItem.count, id: \.self) { index in
                     let item = viewModel.spItem[index]
-                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item),onClick: { item in
+                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item), onClick: { _ in
 
-                    }){ userId in
-                        
+                    }) { _ in
                     }
                 }
             } header: {
@@ -67,12 +65,11 @@ struct KeychainListView: RouteableView {
             }
             .visibility(!viewModel.spItem.isEmpty ? .visible : .gone)
 
-
             Section {
-                ForEach(0..<viewModel.pkItem.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.pkItem.count, id: \.self) { index in
                     let item = viewModel.pkItem[index]
-                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { item in
-                    } onDelete: { userId in
+                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { _ in
+                    } onDelete: { _ in
                     }
                 }
             } header: {
@@ -84,10 +81,8 @@ struct KeychainListView: RouteableView {
             }
             .visibility(!viewModel.pkItem.isEmpty ? .visible : .gone)
 
-
-
             Section {
-                ForEach(0..<viewModel.localList.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.localList.count, id: \.self) { index in
                     let item = viewModel.localList[index]
                     itemView(item)
                 }
@@ -101,7 +96,7 @@ struct KeychainListView: RouteableView {
             .visibility(!viewModel.localList.isEmpty ? .visible : .gone)
 
             Section {
-                ForEach(0..<viewModel.remoteList.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.remoteList.count, id: \.self) { index in
                     let item = viewModel.remoteList[index]
                     itemView(item)
                 }
@@ -115,10 +110,10 @@ struct KeychainListView: RouteableView {
             .visibility(!viewModel.remoteList.isEmpty ? .visible : .gone)
 
             Section {
-                ForEach(0..<$viewModel.multiICloudBackUpList.count, id: \.self) { index in
+                ForEach(0 ..< $viewModel.multiICloudBackUpList.count, id: \.self) { index in
                     let item = viewModel.multiICloudBackUpList[index]
-                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { item in
-                    } onDelete: { userId in}
+                    KeychainListView.Item(info: item, isCurrent: isCurrentKey(info: item)) { _ in
+                    } onDelete: { _ in }
                 }
             } header: {
                 HStack {
@@ -138,6 +133,7 @@ struct KeychainListView: RouteableView {
         })
         .padding(.horizontal, 16)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func itemView(_ item: [String: Any]) -> some View {
@@ -166,7 +162,6 @@ struct KeychainListView: RouteableView {
         .background(Color.Theme.Background.silver)
     }
 
-
     func isCurrentKey(info: [String: String]) -> Bool {
         let key = info["userId"]
         return UserManager.shared.activatedUID == key
@@ -182,8 +177,8 @@ extension KeychainListView {
     struct Item: View {
         var info: [String: String]
         var isCurrent: Bool
-        var onClick:(([String: String]) -> Void)
-        var onDelete:((String) -> Void)
+        var onClick: ([String: String]) -> Void
+        var onDelete: (String) -> Void
         var body: some View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
@@ -199,7 +194,7 @@ extension KeychainListView {
                 .background(Color.Theme.Background.grey)
 
                 VStack {
-                    ForEach(sorting: info,id: \.self) { key,value in
+                    ForEach(sorting: info, id: \.self) { key, value in
                         if key != "userId" {
                             HStack {
                                 Text(key.uppercasedFirstLetter())
@@ -221,7 +216,7 @@ extension KeychainListView {
                 .padding(16)
                 .background(Color.Theme.Background.grey.opacity(0.6))
 
-                HStack(spacing: 12){
+                HStack(spacing: 12) {
 //                    Button {
 //                        onDelete(info["userId"] ?? "")
 //                    } label: {
@@ -239,10 +234,9 @@ extension KeychainListView {
                     }
                     Spacer()
                 }
-                .padding(.horizontal,16)
+                .padding(.horizontal, 16)
                 .background(Color.Theme.Background.grey.opacity(0.6))
                 .frame(maxWidth: .infinity)
-
             }
             .cornerRadius(16)
             .onTapGesture {
@@ -253,7 +247,7 @@ extension KeychainListView {
 }
 
 #Preview {
-    KeychainListView.Item(info: ["userId": "ac12312312", "public Key": "123123","index": "2"], isCurrent: false){ item in
-    } onDelete: { userId in
+    KeychainListView.Item(info: ["userId": "ac12312312", "public Key": "123123", "index": "2"], isCurrent: false) { _ in
+    } onDelete: { _ in
     }
 }

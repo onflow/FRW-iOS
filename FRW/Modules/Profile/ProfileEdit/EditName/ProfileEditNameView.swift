@@ -45,6 +45,7 @@ struct ProfileEditNameView: RouteableView {
         })
         .backgroundFill(.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

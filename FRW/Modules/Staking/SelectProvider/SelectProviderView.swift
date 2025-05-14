@@ -82,6 +82,7 @@ struct SelectProviderView: RouteableView {
         }
         .backgroundFill(.LL.deepBg)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func createSectionTitleView(_ title: String) -> some View {

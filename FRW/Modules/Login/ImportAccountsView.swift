@@ -125,6 +125,7 @@ struct ImportAccountsView: RouteableView, PresentActionDelegate {
         .backgroundFill(.Theme.Background.bg2)
         .cornerRadius([.topLeading, .topTrailing], 16)
         .applyRouteable(self)
+        .tracedView(self)
         .ignoresSafeArea()
     }
 

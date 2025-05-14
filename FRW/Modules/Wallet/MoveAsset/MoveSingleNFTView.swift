@@ -129,7 +129,7 @@ struct MoveSingleNFTView: RouteableView, PresentActionDelegate {
                 .background(.Theme.BG.bg3)
                 .cornerRadius(16)
             }
-                
+
             VPrimaryButton(
                 model: ButtonStyle.primary,
                 state: viewModel.buttonState,
@@ -145,6 +145,7 @@ struct MoveSingleNFTView: RouteableView, PresentActionDelegate {
         .cornerRadius([.topLeading, .topTrailing], 16)
         .edgesIgnoringSafeArea(.bottom)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

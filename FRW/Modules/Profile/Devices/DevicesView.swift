@@ -76,6 +76,7 @@ struct DevicesView: RouteableView {
         .backgroundFill(Color.LL.Neutrals.background)
         .mockPlaceholder(vm.status == PageStatus.loading)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

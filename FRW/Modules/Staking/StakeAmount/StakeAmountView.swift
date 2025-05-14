@@ -53,6 +53,7 @@ struct StakeAmountView: RouteableView {
                 .environmentObject(vm)
         })
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var inputContainerView: some View {

@@ -71,6 +71,7 @@ struct MultiBackupConfirmPinView: RouteableView {
         .padding(.horizontal, 28)
         .background(Color.LL.background, ignoresSafeAreaEdges: .all)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

@@ -68,6 +68,7 @@ struct PrivateKeyLoginView: RouteableView {
         .padding(.horizontal, 24)
         .backgroundFill(Color.Theme.Background.grey)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

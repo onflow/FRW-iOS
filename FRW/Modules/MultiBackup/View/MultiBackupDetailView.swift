@@ -82,6 +82,7 @@ struct MultiBackupDetailView: RouteableView {
             .padding(.horizontal, 18)
         }
         .applyRouteable(self)
+        .tracedView(self)
         .halfSheet(showSheet: $viewModel.showRemoveTipView, autoResizing: true, backgroundColor: Color.LL.Neutrals.background) {
             DangerousTipSheetView(
                 title: "account_key_revoke_title".localized,
