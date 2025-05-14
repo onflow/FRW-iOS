@@ -84,6 +84,7 @@ struct WalletHomeView: View {
                 .navigationBarHidden(true)
                 .ignoresSafeArea(.container, edges: .top)
         }
+        .tracedView(self)
     }
 
     var headerHeight: CGFloat {

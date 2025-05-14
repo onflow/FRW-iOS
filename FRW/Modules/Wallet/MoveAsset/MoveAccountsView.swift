@@ -55,14 +55,13 @@ struct MoveAccountsView: RouteableView, PresentActionDelegate {
                     ForEach(viewModel.list.indices, id: \.self) { index in
                         let model = viewModel.list[index]
                         let isSelected = viewModel.selectedAddr == model.address
-                        
+
                         Button {
                             viewModel.onSelect(contact: model)
-                        } label : {
+                        } label: {
                             MoveAccountsView.AccountCell(contact: model,
                                                          isSelected: isSelected)
                         }.buttonStyle(ScaleButtonStyle())
-                            
                     }
                 }
             }
@@ -71,6 +70,7 @@ struct MoveAccountsView: RouteableView, PresentActionDelegate {
         .backgroundFill(Color.Theme.Background.grey)
         .cornerRadius([.topLeading, .topTrailing], 16)
         .applyRouteable(self)
+        .tracedView(self)
         .ignoresSafeArea()
     }
 }
@@ -153,7 +153,7 @@ class MoveAccountsViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(selected address: String, callback: @escaping (Contact?) -> Void) {
-        self.selectedAddr = address
+        selectedAddr = address
         self.callback = callback
 
         if let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() {

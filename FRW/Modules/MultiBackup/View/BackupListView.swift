@@ -69,6 +69,7 @@ struct BackupListView: RouteableView {
             .padding(.horizontal, 18)
         }
         .applyRouteable(self)
+        .tracedView(self)
         .backgroundFill(Color.LL.Neutrals.background)
         .halfSheet(showSheet: $viewModel.showRemoveTipView, autoResizing: true, backgroundColor: Color.LL.Neutrals.background) {
             DangerousTipSheetView(
@@ -422,7 +423,7 @@ extension BackupListView {
          hierarchy will be updated. */
         NotificationCenter.default.post(name: NSNotification.Name(backTappedNotification))
     }
-    
+
     private func handleBackButtonAction() {
         if viewModel.hasSomeBackup == false {
             showBackWarning = true

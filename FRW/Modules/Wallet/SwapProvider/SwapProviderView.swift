@@ -82,6 +82,7 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
         .background(.Theme.BG.bg1)
         .cornerRadius([.topLeading, .topTrailing], 16)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     @ViewBuilder

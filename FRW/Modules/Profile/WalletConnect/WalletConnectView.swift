@@ -149,6 +149,7 @@ struct WalletConnectView: RouteableView {
             )
             .backgroundFill(Color.LL.Neutrals.background)
             .applyRouteable(self)
+            .tracedView(self)
         } else {
             WalletConnectView.EmptyView()
                 .backgroundFill(Color.LL.Neutrals.background)

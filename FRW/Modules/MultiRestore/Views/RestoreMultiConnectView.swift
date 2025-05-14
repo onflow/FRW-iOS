@@ -70,6 +70,7 @@ struct RestoreMultiConnectView: RouteableView {
         }
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

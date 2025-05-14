@@ -404,6 +404,7 @@ struct NFTDetailPage: RouteableView {
         )
         .animation(.spring(), value: showImageViewer)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var childOpacity: CGFloat {

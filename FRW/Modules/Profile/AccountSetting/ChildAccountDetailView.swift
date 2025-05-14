@@ -266,6 +266,7 @@ struct ChildAccountDetailView: RouteableView {
         .padding(.bottom, 20)
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
         .halfSheet(
             showSheet: $vm.isPresent,
             autoResizing: true,

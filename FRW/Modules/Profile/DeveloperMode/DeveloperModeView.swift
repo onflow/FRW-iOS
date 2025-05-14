@@ -5,8 +5,8 @@
 //  Created by Selina on 7/6/2022.
 //
 
-import SwiftUI
 import Flow
+import SwiftUI
 
 // MARK: - DeveloperModeView_Previews
 
@@ -429,6 +429,7 @@ struct DeveloperModeView: RouteableView {
             }
         })
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

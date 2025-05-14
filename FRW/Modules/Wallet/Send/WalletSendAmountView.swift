@@ -63,6 +63,7 @@ struct WalletSendAmountView: RouteableView {
                 .environmentObject(vm)
         })
         .applyRouteable(self)
+        .tracedView(self)
         .environmentObject(vm)
     }
 

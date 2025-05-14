@@ -70,6 +70,7 @@ struct SyncConfirmView: RouteableView {
         }
         .padding(.horizontal, 24)
         .applyRouteable(self)
+        .tracedView(self)
         .fullScreenCover(isPresented: $viewModel.isPresented) {
             SyncStatusView(syncStatus: $viewModel.status, isPresented: $viewModel.isPresented)
                 .background(ClearBackgroundView())
@@ -87,7 +88,7 @@ struct SyncConfirmView: RouteableView {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 36, height: 36)
                 .cornerRadius(18)
-            VStack(alignment: .leading,spacing: 6) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("\(user.userName ?? "")")
                     .lineLimit(1)
                     .lineBreakMode(.byTruncatingMiddle)
@@ -100,7 +101,6 @@ struct SyncConfirmView: RouteableView {
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(.Theme.Text.black3)
             }
-
 
             Spacer()
         }

@@ -62,6 +62,7 @@ struct WalletSendView: RouteableView {
         .buttonStyle(.plain)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var switchBar: some View {

@@ -34,7 +34,6 @@ struct KeyStoreLoginView: RouteableView {
                                 viewModel.update(json: value)
                             }
                             .frame(height: 120)
-
                         }
 
                     } header: {
@@ -84,6 +83,7 @@ struct KeyStoreLoginView: RouteableView {
         .backgroundColor(Color.Theme.Background.grey)
         .hideKeyboardWhenTappedAround()
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

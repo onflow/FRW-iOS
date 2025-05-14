@@ -159,6 +159,7 @@ struct ManualBackupView: RouteableView {
             viewModel.trigger(.loadDataSource)
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func getColor(

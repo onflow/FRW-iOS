@@ -33,6 +33,7 @@ struct ProfileEditView: RouteableView {
         }
         .backgroundFill(.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var editContainer: some View {

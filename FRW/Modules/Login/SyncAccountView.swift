@@ -55,6 +55,7 @@ struct SyncAccountView: RouteableView {
             .padding(.horizontal, 28)
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

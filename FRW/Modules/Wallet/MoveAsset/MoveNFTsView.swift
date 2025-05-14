@@ -65,6 +65,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
         }
         .padding(.horizontal, 18)
         .applyRouteable(self)
+        .tracedView(self)
         .background(Color.Theme.Background.grey)
     }
 

@@ -52,6 +52,7 @@ struct RecoveryPhraseBackupResultView: RouteableView {
         .padding(.horizontal, 18)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func onConfirm() {

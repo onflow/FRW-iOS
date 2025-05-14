@@ -139,6 +139,7 @@ struct RestoreMultiInputMnemonicView: RouteableView {
         }
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
         .customAlertView(
             isPresented: $viewModel.isAlertViewPresented,
             title: "account_not_found".localized,

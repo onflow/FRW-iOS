@@ -88,6 +88,7 @@ struct RestoreListView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

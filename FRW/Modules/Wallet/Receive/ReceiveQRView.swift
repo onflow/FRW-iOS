@@ -22,7 +22,7 @@ struct ReceiveQRView: RouteableView {
         VStack(spacing: 0) {
             Color.clear
                 .frame(width: 1, height: 8)
-            
+
             VStack(spacing: 8) {
                 Text("current_chain".localized)
                     .font(.inter(size: 14))
@@ -70,7 +70,7 @@ struct ReceiveQRView: RouteableView {
                 .frame(height: 48)
                 .padding(.top, 24)
                 .padding(.bottom)
-            
+
             if self.viewModel.isEVM {
                 evmWarning
                     .padding(.horizontal, -38)
@@ -81,6 +81,7 @@ struct ReceiveQRView: RouteableView {
         .padding(.horizontal, 54)
         .backgroundFill(.Theme.Background.silver)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var qrCodeView: some View {
@@ -141,14 +142,14 @@ struct ReceiveQRView: RouteableView {
         }
         .buttonStyle(ScaleButtonStyle())
     }
-    
+
     var evmWarning: some View {
         HStack(alignment: .top, spacing: 8) {
             Image("Warning")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .width(16)
-            
+
             Text(.init("deposit_evm_warning"))
         }
         .font(Font.LL.body3).fontWeight(.regular)

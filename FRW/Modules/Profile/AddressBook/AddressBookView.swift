@@ -71,6 +71,7 @@ struct AddressBookView: RouteableView {
             return AnyView(
                 view
                     .applyRouteable(self)
+        .tracedView(self)
                     .navigationBarItems(trailing: HStack(spacing: 6) {
                         Button {
                             Router.route(to: RouteMap.AddressBook.add(vm))
