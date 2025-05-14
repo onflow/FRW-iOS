@@ -9407,7 +9407,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9435,7 +9435,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9465,7 +9465,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -9495,7 +9495,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.6;
+				MARKETING_VERSION = 2.4.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
