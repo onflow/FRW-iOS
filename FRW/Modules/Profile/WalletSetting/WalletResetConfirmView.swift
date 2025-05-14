@@ -62,6 +62,7 @@ struct WalletResetConfirmView: RouteableView {
         .padding(.bottom, 20)
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var descAttributeString: NSAttributedString {

@@ -33,6 +33,7 @@ struct TokenBalanceListView: RouteableView {
             .environmentObject(vm)
             .disabled(vm.isRequesting)
             .applyRouteable(self)
+            .tracedView(self)
     }
 
     var listView: some View {

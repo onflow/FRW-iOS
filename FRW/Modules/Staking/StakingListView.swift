@@ -107,6 +107,7 @@ struct StakingListView: RouteableView {
         .buttonStyle(.plain)
         .backgroundFill(.LL.deepBg)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var newNodeBtn: some View {

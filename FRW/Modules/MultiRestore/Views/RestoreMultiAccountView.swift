@@ -50,7 +50,7 @@ struct RestoreMultiAccountView: RouteableView {
             Color.clear
                 .frame(height: 50)
             ScrollView {
-                ForEach(0..<viewModel.items.count, id: \.self) { index in
+                ForEach(0 ..< viewModel.items.count, id: \.self) { index in
                     let item = viewModel.items[index]
                     RestoreMultiAccountView.UserInfoView(user: item.first!, index: index) { idx in
                         viewModel.onClickUser(at: idx)
@@ -62,6 +62,7 @@ struct RestoreMultiAccountView: RouteableView {
         }
         .padding(.horizontal, 24)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

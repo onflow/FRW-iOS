@@ -74,6 +74,7 @@ struct CreatePinCodeView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

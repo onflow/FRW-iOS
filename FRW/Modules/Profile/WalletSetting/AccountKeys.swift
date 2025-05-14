@@ -19,7 +19,7 @@ struct AccountKeysView: RouteableView {
 
     var body: some View {
         ScrollView {
-            ForEach(0..<vm.allKeys.count, id: \.self) { index in
+            ForEach(0 ..< vm.allKeys.count, id: \.self) { index in
                 let model = vm.allKeys[index]
                 AccountKeysView.Cell(model: model) { model in
                     self.onRevokeKey(at: model)
@@ -33,6 +33,7 @@ struct AccountKeysView: RouteableView {
                 .environmentObject(vm)
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func onRevokeKey(at model: AccountKeyModel) {

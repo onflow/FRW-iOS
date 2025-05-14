@@ -49,6 +49,7 @@ struct IntroductionView: RouteableView {
         }
         .padding(.horizontal, 28)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func onClick() {

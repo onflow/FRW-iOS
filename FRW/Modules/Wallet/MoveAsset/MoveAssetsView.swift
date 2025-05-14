@@ -115,6 +115,7 @@ struct MoveAssetsView: RouteableView, PresentActionDelegate {
         .backgroundFill(Color.Theme.Background.grey)
         .cornerRadius([.topLeading, .topTrailing], 16)
         .applyRouteable(self)
+        .tracedView(self)
         .edgesIgnoringSafeArea(.all)
     }
 

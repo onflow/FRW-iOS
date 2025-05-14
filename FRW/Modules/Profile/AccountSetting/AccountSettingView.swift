@@ -44,6 +44,7 @@ struct AccountSettingView: RouteableView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .backgroundFill(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var linkAccountContentView: some View {

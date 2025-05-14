@@ -190,6 +190,7 @@ struct WalletSettingView: RouteableView {
         }
         .backgroundFill(.LL.background)
         .applyRouteable(self)
+        .tracedView(self)
         .popup(isPresented: $showAccountEditor) {
             WalletAccountEditor(address: address) {
                 reload()

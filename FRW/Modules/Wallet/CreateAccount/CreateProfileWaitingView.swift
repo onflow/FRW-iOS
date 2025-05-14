@@ -5,10 +5,10 @@
 //  Created by cat on 2024/6/5.
 //
 
+import Lottie
 import SwiftUI
 import SwiftUIPager
 import SwiftUIX
-import Lottie
 
 // MARK: - CreateProfileWaitingView
 
@@ -31,7 +31,7 @@ struct CreateProfileWaitingView: RouteableView {
     var isNavigationBarHidden: Bool {
         true
     }
-    
+
     var enableSwipeBackGesture: Bool {
         false
     }
@@ -39,22 +39,22 @@ struct CreateProfileWaitingView: RouteableView {
     var body: some View {
         VStack(alignment: .center) {
             flowLabel
-            
+
             Spacer()
-            
+
             creatingAccount
                 .padding(.bottom, 28)
-            
+
             lottieView
-            
+
             secureByDesign
                 .padding(.bottom, 18)
-            
+
             hardwareGradeSecurity
                 .padding(.bottom, 64)
-            
+
             allow1to2Minutes
-            
+
             Spacer()
         }
         .padding(.top, 40)
@@ -62,6 +62,7 @@ struct CreateProfileWaitingView: RouteableView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .backgroundFill(Color.Theme.Background.grey)
         .applyRouteable(self)
+        .tracedView(self)
         .onChange(of: viewModel.createFinished) { finished in
             if finished {
                 Router.route(to: RouteMap.RestoreLogin.createProfileSuccess(viewModel))
@@ -83,7 +84,7 @@ extension CreateProfileWaitingView {
             Spacer()
         }
     }
-    
+
     @ViewBuilder
     private var creatingAccount: some View {
         Text("creating_account".localized)
@@ -91,7 +92,7 @@ extension CreateProfileWaitingView {
             .multilineTextAlignment(.center)
             .foregroundColor(Color.LL.text)
     }
-    
+
     private var lottieView: some View {
         let lottieView = LottieAnimationView(name: "CreatingAccount", bundle: .main)
         lottieView.play(toProgress: .infinity, loopMode: .loop)
@@ -99,14 +100,14 @@ extension CreateProfileWaitingView {
         return FlowLottieView(lottieView: lottieView)
             .frame(width: 240, height: 240)
     }
-    
+
     @ViewBuilder
     private var secureByDesign: some View {
         Text("secure_by_design".localized)
             .font(.inter(size: 14, weight: .semibold))
             .foregroundColor(Color.LL.text)
     }
-    
+
     @ViewBuilder
     private var hardwareGradeSecurity: some View {
         Text("hardware_grade_security".localized)
@@ -114,7 +115,7 @@ extension CreateProfileWaitingView {
             .foregroundColor(Color.LL.text)
             .multilineTextAlignment(.center)
     }
-    
+
     @ViewBuilder
     private var allow1to2Minutes: some View {
         Text("allow_1_2_minutes".localized)

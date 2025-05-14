@@ -49,6 +49,7 @@ struct RestoreErrorView: RouteableView {
             .padding(.horizontal, 62)
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private

@@ -50,6 +50,7 @@ struct NFTAddCollectionView: RouteableView {
         }
         .background(Color.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
         .halfSheet(showSheet: $addViewModel.isConfirmSheetPresented, autoResizing: true, backgroundColor: Color.LL.Neutrals.background) {
             if let item = self.selectItem {
                 NFTAddCollectionView.NFTCollectionEnableView(item: item)

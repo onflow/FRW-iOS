@@ -143,6 +143,7 @@ struct BackupUploadView: RouteableView {
             .padding(.bottom)
         }
         .applyRouteable(self)
+        .tracedView(self)
         .backgroundFill(Color.LL.Neutrals.background)
     }
 

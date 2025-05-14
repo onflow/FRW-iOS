@@ -42,6 +42,7 @@ struct BrowserBookmarkView: RouteableView {
         .listRowBackground(Color.LL.background)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     func backButtonAction() {

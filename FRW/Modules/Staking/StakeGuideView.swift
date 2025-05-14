@@ -67,6 +67,7 @@ struct StakeGuideView: RouteableView {
         .padding(.top, 12)
         .backgroundFill(.LL.deepBg)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var topTitleView: some View {

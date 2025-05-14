@@ -72,6 +72,7 @@ struct TokenDetailView: RouteableView {
         .buttonStyle(.plain)
         .backgroundFill(Color.Theme.Background.white)
         .applyRouteable(self)
+        .tracedView(self)
         .halfSheet(
             showSheet: $vm.showSheet,
             autoResizing: true,

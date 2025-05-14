@@ -38,6 +38,7 @@ struct ManageTokensView: RouteableView {
             showTooltip = false
         }
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var filterView: some View {

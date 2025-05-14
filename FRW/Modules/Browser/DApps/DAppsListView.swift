@@ -26,6 +26,7 @@ struct DAppsListView: RouteableView {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .backgroundFill(.LL.Neutrals.background)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     var headerView: some View {
@@ -62,7 +63,8 @@ struct DAppsListView: RouteableView {
 
                         Router.dismiss {
                             if currentNetwork == .testnet,
-                               let url = dApp.testnetURL {
+                               let url = dApp.testnetURL
+                            {
                                 Router.route(to: RouteMap.Explore.browser(url))
                             } else {
                                 Router.route(to: RouteMap.Explore.browser(dApp.url))

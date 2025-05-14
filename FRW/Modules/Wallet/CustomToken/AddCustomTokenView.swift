@@ -40,6 +40,7 @@ struct AddCustomTokenView: RouteableView {
         .padding(16)
         .background(.Theme.Background.bg2)
         .applyRouteable(self)
+        .tracedView(self)
     }
 }
 

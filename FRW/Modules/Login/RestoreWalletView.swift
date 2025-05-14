@@ -62,6 +62,7 @@ struct RestoreWalletView: RouteableView {
         .padding(.horizontal, 28)
         .backgroundFill(Color.Theme.Background.grey)
         .applyRouteable(self)
+        .tracedView(self)
     }
 
     // MARK: Private
