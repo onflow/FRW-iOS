@@ -9752,7 +9752,7 @@
 			repositoryURL = "https://github.com/onflow/flow-wallet-kit.git";
 			requirement = {
 				kind = revision;
-				revision = 2ba4eb4d451414e9dc650c18ca7e7c328ca365d0;
+				revision = daab7c3e1368738a77dbd3f2f45d2b0ef639534f;
 			};
 		};
 		156AC7A527802F4F00ED5E3E /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
