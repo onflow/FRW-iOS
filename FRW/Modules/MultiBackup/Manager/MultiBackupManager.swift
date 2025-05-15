@@ -141,6 +141,10 @@ extension MultiBackupManager {
             throw BackupError.invaildPublicKey
         }
 
+        guard let publicKey = hdWallet.getPublicKey(signAlgo: .ECDSA_P256)?.format() else {
+            throw BackupError.invaildPublicKey
+        }
+
         let dataHexString = try encryptMnemonic(
             mnemonicData,
             password: type.needPin ? pinCode : password
