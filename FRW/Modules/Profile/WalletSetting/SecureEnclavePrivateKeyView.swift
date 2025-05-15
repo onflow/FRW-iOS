@@ -100,6 +100,7 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                                 Text("Hash__Algorithm::message".localized)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
+
                                 Text(key.hashAlgo.algorithm)
                                     .font(.inter(size: 14))
                                     .foregroundColor(Color.Theme.Text.text4)
