@@ -92,27 +92,7 @@ class NFTDetailPageViewModel: ObservableObject {
             movable = false
             return
         }
-        if !ChildAccountManager.shared.childAccounts.isEmpty {
-            movable = true
-            return
-        }
-
-        Task {
-            let address = self.nft.response.contractAddress ?? ""
-            let evmAddress = await NFTCollectionConfig.share.get(from: address)?.evmAddress
-            let hasEvm = EVMAccountManager.shared.accounts.count > 0
-            if (evmAddress == nil && self.nft.collection?.flowIdentifier == nil) || !hasEvm {
-                DispatchQueue.main.async {
-                    self.movable = false
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                withAnimation {
-                    self.movable = true
-                }
-            }
-        }
+        movable = true
     }
 
     // MARK: Private
