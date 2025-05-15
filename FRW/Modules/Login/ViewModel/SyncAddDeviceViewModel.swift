@@ -69,7 +69,7 @@ class SyncAddDeviceViewModel: ObservableObject {
 
                 HUD.loading()
                 let result = try await flowId.onceSealed()
-                if result.isComplete {
+                if result.isSealed {
                     sendSuccessStatus()
                 } else {
                     EventTrack.Dev.deviceBackup(progress: .addKeyToChain,
