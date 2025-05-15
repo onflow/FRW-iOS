@@ -99,6 +99,7 @@ struct PrivateKeyView: RouteableView {
                             }
                         }
                         Spacer()
+
                         HStack {
                             Divider()
                             VStack(alignment: .leading) {
