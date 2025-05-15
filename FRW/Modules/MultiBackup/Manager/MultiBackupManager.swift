@@ -136,7 +136,7 @@ extension MultiBackupManager {
         guard let pinCode = SecurityManager.shared.currentPinCode.toPassword() else {
             throw BackupError.hexStringToDataFailed
         }
-        
+
         guard let publicKey = hdWallet.getPublicKey(signAlgo: .ECDSA_P256)?.format() else {
             throw BackupError.invaildPublicKey
         }
@@ -145,7 +145,7 @@ extension MultiBackupManager {
             mnemonicData,
             password: type.needPin ? pinCode : password
         )
-        
+
         let result = try await addKeyToFlow(key: publicKey)
         if !result {
             return false
@@ -269,7 +269,6 @@ extension MultiBackupManager {
 }
 
 extension MultiBackupManager {
-    
     private func updateItemType(from type: MultiBackupType, list: [MultiBackupManager.StoreItem]) -> [MultiBackupManager.StoreItem] {
         let result = list.map { item in
             var model = item
@@ -278,7 +277,7 @@ extension MultiBackupManager {
         }
         return result
     }
-    
+
     func getAllCloudDriveItem(from type: MultiBackupType) async throws -> [MultiBackupManager.StoreItem] {
         var list = try await getCloudDriveItems(from: type)
         if type == .dropbox {
@@ -289,9 +288,10 @@ extension MultiBackupManager {
         }
         return list
     }
-    
+
     func getCloudDriveItems(from type: MultiBackupType) async throws
-        -> [MultiBackupManager.StoreItem] {
+        -> [MultiBackupManager.StoreItem]
+    {
         switch type {
         case .google:
             try await login(from: type)
@@ -553,7 +553,7 @@ extension MultiBackupManager {
                 signers: [firstSigner, secondSigner, RemoteConfigManager.shared]
             )
             let result = try await tx.onceSealed()
-            if result.isComplete {
+            if result.isSealed {
                 let userId = firstSigner.provider.userId
 
                 let firstSignature = firstSigner.sign(userId) ?? ""
@@ -653,7 +653,7 @@ extension MultiBackupManager {
             return provider.weight ?? 500
         }
 
-        public func sign(signableData: Data, transaction: Flow.Transaction? ) async throws -> Data {
+        public func sign(signableData: Data, transaction _: Flow.Transaction?) async throws -> Data {
             _ = try await createHDWallet()
 
             guard let hdWallet = hdWallet else {
@@ -737,7 +737,7 @@ extension MultiBackupManager {
                 password: key
             )
 
-            self.hdWallet = HDWallet(mnemonic: mnemonic, passphrase: "")
+            hdWallet = HDWallet(mnemonic: mnemonic, passphrase: "")
         }
     }
 }
