@@ -1131,6 +1131,8 @@
 		4E42DC602B22AEB700EF0A75 /* BackupListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */; };
 		4E4409272CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
 		4E4409282CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
+		4E49B72A2DDD6B3C00BC0D46 /* ImportAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E49B7292DDD6B3C00BC0D46 /* ImportAccountView.swift */; };
+		4E49B72B2DDD6B3C00BC0D46 /* ImportAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E49B7292DDD6B3C00BC0D46 /* ImportAccountView.swift */; };
 		4E4A6B642CA68D7100231A85 /* SeedPhraseLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */; };
 		4E4A6B652CA68D7100231A85 /* SeedPhraseLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */; };
 		4E4A6B672CA68E8100231A85 /* SeedPhraseLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B662CA68E8100231A85 /* SeedPhraseLoginViewModel.swift */; };
@@ -2590,6 +2592,7 @@
 		4E411DBE2CB91C3A005AD540 /* MoveComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponentView.swift; sourceTree = "<group>"; };
 		4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupListView.swift; sourceTree = "<group>"; };
 		4E4409262CC132480041AC06 /* BetterAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterAlertController.swift; sourceTree = "<group>"; };
+		4E49B7292DDD6B3C00BC0D46 /* ImportAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportAccountView.swift; sourceTree = "<group>"; };
 		4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginView.swift; sourceTree = "<group>"; };
 		4E4A6B662CA68E8100231A85 /* SeedPhraseLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginViewModel.swift; sourceTree = "<group>"; };
 		4E4A6B692CA6E1F000231A85 /* SeedPhrase+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeedPhrase+Add.swift"; sourceTree = "<group>"; };
@@ -3412,6 +3415,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4E49B7282DDD6B2100BC0D46 /* ImportAccount */,
 				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
@@ -5180,6 +5184,14 @@
 				4E3138042C658FB2003A73E5 /* ResizeableView.swift */,
 			);
 			path = DebugViewer;
+			sourceTree = "<group>";
+		};
+		4E49B7282DDD6B2100BC0D46 /* ImportAccount */ = {
+			isa = PBXGroup;
+			children = (
+				4E49B7292DDD6B3C00BC0D46 /* ImportAccountView.swift */,
+			);
+			path = ImportAccount;
 			sourceTree = "<group>";
 		};
 		4E4F79492831FC5500ED027C /* MaterialMap */ = {
@@ -7308,6 +7320,7 @@
 				4EFBE5DB2BCE61EB0012968A /* WalletConnectFlowHandler.swift in Sources */,
 				4EB2C6BA2B49D1A500EB899C /* MultiBackupDetailView.swift in Sources */,
 				6A62122D28ACC592002046CA /* UIImage.swift in Sources */,
+				4E49B72B2DDD6B3C00BC0D46 /* ImportAccountView.swift in Sources */,
 				6AF1F35E2869977B0084DF3D /* AddTokenView.swift in Sources */,
 				4E4A6B6D2CA6ECEF00231A85 /* KeyProtocol+Add.swift in Sources */,
 				4EF0B8DD2C2CF914003BFDD6 /* WalletNotificationView.swift in Sources */,
@@ -8190,6 +8203,7 @@
 				4EB2C6B92B49D1A500EB899C /* MultiBackupDetailView.swift in Sources */,
 				6A62122C28ACC592002046CA /* UIImage.swift in Sources */,
 				6AF1F35D2869977B0084DF3D /* AddTokenView.swift in Sources */,
+				4E49B72A2DDD6B3C00BC0D46 /* ImportAccountView.swift in Sources */,
 				4E4A6B6E2CA6ECEF00231A85 /* KeyProtocol+Add.swift in Sources */,
 				4EF0B8DC2C2CF914003BFDD6 /* WalletNotificationView.swift in Sources */,
 				15C58AF42868A4EE00BD4FC6 /* Image.swift in Sources */,
