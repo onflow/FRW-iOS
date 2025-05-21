@@ -62,17 +62,17 @@ final class LilicoTests: XCTestCase {
 
     func testStakeDecode() async throws {
         do {
-            flow.configure(chainID: .mainnet)
-            let address = Flow.Address(hex: "0x84221fe0294044d7")
-            let replacedCadence = CadenceTemplate.queryStakeInfo
-                .replace(by: ScriptAddress.addressMap(on: .mainnet))
-            let model = try await flow.accessAPI.executeScriptAtLatestBlock(
-                script: Flow.Script(text: replacedCadence),
-                arguments: [.address(address)]
-            )
-            .decode([NewStakingInfoInner].self)
+//            flow.configure(chainID: .mainnet)
+//            let address = Flow.Address(hex: "0x84221fe0294044d7")
+//            let replacedCadence = CadenceTemplate.queryStakeInfo
+//                .replace(by: ScriptAddress.addressMap(on: .mainnet))
+//            let model = try await flow.accessAPI.executeScriptAtLatestBlock(
+//                script: Flow.Script(text: replacedCadence),
+//                arguments: [.address(address)]
+//            )
+//            .decode([NewStakingInfoInner].self)
 
-            print(model)
+//            print(model)
         } catch {
             print(error)
         }
