@@ -338,7 +338,7 @@ struct WalletHomeView: View {
                     Text(
                         vm
                             .isHidden ? "****" :
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyString(considerCustomCurrency: false))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.balance.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: false))"
                     )
                     .font(.Ukraine(size: 30, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black)

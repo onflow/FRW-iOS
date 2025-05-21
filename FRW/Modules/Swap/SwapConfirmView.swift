@@ -99,26 +99,12 @@ struct SwapConfirmView: View {
 
                 Text(
                     ((vm.estimateResponse?.priceImpact ?? 0.0) * -100)
-                        .formatCurrencyString(digits: 4) + "%"
+                        .formatCurrencyStringForDisplay(digits: 4) + "%"
                 )
                 .font(.inter(size: 14, weight: .medium))
                 .foregroundColor(Color.LL.Success.success1)
                 .lineLimit(1)
             }
-
-//            HStack {
-//                Text("swap_estimated_fees".localized)
-//                    .font(.inter(size: 14, weight: .medium))
-//                    .foregroundColor(Color.LL.Neutrals.text2)
-//                    .lineLimit(1)
-//
-//                Spacer()
-//
-//                Text(vm.estimateResponse?.priceImpact.formatCurrencyString(digits: 4) ?? "0")
-//                    .font(.inter(size: 14, weight: .medium))
-//                    .foregroundColor(Color.LL.Neutrals.text)
-//                    .lineLimit(1)
-//            }
         }
         .padding(.horizontal, 18)
         .padding(.top, 44)

@@ -110,7 +110,7 @@ struct StakingDetailView: RouteableView {
 
             HStack(alignment: .bottom, spacing: 0) {
                 Text(
-                    "\(CurrencyCache.cache.currencySymbol)\(vm.node.tokenStakedASUSD.formatCurrencyString(digits: 3, considerCustomCurrency: true))"
+                    "\(CurrencyCache.cache.currencySymbol)\(vm.node.tokenStakedASUSD.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                 )
                 .font(.inter(size: 32, weight: .semibold))
                 .foregroundColor(Color.LL.Neutrals.text)
@@ -129,7 +129,7 @@ struct StakingDetailView: RouteableView {
                     .resizable()
                     .frame(width: 16, height: 16)
 
-                Text(vm.node.tokensStaked.formatCurrencyString(digits: 3))
+                Text(vm.node.tokensStaked.formatCurrencyStringForDisplay(digits: 2))
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -141,7 +141,7 @@ struct StakingDetailView: RouteableView {
                     .frame(width: 1, height: 12)
                     .background(Color.LL.Neutrals.note)
 
-                Text("\(vm.availableAmount.formatCurrencyString(digits: 3))")
+                Text("\(vm.availableAmount.formatCurrencyStringForDisplay(digits: 2))")
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -160,7 +160,7 @@ struct StakingDetailView: RouteableView {
                     .padding(.bottom, 4)
 
                 HStack(spacing: 0) {
-                    Text("\(vm.node.tokensRewarded.formatCurrencyString(digits: 3))")
+                    Text("\(vm.node.tokensRewarded.formatCurrencyStringForDisplay(digits: 2))")
                         .font(.inter(size: 24, weight: .semibold))
                         .foregroundColor(Color.LL.Neutrals.text)
 
@@ -278,7 +278,7 @@ struct StakingDetailView: RouteableView {
             }
 
             HStack(spacing: 0) {
-                Text("\(vm.node.tokensUnstaked.formatCurrencyString(digits: 3))")
+                Text("\(vm.node.tokensUnstaked.formatCurrencyStringForDisplay(digits: 2))")
                     .font(.inter(size: 24, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -328,7 +328,7 @@ struct StakingDetailView: RouteableView {
 
                 Spacer()
 
-                Text("+\(vm.node.tokensCommitted.formatCurrencyString(digits: 3))")
+                Text("+\(vm.node.tokensCommitted.formatCurrencyStringForDisplay(digits: 2))")
                     .font(.inter(size: 20, weight: .medium))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -367,7 +367,7 @@ struct StakingDetailView: RouteableView {
 
                 Spacer()
 
-                Text("-\(vm.node.tokensRequestedToUnstake.formatCurrencyString(digits: 3))")
+                Text("-\(vm.node.tokensRequestedToUnstake.formatCurrencyStringForDisplay(digits: 2))")
                     .font(.inter(size: 20, weight: .medium))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -405,7 +405,7 @@ struct StakingDetailView: RouteableView {
 
                 Spacer()
 
-                Text("-\(vm.node.tokensUnstaking.formatCurrencyString(digits: 3))")
+                Text("-\(vm.node.tokensUnstaking.formatCurrencyStringForDisplay(digits: 2))")
                     .font(.inter(size: 20, weight: .medium))
                     .foregroundColor(Color.LL.Neutrals.text)
 
@@ -444,7 +444,7 @@ struct StakingDetailView: RouteableView {
 
                 HStack(alignment: .bottom, spacing: 5) {
                     Text(
-                        "\(CurrencyCache.cache.currentCurrency.symbol)\(vm.node.dayRewardsASUSD.formatCurrencyString(digits: 3, considerCustomCurrency: true))"
+                        "\(CurrencyCache.cache.currentCurrency.symbol)\(vm.node.dayRewardsASUSD.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                     )
                     .font(.inter(size: 24, weight: .bold))
                     .foregroundColor(Color.LL.Neutrals.text)
@@ -455,7 +455,7 @@ struct StakingDetailView: RouteableView {
                         .padding(.bottom, 5)
                 }
 
-                Text("\(vm.node.dayRewards.formatCurrencyString(digits: 3)) Flow")
+                Text("\(vm.node.dayRewards.formatCurrencyStringForDisplay(digits: 2)) Flow")
                     .font(.inter(size: 12, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text3)
             }
@@ -472,7 +472,7 @@ struct StakingDetailView: RouteableView {
 
                 HStack(alignment: .bottom, spacing: 5) {
                     Text(
-                        "\(CurrencyCache.cache.currentCurrency.symbol)\(vm.node.monthRewardsASUSD.formatCurrencyString(digits: 3, considerCustomCurrency: true))"
+                        "\(CurrencyCache.cache.currentCurrency.symbol)\(vm.node.monthRewardsASUSD.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                     )
                     .font(.inter(size: 24, weight: .bold))
                     .foregroundColor(Color.LL.Neutrals.text)
@@ -483,7 +483,7 @@ struct StakingDetailView: RouteableView {
                         .padding(.bottom, 5)
                 }
 
-                Text("\(vm.node.monthRewards.formatCurrencyString(digits: 3)) Flow")
+                Text("\(vm.node.monthRewards.formatCurrencyStringForDisplay(digits: 2)) Flow")
                     .font(.inter(size: 12, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text3)
             }
@@ -498,27 +498,27 @@ struct StakingDetailView: RouteableView {
         VStack(spacing: 0) {
             createListCell(
                 key: "stake_unstaked_amount".localized,
-                value: "\(vm.node.tokensUnstaked.formatCurrencyString(digits: 3)) Flow"
+                value: "\(vm.node.tokensUnstaked.formatCurrencyStringForDisplay(digits: 2)) Flow"
             )
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_unstaking_amount".localized,
-                value: "\(vm.node.tokensUnstaking.formatCurrencyString(digits: 3)) Flow"
+                value: "\(vm.node.tokensUnstaking.formatCurrencyStringForDisplay(digits: 2)) Flow"
             )
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_committed_amount".localized,
-                value: "\(vm.node.tokensCommitted.formatCurrencyString(digits: 3)) Flow"
+                value: "\(vm.node.tokensCommitted.formatCurrencyStringForDisplay(digits: 2)) Flow"
             )
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_requested_to_unstake_amount".localized,
-                value: "\(vm.node.tokensRequestedToUnstake.formatCurrencyString(digits: 3)) Flow"
+                value: "\(vm.node.tokensRequestedToUnstake.formatCurrencyStringForDisplay(digits: 2)) Flow"
             )
             Divider().foregroundColor(Color.LL.Neutrals.text2)
             createListCell(
                 key: "stake_apr".localized,
-                value: "\((vm.provider.rate * 100).formatCurrencyString()) %"
+                value: "\((vm.provider.rate * 100).formatCurrencyStringForDisplay(digits: 2)) %"
             )
         }
         .padding(.horizontal, 18)

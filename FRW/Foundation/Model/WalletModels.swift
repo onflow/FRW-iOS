@@ -263,7 +263,7 @@ extension TokenModel {
         guard let bal = availableBalanceToUse ?? displayBalance else {
             return "0"
         }
-        return bal.doubleValue.formatCurrencyString()
+        return bal.doubleValue.formatCurrencyStringForDisplay(digits: 2)
     }
 
     var priceInCurrencyStr: String? {
