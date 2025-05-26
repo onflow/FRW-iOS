@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "restore.icon.device.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "restore.icon.device@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "restore.icon.device@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "smartphone.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

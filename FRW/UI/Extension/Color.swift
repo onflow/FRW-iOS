@@ -306,3 +306,26 @@ extension Color {
         opacity(0.16)
     }
 }
+
+// MARK: - Color for Summer
+
+extension Color {
+    enum Summer {
+        /// light: #F2F2F7 dark: #1A1A1A
+        static let cards = Color(.Summer.cards)
+        /// light: #767676 dark: #FFFFF 0.5
+        static let icons = Color(.Summer.icons)
+
+        enum Text {
+            /// light: #000D07 dark: #FFFFFF
+            static let primary = Color(.Summer.Text.primary)
+            /// light: #767676 dark: #B3B3B3
+            static let secondary = Color(.Summer.Text.secondary)
+        }
+
+        enum Background {
+            /// page background light: #FFFFFF dark: #000000
+            static let nav = Color(.Summer.Background.nav)
+        }
+    }
+}
