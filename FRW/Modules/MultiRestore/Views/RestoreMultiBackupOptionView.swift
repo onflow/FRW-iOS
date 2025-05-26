@@ -12,44 +12,30 @@ struct RestoreMultiBackupOptionView: RouteableView {
     var viewModel: RestoreMultiBackupOptionViewModel = .init()
 
     var title: String {
-        ""
+        "import_account".localized
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    Text("restore".localized)
-                        .foregroundColor(Color.Theme.Accent.green)
-                        .bold()
-                    Text("wallet".localized)
-                        .foregroundColor(Color.Theme.Accent.green)
-                        .bold()
-                }
-                .font(.LL.largeTitle)
-
+        VStack(alignment: .center, spacing: 18) {
+            VStack(alignment: .center, spacing: 8) {
                 Text("from_multi_backup".localized)
-                    .foregroundColor(Color.Theme.Text.black8)
-                    .font(.LL.largeTitle)
-                    .bold()
+                    .font(.inter(size: 24, weight: .w700))
+                    .foregroundColor(Color.Summer.Text.primary)
 
                 Text("from_multi_backup_desc".localized)
-                    .font(.LL.body)
-                    .foregroundColor(.LL.note)
+                    .font(.inter(size: 14))
+                    .foregroundColor(.Summer.Text.secondary)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity)
 
-            LazyVGrid(columns: columns(), spacing: 40) {
+            VStack(spacing: 8) {
                 ForEach(viewModel.list.indices, id: \.self) { index in
                     let item = $viewModel.list[index]
-                    BackupMultiView.ItemView(item: item) { item in
+                    MultiBackupItemView(item: item) { item in
                         onClick(item: item)
                     }
-                    .frame(height: 136)
                 }
             }
-            .padding(.horizontal, 36)
-            .padding(.top, 64)
 
             Spacer()
 
