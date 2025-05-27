@@ -12,6 +12,7 @@ import Foundation
 
 protocol TokenBalanceProvider {
     var network: Flow.ChainID { get }
+    var currency: Currency { get }
     var nftPageSize: Int { get }
     // cache
     var tokens: [TokenModel] { get }
