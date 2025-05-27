@@ -388,16 +388,16 @@ extension FlowNetwork {
             throw WalletError.emptyAddress
         }
 
-        guard let cadence = CadenceManager.shared.current.staking?.getDelegatesIndo?.toFunc() else {
+        guard let cadence = CadenceManager.shared.current.staking?.getDelegatesInfoV2?.toFunc() else {
             throw WalletError.emptyScript
         }
 
-        let response: [CadenceLoader.Category.Staking.StakingNode] = try await flow.accessAPI.executeScriptAtLatestBlock(
+        let response: [String: [String: CadenceLoader.Category.Staking.StakingNode]] = try await flow.accessAPI.executeScriptAtLatestBlock(
             cadence: cadence,
             arguments: [.address(.init(address))]
         ).decode()
 
-        return response
+        return response.values.flatMap { $0.values }
     }
 }
 
