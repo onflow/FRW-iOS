@@ -40,6 +40,8 @@
 		15362A1C2DA02BCD008F4E51 /* CoinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15362A1A2DA02BCD008F4E51 /* CoinCell.swift */; };
 		1544C62828C812E700B6BA52 /* GoogleOAuth2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1544C62728C812E500B6BA52 /* GoogleOAuth2.plist */; };
 		15455B5F2DCD1B1900E87FBB /* FlowWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 15455B5E2DCD1B1900E87FBB /* FlowWalletKit */; };
+		1545705029461AB7004A278E /* MJRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 1545704F29461AB7004A278E /* MJRefresh */; };
+		1545705229461ABD004A278E /* FMDB in Frameworks */ = {isa = PBXBuildFile; productRef = 1545705129461ABD004A278E /* FMDB */; };
 		154866EC28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EB28D0ECE400D012B8 /* FlixAuditEndpoint.swift */; };
 		154866ED28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EB28D0ECE400D012B8 /* FlixAuditEndpoint.swift */; };
 		154866F028D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154866EF28D0EEF000D012B8 /* FlowTransactionTemplate.swift */; };
