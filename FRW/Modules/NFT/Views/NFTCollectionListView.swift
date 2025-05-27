@@ -297,31 +297,21 @@ extension NFTCollectionListView {
                         .frame(height: 20)
 
                     HStack(spacing: 8) {
-//                        Button {
-//
-//                        } label: {
-//                            Image("nft_button_share_inline")
-//                            Text("share".localized)
-//                                .font(.LL.body)
-//                                .fontWeight(.w600)
-//                                .foregroundColor(.LL.Neutrals.neutrals3)
-//                        }
-//                        .padding(.horizontal, 10)
-//                        .frame(height: 38)
-//                        .background(.thinMaterial)
-//                        .cornerRadius(12)
-
-                        Button {} label: {
-                            Image("nft_button_explore")
-                            Text("explore".localized)
-                                .font(.LL.body)
-                                .fontWeight(.w600)
-                                .foregroundColor(.LL.Neutrals.neutrals3)
+                        if let urlStr = collection.collection?.externalURL, let url = URL(string: urlStr) {
+                            Button {
+                                Router.route(to: RouteMap.Explore.browser(url))
+                            } label: {
+                                Image("nft_button_explore")
+                                Text("explore".localized)
+                                    .font(.LL.body)
+                                    .fontWeight(.w600)
+                                    .foregroundColor(.LL.Neutrals.neutrals3)
+                            }
+                            .padding(.horizontal, 10)
+                            .frame(height: 38)
+                            .background(.thinMaterial)
+                            .cornerRadius(12)
                         }
-                        .padding(.horizontal, 10)
-                        .frame(height: 38)
-                        .background(.thinMaterial)
-                        .cornerRadius(12)
                     }
                 }
                 .background(Color.clear)
