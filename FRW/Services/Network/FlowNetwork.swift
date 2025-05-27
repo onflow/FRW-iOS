@@ -258,7 +258,7 @@ extension FlowNetwork {
         return try await fetch(by: \.staking?.checkSetup, arguments: [.address(address)])
     }
 
-    static func claimUnstake(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow
+    static func claimUnstake(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow
         .ID
     {
         try await sendTransaction(
@@ -273,7 +273,7 @@ extension FlowNetwork {
 
     static func reStakeUnstake(
         nodeID: String,
-        delegatorId: Int,
+        delegatorId: UInt32,
         amount: Decimal
     ) async throws -> Flow.ID {
         try await sendTransaction(
@@ -287,7 +287,7 @@ extension FlowNetwork {
     }
 
     // FIXME:
-    static func claimReward(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow
+    static func claimReward(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow
         .ID
     {
         try await sendTransaction(
@@ -298,7 +298,7 @@ extension FlowNetwork {
 
     static func reStakeReward(
         nodeID: String,
-        delegatorId: Int,
+        delegatorId: UInt32,
         amount: Decimal
     ) async throws -> Flow.ID {
         try await sendTransaction(
@@ -331,7 +331,7 @@ extension FlowNetwork {
         return txId
     }
 
-    static func stakeFlow(providerId: String, delegatorId: Int, amount: Double) async throws -> Flow
+    static func stakeFlow(providerId: String, delegatorId: UInt32, amount: Double) async throws -> Flow
         .ID
     {
         let txId = try await sendTransaction(
@@ -348,7 +348,7 @@ extension FlowNetwork {
 
     static func unstakeFlow(
         providerId: String,
-        delegatorId: Int,
+        delegatorId: UInt32,
         amount: Double
     ) async throws -> Flow.ID {
         let txId = try await sendTransaction(
@@ -383,21 +383,21 @@ extension FlowNetwork {
         return result.doubleValue
     }
 
-    static func getDelegatorInfo() async throws -> [CadenceLoader.Category.Staking.StakingNode] {
+    static func getDelegatorInfo() async throws -> [DelegateInfo] {
         guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
             throw WalletError.emptyAddress
         }
 
-        guard let cadence = CadenceManager.shared.current.staking?.getDelegatesIndo?.toFunc() else {
+        guard let cadence = CadenceManager.shared.current.staking?.getDelegatesInfoV2?.toFunc() else {
             throw WalletError.emptyScript
         }
 
-        let response: [CadenceLoader.Category.Staking.StakingNode] = try await flow.accessAPI.executeScriptAtLatestBlock(
+        let response: [String: [String: DelegateInfo]] = try await flow.accessAPI.executeScriptAtLatestBlock(
             cadence: cadence,
             arguments: [.address(.init(address))]
         ).decode()
 
-        return response
+        return response.values.flatMap { $0.values }
     }
 }
 
