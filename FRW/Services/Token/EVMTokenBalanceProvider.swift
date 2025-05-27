@@ -16,19 +16,21 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
 
     init(network: Flow.ChainID = currentNetwork) {
         self.network = network
+        currency = CurrencyCache.cache.currentCurrency
     }
 
     // MARK: Internal
 
     var network: Flow.ChainID
+    var currency: Currency
 
     func fetchUserTokens(address: any FWAddress) async throws -> [TokenModel] {
         guard let addr = address as? EthereumAddress
         else {
             throw EVMError.addressError
         }
-        let currency = CurrencyCache.cache.currentCurrency.rawValue
-        let response: [EVMTokenResponse] = try await Network.request(FRWAPI.Token.evm(.init(address: addr.hexAddr, currency: currency, network: network)))
+        currency = CurrencyCache.cache.currentCurrency
+        let response: [EVMTokenResponse] = try await Network.request(FRWAPI.Token.evm(.init(address: addr.hexAddr, currency: currency.rawValue, network: network)))
         tokens = response.compactMap { $0.toTokenModel(type: .evm) }
         let customToken = await fetchCustomBalance()
         tokens.append(contentsOf: customToken)
@@ -42,7 +44,7 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        guard tokens.isEmpty else {
+        guard tokens.isEmpty || currency != CurrencyCache.cache.currentCurrency else {
             return tokens
         }
         return try await fetchUserTokens(address: address)
