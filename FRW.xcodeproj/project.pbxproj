@@ -1475,6 +1475,8 @@
 		4EE090A82DB0ABB8001515FE /* ZipFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE090A62DB0ABB8001515FE /* ZipFile.swift */; };
 		4EE090AA2DB0ADB5001515FE /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE090A92DB0ADB5001515FE /* ZIPFoundation */; };
 		4EE090AC2DB0ADBD001515FE /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE090AB2DB0ADBD001515FE /* ZIPFoundation */; };
+		4EE1964F2DE58F4E003EE55D /* DelegateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */; };
+		4EE196502DE58F4E003EE55D /* DelegateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2766,6 +2768,7 @@
 		4EE0909E2DA750B3001515FE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
 		4EE090A62DB0ABB8001515FE /* ZipFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipFile.swift; sourceTree = "<group>"; };
+		4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegateInfo.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -6106,6 +6109,7 @@
 			children = (
 				6A998DA22936702A00EF133B /* StakingProvider.swift */,
 				6AB90AD82937C2D00008E74A /* StakingInfo.swift */,
+				4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7203,6 +7207,7 @@
 				15DC20BF27819C56000B187A /* VSquareButtonState.swift in Sources */,
 				6A8FA49A285B192800EE5BE3 /* SnapAnchorPreferenceKey.swift in Sources */,
 				15DC217527819C56000B187A /* VDialogButtonModel.swift in Sources */,
+				4EE196502DE58F4E003EE55D /* DelegateInfo.swift in Sources */,
 				15F5311C2DCE03A3004C610A /* TransactionHolder.swift in Sources */,
 				57E9AB782CE40B2600F04CE5 /* InsufficientStorageToastView.swift in Sources */,
 				158832EB28942F8500142B35 /* serviceDefinition.swift in Sources */,
@@ -8086,6 +8091,7 @@
 				15C58AD32868A4EE00BD4FC6 /* SnapAnchorPreferenceKey.swift in Sources */,
 				15C58AD42868A4EE00BD4FC6 /* VDialogButtonModel.swift in Sources */,
 				57E9AB772CE40B2600F04CE5 /* InsufficientStorageToastView.swift in Sources */,
+				4EE1964F2DE58F4E003EE55D /* DelegateInfo.swift in Sources */,
 				15F5311B2DCE03A3004C610A /* TransactionHolder.swift in Sources */,
 				158832EA28942F8500142B35 /* serviceDefinition.swift in Sources */,
 				15C58AD52868A4EE00BD4FC6 /* WalletModels.swift in Sources */,

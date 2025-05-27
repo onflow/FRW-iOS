@@ -53,7 +53,7 @@ class StakingManager: ObservableObject {
     @Published
     var nodeInfos: [StakingNode] = []
     @Published
-    var delegatorIds: [String: Int] = [:]
+    var delegatorIds: [String: UInt32] = [:]
     @Published
     var apy: Double = StakingDefaultApy
     @Published
@@ -163,7 +163,7 @@ class StakingManager: ObservableObject {
         }
     }
 
-    func claimReward(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow.ID {
+    func claimReward(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow.ID {
         let txId = try await FlowNetwork.claimReward(
             nodeID: nodeID,
             delegatorId: delegatorId,
@@ -174,7 +174,7 @@ class StakingManager: ObservableObject {
         return txId
     }
 
-    func reStakeReward(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow.ID {
+    func reStakeReward(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow.ID {
         let txId = try await FlowNetwork.reStakeReward(
             nodeID: nodeID,
             delegatorId: delegatorId,
@@ -185,7 +185,7 @@ class StakingManager: ObservableObject {
         return txId
     }
 
-    func claimUnstake(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow.ID {
+    func claimUnstake(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow.ID {
         let txId = try await FlowNetwork.claimUnstake(
             nodeID: nodeID,
             delegatorId: delegatorId,
@@ -196,7 +196,7 @@ class StakingManager: ObservableObject {
         return txId
     }
 
-    func reStakeUnstake(nodeID: String, delegatorId: Int, amount: Decimal) async throws -> Flow.ID {
+    func reStakeUnstake(nodeID: String, delegatorId: UInt32, amount: Decimal) async throws -> Flow.ID {
         let txId = try await FlowNetwork.reStakeUnstake(
             nodeID: nodeID,
             delegatorId: delegatorId,
@@ -291,9 +291,9 @@ extension StakingManager {
         if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
             return
         }
-        
+
         for node in response {
-            delegatorIds[node.nodeID] = node.id
+            delegatorIds[node.nodeID] = node.delegatorID
         }
     }
 
