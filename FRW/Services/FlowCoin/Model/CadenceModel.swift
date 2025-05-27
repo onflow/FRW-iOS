@@ -144,8 +144,7 @@ extension CadenceModel {
         let createDelegator: String?
         let createStake: String?
         let getApr: String?
-        let getDelegatesIndo: String?
-        let getDelegatorInfo: String?
+        let getDelegatesInfoV2: String?
         let getEpochMetadata: String?
         let getNodeInfo: String?
         let getNodesInfo: String?

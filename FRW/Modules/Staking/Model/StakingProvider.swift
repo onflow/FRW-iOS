@@ -32,7 +32,7 @@ struct StakingProvider: Codable {
         return "\(num)%"
     }
 
-    var delegatorId: Int? {
+    var delegatorId: UInt32? {
         StakingManager.shared.delegatorIds[id]
     }
 

@@ -53,7 +53,7 @@ struct NFTCollectionInfo: Codable, Hashable, Mockable {
     let evmAddress: String?
 //    var socials: NFTCollectionInfo.Social?
     let flowIdentifier: String?
-
+    var externalURL: String? = nil
     var logoURL: URL {
         if let logoString = logo {
             if logoString.hasSuffix("svg") {
