@@ -203,7 +203,6 @@ extension WalletManager {
                         log.warning("logout failed.")
                     }
                 }
-
                 return
             }
             updateKeyProvider(provider: provider, storeUser: user)
@@ -235,7 +234,7 @@ extension WalletManager {
         if selectedAccount == nil {
             selectedAccount = .main(account.address)
         }
-
+        updateUserAddress()
         loadLinkedAccounts()
         Task {
             do {
@@ -254,6 +253,17 @@ extension WalletManager {
                 log.error(error)
             }
         }
+    }
+
+    /// Temporary solution, solve the needs of multiple users
+    private func updateUserAddress() {
+        guard let address = selectedAccount?.address.hexAddr,
+              let publicKey = getCurrentPublicKey(),
+              let uid = UserManager.shared.activatedUID
+        else {
+            return
+        }
+        LocalUserDefaults.shared.updateUser(by: uid, publicKey: publicKey, address: address)
     }
 
     func loadLinkedAccounts() {

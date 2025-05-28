@@ -422,8 +422,12 @@ extension UserManager {
             keyType: provider.keyType,
             account: nil
         )
+        try provider.store(
+            id: provider.createKey(uid: uid),
+            password: KeyProvider.password(with: uid)
+        )
         LocalUserDefaults.shared.addUser(user: storeUser)
-        WalletManager.shared.updateKeyProvider(provider: provider, storeUser: storeUser)
+        await WalletManager.shared.updateKeyProvider(provider: provider, storeUser: storeUser)
         try await finishLogin(customToken: customToken)
     }
 
