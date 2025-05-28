@@ -263,7 +263,7 @@ extension TokenModel {
         guard let bal = availableBalanceToUse ?? displayBalance else {
             return "0"
         }
-        return bal.doubleValue.formatCurrencyString()
+        return bal.doubleValue.formatCurrencyStringForDisplay(digits: 2)
     }
 
     var priceInCurrencyStr: String? {
@@ -273,7 +273,7 @@ extension TokenModel {
         guard bal.doubleValue != 0 else {
             return ""
         }
-        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyStringForDisplay()
     }
 
     var balanceInCurrencyStr: String? {
@@ -283,7 +283,7 @@ extension TokenModel {
         guard bal.doubleValue != 0 else {
             return ""
         }
-        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyString()
+        return "\(CurrencyCache.cache.currencySymbol)" + bal.doubleValue.formatCurrencyStringForDisplay()
     }
 }
 

@@ -71,10 +71,6 @@ struct InboxToken: Codable {
         matchedCoin?.iconURL
     }
 
-    var amountText: String {
-        "\(amount.formatCurrencyString()) \(matchedCoin?.symbol?.uppercased() ?? "")"
-    }
-
     var marketPrice: Double {
         guard let coin = matchedCoin,
               let rate = CoinRateCache.cache.getSummary(by: coin.contractId)

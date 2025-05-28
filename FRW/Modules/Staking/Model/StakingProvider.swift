@@ -28,7 +28,7 @@ struct StakingProvider: Codable {
     }
 
     var apyYearPercentString: String {
-        let num = (rate * 100).formatCurrencyString()
+        let num = (rate * 100).formatCurrencyStringForDisplay(digits: 2)
         return "\(num)%"
     }
 
