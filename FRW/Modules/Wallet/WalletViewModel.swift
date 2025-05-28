@@ -90,7 +90,7 @@ final class WalletViewModel: ObservableObject {
         WalletManager.shared.$activatedCoins
             .receive(on: DispatchQueue.main)
             .filter { !$0.isEmpty }
-            .removeDuplicates()
+//            .removeDuplicates()
             .sink { [weak self] _ in
                 self?.refreshCoinItems()
             }.store(in: &cancelSets)

@@ -151,6 +151,14 @@ class WalletManager: ObservableObject {
                 self?.loadRecentFlowAccount()
             }
             .store(in: &cancellableSet)
+
+        CurrencyCache.cache.$currentCurrency
+            .receive(on: DispatchQueue.main)
+            .map { $0 }
+            .sink { [weak self] _ in
+                self?.reloadWhenCurrencyDidChanged()
+            }
+            .store(in: &cancellableSet)
     }
 
     // MARK: Private
@@ -229,6 +237,16 @@ extension WalletManager {
         }
 
         loadLinkedAccounts()
+        Task {
+            do {
+                try await fetchWalletDatas()
+            } catch {
+                log.error(error)
+            }
+        }
+    }
+
+    private func reloadWhenCurrencyDidChanged() {
         Task {
             do {
                 try await fetchWalletDatas()

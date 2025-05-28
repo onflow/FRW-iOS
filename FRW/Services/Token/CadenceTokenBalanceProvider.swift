@@ -15,21 +15,23 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
 
     init(network: Flow.ChainID = currentNetwork) {
         self.network = network
+        currency = CurrencyCache.cache.currentCurrency
     }
 
     // MARK: Internal
 
     var tokens: [TokenModel] = []
     var network: Flow.ChainID
+    var currency: Currency
 
     func fetchUserTokens(address: any FWAddress) async throws -> [TokenModel] {
         guard let addr = address as? Flow.Address else {
             throw WalletError.invaildAddress
         }
-        let currency = CurrencyCache.cache.currentCurrency.rawValue
-        let query = FRWAPI.TokenQuery(address: addr.hexAddr, currency: currency, network: network)
+        currency = CurrencyCache.cache.currentCurrency
+        let query = FRWAPI.TokenQuery(address: addr.hexAddr, currency: currency.rawValue, network: network)
         let response: TokenModelResponse = try await Network.request(FRWAPI.Token.cadence(query))
-        var availableBalanceToUse = response.storage?.availableBalanceToUse
+        let availableBalanceToUse = response.storage?.availableBalanceToUse
         var tokenList: [TokenModel] = response.result ?? []
         if let balance = availableBalanceToUse {
             tokenList = tokenList.map { token in
@@ -51,7 +53,7 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
     }
 
     func getFTBalance(address: FWAddress) async throws -> [TokenModel] {
-        guard tokens.isEmpty else {
+        guard tokens.isEmpty || currency != CurrencyCache.cache.currentCurrency else {
             return tokens
         }
         return try await fetchUserTokens(address: address)
