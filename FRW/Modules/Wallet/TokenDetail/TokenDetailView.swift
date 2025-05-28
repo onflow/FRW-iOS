@@ -257,7 +257,7 @@ struct TokenDetailView: RouteableView {
 
                     HStack(spacing: 4) {
                         Text(
-                            "\(CurrencyCache.cache.currencySymbol)\(vm.rate.formatCurrencyString(considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currencySymbol)\(vm.rate.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                         )
                         .foregroundColor(.LL.Neutrals.text)
                         .font(.inter(size: 14, weight: .regular))
@@ -689,7 +689,7 @@ extension TokenDetailView {
 
                     HStack(spacing: 10) {
                         Text(
-                            "\(stakingManager.stakingCount.formatCurrencyString()) \(vm.token.symbol?.uppercased() ?? "?")"
+                            "\(stakingManager.stakingCount.formatCurrencyStringForDisplay(digits: 2)) \(vm.token.symbol?.uppercased() ?? "?")"
                         )
                         .font(.inter(size: 14))
                         .foregroundColor(Color.LL.Neutrals.text)
@@ -712,13 +712,13 @@ extension TokenDetailView {
                             .foregroundColor(Color.LL.Neutrals.text)
 
                         Text(
-                            "\(CurrencyCache.cache.currentCurrency.symbol)\(stakingManager.dayRewardsASUSD.formatCurrencyString(considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currentCurrency.symbol)\(stakingManager.dayRewardsASUSD.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                         )
                         .font(.inter(size: 24, weight: .bold))
                         .foregroundColor(Color.LL.Neutrals.text)
 
                         Text(
-                            "\(stakingManager.dayRewards.formatCurrencyString()) \(vm.token.symbol?.uppercased() ?? "?")"
+                            "\(stakingManager.dayRewards.formatCurrencyStringForDisplay(digits: 2)) \(vm.token.symbol?.uppercased() ?? "?")"
                         )
                         .font(.inter(size: 12, weight: .semibold))
                         .foregroundColor(Color.LL.Neutrals.text3)
@@ -735,13 +735,13 @@ extension TokenDetailView {
                             .foregroundColor(Color.LL.Neutrals.text)
 
                         Text(
-                            "\(CurrencyCache.cache.currentCurrency.symbol)\(stakingManager.monthRewardsASUSD.formatCurrencyString(considerCustomCurrency: true))"
+                            "\(CurrencyCache.cache.currentCurrency.symbol)\(stakingManager.monthRewardsASUSD.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                         )
                         .font(.inter(size: 24, weight: .bold))
                         .foregroundColor(Color.LL.Neutrals.text)
 
                         Text(
-                            "\(stakingManager.monthRewards.formatCurrencyString()) \(vm.token.symbol?.uppercased() ?? "?")"
+                            "\(stakingManager.monthRewards.formatCurrencyStringForDisplay(digits: 2)) \(vm.token.symbol?.uppercased() ?? "?")"
                         )
                         .font(.inter(size: 12, weight: .semibold))
                         .foregroundColor(Color.LL.Neutrals.text3)

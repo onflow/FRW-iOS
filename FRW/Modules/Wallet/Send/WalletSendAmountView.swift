@@ -234,8 +234,8 @@ struct WalletSendAmountView: RouteableView {
                         .visibility(vm.exchangeType == .dollar ? .visible : .gone)
 
                     Text(
-                        vm.exchangeType == .token ? vm.inputDollarNum.formatCurrencyString() : vm
-                            .inputTokenNum.formatCurrencyString()
+                        vm.exchangeType == .token ? vm.inputDollarNum.formatCurrencyStringForDisplay(digits: 2) : vm
+                            .inputTokenNum.formatCurrencyStringForDisplay(digits: 2)
                     )
                     .foregroundColor(.LL.Neutrals.note)
                     .font(.inter(size: 16, weight: .medium))
@@ -342,13 +342,13 @@ struct WalletSendAmountView: RouteableView {
                     .clipShape(Circle())
 
                 Text(
-                    "\(vm.amountBalance.formatCurrencyString()) \(vm.token.symbol?.uppercased() ?? "?")"
+                    "\(vm.amountBalance.formatCurrencyStringForDisplay(digits: 2)) \(vm.token.symbol?.uppercased() ?? "?")"
                 )
                 .foregroundColor(.LL.Neutrals.text)
                 .font(.inter(size: 14, weight: .medium))
 
                 Text(
-                    "≈ \(CurrencyCache.cache.currencySymbol) \(vm.amountBalanceAsDollar.formatCurrencyString(considerCustomCurrency: true))"
+                    "≈ \(CurrencyCache.cache.currencySymbol) \(vm.amountBalanceAsDollar.formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true))"
                 )
                 .foregroundColor(.LL.Neutrals.text)
                 .font(.inter(size: 14, weight: .medium))
@@ -476,7 +476,7 @@ extension WalletSendAmountView {
                 HStack {
                     Spacer()
 
-                    Text("\(CurrencyCache.cache.currentCurrency.rawValue) \(CurrencyCache.cache.currencySymbol) \(vm.inputDollarNum.formatCurrencyString())")
+                    Text("\(CurrencyCache.cache.currentCurrency.rawValue) \(CurrencyCache.cache.currencySymbol) \(vm.inputDollarNum.formatCurrencyStringForDisplay(digits: 2))")
                         .foregroundColor(.LL.Neutrals.neutrals8)
                         .font(.inter(size: 14, weight: .medium))
                 }

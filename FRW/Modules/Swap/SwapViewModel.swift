@@ -102,7 +102,7 @@ class SwapViewModel: ObservableObject {
             return ""
         }
 
-        return "1 \(fromToken.symbol?.uppercased() ?? "") ≈ \((amountOut / amountIn).formatCurrencyString()) \(toToken.symbol?.uppercased() ?? "")"
+        return "1 \(fromToken.symbol?.uppercased() ?? "") ≈ \((amountOut / amountIn).formatCurrencyStringForDisplay(digits: 2)) \(toToken.symbol?.uppercased() ?? "")"
     }
 
     var fromAmount: Double {
@@ -126,7 +126,7 @@ class SwapViewModel: ObservableObject {
     }
 
     var fromPriceAmountString: String {
-        (fromAmount * fromTokenRate).formatCurrencyString(considerCustomCurrency: true)
+        (fromAmount * fromTokenRate).formatCurrencyStringForDisplay(digits: 2, considerCustomCurrency: true)
     }
 
     // MARK: Private
