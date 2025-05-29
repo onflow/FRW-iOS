@@ -1,5 +1,5 @@
 //
-//  ImportAccountView.swift
+//  ImportAccountListView.swift
 //  FRW
 //
 //  Created by cat on 5/21/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ImportAccountView: RouteableView {
+struct ImportAccountListView: RouteableView {
     // MARK: Internal
 
     var title: String {
@@ -136,5 +136,5 @@ struct ImportOptionCard: View {
 }
 
 #Preview {
-    ImportAccountView()
+    ImportAccountListView()
 }
