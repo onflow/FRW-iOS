@@ -118,7 +118,7 @@ extension MoveAccountsView {
                             .foregroundColor(Color.LL.Neutrals.text)
                             .font(.inter(size: 12, weight: .semibold))
 
-                        EVMTagView()
+                        TagView(type: .evm)
                             .visibility(isEVM ? .visible : .gone)
                     }
                     .frame(alignment: .leading)

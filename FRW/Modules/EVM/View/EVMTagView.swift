@@ -7,20 +7,6 @@
 
 import SwiftUI
 
-// MARK: - EVMTagView
-
-struct EVMTagView: View {
-    var body: some View {
-        Text("EVM")
-            .font(.inter(size: 9))
-            .kerning(0.144)
-            .foregroundStyle(Color.white)
-            .frame(width: 36, height: 16)
-            .background(Color.Theme.evm)
-            .cornerRadius(8)
-    }
-}
-
 // MARK: - TagView
 
 struct TagView: View {
@@ -30,13 +16,12 @@ struct TagView: View {
         HStack {
             if type != .flow {
                 Text(title)
-                    .font(.inter(size: 9))
-                    .kerning(0.144)
+                    .font(.inter(size: 8))
                     .foregroundStyle(Color.white)
-                    .frame(height: 16)
-                    .padding(.horizontal, 8)
+                    .frame(height: 10)
+                    .padding(.horizontal, 4)
                     .background(BGColor)
-                    .cornerRadius(8)
+                    .cornerRadius(16)
             }
         }
     }
@@ -65,5 +50,5 @@ struct TagView: View {
 }
 
 #Preview {
-    TagView()
+    TagView(type: .evm)
 }

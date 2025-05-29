@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-enum AvatarSource: Equatable {
-    case emoji(String)
+enum AvatarSource {
+    case user(WalletAccount.User)
     case url(URL)
     case system(String)
     case image(Image)
@@ -20,12 +20,9 @@ struct AvatarContentView: View {
     var body: some View {
         Group {
             switch source {
-            case let .emoji(emoji):
+            case let .user(user):
                 ZStack {
-                    Color("Background")
-                    Text(emoji)
-                        .font(.system(size: size * 0.7))
-                        .minimumScaleFactor(0.5)
+                    user.emoji.icon(size: size)
                 }
             case let .url(url):
                 AsyncImage(url: url) { phase in
@@ -57,17 +54,19 @@ struct AvatarContentView: View {
 struct AvatarView: View {
     let mainAvatar: AvatarSource
     let subAvatar: AvatarSource?
+    let backgroundColor: Color
     let isSelected: Bool
     let size: CGFloat
 
     private let borderWidth: CGFloat = 1
     private let selectedBorderColor: Color = Color.Theme.Accent.green
 
-    init(mainAvatar: AvatarSource, subAvatar: AvatarSource? = nil, isSelected: Bool = false, size: CGFloat = 36) {
+    init(mainAvatar: AvatarSource, subAvatar: AvatarSource? = nil, backgroundColor: Color = .clear, isSelected: Bool = false, size: CGFloat = 36) {
         self.mainAvatar = mainAvatar
         self.subAvatar = subAvatar
         self.isSelected = isSelected
         self.size = size
+        self.backgroundColor = backgroundColor
     }
 
     var body: some View {
@@ -83,7 +82,10 @@ struct AvatarView: View {
             if let subAvatar = subAvatar {
                 AvatarContentView(source: subAvatar, size: size * 0.5)
                     .padding(2)
-                    .background(Circle().fill(Color("Background")))
+                    .background(
+                        Circle()
+                            .fill(backgroundColor)
+                    )
                     .offset(x: -6, y: 0)
                     .accessibilityLabel(Text("sub avatar"))
             }
@@ -94,9 +96,9 @@ struct AvatarView: View {
 
 #Preview {
     VStack(spacing: 20) {
-        AvatarView(mainAvatar: .system("person.crop.circle.fill"), subAvatar: .emoji("🐧"), isSelected: true)
-        AvatarView(mainAvatar: .emoji("🐼"), subAvatar: .url(URL(string: "https://avatars.githubusercontent.com/u/1?v=4")!), isSelected: false)
-        AvatarView(mainAvatar: .emoji("🐱"), isSelected: true)
+        AvatarView(mainAvatar: .system("person.crop.circle.fill"), subAvatar: .user(.init(emoji: .avocado, address: "0x1234")), isSelected: true)
+        AvatarView(mainAvatar: .user(.init(emoji: .cherry, address: "0xabc")), subAvatar: .url(URL(string: "https://avatars.githubusercontent.com/u/1?v=4")!), isSelected: false)
+        AvatarView(mainAvatar: .user(.init(emoji: .lion, address: "0xabc")), isSelected: true)
         AvatarView(mainAvatar: .url(URL(string: "https://avatars.githubusercontent.com/u/2?v=4")!), subAvatar: .system("star.fill"), isSelected: false)
     }
 }

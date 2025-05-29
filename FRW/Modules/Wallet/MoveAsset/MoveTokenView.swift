@@ -149,7 +149,7 @@ struct MoveUserView: View {
                             .foregroundColor(Color.LL.Neutrals.text)
                             .font(.inter(size: 14, weight: .semibold))
 
-                        EVMTagView()
+                        TagView(type: .evm)
                             .visibility(isEVM ? .visible : .gone)
                     }
                     .frame(alignment: .leading)

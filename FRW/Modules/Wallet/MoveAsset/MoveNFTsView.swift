@@ -132,7 +132,7 @@ struct MoveNFTsView: RouteableView, PresentActionDelegate {
                         .truncationMode(.middle)
                         .foregroundStyle(Color.Theme.Text.black)
                         .padding(.trailing, 8)
-                    EVMTagView()
+                    TagView(type: .evm)
                         .visibility(viewModel.showEVMTag(isFirst: isFirst) ? .visible : .gone)
                     Spacer()
                 }

@@ -1479,6 +1479,12 @@
 		4EE090AC2DB0ADBD001515FE /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 4EE090AB2DB0ADBD001515FE /* ZIPFoundation */; };
 		4EE43F052DE8067B00DB8745 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE43F042DE8067B00DB8745 /* AvatarView.swift */; };
 		4EE43F062DE8067B00DB8745 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE43F042DE8067B00DB8745 /* AvatarView.swift */; };
+		4EE5A6912DE8424000DA6B39 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6902DE8424000DA6B39 /* AccountInfoView.swift */; };
+		4EE5A6922DE8424000DA6B39 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6902DE8424000DA6B39 /* AccountInfoView.swift */; };
+		4EE5A6942DE8463500DA6B39 /* AccountInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6932DE8463500DA6B39 /* AccountInfoProtocol.swift */; };
+		4EE5A6952DE8463500DA6B39 /* AccountInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6932DE8463500DA6B39 /* AccountInfoProtocol.swift */; };
+		4EE5A6972DE851ED00DA6B39 /* MockAccountInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6962DE851ED00DA6B39 /* MockAccountInfo.swift */; };
+		4EE5A6982DE851ED00DA6B39 /* MockAccountInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5A6962DE851ED00DA6B39 /* MockAccountInfo.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -2785,6 +2791,9 @@
 		4EE090A22DA8F08C001515FE /* BugReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReport.swift; sourceTree = "<group>"; };
 		4EE090A62DB0ABB8001515FE /* ZipFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipFile.swift; sourceTree = "<group>"; };
 		4EE43F042DE8067B00DB8745 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		4EE5A6902DE8424000DA6B39 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		4EE5A6932DE8463500DA6B39 /* AccountInfoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoProtocol.swift; sourceTree = "<group>"; };
+		4EE5A6962DE851ED00DA6B39 /* MockAccountInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAccountInfo.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -5712,6 +5721,7 @@
 				4ED9C5B92C0464A9004276D1 /* NetworkMenuItem.swift */,
 				15B302B42D9AD51A007C792C /* SideContainerView.swift */,
 				15B302B72D9AD550007C792C /* SideContainerViewModel.swift */,
+				4EE5A6902DE8424000DA6B39 /* AccountInfoView.swift */,
 			);
 			path = SideMenu;
 			sourceTree = "<group>";
@@ -6242,6 +6252,7 @@
 		6ABAE52C2836295100C97AE2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4EE5A6962DE851ED00DA6B39 /* MockAccountInfo.swift */,
 				156E84AC281CDF4F00415896 /* WalletModels.swift */,
 				6A8D2A3F283C865F0041100E /* AddressBookInfoModel.swift */,
 				6AE0841C284F58F3003BEEF0 /* UserModel.swift */,
@@ -6256,6 +6267,7 @@
 				158637222D6C9D570083A068 /* FWAddress.swift */,
 				15B302AE2D9AC757007C792C /* FWAccount.swift */,
 				4E8866152DBF7FD80031E242 /* TokenModelResponse.swift */,
+				4EE5A6932DE8463500DA6B39 /* AccountInfoProtocol.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7399,6 +7411,7 @@
 				6AEF839928647A3B0081E285 /* WalletResponses.swift in Sources */,
 				15DC20B527819C56000B187A /* VChevronButtonDirection.swift in Sources */,
 				15DC20CF27819C56000B187A /* VNavigationLinkExtension.swift in Sources */,
+				4EE5A6922DE8424000DA6B39 /* AccountInfoView.swift in Sources */,
 				15DC212727819C56000B187A /* VSpinnerModelContinous.swift in Sources */,
 				6AF95B3D2848686D0012C837 /* AddressBookRequest.swift in Sources */,
 				15DC215D27819C56000B187A /* VMenuRow.swift in Sources */,
@@ -7509,6 +7522,7 @@
 				15DE22D3277DBE0000B5EE03 /* UserManager.swift in Sources */,
 				15F6F4CE2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift in Sources */,
 				1575A71528B25EE800ADC513 /* FluidView.swift in Sources */,
+				4EE5A6972DE851ED00DA6B39 /* MockAccountInfo.swift in Sources */,
 				6ACDD17728587FF800F406EB /* ProfileEditNameViewModel.swift in Sources */,
 				15DC211F27819C56000B187A /* VSpinnerType.swift in Sources */,
 				4E1DD8D22B162F9B0055E510 /* SyncConfirmView.swift in Sources */,
@@ -7568,6 +7582,7 @@
 				1565FBB828B173960086A652 /* ExploreTabScreen.swift in Sources */,
 				6A9D7C472833B45500078F63 /* ThemeManager.swift in Sources */,
 				6A382E22289BD3B000163564 /* BionicErrorHandler.swift in Sources */,
+				4EE5A6952DE8463500DA6B39 /* AccountInfoProtocol.swift in Sources */,
 				4ED21F42284E4C0A00320AD0 /* NFTShareView.swift in Sources */,
 				6A5006D328A7892D007FE3F5 /* NFTUIKitCollectionRegularItemCell.swift in Sources */,
 				15B1F6332786B1BB00847BB5 /* CheckboxStyle.swift in Sources */,
@@ -8285,6 +8300,7 @@
 				15C58B0C2868A4EE00BD4FC6 /* VChevronButtonDirection.swift in Sources */,
 				15C58B0D2868A4EE00BD4FC6 /* VNavigationLinkExtension.swift in Sources */,
 				15C58B0E2868A4EE00BD4FC6 /* VSpinnerModelContinous.swift in Sources */,
+				4EE5A6912DE8424000DA6B39 /* AccountInfoView.swift in Sources */,
 				15C58B0F2868A4EE00BD4FC6 /* AddressBookRequest.swift in Sources */,
 				15C58B102868A4EE00BD4FC6 /* VMenuRow.swift in Sources */,
 				15C58B112868A4EE00BD4FC6 /* CreatePinCodeViewModel.swift in Sources */,
@@ -8395,6 +8411,7 @@
 				15C58B432868A4EE00BD4FC6 /* ProfileEditNameViewModel.swift in Sources */,
 				15F6F4CD2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift in Sources */,
 				15C58B442868A4EE00BD4FC6 /* VSpinnerType.swift in Sources */,
+				4EE5A6982DE851ED00DA6B39 /* MockAccountInfo.swift in Sources */,
 				6AE1817328C59B57009ADDDB /* JSModels.swift in Sources */,
 				4E1DD8D12B162F9B0055E510 /* SyncConfirmView.swift in Sources */,
 				15C58B452868A4EE00BD4FC6 /* VBaseViewNavigationBarLeading.swift in Sources */,
@@ -8454,6 +8471,7 @@
 				6A382E21289BD3B000163564 /* BionicErrorHandler.swift in Sources */,
 				15C58B582868A4EE00BD4FC6 /* NFTShareView.swift in Sources */,
 				6A5006D228A7892D007FE3F5 /* NFTUIKitCollectionRegularItemCell.swift in Sources */,
+				4EE5A6942DE8463500DA6B39 /* AccountInfoProtocol.swift in Sources */,
 				15C58B592868A4EE00BD4FC6 /* CheckboxStyle.swift in Sources */,
 				15C58B5A2868A4EE00BD4FC6 /* IndexedScrollView.swift in Sources */,
 				15C58B5B2868A4EE00BD4FC6 /* Color.swift in Sources */,

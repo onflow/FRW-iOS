@@ -5,9 +5,9 @@
 //  Created by cat on 2024/5/27.
 //
 
+import Flow
 import Kingfisher
 import SwiftUI
-import Flow
 
 struct AccountSideCell: View {
     // MARK: Internal
@@ -16,12 +16,12 @@ struct AccountSideCell: View {
     var currentAddress: String
     var name: String? = nil
     var logo: String? = nil
-    
+
     @Binding
     var balance: String?
-    
+
     var onClick: (String) -> Void
-    
+
     var body: some View {
         Button {
             NotificationCenter.default.post(name: .toggleSideMenu)
@@ -51,7 +51,7 @@ struct AccountSideCell: View {
                             .foregroundStyle(Color.Theme.Text.black8)
                             .frame(height: 22)
 
-                        EVMTagView()
+                        TagView(type: .evm)
                             .visibility(isEVM ? .visible : .gone)
 
                         Circle()

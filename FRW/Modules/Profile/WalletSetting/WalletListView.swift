@@ -32,7 +32,7 @@ class WalletListViewModel: ObservableObject {
             let user = WalletManager.shared.walletAccount.readInfo(at: mainAddress)
             let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: mainAddress)
             var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
-            
+
             let mainWallet = WalletListViewModel.Item(
                 user: user,
                 address: mainAddress,
@@ -46,7 +46,7 @@ class WalletListViewModel: ObservableObject {
             let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
             let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: account.showAddress)
             var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
-            
+
             let model = WalletListViewModel.Item(
                 user: user,
                 address: account.showAddress,
@@ -157,11 +157,11 @@ extension WalletListView {
                             .truncationMode(.middle)
                             .foregroundStyle(Color.Theme.Text.black3)
                             .frame(maxWidth: 120)
-                        EVMTagView()
+                        TagView(type: .evm)
                             .visibility(item.isEvm ? .visible : .gone)
                             .padding(.leading, 8)
                     }
-                    
+
                     if let balance = item.balance {
                         Text(balance)
                             .font(.inter(size: 14))
