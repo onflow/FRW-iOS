@@ -100,3 +100,4 @@ iOSInjectionProject/
 .DS_Store
 /FRW/App/Env/Dev/ServiceConfig.plist
 /FRW/App/Env/Prod/ServiceConfig.plist
+/.cursor
