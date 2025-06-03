@@ -314,9 +314,6 @@ extension WalletViewModel {
         UIPasteboard.general.string = WalletManager.shared.selectedAccountAddress
         HUD.success(title: "Address Copied".localized)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        #if DEBUG
-            WalletManager.shared.loadRecentFlowAccount()
-        #endif
     }
 
     func toggleHiddenStatusAction() {
