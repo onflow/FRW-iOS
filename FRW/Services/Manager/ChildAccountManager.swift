@@ -107,6 +107,7 @@ class ChildAccountManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .map { $0 }
             .sink { walletInfo in
+                self.refresh()
                 if walletInfo != nil {
                     if !self.cacheLoaded {
                         self.loadCache()
@@ -185,7 +186,7 @@ class ChildAccountManager: ObservableObject {
         }
         log.debug("start refresh")
         do {
-            let list = try await FlowNetwork.queryChildAccountMeta(address)
+            let list = try await FlowNetwork.queryChildAccountMeta("0x34aaef24072b302e")
 
             await MainActor.run {
                 if UserManager.shared.activatedUID != uid { return }

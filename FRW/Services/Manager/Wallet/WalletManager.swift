@@ -210,7 +210,7 @@ extension WalletManager {
         }
     }
 
-    private func loadRecentFlowAccount() {
+    func loadRecentFlowAccount() {
         guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
             reloadWalletInfo()
             return

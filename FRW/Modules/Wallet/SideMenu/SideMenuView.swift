@@ -6,9 +6,9 @@
 //
 
 import Combine
+import Factory
 import Kingfisher
 import SwiftUI
-import Factory
 
 // MARK: - SideMenuView
 
@@ -16,31 +16,37 @@ struct SideMenuView: View {
     // MARK: Internal
 
     private let SideOffset: CGFloat = 65
-    
+
     @State
     var reloadCount = 0
-    
+
     var body: some View {
         GeometryReader { proxy in
             HStack(spacing: 0) {
-                VStack {
-                    cardView
+                VStack(spacing: 24) {
+                    ProfileView
+//                    cardView
                         .padding(.top, proxy.safeAreaInsets.top)
 
                     ScrollView {
-                        VStack {
-                            enableEVMView
-                                .padding(.top, 24)
-                                .visibility(evmManager.showEVM ? .visible : .gone)
-
-                            addressListView
+                        VStack(spacing: 24) {
+                            ActivityAccountView
+                            OtherAccountsView
                         }
+
+//                        VStack {
+//                            enableEVMView
+//                                .padding(.top, 24)
+//                                .visibility(evmManager.showEVM ? .visible : .gone)
+//
+//                            addressListView
+//                        }
                     }
 
                     bottomMenu
                         .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.Theme.Background.white)
                 .ignoresSafeArea()
@@ -201,18 +207,18 @@ struct SideMenuView: View {
 
                     if let childs = wallet.childs, !childs.isEmpty {
                         ForEach(childs, id: \.address) { child in
-                                AccountSideCell(
-                                    address: child.address.hex,
-                                    currentAddress: vm.currentAddress,
-                                    name: child.name,
-                                    logo: child.icon?.absoluteString,
-                                    balance: Binding<String?>(
-                                        get: { vm.walletBalance[child.address.hex]?.doubleValue.formatDisplayFlowBalance },
-                                        set: { _ in }
-                                    )
-                                ) { address in
-                                    WalletManager.shared.changeSelectedAccount(address: address, type: .child)
-                                }
+                            AccountSideCell(
+                                address: child.address.hex,
+                                currentAddress: vm.currentAddress,
+                                name: child.name,
+                                logo: child.icon?.absoluteString,
+                                balance: Binding<String?>(
+                                    get: { vm.walletBalance[child.address.hex]?.doubleValue.formatDisplayFlowBalance },
+                                    set: { _ in }
+                                )
+                            ) { address in
+                                WalletManager.shared.changeSelectedAccount(address: address, type: .child)
+                            }
                         }
                     }
                 }
@@ -238,7 +244,7 @@ struct SideMenuView: View {
                 .background(.Theme.Line.line)
                 .frame(height: 1)
                 .padding(.bottom, 12)
-            
+
             Button {
                 reloadCount += 1
                 UIFeedbackGenerator.impactOccurred(.light)
@@ -250,9 +256,9 @@ struct SideMenuView: View {
                         .foregroundStyle(Color.Theme.Text.black8)
                         .font(.system(size: 14).bold())
                         .frame(width: 24, height: 24)
-                        .rotationEffect(.degrees(360 * reloadCount ))
+                        .rotationEffect(.degrees(360 * reloadCount))
                         .animation(.linear(duration: 0.5), value: reloadCount)
-                    
+
                     Text("Refresh Accounts".localized)
                         .font(.inter(size: 14, weight: .semibold))
                         .foregroundStyle(Color.Theme.Text.black8)
@@ -262,7 +268,7 @@ struct SideMenuView: View {
                 .frame(height: 40)
             }
             .buttonStyle(ScaleButtonStyle())
-            
+
             if isDeveloperMode {
                 HStack {
                     Image("icon_side_link")
@@ -345,10 +351,10 @@ struct SideMenuView: View {
     private var vm = SideMenuViewModel()
     @StateObject
     private var um = UserManager.shared
-    
+
     @Injected(\.wallet)
     private var wallet: WalletManager
-    
+
     @StateObject
     private var cm = ChildAccountManager.shared
     @StateObject
@@ -359,4 +365,74 @@ struct SideMenuView: View {
     private var showSwitchUserAlert = false
 
     private let cPadding = 12.0
+}
+
+// MARK: - New UI
+
+extension SideMenuView {
+    @ViewBuilder
+    var ProfileView: some View {
+        VStack {
+            HStack(alignment: .center, spacing: 16) {
+                KFImage.url(URL(string: um.userInfo?.avatar.convertedAvatarString() ?? ""))
+                    .placeholder {
+                        Image("placeholder")
+                            .resizable()
+                    }
+                    .onSuccess { _ in
+                        vm.pickColor(from: um.userInfo?.avatar.convertedAvatarString() ?? "")
+                    }
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 40, height: 40)
+                    .contentShape(RoundedRectangle(cornerRadius: 16))
+
+                Text(um.userInfo?.nickname ?? "lilico".localized)
+                    .font(.inter(size: 14, weight: .bold))
+                    .foregroundColor(.Summer.Text.primary)
+
+                Spacer()
+
+                Button {
+                    vm.switchAccountMoreAction()
+                } label: {
+                    Image("icon_account_setting")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                }
+            }
+            Divider()
+                .foregroundStyle(Color.Summer.line)
+        }
+    }
+
+    @ViewBuilder
+    var ActivityAccountView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            if let account = vm.activeAccount {
+                Text("active_account".localized)
+                    .font(.inter(size: 14))
+                    .foregroundStyle(Color.Theme.Text.black8)
+                AccountInfoView(account: account, isActivity: true, isSelected: true)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var OtherAccountsView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            if vm.hasOtherAccounts {
+                Text("other_accounts".localized)
+                    .font(.inter(size: 14))
+                    .foregroundStyle(Color.Theme.Text.black8)
+                ForEach(0 ..< vm.accounts.count, id: \.self) { index in
+                    ForEach(vm.accounts[index], id: \.account.infoAddress) { account in
+                        AccountInfoView(account: account, isActivity: false, isSelected: vm.activeAccount?.account.infoAddress == account.account.infoAddress) { model in
+                            WalletManager.shared.changeSelectedAccount(address: model.account.infoAddress, type: model.account.accountType)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

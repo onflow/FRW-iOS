@@ -9,57 +9,50 @@ import FlowWalletKit
 import SwiftUI
 
 struct AccountInfoView: View {
-    var info: AccountInfoProtocol
+    var account: AccountModel
     var isActivity: Bool = false
     var isSelected: Bool = false
     var backgroundColor: Color = Color.Summer.Background.nav
-    var mainAccount: AccountInfoProtocol? = nil
+    var onClick: ((AccountModel) -> Void)?
 
     var body: some View {
         ZStack {
             HStack(spacing: 12) {
-                if !info.isMain && !isActivity {
+                if !account.isMain && !isActivity {
                     Image("icon-link")
                         .resizable()
                         .frame(width: 20, height: 20)
                         .padding(.leading, 8)
                 }
-                if let data = mainAccount?.walletMetadata {
-                    info.avatar(isSelected: isSelected, subAvatar: isActivity ? .user(data) : nil)
+                if let data = account.mainAccount?.walletMetadata {
+                    account.account.avatar(isSelected: isSelected, subAvatar: isActivity ? .user(data) : nil)
                 } else {
-                    info.avatar(isSelected: isSelected, subAvatar: nil)
+                    account.account.avatar(isSelected: isSelected, subAvatar: nil)
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 4) {
-                        if !info.isMain && isActivity {
+                        if !account.isMain && isActivity {
                             Image("icon-link")
                                 .resizable()
                                 .frame(width: 12, height: 12)
                         }
-                        Text(info.infoName)
+                        Text(account.account.infoName)
                             .font(.inter(size: 14, weight: .w600))
                             .foregroundStyle(Color.Summer.Text.primary)
-                        if info.isCoa {
+                        if account.isCoa {
                             TagView(type: .evm)
                         }
                     }
 
-                    Text(info.infoAddress)
+                    Text(account.account.infoAddress)
                         .font(.inter(size: 12))
+                        .lineLimit(1)
                         .truncationMode(.middle)
                         .foregroundStyle(Color.Summer.Text.secondary)
 
                     HStack(spacing: 0) {
-                        Text(info.tokenCount)
-                            .font(.inter(size: 12))
-                            .foregroundStyle(Color.Summer.Text.secondary)
-
-                        Text(" | ")
-                            .font(.inter(size: 12))
-                            .foregroundStyle(Color.Summer.Text.secondary)
-
-                        Text(info.nftCount)
+                        Text(account.showAmount)
                             .font(.inter(size: 12))
                             .foregroundStyle(Color.Summer.Text.secondary)
                         Spacer()
@@ -68,7 +61,7 @@ struct AccountInfoView: View {
                 Spacer(minLength: 2)
 
                 Button {
-                    UIPasteboard.general.string = info.infoAddress
+                    UIPasteboard.general.string = account.account.infoAddress
                     HUD.success(title: "Address Copied".localized)
                     UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 } label: {
@@ -91,18 +84,21 @@ struct AccountInfoView: View {
                         .allowsHitTesting(false)
                 }
             }
+            .contentShape(RoundedRectangle(cornerRadius: 0))
+            .onTapGesture {
+                onClick?(account)
+            }
         }
     }
 }
 
 #Preview {
     VStack {
-        AccountInfoView(info: MockAccountInfo(), isActivity: true, isSelected: true, backgroundColor: Color.Summer.Background.nav)
-
-        AccountInfoView(info: MockAccountInfo.linkAccount, isActivity: true, isSelected: true, backgroundColor: Color.Summer.Background.nav, mainAccount: MockAccountInfo())
-
-        AccountInfoView(info: MockAccountInfo.linkAccount, isActivity: false, isSelected: false, backgroundColor: Color.Summer.Background.nav)
-        AccountInfoView(info: MockAccountInfo.evmAccount, isActivity: false, isSelected: true, backgroundColor: Color.Summer.Background.nav)
+        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: true)
+        AccountInfoView(account: AccountModel.mockSamples()[1], isActivity: true)
+        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: false, isSelected: true)
+        AccountInfoView(account: AccountModel.mockSamples()[1], isSelected: true)
+        AccountInfoView(account: AccountModel.mockSamples()[2], isSelected: false)
     }
     .background(Color.Summer.Background.nav)
     .padding(.vertical, 50)

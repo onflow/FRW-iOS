@@ -1209,6 +1209,8 @@
 		4E7918472B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918492B21518300DA832F /* BackupMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918482B21518300DA832F /* BackupMultiViewModel.swift */; };
 		4E79184A2B21518300DA832F /* BackupMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918482B21518300DA832F /* BackupMultiViewModel.swift */; };
+		4E7DC92D2DEF084100A14B60 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DC92C2DEF084100A14B60 /* AccountModel.swift */; };
+		4E7DC92E2DEF084100A14B60 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DC92C2DEF084100A14B60 /* AccountModel.swift */; };
 		4E7DD2622858E74600052B21 /* FRWAPI+NFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7DD2602858E74600052B21 /* FRWAPI+NFT.swift */; };
 		4E815E6B2D7AE2AE00082EE1 /* PrivateKeyWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E815E6A2D7AE2AE00082EE1 /* PrivateKeyWarning.swift */; };
 		4E815E6C2D7AE2AE00082EE1 /* PrivateKeyWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E815E6A2D7AE2AE00082EE1 /* PrivateKeyWarning.swift */; };
@@ -2644,6 +2646,7 @@
 		4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncDevice.swift"; sourceTree = "<group>"; };
 		4E7918452B214EEF00DA832F /* BackupMultiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiView.swift; sourceTree = "<group>"; };
 		4E7918482B21518300DA832F /* BackupMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiViewModel.swift; sourceTree = "<group>"; };
+		4E7DC92C2DEF084100A14B60 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		4E7DD2602858E74600052B21 /* FRWAPI+NFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+NFT.swift"; sourceTree = "<group>"; };
 		4E815E6A2D7AE2AE00082EE1 /* PrivateKeyWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyWarning.swift; sourceTree = "<group>"; };
 		4E815E6D2D7AE4C900082EE1 /* CopyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyButton.swift; sourceTree = "<group>"; };
@@ -6268,6 +6271,7 @@
 				15B302AE2D9AC757007C792C /* FWAccount.swift */,
 				4E8866152DBF7FD80031E242 /* TokenModelResponse.swift */,
 				4EE5A6932DE8463500DA6B39 /* AccountInfoProtocol.swift */,
+				4E7DC92C2DEF084100A14B60 /* AccountModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -7799,6 +7803,7 @@
 				15DC218B27819C56000B187A /* VRadioButtonModel.swift in Sources */,
 				15BCFF1527770D76000B7863 /* EmptyWalletView.swift in Sources */,
 				6A164F702845F1CB0026B31E /* Index.swift in Sources */,
+				4E7DC92D2DEF084100A14B60 /* AccountModel.swift in Sources */,
 				4EFF94BF2AEEDB2D00365EF7 /* IPManager.swift in Sources */,
 				4EAD14172B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */,
 				4E7DD2622858E74600052B21 /* FRWAPI+NFT.swift in Sources */,
@@ -8688,6 +8693,7 @@
 				15C58BBE2868A4EE00BD4FC6 /* EmptyWalletView.swift in Sources */,
 				15C58BBF2868A4EE00BD4FC6 /* Index.swift in Sources */,
 				15C58BC02868A4EE00BD4FC6 /* FRWAPI+NFT.swift in Sources */,
+				4E7DC92E2DEF084100A14B60 /* AccountModel.swift in Sources */,
 				4EFF94BE2AEEDB2D00365EF7 /* IPManager.swift in Sources */,
 				15C58BC12868A4EE00BD4FC6 /* VNavigationViewAppearance.swift in Sources */,
 				4EAD14162B61DD940076B318 /* MultiBackupPasskeyTarget.swift in Sources */,

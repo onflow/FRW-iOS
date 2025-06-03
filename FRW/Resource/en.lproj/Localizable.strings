@@ -1177,3 +1177,5 @@ Key Store and Private Key.";
 "import_account" = "Import account";
 "restore.profile.title" = "From another profile";
 "restore.profile.desc" = "Add an account from another profile";
+"active_account" = "Active account";
+"other_accounts" = "Other accounts";

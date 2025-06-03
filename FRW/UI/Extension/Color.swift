@@ -316,6 +316,8 @@ extension Color {
         /// light: #767676 dark: #FFFFF 0.5
         static let icons = Color(.Summer.icons)
 
+        static let line = Color(.Summer.line)
+
         enum Text {
             /// light: #000D07 dark: #FFFFFF
             static let primary = Color(.Summer.Text.primary)

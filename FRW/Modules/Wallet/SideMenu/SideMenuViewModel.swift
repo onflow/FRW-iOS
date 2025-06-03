@@ -7,6 +7,7 @@
 
 import Combine
 import Factory
+import FlowWalletKit
 import Foundation
 import SwiftUI
 
@@ -48,6 +49,12 @@ class SideMenuViewModel: ObservableObject {
     @Published
     var walletBalance: [String: Decimal] = [:]
 
+    @Published
+    var activeAccount: AccountModel? = nil
+
+    @Published
+    var accounts: [[AccountModel]] = []
+
     var colorsMap: [String: Color] = [:]
 
     var currentAddress: String {
@@ -72,8 +79,10 @@ class SideMenuViewModel: ObservableObject {
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] value in
                 self?.accountLoading = value
+                self?.refreshAccounts()
             }
             .store(in: &cancellableSet)
 
@@ -83,6 +92,13 @@ class SideMenuViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 self?.linkLoading = value
+            }
+            .store(in: &cancellableSet)
+        wallet.$selectedAccount
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshActiveAccount()
             }
             .store(in: &cancellableSet)
     }
@@ -139,8 +155,69 @@ class SideMenuViewModel: ObservableObject {
         NotificationCenter.default.post(name: .toggleSideMenu)
         Router.route(to: RouteMap.Wallet.enableEVM)
     }
+}
 
-    // MARK: Private
+// MARK: - Refresh Data
 
-    private var cancelSets = Set<AnyCancellable>()
+extension SideMenuViewModel {
+    private func refreshActiveAccount() {
+        let current: AccountInfoProtocol? = WalletManager.shared.selectedChildAccount ?? WalletManager.shared.selectedEVMAccount ?? WalletManager.shared.mainAccount
+        guard let current else {
+            return
+        }
+        activeAccount = AccountModel(account: current, mainAccount: WalletManager.shared.isSelectedFlowAccount ? nil : WalletManager.shared.mainAccount, flowCount: "0", nftCount: 0)
+    }
+
+    private func refreshAccounts() {
+        refreshActiveAccount()
+        let list = WalletManager.shared.currentNetworkAccounts
+
+        Task {
+            var results: [[AccountModel]] = []
+            await withTaskGroup(of: [AccountModel]?.self) { group in
+                for account in list {
+                    group.addTask {
+                        do {
+                            return try await self.fetchMetadata(account: account)
+                        } catch {
+                            log.info("[SideMenu] fetch child or coa failed:\(error)")
+                            return nil
+                        }
+                    }
+                }
+                for await result in group {
+                    if let result = result {
+                        results.append(result)
+                    }
+                }
+            }
+            await MainActor.run {
+                self.accounts = results
+            }
+        }
+    }
+
+    private func fetchMetadata(account: FlowWalletKit.Account) async throws -> [AccountModel] {
+        try await account.fetchAccount()
+        var tmp: [AccountModel] = []
+        tmp.append(AccountModel(account: account, flowCount: "", nftCount: 0))
+        if let coa = account.coa {
+            tmp.append(AccountModel(account: coa, mainAccount: account, flowCount: "", nftCount: 0))
+        }
+        if let child = account.childs {
+            tmp.append(contentsOf: child.map { AccountModel(account: $0, mainAccount: account, flowCount: "", nftCount: 0) })
+        }
+        return tmp
+    }
+}
+
+// MARK: - getter
+
+extension SideMenuViewModel {
+    var hasOtherAccounts: Bool {
+        let hasCOA = WalletManager.shared.mainAccount?.hasCOA ?? false
+        let hasChild = WalletManager.shared.mainAccount?.hasChild ?? false
+        let hasOther = (WalletManager.shared.walletEntity?.accounts?.count ?? 0) > 1
+        return hasCOA || hasChild || hasOther
+    }
 }
