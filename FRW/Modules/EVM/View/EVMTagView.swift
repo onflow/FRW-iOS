@@ -10,18 +10,19 @@ import SwiftUI
 // MARK: - TagView
 
 struct TagView: View {
+    var size: CGFloat = 8
     var type: Contact.WalletType = .flow
 
     var body: some View {
         HStack {
             if type != .flow {
                 Text(title)
-                    .font(.inter(size: 8))
+                    .font(.inter(size: size))
                     .foregroundStyle(Color.white)
-                    .frame(height: 10)
                     .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
                     .background(BGColor)
-                    .cornerRadius(16)
+                    .clipShape(Capsule())
             }
         }
     }

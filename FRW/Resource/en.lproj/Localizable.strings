@@ -1179,3 +1179,4 @@ Key Store and Private Key.";
 "restore.profile.desc" = "Add an account from another profile";
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
+"add_account" = "Add account";

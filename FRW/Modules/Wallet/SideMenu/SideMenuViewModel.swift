@@ -55,6 +55,9 @@ class SideMenuViewModel: ObservableObject {
     @Published
     var accounts: [[AccountModel]] = []
 
+    @Published
+    var hasCoa: Bool = true
+
     var colorsMap: [String: Color] = [:]
 
     var currentAddress: String {
@@ -66,15 +69,6 @@ class SideMenuViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        wallet.$mainAccount
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.loadBalance()
-            }
-            .store(in: &cancellableSet)
-
         wallet.$walletEntity
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
@@ -94,6 +88,16 @@ class SideMenuViewModel: ObservableObject {
                 self?.linkLoading = value
             }
             .store(in: &cancellableSet)
+
+        wallet.$mainAccount
+            .compactMap { $0 }
+            .flatMap { $0.$coa }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                self?.hasCoa = (value != nil)
+            }
+            .store(in: &cancellableSet)
+
         wallet.$selectedAccount
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -101,32 +105,6 @@ class SideMenuViewModel: ObservableObject {
                 self?.refreshActiveAccount()
             }
             .store(in: &cancellableSet)
-    }
-
-    func loadBalance() {
-        Task {
-            let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
-            var linksAccounts: [String] = []
-            linksAccounts = wallet.childs?.compactMap(\.address.hex) ?? []
-            if let coa = wallet.coa {
-                linksAccounts.insert(coa.address, at: 0)
-            }
-
-            let accounts = mainAccounts + linksAccounts
-
-            if accounts.isEmpty {
-                return
-            }
-            do {
-                let result = try await token.getAvailableFlowBalance(addresses: accounts, forceReload: true)
-                print("JJJJJJJJJJ ====> \(result)")
-                await MainActor.run {
-                    walletBalance = result
-                }
-            } catch {
-                print("JJJJJJJJJJ 1111 ====> \(error)")
-            }
-        }
     }
 
     func pickColor(from url: String) {

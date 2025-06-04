@@ -7,10 +7,14 @@
 
 import Foundation
 
-struct AccountModel {
-    var account: AccountInfoProtocol
+struct AccountModel: Equatable {
+    static func == (lhs: AccountModel, rhs: AccountModel) -> Bool {
+        lhs.account.infoAddress == rhs.account.infoAddress
+    }
+
+    var account: any AccountInfoProtocol
     /// not nil when account type is coa or child,other is nil
-    var mainAccount: AccountInfoProtocol?
+    var mainAccount: (any AccountInfoProtocol)?
     var flowCount: String
     var nftCount: UInt
 }

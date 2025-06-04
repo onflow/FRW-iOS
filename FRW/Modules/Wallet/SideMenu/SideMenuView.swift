@@ -24,23 +24,20 @@ struct SideMenuView: View {
         GeometryReader { proxy in
             HStack(spacing: 0) {
                 VStack(spacing: 24) {
-                    ProfileView
-//                    cardView
-                        .padding(.top, proxy.safeAreaInsets.top)
+                    VStack {
+                        if vm.hasCoa {
+                            ProfileView
+                        } else {
+                            EnableEVMView
+                        }
+                    }
+                    .padding(.top, proxy.safeAreaInsets.top + 16)
 
                     ScrollView {
                         VStack(spacing: 24) {
                             ActivityAccountView
                             OtherAccountsView
                         }
-
-//                        VStack {
-//                            enableEVMView
-//                                .padding(.top, 24)
-//                                .visibility(evmManager.showEVM ? .visible : .gone)
-//
-//                            addressListView
-//                        }
                     }
 
                     bottomMenu
@@ -407,6 +404,44 @@ extension SideMenuView {
     }
 
     @ViewBuilder
+    var EnableEVMView: some View {
+        Button {
+            vm.onClickEnableEVM()
+        } label: {
+            HStack(alignment: .center, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 6) {
+                        Text("Add an")
+                            .font(.inter(size: 14))
+                            .foregroundStyle(Color.Summer.Text.primary)
+                        TagView(size: 12, type: .evm)
+                        Text("account on Flow")
+                            .font(.inter(size: 14))
+                            .foregroundStyle(Color.Summer.Text.primary)
+                    }
+                    .fontWeight(.bold)
+                    Text("Manage your multi-VM assets seamlessly.")
+                        .font(.inter(size: 12))
+                        .foregroundStyle(Color.Summer.Text.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color.Summer.icons)
+                    .font(.system(size: 16, weight: .semibold))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.Summer.cards)
+            )
+            .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 2)
+        }
+        .buttonStyle(ScaleButtonStyle())
+    }
+
+    @ViewBuilder
     var ActivityAccountView: some View {
         VStack(alignment: .leading, spacing: 16) {
             if let account = vm.activeAccount {
@@ -414,6 +449,7 @@ extension SideMenuView {
                     .font(.inter(size: 14))
                     .foregroundStyle(Color.Theme.Text.black8)
                 AccountInfoView(account: account, isActivity: true, isSelected: true)
+                    .animation(.bouncy, value: vm.activeAccount)
             }
         }
     }
@@ -433,6 +469,24 @@ extension SideMenuView {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    var BottomView: some View {
+        VStack {
+            Button {} label: {
+                HStack {
+                    CircleButton(image: .add) {}
+                        .allowsHitTesting(false)
+                    Text("add_account".localized)
+                        .font(.inter(size: 16, weight: .bold))
+                        .foregroundStyle(Color.Theme.Text.black8)
+
+                    Spacer()
+                }
+            }
+            .buttonStyle(ScaleButtonStyle())
         }
     }
 }
