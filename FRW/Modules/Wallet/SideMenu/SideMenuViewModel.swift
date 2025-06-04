@@ -169,8 +169,19 @@ extension SideMenuViewModel {
                     }
                 }
             }
+            let sortedResult = results.sorted { lhs, rhs in
+
+                guard let l = lhs.first, let r = rhs.first else { return false }
+
+                let lFlow = Double(l.flowCount) ?? 0
+                let rFlow = Double(r.flowCount) ?? 0
+                if lFlow != rFlow {
+                    return lFlow > rFlow
+                }
+                return l.nftCount > r.nftCount
+            }
             await MainActor.run {
-                self.accounts = results
+                self.accounts = sortedResult
             }
         }
     }
@@ -191,7 +202,15 @@ extension SideMenuViewModel {
                 let childInfo = countInfo[child.address.hexAddr] ?? .empty
                 return AccountModel(account: child, mainAccount: account, flowCount: String(childInfo.flowBalance), nftCount: childInfo.nftCounts)
             }
-            tmp.append(contentsOf: result)
+            let sortedResult = result.sorted { lhs, rhs in
+                let lhsFlow = Double(lhs.flowCount) ?? 0
+                let rhsFlow = Double(rhs.flowCount) ?? 0
+                if lhsFlow != rhsFlow {
+                    return lhsFlow > rhsFlow
+                }
+                return lhs.nftCount > rhs.nftCount
+            }
+            tmp.append(contentsOf: sortedResult)
         }
         return tmp
     }
