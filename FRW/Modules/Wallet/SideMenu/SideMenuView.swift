@@ -40,8 +40,8 @@ struct SideMenuView: View {
                         }
                     }
 
-                    bottomMenu
-                        .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
+//                    bottomMenu
+//                        .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
                 }
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
