@@ -171,7 +171,10 @@ extension String {
         }
 
         if !starts(with: "https://firebasestorage.googleapis.com") {
-            return self
+            if contains("&square=true") {
+                return self
+            }
+            return self + "&square=true"
         }
 
         if contains("alt=media") {
