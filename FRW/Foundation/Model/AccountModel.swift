@@ -26,7 +26,7 @@ extension AccountModel {
         var amount = ""
         let flowCount = Double(flowCount) ?? 0
         if flowCount >= 0 {
-            amount += "\(flowCount) Flow" + " | "
+            amount += "\(flowCount.formatCurrencyString()) Flow" + " | "
         }
         if nftCount >= 0 {
             amount += "\(nftCount) NFT's"

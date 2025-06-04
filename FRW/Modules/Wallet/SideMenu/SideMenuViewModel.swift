@@ -168,7 +168,7 @@ extension SideMenuViewModel {
         activeAccount = AccountModel(account: current, mainAccount: WalletManager.shared.isSelectedFlowAccount ? nil : WalletManager.shared.mainAccount, flowCount: "0", nftCount: 0)
     }
 
-    private func refreshAccounts() {
+    func refreshAccounts() {
         refreshActiveAccount()
         let list = WalletManager.shared.currentNetworkAccounts
 
@@ -199,15 +199,40 @@ extension SideMenuViewModel {
 
     private func fetchMetadata(account: FlowWalletKit.Account) async throws -> [AccountModel] {
         try await account.fetchAccount()
+        let countInfo = await fetchCount(account: account)
+
         var tmp: [AccountModel] = []
-        tmp.append(AccountModel(account: account, flowCount: "", nftCount: 0))
+        let mainInfo = countInfo[account.hexAddr] ?? .empty
+        tmp.append(AccountModel(account: account, flowCount: String(mainInfo.flowBalance), nftCount: mainInfo.nftCounts))
         if let coa = account.coa {
-            tmp.append(AccountModel(account: coa, mainAccount: account, flowCount: "", nftCount: 0))
+            let coaInfo = countInfo[coa.address] ?? .empty
+            tmp.append(AccountModel(account: coa, mainAccount: account, flowCount: String(coaInfo.flowBalance), nftCount: coaInfo.nftCounts))
         }
         if let child = account.childs {
-            tmp.append(contentsOf: child.map { AccountModel(account: $0, mainAccount: account, flowCount: "", nftCount: 0) })
+            let result = child.map { child in
+                let childInfo = countInfo[child.address.hexAddr] ?? .empty
+                return AccountModel(account: child, mainAccount: account, flowCount: String(childInfo.flowBalance), nftCount: childInfo.nftCounts)
+            }
+            tmp.append(contentsOf: result)
         }
         return tmp
+    }
+
+    private func fetchCount(account: FlowWalletKit.Account) async -> [String: FlowNFTCountModel] {
+        do {
+            var addressList: [String] = [account.hexAddr]
+            if let address = account.coa?.address {
+                addressList.append(address)
+            }
+            if let childs = account.childs {
+                addressList.append(contentsOf: childs.map { $0.address.hexAddr })
+            }
+            let countInfo = try await FlowNetwork.getFlowTokenAndNFTCount(addresses: addressList)
+            return countInfo
+        } catch {
+            log.error(error)
+            return [:]
+        }
     }
 }
 

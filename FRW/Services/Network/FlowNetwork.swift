@@ -1179,6 +1179,20 @@ extension FlowNetwork {
     }
 }
 
+// MARK: -
+
+extension FlowNetwork {
+    static func getFlowTokenAndNFTCount(addresses: [String]) async throws -> [String: FlowNFTCountModel] {
+        let list = addresses.map { Flow.Address(hex: $0) }
+        guard let argument = list.toFlowValue() else {
+            throw CadenceError.invaildArgument
+        }
+        let result: [String: FlowNFTCountModel] = try await fetch(by: \.basic?.queryBalanceForAccounts, arguments: [argument])
+        return result
+//        return Dictionary(uniqueKeysWithValues: result.map { ($0.hexAddr, $1) })
+    }
+}
+
 // MARK: - Base
 
 extension FlowNetwork {

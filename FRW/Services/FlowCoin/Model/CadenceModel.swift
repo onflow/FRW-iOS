@@ -57,6 +57,7 @@ extension CadenceModel {
         let revokeKey: String?
         let getAccountMinFlow: String?
         let getFlowBalanceForAnyAccounts: String?
+        let queryBalanceForAccounts: String?
     }
 
     struct Account: Codable {
