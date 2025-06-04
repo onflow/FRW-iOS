@@ -132,7 +132,7 @@ extension WalletConnectSyncDevice {
             data: requestParam
         )
         try secureKey.store(id: userId)
-        let storeUser = UserManager.StoreUser(publicKey: key.publicKey.description, address: address, userId: userId, keyType: .secureEnclave, account: nil)
+        let storeUser = UserManager.StoreUser(publicKey: key.publicKey.description, address: address, userId: userId, keyType: .secureEnclave, account: nil, userInfo: nil)
         LocalUserDefaults.shared.addUser(user: storeUser)
         log.debug("[Sync] Public Key: \(key.publicKey.data.hexString)")
         return AnyCodable(response)

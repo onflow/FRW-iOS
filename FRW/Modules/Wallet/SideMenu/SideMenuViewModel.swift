@@ -149,7 +149,6 @@ extension SideMenuViewModel {
     func refreshAccounts() {
         refreshActiveAccount()
         let list = WalletManager.shared.currentNetworkAccounts
-
         Task {
             var results: [[AccountModel]] = []
             await withTaskGroup(of: [AccountModel]?.self) { group in
@@ -187,7 +186,7 @@ extension SideMenuViewModel {
     }
 
     private func fetchMetadata(account: FlowWalletKit.Account) async throws -> [AccountModel] {
-        try await account.fetchAccount()
+        try? await account.fetchAccount()
         let countInfo = await fetchCount(account: account)
 
         var tmp: [AccountModel] = []

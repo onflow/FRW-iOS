@@ -193,7 +193,8 @@ extension UserManager {
             address: nil,
             userId: model.id,
             keyType: .secureEnclave,
-            account: key.toStoreKey()
+            account: key.toStoreKey(),
+            userInfo: nil
         )
         WalletManager.shared.updateKeyProvider(provider: secureKey, storeUser: store)
         LocalUserDefaults.shared.addUser(user: store)
@@ -244,7 +245,8 @@ extension UserManager {
                             address: model.address,
                             userId: userId,
                             keyType: .secureEnclave,
-                            account: nil
+                            account: nil,
+                            userInfo: nil
                         )
                         LocalUserDefaults.shared.addUser(user: storeUser)
                     }
@@ -278,7 +280,8 @@ extension UserManager {
                             address: model.address,
                             userId: userId,
                             keyType: .seedPhrase,
-                            account: nil
+                            account: nil,
+                            userInfo: nil
                         )
                         LocalUserDefaults.shared.addUser(user: storeUser)
                     } else {
@@ -324,7 +327,8 @@ extension UserManager {
                             address: model.address,
                             userId: userId,
                             keyType: .privateKey,
-                            account: nil
+                            account: nil,
+                            userInfo: nil
                         )
                         LocalUserDefaults.shared.addUser(user: storeUser)
                     } else {
@@ -420,7 +424,8 @@ extension UserManager {
             address: nil,
             userId: uid,
             keyType: provider.keyType,
-            account: nil
+            account: nil,
+            userInfo: nil
         )
         LocalUserDefaults.shared.addUser(user: storeUser)
         WalletManager.shared.updateKeyProvider(provider: provider, storeUser: storeUser)
@@ -483,7 +488,8 @@ extension UserManager {
             address: nil,
             userId: userId,
             keyType: keyProvider.keyType,
-            account: accountKey
+            account: accountKey,
+            userInfo: nil
         )
         WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: storeUser)
 
@@ -624,7 +630,8 @@ extension UserManager {
             address: address,
             userId: uid,
             keyType: privateKey.keyType,
-            account: flowKey.toStoreKey()
+            account: flowKey.toStoreKey(),
+            userInfo: nil
         )
         LocalUserDefaults.shared.addUser(user: store)
         WalletManager.shared.updateKeyProvider(provider: privateKey, storeUser: store)
@@ -869,6 +876,7 @@ extension UserManager {
         let userId: String
         let keyType: FlowWalletKit.KeyType
         let account: UserManager.Accountkey?
+        var userInfo: UserInfo?
         var updateAt: TimeInterval = ceil(Date().timeIntervalSince1970)
 
         func copy(address: String? = nil, account: UserManager.Accountkey? = nil) -> StoreUser {
@@ -877,7 +885,8 @@ extension UserManager {
                 address: address ?? self.address,
                 userId: userId,
                 keyType: keyType,
-                account: account ?? self.account
+                account: account ?? self.account,
+                userInfo: nil
             )
         }
     }

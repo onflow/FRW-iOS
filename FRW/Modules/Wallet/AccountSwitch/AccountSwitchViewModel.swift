@@ -28,40 +28,22 @@ class AccountSwitchViewModel: ObservableObject {
         UserManager.shared.$loginUIDList
             .receive(on: DispatchQueue.main)
             .map { $0 }
-            .sink { [weak self] list in
+            .sink { [weak self] _ in
                 guard let self = self else { return }
-                var index = 1
                 let userStoreList = LocalUserDefaults.shared.userList
-                self.placeholders = list.map { uid in
-                    let userInfo = MultiAccountStorage.shared.getUserInfo(uid)
-                    var address = MultiAccountStorage.shared.getWalletInfo(uid)?
-                        .getNetworkWalletModel(network: .mainnet)?.getAddress ?? "0x"
-                    if address == "0x" {
-                        address = LocalUserDefaults.shared.userAddressOfDeletedApp[uid] ?? "0x"
-                    }
-                    if address == "0x" {
-                        let userStore = userStoreList.last { $0.userId == uid }
-                        address = userStore?.address ?? "0x"
-                    }
-                    var username = userInfo?.nickname ?? userInfo?.username
-                    if username == nil {
-                        username = "Profile \(index)"
-                        index += 1
-                    }
-                    return Placeholder(
-                        uid: uid,
-                        avatar: userInfo?.avatar ?? "",
-                        username: username ?? "",
-                        address: address
-                    )
+                let result = userStoreList.map { user in
+                    var model = user
+                    model.userInfo = MultiAccountStorage.shared.getUserInfo(user.userId)
+                    return model
                 }
+                self.placeholders = result
             }.store(in: &cancelSets)
     }
 
     // MARK: Internal
 
     @Published
-    var placeholders: [Placeholder] = []
+    var placeholders: [UserManager.StoreUser] = []
     var selectedUid: String?
 
     func createNewAccountAction() {

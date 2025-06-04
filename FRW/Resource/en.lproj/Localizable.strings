@@ -818,7 +818,7 @@
 "backup_tips_desc" = "Backup your account now to protect your assets.";
 "not_now" = "Not Now";
 "accounts" = "Profiles";
-"create_new_account" = "Create a New Profile";
+"create_new_account" = "Create a new profile";
 "add_existing_account" = "Import an Existing Profile";
 "import_wallet" = "Import Wallet";
 "welcome" = "Welcome";
@@ -1180,3 +1180,4 @@ Key Store and Private Key.";
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
 "add_account" = "Add account";
+"recover_profile" = "Recover an existing profile";

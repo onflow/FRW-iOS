@@ -10,6 +10,7 @@ import FlowWalletKit
 import Foundation
 import KeychainAccess
 import WalletCore
+
 // MARK: - SecureEnclaveMigration
 
 enum SecureEnclaveMigration {
@@ -28,8 +29,8 @@ enum SecureEnclaveMigration {
     }
 
     private static func migrationFromOldSE() {
-        let service: String = "com.flowfoundation.wallet.securekey"
-        let userKey: String = "user.keystore"
+        let service = "com.flowfoundation.wallet.securekey"
+        let userKey = "user.keystore"
         let keychain = Keychain(service: service)
         guard let data = try? keychain.getData(userKey) else {
             print("[Mig] SecureEnclave get value from keychain empty,\(service)")
@@ -65,7 +66,8 @@ enum SecureEnclaveMigration {
         for model in users {
             do {
                 guard let privateKey = try? SecureEnclave.P256.Signing
-                    .PrivateKey(dataRepresentation: model.publicKey) else {
+                    .PrivateKey(dataRepresentation: model.publicKey)
+                else {
                     log.error("[Mig] migration from Lilico Tag error: private key")
                     continue
                 }
@@ -79,7 +81,7 @@ enum SecureEnclaveMigration {
                         continue
                     }
                     let address = address(by: model.uniq)
-                    let storeUser = UserManager.StoreUser(publicKey: publicKey, address: address, userId: model.uniq, keyType: .secureEnclave, account: nil)
+                    let storeUser = UserManager.StoreUser(publicKey: publicKey, address: address, userId: model.uniq, keyType: .secureEnclave, account: nil, userInfo: nil)
                     LocalUserDefaults.shared.addUser(user: storeUser)
                     try secureKey.store(id: model.uniq)
                     if !userIds.contains(model.uniq) {
@@ -101,19 +103,21 @@ enum SecureEnclaveMigration {
 
     static func canKeySign(privateKey: SecureEnclaveKey) -> Bool {
         guard let data = generateRandomBytes(),
-              let _ = try? privateKey.sign(data: data, hashAlgo: .SHA2_256) else {
+              let _ = try? privateKey.sign(data: data, hashAlgo: .SHA2_256)
+        else {
             return false
         }
         return true
     }
 
-//MARK: - phrase
+    // MARK: - phrase
+
     private static func migrationOldSeedPhrase() {
         let mainKeychain =
-        Keychain(service: (Bundle.main.bundleIdentifier ?? "com.flowfoundation.wallet") + ".local")
-            .label("Lilico app backup")
-            .synchronizable(false)
-            .accessibility(.whenUnlocked)
+            Keychain(service: (Bundle.main.bundleIdentifier ?? "com.flowfoundation.wallet") + ".local")
+                .label("Lilico app backup")
+                .synchronizable(false)
+                .accessibility(.whenUnlocked)
         var userIds = LocalUserDefaults.shared.loginUIDList
         let allKeys = mainKeychain.allKeys()
         var finishCount = 0
@@ -145,7 +149,7 @@ enum SecureEnclaveMigration {
                 continue
             }
             let address = address(by: uid)
-            let storeUser = UserManager.StoreUser(publicKey: publicKey, address: address, userId: uid, keyType: .seedPhrase, account: nil)
+            let storeUser = UserManager.StoreUser(publicKey: publicKey, address: address, userId: uid, keyType: .seedPhrase, account: nil, userInfo: nil)
             LocalUserDefaults.shared.addUser(user: storeUser)
             finishCount += 1
             try? providerKey.store(id: uid)
@@ -159,14 +163,14 @@ enum SecureEnclaveMigration {
 
     private static func migrationSeedPhraseBackup() {
         let mainKeychain =
-        Keychain(service: (Bundle.main.bundleIdentifier ?? "com.flowfoundation.wallet") + ".backup.phrase")
-            .label("Lilico app backup")
-            .synchronizable(false)
-            .accessibility(.whenUnlocked)
+            Keychain(service: (Bundle.main.bundleIdentifier ?? "com.flowfoundation.wallet") + ".backup.phrase")
+                .label("Lilico app backup")
+                .synchronizable(false)
+                .accessibility(.whenUnlocked)
 
         let allKeys = mainKeychain.allKeys()
         for userId in allKeys {
-            guard let data = try? mainKeychain.getData(userId) ,
+            guard let data = try? mainKeychain.getData(userId),
                   let decryptedData = try? WalletManager.decryptionChaChaPoly(key: userId, data: data),
                   let mnemonic = String(data: decryptedData, encoding: .utf8),
                   !mnemonic.isEmpty

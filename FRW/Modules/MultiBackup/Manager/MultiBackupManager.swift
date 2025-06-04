@@ -596,7 +596,8 @@ extension MultiBackupManager {
                         address: firstItem.address,
                         userId: firstItem.userId,
                         keyType: .secureEnclave,
-                        account: nil
+                        account: nil,
+                        userInfo: nil
                     )
                     LocalUserDefaults.shared.addUser(user: storeUser)
                     try await UserManager.shared.restoreLogin(with: firstItem.userId)

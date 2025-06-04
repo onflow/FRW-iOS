@@ -85,22 +85,7 @@ extension SideMenuView {
     var ProfileView: some View {
         VStack {
             HStack(alignment: .center, spacing: 16) {
-                KFImage.url(URL(string: um.userInfo?.avatar.convertedAvatarString() ?? ""))
-                    .placeholder {
-                        Image("placeholder")
-                            .resizable()
-                    }
-                    .onSuccess { _ in
-                        vm.pickColor(from: um.userInfo?.avatar.convertedAvatarString() ?? "")
-                    }
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 40, height: 40)
-                    .contentShape(RoundedRectangle(cornerRadius: 16))
-
-                Text(um.userInfo?.nickname ?? "lilico".localized)
-                    .font(.inter(size: 14, weight: .bold))
-                    .foregroundColor(.Summer.Text.primary)
+                ProfileInfoView(userInfo: um.userInfo ?? .empty)
 
                 Spacer()
 
