@@ -569,7 +569,7 @@
 "Flow::message" = "Flow";
 "free_gas_fee" = "Free Gas Fee";
 "Import_your_wallet::message" = "Import your wallet";
-"gas_fee_desc" = "Allow Flow Wallet to pay the gas fee for all my transactions";
+"gas_fee_desc" = "* Allow Flow Wallet to pay the gas fee for all my transactions";
 "Create_a_new_wallet::message" = "Create a new wallet";
 "delete_wallet" = "Delete Profile";
 "Feature_Coming_Soon::message" = "Feature Coming Soon";
@@ -1181,3 +1181,5 @@ Key Store and Private Key.";
 "other_accounts" = "Other accounts";
 "add_account" = "Add account";
 "recover_profile" = "Recover an existing profile";
+"show_in_account" = "Show in account list";
+"remove_account" = "Remove account";

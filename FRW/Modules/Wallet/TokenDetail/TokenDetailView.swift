@@ -196,7 +196,7 @@ struct TokenDetailView: RouteableView {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
         .background(.clear)
-        .cardStyle(showBorder: false)
+        .cardStyle(padding: 0)
     }
 
     var activitiesView: some View {
@@ -244,7 +244,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 18)
         .padding(.bottom, 8)
-        .cardStyle(showBorder: false)
+        .cardStyle(padding: 0)
     }
 
     var chartContainerView: some View {
@@ -300,7 +300,7 @@ struct TokenDetailView: RouteableView {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 18)
-        .cardStyle(showBorder: false)
+        .cardStyle(padding: 0)
     }
 
     var chartRangeView: some View {
@@ -351,7 +351,7 @@ struct TokenDetailView: RouteableView {
             .padding(.top, 16)
             .padding(.horizontal, 16)
             .padding(.bottom, 22)
-            .cardStyle(showBorder: false)
+            .cardStyle(padding: 0)
         }
         .padding(.bottom, 12)
     }
@@ -393,7 +393,7 @@ struct TokenDetailView: RouteableView {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 18)
-        .cardStyle(showBorder: false)
+        .cardStyle(padding: 0)
         .padding(.bottom, 8)
     }
 
@@ -413,7 +413,7 @@ struct TokenDetailView: RouteableView {
         }
         .frame(maxWidth: .infinity)
         .padding(16)
-        .cardStyle(showBorder: false)
+        .cardStyle(padding: 0)
         .onTapGesture {
             vm.onClickUnverifiedToken()
         }
@@ -760,7 +760,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .padding(.bottom, 14)
-            .cardStyle(showBorder: false)
+            .cardStyle(padding: 0)
         }
     }
 
@@ -822,7 +822,7 @@ extension TokenDetailView {
             }
             .padding(.horizontal, 18)
             .frame(height: 72, alignment: .topLeading)
-            .cardStyle(showBorder: false)
+            .cardStyle(padding: 0)
         }
     }
 }
@@ -858,24 +858,16 @@ struct BorderStyle: ViewModifier {
 
 struct CardStyle: ViewModifier {
     let cornerRadius: CGFloat
-    let showBorder: Bool
+    let padding: CGFloat
 
     func body(content: Content) -> some View {
-        if showBorder {
-            content
-                .overlay {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .miter))
-                        .foregroundColor(Color.Theme.Line.stroke)
-                }
-        } else {
-            content
-                .background(
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(Color.Theme.Special.white1)
-                        .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 8)
-                )
-        }
+        content
+            .padding(padding)
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .fill(Color.Theme.Special.white1)
+                    .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 8)
+            )
     }
 }
 
@@ -884,8 +876,8 @@ extension View {
         modifier(BorderStyle())
     }
 
-    func cardStyle(cornerRadius: CGFloat = 12, showBorder: Bool = true) -> some View {
-        modifier(CardStyle(cornerRadius: cornerRadius, showBorder: showBorder))
+    func cardStyle(padding: CGFloat = 18, cornerRadius: CGFloat = 16) -> some View {
+        modifier(CardStyle(cornerRadius: cornerRadius, padding: padding))
     }
 }
 

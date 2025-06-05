@@ -160,9 +160,10 @@ extension SideMenuView {
                 Text("other_accounts".localized)
                     .font(.inter(size: 14))
                     .foregroundStyle(Color.Theme.Text.black8)
-                ForEach(0 ..< vm.accounts.count, id: \.self) { index in
-                    ForEach(vm.accounts[index], id: \.account.infoAddress) { account in
-                        AccountInfoView(account: account, isActivity: false, isSelected: vm.activeAccount?.account.infoAddress == account.account.infoAddress) { model in
+                ForEach(0 ..< um.accounts.count, id: \.self) { index in
+                    ForEach(um.accounts[index], id: \.account.infoAddress) { account in
+                        let isSelected = vm.activeAccount?.account.infoAddress == account.account.infoAddress
+                        AccountInfoView(account: account, isActivity: false, isSelected: isSelected) { model, _ in
                             WalletManager.shared.changeSelectedAccount(address: model.account.infoAddress, type: model.account.accountType)
                         }
                     }

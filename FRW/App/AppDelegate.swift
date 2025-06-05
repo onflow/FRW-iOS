@@ -186,6 +186,8 @@ extension AppDelegate {
         if UserManager.shared.isLoggedIn {
             DeviceManager.shared.updateDevice()
         }
+
+        UserManager.shared.start()
     }
 
     private func commonConfig() {

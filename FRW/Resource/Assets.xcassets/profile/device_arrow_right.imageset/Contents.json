@@ -1,19 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "Vector 5.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename" : "chevron-right (1).svg",
+      "idiom" : "universal"
     },
     {
-      "filename" : "Vector 5@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Vector 5@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "chevron-right.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

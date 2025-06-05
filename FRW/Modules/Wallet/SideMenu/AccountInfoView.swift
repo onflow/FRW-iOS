@@ -12,8 +12,9 @@ struct AccountInfoView: View {
     var account: AccountModel
     var isActivity: Bool = false
     var isSelected: Bool = false
-    var backgroundColor: Color = Color.Summer.Background.nav
-    var onClick: ((AccountModel) -> Void)?
+    var backgroundColor: Color = .clear
+    var action: Action = .copy
+    var onClick: ((AccountModel, AccountInfoView.Action) -> Void)? = nil
 
     var body: some View {
         ZStack {
@@ -59,15 +60,15 @@ struct AccountInfoView: View {
                     }
                 }
                 Spacer(minLength: 2)
-
-                Button {
-                    UIPasteboard.general.string = account.account.infoAddress
-                    HUD.success(title: "Address Copied".localized)
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                } label: {
-                    Image("icon_button_copy")
-                        .resizable()
-                        .frame(width: 24, height: 24)
+                switch action {
+                case .copy:
+                    copyAction()
+                case .arrow:
+                    arrowAction()
+                case .hide:
+                    hideAction()
+                case .card:
+                    HStack {}
                 }
             }
             .padding(.leading, isActivity ? 12 : 5)
@@ -86,15 +87,66 @@ struct AccountInfoView: View {
             }
             .contentShape(RoundedRectangle(cornerRadius: 0))
             .onTapGesture {
-                onClick?(account)
+                onClick?(account, .card)
             }
         }
+    }
+
+    @ViewBuilder
+    func copyAction() -> some View {
+        HStack {
+            Button {
+                UIPasteboard.general.string = account.account.infoAddress
+                HUD.success(title: "Address Copied".localized)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            } label: {
+                Image("icon_button_copy")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func hideAction() -> some View {
+        HStack(spacing: 0) {
+            Button {} label: {
+                Image("icon-wallet-hidden-on")
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fill)
+                    .foregroundColor(Color.Theme.Text.black3)
+                    .frame(width: 24, height: 24)
+                    .padding(12)
+            }
+
+            Image("device_arrow_right")
+                .resizable()
+                .frame(width: 24, height: 24)
+        }
+    }
+
+    @ViewBuilder
+    func arrowAction() -> some View {
+        Image("device_arrow_right")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 24, height: 24)
+    }
+}
+
+extension AccountInfoView {
+    enum Action {
+        case card
+        case copy
+        case arrow
+        case hide
     }
 }
 
 #Preview {
     VStack {
-        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: true)
+        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: true, action: .arrow)
         AccountInfoView(account: AccountModel.mockSamples()[1], isActivity: true)
         AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: false, isSelected: true)
         AccountInfoView(account: AccountModel.mockSamples()[1], isSelected: true)

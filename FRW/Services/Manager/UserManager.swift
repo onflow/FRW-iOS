@@ -34,14 +34,24 @@ class UserManager: ObservableObject {
         loginAnonymousIfNeeded()
     }
 
+    func start() {
+        listenWallet()
+    }
+
     // MARK: Internal
 
     static let shared = UserManager()
 
     @Published
+    var accounts: [[AccountModel]] = []
+
+    @Published var filterAccounts: AccountFilter = .init()
+
+    @Published
     var isMeowDomainEnabled: Bool = false
 
     var userType: UserManager.UserType = .secure
+    var cancellableSet = Set<AnyCancellable>()
 
     @Published
     var activatedUID: String? = LocalUserDefaults.shared.activatedUID {

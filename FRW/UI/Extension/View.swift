@@ -23,14 +23,15 @@ extension View {
     }
 }
 
-extension View {
+public extension View {
     /// Applies modifier and transforms view if condition is met.
     @ViewBuilder
-    public func `if`<Content>(
+    func `if`<Content>(
         _ condition: Bool,
         transform: (Self) -> Content
     ) -> some View
-        where Content: View {
+        where Content: View
+    {
         switch condition {
         case false: self
         case true: transform(self)
@@ -39,14 +40,15 @@ extension View {
 
     /// Applies modifier and transforms view if condition is met, or applies alternate modifier.
     @ViewBuilder
-    public func `if`<IfContent, ElseContent>(
+    func `if`<IfContent, ElseContent>(
         _ condition: Bool,
         ifTransform: (Self) -> IfContent,
         elseTransform: (Self) -> ElseContent
     ) -> some View
         where
         IfContent: View,
-        ElseContent: View {
+        ElseContent: View
+    {
         switch condition {
         case false: ifTransform(self)
         case true: elseTransform(self)
@@ -55,11 +57,12 @@ extension View {
 
     /// Applies modifier and transforms view if value is non-nil.
     @ViewBuilder
-    public func ifLet<Value, Content>(
+    func ifLet<Value, Content>(
         _ value: Value?,
         transform: (Self, Value) -> Content
     ) -> some View
-        where Content: View {
+        where Content: View
+    {
         switch value {
         case let value?: transform(self, value)
         case nil: self
@@ -68,14 +71,15 @@ extension View {
 
     /// Applies modifier and transforms view if value is non-nil, or applies alternate modifier.
     @ViewBuilder
-    public func ifLet<Value, IfContent, ElseContent>(
+    func ifLet<Value, IfContent, ElseContent>(
         _ value: Value?,
         ifTransform: (Self, Value) -> IfContent,
         elseTransform: (Self) -> ElseContent
     ) -> some View
         where
         IfContent: View,
-        ElseContent: View {
+        ElseContent: View
+    {
         switch value {
         case let value?: ifTransform(self, value)
         case nil: elseTransform(self)
@@ -159,7 +163,7 @@ extension View {
             }
         }
     }
-    
+
     @ViewBuilder
     func visibility(_ isVisible: Bool) -> some View {
         if isVisible {
@@ -170,7 +174,7 @@ extension View {
     @ViewBuilder
     func roundedBg(
         cornerRadius: CGFloat = 16,
-        fillColor: Color = .LL.bgForIcon,
+        fillColor: Color = .Summer.cards,
         strokeColor: Color? = nil,
         strokeLineWidth: CGFloat? = nil
     ) -> some View {

@@ -58,6 +58,8 @@ extension LocalUserDefaults {
         case selectedAddress
 
         case filterToken
+
+        case filterAccount
     }
 }
 

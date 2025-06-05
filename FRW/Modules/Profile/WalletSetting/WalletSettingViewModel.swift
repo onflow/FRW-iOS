@@ -24,13 +24,12 @@ class WalletSettingViewModel: ObservableObject {
                     self.storageUsedRatio = info.storageUsedRatio
                     self.storageUsedDesc = info.storageUsedString
                 }
-            } catch {
-                
-            }
+            } catch {}
         }
     }
 
     func resetWalletAction() {
+        // TODO: #multi-account #six
         Router.route(to: RouteMap.Profile.resetWalletConfirm)
     }
 }

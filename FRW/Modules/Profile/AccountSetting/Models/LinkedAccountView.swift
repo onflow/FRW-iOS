@@ -11,6 +11,7 @@ import SwiftUI
 
 // MARK: - LinkedAccountView
 
+// Linked Account list
 struct LinkedAccountView: RouteableView {
     // MARK: Internal
 

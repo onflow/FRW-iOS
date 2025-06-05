@@ -84,8 +84,8 @@ extension ProfileSecureView {
         var body: some View {
             HStack(spacing: 0) {
                 Text(title)
-                    .font(.inter(size: 16, weight: .medium))
-                    .foregroundColor(Color.LL.Neutrals.text)
+                    .font(.inter(size: 16))
+                    .foregroundColor(Color.Theme.Text.black8)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Toggle(isOn: $isOn) {}
@@ -98,10 +98,11 @@ extension ProfileSecureView {
                 Image("icon-black-right-arrow")
                     .renderingMode(.template)
                     .foregroundColor(Color.LL.Button.color)
+                    .frame(width: 24, height: 24)
                     .visibility(style == .arrow ? .visible : .gone)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 52)
+            .padding(18)
         }
     }
 
@@ -117,6 +118,7 @@ extension ProfileSecureView {
                     .foregroundStyle(Color.Theme.Text.black)
 
                 Spacer()
+
                 Button {
                     onEdit()
                 } label: {
@@ -131,6 +133,9 @@ extension ProfileSecureView {
                     .padding(.leading, 4)
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding(18)
+            .roundedBg()
         }
     }
 }

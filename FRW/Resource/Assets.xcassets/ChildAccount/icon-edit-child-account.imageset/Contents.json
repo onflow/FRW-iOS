@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "icon-edit-child-account@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "icon-edit-child-account@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "edit.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

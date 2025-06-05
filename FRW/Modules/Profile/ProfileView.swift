@@ -245,7 +245,10 @@ extension ProfileView {
                     iconName: "icon-wallet",
                     title: "wallets".localized
                 ) {
-                    Router.route(to: RouteMap.Profile.walletList)
+                    let accounts = UserManager.shared.accounts
+                    let currentAddress = WalletManager.shared.selectedAccountAddress ?? ""
+                    let hideAccount = UserManager.shared.filterAccounts.currentFilter
+                    Router.route(to: RouteMap.Profile.walletList(accounts, currentAddress, hideAccount))
                 }
             }
             .padding(.vertical, 20)
@@ -286,25 +289,12 @@ extension ProfileView {
         enum Row {
             case backup(ProfileViewModel)
             case security
-            case linkedAccount
         }
 
         var body: some View {
             VStack {
                 Section {
                     if !vm.isLinkedAccount {
-                        Button {
-                            vm.linkedAccountAction()
-                        } label: {
-                            ProfileView.SettingItemCell(
-                                iconName: Row.linkedAccount.iconName,
-                                title: Row.linkedAccount.title,
-                                style: Row.linkedAccount.style,
-                                desc: Row.linkedAccount.desc
-                            )
-                        }
-                        Divider().background(Color.LL.Neutrals.background)
-
                         Button {
                             if !isDevModel && currentNetwork != .mainnet {
                                 showAlert = true
@@ -343,6 +333,8 @@ extension ProfileView {
                             desc: Row.security.desc
                         )
                     }
+
+                    Divider().background(Color.LL.Neutrals.background)
                 }
             }
             .borderStyle()
@@ -461,8 +453,6 @@ extension ProfileView.ActionSectionView.Row {
             return "icon-backup"
         case .security:
             return "icon-security"
-        case .linkedAccount:
-            return "icon-linked-account"
         }
     }
 
@@ -472,8 +462,6 @@ extension ProfileView.ActionSectionView.Row {
             return "backup".localized
         case .security:
             return "security".localized
-        case .linkedAccount:
-            return "linked_account".localized
         }
     }
 
@@ -482,8 +470,6 @@ extension ProfileView.ActionSectionView.Row {
         case let .backup(vm):
             return .arrow
         case .security:
-            return .arrow
-        case .linkedAccount:
             return .arrow
         }
     }
@@ -501,14 +487,12 @@ extension ProfileView.ActionSectionView.Row {
             }
         case .security:
             return ""
-        case .linkedAccount:
-            return ""
         }
     }
 
     var imageName: String {
         switch self {
-        case let .backup(vm):
+        case .backup:
             return ""
 
         default:
@@ -518,7 +502,7 @@ extension ProfileView.ActionSectionView.Row {
 
     var sysImageColor: Color {
         switch self {
-        case let .backup(vm):
+        case .backup:
             return .clear
         default:
             return .clear

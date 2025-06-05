@@ -19,6 +19,7 @@ class AccountSettingViewModel: ObservableObject {
 
 // MARK: - AccountSettingView
 
+// FIXME: remove this view?
 struct AccountSettingView: RouteableView {
     // MARK: Internal
 

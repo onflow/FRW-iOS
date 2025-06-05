@@ -392,19 +392,17 @@ extension RouteMap {
         case security(Bool)
         case resetWalletConfirm
         case currency
-        case accountSetting
         case accountDetail(ChildAccount)
         case switchProfile
         case editChildAccount(ChildAccount)
         case backToAccountSetting
 
-        case linkedAccount
         case accountKeys
         case devices
         case deviceInfo(DeviceInfoModel)
 
         case keychain
-        case walletList
+        case walletList([[AccountModel]], String, [String])
 
         case wallpaper
         case secureEnclavePrivateKey
@@ -445,7 +443,7 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: ProfileBackupView())
         case let .walletSetting(animated, address):
             Router.coordinator.rootNavi?.push(
-                content: WalletSettingView(address: address),
+                content: FlowAccountDetailView(address: address),
                 animated: animated
             )
         case .walletConnect:
@@ -470,8 +468,6 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: WalletResetConfirmView())
         case .currency:
             navi.push(content: CurrencyListView())
-        case .accountSetting:
-            navi.push(content: AccountSettingView())
         case let .accountDetail(childAccount):
             DispatchQueue.main.async {
                 let vm = ChildAccountDetailViewModel(childAccount: childAccount)
@@ -491,8 +487,6 @@ extension RouteMap.Profile: RouterTarget {
                 return
             }
             navi.popToRootViewController(animated: true)
-        case .linkedAccount:
-            navi.push(content: LinkedAccountView())
         case .accountKeys:
             navi.push(content: AccountKeysView())
         case .devices:
@@ -501,8 +495,8 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: DevicesInfoView(info: model))
         case .keychain:
             navi.push(content: KeychainListView())
-        case .walletList:
-            navi.push(content: WalletListView())
+        case let .walletList(list, address, blackList):
+            navi.push(content: AccountListView(accounts: list, selectedAdress: address, hideAccounts: blackList))
         case .wallpaper:
             navi.push(content: WallpaperView())
         case .secureEnclavePrivateKey:
