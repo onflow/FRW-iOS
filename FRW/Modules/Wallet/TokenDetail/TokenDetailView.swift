@@ -864,7 +864,7 @@ struct CardStyle: ViewModifier {
         content
             .padding(padding)
             .background(
-                RoundedRectangle(cornerRadius: cornerRadius)
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(Color.Theme.Special.white1)
                     .shadow(color: Color.black.opacity(0.08), radius: 4, x: 0, y: 8)
             )

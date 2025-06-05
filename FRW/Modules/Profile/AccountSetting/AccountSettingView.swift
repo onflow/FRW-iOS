@@ -66,9 +66,12 @@ struct AccountSettingView: RouteableView {
 
     func walletInfoCell() -> some View {
         Button {
+            guard let account = WalletManager.shared.mainAccount else {
+                return
+            }
             Router.route(to: RouteMap.Profile.walletSetting(
                 true,
-                WalletManager.shared.getPrimaryWalletAddress() ?? "0x"
+                account
             ))
         } label: {
             HStack(spacing: 18) {

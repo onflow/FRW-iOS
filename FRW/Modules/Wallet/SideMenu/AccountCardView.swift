@@ -5,6 +5,7 @@
 //  Created by cat on 6/5/25.
 //
 
+import FlowWalletKit
 import SwiftUI
 
 struct AccountCardView: View {
@@ -16,7 +17,7 @@ struct AccountCardView: View {
         VStack(spacing: 0) {
             ForEach(accounts, id: \.account.infoAddress) { account in
                 AccountInfoView(account: account, isActivity: false, isSelected: isSelected(account), action: actionType(account)) { _, _ in
-                    Router.route(to: RouteMap.Profile.walletSetting(true, account.account.infoAddress))
+                    Router.route(to: RouteMap.Profile.walletSetting(true, account.account))
                 }
             }
         }

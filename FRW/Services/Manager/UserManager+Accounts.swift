@@ -26,6 +26,17 @@ extension UserManager {
             .store(in: &cancellableSet)
     }
 
+    func mainAccount(by address: String) -> AccountInfoProtocol? {
+        for list in accounts {
+            for account in list {
+                if account.account.infoAddress.lowercased() == address.lowercased() {
+                    return account.mainAccount ?? account.account
+                }
+            }
+        }
+        return nil
+    }
+
     private func refreshAccounts() {
         let list = WalletManager.shared.currentNetworkAccounts
         Task {

@@ -1183,3 +1183,4 @@ Key Store and Private Key.";
 "recover_profile" = "Recover an existing profile";
 "show_in_account" = "Show in account list";
 "remove_account" = "Remove account";
+"linked_description" = "Dapper custodial wallet";

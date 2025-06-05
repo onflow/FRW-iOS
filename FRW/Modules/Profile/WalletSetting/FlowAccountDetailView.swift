@@ -5,24 +5,22 @@
 //  Created by Hao Fu on 7/9/2022.
 //
 
+import FlowWalletKit
 import SwiftUI
 
 struct FlowAccountDetailView: RouteableView {
     // MARK: Lifecycle
 
-    init(address: String) {
-        self.address = address
-        user = WalletManager.shared.walletAccount.readInfo(at: address)
-        showInAccount = !UserManager.shared.filterAccounts.inFilter(address: address)
+    init(account: FlowWalletKit.Account) {
+        self.account = account
+        showInAccount = !UserManager.shared.filterAccounts.inFilter(address: account.hexAddr)
     }
 
     // MARK: Internal
 
-    var address: String
+    @State var account: FlowWalletKit.Account
     @State
     var showAccountEditor = false
-    @State
-    var user: WalletAccount.User
 
     var title: String {
         "account".localized.capitalized
@@ -40,34 +38,9 @@ struct FlowAccountDetailView: RouteableView {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(spacing: 8) {
-                    ProfileSecureView.WalletInfoCell(user: user, onEdit: {
+                    AccountInfoCard(account: account) {
                         showAccountEditor.toggle()
-                    })
-
-                    HStack {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("address".localized)
-                                .font(.inter(size: 12))
-                                .foregroundStyle(Color.Summer.Text.secondary)
-
-                            Text(address)
-                                .font(.inter(size: 16))
-                                .foregroundStyle(Color.Theme.Text.black8)
-                        }
-                        Spacer()
-
-                        Button {
-                            UIPasteboard.general.string = address
-                            HUD.success(title: "Address Copied".localized)
-                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        } label: {
-                            Image("icon_button_copy")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                        }
                     }
-                    .padding(18)
-                    .roundedBg()
 
                     VStack(spacing: 16) {
                         if isSecureEnclave {
@@ -157,9 +130,9 @@ struct FlowAccountDetailView: RouteableView {
                                         return
                                     }
                                     if value {
-                                        UserManager.shared.filterAccounts.removeFilter(uid: uid, address: address)
+                                        UserManager.shared.filterAccounts.removeFilter(uid: uid, address: account.hexAddr)
                                     } else {
-                                        UserManager.shared.filterAccounts.addFilter(uid: uid, address: address)
+                                        UserManager.shared.filterAccounts.addFilter(uid: uid, address: account.hexAddr)
                                     }
                                 }
                         }
@@ -227,7 +200,7 @@ struct FlowAccountDetailView: RouteableView {
         .applyRouteable(self)
         .tracedView(self)
         .popup(isPresented: $showAccountEditor) {
-            WalletAccountEditor(address: address) {
+            WalletAccountEditor(address: account.hexAddr) {
                 reload()
                 showAccountEditor = false
             }
@@ -240,13 +213,14 @@ struct FlowAccountDetailView: RouteableView {
     }
 
     func reload() {
-        user = WalletManager.shared.walletAccount.readInfo(at: address)
+        let user = WalletManager.shared.walletAccount.readInfo(at: account.hexAddr)
+        account = account
         WalletManager.shared.changeNetwork(currentNetwork)
     }
 
     func onlyShowInfo() -> Bool {
         let list = EVMAccountManager.shared.accounts
-            .filter { $0.showAddress.lowercased() == address.lowercased() }
+            .filter { $0.showAddress.lowercased() == account.hexAddr.lowercased() }
         return !list.isEmpty
     }
 
@@ -258,14 +232,4 @@ struct FlowAccountDetailView: RouteableView {
     private var localGreeGas = true
 
     @State private var showInAccount: Bool
-}
-
-// MARK: - WalletSettingView_Previews
-
-struct WalletSettingView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            FlowAccountDetailView(address: "0x")
-        }
-    }
 }

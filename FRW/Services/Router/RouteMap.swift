@@ -6,9 +6,9 @@
 //
 
 import Flow
+import FlowWalletKit
 import SafariServices
 import SwiftUI
-
 import UIKit
 
 // MARK: - RouteMap
@@ -385,7 +385,7 @@ extension RouteMap {
         case editName
         case editAvatar
         case backupChange
-        case walletSetting(Bool, String)
+        case walletSetting(Bool, AccountInfoProtocol)
         case privateKey(Bool)
         case walletConnect
         case manualBackup(Bool)
@@ -441,11 +441,14 @@ extension RouteMap.Profile: RouterTarget {
             }
 
             navi.push(content: ProfileBackupView())
-        case let .walletSetting(animated, address):
-            Router.coordinator.rootNavi?.push(
-                content: FlowAccountDetailView(address: address),
-                animated: animated
-            )
+        case let .walletSetting(animated, account):
+            if let mainAccount = account as? FlowWalletKit.Account {
+                navi.push(content: FlowAccountDetailView(account: mainAccount))
+            } else if let linkedAccount = account as? FlowWalletKit.ChildAccount {
+                navi.push(content: LinkedAccountDetailView(account: linkedAccount))
+            } else if let coa = account as? FlowWalletKit.COA {
+                navi.push(content: COAAccountDetailView(account: coa))
+            }
         case .walletConnect:
             navi.push(content: WalletConnectView())
         case let .privateKey(animated):
