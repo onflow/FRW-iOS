@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "Group 700@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Group 700@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "Frame 48569.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -207,37 +207,21 @@ extension ProfileView {
 
         var body: some View {
             HStack(spacing: 16) {
-                KFImage.url(URL(string: userManager.userInfo?.avatar.convertedAvatarString() ?? ""))
-                    .placeholder {
-                        Image("placeholder")
-                            .resizable()
-                    }
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 82, height: 82)
-                    .cornerRadius(41)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 8) {
-                        Text(userManager.userInfo?.nickname ?? "")
-                            .foregroundColor(.LL.Neutrals.text)
-                            .font(.inter(weight: .semibold))
-
-                        Image("icon-switch-profile")
-                            .renderingMode(.template)
-                    }
-
-//                    Text("@\(userManager.userInfo?.username ?? "")").foregroundColor(.LL.Neutrals.text).font(.inter(size: 14, weight: .medium))
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                ProfileInfoView(userInfo: userManager.userInfo ?? .empty)
+                Image("icon-switch-profile")
+                    .renderingMode(.template)
+                Spacer()
 
                 Button {
                     Router.route(to: RouteMap.Profile.edit)
                 } label: {
                     Image("icon-profile-edit")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                        .background(Color.Summer.cards)
+                        .clipShape(Circle())
                 }
-                .frame(size: CGSize(width: 36, height: 36))
-                .roundedButtonStyle(bgColor: .clear)
+                .buttonStyle(ScaleButtonStyle())
             }
         }
 
