@@ -14,6 +14,7 @@ struct FlowAccountDetailView: RouteableView {
     init(account: FlowWalletKit.Account) {
         self.account = account
         showInAccount = !UserManager.shared.filterAccounts.inFilter(address: account.hexAddr)
+        isSelected = WalletManager.shared.selectedAccountAddress == account.hexAddr
     }
 
     // MARK: Internal
@@ -21,6 +22,8 @@ struct FlowAccountDetailView: RouteableView {
     @State var account: FlowWalletKit.Account
     @State
     var showAccountEditor = false
+
+    var isSelected: Bool
 
     var title: String {
         "account".localized.capitalized
@@ -115,30 +118,32 @@ struct FlowAccountDetailView: RouteableView {
                         .frame(maxWidth: .infinity)
                         .roundedBg()
 
-                        HStack {
-                            Text("show_in_account".localized)
-                                .font(.inter(size: 16))
-                                .foregroundColor(Color.LL.Neutrals.text)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                        if !isSelected {
+                            HStack {
+                                Text("show_in_account".localized)
+                                    .font(.inter(size: 16))
+                                    .foregroundColor(Color.LL.Neutrals.text)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Spacer()
+                                Spacer()
 
-                            Toggle(isOn: $showInAccount) {}
-                                .tint(.LL.Primary.salmonPrimary)
-                                .onChange(of: showInAccount) { value in
-                                    guard let uid = UserManager.shared.activatedUID else {
-                                        return
+                                Toggle(isOn: $showInAccount) {}
+                                    .tint(.LL.Primary.salmonPrimary)
+                                    .onChange(of: showInAccount) { value in
+                                        guard let uid = UserManager.shared.activatedUID else {
+                                            return
+                                        }
+                                        if value {
+                                            UserManager.shared.filterAccounts.removeFilter(uid: uid, address: account.hexAddr)
+                                        } else {
+                                            UserManager.shared.filterAccounts.addFilter(uid: uid, address: account.hexAddr)
+                                        }
                                     }
-                                    if value {
-                                        UserManager.shared.filterAccounts.removeFilter(uid: uid, address: account.hexAddr)
-                                    } else {
-                                        UserManager.shared.filterAccounts.addFilter(uid: uid, address: account.hexAddr)
-                                    }
-                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(18)
+                            .roundedBg()
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(18)
-                        .roundedBg()
 
                         VStack(spacing: 8) {
                             HStack {
