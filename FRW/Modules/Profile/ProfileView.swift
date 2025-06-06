@@ -247,8 +247,7 @@ extension ProfileView {
                 ) {
                     let accounts = UserManager.shared.accounts
                     let currentAddress = WalletManager.shared.selectedAccountAddress ?? ""
-                    let hideAccount = UserManager.shared.filterAccounts.currentFilter
-                    Router.route(to: RouteMap.Profile.walletList(accounts, currentAddress, hideAccount))
+                    Router.route(to: RouteMap.Profile.walletList(accounts, currentAddress))
                 }
             }
             .padding(.vertical, 20)

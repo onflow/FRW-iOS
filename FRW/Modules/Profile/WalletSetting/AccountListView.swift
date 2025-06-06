@@ -5,17 +5,16 @@
 //  Created by cat on 2024/5/28.
 //
 
+import FlowWalletKit
 import SwiftUI
 
 struct AccountListView: RouteableView {
     var accounts: [[AccountModel]]
     var selectedAdress: String
-    var hideAccounts: [String]
 
-    init(accounts: [[AccountModel]], selectedAdress: String, hideAccounts: [String]) {
+    init(accounts: [[AccountModel]], selectedAdress: String) {
         self.accounts = accounts
         self.selectedAdress = selectedAdress
-        self.hideAccounts = hideAccounts
     }
 
     var title: String {
@@ -26,7 +25,7 @@ struct AccountListView: RouteableView {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(0 ..< accounts.count, id: \.self) { index in
-                    AccountCardView(accounts: accounts[index], selectedAddress: selectedAdress, hideAccounts: hideAccounts)
+                    AccountCardView(accounts: accounts[index], selectedAddress: selectedAdress, isHidden: isHidden(accounts: accounts[index]))
                 }
             }
             .padding(.top, 12)
@@ -45,8 +44,15 @@ struct AccountListView: RouteableView {
 //            }
 //        })
     }
+
+    func isHidden(accounts: [AccountModel]) -> Bool {
+        guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
+            return false
+        }
+        return UserManager.shared.filterAccounts.inFilter(with: mainAccount)
+    }
 }
 
 #Preview {
-    AccountListView(accounts: [AccountModel.mockSamples(), AccountModel.mockSamples()], selectedAdress: "", hideAccounts: [])
+    AccountListView(accounts: [AccountModel.mockSamples(), AccountModel.mockSamples()], selectedAdress: "")
 }

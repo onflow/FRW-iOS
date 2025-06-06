@@ -402,7 +402,7 @@ extension RouteMap {
         case deviceInfo(DeviceInfoModel)
 
         case keychain
-        case walletList([[AccountModel]], String, [String])
+        case walletList([[AccountModel]], String)
 
         case wallpaper
         case secureEnclavePrivateKey
@@ -498,8 +498,8 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: DevicesInfoView(info: model))
         case .keychain:
             navi.push(content: KeychainListView())
-        case let .walletList(list, address, blackList):
-            navi.push(content: AccountListView(accounts: list, selectedAdress: address, hideAccounts: blackList))
+        case let .walletList(list, address):
+            navi.push(content: AccountListView(accounts: list, selectedAdress: address))
         case .wallpaper:
             navi.push(content: WallpaperView())
         case .secureEnclavePrivateKey:

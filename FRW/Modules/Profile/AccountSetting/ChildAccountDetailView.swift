@@ -97,29 +97,29 @@ class ChildAccountDetailViewModel: ObservableObject {
 
         Task {
             do {
-                let txId = try await FlowNetwork.unlinkChildAccount(childAccount.addr ?? "")
-                let data = try JSONEncoder().encode(self.childAccount)
-                let holder = TransactionManager.TransactionHolder(
-                    id: txId,
-                    type: .unlinkAccount,
-                    data: data
-                )
-
-                TransactionManager.shared.newTransaction(holder: holder)
-                self.isUnlinking = false
-                self.isPresent = false
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    Router.pop()
-                }
-            } catch {
-                log.error("unlink failed", context: error)
-                DispatchQueue.main.async {
-                    self.isUnlinking = false
-                    self.isPresent = false
-                }
-
-                HUD.error(title: "request_failed".localized)
+//                let txId = try await FlowNetwork.unlinkChildAccount(childAccount.addr ?? "")
+//                let data = try JSONEncoder().encode(self.childAccount)
+//                let holder = TransactionManager.TransactionHolder(
+//                    id: txId,
+//                    type: .unlinkAccount,
+//                    data: data
+//                )
+//
+//                TransactionManager.shared.newTransaction(holder: holder)
+//                self.isUnlinking = false
+//                self.isPresent = false
+//
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    Router.pop()
+//                }
+//            } catch {
+//                log.error("unlink failed", context: error)
+//                DispatchQueue.main.async {
+//                    self.isUnlinking = false
+//                    self.isPresent = false
+//                }
+//
+//                HUD.error(title: "request_failed".localized)
             }
         }
     }

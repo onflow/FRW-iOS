@@ -13,7 +13,7 @@ struct FlowAccountDetailView: RouteableView {
 
     init(account: FlowWalletKit.Account) {
         self.account = account
-        showInAccount = !UserManager.shared.filterAccounts.inFilter(address: account.hexAddr)
+        showInAccount = !UserManager.shared.filterAccounts.inFilter(with: account)
         isSelected = WalletManager.shared.selectedAccountAddress == account.hexAddr
     }
 
@@ -130,13 +130,10 @@ struct FlowAccountDetailView: RouteableView {
                                 Toggle(isOn: $showInAccount) {}
                                     .tint(.LL.Primary.salmonPrimary)
                                     .onChange(of: showInAccount) { value in
-                                        guard let uid = UserManager.shared.activatedUID else {
-                                            return
-                                        }
                                         if value {
-                                            UserManager.shared.filterAccounts.removeFilter(uid: uid, address: account.hexAddr)
+                                            UserManager.shared.filterAccounts.removeFilter(with: account)
                                         } else {
-                                            UserManager.shared.filterAccounts.addFilter(uid: uid, address: account.hexAddr)
+                                            UserManager.shared.filterAccounts.addFilter(with: account)
                                         }
                                     }
                             }

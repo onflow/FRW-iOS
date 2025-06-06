@@ -5,6 +5,7 @@
 //  Created by cat on 6/5/25.
 //
 
+import FlowWalletKit
 import Foundation
 import SwiftUI
 
@@ -32,33 +33,41 @@ class AccountFilter {
 }
 
 extension AccountFilter {
-    var currentFilter: [String] {
-        guard let uid = UserManager.shared.activatedUID else {
-            return []
+    func inFilter(with account: FlowWalletKit.Account) -> Bool {
+        guard let key = account.fullWeightKey?.publicKey.hex.prefix(8) else {
+            return false
         }
-        return filterAccounts[uid] ?? []
+        let address = account.hexAddr
+        let publicKey = String(key)
+        return filterAccounts[publicKey]?.contains(address.lowercased()) ?? false
     }
 
-    func inFilter(address: String) -> Bool {
-        currentFilter.contains(address.lowercased())
-    }
-
-    func addFilter(uid: String, address: String) {
+    func addFilter(with account: FlowWalletKit.Account) {
+        let address = account.hexAddr
         guard let currentAddr = WalletManager.shared.selectedAccountAddress, address.lowercased() != currentAddr.lowercased() else {
             return
         }
-        var list = filterAccounts[uid] ?? []
+        guard let key = account.fullWeightKey?.publicKey.hex.prefix(8) else {
+            return
+        }
+        let publicKey = String(key)
+        var list = filterAccounts[publicKey] ?? []
         if !list.contains(address.lowercased()) {
             list.append(address.lowercased())
-            filterAccounts[uid] = list
+            filterAccounts[publicKey] = list
         }
         saveFilterAccounts()
     }
 
-    func removeFilter(uid: String, address: String) {
-        var list = filterAccounts[uid] ?? []
+    func removeFilter(with account: FlowWalletKit.Account) {
+        let address = account.hexAddr
+        guard let key = account.fullWeightKey?.publicKey.hex.prefix(8) else {
+            return
+        }
+        let publicKey = String(key)
+        var list = filterAccounts[publicKey] ?? []
         list.removeAll { $0 == address.lowercased() }
-        filterAccounts[uid] = list
+        filterAccounts[publicKey] = list
         saveFilterAccounts()
     }
 }
