@@ -9,6 +9,7 @@ import BigInt
 import Combine
 import CryptoKit
 import Flow
+import FlowWalletKit
 import Foundation
 import Web3Core
 
@@ -413,12 +414,12 @@ extension FlowNetwork {
         return response
     }
 
-    static func unlinkChildAccount(_ address: String) async throws -> Flow.ID {
+    static func unlinkChildAccount(_ address: String, mainAccount: FlowWalletKit.Account) async throws -> Flow.ID {
         let txId = try await sendTransaction(
             by: \.hybridCustody?.unlinkChildAccount,
-            argumentList: [.address(Flow.Address(hex: address))]
+            argumentList: [.address(Flow.Address(hex: address))],
+            fromAccount: mainAccount
         )
-
         return txId
     }
 
@@ -1237,7 +1238,8 @@ extension FlowNetwork {
 
     private static func sendTransaction(
         by keyPath: KeyPath<CadenceModel, String?>,
-        argumentList: [Flow.Cadence.FValue]
+        argumentList: [Flow.Cadence.FValue],
+        fromAccount: FlowWalletKit.Account? = nil
     ) async throws -> Flow.ID {
         let funcName = keyPath.funcName()
         guard let cadence = CadenceManager.shared.current[keyPath: keyPath]?.toFunc() else {
@@ -1256,7 +1258,8 @@ extension FlowNetwork {
         return try await sendTransaction(
             funcName: funcName,
             cadenceStr: replacedCadence,
-            argumentList: argumentList
+            argumentList: argumentList,
+            fromAccount: fromAccount
         )
     }
 
@@ -1335,17 +1338,20 @@ extension FlowNetwork {
     private static func sendTransaction(
         funcName: String,
         cadenceStr: String,
-        argumentList: [Flow.Cadence.FValue]
+        argumentList: [Flow.Cadence.FValue],
+        fromAccount: FlowWalletKit.Account? = nil
     ) async throws -> Flow.ID {
-        guard let fromAddress = WalletManager.shared.getPrimaryWalletAddress() else {
+        let currentAddr = await WalletManager.shared.getPrimaryWalletAddress()
+        let keyIndex = await WalletManager.shared.keyIndex
+        let fromKeyIndex = fromAccount?.keyIndex ?? keyIndex
+        guard let fromAddress = fromAccount?.hexAddr ?? currentAddr else {
             log.error("[Cadence] transaction invalid address on \(funcName)")
             throw LLError.invalidAddress
         }
         do {
             let needBridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
             let bridgeFeePayerAddress = Flow.Address(hex: RemoteConfigManager.shared.bridgeFeePayer)
-            let fromKeyIndex = WalletManager.shared.keyIndex
-            let signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
+            let signers = await WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
             let tranId = try await flow
                 .sendTransaction(signers: signers) {
                     cadence {

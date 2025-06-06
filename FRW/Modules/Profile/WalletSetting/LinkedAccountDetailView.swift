@@ -78,7 +78,6 @@ struct LinkedAccountDetailView: RouteableView {
                 Spacer()
 
                 HStack(spacing: 6) {
-
                     Text("view_empty".localized)
                         .font(.inter(size: 12))
                         .foregroundStyle(Color.Theme.Text.text4)
@@ -94,11 +93,11 @@ struct LinkedAccountDetailView: RouteableView {
                 }
             }
             .padding(.bottom, 24)
-            
+
             SegmentedControl(
                 tabs: [
                     .text("collections".localized),
-                    .text("coins_cap".localized)
+                    .text("coins_cap".localized),
                 ],
                 selectedIndex: $selectedIndex,
                 height: 32,
@@ -113,7 +112,7 @@ struct LinkedAccountDetailView: RouteableView {
             }
             .cardStyle(padding: 0)
             .padding(.bottom, 18)
-            
+
             if viewModel.accessibleItems.isEmpty, !viewModel.isLoading {
                 emptyAccessibleView
             }
@@ -184,7 +183,7 @@ struct AccessibleItemView: View {
             Text(item.subtitle)
                 .foregroundColor(Color.Summer.Text.secondary)
                 .font(.inter(size: 12))
-            
+
             Image("device_arrow_right")
                 .resizable()
                 .frame(width: 24, height: 24)
@@ -198,4 +197,3 @@ struct AccessibleItemView: View {
         }
     }
 }
-

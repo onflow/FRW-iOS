@@ -26,6 +26,10 @@ extension UserManager {
             .store(in: &cancellableSet)
     }
 
+    func unlinkedAccount() {
+        refreshAccounts()
+    }
+
     func mainAccount(by address: String) -> AccountInfoProtocol? {
         for list in accounts {
             for account in list {

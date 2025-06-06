@@ -51,6 +51,11 @@ class LinkedAccountDetailViewModel: ObservableObject {
             return
         }
 
+        if childAccount.infoAddress == WalletManager.shared.selectedAccountAddress {
+            HUD.info(title: "", message: "unlinked_current_message".localized)
+            return
+        }
+
         if isPresent {
             isPresent = false
         }
@@ -87,7 +92,17 @@ class LinkedAccountDetailViewModel: ObservableObject {
 
         Task {
             do {
-                let txId = try await FlowNetwork.unlinkChildAccount(childAccount.infoAddress)
+                guard let mainAccount = UserManager.shared.mainAccount(by: childAccount.infoAddress) as? FlowWalletKit.Account else {
+                    log.error("unlink failed,don't find main account. \(childAccount.infoAddress)")
+                    DispatchQueue.main.async {
+                        self.isUnlinking = false
+                        self.isPresent = false
+                    }
+
+                    HUD.error(title: "unlinked_error".localized)
+                    return
+                }
+                let txId = try await FlowNetwork.unlinkChildAccount(childAccount.infoAddress, mainAccount: mainAccount)
                 let data = try JSONEncoder().encode(self.childAccount)
                 let holder = TransactionManager.TransactionHolder(
                     id: txId,
@@ -98,9 +113,12 @@ class LinkedAccountDetailViewModel: ObservableObject {
                 TransactionManager.shared.newTransaction(holder: holder)
                 self.isUnlinking = false
                 self.isPresent = false
-
+                let result = try await txId.onceSealed()
+                if !result.isFailed {
+                    UserManager.shared.unlinkedAccount()
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    Router.pop()
+                    Router.popToRoot()
                 }
             } catch {
                 log.error("unlink failed", context: error)
