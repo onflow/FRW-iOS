@@ -6,12 +6,13 @@
 //
 
 import FlowWalletKit
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct LinkedAccountDetailView: RouteableView {
     @StateObject var viewModel: LinkedAccountDetailViewModel
-    
+    @State private var selectedIndex: Int = 0
+
     init(account: FlowWalletKit.ChildAccount) {
         _viewModel = StateObject(wrappedValue: LinkedAccountDetailViewModel(childAccount: account))
     }
@@ -19,34 +20,56 @@ struct LinkedAccountDetailView: RouteableView {
     var title: String {
         "linked_account".localized
     }
-    
+
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack {
                 AccountInfoCard(account: viewModel.childAccount) {
-                    //TODO: Edit
+                    // TODO: Edit
                 }
-                
+
                 LineView()
                     .padding(.top, 36)
                     .padding(.bottom, 16)
-                
+
                 accessibleView
-                
-                
             }
             .padding(.horizontal, 18)
             .padding(.vertical, 12)
-            .backgroundFill(Color.Theme.Background.white)
-            
         }
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                viewModel.unlinkConfirmAction()
+            } label: {
+                Text("unlink_account".localized)
+                    .font(.inter(size: 16, weight: .bold))
+                    .foregroundColor(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.Theme.Accent.red)
+                    .cornerRadius(16)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .padding(.horizontal, 18)
+        }
+        .backgroundFill(Color.Theme.Background.white)
+        .clipped()
         .applyRouteable(self)
         .tracedView(self)
+        .halfSheet(
+            showSheet: $viewModel.isPresent,
+            autoResizing: true,
+            backgroundColor: Color.LL.Neutrals.background
+        ) {
+            UnlinkConfirmView(childAccount: viewModel.childAccount) {
+                viewModel.doUnlinkAction()
+            }
+        }
     }
 
     @ViewBuilder
     var accessibleView: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text("accessible_cap".localized)
                     .foregroundColor(Color.Theme.Text.black8)
@@ -55,9 +78,7 @@ struct LinkedAccountDetailView: RouteableView {
                 Spacer()
 
                 HStack(spacing: 6) {
-//                    Image(vm.showEmptyCollection ? "icon-empty-mark" : "icon-right-mark")
-//                        .resizable()
-//                        .frame(width: 11, height: 11)
+
                     Text("view_empty".localized)
                         .font(.inter(size: 12))
                         .foregroundStyle(Color.Theme.Text.text4)
@@ -72,15 +93,31 @@ struct LinkedAccountDetailView: RouteableView {
                         .frame(width: 2)
                 }
             }
-            .padding(.bottom, 8)
-            //TODO: #six #multi-account  segment & cell
-            LLSegmenControl(titles: ["collections".localized, "coins_cap".localized]) { idx in
-                viewModel.switchTab(index: idx)
+            .padding(.bottom, 24)
+            
+            SegmentedControl(
+                tabs: [
+                    .text("collections".localized),
+                    .text("coins_cap".localized)
+                ],
+                selectedIndex: $selectedIndex,
+                height: 32,
+                font: .inter(size: 12, weight: .w700),
+                activeTint: .Summer.Text.primary,
+                inActiveTint: .Summer.Text.primary
+            ) { size in
+                CapsuleIndicator(color: .Summer.dark10, size: size)
             }
+            .onChange(of: selectedIndex) { index in
+                viewModel.switchTab(index: index)
+            }
+            .cardStyle(padding: 0)
+            .padding(.bottom, 18)
+            
             if viewModel.accessibleItems.isEmpty, !viewModel.isLoading {
                 emptyAccessibleView
             }
-            VStack {
+            VStack(spacing: 0) {
                 ForEach(viewModel.accessibleItems.indices, id: \.self) { idx in
                     AccessibleItemView(item: viewModel.accessibleItems[idx]) { item in
                         if let collectionInfo = item as? NFTCollection,
@@ -88,12 +125,12 @@ struct LinkedAccountDetailView: RouteableView {
                            !collectionInfo.isEmpty
                         {
                             let addr = viewModel.childAccount.infoAddress
-                            //TODO: #multi-account
-    //                        Router.route(to: RouteMap.NFT.collectionDetail(
-    //                            addr,
-    //                            pathId,
-    //                            viewModel.childAccount
-    //                        ))
+                            // TODO: #multi-account
+//                            Router.route(to: RouteMap.NFT.collectionDetail(
+//                                addr,
+//                                pathId,
+//                                viewModel.childAccount
+//                            ))
                         }
                     }
                     if idx != viewModel.accessibleItems.count - 1 {
@@ -101,11 +138,11 @@ struct LinkedAccountDetailView: RouteableView {
                     }
                 }
             }
-            .cardStyle()
+            .cardStyle(padding: EdgeInsets(top: 0, leading: 18, bottom: 0, trailing: 18))
             .mockPlaceholder(viewModel.isLoading)
         }
     }
-    
+
     var emptyAccessibleView: some View {
         HStack {
             Text(viewModel.accessibleEmptyTitle)
@@ -133,29 +170,27 @@ struct AccessibleItemView: View {
                 }
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 24, height: 24)
-                .cornerRadius(12, style: .continuous)
+                .frame(width: 36, height: 36)
+                .clipShape(Circle())
 
             Text(item.title)
-                .foregroundColor(Color.LL.Neutrals.text)
-                .font(.inter(size: 14, weight: .semibold))
-                .lineLimit(2)
+                .foregroundColor(Color.Summer.Text.primary)
+                .truncationMode(.middle)
+                .font(.inter(size: 14))
+                .lineLimit(1)
 
-            Spacer()
+            Spacer(minLength: 14)
 
             Text(item.subtitle)
-                .foregroundColor(Color.LL.Neutrals.text3)
+                .foregroundColor(Color.Summer.Text.secondary)
                 .font(.inter(size: 12))
-            Image("icon-black-right-arrow")
-                .renderingMode(.template)
-                .foregroundColor(Color.LL.Neutrals.text2)
-                .visibility(item.isShowNext ? .visible : .gone)
+            
+            Image("device_arrow_right")
+                .resizable()
+                .frame(width: 24, height: 24)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 48)
-        .padding(.horizontal, 16)
-        .background(Color.LL.background)
-        .cornerRadius(16, style: .circular)
+        .frame(height: 70)
         .onTapGesture {
             if let onClick = onClick {
                 onClick(item)
@@ -163,4 +198,4 @@ struct AccessibleItemView: View {
         }
     }
 }
-#Preview {}
+

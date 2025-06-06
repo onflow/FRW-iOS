@@ -62,3 +62,14 @@ extension FlowModel {
 //        let traits: NFTTrait?
     }
 }
+
+struct ChildAccessibleCollectionModel: Codable {
+    let id: String
+    let idList: [UInt64]
+    let display: AccessibleCollectionDisplay?
+}
+
+struct AccessibleCollectionDisplay: Codable {
+    let name: String
+    let squareImage: FlowModel.Media?
+}

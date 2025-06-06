@@ -36,7 +36,7 @@ struct FlowAccountDetailView: RouteableView {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 8) {
                     AccountInfoCard(account: account) {
                         showAccountEditor.toggle()
@@ -179,8 +179,8 @@ struct FlowAccountDetailView: RouteableView {
                 }
                 .padding(.horizontal, 18)
             }
-
-            VStack(alignment: .trailing) {
+            .clipped()
+            .safeAreaInset(edge: .bottom) {
                 Button {
                     vm.resetWalletAction()
                 } label: {
@@ -189,12 +189,13 @@ struct FlowAccountDetailView: RouteableView {
                         .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(.LL.Warning.warning2)
+                        .background(Color.Theme.Accent.red)
                         .cornerRadius(16)
                 }
+                .buttonStyle(ScaleButtonStyle())
                 .padding(.horizontal, 18)
+                .visibility(onlyShowInfo() ? .gone : .visible)
             }
-            .visibility(onlyShowInfo() ? .gone : .visible)
         }
         .backgroundFill(Color.Theme.Background.white)
         .applyRouteable(self)

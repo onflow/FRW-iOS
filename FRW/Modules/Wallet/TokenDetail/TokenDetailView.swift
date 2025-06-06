@@ -858,7 +858,7 @@ struct BorderStyle: ViewModifier {
 
 struct CardStyle: ViewModifier {
     let cornerRadius: CGFloat
-    let padding: CGFloat
+    let padding: EdgeInsets
 
     func body(content: Content) -> some View {
         content
@@ -877,6 +877,10 @@ extension View {
     }
 
     func cardStyle(padding: CGFloat = 18, cornerRadius: CGFloat = 16) -> some View {
+        modifier(CardStyle(cornerRadius: cornerRadius, padding: .init(top: padding, leading: padding, bottom: padding, trailing: padding)))
+    }
+
+    func cardStyle(padding: EdgeInsets, cornerRadius: CGFloat = 16) -> some View {
         modifier(CardStyle(cornerRadius: cornerRadius, padding: padding))
     }
 }

@@ -33,7 +33,7 @@ struct SideMenuView: View {
                     }
                     .padding(.top, proxy.safeAreaInsets.top + 16)
 
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         VStack(spacing: 24) {
                             ActivityAccountView
                             OtherAccountsView

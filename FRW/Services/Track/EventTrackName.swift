@@ -17,7 +17,7 @@ protocol EventTrackNameProtocol {
 
 extension EventTrack {
     enum General: String, EventTrackNameProtocol {
-        case rpcError = "script_error"
+        case rpcError = "0x0ea1b42d960ae36e"
         case delegationCreated = "delegation_created"
         case rampClicked = "on_ramp_clicked"
         case coaCreation = "coa_creation"

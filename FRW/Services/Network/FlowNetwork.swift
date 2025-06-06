@@ -483,6 +483,21 @@ extension FlowNetwork {
         return result
     }
 
+    static func fetchChildAccessibleCollectionList(parent: String, child: String) async throws -> [ChildAccessibleCollectionModel] {
+        let cadence = CadenceManager.shared.current.hybridCustody?.getAccessibleCollectionAndIdsDisplay?
+            .toFunc() ?? ""
+        let cadenceString = cadence.replace(by: ScriptAddress.addressMap())
+        let parentAddress = Flow.Address(hex: parent)
+        let childAddress = Flow.Address(hex: child)
+        let response = try await flow.accessAPI
+            .executeScriptAtLatestBlock(
+                script: Flow.Script(text: cadenceString),
+                arguments: [.address(parentAddress), .address(childAddress)]
+            )
+        let result = try response.decode([ChildAccessibleCollectionModel].self)
+        return result
+    }
+
     static func fetchAccessibleFT(
         parent: String,
         child: String

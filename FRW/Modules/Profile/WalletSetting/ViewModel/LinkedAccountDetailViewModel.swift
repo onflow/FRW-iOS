@@ -47,11 +47,6 @@ class LinkedAccountDetailViewModel: ObservableObject {
     }
 
     func unlinkConfirmAction() {
-        if !checkChildAcountExist() {
-            Router.pop()
-            return
-        }
-
         if checkUnlinkingTransactionIsProcessing() {
             return
         }
@@ -154,9 +149,8 @@ class LinkedAccountDetailViewModel: ObservableObject {
         isLoading = true
 
         Task {
-            let child = self.childAccount.infoAddress
-            guard let parent = WalletManager.shared.getPrimaryWalletAddress()
-            else {
+            let childAddr = self.childAccount.infoAddress
+            guard let parent = UserManager.shared.mainAccount(by: childAddr)?.infoAddress else {
                 await MainActor.run {
                     self.collections = []
                     self.accessibleItems = []
@@ -165,25 +159,30 @@ class LinkedAccountDetailViewModel: ObservableObject {
             }
 
             do {
-                let result = try await FlowNetwork.fetchAccessibleCollection(
+                let result = try await FlowNetwork.fetchChildAccessibleCollectionList(
                     parent: parent,
-                    child: child
+                    child: childAddr
                 )
                 let response: [NFTCollection] = try await Network
                     .request(FRWAPI.NFT.userCollection(
-                        child,
+                        childAddr,
                         .cadence
                     ))
                 let collectionList = response
 
-                let resultList: [NFTCollection] = result.compactMap { item in
-                    if let contractName = item.split(separator: ".")[safe: 2] {
+                var resultList: [NFTCollection] = result.compactMap { item in
+
+                    if let contractName = item.id.split(separator: ".")[safe: 2] {
                         if let model = NFTCatalogCache.cache.find(by: String(contractName)) {
-                            return NFTCollection(collection: model.collection, count: 0)
+                            return NFTCollection(collection: model.collection, count: item.idList.count)
                         }
                     }
                     return nil
                 }
+
+                #if DEBUG
+                    resultList = response
+                #endif
 
                 let tmpList = resultList.map { model in
                     var model = model
@@ -214,15 +213,15 @@ class LinkedAccountDetailViewModel: ObservableObject {
         isLoading = true
 
         Task {
-            let child = self.childAccount.infoAddress
-            guard let parent = WalletManager.shared.getPrimaryWalletAddress()
+            let childAddr = self.childAccount.infoAddress
+            guard let parent = UserManager.shared.mainAccount(by: childAddr)?.infoAddress
             else {
                 self.coins = []
                 self.accessibleItems = []
                 return
             }
 
-            let result = try await FlowNetwork.fetchAccessibleFT(parent: parent, child: child)
+            let result = try await FlowNetwork.fetchAccessibleFT(parent: parent, child: childAddr)
             self.coins = result
             self.accessibleItems = result
             self.isLoading = false

@@ -109,7 +109,6 @@ extension CadenceModel {
         let getAccessibleCoinInfo: String?
         let getAccessibleCollectionAndIds: String?
         let getAccessibleCollectionAndIdsDisplay: String?
-        let getAccessibleCollectionsAndIds: String?
 
         let getAccessibleFungibleToken: String?
         let getChildAccount: String?

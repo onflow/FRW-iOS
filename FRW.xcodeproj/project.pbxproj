@@ -1068,6 +1068,10 @@
 		4E2E8CBA2C61B32C00095D5B /* FlowLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2E8CB82C61B32C00095D5B /* FlowLog.swift */; };
 		4E2E8CBD2C61B9A800095D5B /* LogView in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2E8CBC2C61B9A800095D5B /* LogView */; };
 		4E2E8CBF2C61BB2300095D5B /* LogView in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2E8CBE2C61BB2300095D5B /* LogView */; };
+		4E2F22B92DF2DAC100EF0FE8 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22B82DF2DAC100EF0FE8 /* SegmentedControl.swift */; };
+		4E2F22BA2DF2DAC100EF0FE8 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22B82DF2DAC100EF0FE8 /* SegmentedControl.swift */; };
+		4E2F22BC2DF307E600EF0FE8 /* UnlinkConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22BB2DF307E600EF0FE8 /* UnlinkConfirmView.swift */; };
+		4E2F22BD2DF307E600EF0FE8 /* UnlinkConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22BB2DF307E600EF0FE8 /* UnlinkConfirmView.swift */; };
 		4E2FA68E2CF40FE700D46EA7 /* ReownWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA68D2CF40FE700D46EA7 /* ReownWalletKit */; };
 		4E2FA6902CF40FE700D46EA7 /* WalletConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA68F2CF40FE700D46EA7 /* WalletConnect */; };
 		4E2FA6922CF40FE700D46EA7 /* WalletConnectIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA6912CF40FE700D46EA7 /* WalletConnectIdentity */; };
@@ -2603,6 +2607,8 @@
 		4E297BDE2DC9FDAD006A8052 /* ManagerTokensItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerTokensItemView.swift; sourceTree = "<group>"; };
 		4E2B704C2AF3727F004F00A0 /* KeyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyResponse.swift; sourceTree = "<group>"; };
 		4E2E8CB82C61B32C00095D5B /* FlowLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLog.swift; sourceTree = "<group>"; };
+		4E2F22B82DF2DAC100EF0FE8 /* SegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		4E2F22BB2DF307E600EF0FE8 /* UnlinkConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlinkConfirmView.swift; sourceTree = "<group>"; };
 		4E30D8092B161F1800A49DAF /* ServiceConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ServiceConfig.plist; sourceTree = "<group>"; };
 		4E30D80B2B161F2400A49DAF /* ServiceConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ServiceConfig.plist; sourceTree = "<group>"; };
 		4E30D80D2B161F3F00A49DAF /* ServiceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConfig.swift; sourceTree = "<group>"; };
@@ -4931,6 +4937,7 @@
 				4EFD70CE2DE40A7800BB7302 /* FCheckBox.swift */,
 				4EE43F042DE8067B00DB8745 /* AvatarView.swift */,
 				4E7DC9332DF0189E00A14B60 /* ProfileAvatar.swift */,
+				4E2F22B82DF2DAC100EF0FE8 /* SegmentedControl.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -5402,6 +5409,7 @@
 			isa = PBXGroup;
 			children = (
 				4E7DC94A2DF19AC200A14B60 /* AccountDetailElement.swift */,
+				4E2F22BB2DF307E600EF0FE8 /* UnlinkConfirmView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7443,6 +7451,7 @@
 				15DC21D127819C56000B187A /* VPickableItems.swift in Sources */,
 				6A164F622845F1CB0026B31E /* EnvironmentValues+Extensions.swift in Sources */,
 				15DC211D27819C56000B187A /* VSpinner.swift in Sources */,
+				4E2F22B92DF2DAC100EF0FE8 /* SegmentedControl.swift in Sources */,
 				6AF2ED962836539E00F06AD3 /* BaseDivider.swift in Sources */,
 				6A11596F288E7134005EF797 /* RouteMap.swift in Sources */,
 				4EB60F90286825960025DD72 /* ContextMenuPreview.swift in Sources */,
@@ -7900,6 +7909,7 @@
 				15DC21B127819C56000B187A /* UIVIew.SafeAreas.swift in Sources */,
 				4EE090A82DB0ABB8001515FE /* ZipFile.swift in Sources */,
 				154B8913276A1EEB00780E93 /* ImageBook.swift in Sources */,
+				4E2F22BC2DF307E600EF0FE8 /* UnlinkConfirmView.swift in Sources */,
 				15DC212F27819C56000B187A /* VWheelPickerState.swift in Sources */,
 				15DC212527819C56000B187A /* VSpinnerContinous.swift in Sources */,
 				4ED2D7772850DDC200B9A572 /* ColorsFromImage.swift in Sources */,
@@ -8342,6 +8352,7 @@
 				15C58AFF2868A4EE00BD4FC6 /* EnvironmentValues+Extensions.swift in Sources */,
 				15C58B002868A4EE00BD4FC6 /* VSpinner.swift in Sources */,
 				15C58B012868A4EE00BD4FC6 /* BaseDivider.swift in Sources */,
+				4E2F22BA2DF2DAC100EF0FE8 /* SegmentedControl.swift in Sources */,
 				6A11596E288E7134005EF797 /* RouteMap.swift in Sources */,
 				15C58B022868A4EE00BD4FC6 /* ContextMenuPreview.swift in Sources */,
 				15C58B032868A4EE00BD4FC6 /* VList.swift in Sources */,
@@ -8799,6 +8810,7 @@
 				4E2E8CB92C61B32C00095D5B /* FlowLog.swift in Sources */,
 				15C58BD52868A4EE00BD4FC6 /* VWheelPickerState.swift in Sources */,
 				4EE090A72DB0ABB8001515FE /* ZipFile.swift in Sources */,
+				4E2F22BD2DF307E600EF0FE8 /* UnlinkConfirmView.swift in Sources */,
 				15C58BD62868A4EE00BD4FC6 /* VSpinnerContinous.swift in Sources */,
 				15C58BD72868A4EE00BD4FC6 /* ColorsFromImage.swift in Sources */,
 				6A15C1FF286D914000C2EBA2 /* TokenDetailView.swift in Sources */,
