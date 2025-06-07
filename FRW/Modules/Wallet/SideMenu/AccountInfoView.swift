@@ -56,6 +56,7 @@ struct AccountInfoView: View {
                         Text(account.showAmount)
                             .font(.inter(size: 12))
                             .foregroundStyle(Color.Summer.Text.secondary)
+                            .animation(.easeInOut, value: account.showAmount)
                         Spacer()
                     }
                 }
@@ -69,6 +70,8 @@ struct AccountInfoView: View {
                     hideAction()
                 case .card:
                     HStack {}
+                case let .check(isCheck):
+                    checkAction(isCheck: isCheck)
                 }
             }
             .padding(.leading, isActivity ? 12 : 5)
@@ -133,6 +136,21 @@ struct AccountInfoView: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 24, height: 24)
     }
+
+    @ViewBuilder
+    func checkAction(isCheck: Bool) -> some View {
+        HStack {
+            if account.isMain {
+                Button {
+                    onClick?(account, .check(isCheck))
+                } label: {
+                    Image(isCheck ? .checkBoxSelected : .checkBoxNormal)
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                }
+            }
+        }
+    }
 }
 
 extension AccountInfoView {
@@ -141,6 +159,7 @@ extension AccountInfoView {
         case copy
         case arrow
         case hide
+        case check(Bool)
     }
 }
 

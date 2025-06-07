@@ -25,7 +25,7 @@ struct AccountListView: RouteableView {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(0 ..< accounts.count, id: \.self) { index in
-                    AccountCardView(accounts: accounts[index], selectedAddress: selectedAdress, isHidden: isHidden(accounts: accounts[index]))
+                    AccountCardView(accounts: accounts[index], selectedAddress: selectedAdress, action: action(with: accounts[index]))
                 }
             }
             .padding(.top, 12)
@@ -45,11 +45,11 @@ struct AccountListView: RouteableView {
 //        })
     }
 
-    func isHidden(accounts: [AccountModel]) -> Bool {
+    func action(with accounts: [AccountModel]) -> AccountInfoView.Action {
         guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
-            return false
+            return .arrow
         }
-        return UserManager.shared.filterAccounts.inFilter(with: mainAccount)
+        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? .card : .arrow
     }
 }
 

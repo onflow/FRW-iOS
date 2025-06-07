@@ -1186,3 +1186,7 @@ Key Store and Private Key.";
 "linked_description" = "Dapper custodial wallet";
 "unlinked_error" = "unlink failed.";
 "unlinked_current_message" = "don't unlink the selected account";
+"import_profile" = "Import profile";
+"confirm_which_account" = "Confirm which\naccount to import";
+"confirm_which_account_des" = "Importing an account will add your profiles key and backup mechanisms to this account, which Flow Wallet will use going forward.";
+"import_profile_error" = "don't find any account,please check it";

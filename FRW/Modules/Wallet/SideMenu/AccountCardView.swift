@@ -11,12 +11,12 @@ import SwiftUI
 struct AccountCardView: View {
     var accounts: [AccountModel]
     var selectedAddress: String
-    var isHidden: Bool
+    var action: AccountInfoView.Action
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(accounts, id: \.account.infoAddress) { account in
-                AccountInfoView(account: account, isActivity: false, isSelected: isSelected(account), action: isHidden ? .hide : .arrow) { _, _ in
+                AccountInfoView(account: account, isActivity: false, isSelected: isSelected(account), action: action) { _, _ in
                     Router.route(to: RouteMap.Profile.walletSetting(true, account.account))
                 }
             }
@@ -34,5 +34,5 @@ struct AccountCardView: View {
 }
 
 #Preview {
-    AccountCardView(accounts: AccountModel.mockSamples(), selectedAddress: "0x1234567890abcdef", isHidden: true)
+    AccountCardView(accounts: AccountModel.mockSamples(), selectedAddress: "0x1234567890abcdef", action: .arrow)
 }

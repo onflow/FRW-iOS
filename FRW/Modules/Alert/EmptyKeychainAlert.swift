@@ -26,7 +26,7 @@ extension AlertViewController {
                 ),
                 buttons: [
                     AlertView.ButtonItem(type: .primaryAction, title: "restore_wallet".localized, action: {
-                        Router.route(to: RouteMap.RestoreLogin.restoreList)
+                        Router.route(to: RouteMap.RestoreLogin.importAccountList)
                     }),
 
                     AlertView.ButtonItem(type: .normal, title: "tutorial_restore".localized, action: {
