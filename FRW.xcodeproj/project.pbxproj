@@ -1078,6 +1078,14 @@
 		4E2F22C32DF3FF6B00EF0FE8 /* AccountFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22C12DF3FF6B00EF0FE8 /* AccountFetcher.swift */; };
 		4E2F22C52DF40DE500EF0FE8 /* ImportProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22C42DF40DE500EF0FE8 /* ImportProfileViewModel.swift */; };
 		4E2F22C62DF40DE500EF0FE8 /* ImportProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22C42DF40DE500EF0FE8 /* ImportProfileViewModel.swift */; };
+		4E2F22CB2DF67F7300EF0FE8 /* SyncActionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22CA2DF67F7300EF0FE8 /* SyncActionStatusView.swift */; };
+		4E2F22CC2DF67F7300EF0FE8 /* SyncActionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22CA2DF67F7300EF0FE8 /* SyncActionStatusView.swift */; };
+		4E2F22CE2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22CD2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift */; };
+		4E2F22CF2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22CD2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift */; };
+		4E2F22D42DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22D32DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift */; };
+		4E2F22D52DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22D32DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift */; };
+		4E2F22D72DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22D62DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift */; };
+		4E2F22D82DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2F22D62DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift */; };
 		4E2FA68E2CF40FE700D46EA7 /* ReownWalletKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA68D2CF40FE700D46EA7 /* ReownWalletKit */; };
 		4E2FA6902CF40FE700D46EA7 /* WalletConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA68F2CF40FE700D46EA7 /* WalletConnect */; };
 		4E2FA6922CF40FE700D46EA7 /* WalletConnectIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 4E2FA6912CF40FE700D46EA7 /* WalletConnectIdentity */; };
@@ -2618,6 +2626,10 @@
 		4E2F22BE2DF3F55300EF0FE8 /* ImportProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProfileView.swift; sourceTree = "<group>"; };
 		4E2F22C12DF3FF6B00EF0FE8 /* AccountFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountFetcher.swift; sourceTree = "<group>"; };
 		4E2F22C42DF40DE500EF0FE8 /* ImportProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportProfileViewModel.swift; sourceTree = "<group>"; };
+		4E2F22CA2DF67F7300EF0FE8 /* SyncActionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncActionStatusView.swift; sourceTree = "<group>"; };
+		4E2F22CD2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncMultiAccount.swift"; sourceTree = "<group>"; };
+		4E2F22D32DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmImportProfileView.swift; sourceTree = "<group>"; };
+		4E2F22D62DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmImportProfileViewModel.swift; sourceTree = "<group>"; };
 		4E30D8092B161F1800A49DAF /* ServiceConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ServiceConfig.plist; sourceTree = "<group>"; };
 		4E30D80B2B161F2400A49DAF /* ServiceConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ServiceConfig.plist; sourceTree = "<group>"; };
 		4E30D80D2B161F3F00A49DAF /* ServiceConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConfig.swift; sourceTree = "<group>"; };
@@ -3478,6 +3490,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4E2F22D02DF6AADB00EF0FE8 /* SyncMultiAccount */,
 				4E49B7282DDD6B2100BC0D46 /* ImportAccount */,
 				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
@@ -3710,6 +3723,7 @@
 			children = (
 				158832DC28942BE800142B35 /* Model */,
 				158832CD2894269E00142B35 /* WalletConnectManager.swift */,
+				4E2F22CD2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift */,
 				4EA885E72DC1F8870070CE14 /* WalletConnect+DeepLink.swift */,
 				4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */,
 				158832D6289427EF00142B35 /* Websocket.swift */,
@@ -5231,6 +5245,32 @@
 				4E2B704C2AF3727F004F00A0 /* KeyResponse.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		4E2F22D02DF6AADB00EF0FE8 /* SyncMultiAccount */ = {
+			isa = PBXGroup;
+			children = (
+				4E2F22D22DF6AB1200EF0FE8 /* NewDevice */,
+				4E2F22D12DF6AB0000EF0FE8 /* OldDevice */,
+				4E2F22CA2DF67F7300EF0FE8 /* SyncActionStatusView.swift */,
+			);
+			path = SyncMultiAccount;
+			sourceTree = "<group>";
+		};
+		4E2F22D12DF6AB0000EF0FE8 /* OldDevice */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = OldDevice;
+			sourceTree = "<group>";
+		};
+		4E2F22D22DF6AB1200EF0FE8 /* NewDevice */ = {
+			isa = PBXGroup;
+			children = (
+				4E2F22D32DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift */,
+				4E2F22D62DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift */,
+			);
+			path = NewDevice;
 			sourceTree = "<group>";
 		};
 		4E3137FD2C658FB2003A73E5 /* workflows */ = {
@@ -7664,6 +7704,7 @@
 				6A46754B28F2D50500F705A8 /* DBManager.swift in Sources */,
 				4EFBE5DE2BCE61FF0012968A /* WalletConnectEVMHandler.swift in Sources */,
 				4E9532422CDA18FB00AAECD1 /* AddTokenSheetView.swift in Sources */,
+				4E2F22CB2DF67F7300EF0FE8 /* SyncActionStatusView.swift in Sources */,
 				15DC20DB27819C56000B187A /* VPrimaryButtonState.swift in Sources */,
 				4E5646622C06073900890E61 /* WalletAccount.swift in Sources */,
 				6A5D99AF2A4D5E7400C43D36 /* DAppsListViewModel.swift in Sources */,
@@ -7730,6 +7771,7 @@
 				15D9282D2783395F00382226 /* HUDManager.swift in Sources */,
 				4E03BE232C7349E300EF04DC /* ImportAccountsView.swift in Sources */,
 				4E63A57F2B8D75F200BBD15F /* MoveTokenViewModel.swift in Sources */,
+				4E2F22CF2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift in Sources */,
 				4E4F794C2831FCB700ED027C /* ImageName.swift in Sources */,
 				15B1F6302786AC9E00847BB5 /* BackupPasswordViewModel.swift in Sources */,
 				4EA0D0A42A7A357E004C6A19 /* LLSegmenControl.swift in Sources */,
@@ -7991,6 +8033,7 @@
 				1552DC622786F49000EAA7D5 /* CreatePinCodeView.swift in Sources */,
 				154E315A2DA56D24008A495F /* WalletManager+Signer.swift in Sources */,
 				15D874E828C623770072C6EA /* RemoteConfig.swift in Sources */,
+				4E2F22D42DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift in Sources */,
 				15F2444D28CB370D00C1090E /* LowerCapsuleView.swift in Sources */,
 				15DC215127819C56000B187A /* VNavigationView.swift in Sources */,
 				6AC717E3287EA61100AA5040 /* WalletSendAmountViewModel.swift in Sources */,
@@ -8091,6 +8134,7 @@
 				6AE4605F286ED142009C2B96 /* TokenDetailViewModel.swift in Sources */,
 				15DC209327819C56000B187A /* VToast.swift in Sources */,
 				15DC21CD27819C56000B187A /* SliderHelpers.swift in Sources */,
+				4E2F22D72DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift in Sources */,
 				6AC476E928F3C993008503E6 /* WebBookmark.swift in Sources */,
 				6A37AD9828BE0DE40047E5F7 /* TransactionProcessStatusView.swift in Sources */,
 				154E31532DA40816008A495F /* Extension.swift in Sources */,
@@ -8568,6 +8612,7 @@
 				1565FBB728B173960086A652 /* ExploreTabScreen.swift in Sources */,
 				4EFBE5DD2BCE61FF0012968A /* WalletConnectEVMHandler.swift in Sources */,
 				4E9532412CDA18FB00AAECD1 /* AddTokenSheetView.swift in Sources */,
+				4E2F22CC2DF67F7300EF0FE8 /* SyncActionStatusView.swift in Sources */,
 				6A5D99AE2A4D5E7400C43D36 /* DAppsListViewModel.swift in Sources */,
 				4E5646612C06073900890E61 /* WalletAccount.swift in Sources */,
 				15C58B572868A4EE00BD4FC6 /* ThemeManager.swift in Sources */,
@@ -8634,6 +8679,7 @@
 				15C58B722868A4EE00BD4FC6 /* BackupPasswordViewModel.swift in Sources */,
 				4E03BE222C7349E300EF04DC /* ImportAccountsView.swift in Sources */,
 				4E63A57E2B8D75F200BBD15F /* MoveTokenViewModel.swift in Sources */,
+				4E2F22CE2DF6874B00EF0FE8 /* WalletConnect+SyncMultiAccount.swift in Sources */,
 				15C58B732868A4EE00BD4FC6 /* ScrollAccessory.swift in Sources */,
 				4EA0D0A32A7A357E004C6A19 /* LLSegmenControl.swift in Sources */,
 				15C58B742868A4EE00BD4FC6 /* UIApplication.swift in Sources */,
@@ -8895,6 +8941,7 @@
 				4EFBB2C02BDF49AB00359FAA /* FRWAPI+EVM.swift in Sources */,
 				15D874E728C623770072C6EA /* RemoteConfig.swift in Sources */,
 				154E31592DA56D24008A495F /* WalletManager+Signer.swift in Sources */,
+				4E2F22D52DF6C8FD00EF0FE8 /* ConfirmImportProfileView.swift in Sources */,
 				15F2444C28CB370D00C1090E /* LowerCapsuleView.swift in Sources */,
 				15C58BF42868A4EE00BD4FC6 /* VNavigationView.swift in Sources */,
 				6AC717E2287EA61100AA5040 /* WalletSendAmountViewModel.swift in Sources */,
@@ -8995,6 +9042,7 @@
 				573429B72CDC4B2E00BDE016 /* AccountModels.swift in Sources */,
 				6AE4605E286ED142009C2B96 /* TokenDetailViewModel.swift in Sources */,
 				15C58C1F2868A4EE00BD4FC6 /* VToast.swift in Sources */,
+				4E2F22D82DF6C93400EF0FE8 /* ConfirmImportProfileViewModel.swift in Sources */,
 				15C58C202868A4EE00BD4FC6 /* SliderHelpers.swift in Sources */,
 				6AC476E828F3C993008503E6 /* WebBookmark.swift in Sources */,
 				6A37AD9728BE0DE40047E5F7 /* TransactionProcessStatusView.swift in Sources */,

@@ -10,6 +10,7 @@ import UIKit
 import WalletConnectPairing
 import WalletConnectSign
 
+/// multi-account from old
 class SyncAccountViewModel: ObservableObject {
     // MARK: Lifecycle
 
@@ -23,10 +24,13 @@ class SyncAccountViewModel: ObservableObject {
             .sink { sessions in
                 for session in sessions {
                     if session.pairingTopic == self.topic {
-                        self.isConnect = true
+                        let namespaces = session.requiredNamespaces.values.map { $0 }
+                        let result = namespaces.filter { $0.methods.contains(FCLWalletConnectMethod.addMultiAccount.rawValue) }
+                        if result.count > 0 {
+                            WalletConnectManager.shared.skipToSyncAction(source: .new)
+                        }
                     }
                 }
-
             }.store(in: &publishers)
     }
 

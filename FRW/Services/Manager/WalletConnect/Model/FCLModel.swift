@@ -15,24 +15,24 @@ struct AuthnResponse: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fType = try? container.decode(String.self, forKey: .fType)
-        self.fVsn = try? container.decode(String.self, forKey: .fVsn)
-        self.status = try container.decode(Status.self, forKey: .status)
-        self.updates = try? container.decode(Service.self, forKey: .updates)
-        self.authorizationUpdates = try? container.decode(
+        fType = try? container.decode(String.self, forKey: .fType)
+        fVsn = try? container.decode(String.self, forKey: .fVsn)
+        status = try container.decode(Status.self, forKey: .status)
+        updates = try? container.decode(Service.self, forKey: .updates)
+        authorizationUpdates = try? container.decode(
             Service.self,
             forKey: .authorizationUpdates
         )
         do {
-            self.local = try container.decode(Service.self, forKey: .local)
+            local = try container.decode(Service.self, forKey: .local)
         } catch {
             let locals = try? container.decode([Service].self, forKey: .local)
-            self.local = locals?.first
+            local = locals?.first
         }
 
-        self.data = try? container.decode(AuthnData.self, forKey: .data)
-        self.reason = try? container.decode(String.self, forKey: .reason)
-        self.compositeSignature = try? container.decode(AuthnData.self, forKey: .compositeSignature)
+        data = try? container.decode(AuthnData.self, forKey: .data)
+        reason = try? container.decode(String.self, forKey: .reason)
+        compositeSignature = try? container.decode(AuthnData.self, forKey: .compositeSignature)
     }
 
     init(
@@ -149,6 +149,7 @@ public enum FCLWalletConnectMethod: String, Codable {
 
     case accountInfo = "frw_account_info"
     case addDeviceInfo = "frw_add_device_key"
+    case addMultiAccount = "frw_add_key_to_multiple_accounts"
 
     // MARK: Lifecycle
 
@@ -231,13 +232,13 @@ struct ParamValue: Codable {
     init(from decoder: Decoder) throws {
         if let container = try? decoder.singleValueContainer() {
             if let intVal = try? container.decode(Int.self) {
-                self.value = String(intVal)
+                value = String(intVal)
             } else if let doubleVal = try? container.decode(Double.self) {
-                self.value = String(doubleVal)
+                value = String(doubleVal)
             } else if let boolVal = try? container.decode(Bool.self) {
-                self.value = String(boolVal)
+                value = String(boolVal)
             } else if let stringVal = try? container.decode(String.self) {
-                self.value = stringVal
+                value = stringVal
             } else {
                 throw DecodingError.dataCorruptedError(
                     in: container,
@@ -278,7 +279,7 @@ struct Service: Codable {
         self.fType = fType
         self.fVsn = fVsn
         self.type = type
-        self.network = currentNetwork.rawValue
+        network = currentNetwork.rawValue
         self.method = method
         self.endpoint = endpoint
         self.uid = uid
@@ -296,18 +297,18 @@ struct Service: Codable {
         rawValue?.compactMap { $0 }.forEach { key, value in
             result[key] = value.value
         }
-        self.params = result
-        self.fType = try? container.decode(String.self, forKey: .fType)
-        self.fVsn = try? container.decode(String.self, forKey: .fVsn)
-        self.type = try? container.decode(FCLServiceType.self, forKey: .type)
-        self.method = try? container.decode(FCLServiceMethod.self, forKey: .method)
-        self.endpoint = try? container.decode(String.self, forKey: .endpoint)
-        self.uid = try? container.decode(String.self, forKey: .uid)
-        self.id = try? container.decode(String.self, forKey: .id)
-        self.identity = try? container.decode(Identity.self, forKey: .identity)
-        self.provider = try? container.decode(Provider.self, forKey: .provider)
-        self.data = try? container.decode(AccountProof.self, forKey: .data)
-        self.network = try? container.decode(String.self, forKey: .network)
+        params = result
+        fType = try? container.decode(String.self, forKey: .fType)
+        fVsn = try? container.decode(String.self, forKey: .fVsn)
+        type = try? container.decode(FCLServiceType.self, forKey: .type)
+        method = try? container.decode(FCLServiceMethod.self, forKey: .method)
+        endpoint = try? container.decode(String.self, forKey: .endpoint)
+        uid = try? container.decode(String.self, forKey: .uid)
+        id = try? container.decode(String.self, forKey: .id)
+        identity = try? container.decode(Identity.self, forKey: .identity)
+        provider = try? container.decode(Provider.self, forKey: .provider)
+        data = try? container.decode(AccountProof.self, forKey: .data)
+        network = try? container.decode(String.self, forKey: .network)
     }
 
     // MARK: Internal

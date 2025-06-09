@@ -33,6 +33,7 @@ enum WalletConnectSyncDevice {
         let methods: Set<String> = [
             FCLWalletConnectMethod.accountInfo.rawValue,
             FCLWalletConnectMethod.addDeviceInfo.rawValue,
+            FCLWalletConnectMethod.addMultiAccount.rawValue,
         ]
         let namespaces = Sign.FlowWallet.namespaces(methods)
         let uri = try await Sign.instance.connect(requiredNamespaces: namespaces)
@@ -42,7 +43,7 @@ enum WalletConnectSyncDevice {
     static func requestSyncAccount(in session: Session) async throws -> WalletConnectSign.Request? {
         log.info("[sync] send request for account info top:\(session.topic)")
 
-        let methods: String = FCLWalletConnectMethod.accountInfo.rawValue
+        let methods: String = FCLWalletConnectMethod.addMultiAccount.rawValue
         let blockchain = Sign.FlowWallet.blockchain
         do {
             let request = try Request(

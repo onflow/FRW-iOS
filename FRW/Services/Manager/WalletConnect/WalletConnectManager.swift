@@ -321,6 +321,7 @@ extension WalletConnectManager {
         [
             FCLWalletConnectMethod.addDeviceInfo.rawValue,
             FCLWalletConnectMethod.accountInfo.rawValue,
+            FCLWalletConnectMethod.addMultiAccount.rawValue,
         ]
     }
 }
@@ -364,7 +365,6 @@ extension WalletConnectManager {
             network: network
         ) { result in
             if result {
-                // TODO: Handle network mismatch
                 self.approveSession(proposal: sessionProposal)
             } else {
                 self.rejectSession(proposal: sessionProposal)
@@ -721,6 +721,8 @@ extension WalletConnectManager {
             handleSignTypedData(sessionRequest)
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
+        case FCLWalletConnectMethod.addMultiAccount.rawValue:
+            handleSyncMultiAccount(sessionRequest)
         default:
             rejectRequest(request: sessionRequest, reason: "unspport method")
         }
@@ -740,16 +742,16 @@ extension WalletConnectManager {
                     let user = try WalletConnectSyncDevice.parseAccount(data: data)
                     Router.route(to: RouteMap.RestoreLogin.syncAccount(user))
                 } catch {
-                    log
-                        .error(
-                            "[WALLET] Respond Error: [account info] \(error.localizedDescription)"
-                        )
+                    log.error("[WALLET] Respond Error: [account info] \(error.localizedDescription)")
                 }
             } else if WalletConnectSyncDevice.isDevice(request: request, with: response) {
                 NotificationCenter.default.post(
                     name: .syncDeviceStatusDidChanged,
                     object: WalletConnectSyncDevice.SyncResult.success
                 )
+            } else if WalletConnectManager.shared.isMultiAccount(request: request, with: response) {
+                Router.popToRoot(animated: false)
+                // TODO: multi-account to confirm which profile
             }
         case let .error(error):
             if WalletConnectSyncDevice.isDevice(request: request, with: response) {
@@ -815,12 +817,25 @@ extension WalletConnectManager {
         Task {
             do {
                 let namespaces = try handler.approveSessionNamespaces(sessionProposal: proposal)
+
                 _ = try await Sign.instance.approve(proposalId: proposal.id, namespaces: namespaces)
+                doAfterApprove(proposal: proposal)
                 HUD.success(title: "approved".localized)
             } catch {
                 debugPrint("WalletConnectManager -> approveSession failed: \(error)")
                 HUD.error(title: "approve_failed".localized)
             }
+        }
+    }
+
+    /// do action after approve. e.g.  sync multi-account
+    private func doAfterApprove(proposal: Session.Proposal) {
+        let namespaces = try? handler.approveSessionNamespaces(sessionProposal: proposal)
+        // handle addMultiAccount
+        let result = namespaces?.values.filter { $0.methods.contains(FCLWalletConnectMethod.addMultiAccount.rawValue) }.count ?? 0
+        if result > 0 {
+            /// sync multi-account[1]: approve
+            skipToSyncAction(source: .old)
         }
     }
 
@@ -921,7 +936,7 @@ extension WalletConnectManager {
         }
     }
 
-    private func rejectRequest(request: Request, reason: String = "User reject request") {
+    func rejectRequest(request: Request, reason: String = "User reject request") {
         let result = AuthnResponse(
             fType: "PollingResponse",
             fVsn: "1.0.0",
@@ -1011,7 +1026,6 @@ extension WalletConnectManager {
             return
         }
         syncAccountFlag = false
-
         Task {
             do {
                 self.currentRequest = try await WalletConnectSyncDevice
