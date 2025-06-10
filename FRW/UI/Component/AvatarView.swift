@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum AvatarSource {
-    case user(WalletAccount.User)
+    case user(WalletUserProfile.User)
     case url(URL)
     case system(String)
     case image(Image)

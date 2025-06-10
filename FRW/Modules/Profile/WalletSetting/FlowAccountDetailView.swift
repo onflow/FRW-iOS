@@ -22,6 +22,7 @@ struct FlowAccountDetailView: RouteableView {
     @State var account: FlowWalletKit.Account
     @State
     var showAccountEditor = false
+    @State private var reloadFlag = false
 
     var isSelected: Bool
 
@@ -44,6 +45,7 @@ struct FlowAccountDetailView: RouteableView {
                     AccountInfoCard(account: account) {
                         showAccountEditor.toggle()
                     }
+                    .id(reloadFlag)
 
                     VStack(spacing: 16) {
                         if isSecureEnclave {
@@ -216,9 +218,7 @@ struct FlowAccountDetailView: RouteableView {
     }
 
     func reload() {
-        let user = WalletManager.shared.walletAccount.readInfo(at: account.hexAddr)
-        account = account
-        WalletManager.shared.changeNetwork(currentNetwork)
+        reloadFlag.toggle()
     }
 
     func onlyShowInfo() -> Bool {

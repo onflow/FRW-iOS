@@ -1,26 +1,26 @@
 //
-//  WalletAccount.swift
+//  WalletUserProfile.swift
 //  FRW
 //
 //  Created by cat on 2024/5/20.
 //
 
+import Flow
 import Foundation
 import SwiftUI
-import Flow
 
 // MARK: - WalletAccount
 
-struct WalletAccount {
+class WalletUserProfile: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        self.storedAccount = LocalUserDefaults.shared.walletAccount ?? [:]
+        info = LocalUserDefaults.shared.walletAccount ?? [:]
     }
 
     // MARK: Internal
 
-    var storedAccount: [String: [WalletAccount.User]]
+    @Published var info: [String: [WalletUserProfile.User]]
 
     // MARK: Private
 
@@ -32,16 +32,16 @@ struct WalletAccount {
     }
 
     private func saveCache() {
-        LocalUserDefaults.shared.walletAccount = storedAccount
+        LocalUserDefaults.shared.walletAccount = info
     }
 }
 
 // MARK: Logical processing
 
-extension WalletAccount {
-    mutating func readInfo(at address: String) -> WalletAccount.User {
+extension WalletUserProfile {
+    func readInfo(at address: String) -> WalletUserProfile.User {
         let currentNetwork = currentNetwork
-        if var list = storedAccount[key] {
+        if var list = info[key] {
             let lastUser = list.last { $0.network == currentNetwork && $0.address == address }
             if let user = lastUser {
                 return user
@@ -49,37 +49,38 @@ extension WalletAccount {
                 let filterList = list.filter { $0.network == currentNetwork }
                 let existList = filterList.map { $0.emoji }
                 let nEmoji = generalInfo(count: 1, excluded: existList)?.first ?? .koala
-                let user = WalletAccount.User(emoji: nEmoji, address: address)
+                let user = WalletUserProfile.User(emoji: nEmoji, address: address)
                 list.append(user)
-                storedAccount[key] = list
+                info[key] = list
                 saveCache()
                 return user
             }
         } else {
             let nEmoji = generalInfo(count: 1, excluded: [])?.first ?? .koala
-            let model = WalletAccount.User(emoji: nEmoji, address: address)
-            storedAccount[key] = [model]
+            let model = WalletUserProfile.User(emoji: nEmoji, address: address)
+            info[key] = [model]
             saveCache()
             return model
         }
     }
 
-    mutating func update(at address: String, emoji: WalletAccount.Emoji, name: String? = nil) {
+    func update(at address: String, emoji: WalletUserProfile.Emoji, name: String? = nil) {
         let currentNetwork = currentNetwork
-        if var list = storedAccount[key] {
+        if var list = info[key] {
             if let index = list
-                .lastIndex(where: { $0.network == currentNetwork && $0.address == address }) {
+                .lastIndex(where: { $0.network == currentNetwork && $0.address == address })
+            {
                 var user = list[index]
                 user.emoji = emoji
                 user.name = name ?? emoji.name
                 list[index] = user
-                storedAccount[key] = list
+                info[key] = list
                 saveCache()
             }
         }
     }
 
-    private func generalInfo(count: Int, excluded: [Emoji]) -> [WalletAccount.Emoji]? {
+    private func generalInfo(count: Int, excluded: [Emoji]) -> [WalletUserProfile.Emoji]? {
         let list = Emoji.allCases
         return list.randomDifferentElements(limitCount: count, excluded: excluded)
     }
@@ -87,7 +88,7 @@ extension WalletAccount {
 
 // MARK: data struct
 
-extension WalletAccount {
+extension WalletUserProfile {
     enum Emoji: String, CaseIterable, Codable {
         case koala = "🐨"
         case lion = "🦁"
@@ -165,42 +166,42 @@ extension WalletAccount {
     struct User: Codable {
         // MARK: Lifecycle
 
-        init(emoji: WalletAccount.Emoji, address: String) {
+        init(emoji: WalletUserProfile.Emoji, address: String) {
             self.emoji = emoji
-            self.name = emoji.name
+            name = emoji.name
             self.address = address
-            self.network = currentNetwork
+            network = currentNetwork
         }
 
         init(from decoder: any Decoder) throws {
-            let container: KeyedDecodingContainer<WalletAccount.User.CodingKeys> = try decoder
-                .container(keyedBy: WalletAccount.User.CodingKeys.self)
+            let container: KeyedDecodingContainer<WalletUserProfile.User.CodingKeys> = try decoder
+                .container(keyedBy: WalletUserProfile.User.CodingKeys.self)
             do {
-                self.emoji = try container.decode(
-                    WalletAccount.Emoji.self,
-                    forKey: WalletAccount.User.CodingKeys.emoji
+                emoji = try container.decode(
+                    WalletUserProfile.Emoji.self,
+                    forKey: WalletUserProfile.User.CodingKeys.emoji
                 )
             } catch {
-                self.emoji = WalletAccount.Emoji.avocado
+                emoji = WalletUserProfile.Emoji.avocado
             }
 
-            self.name = try container.decode(
+            name = try container.decode(
                 String.self,
-                forKey: WalletAccount.User.CodingKeys.name
+                forKey: WalletUserProfile.User.CodingKeys.name
             )
-            self.address = try container.decode(
+            address = try container.decode(
                 String.self,
-                forKey: WalletAccount.User.CodingKeys.address
+                forKey: WalletUserProfile.User.CodingKeys.address
             )
-            self.network = try container.decode(
+            network = try container.decode(
                 Flow.ChainID.self,
-                forKey: WalletAccount.User.CodingKeys.network
+                forKey: WalletUserProfile.User.CodingKeys.network
             )
         }
 
         // MARK: Internal
 
-        var emoji: WalletAccount.Emoji
+        var emoji: WalletUserProfile.Emoji
         var name: String
         var address: String
         var network: Flow.ChainID
@@ -216,7 +217,7 @@ extension Array where Element: Equatable {
         var selectedElements: [Element] = []
 
         var num = count * 36
-        for i in 0..<num {
+        for i in 0 ..< num {
             let element = randomElement()!
             if !selectedElements.contains(element), !excluded.contains(element) {
                 selectedElements.append(element)

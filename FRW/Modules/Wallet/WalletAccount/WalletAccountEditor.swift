@@ -16,9 +16,9 @@ struct WalletAccountEditor: View {
     init(address: String, callback: @escaping () -> Void) {
         let user = WalletManager.shared.walletAccount.readInfo(at: address)
         self.address = address
-        self.current = user
-        self.emojis = WalletAccount.Emoji.allCases
-        self.walletName = user.name
+        current = user
+        emojis = WalletUserProfile.Emoji.allCases
+        walletName = user.name
         self.callback = callback
     }
 
@@ -44,9 +44,9 @@ struct WalletAccountEditor: View {
                 let remainingItems = emojis.count % columns
 
                 // Create grid for full rows
-                ForEach(0..<rows, id: \.self) { rowIndex in
+                ForEach(0 ..< rows, id: \.self) { rowIndex in
                     HStack(spacing: spacing) {
-                        ForEach(0..<columns, id: \.self) { columnIndex in
+                        ForEach(0 ..< columns, id: \.self) { columnIndex in
                             let index = rowIndex * columns + columnIndex
                             let emoji = emojis[index]
                             WalletAccountEditor.EmojiView(
@@ -63,7 +63,7 @@ struct WalletAccountEditor: View {
                 if remainingItems > 0 {
                     HStack(spacing: spacing) {
                         Spacer()
-                        ForEach(0..<remainingItems, id: \.self) { columnIndex in
+                        ForEach(0 ..< remainingItems, id: \.self) { columnIndex in
                             let index = rows * columns + columnIndex
                             let emoji = emojis[index]
                             WalletAccountEditor.EmojiView(
@@ -141,15 +141,15 @@ struct WalletAccountEditor: View {
     // MARK: Private
 
     @State
-    private var current: WalletAccount.User
+    private var current: WalletUserProfile.User
     @State
     private var walletName: String
 
-    private var emojis: [WalletAccount.Emoji]
+    private var emojis: [WalletUserProfile.Emoji]
     private let columns: Int = 7
     private let spacing: CGFloat = 8.0
 
-    private func updateEmoji(emoji: WalletAccount.Emoji) {
+    private func updateEmoji(emoji: WalletUserProfile.Emoji) {
         if current.emoji.name == walletName {
             walletName = emoji.name
         }
@@ -162,7 +162,7 @@ struct WalletAccountEditor: View {
 
 extension WalletAccountEditor {
     struct EmojiView: View {
-        var emoji: WalletAccount.Emoji
+        var emoji: WalletUserProfile.Emoji
         var isSelected: Bool
         var action: () -> Void
 

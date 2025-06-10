@@ -113,14 +113,16 @@ struct AccountInfoView: View {
     @ViewBuilder
     func hideAction() -> some View {
         HStack(spacing: 0) {
-            Button {} label: {
-                Image("icon-wallet-hidden-on")
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fill)
-                    .foregroundColor(Color.Theme.Text.black3)
-                    .frame(width: 24, height: 24)
-                    .padding(12)
+            if account.isMain {
+                Button {} label: {
+                    Image("icon-wallet-hidden-on")
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fill)
+                        .foregroundColor(Color.Theme.Text.black3)
+                        .frame(width: 24, height: 24)
+                        .padding(12)
+                }
             }
 
             Image("device_arrow_right")

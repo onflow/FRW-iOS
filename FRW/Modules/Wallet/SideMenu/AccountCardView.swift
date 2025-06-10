@@ -21,7 +21,8 @@ struct AccountCardView: View {
                 }
             }
         }
-        .padding(18)
+        .padding(.horizontal, 18)
+        .padding(.vertical, 8)
         .background {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.Summer.cards)

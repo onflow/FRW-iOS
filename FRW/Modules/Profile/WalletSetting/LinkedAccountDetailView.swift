@@ -24,9 +24,7 @@ struct LinkedAccountDetailView: RouteableView {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack {
-                AccountInfoCard(account: viewModel.childAccount) {
-                    // TODO: Edit
-                }
+                AccountInfoCard(account: viewModel.childAccount) {}
 
                 LineView()
                     .padding(.top, 36)

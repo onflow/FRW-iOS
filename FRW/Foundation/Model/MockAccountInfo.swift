@@ -4,7 +4,7 @@ struct MockAccountInfo: AccountInfoProtocol {
     var infoName: String
     var infoAddress: String
     var accountType: FWAccount.AccountType
-    var walletMetadata: WalletAccount.User
+    var walletMetadata: WalletUserProfile.User
 
     func avatar(isSelected: Bool, subAvatar: AvatarSource?) -> AvatarView {
         AvatarView(mainAvatar: .system("person.crop.circle.fill"), subAvatar: subAvatar, backgroundColor: Color.Summer.cards, isSelected: isSelected)
@@ -18,19 +18,19 @@ extension MockAccountInfo {
                 infoName: "mainAccount",
                 infoAddress: "0x1234567890abcdef",
                 accountType: .main,
-                walletMetadata: WalletAccount.User(emoji: .koala, address: "0x1234567890abcdef")
+                walletMetadata: WalletUserProfile.User(emoji: .koala, address: "0x1234567890abcdef")
             ),
             MockAccountInfo(
                 infoName: "Child",
                 infoAddress: "0xabcdef1234567890",
                 accountType: .child,
-                walletMetadata: WalletAccount.User(emoji: .lion, address: "0xabcdef1234567890")
+                walletMetadata: WalletUserProfile.User(emoji: .lion, address: "0xabcdef1234567890")
             ),
             MockAccountInfo(
                 infoName: "EVM",
                 infoAddress: "0x8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b",
                 accountType: .coa,
-                walletMetadata: WalletAccount.User(emoji: .avocado, address: "0x8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b")
+                walletMetadata: WalletUserProfile.User(emoji: .avocado, address: "0x8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b4a8e5b")
             ),
         ]
     }

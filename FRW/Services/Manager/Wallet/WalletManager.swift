@@ -89,7 +89,8 @@ class WalletManager: ObservableObject {
             .synchronizable(false)
             .accessibility(.whenUnlocked)
 
-    var walletAccount = WalletAccount()
+    @Published
+    var walletAccount = WalletUserProfile()
 
     @Published
     var walletEntity: FlowWalletKit.Wallet?
@@ -112,10 +113,6 @@ class WalletManager: ObservableObject {
     var keyProvider: (any KeyProtocol)?
 
     var customTokenManager: CustomTokenManager = .init()
-
-    var walletMetadata: WalletAccount.User {
-        walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
-    }
 
     var flowToken: TokenModel? {
         WalletManager.shared.activatedCoins.first(where: { $0.isFlowCoin })

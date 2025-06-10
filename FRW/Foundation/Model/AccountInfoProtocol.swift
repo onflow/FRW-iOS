@@ -13,13 +13,13 @@ protocol AccountInfoProtocol {
     var infoAddress: String { get }
     var accountType: FWAccount.AccountType { get }
 
-    var walletMetadata: WalletAccount.User { get }
+    var walletMetadata: WalletUserProfile.User { get }
 
     func avatar(isSelected: Bool, subAvatar: AvatarSource?) -> AvatarView
 }
 
 extension AccountInfoProtocol {
-    var walletMetadata: WalletAccount.User {
+    var walletMetadata: WalletUserProfile.User {
         WalletManager.shared.walletAccount.readInfo(at: infoAddress)
     }
 }

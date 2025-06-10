@@ -17,7 +17,7 @@ struct AccountInfoCard: View {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 14) {
                     account.avatar(isSelected: false, subAvatar: nil)
-                    VStack {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text(mainAccountName)
                             .font(.inter(size: 16, weight: .w600))
                             .foregroundStyle(Color.Theme.Text.black8)
@@ -43,14 +43,16 @@ struct AccountInfoCard: View {
 
                     Spacer(minLength: 8)
 
-                    Button {
-                        onEdit()
-                    } label: {
-                        Image("icon-edit-child-account")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .padding(.vertical, 6)
-                            .padding(.leading, 6)
+                    if account.accountType != .child {
+                        Button {
+                            onEdit()
+                        } label: {
+                            Image("icon-edit-child-account")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .padding(.vertical, 6)
+                                .padding(.leading, 6)
+                        }
                     }
                 }
 

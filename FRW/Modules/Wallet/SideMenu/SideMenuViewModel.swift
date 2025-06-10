@@ -35,6 +35,9 @@ class SideMenuViewModel: ObservableObject {
     var accountLoading: Bool = false
 
     @Published
+    var isUpdateFlag: Bool = false
+
+    @Published
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
 
     @Published
@@ -83,6 +86,15 @@ class SideMenuViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshActiveAccount()
+            }
+            .store(in: &cancellableSet)
+
+        wallet.$walletAccount
+            .compactMap { $0 }
+            .flatMap { $0.$info }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isUpdateFlag.toggle()
             }
             .store(in: &cancellableSet)
 

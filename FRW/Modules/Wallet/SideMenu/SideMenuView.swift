@@ -38,6 +38,7 @@ struct SideMenuView: View {
                             ActivityAccountView
                             OtherAccountsView
                         }
+                        .id(vm.isUpdateFlag)
                     }
 
 //                    bottomMenu

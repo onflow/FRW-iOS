@@ -449,7 +449,7 @@ extension MoveNFTsViewModel: InsufficientStorageToastViewModel {
 }
 
 extension MoveNFTsViewModel {
-    private func emojiAccount(isFirst: Bool) -> WalletAccount.User {
+    private func emojiAccount(isFirst: Bool) -> WalletUserProfile.User {
         let address = accountAddress(isFirst: isFirst)
         return WalletManager.shared.walletAccount.readInfo(at: address)
     }

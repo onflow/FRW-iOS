@@ -186,7 +186,7 @@ struct BrowserAuthnView: View {
         .cornerRadius(12)
     }
 
-    var user: WalletAccount.User {
+    var user: WalletUserProfile.User {
         WalletManager.shared.walletAccount.readInfo(at: vm.walletAddress ?? "")
     }
 

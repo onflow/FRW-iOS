@@ -45,7 +45,7 @@ struct UserInfo: Codable {
 
     func toContactWithCurrentUserAddress() -> Contact {
         let address = WalletManager.shared.getPrimaryWalletAddress()
-        var user: WalletAccount.User?
+        var user: WalletUserProfile.User?
         if let addr = address {
             user = WalletManager.shared.walletAccount.readInfo(at: addr)
         }

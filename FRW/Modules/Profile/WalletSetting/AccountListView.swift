@@ -12,6 +12,8 @@ struct AccountListView: RouteableView {
     var accounts: [[AccountModel]]
     var selectedAdress: String
 
+    @StateObject var viewModel = AccountListViewModel()
+
     init(accounts: [[AccountModel]], selectedAdress: String) {
         self.accounts = accounts
         self.selectedAdress = selectedAdress
@@ -29,6 +31,7 @@ struct AccountListView: RouteableView {
                 }
             }
             .padding(.top, 12)
+            .id(viewModel.isUpdateFlag)
         }
         .padding(.horizontal, 18)
         .backgroundFill(Color.Theme.Background.white)
@@ -49,7 +52,7 @@ struct AccountListView: RouteableView {
         guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
             return .arrow
         }
-        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? .card : .arrow
+        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? .hide : .arrow
     }
 }
 

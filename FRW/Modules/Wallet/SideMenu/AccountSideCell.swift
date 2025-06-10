@@ -128,7 +128,7 @@ struct AccountSideCell: View {
         currentNetwork
     }
 
-    private var user: WalletAccount.User {
+    private var user: WalletUserProfile.User {
         WalletManager.shared.walletAccount.readInfo(at: address)
     }
 

@@ -107,7 +107,7 @@ extension ProfileSecureView {
     }
 
     struct WalletInfoCell: View {
-        var user: WalletAccount.User
+        var user: WalletUserProfile.User
         var onEdit: () -> Void
 
         var body: some View {

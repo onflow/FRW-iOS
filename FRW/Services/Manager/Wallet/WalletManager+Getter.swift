@@ -97,7 +97,7 @@ extension WalletManager {
 
     func currentContact() -> Contact {
         let address = getWatchAddressOrChildAccountAddressOrPrimaryAddress()
-        var user: WalletAccount.User?
+        var user: WalletUserProfile.User?
         if let addr = address {
             user = WalletManager.shared.walletAccount.readInfo(at: addr)
         }
