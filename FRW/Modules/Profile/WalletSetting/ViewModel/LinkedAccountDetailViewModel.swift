@@ -198,10 +198,6 @@ class LinkedAccountDetailViewModel: ObservableObject {
                     return nil
                 }
 
-                #if DEBUG
-                    resultList = response
-                #endif
-
                 let tmpList = resultList.map { model in
                     var model = model
                     let collectionItem = collectionList.first(where: { item in
