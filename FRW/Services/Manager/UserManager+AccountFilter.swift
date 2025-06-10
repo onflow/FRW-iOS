@@ -11,7 +11,8 @@ import SwiftUI
 
 class AccountFilter {
     private let filterAccountsKey = LocalUserDefaults.Keys.filterAccount.rawValue
-    var filterAccounts: [String: [String]] = [:]
+
+    @Published var filterAccounts: [String: [String]] = [:]
 
     init() {
         filterAccounts = loadFilterAccounts()

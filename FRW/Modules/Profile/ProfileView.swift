@@ -245,7 +245,7 @@ extension ProfileView {
                     iconName: "icon-wallet",
                     title: "wallets".localized
                 ) {
-                    let accounts = UserManager.shared.accounts
+                    let accounts = UserManager.shared.allAccounts
                     let currentAddress = WalletManager.shared.selectedAccountAddress ?? ""
                     Router.route(to: RouteMap.Profile.walletList(accounts, currentAddress))
                 }

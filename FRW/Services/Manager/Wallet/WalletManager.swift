@@ -215,8 +215,14 @@ extension WalletManager {
             reloadWalletInfo()
             return
         }
-        guard let accounts = accounts[currentNetwork], let account = accounts.first else {
+
+        guard let accounts = accounts[currentNetwork] else {
             // TODO: Handle newtork swicth, if no account
+            mainAccount = nil
+            return
+        }
+        let account = accounts.first { !UserManager.shared.filterAccounts.inFilter(with: $0) }
+        guard let account else {
             mainAccount = nil
             return
         }

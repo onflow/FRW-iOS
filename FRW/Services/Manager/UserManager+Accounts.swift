@@ -31,7 +31,7 @@ extension UserManager {
     }
 
     func mainAccount(by address: String) -> AccountInfoProtocol? {
-        for list in accounts {
+        for list in allAccounts {
             for account in list {
                 if account.account.infoAddress.lowercased() == address.lowercased() {
                     return account.mainAccount ?? account.account
@@ -46,7 +46,10 @@ extension UserManager {
             do {
                 let list = await WalletManager.shared.currentNetworkAccounts
                 let fetcher = AccountFetcher()
-                accounts = try await fetcher.fetchAccountInfo(list)
+                let result = try await fetcher.fetchAccountInfo(list)
+                await MainActor.run {
+                    self.allAccounts = result
+                }
             } catch {
                 log.error("fetch accounts failed.")
             }

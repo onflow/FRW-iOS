@@ -43,7 +43,7 @@ class UserManager: ObservableObject {
     static let shared = UserManager()
 
     @Published
-    var accounts: [[AccountModel]] = []
+    var allAccounts: [[AccountModel]] = []
 
     @Published var filterAccounts: AccountFilter = .init()
 

@@ -38,16 +38,12 @@ class SideMenuViewModel: ObservableObject {
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
 
     @Published
-    var mainAccounts: [String] = []
-
-    @Published
-    var linkedAccounts: [String] = []
-
-    @Published
-    var walletBalance: [String: Decimal] = [:]
-
-    @Published
     var activeAccount: AccountModel? = nil
+
+    @Published
+    var userInfo: UserInfo? = nil
+
+    @Published var filterAccounts: [[AccountModel]] = []
 
     @Published
     var hasCoa: Bool = true
@@ -89,6 +85,20 @@ class SideMenuViewModel: ObservableObject {
                 self?.refreshActiveAccount()
             }
             .store(in: &cancellableSet)
+
+        UserManager.shared.$allAccounts
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshList()
+            }
+            .store(in: &cancellableSet)
+
+        UserManager.shared.filterAccounts.$filterAccounts
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshList()
+            }
+            .store(in: &cancellableSet)
     }
 
     func pickColor(from url: String) {
@@ -128,6 +138,17 @@ extension SideMenuViewModel {
             return
         }
         activeAccount = AccountModel(account: current, mainAccount: WalletManager.shared.isSelectedFlowAccount ? nil : WalletManager.shared.mainAccount, flowCount: "0", nftCount: 0)
+    }
+
+    private func refreshList() {
+        filterAccounts = UserManager.shared.allAccounts.filter { inWhite(with: $0) }
+    }
+
+    func inWhite(with accounts: [AccountModel]) -> Bool {
+        guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
+            return false
+        }
+        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? false : true
     }
 }
 

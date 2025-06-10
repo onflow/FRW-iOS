@@ -39,7 +39,9 @@ class ImportProfileViewModel: ObservableObject {
         let fetcher = AccountFetcher()
         let result = try? await fetcher.fetchAccountInfo(list)
         if let result {
-            accounts = result
+            await MainActor.run {
+                self.accounts = result
+            }
         }
     }
 

@@ -35,5 +35,5 @@ struct ConfirmImportProfileView: View {
 }
 
 #Preview {
-    ConfirmImportProfileView()
+    ConfirmImportProfileView(list: [])
 }
