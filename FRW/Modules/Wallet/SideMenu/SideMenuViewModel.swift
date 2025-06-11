@@ -46,7 +46,7 @@ class SideMenuViewModel: ObservableObject {
     @Published
     var userInfo: UserInfo? = nil
 
-    @Published var filterAccounts: [[AccountModel]] = []
+    @Published var filterAccounts: [AccountModel] = []
 
     @Published
     var hasCoa: Bool = true
@@ -149,15 +149,15 @@ extension SideMenuViewModel {
         guard let current else {
             return
         }
-        activeAccount = AccountModel(account: current, mainAccount: WalletManager.shared.isSelectedFlowAccount ? nil : WalletManager.shared.mainAccount, flowCount: "0", nftCount: 0)
+        activeAccount = AccountModel(account: current, mainAccount: WalletManager.shared.isSelectedFlowAccount ? nil : WalletManager.shared.mainAccount, flowCount: "0", nftCount: 0, linkedAccounts: [])
     }
 
     private func refreshList() {
         filterAccounts = UserManager.shared.allAccounts.filter { inWhite(with: $0) }
     }
 
-    func inWhite(with accounts: [AccountModel]) -> Bool {
-        guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
+    func inWhite(with account: AccountModel) -> Bool {
+        guard let mainAccount = account.account as? FlowWalletKit.Account else {
             return false
         }
         return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? false : true

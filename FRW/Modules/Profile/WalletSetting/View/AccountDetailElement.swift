@@ -109,9 +109,9 @@ struct AccountInfoCard: View {
 
 #Preview {
     VStack(spacing: 32) {
-        AccountInfoCard(account: AccountModel.mockSamples()[0].account) {}
-        AccountInfoCard(account: AccountModel.mockSamples()[1].account) {}
-        AccountInfoCard(account: AccountModel.mockSamples()[2].account) {}
+        AccountInfoCard(account: AccountModel.mockSamples().account) {}
+        AccountInfoCard(account: AccountModel.mockSamples().account) {}
+        AccountInfoCard(account: AccountModel.mockSamples().account) {}
     }
     .background(Color.black)
 }

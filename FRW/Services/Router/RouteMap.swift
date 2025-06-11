@@ -406,7 +406,7 @@ extension RouteMap {
         case deviceInfo(DeviceInfoModel)
 
         case keychain
-        case walletList([[AccountModel]], String)
+        case walletList([AccountModel], String)
 
         case wallpaper
         case secureEnclavePrivateKey

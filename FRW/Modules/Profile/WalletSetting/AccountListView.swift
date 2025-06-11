@@ -9,12 +9,12 @@ import FlowWalletKit
 import SwiftUI
 
 struct AccountListView: RouteableView {
-    var accounts: [[AccountModel]]
+    var accounts: [AccountModel]
     var selectedAdress: String
 
     @StateObject var viewModel = AccountListViewModel()
 
-    init(accounts: [[AccountModel]], selectedAdress: String) {
+    init(accounts: [AccountModel], selectedAdress: String) {
         self.accounts = accounts
         self.selectedAdress = selectedAdress
     }
@@ -27,7 +27,8 @@ struct AccountListView: RouteableView {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(0 ..< accounts.count, id: \.self) { index in
-                    AccountCardView(accounts: accounts[index], selectedAddress: selectedAdress, action: action(with: accounts[index]))
+                    let account = accounts[index]
+                    AccountCardView(account: account, selectedAddress: selectedAdress, action: action(with: account))
                 }
             }
             .padding(.top, 12)
@@ -48,8 +49,8 @@ struct AccountListView: RouteableView {
 //        })
     }
 
-    func action(with accounts: [AccountModel]) -> AccountInfoView.Action {
-        guard let mainAccount = accounts.first?.account as? FlowWalletKit.Account else {
+    func action(with accounts: AccountModel) -> AccountInfoView.Action {
+        guard let mainAccount = accounts.account as? FlowWalletKit.Account else {
             return .arrow
         }
         return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? .hide : .arrow
@@ -57,5 +58,5 @@ struct AccountListView: RouteableView {
 }
 
 #Preview {
-    AccountListView(accounts: [AccountModel.mockSamples(), AccountModel.mockSamples()], selectedAdress: "")
+    AccountListView(accounts: [AccountModel.mockSamples()], selectedAdress: "")
 }

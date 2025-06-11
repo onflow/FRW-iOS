@@ -31,9 +31,14 @@ struct ImportProfileView: RouteableView {
 
                     VStack(spacing: 8) {
                         ForEach(0 ..< viewModel.accounts.count, id: \.self) { index in
+                            let account = viewModel.accounts[index]
                             VStack(spacing: 0) {
-                                ForEach(viewModel.accounts[index], id: \.account.infoAddress) { account in
-                                    AccountInfoView(account: account, isActivity: false, isSelected: false, action: .check(viewModel.isCheck(account))) { model, _ in
+                                AccountInfoView(account: account, isActivity: false, isSelected: false, action: .check(viewModel.isCheck(account))) { model, _ in
+                                    viewModel.onClick(model)
+                                }
+                                ForEach(0 ..< account.linkedAccounts.count, id: \.self) { index in
+                                    let linkedAccount = account.linkedAccounts[index]
+                                    AccountInfoView(account: linkedAccount, isActivity: false, isSelected: false, action: .check(viewModel.isCheck(linkedAccount))) { model, _ in
                                         viewModel.onClick(model)
                                     }
                                 }

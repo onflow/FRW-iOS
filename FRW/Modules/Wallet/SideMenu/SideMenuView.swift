@@ -162,9 +162,15 @@ extension SideMenuView {
                     .font(.inter(size: 14))
                     .foregroundStyle(Color.Theme.Text.black8)
                 ForEach(0 ..< vm.filterAccounts.count, id: \.self) { index in
-                    ForEach(vm.filterAccounts[index], id: \.account.infoAddress) { account in
-                        let isSelected = vm.activeAccount?.account.infoAddress == account.account.infoAddress
-                        AccountInfoView(account: account, isActivity: false, isSelected: isSelected) { model, _ in
+                    let account = vm.filterAccounts[index]
+                    let isSelected = vm.activeAccount?.account.infoAddress == account.account.infoAddress
+                    AccountInfoView(account: account, isActivity: false, isSelected: isSelected) { model, _ in
+                        WalletManager.shared.changeSelectedAccount(address: model.account.infoAddress, type: model.account.accountType)
+                    }
+                    ForEach(0 ..< account.linkedAccounts.count, id: \.self) { linkedIndex in
+                        let linkedAccount = account.linkedAccounts[linkedIndex]
+                        let isSelected = vm.activeAccount?.account.infoAddress == linkedAccount.account.infoAddress
+                        AccountInfoView(account: linkedAccount, isActivity: false, isSelected: isSelected) { model, _ in
                             WalletManager.shared.changeSelectedAccount(address: model.account.infoAddress, type: model.account.accountType)
                         }
                     }

@@ -17,6 +17,7 @@ struct AccountModel: Equatable {
     var mainAccount: (any AccountInfoProtocol)?
     var flowCount: String
     var nftCount: UInt
+    var linkedAccounts: [AccountModel]
 }
 
 // MARK: - UI

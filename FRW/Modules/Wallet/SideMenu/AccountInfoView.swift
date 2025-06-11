@@ -167,11 +167,11 @@ extension AccountInfoView {
 
 #Preview {
     VStack {
-        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: true, action: .arrow)
-        AccountInfoView(account: AccountModel.mockSamples()[1], isActivity: true)
-        AccountInfoView(account: AccountModel.mockSamples()[0], isActivity: false, isSelected: true)
-        AccountInfoView(account: AccountModel.mockSamples()[1], isSelected: true)
-        AccountInfoView(account: AccountModel.mockSamples()[2], isSelected: false)
+        AccountInfoView(account: AccountModel.mockSamples(), isActivity: true, action: .arrow)
+        AccountInfoView(account: AccountModel.mockSamples(), isActivity: true)
+        AccountInfoView(account: AccountModel.mockSamples(), isActivity: false, isSelected: true)
+        AccountInfoView(account: AccountModel.mockSamples(), isSelected: true)
+        AccountInfoView(account: AccountModel.mockSamples(), isSelected: false)
     }
     .background(Color.Summer.Background.nav)
     .padding(.vertical, 50)

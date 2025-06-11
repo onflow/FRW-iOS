@@ -31,11 +31,9 @@ extension UserManager {
     }
 
     func mainAccount(by address: String) -> AccountInfoProtocol? {
-        for list in allAccounts {
-            for account in list {
-                if account.account.infoAddress.lowercased() == address.lowercased() {
-                    return account.mainAccount ?? account.account
-                }
+        for account in allAccounts {
+            if account.account.infoAddress.lowercased() == address.lowercased() {
+                return account.mainAccount ?? account.account
             }
         }
         return nil

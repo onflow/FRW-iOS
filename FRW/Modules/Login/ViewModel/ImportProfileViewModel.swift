@@ -12,7 +12,7 @@ import Foundation
 class ImportProfileViewModel: ObservableObject {
     let list: [FlowWalletKit.Account]
     let keyProvider: any FlowWalletKit.KeyProtocol
-    @Published var accounts: [[AccountModel]] = []
+    @Published var accounts: [AccountModel] = []
     @Published var hideAccount: [String] = []
 
     init(list: [FlowWalletKit.Account], keyProvider: any FlowWalletKit.KeyProtocol) {
