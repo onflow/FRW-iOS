@@ -279,6 +279,10 @@ extension WalletManager {
         }
         return provider
     }
+
+    func updateWalletEntity() async throws {
+        try await walletEntity?.fetchAccount()
+    }
 }
 
 // MARK: - Child Account

@@ -41,8 +41,8 @@ struct SideMenuView: View {
                         .id(vm.isUpdateFlag)
                     }
 
-//                    bottomMenu
-//                        .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
+                    BottomView
+                        .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
                 }
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -181,8 +181,14 @@ extension SideMenuView {
 
     @ViewBuilder
     var BottomView: some View {
-        VStack {
-            Button {} label: {
+        VStack(spacing: 16) {
+            if vm.isCreating {
+                AccountCreatingCell()
+            }
+            LineView()
+            Button {
+                vm.onAddAccount()
+            } label: {
                 HStack {
                     CircleButton(image: .add) {}
                         .allowsHitTesting(false)

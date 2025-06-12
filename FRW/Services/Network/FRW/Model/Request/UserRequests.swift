@@ -103,3 +103,11 @@ struct NetworkRequest: Codable {
     let accountKey: AccountKey
     let network: String
 }
+
+// MARK: - create address request
+struct CreateAddress: Codable {
+    let hashAlgorithm: Int
+    let publicKey: String
+    let signatureAlgorithm: Int
+    let weight: Int
+}

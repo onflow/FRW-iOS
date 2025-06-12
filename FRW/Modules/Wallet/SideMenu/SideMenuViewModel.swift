@@ -7,6 +7,7 @@
 
 import Combine
 import Factory
+import Flow
 import FlowWalletKit
 import Foundation
 import SwiftUI
@@ -33,6 +34,7 @@ class SideMenuViewModel: ObservableObject {
 
     @Published
     var accountLoading: Bool = false
+    @Published var isCreating: Bool = false
 
     @Published
     var isUpdateFlag: Bool = false
@@ -135,9 +137,53 @@ class SideMenuViewModel: ObservableObject {
         Router.route(to: RouteMap.Profile.switchProfile)
     }
 
+    func onAddAccount() {
+        let closure: StringClosure = { [weak self] action in
+            if action == AddAccountSheet.Action.create.rawValue {
+                self?.createAccount()
+            } else if action == AddAccountSheet.Action.recover.rawValue {
+                self?.recoverAccount()
+            }
+        }
+        Router.route(to: RouteMap.SideMenu.addAccount(closure))
+    }
+
     func onClickEnableEVM() {
         NotificationCenter.default.post(name: .toggleSideMenu)
         Router.route(to: RouteMap.Wallet.enableEVM)
+    }
+
+    private func createAccount() {
+        isCreating = true
+        Task {
+            do {
+                guard let accountKey = await WalletManager.shared.mainAccount?.fullWeightKey else {
+                    log.error("don't find full weight key")
+                    return
+                }
+
+                let requestParam = CreateAddress(hashAlgorithm: accountKey.hashAlgo.index, publicKey: accountKey.publicKey.description, signatureAlgorithm: accountKey.signAlgo.index, weight: accountKey.weight)
+                let response: UserAddressV2Response = try await Network.request(FRWAPI.User.createAddress(requestParam))
+                let txId = Flow.ID(hex: response.txId)
+                _ = try await txId.onceExecuted()
+
+                try await WalletManager.shared.updateWalletEntity()
+
+                await MainActor.run {
+                    HUD.success(title: "success_tips".localized)
+                    self.isCreating = false
+                }
+            } catch {
+                log.error(error)
+                await MainActor.run {
+                    self.isCreating = false
+                }
+            }
+        }
+    }
+
+    private func recoverAccount() {
+        log.debug("--")
     }
 }
 

@@ -320,6 +320,9 @@ extension Color {
 
         /// light: (#00000 10%) dark:(#FFFFFF 20%)
         static let dark10 = Color(.Summer.dark10)
+        /// #FFFFFF #121212
+        static let sheet = Color(.Summer.sheetBG)
+        static let sheetCard = Color(.Summer.sheetCard)
 
         enum Text {
             /// light: #000D07 dark: #FFFFFF

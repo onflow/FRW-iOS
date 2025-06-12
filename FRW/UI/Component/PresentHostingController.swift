@@ -36,11 +36,11 @@ extension PresentActionDelegate {
 // MARK: - PresentHostingController
 
 final class PresentHostingController<Content: PresentActionView>: UIHostingController<Content>,
-    UISheetPresentationControllerDelegate {
-    
+    UISheetPresentationControllerDelegate
+{
     // MARK: Lifecycle
 
-    public init(backgroundColor: Color = Color.Theme.BG.bg1, rootView: Content) {
+    public init(backgroundColor _: Color = Color.Summer.sheet, rootView: Content) {
         super.init(rootView: rootView)
         overrideUserInterfaceStyle = ThemeManager.shared.getUIKitStyle()
     }

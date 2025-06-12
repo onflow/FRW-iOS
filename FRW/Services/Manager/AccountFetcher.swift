@@ -40,7 +40,7 @@ struct AccountFetcher {
         return sortedResult
     }
 
-    private func fetchMetadata(account: FlowWalletKit.Account) async throws -> AccountModel {
+    func fetchMetadata(account: FlowWalletKit.Account) async throws -> AccountModel {
         try? await account.fetchAccount()
         let countInfo = await fetchCount(account: account)
         return AccountFetcher.regroup(account: account, with: countInfo)

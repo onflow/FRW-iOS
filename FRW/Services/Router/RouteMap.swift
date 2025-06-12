@@ -18,6 +18,7 @@ enum RouteMap {}
 typealias EmptyClosure = () -> Void
 typealias SwitchNetworkClosure = (Flow.ChainID) -> Void
 typealias BoolClosure = (Bool) -> Void
+typealias StringClosure = (String) -> Void
 
 // MARK: - RouteMap.RestoreLogin
 
@@ -736,6 +737,22 @@ extension RouteMap.Explore: RouterTarget {
                 showLarge: true
             )
             Router.topPresentedController().present(vc, animated: true, completion: nil)
+        }
+    }
+}
+
+extension RouteMap {
+    enum SideMenu {
+        case addAccount(StringClosure)
+    }
+}
+
+extension RouteMap.SideMenu: RouterTarget {
+    func onPresent(navi: UINavigationController) {
+        switch self {
+        case let .addAccount(closure):
+            let vc = PresentHostingController(rootView: AddAccountSheet(onClick: closure))
+            navi.present(vc, animated: true, completion: nil)
         }
     }
 }

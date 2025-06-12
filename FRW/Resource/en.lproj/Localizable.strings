@@ -1196,3 +1196,5 @@ Key Store and Private Key.";
 "sync_from_old" = "Check your new device to select accounts to import to new device";
 "sync_from_new" = "Check your other device to confirm import";
 "confirm_which_import" = "Confirm which profile to import";
+"multi_create_account" = "Create a new account";
+"multi_recover_account" = "Recover an existing account";

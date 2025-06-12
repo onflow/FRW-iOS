@@ -29,6 +29,7 @@ extension FRWAPI {
         case updateDevice(String)
         case checkimport(String)
         case loginWithImport(RestoreImportRequest)
+        case createAddress(CreateAddress)
     }
 }
 
@@ -79,6 +80,8 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
             return "/v3/checkimport"
         case .loginWithImport:
             return "/v3/import"
+        case .createAddress:
+            return "/v2/user/manualaddress"
         }
     }
 
@@ -87,7 +90,7 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
         case .checkUsername, .userInfo, .userWallet, .search, .keys, .devices, .checkimport:
             return .get
         case .login, .register, .userAddress, .userAddressV2, .manualCheck, .crescendo, .syncDevice, .addSigned,
-             .updateDevice, .loginWithImport:
+             .updateDevice, .loginWithImport, .createAddress:
             return .post
         }
     }
@@ -127,6 +130,8 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
             return .requestParameters(parameters: ["key": key], encoding: URLEncoding.queryString)
         case let .loginWithImport(request):
             return .requestCustomJSONEncodable(request, encoder: FRWAPI.jsonEncoder)
+        case let .createAddress(request):
+            return .requestJSONEncodable(request)
         }
     }
 
