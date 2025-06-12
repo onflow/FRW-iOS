@@ -15,12 +15,33 @@ class WalletUserProfile: ObservableObject {
     // MARK: Lifecycle
 
     init() {
-        info = LocalUserDefaults.shared.walletAccount ?? [:]
+        if let newData = LocalUserDefaults.shared.walletUserProfiles, !newData.isEmpty {
+            info = newData
+        } else if let oldData = LocalUserDefaults.shared.walletAccount, !oldData.isEmpty {
+            var migrated: [String: [String: [WalletUserProfile.User]]] = [:]
+            for (userId, userList) in oldData {
+                for user in userList {
+                    let mainAccountAddress = user.address
+                    if migrated[userId] == nil {
+                        migrated[userId] = [:]
+                    }
+                    if migrated[userId]![mainAccountAddress] == nil {
+                        migrated[userId]![mainAccountAddress] = []
+                    }
+                    migrated[userId]![mainAccountAddress]?.append(user)
+                }
+            }
+            info = migrated
+            LocalUserDefaults.shared.walletUserProfiles = migrated
+            LocalUserDefaults.shared.walletAccount = nil
+        } else {
+            info = [:]
+        }
     }
 
     // MARK: Internal
 
-    @Published var info: [String: [WalletUserProfile.User]]
+    @Published var info: [String: [String: [WalletUserProfile.User]]]
 
     // MARK: Private
 
@@ -32,7 +53,7 @@ class WalletUserProfile: ObservableObject {
     }
 
     private func saveCache() {
-        LocalUserDefaults.shared.walletAccount = info
+        LocalUserDefaults.shared.walletUserProfiles = info
     }
 }
 
@@ -40,56 +61,70 @@ class WalletUserProfile: ObservableObject {
 
 extension WalletUserProfile {
     func readInfo(at address: String) -> WalletUserProfile.User {
-        let currentNetwork = currentNetwork
-        if var list = info[key] {
-            let lastUser = list.last { $0.network == currentNetwork && $0.address == address }
-            if let user = lastUser {
-                return user
+        let mainAddress = mainAddress(by: address)
+        if var addressDict = info[key] {
+            if var list = addressDict[mainAddress] {
+                let lastUser = list.last { $0.address == address }
+                if let user = lastUser {
+                    return user
+                } else {
+                    let existList = list.map { $0.emoji }
+                    let nEmoji = generalInfo(excluded: existList)
+                    let user = WalletUserProfile.User(emoji: nEmoji, address: address)
+                    list.append(user)
+                    addressDict[mainAddress] = list
+                    info[key] = addressDict
+                    saveCache()
+                    return user
+                }
             } else {
-                let filterList = list.filter { $0.network == currentNetwork }
-                let existList = filterList.map { $0.emoji }
-                let nEmoji = generalInfo(count: 1, excluded: existList)?.first ?? .koala
-                let user = WalletUserProfile.User(emoji: nEmoji, address: address)
-                list.append(user)
-                info[key] = list
+                let nEmoji = generalInfo(excluded: [])
+                let model = WalletUserProfile.User(emoji: nEmoji, address: address)
+                addressDict[mainAddress] = [model]
+                info[key] = addressDict
                 saveCache()
-                return user
+                return model
             }
         } else {
-            let nEmoji = generalInfo(count: 1, excluded: [])?.first ?? .koala
+            let nEmoji = generalInfo(excluded: [])
             let model = WalletUserProfile.User(emoji: nEmoji, address: address)
-            info[key] = [model]
+            info[key] = [mainAddress: [model]]
             saveCache()
             return model
         }
     }
 
+    private func mainAddress(by address: String) -> String {
+        UserManager.shared.mainAccount(by: address)?.infoAddress ?? address
+    }
+
     func update(at address: String, emoji: WalletUserProfile.Emoji, name: String? = nil) {
-        let currentNetwork = currentNetwork
-        if var list = info[key] {
-            if let index = list
-                .lastIndex(where: { $0.network == currentNetwork && $0.address == address })
-            {
-                var user = list[index]
-                user.emoji = emoji
-                user.name = name ?? emoji.name
-                list[index] = user
-                info[key] = list
-                saveCache()
+        let mainAccountAddress = address
+        if var addressDict = info[key] {
+            if var list = addressDict[mainAccountAddress] {
+                if let index = list.lastIndex(where: { $0.address == address }) {
+                    var user = list[index]
+                    user.emoji = emoji
+                    user.name = name ?? emoji.name
+                    list[index] = user
+                    addressDict[mainAccountAddress] = list
+                    info[key] = addressDict
+                    saveCache()
+                }
             }
         }
     }
 
-    private func generalInfo(count: Int, excluded: [Emoji]) -> [WalletUserProfile.Emoji]? {
+    private func generalInfo(excluded: [Emoji]) -> WalletUserProfile.Emoji {
         let list = Emoji.allCases
-        return list.randomDifferentElements(limitCount: count, excluded: excluded)
+        return list.randomDifferentElements(excluded: excluded) ?? .avocado
     }
 }
 
 // MARK: data struct
 
 extension WalletUserProfile {
-    enum Emoji: String, CaseIterable, Codable {
+    enum Emoji: String, CaseIterable, Codable, Equatable {
         case koala = "🐨"
         case lion = "🦁"
         case panda = "🐼"
@@ -209,24 +244,16 @@ extension WalletUserProfile {
 }
 
 extension Array where Element: Equatable {
-    func randomDifferentElements(limitCount: Int, excluded: [Element]) -> [Element]? {
-        guard count >= limitCount else {
-            return nil // 确保数组中至少有指定数量的元素
-        }
-
-        var selectedElements: [Element] = []
-
-        var num = count * 36
-        for i in 0 ..< num {
+    func randomDifferentElements(excluded: [Element]) -> Element? {
+        var selectedElements: Element? = randomElement()
+        let num = count * 36
+        for _ in 0 ..< num {
             let element = randomElement()!
-            if !selectedElements.contains(element), !excluded.contains(element) {
-                selectedElements.append(element)
-            }
-            if selectedElements.count == limitCount {
+            if !excluded.contains(element) {
+                selectedElements = element
                 break
             }
         }
-
         return selectedElements
     }
 }

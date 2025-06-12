@@ -60,6 +60,7 @@ extension LocalUserDefaults {
         case filterToken
 
         case filterAccount
+        case walletUserProfiles
     }
 }
 
@@ -310,6 +311,25 @@ class LocalUserDefaults: ObservableObject {
                    [String: [WalletUserProfile.User]].self,
                    from: data
                )
+            {
+                return model
+            } else {
+                return nil
+            }
+        }
+    }
+
+    var walletUserProfiles: [String: [String: [WalletUserProfile.User]]]? {
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                UserDefaults.standard.set(data, forKey: Keys.walletUserProfiles.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Keys.walletUserProfiles.rawValue)
+            }
+        }
+        get {
+            if let data = UserDefaults.standard.data(forKey: Keys.walletUserProfiles.rawValue),
+               let model = try? JSONDecoder().decode([String: [String: [WalletUserProfile.User]]].self, from: data)
             {
                 return model
             } else {

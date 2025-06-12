@@ -105,6 +105,7 @@ struct NetworkRequest: Codable {
 }
 
 // MARK: - create address request
+
 struct CreateAddress: Codable {
     let hashAlgorithm: Int
     let publicKey: String

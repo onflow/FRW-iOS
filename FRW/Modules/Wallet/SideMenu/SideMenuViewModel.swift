@@ -159,17 +159,27 @@ class SideMenuViewModel: ObservableObject {
             do {
                 guard let accountKey = await WalletManager.shared.mainAccount?.fullWeightKey else {
                     log.error("don't find full weight key")
+                    HUD.error(title: "don't find full weight key")
+                    await MainActor.run {
+                        self.isCreating = false
+                    }
                     return
                 }
 
                 let requestParam = CreateAddress(hashAlgorithm: accountKey.hashAlgo.index, publicKey: accountKey.publicKey.description, signatureAlgorithm: accountKey.signAlgo.index, weight: accountKey.weight)
                 let response: UserAddressV2Response = try await Network.request(FRWAPI.User.createAddress(requestParam))
                 let txId = Flow.ID(hex: response.txId)
-                _ = try await txId.onceExecuted()
-
-                try await WalletManager.shared.updateWalletEntity()
-
+                _ = try await txId.onceSealed()
+                guard let model = try await WalletManager.shared.walletEntity?.fetchAccountsByCreationTxId(txId: txId, network: currentNetwork) else {
+                    await MainActor.run {
+                        self.isCreating = false
+                    }
+                    return
+                }
+                let fetcher = AccountFetcher()
+                let accountModel = try await fetcher.fetchMetadata(account: model)
                 await MainActor.run {
+                    filterAccounts.append(accountModel)
                     HUD.success(title: "success_tips".localized)
                     self.isCreating = false
                 }
