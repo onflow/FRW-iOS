@@ -144,8 +144,6 @@ class CadenceManager {
     }
 
     private func loadCache() -> CadenceResponse? {
-        // TODO: replace success?
-        return nil
         guard let file = filePath() else {
             return nil
         }
