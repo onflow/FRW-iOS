@@ -107,7 +107,7 @@ class SideMenuViewModel: ObservableObject {
             }
             .store(in: &cancellableSet)
 
-        UserManager.shared.filterAccounts.$filterAccounts
+        UserManager.shared.accountsFilter.$filterAccounts
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshList()
@@ -178,6 +178,7 @@ class SideMenuViewModel: ObservableObject {
                 }
                 let fetcher = AccountFetcher()
                 let accountModel = try await fetcher.fetchMetadata(account: model)
+                UserManager.shared.allAccounts.append(accountModel)
                 await MainActor.run {
                     filterAccounts.append(accountModel)
                     HUD.success(title: "success_tips".localized)
@@ -216,7 +217,7 @@ extension SideMenuViewModel {
         guard let mainAccount = account.account as? FlowWalletKit.Account else {
             return false
         }
-        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? false : true
+        return UserManager.shared.accountsFilter.inFilter(with: mainAccount) ? false : true
     }
 }
 

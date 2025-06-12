@@ -53,7 +53,7 @@ struct AccountListView: RouteableView {
         guard let mainAccount = accounts.account as? FlowWalletKit.Account else {
             return .arrow
         }
-        return UserManager.shared.filterAccounts.inFilter(with: mainAccount) ? .hide : .arrow
+        return UserManager.shared.accountsFilter.inFilter(with: mainAccount) ? .hide : .arrow
     }
 }
 

@@ -45,7 +45,7 @@ class UserManager: ObservableObject {
     @Published
     var allAccounts: [AccountModel] = []
 
-    @Published var filterAccounts: AccountFilter = .init()
+    @Published var accountsFilter: AccountFilter = .init()
 
     @Published
     var isMeowDomainEnabled: Bool = false

@@ -245,15 +245,12 @@ extension WalletUserProfile {
 
 extension Array where Element: Equatable {
     func randomDifferentElements(excluded: [Element]) -> Element? {
-        var selectedElements: Element? = randomElement()
-        let num = count * 36
-        for _ in 0 ..< num {
-            let element = randomElement()!
-            if !excluded.contains(element) {
-                selectedElements = element
-                break
-            }
+        guard !isEmpty else { return nil }
+        let available = filter { !excluded.contains($0) }
+        if !available.isEmpty {
+            return available.randomElement()
+        } else {
+            return randomElement()
         }
-        return selectedElements
     }
 }

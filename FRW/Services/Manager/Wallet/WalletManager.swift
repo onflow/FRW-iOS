@@ -218,7 +218,7 @@ extension WalletManager {
             mainAccount = nil
             return
         }
-        let account = accounts.first { !UserManager.shared.filterAccounts.inFilter(with: $0) }
+        let account = accounts.first { !UserManager.shared.accountsFilter.inFilter(with: $0) }
         guard let account else {
             mainAccount = nil
             return
