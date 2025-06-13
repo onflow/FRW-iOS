@@ -9,6 +9,7 @@ import Combine
 import Flow
 import SwiftUI
 import SwiftUICharts
+import Factory
 
 extension TokenDetailView {
     struct Quote: Codable {
@@ -136,6 +137,8 @@ class TokenDetailViewModel: ObservableObject {
         refreshButtonState()
     }
 
+    @Injected(\.wallet)
+    private var wallet: WalletManager
     // MARK: Internal
 
     @Published
@@ -176,7 +179,8 @@ class TokenDetailViewModel: ObservableObject {
     var showSheet: Bool = false
     var buttonAction: TokenDetailViewModel.Action = .none
 
-    var showStorageView: Bool { token.isFlowCoin }
+    // Only show storage info when it's flow token under flow account 
+    var showStorageView: Bool { token.isFlowCoin && wallet.selectedAccount?.type == .main }
 
     var isTokenDetailsButtonEnabled: Bool { token.website.isNotNullNorEmpty }
 
