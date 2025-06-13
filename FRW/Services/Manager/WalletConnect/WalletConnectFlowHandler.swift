@@ -19,8 +19,10 @@ struct WalletConnectFlowHandler: WalletConnectChildHandlerProtocol {
     }
 
     func chainId(sessionProposal: Session.Proposal) -> Flow.ChainID? {
-        guard let chains = sessionProposal.requiredNamespaces[nameTag]?.chains,
-              let reference = chains.first(where: { $0.namespace == nameTag })?.reference
+        let requiredChains = sessionProposal.requiredNamespaces[nameTag]?.chains ?? []
+        let optionalChains = sessionProposal.optionalNamespaces?[nameTag]?.chains ?? []
+        let chains = requiredChains + optionalChains
+        guard let reference = chains.first(where: { $0.namespace == nameTag })?.reference
         else {
             return nil
         }
