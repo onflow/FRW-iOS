@@ -404,14 +404,6 @@ extension FlowNetwork {
 // MARK: - Child Account
 
 extension FlowNetwork {
-    static func queryChildAccountList() async throws -> [String] {
-        let address = Flow.Address(hex: WalletManager.shared.getPrimaryWalletAddress() ?? "")
-        let response: [String] = try await fetch(
-            by: \.hybridCustody?.getChildAccount,
-            arguments: [.address(address)]
-        )
-        return response
-    }
 
     static func unlinkChildAccount(_ address: String) async throws -> Flow.ID {
         let txId = try await sendTransaction(
