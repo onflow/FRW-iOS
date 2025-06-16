@@ -106,7 +106,7 @@ struct SecureEnclavePrivateKeyView: RouteableView {
                                     .foregroundColor(Color.Theme.Text.text4)
                             }
                         }
-
+                      
                         Spacer()
 
                         HStack(spacing: 16) {

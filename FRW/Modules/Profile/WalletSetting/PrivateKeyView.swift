@@ -98,9 +98,7 @@ struct PrivateKeyView: RouteableView {
                                     .foregroundColor(.Theme.Text.text4)
                             }
                         }
-
                         Spacer()
-
                         HStack {
                             Divider()
                             VStack(alignment: .leading) {
