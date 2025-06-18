@@ -27,9 +27,4 @@ class WalletSettingViewModel: ObservableObject {
             } catch {}
         }
     }
-
-    func resetWalletAction() {
-        // TODO: #multi-account #six
-        Router.route(to: RouteMap.Profile.resetWalletConfirm)
-    }
 }

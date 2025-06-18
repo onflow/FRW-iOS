@@ -30,6 +30,21 @@ struct COAAccountDetailView: RouteableView {
             .padding(.vertical, 12)
             .backgroundFill(Color.Theme.Background.white)
         }
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                removeAccount()
+            } label: {
+                Text("remove_account".localized)
+                    .font(.inter(size: 16, weight: .bold))
+                    .foregroundColor(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.Theme.Accent.red)
+                    .cornerRadius(16)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .padding(.horizontal, 18)
+        }
         .popup(isPresented: $showAccountEditor) {
             WalletAccountEditor(address: account.infoAddress) {
                 reload()
@@ -47,5 +62,9 @@ struct COAAccountDetailView: RouteableView {
 
     func reload() {
         reloadFlag.toggle()
+    }
+
+    private func removeAccount() {
+        Router.route(to: RouteMap.Profile.removeWallet(account))
     }
 }

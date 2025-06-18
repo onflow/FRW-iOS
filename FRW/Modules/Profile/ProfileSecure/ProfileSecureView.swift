@@ -102,7 +102,6 @@ extension ProfileSecureView {
                     .visibility(style == .arrow ? .visible : .gone)
             }
             .frame(maxWidth: .infinity)
-            .padding(18)
         }
     }
 
@@ -153,6 +152,8 @@ extension ProfileSecureView.ItemCell {
 
 struct Previews_ProfileSecureView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSecureView()
+        ProfileSecureView.ItemCell(title: "Private Key", style: .arrow) { _ in
+        }
+        .cardStyle()
     }
 }

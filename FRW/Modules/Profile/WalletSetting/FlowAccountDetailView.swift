@@ -179,14 +179,13 @@ struct FlowAccountDetailView: RouteableView {
                         .padding(18)
                         .roundedBg()
                     }
-                    .visibility(onlyShowInfo() ? .gone : .visible)
                 }
                 .padding(.horizontal, 18)
             }
             .clipped()
             .safeAreaInset(edge: .bottom) {
                 Button {
-                    vm.resetWalletAction()
+                    Router.route(to: RouteMap.Profile.removeWallet(account))
                 } label: {
                     Text("remove_account".localized)
                         .font(.inter(size: 16, weight: .bold))
@@ -198,7 +197,6 @@ struct FlowAccountDetailView: RouteableView {
                 }
                 .buttonStyle(ScaleButtonStyle())
                 .padding(.horizontal, 18)
-                .visibility(onlyShowInfo() ? .gone : .visible)
             }
         }
         .backgroundFill(Color.Theme.Background.white)
@@ -219,12 +217,6 @@ struct FlowAccountDetailView: RouteableView {
 
     func reload() {
         reloadFlag.toggle()
-    }
-
-    func onlyShowInfo() -> Bool {
-        let list = EVMAccountManager.shared.accounts
-            .filter { $0.showAddress.lowercased() == account.hexAddr.lowercased() }
-        return !list.isEmpty
     }
 
     // MARK: Private

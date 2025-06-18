@@ -31,6 +31,21 @@ struct ProfileEditView: RouteableView {
                 editContainer
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                removeAccount()
+            } label: {
+                Text("edit_account".localized)
+                    .font(.inter(size: 16, weight: .bold))
+                    .foregroundColor(Color.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.Theme.Accent.red)
+                    .cornerRadius(16)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .padding(.horizontal, 18)
+        }
         .backgroundFill(.LL.Neutrals.background)
         .applyRouteable(self)
         .tracedView(self)
@@ -53,6 +68,10 @@ struct ProfileEditView: RouteableView {
 
     @StateObject
     private var vm = ProfileEditViewModel()
+
+    func removeAccount() {
+        Router.route(to: RouteMap.Profile.removeWallet(nil))
+    }
 }
 
 extension ProfileEditView {

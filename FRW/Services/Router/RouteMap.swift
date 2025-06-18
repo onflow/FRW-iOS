@@ -411,6 +411,8 @@ extension RouteMap {
 
         case wallpaper
         case secureEnclavePrivateKey
+
+        case removeWallet(AccountInfoProtocol?)
     }
 }
 
@@ -509,6 +511,8 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: WallpaperView())
         case .secureEnclavePrivateKey:
             navi.push(content: SecureEnclavePrivateKeyView())
+        case let .removeWallet(account):
+            navi.push(content: RemoveWalletView(account: account))
         }
     }
 }
