@@ -22,5 +22,14 @@ class AccountListViewModel: ObservableObject {
                 self?.isUpdateFlag.toggle()
             }
             .store(in: &cancellableSet)
+
+        UserManager.shared.$accountsFilter
+            .compactMap { $0 }
+            .flatMap { $0.$filterAccounts }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isUpdateFlag.toggle()
+            }
+            .store(in: &cancellableSet)
     }
 }
