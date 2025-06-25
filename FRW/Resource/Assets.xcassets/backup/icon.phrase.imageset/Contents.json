@@ -1,19 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "Group 47614.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename" : "Frame 1000002712 (1).svg",
+      "idiom" : "universal"
     },
     {
-      "filename" : "Group 47614@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Group 47614@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "Frame 1000002712 (3).svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

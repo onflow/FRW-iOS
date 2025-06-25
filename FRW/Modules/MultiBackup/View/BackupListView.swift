@@ -268,39 +268,53 @@ struct BackupPatternItem: View {
     var onClick: (ItemStyle) -> Void
 
     var body: some View {
-        VStack {
-            Image(iconName)
-                .renderingMode(.template)
-                .foregroundStyle(Color.Theme.Accent.green)
-                .frame(width: 48, height: 48, alignment: .center)
-                .padding(.top, 48)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .top) {
+                Image(iconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 56)
+                Spacer()
+                Text("Recommended".localized)
+                    .font(.inter(size: 10, weight: .bold))
+                    .kerning(0.16)
+                    .foregroundStyle(Color.Brain.Primary.main)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 8)
+                    .background(.Brain.Primary.main10)
+                    .visibility(style != .phrase ? .visible : .gone)
+                    .cornerRadius(12)
+            }
 
             Text(title)
-                .font(.inter(size: 20, weight: .bold))
-                .foregroundStyle(Color.LL.text)
+                .font(.inter(size: 24, weight: .w700))
+                .foregroundStyle(Color.Brain.Text.primary)
+
             Text(note)
-                .font(.inter(size: 12))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(Color.LL.text)
-                .padding(.horizontal, 24)
-                .padding(.bottom, 48)
-                .padding(.top, 8)
+                .font(.inter(size: 14))
+                .foregroundStyle(Color.Brain.Text.secondary)
         }
+        .padding(24)
         .frame(minWidth: 0, maxWidth: .infinity)
-        .background(color.fixedOpacity())
-        .overlay(alignment: .topTrailing) {
-            Text("Recommended".localized)
-                .font(.inter(size: 10, weight: .bold))
-                .kerning(0.16)
-                .foregroundStyle(Color.Theme.Accent.green)
-                .padding(.vertical, 4)
-                .padding(.horizontal, 8)
-                .background(.Theme.Accent.green.fixedOpacity())
-                .visibility(style != .phrase ? .visible : .gone)
-                .cornerRadius(12)
-                .offset(x: -16, y: 12)
-        }
-        .cornerRadius(24, style: .continuous)
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [color.opacity(0.2), .white.opacity(0.0)]),
+                startPoint: UnitPoint(x: 0.18, y: 0.18),
+                endPoint: .bottomTrailing
+            )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(
+                    LinearGradient(
+                        gradient: Gradient(colors: [color.opacity(0.8), color.opacity(0.2)]),
+                        startPoint: UnitPoint(x: 0.18, y: 0.18),
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        )
+        .cornerRadius(16)
         .onTapGesture {
             onClick(style)
         }
@@ -342,11 +356,11 @@ struct BackupPatternItem: View {
     var color: Color {
         switch style {
         case .device:
-            return Color.Theme.Accent.grey
+            return Color.Theme.Accent.green
         case .multi:
-            return Color.Theme.Accent.grey
+            return Color.Theme.Accent.green
         case .phrase:
-            return Color.Theme.Accent.grey
+            return Color.Theme.Accent.green
         }
     }
 }
