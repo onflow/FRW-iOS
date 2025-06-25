@@ -51,7 +51,7 @@ class AccountSwitchViewModel: ObservableObject {
     }
 
     func loginAccountAction() {
-        Router.route(to: RouteMap.RestoreLogin.importAccountList)
+        Router.route(to: RouteMap.ImportWallet.profile)
     }
 
     func switchAccountAction(_ uid: String) {

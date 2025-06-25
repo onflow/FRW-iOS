@@ -1,15 +1,19 @@
 //
-//  ImportAccountListView.swift
+//  ImportWalletView.swift
 //  FRW
 //
-//  Created by cat on 5/21/25.
+//  Created by cat on 6/19/25.
 //
 
 import SwiftUI
 
-/// a list of all import type
-struct ImportAccountListView: RouteableView {
-    // MARK: Internal
+struct ImportWalletView: RouteableView {
+    @StateObject var viewModel: ImportWalletViewModel
+    @State private var showSwitchUserAlert = false
+
+    init(viewModel: ImportWalletViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var title: String {
         ""
@@ -18,60 +22,53 @@ struct ImportAccountListView: RouteableView {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             VStack(alignment: .center, spacing: 8) {
-                Text("import_account".localized)
+                Text(topTitle)
                     .font(.inter(size: 24, weight: .w700))
                     .foregroundStyle(Color.Summer.Text.primary)
-                Text("restore_from_backup".localized)
+                Text(topSubtitle)
                     .font(.inter(size: 14))
                     .foregroundStyle(Color.Summer.Text.secondary)
             }
 
             VStack(spacing: 8) {
-                ImportOptionCard(
+                ImportWalletCard(
                     icon: "restore.icon.device",
-                    title: "restore_device_title".localized,
+                    title: "import_account_device_title".localized,
                     des: "restore_device_desc_2".localized
                 ) {
-                    if currentNetwork != .mainnet {
-                        showSwitchUserAlert = true
-                    } else {
+                    if isMainnet() {
                         Router.route(to: RouteMap.RestoreLogin.syncQC)
                     }
                 }
 
-                ImportOptionCard(
+                ImportWalletCard(
                     icon: "restore.icon.multi",
                     title: "restore_multi_title".localized,
                     des: "restore_multi_desc".localized
                 ) {
-                    if currentNetwork != .mainnet {
-                        showSwitchUserAlert = true
-                    } else {
-                        Router.route(to: RouteMap.RestoreLogin.restoreMulti)
+                    if isMainnet() {
+                        Router.route(to: RouteMap.ImportWallet.multibackList(viewModel))
                     }
                 }
 
-                ImportOptionCard(
+                ImportWalletCard(
                     icon: "restore.icon.phrase",
                     title: "restore_phrase_title_2".localized,
                     des: "restore_phrase_desc_2".localized
                 ) {
-                    if currentNetwork != .mainnet {
-                        showSwitchUserAlert = true
-                    } else {
+                    if isMainnet() {
                         Router.route(to: RouteMap.RestoreLogin.root)
                     }
                 }
-
-                ImportOptionCard(
-                    icon: "restore.profile.icon",
-                    title: "restore.profile.title".localized,
-                    des: "restore.profile.desc".localized
-                ) {
-                    if currentNetwork != .mainnet {
-                        showSwitchUserAlert = true
-                    } else {
-                        // TODO: #six skip to profile
+                if isAccount {
+                    ImportWalletCard(
+                        icon: "restore.profile.icon",
+                        title: "restore.profile.title".localized,
+                        des: "restore.profile.desc".localized
+                    ) {
+                        if isMainnet() {
+                            // TODO: #six skip to profile
+                        }
                     }
                 }
             }
@@ -94,13 +91,36 @@ struct ImportAccountListView: RouteableView {
         .tracedView(self)
     }
 
-    // MARK: Private
-
-    @State
-    private var showSwitchUserAlert = false
+    func isMainnet() -> Bool {
+        if currentNetwork != .mainnet {
+            showSwitchUserAlert = true
+            return false
+        }
+        return true
+    }
 }
 
-struct ImportOptionCard: View {
+// MARK: - UI
+
+extension ImportWalletView {
+    var isAccount: Bool {
+        viewModel.importType == .account
+    }
+
+    var topTitle: String {
+        isAccount ? "import_account".localized : "import_profile".localized
+    }
+
+    var topSubtitle: String {
+        isAccount ? "import_account_subtitle".localized : "import_profile_subtitle".localized
+    }
+}
+
+#Preview {
+    ImportWalletView(viewModel: .init(importType: .account))
+}
+
+struct ImportWalletCard: View {
     var icon: String
     var title: String
     var des: String
@@ -134,8 +154,4 @@ struct ImportOptionCard: View {
         }
         .buttonStyle(ScaleButtonStyle())
     }
-}
-
-#Preview {
-    ImportAccountListView()
 }

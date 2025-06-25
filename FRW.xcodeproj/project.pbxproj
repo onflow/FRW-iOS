@@ -1155,8 +1155,6 @@
 		4E42DC602B22AEB700EF0A75 /* BackupListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */; };
 		4E4409272CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
 		4E4409282CC132480041AC06 /* BetterAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4409262CC132480041AC06 /* BetterAlertController.swift */; };
-		4E49B72A2DDD6B3C00BC0D46 /* ImportAccountListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E49B7292DDD6B3C00BC0D46 /* ImportAccountListView.swift */; };
-		4E49B72B2DDD6B3C00BC0D46 /* ImportAccountListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E49B7292DDD6B3C00BC0D46 /* ImportAccountListView.swift */; };
 		4E4A6B642CA68D7100231A85 /* SeedPhraseLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */; };
 		4E4A6B652CA68D7100231A85 /* SeedPhraseLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */; };
 		4E4A6B672CA68E8100231A85 /* SeedPhraseLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4A6B662CA68E8100231A85 /* SeedPhraseLoginViewModel.swift */; };
@@ -1430,8 +1428,24 @@
 		4EBDF2C62BFB9E9400E56968 /* SelectCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDF2C42BFB9E9400E56968 /* SelectCollectionView.swift */; };
 		4EBDF2C82BFB9F3700E56968 /* SelectCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDF2C72BFB9F3700E56968 /* SelectCollectionViewModel.swift */; };
 		4EBDF2C92BFB9F3700E56968 /* SelectCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDF2C72BFB9F3700E56968 /* SelectCollectionViewModel.swift */; };
+		4EBE193D2E09A1FD008670B8 /* ImportFromDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE193C2E09A1FD008670B8 /* ImportFromDeviceView.swift */; };
+		4EBE193E2E09A1FD008670B8 /* ImportFromDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE193C2E09A1FD008670B8 /* ImportFromDeviceView.swift */; };
+		4EBE19402E09A296008670B8 /* ImportFromDeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE193F2E09A296008670B8 /* ImportFromDeviceViewModel.swift */; };
+		4EBE19412E09A296008670B8 /* ImportFromDeviceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE193F2E09A296008670B8 /* ImportFromDeviceViewModel.swift */; };
+		4EBE19432E09A61C008670B8 /* WalletConnect+MultiAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19422E09A61C008670B8 /* WalletConnect+MultiAccount.swift */; };
+		4EBE19442E09A61C008670B8 /* WalletConnect+MultiAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19422E09A61C008670B8 /* WalletConnect+MultiAccount.swift */; };
+		4EBE19462E0AA03F008670B8 /* RouteMap+ImportWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19452E0AA03F008670B8 /* RouteMap+ImportWallet.swift */; };
+		4EBE19472E0AA03F008670B8 /* RouteMap+ImportWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19452E0AA03F008670B8 /* RouteMap+ImportWallet.swift */; };
+		4EBE19492E0AAA14008670B8 /* ImportFromMultiBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19482E0AAA14008670B8 /* ImportFromMultiBackupView.swift */; };
+		4EBE194A2E0AAA14008670B8 /* ImportFromMultiBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE19482E0AAA14008670B8 /* ImportFromMultiBackupView.swift */; };
 		4EBE49262AA1B732000FFFFE /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */; };
 		4EBE49272AA1B732000FFFFE /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */; };
+		4EC07EE12E0C5A8600214AE8 /* ImportFromMultiBackupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE02E0C5A8500214AE8 /* ImportFromMultiBackupViewModel.swift */; };
+		4EC07EE22E0C5A8600214AE8 /* ImportFromMultiBackupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE02E0C5A8500214AE8 /* ImportFromMultiBackupViewModel.swift */; };
+		4EC07EE72E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE62E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift */; };
+		4EC07EE82E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE62E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift */; };
+		4EC07EEA2E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE92E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift */; };
+		4EC07EEB2E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC07EE92E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift */; };
 		4EC212F22C45E7F5008469F1 /* MoveAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */; };
 		4EC212F32C45E7F5008469F1 /* MoveAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */; };
 		4EC26FCA2BFCAF5C001330DF /* EVMAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26FC92BFCAF5C001330DF /* EVMAssetProvider.swift */; };
@@ -1486,6 +1500,12 @@
 		4ED41C3A2E02BAC9004A2EC5 /* RemoveWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C382E02BAC9004A2EC5 /* RemoveWalletView.swift */; };
 		4ED41C3C2E02BB0E004A2EC5 /* RemoveAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C3B2E02BB0E004A2EC5 /* RemoveAccountViewModel.swift */; };
 		4ED41C3D2E02BB0E004A2EC5 /* RemoveAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C3B2E02BB0E004A2EC5 /* RemoveAccountViewModel.swift */; };
+		4ED41C452E0379B1004A2EC5 /* ImportWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C442E0379B1004A2EC5 /* ImportWalletView.swift */; };
+		4ED41C462E0379B1004A2EC5 /* ImportWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C442E0379B1004A2EC5 /* ImportWalletView.swift */; };
+		4ED41C482E0379C6004A2EC5 /* ImportWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C472E0379C6004A2EC5 /* ImportWalletViewModel.swift */; };
+		4ED41C492E0379C6004A2EC5 /* ImportWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C472E0379C6004A2EC5 /* ImportWalletViewModel.swift */; };
+		4ED41C4B2E0379DC004A2EC5 /* ImportWalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C4A2E0379DC004A2EC5 /* ImportWalletModel.swift */; };
+		4ED41C4C2E0379DC004A2EC5 /* ImportWalletModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED41C4A2E0379DC004A2EC5 /* ImportWalletModel.swift */; };
 		4ED483132DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */; };
 		4ED483142DA5141C00AA23E6 /* FRWAPI+Blocklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */; };
 		4ED483162DA5155200AA23E6 /* BlocklistResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */; };
@@ -2664,7 +2684,6 @@
 		4E411DBE2CB91C3A005AD540 /* MoveComponentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponentView.swift; sourceTree = "<group>"; };
 		4E42DC5E2B22AEB700EF0A75 /* BackupListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupListView.swift; sourceTree = "<group>"; };
 		4E4409262CC132480041AC06 /* BetterAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetterAlertController.swift; sourceTree = "<group>"; };
-		4E49B7292DDD6B3C00BC0D46 /* ImportAccountListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportAccountListView.swift; sourceTree = "<group>"; };
 		4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginView.swift; sourceTree = "<group>"; };
 		4E4A6B662CA68E8100231A85 /* SeedPhraseLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginViewModel.swift; sourceTree = "<group>"; };
 		4E4A6B692CA6E1F000231A85 /* SeedPhrase+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SeedPhrase+Add.swift"; sourceTree = "<group>"; };
@@ -2810,7 +2829,15 @@
 		4EBDF2BE2BFB8DF700E56968 /* EVMTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMTagView.swift; sourceTree = "<group>"; };
 		4EBDF2C42BFB9E9400E56968 /* SelectCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectCollectionView.swift; sourceTree = "<group>"; };
 		4EBDF2C72BFB9F3700E56968 /* SelectCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollectionViewModel.swift; sourceTree = "<group>"; };
+		4EBE193C2E09A1FD008670B8 /* ImportFromDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromDeviceView.swift; sourceTree = "<group>"; };
+		4EBE193F2E09A296008670B8 /* ImportFromDeviceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromDeviceViewModel.swift; sourceTree = "<group>"; };
+		4EBE19422E09A61C008670B8 /* WalletConnect+MultiAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+MultiAccount.swift"; sourceTree = "<group>"; };
+		4EBE19452E0AA03F008670B8 /* RouteMap+ImportWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+ImportWallet.swift"; sourceTree = "<group>"; };
+		4EBE19482E0AAA14008670B8 /* ImportFromMultiBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromMultiBackupView.swift; sourceTree = "<group>"; };
 		4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateManager.swift; sourceTree = "<group>"; };
+		4EC07EE02E0C5A8500214AE8 /* ImportFromMultiBackupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFromMultiBackupViewModel.swift; sourceTree = "<group>"; };
+		4EC07EE62E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmFromMultiBackupView.swift; sourceTree = "<group>"; };
+		4EC07EE92E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmFromMultiBackupViewModel.swift; sourceTree = "<group>"; };
 		4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAccountsView.swift; sourceTree = "<group>"; };
 		4EC26FC92BFCAF5C001330DF /* EVMAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAssetProvider.swift; sourceTree = "<group>"; };
 		4EC26FCF2BFE315A001330DF /* MoveSingleNFTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSingleNFTView.swift; sourceTree = "<group>"; };
@@ -2844,6 +2871,9 @@
 		4ED40AF62B1A190B00C25EBF /* Loading_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Loading_animation.json; sourceTree = "<group>"; };
 		4ED41C382E02BAC9004A2EC5 /* RemoveWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveWalletView.swift; sourceTree = "<group>"; };
 		4ED41C3B2E02BB0E004A2EC5 /* RemoveAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAccountViewModel.swift; sourceTree = "<group>"; };
+		4ED41C442E0379B1004A2EC5 /* ImportWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletView.swift; sourceTree = "<group>"; };
+		4ED41C472E0379C6004A2EC5 /* ImportWalletViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletViewModel.swift; sourceTree = "<group>"; };
+		4ED41C4A2E0379DC004A2EC5 /* ImportWalletModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletModel.swift; sourceTree = "<group>"; };
 		4ED483122DA5141C00AA23E6 /* FRWAPI+Blocklist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+Blocklist.swift"; sourceTree = "<group>"; };
 		4ED483152DA5155200AA23E6 /* BlocklistResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlocklistResponse.swift; sourceTree = "<group>"; };
 		4ED483192DA515FC00AA23E6 /* BlocklistHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlocklistHandler.swift; sourceTree = "<group>"; };
@@ -3505,8 +3535,8 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4ED41C412E03791C004A2EC5 /* Import */,
 				4E2F22D02DF6AADB00EF0FE8 /* SyncMultiAccount */,
-				4E49B7282DDD6B2100BC0D46 /* ImportAccount */,
 				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
@@ -3748,6 +3778,7 @@
 				4EFBE5D92BCE61EB0012968A /* WalletConnectFlowHandler.swift */,
 				4EFBE5DC2BCE61FF0012968A /* WalletConnectEVMHandler.swift */,
 				4E5F2F1E2C193A2B008589C4 /* DefaultCryptoProvider.swift */,
+				4EBE19422E09A61C008670B8 /* WalletConnect+MultiAccount.swift */,
 			);
 			path = WalletConnect;
 			sourceTree = "<group>";
@@ -5328,14 +5359,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		4E49B7282DDD6B2100BC0D46 /* ImportAccount */ = {
-			isa = PBXGroup;
-			children = (
-				4E49B7292DDD6B3C00BC0D46 /* ImportAccountListView.swift */,
-			);
-			path = ImportAccount;
-			sourceTree = "<group>";
-		};
 		4E4F79492831FC5500ED027C /* MaterialMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -5717,6 +5740,38 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		4ED41C412E03791C004A2EC5 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				4ED41C432E037935004A2EC5 /* ViewModels */,
+				4ED41C422E03792C004A2EC5 /* Views */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		4ED41C422E03792C004A2EC5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4ED41C442E0379B1004A2EC5 /* ImportWalletView.swift */,
+				4EBE193C2E09A1FD008670B8 /* ImportFromDeviceView.swift */,
+				4EBE19482E0AAA14008670B8 /* ImportFromMultiBackupView.swift */,
+				4EC07EE62E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		4ED41C432E037935004A2EC5 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				4ED41C472E0379C6004A2EC5 /* ImportWalletViewModel.swift */,
+				4ED41C4A2E0379DC004A2EC5 /* ImportWalletModel.swift */,
+				4EBE193F2E09A296008670B8 /* ImportFromDeviceViewModel.swift */,
+				4EC07EE02E0C5A8500214AE8 /* ImportFromMultiBackupViewModel.swift */,
+				4EC07EE92E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		4ED483182DA515C100AA23E6 /* BlockList */ = {
 			isa = PBXGroup;
 			children = (
@@ -5852,6 +5907,7 @@
 			children = (
 				6A11596A288E710C005EF797 /* Router.swift */,
 				6A11596D288E7134005EF797 /* RouteMap.swift */,
+				4EBE19452E0AA03F008670B8 /* RouteMap+ImportWallet.swift */,
 				6A115970288E72CC005EF797 /* Coordinator.swift */,
 				6AE8821A288E9FE900ADF36E /* RouteableUIHostingController.swift */,
 				6AE8821D288EB67A00ADF36E /* RouterExtensions.swift */,
@@ -7368,6 +7424,8 @@
 				15DFD3342CD4576A004B0DB8 /* BlobLayer.swift in Sources */,
 				15DFD3352CD4576A004B0DB8 /* ResizableLayer.swift in Sources */,
 				4E09A1F22CC79A5C0099606E /* EventTrackName.swift in Sources */,
+				4EBE193D2E09A1FD008670B8 /* ImportFromDeviceView.swift in Sources */,
+				4EBE19442E09A61C008670B8 /* WalletConnect+MultiAccount.swift in Sources */,
 				15DC20DD27819C56000B187A /* VPrimaryButton.swift in Sources */,
 				15DC21AD27819C56000B187A /* VBaseTextFieldModel.swift in Sources */,
 				6AE69EA528C0BCD4004D4709 /* UIViewController.swift in Sources */,
@@ -7409,6 +7467,7 @@
 				15DC20C727819C56000B187A /* VCloseButtonState.swift in Sources */,
 				15DC214927819C56000B187A /* VTabNavigationViewModel.swift in Sources */,
 				4EA106742C738BB300555350 /* PrivateKeyLoginView.swift in Sources */,
+				4ED41C482E0379C6004A2EC5 /* ImportWalletViewModel.swift in Sources */,
 				4E1B2FE42BA038C000F30379 /* DevicesInfoViewModel.swift in Sources */,
 				15DC20FF27819C56000B187A /* VStepperModel.swift in Sources */,
 				4E7DC9472DF1951600A14B60 /* LinkedAccountDetailViewModel.swift in Sources */,
@@ -7499,7 +7558,6 @@
 				4EFBE5DB2BCE61EB0012968A /* WalletConnectFlowHandler.swift in Sources */,
 				4EB2C6BA2B49D1A500EB899C /* MultiBackupDetailView.swift in Sources */,
 				6A62122D28ACC592002046CA /* UIImage.swift in Sources */,
-				4E49B72B2DDD6B3C00BC0D46 /* ImportAccountListView.swift in Sources */,
 				6AF1F35E2869977B0084DF3D /* AddTokenView.swift in Sources */,
 				4E4A6B6D2CA6ECEF00231A85 /* KeyProtocol+Add.swift in Sources */,
 				4EF0B8DD2C2CF914003BFDD6 /* WalletNotificationView.swift in Sources */,
@@ -7542,6 +7600,7 @@
 				4EBDF2C62BFB9E9400E56968 /* SelectCollectionView.swift in Sources */,
 				15DC212327819C56000B187A /* VSpinnerDashed.swift in Sources */,
 				6A29114728CB377A003295BD /* TransactionListHandler.swift in Sources */,
+				4EC07EE12E0C5A8600214AE8 /* ImportFromMultiBackupViewModel.swift in Sources */,
 				4E03BE1D2C73222A00EF04DC /* KeyStoreLoginViewModel.swift in Sources */,
 				4EB398002B4C073B00704F8A /* RestoreMultiInputMnemonicViewModel.swift in Sources */,
 				6A95CFB528B7747F00267F86 /* TransactionManager.swift in Sources */,
@@ -7563,6 +7622,7 @@
 				15DC20E927819C56000B187A /* VAccordionState.swift in Sources */,
 				4E9D8F1F2BF87A0400E11CC7 /* TitleWithClosedView.swift in Sources */,
 				6A29115128CB3A1D003295BD /* FlowScanTransaction.swift in Sources */,
+				4EBE19492E0AAA14008670B8 /* ImportFromMultiBackupView.swift in Sources */,
 				6AEF839928647A3B0081E285 /* WalletResponses.swift in Sources */,
 				15DC20B527819C56000B187A /* VChevronButtonDirection.swift in Sources */,
 				15DC20CF27819C56000B187A /* VNavigationLinkExtension.swift in Sources */,
@@ -7574,6 +7634,7 @@
 				15DC210527819C56000B187A /* VSliderModel.swift in Sources */,
 				6A45898728C1A70200B1024B /* BrowserSearchItemCell.swift in Sources */,
 				4EB2EF732C984D00002E59B4 /* SecureEnclavePrivateKeyView.swift in Sources */,
+				4EBE19412E09A296008670B8 /* ImportFromDeviceViewModel.swift in Sources */,
 				6A29113F28CB2377003295BD /* TransactionListViewController.swift in Sources */,
 				15D574CA277816F200045E79 /* UsernameView.swift in Sources */,
 				4E3B429F2DF96F3F005B6E13 /* AddAccountSheet.swift in Sources */,
@@ -7649,6 +7710,7 @@
 				6ACDD17028587A7700F406EB /* ProfileEditViewModel.swift in Sources */,
 				154E31512DA40797008A495F /* WalletManager+Crypto.swift in Sources */,
 				15DC20AD27819C56000B187A /* VBaseButtonViewRepresentable.swift in Sources */,
+				4EC07EE82E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift in Sources */,
 				158CE88C2782F1FA006A8394 /* RecoveryPhraseViewModel.swift in Sources */,
 				1588331F28943D1D00142B35 /* SPQRCode.swift in Sources */,
 				154B8906276A1EEB00780E93 /* FRW_App.swift in Sources */,
@@ -7718,6 +7780,7 @@
 				154B8908276A1EEB00780E93 /* ColorBook.swift in Sources */,
 				4E297BD12DC99D3D006A8052 /* CircleButton.swift in Sources */,
 				1565FB9028B15D890086A652 /* LottieView.swift in Sources */,
+				4ED41C462E0379B1004A2EC5 /* ImportWalletView.swift in Sources */,
 				4E42DC602B22AEB700EF0A75 /* BackupListView.swift in Sources */,
 				15D874E428C5D37F0072C6EA /* MatrixView.swift in Sources */,
 				15ECAE3C28C4FCEB00B79453 /* WalletConnectViewModel.swift in Sources */,
@@ -7766,6 +7829,7 @@
 				15DC212B27819C56000B187A /* VProgressBarModel.swift in Sources */,
 				4E297BDF2DC9FDAD006A8052 /* ManagerTokensItemView.swift in Sources */,
 				6A164F6E2845F1CB0026B31E /* View+IndexBarBackground.swift in Sources */,
+				4EBE19462E0AA03F008670B8 /* RouteMap+ImportWallet.swift in Sources */,
 				4E297BD52DC9B13B006A8052 /* ManageTokensView.swift in Sources */,
 				15DC213D27819C56000B187A /* VMenuPickerRow.swift in Sources */,
 				4E95323E2CD5501C00AAECD1 /* CustomTokenDetailView.swift in Sources */,
@@ -8127,6 +8191,7 @@
 				4E3BFD5D2C93D4EA00517FAB /* ImportUserNameViewModel.swift in Sources */,
 				4EC56B31281FC57900246878 /* FlowQuery.swift in Sources */,
 				6AFE1D092A38540300824D5C /* AccountSwitchViewModel.swift in Sources */,
+				4EC07EEB2E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift in Sources */,
 				15DC21DD27819C56000B187A /* StateOpacities_PD.swift in Sources */,
 				6A4BFE312893CA5500142113 /* AlertView.swift in Sources */,
 				6A11596C288E710C005EF797 /* Router.swift in Sources */,
@@ -8154,6 +8219,7 @@
 				6AD3581A28AF700C00BC510A /* NFTUIKitTopSelectionHeaderView.swift in Sources */,
 				1575A74028B29BA200ADC513 /* SVGWebUIView.swift in Sources */,
 				4ED21F38284E2E6E00320AD0 /* ShareSheet.swift in Sources */,
+				4ED41C4B2E0379DC004A2EC5 /* ImportWalletModel.swift in Sources */,
 				6A32213A2927B49B000B8E1F /* StakingDetailView.swift in Sources */,
 				6AF4A6C828D4725300B12FAB /* FlownsResponses.swift in Sources */,
 				6A45898D28C1E05100B1024B /* BrowserResponses.swift in Sources */,
@@ -8281,6 +8347,8 @@
 				15DFD3302CD4576A004B0DB8 /* ResizableLayer.swift in Sources */,
 				4E09A1F32CC79A5C0099606E /* EventTrackName.swift in Sources */,
 				15C58ABA2868A4EE00BD4FC6 /* VPrimaryButton.swift in Sources */,
+				4EBE193E2E09A1FD008670B8 /* ImportFromDeviceView.swift in Sources */,
+				4EBE19432E09A61C008670B8 /* WalletConnect+MultiAccount.swift in Sources */,
 				15C58ABB2868A4EE00BD4FC6 /* VBaseTextFieldModel.swift in Sources */,
 				6AE69EA428C0BCD4004D4709 /* UIViewController.swift in Sources */,
 				15C58ABC2868A4EE00BD4FC6 /* AddressBookView.swift in Sources */,
@@ -8322,6 +8390,7 @@
 				15C58ACC2868A4EE00BD4FC6 /* VTabNavigationViewModel.swift in Sources */,
 				4EA106732C738BB300555350 /* PrivateKeyLoginView.swift in Sources */,
 				4E1B2FE32BA038C000F30379 /* DevicesInfoViewModel.swift in Sources */,
+				4ED41C492E0379C6004A2EC5 /* ImportWalletViewModel.swift in Sources */,
 				15C58ACD2868A4EE00BD4FC6 /* VStepperModel.swift in Sources */,
 				6AA78E0328A0BF2C00FF6CF9 /* ScanHandler.swift in Sources */,
 				4E7DC9482DF1951600A14B60 /* LinkedAccountDetailViewModel.swift in Sources */,
@@ -8412,7 +8481,6 @@
 				4EB2C6B92B49D1A500EB899C /* MultiBackupDetailView.swift in Sources */,
 				6A62122C28ACC592002046CA /* UIImage.swift in Sources */,
 				6AF1F35D2869977B0084DF3D /* AddTokenView.swift in Sources */,
-				4E49B72A2DDD6B3C00BC0D46 /* ImportAccountListView.swift in Sources */,
 				4E4A6B6E2CA6ECEF00231A85 /* KeyProtocol+Add.swift in Sources */,
 				4EF0B8DC2C2CF914003BFDD6 /* WalletNotificationView.swift in Sources */,
 				15C58AF42868A4EE00BD4FC6 /* Image.swift in Sources */,
@@ -8455,6 +8523,7 @@
 				4EBDF2C52BFB9E9400E56968 /* SelectCollectionView.swift in Sources */,
 				6A29114628CB377A003295BD /* TransactionListHandler.swift in Sources */,
 				6A95CFB428B7747F00267F86 /* TransactionManager.swift in Sources */,
+				4EC07EE22E0C5A8600214AE8 /* ImportFromMultiBackupViewModel.swift in Sources */,
 				4E03BE1C2C73222A00EF04DC /* KeyStoreLoginViewModel.swift in Sources */,
 				4EB397FF2B4C073B00704F8A /* RestoreMultiInputMnemonicViewModel.swift in Sources */,
 				15D3BA6428C393CB009AEA6E /* MatrixRainView.swift in Sources */,
@@ -8476,6 +8545,7 @@
 				6A29115028CB3A1D003295BD /* FlowScanTransaction.swift in Sources */,
 				4E9D8F1E2BF87A0400E11CC7 /* TitleWithClosedView.swift in Sources */,
 				15C58B0B2868A4EE00BD4FC6 /* WalletResponses.swift in Sources */,
+				4EBE194A2E0AAA14008670B8 /* ImportFromMultiBackupView.swift in Sources */,
 				15C58B0C2868A4EE00BD4FC6 /* VChevronButtonDirection.swift in Sources */,
 				15C58B0D2868A4EE00BD4FC6 /* VNavigationLinkExtension.swift in Sources */,
 				15C58B0E2868A4EE00BD4FC6 /* VSpinnerModelContinous.swift in Sources */,
@@ -8487,6 +8557,7 @@
 				6A45898628C1A70200B1024B /* BrowserSearchItemCell.swift in Sources */,
 				6A29113E28CB2377003295BD /* TransactionListViewController.swift in Sources */,
 				4EB2EF722C984D00002E59B4 /* SecureEnclavePrivateKeyView.swift in Sources */,
+				4EBE19402E09A296008670B8 /* ImportFromDeviceViewModel.swift in Sources */,
 				15C58B132868A4EE00BD4FC6 /* UsernameView.swift in Sources */,
 				6A2772A228D306B0007E06E9 /* DeveloperModeViewModel.swift in Sources */,
 				4E3B42A02DF96F3F005B6E13 /* AddAccountSheet.swift in Sources */,
@@ -8562,6 +8633,7 @@
 				15C58B3A2868A4EE00BD4FC6 /* RecoveryPhraseViewModel.swift in Sources */,
 				154E31502DA40797008A495F /* WalletManager+Crypto.swift in Sources */,
 				1588331E28943D1D00142B35 /* SPQRCode.swift in Sources */,
+				4EC07EE72E0C74FC00214AE8 /* ConfirmFromMultiBackupView.swift in Sources */,
 				15C58B3B2868A4EE00BD4FC6 /* FRW_App.swift in Sources */,
 				15C58B3C2868A4EE00BD4FC6 /* NotificationDefine.swift in Sources */,
 				15C58B3D2868A4EE00BD4FC6 /* VChevronButtonState.swift in Sources */,
@@ -8631,6 +8703,7 @@
 				15D874E328C5D37F0072C6EA /* MatrixView.swift in Sources */,
 				4E297BD22DC99D3D006A8052 /* CircleButton.swift in Sources */,
 				4E42DC5F2B22AEB700EF0A75 /* BackupListView.swift in Sources */,
+				4ED41C452E0379B1004A2EC5 /* ImportWalletView.swift in Sources */,
 				15ECAE3B28C4FCEB00B79453 /* WalletConnectViewModel.swift in Sources */,
 				15C58B542868A4EE00BD4FC6 /* VSpinnerModelDashed.swift in Sources */,
 				6A63F9F228C9C69100FE96C0 /* ImageAnimated.swift in Sources */,
@@ -8679,6 +8752,7 @@
 				15C58B622868A4EE00BD4FC6 /* VMenuPickerRow.swift in Sources */,
 				4E297BE02DC9FDAD006A8052 /* ManagerTokensItemView.swift in Sources */,
 				15C58B632868A4EE00BD4FC6 /* Shimmer.swift in Sources */,
+				4EBE19472E0AA03F008670B8 /* RouteMap+ImportWallet.swift in Sources */,
 				4E297BD62DC9B13B006A8052 /* ManageTokensView.swift in Sources */,
 				15C58B642868A4EE00BD4FC6 /* NFTTabViewModel.swift in Sources */,
 				4E95323F2CD5501C00AAECD1 /* CustomTokenDetailView.swift in Sources */,
@@ -9040,6 +9114,7 @@
 				15C58C132868A4EE00BD4FC6 /* VSideBar.swift in Sources */,
 				4E3BFD5C2C93D4EA00517FAB /* ImportUserNameViewModel.swift in Sources */,
 				15C58C142868A4EE00BD4FC6 /* FlowQuery.swift in Sources */,
+				4EC07EEA2E0C750F00214AE8 /* ConfirmFromMultiBackupViewModel.swift in Sources */,
 				6AFE1D082A38540300824D5C /* AccountSwitchViewModel.swift in Sources */,
 				15C58C152868A4EE00BD4FC6 /* StateOpacities_PD.swift in Sources */,
 				6A4BFE302893CA5500142113 /* AlertView.swift in Sources */,
@@ -9067,6 +9142,7 @@
 				4E3138122C658FB2003A73E5 /* ResizeableView.swift in Sources */,
 				6AD3581928AF700C00BC510A /* NFTUIKitTopSelectionHeaderView.swift in Sources */,
 				1575A73F28B29BA200ADC513 /* SVGWebUIView.swift in Sources */,
+				4ED41C4C2E0379DC004A2EC5 /* ImportWalletModel.swift in Sources */,
 				15C58C1E2868A4EE00BD4FC6 /* ShareSheet.swift in Sources */,
 				6A3221392927B49B000B8E1F /* StakingDetailView.swift in Sources */,
 				6AF4A6C728D4725300B12FAB /* FlownsResponses.swift in Sources */,

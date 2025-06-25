@@ -88,7 +88,7 @@ class EmptyWalletViewModel: ObservableObject {
     }
 
     func loginAccountAction() {
-        Router.route(to: RouteMap.RestoreLogin.importAccountList)
+        Router.route(to: RouteMap.ImportWallet.profile)
     }
 
     func syncAccountAction() {

@@ -150,6 +150,7 @@ public enum FCLWalletConnectMethod: String, Codable {
     case accountInfo = "frw_account_info"
     case addDeviceInfo = "frw_add_device_key"
     case addMultiAccount = "frw_add_key_to_multiple_accounts"
+    case addKeyToProfile = "frw_add_key_to_profile"
 
     // MARK: Lifecycle
 

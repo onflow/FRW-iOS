@@ -194,7 +194,7 @@ class SideMenuViewModel: ObservableObject {
     }
 
     private func recoverAccount() {
-        log.debug("--")
+        Router.route(to: RouteMap.ImportWallet.account)
     }
 }
 

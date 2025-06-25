@@ -923,7 +923,7 @@
 "restore_device_title" = "From Device Backup";
 "restore_device_desc" = "Restore from another mobile or extension wallet";
 "restore_multi_title" = "From Multi Backup";
-"restore_multi_desc" = "Google Drive/ Passkey/ iCloud/ Recovery Phrase";
+"restore_multi_desc" = "Google Drive, iCloud, DropBox or Recovery phrasy";
 "restore_phrase_title" = "From Raw Key";
 "restore_phrase_desc" = "Support legacy Google Drive, iCloud, Seed Phrase, Key Store and Private Key";
 "from_multi_backup" = "From Multi-Backup";
@@ -1109,8 +1109,8 @@ Please create backups for your wallet to ensure you retain access to your Flow a
 "choose_account_import" = "Choose an account you want to import";
 
 "restore_device_desc_2" = "Mobile or Extension Devices";
-"restore_phrase_title_2" = "From Raw Key";
-"restore_phrase_desc_2" = "Support legacy Google Drive, Seed Phrase, Key Store and Private Key";
+"restore_phrase_title_2" = "From Recovery phrase (legacy)";
+"restore_phrase_desc_2" = "Recovery phrase, Key store, Private key and legacy Google Drive backup";
 "import_desc" = "From Flow Wallet legacy backup, Seed Phrase, 
 Key Store and Private Key.";
 "invalid_data" = "Invalid Data";
@@ -1208,3 +1208,9 @@ Key Store and Private Key.";
 "remove_profile_desc" = "By removing this profile, you will lose the access to it on this device. Please make sure you have backed up your profile. ";
 "remove_profile_desc_2" = "REMOVE MY PROFILE";
 "delete_alert_confirm" = "Delete account";
+
+"import_account_subtitle" = "Restore your account using a backup.";
+"import_profile_subtitle" = "Restore your profile using a backup.";
+
+"import_account_device_title" = "From another device";
+

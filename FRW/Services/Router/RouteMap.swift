@@ -47,7 +47,6 @@ extension RouteMap {
         case privateKey
         case seedPhrase
         // import account
-        case importAccountList
         case importProfile(ImportProfileViewModel)
 
         case syncAction(SyncActionStatusView.Source)
@@ -99,8 +98,6 @@ extension RouteMap.RestoreLogin: RouterTarget {
             navi.push(content: PrivateKeyLoginView())
         case .seedPhrase:
             navi.push(content: SeedPhraseLoginView())
-        case .importAccountList:
-            navi.push(content: ImportAccountListView())
         case let .importProfile(model):
             navi.push(content: ImportProfileView(viewModel: model))
         case let .syncAction(source):
