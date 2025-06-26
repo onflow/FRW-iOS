@@ -16,9 +16,9 @@ class RestoreMultiConnectViewModel: ObservableObject {
 
     init(items: [MultiBackupType]) {
         self.items = items
-        self.currentIndex = 0
+        currentIndex = 0
         if !self.items.isEmpty {
-            self.currentType = self.items[0]
+            currentType = self.items[0]
         }
     }
 
@@ -136,7 +136,8 @@ extension RestoreMultiConnectViewModel {
         validationErrorsOccurred = false
         for item in list {
             if let _ = try? MultiBackupManager.shared
-                .decryptMnemonic(item.data, password: pinCode) {
+                .decryptMnemonic(item.data, password: pinCode)
+            {
                 var newItem = item
                 newItem.code = pin
                 result.append(newItem)
@@ -153,16 +154,16 @@ extension RestoreMultiConnectViewModel {
             HUD.error(WalletError.invalidMnemonic)
             return
         }
-        
+
         let isOldAccount = hdWallet.mnemonic.words.count == 12
         let signAlgo = isOldAccount ? Flow.SignatureAlgorithm.ECDSA_SECP256k1 : Flow
             .SignatureAlgorithm.ECDSA_P256
-        
-        guard let publicKey = hdWallet.getPublicKey(signAlgo: signAlgo) else {
+
+        guard let publicKey = hdWallet.getPublicKey(signAlgo: signAlgo)?.format() else {
             HUD.error(WalletError.invaildPublicKey)
             return
         }
-        
+
         let key = LocalEnvManager.shared.backupAESKey
         do {
             let dataHexString = try MultiBackupManager.shared.encryptMnemonic(
@@ -174,7 +175,7 @@ extension RestoreMultiConnectViewModel {
                 address: "",
                 userId: "",
                 userName: "",
-                publicKey: publicKey.data.hexValue,
+                publicKey: publicKey,
                 data: dataHexString,
                 keyIndex: 0,
                 signAlgo: signAlgo.index,
