@@ -431,12 +431,18 @@ extension UserManager {
         try await finishLogin(customToken: customToken)
     }
 
-    func restoreLogin(with userId: String) async throws {
+    func getAccount(by address: String, for publicKey: String) async throws -> Flow.AccountKey? {
+        let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
+        let result = account.keys.last { $0.publicKey.hex == publicKey && !$0.revoked && $0.weight >= 1000 }
+        return result
+    }
+
+    func restoreLogin(with userId: String, with thePublicKey: String? = nil) async throws {
         guard let token = try? await getIDToken(), !token.isEmpty else {
             loginAnonymousIfNeeded()
             throw LLError.restoreLoginFailed
         }
-        guard let keyProvider = WalletManager.shared.keyProvider(with: userId) else {
+        guard let keyProvider = await WalletManager.shared.keyProvider(with: userId) else {
             throw LLError.restoreLoginFailed
         }
 
@@ -445,7 +451,15 @@ extension UserManager {
         // TODO: Support other network login
         let accounts = wallet.accounts?[.mainnet]
         let validAccount = accounts?.filter { $0.account.keys.filter { !$0.revoked }.count > 0 }
-        guard let accountKey = validAccount?.first?.fullWeightKey?.toStoreKey() else {
+        var flowKey = validAccount?.first?.fullWeightKey
+
+        if flowKey == nil, let theKey = thePublicKey {
+            if let address = await WalletManager.shared.userStore(with: userId)?.address {
+                flowKey = try await getAccount(by: address, for: theKey)
+            }
+        }
+
+        guard let accountKey = flowKey?.toStoreKey() else {
             throw LLError.cannotFindFlowAccount
         }
 
