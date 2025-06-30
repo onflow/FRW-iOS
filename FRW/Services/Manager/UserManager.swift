@@ -454,7 +454,7 @@ extension UserManager {
         var flowKey = validAccount?.first?.fullWeightKey
 
         if flowKey == nil, let theKey = thePublicKey {
-            if let address = await WalletManager.shared.userStore(with: userId)?.address {
+            if let address = await WalletManager.shared.userStore(with: userId, and: theKey)?.address {
                 flowKey = try await getAccount(by: address, for: theKey)
             }
         }
