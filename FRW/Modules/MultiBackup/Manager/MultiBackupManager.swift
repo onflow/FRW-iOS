@@ -553,7 +553,7 @@ extension MultiBackupManager {
                 signers: [firstSigner, secondSigner, RemoteConfigManager.shared]
             )
             let result = try await tx.onceSealed()
-            if result.isSealed {
+            if !result.isFailed {
                 let userId = firstSigner.provider.userId
 
                 let firstSignature = firstSigner.sign(userId) ?? ""
@@ -603,7 +603,7 @@ extension MultiBackupManager {
                     Router.popToRoot()
                 }
             } else {
-                HUD.error(title: "Incorrect signature information")
+                HUD.error(title: "Add key failed", message: result.errorMessage)
             }
             HUD.dismissLoading()
 
