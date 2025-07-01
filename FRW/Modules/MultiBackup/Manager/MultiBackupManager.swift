@@ -599,7 +599,7 @@ extension MultiBackupManager {
                         account: nil
                     )
                     LocalUserDefaults.shared.addUser(user: storeUser)
-                    try await UserManager.shared.restoreLogin(with: firstItem.userId, with: key.publicKey.description)
+                    try await UserManager.shared.restoreLogin(with: firstItem.userId, with: firstItem.address, publicKey: key.publicKey.description)
                     Router.popToRoot()
                 }
             } else {

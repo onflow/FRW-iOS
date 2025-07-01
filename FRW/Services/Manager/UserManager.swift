@@ -437,7 +437,7 @@ extension UserManager {
         return result
     }
 
-    func restoreLogin(with userId: String, with thePublicKey: String? = nil) async throws {
+    func restoreLogin(with userId: String, with address: String? = nil, publicKey: String? = nil) async throws {
         guard let token = try? await getIDToken(), !token.isEmpty else {
             loginAnonymousIfNeeded()
             throw LLError.restoreLoginFailed
@@ -449,14 +449,14 @@ extension UserManager {
         let wallet = Wallet(type: .key(keyProvider))
         try await wallet.fetchAccount()
         // TODO: Support other network login
-        let accounts = wallet.accounts?[.mainnet]
-        let validAccount = accounts?.filter { $0.account.keys.filter { !$0.revoked }.count > 0 }
+        let network: Flow.ChainID = .mainnet
+        let accounts = wallet.accounts?[network]
+        let validAccount = accounts?.filter { $0.hasFullWeightKey }
         var flowKey = validAccount?.first?.fullWeightKey
 
-        if flowKey == nil, let theKey = thePublicKey {
-            if let address = await WalletManager.shared.userStore(with: userId, and: theKey)?.address {
-                flowKey = try await getAccount(by: address, for: theKey)
-            }
+        if flowKey == nil, let address, let publicKey {
+            let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
+            flowKey = account.keys.last { $0.publicKey.description == publicKey }
         }
 
         guard let accountKey = flowKey?.toStoreKey() else {
