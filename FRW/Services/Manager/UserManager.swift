@@ -455,8 +455,7 @@ extension UserManager {
         var flowKey = validAccount?.first?.fullWeightKey
 
         if flowKey == nil, let address, let publicKey {
-            let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
-            flowKey = account.keys.last { $0.publicKey.description == publicKey }
+            flowKey = try await getAccount(by: address, for: publicKey)
         }
 
         guard let accountKey = flowKey?.toStoreKey() else {
