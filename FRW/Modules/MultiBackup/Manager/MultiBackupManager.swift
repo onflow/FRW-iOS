@@ -553,7 +553,7 @@ extension MultiBackupManager {
                 signers: [firstSigner, secondSigner, RemoteConfigManager.shared]
             )
             let result = try await tx.onceSealed()
-            if result.isSealed {
+            if !result.isFailed {
                 let userId = firstSigner.provider.userId
 
                 let firstSignature = firstSigner.sign(userId) ?? ""
@@ -599,11 +599,11 @@ extension MultiBackupManager {
                         account: nil
                     )
                     LocalUserDefaults.shared.addUser(user: storeUser)
-                    try await UserManager.shared.restoreLogin(with: firstItem.userId)
+                    try await UserManager.shared.restoreLogin(with: firstItem.userId, with: firstItem.address, publicKey: key.publicKey.description)
                     Router.popToRoot()
                 }
             } else {
-                HUD.error(title: "Incorrect signature information")
+                HUD.error(title: "Add key failed", message: result.errorMessage)
             }
             HUD.dismissLoading()
 
