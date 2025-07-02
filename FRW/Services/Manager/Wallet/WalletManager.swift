@@ -286,6 +286,10 @@ extension WalletManager {
         LocalUserDefaults.shared.userList.last { $0.userId == uid }
     }
 
+    func userStore(with uid: String, and publicKey: String) -> UserManager.StoreUser? {
+        LocalUserDefaults.shared.userList.last { $0.userId == uid && $0.publicKey == publicKey }
+    }
+
     func keyProvider(with uid: String) -> (any KeyProtocol)? {
         guard let userStore = userStore(with: uid) else {
             return nil

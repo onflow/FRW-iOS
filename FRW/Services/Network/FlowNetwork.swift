@@ -404,7 +404,6 @@ extension FlowNetwork {
 // MARK: - Child Account
 
 extension FlowNetwork {
-
     static func unlinkChildAccount(_ address: String) async throws -> Flow.ID {
         let txId = try await sendTransaction(
             by: \.hybridCustody?.unlinkChildAccount,
@@ -1402,7 +1401,11 @@ extension FlowNetwork {
                 }
 
                 payer {
-                    RemoteConfigManager.shared.payer
+                    if RemoteConfigManager.shared.remoteGreeGas {
+                        RemoteConfigManager.shared.payer
+                    } else {
+                        address.hexAddr
+                    }
                 }
                 arguments {
                     argumentList
