@@ -120,5 +120,7 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

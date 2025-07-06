@@ -20,8 +20,12 @@ import SwiftyDropbox
 import UIKit
 import WalletConnectNotify
 import WalletCore
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
 
 #if DEBUG
+//    import React_RCTDevMenu
     import Atlantis
 #endif
 
@@ -30,7 +34,7 @@ let log = FlowLog.shared
 // MARK: - AppDelegate
 
 @main
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     static var isUnitTest: Bool {
         #if DEBUG
             return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -40,6 +44,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     var window: UIWindow?
+    private var bridge: RCTBridge?
     lazy var coordinator = Coordinator(window: window!)
 
     func application(
@@ -71,6 +76,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         migration.start()
         #if DEBUG
             Atlantis.start()
+        #endif
+        
+        // Initialize React Native bridge for dev tools integration
+        bridge = RCTBridge(bundleURL: bundleURL(), moduleProvider: nil, launchOptions: launchOptions)
+        
+        #if DEBUG
+            // Enable React Native dev tools
+            if let _ = bridge {
+                RCTDevSettings().isShakeToShowDevMenuEnabled = true
+//                RCTDevSettings().isShakeToShowDevMenuEnabled
+//                RCTDevSettings().isDeviceDebuggingAvailable = false
+            }
         #endif
 
         let crowdinProviderConfig = CrowdinProviderConfig(
@@ -148,6 +165,25 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
         return false
+    }
+    
+    override func sourceURL(for bridge: RCTBridge) -> URL? {
+        self.bundleURL()
+    }
+    
+    override func bundleURL() -> URL? {
+//    #if DEBUG
+        // Use local IP for better dev tools connectivity
+        RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+//    #else
+//        Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+//    #endif
+    }
+    
+    // MARK: - React Native Bridge Access
+    
+    func getRCTBridge() -> RCTBridge? {
+        return bridge
     }
 }
 

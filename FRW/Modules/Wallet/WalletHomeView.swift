@@ -413,7 +413,8 @@ struct WalletHomeView: View {
                 allowClick: !wm.isSelectedChildAccount
             ) {
                 LocalUserDefaults.shared.recentToken = nil
-                Router.route(to: RouteMap.Wallet.send())
+//                Router.route(to: RouteMap.Wallet.send())
+                Router.route(to: RouteMap.Wallet.reactNativeDemo)
             }
 
             WalletActionButton(

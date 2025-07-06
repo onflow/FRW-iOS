@@ -201,6 +201,14 @@
 		158CE8812782BEAA006A8394 /* TYNKViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158CE87F2782BEAA006A8394 /* TYNKViewModel.swift */; };
 		158CE8892782DAD7006A8394 /* UserResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158CE8872782DAD7006A8394 /* UserResponses.swift */; };
 		158CE88C2782F1FA006A8394 /* RecoveryPhraseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158CE88A2782F1FA006A8394 /* RecoveryPhraseViewModel.swift */; };
+		1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */; };
+		1596A8D22E1AD76200E85303 /* ReactNativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */; };
+		1596A8D32E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */; };
+		1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */; };
+		1596A8D52E1AD76200E85303 /* ReactNativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */; };
+		1596A8D62E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */; };
+		1596A8D82E1AD9B300E85303 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1596A8D72E1AD9B300E85303 /* main.jsbundle */; };
+		1596A8D92E1AD9B300E85303 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1596A8D72E1AD9B300E85303 /* main.jsbundle */; };
 		1599F771278892680094B196 /* InputMnemonicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1599F76F278892680094B196 /* InputMnemonicViewModel.swift */; };
 		1599F774278894E00094B196 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1599F772278894E00094B196 /* String.swift */; };
 		159CFF2C27887ED3006421FB /* InputMnemonicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159CFF2A27887ED3006421FB /* InputMnemonicView.swift */; };
@@ -2215,6 +2223,10 @@
 		158CE87F2782BEAA006A8394 /* TYNKViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TYNKViewModel.swift; sourceTree = "<group>"; };
 		158CE8872782DAD7006A8394 /* UserResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponses.swift; sourceTree = "<group>"; };
 		158CE88A2782F1FA006A8394 /* RecoveryPhraseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryPhraseViewModel.swift; sourceTree = "<group>"; };
+		1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeDemoView.swift; sourceTree = "<group>"; };
+		1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeView.swift; sourceTree = "<group>"; };
+		1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeViewController.swift; sourceTree = "<group>"; };
+		1596A8D72E1AD9B300E85303 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		1599F76F278892680094B196 /* InputMnemonicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicViewModel.swift; sourceTree = "<group>"; };
 		1599F772278894E00094B196 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		159A54312753681F004BCACC /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
@@ -3405,6 +3417,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				1596A8D02E1AD76200E85303 /* ReactNative */,
 				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
 				4ED483182DA515C100AA23E6 /* BlockList */,
@@ -3748,6 +3761,16 @@
 				4EB2C3062DC0D57700E79FC5 /* FTV3Response.swift */,
 			);
 			path = Response;
+			sourceTree = "<group>";
+		};
+		1596A8D02E1AD76200E85303 /* ReactNative */ = {
+			isa = PBXGroup;
+			children = (
+				1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */,
+				1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */,
+				1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */,
+			);
+			path = ReactNative;
 			sourceTree = "<group>";
 		};
 		159A54302753680C004BCACC /* Base */ = {
@@ -4966,6 +4989,7 @@
 		15EC9DE5274FD1FC00F70CD9 = {
 			isa = PBXGroup;
 			children = (
+				1596A8D72E1AD9B300E85303 /* main.jsbundle */,
 				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
 				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
 				15EC9DF0274FD1FC00F70CD9 /* FRW */,
@@ -6492,7 +6516,6 @@
 				E335EC49770BF49C651A8F56 /* Pods-FRW-dev.debug.xcconfig */,
 				B7074F77EDC150C860131391 /* Pods-FRW-dev.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -6924,6 +6947,7 @@
 				158C9CAB2787F7490062E0C6 /* Montserrat-Italic.ttf in Resources */,
 				4E0D34A62A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */,
 				1565FBA328B16FD70086A652 /* Compass.json in Resources */,
+				1596A8D82E1AD9B300E85303 /* main.jsbundle in Resources */,
 				15D3BA7B28C4D2A4009AEA6E /* LaunchScreen.storyboard in Resources */,
 				154B8929276A1F4600780E93 /* GoogleService-Info.plist in Resources */,
 				158C9CA42787F6EA0062E0C6 /* Inter.ttf in Resources */,
@@ -6976,6 +7000,7 @@
 				1565FB6328B14F140086A652 /* Chat.json in Resources */,
 				6A37AD9428BDAA310047E5F7 /* GoogleService-Info.plist in Resources */,
 				4E3138062C658FB2003A73E5 /* codeql-analysis.yml in Resources */,
+				1596A8D92E1AD9B300E85303 /* main.jsbundle in Resources */,
 				4E0D34A52A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf in Resources */,
 				15C58C612868A4EE00BD4FC6 /* Montserrat-Italic.ttf in Resources */,
 				1565FBA228B16FD70086A652 /* Compass.json in Resources */,
@@ -7710,6 +7735,9 @@
 				4EA0D0A72A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */,
 				57312EC62CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE1A2C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
+				1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
+				1596A8D52E1AD76200E85303 /* ReactNativeView.swift in Sources */,
+				1596A8D62E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */,
 				154E31572DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F142BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15BA24B628C785B300755CBF /* GradientButton.swift in Sources */,
@@ -8594,6 +8622,9 @@
 				15C58B6F2868A4EE00BD4FC6 /* VBaseButtonState.swift in Sources */,
 				57312EC52CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE192C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
+				1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
+				1596A8D22E1AD76200E85303 /* ReactNativeView.swift in Sources */,
+				1596A8D32E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */,
 				154E31562DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F132BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15C58B702868A4EE00BD4FC6 /* HUDManager.swift in Sources */,
