@@ -7,8 +7,12 @@
 
 import UIKit
 import React
+import Factory
 
 class ReactNativeViewController: UIViewController {
+    
+    @Injected(\.wallet)
+    private var wallet: WalletManager
     
     private var reactView: UIView?
     
@@ -38,7 +42,10 @@ class ReactNativeViewController: UIViewController {
             return
         }
         
-        let initialProps: [String: Any] = [:]
+        let initialProps: [String: Any] = [
+            "address" : wallet.selectedAccount?.address.hexAddr ?? "",
+            "network" : wallet.currentNetwork.rawValue,
+        ]
         
         let reactView = RCTRootView(
             bridge: bridge,
