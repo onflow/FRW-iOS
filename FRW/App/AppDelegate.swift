@@ -172,12 +172,12 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     }
     
     override func bundleURL() -> URL? {
-//    #if DEBUG
+    #if DEBUG
         // Use local IP for better dev tools connectivity
         RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
-//    #else
-//        Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-//    #endif
+    #else
+        Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    #endif
     }
     
     // MARK: - React Native Bridge Access
