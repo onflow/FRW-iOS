@@ -67,6 +67,8 @@ class NFTTransferViewModel: ObservableObject {
     @Published
     var isEmptyTransation = true
 
+    @Published var amountValue: Int = 1
+
     var fromChildAccount: ChildAccount?
 
     var fromTargetContent: Contact {
@@ -237,18 +239,38 @@ class NFTTransferViewModel: ObservableObject {
                 case (.coa, .eoa):
                     // sendTransaction
 
-                    let erc721 = try await FlowProvider.Web3.erc721NFTContract()
+                    let ERCContract = try await FlowProvider.Web3.NFTContract(nft.ERCType)
                     let nftId = nft.response.id
-                    guard let coaAddress = EVMAccountManager.shared.accounts.first?.showAddress,
+
+                    let coaAddress = await WalletManager.shared.coa?.address
+
+                    let amount = amountValue
+                    guard let coaAddress = coaAddress,
                           let evmContractAddress = self.nft.collection?.evmAddress
                     else {
                         throw NFTError.sendInvalidAddress
                     }
-                    guard let data = erc721?.contract.method(
-                        "safeTransferFrom",
-                        parameters: [coaAddress, toAddress, nftId],
-                        extraData: nil
-                    ) else {
+                    if amount == 0 {
+                        HUD.error(title: "invalid_count".localized)
+                        return
+                    }
+
+                    var contractData: Data? = nil
+                    if nft.ERCType == .erc1155 {
+                        contractData = ERCContract?.contract.method(
+                            "safeTransferFrom",
+                            parameters: [coaAddress, toAddress, nftId, BigInt(amount), Data()],
+                            extraData: nil
+                        )
+                    } else {
+                        contractData = ERCContract?.contract.method(
+                            "safeTransferFrom",
+                            parameters: [coaAddress, toAddress, nftId],
+                            extraData: nil
+                        )
+                    }
+
+                    guard let data = contractData else {
                         throw NFTError.sendInvalidAddress
                     }
                     log.debug("[NFT] nftID: \(nftId)")
@@ -502,6 +524,11 @@ struct NFTTransferView: View {
                 .padding(.horizontal, 12)
                 .visibility(vm.isValidNFT ? .gone : .visible)
                 .transition(.move(edge: .top))
+
+                if vm.nft.ERCType == .erc1155 {
+                    AmountView(value: $vm.amountValue)
+                        .padding(.top, 8)
+                }
 
                 Spacer()
 

@@ -1174,3 +1174,4 @@ Key Store and Private Key.";
 "hide_dust_tokens_tip" = "Tokens with less than 0.01$ USD balance";
 "only_show_tokens" = "Only show verified tokens";
 "Filters" = "Filters";
+"invalid_count" = "invalid count";
