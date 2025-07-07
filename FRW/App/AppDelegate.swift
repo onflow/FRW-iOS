@@ -25,7 +25,6 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 
 #if DEBUG
-//    import React_RCTDevMenu
     import Atlantis
 #endif
 
@@ -44,13 +43,22 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     }
 
     var window: UIWindow?
-    private var bridge: RCTBridge?
+    var reactNativeDelegate: ReactNativeDelegate?
+    var reactNativeFactory: RCTReactNativeFactory?
+//    private var bridge: RCTBridge?
     lazy var coordinator = Coordinator(window: window!)
 
     func application(
         _: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        
+        let delegate = ReactNativeDelegate()
+        let factory = RCTReactNativeFactory(delegate: delegate)
+        delegate.dependencyProvider = RCTAppDependencyProvider()
+        reactNativeDelegate = delegate
+        reactNativeFactory = factory
+        
         KeyChainAccessibilityUpdate.udpate()
 
         _ = LocalEnvManager.shared
@@ -76,18 +84,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         migration.start()
         #if DEBUG
             Atlantis.start()
-        #endif
-        
-        // Initialize React Native bridge for dev tools integration
-        bridge = RCTBridge(bundleURL: bundleURL(), moduleProvider: nil, launchOptions: launchOptions)
-        
-        #if DEBUG
-            // Enable React Native dev tools
-            if let _ = bridge {
-                RCTDevSettings().isShakeToShowDevMenuEnabled = true
-//                RCTDevSettings().isShakeToShowDevMenuEnabled
-//                RCTDevSettings().isDeviceDebuggingAvailable = false
-            }
         #endif
 
         let crowdinProviderConfig = CrowdinProviderConfig(
@@ -173,17 +169,21 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     
     override func bundleURL() -> URL? {
     #if DEBUG
-        // Use local IP for better dev tools connectivity
-        RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+        // Force Metro connection for debugging
+        return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-        Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
     #endif
     }
     
     // MARK: - React Native Bridge Access
+//    
+//    func getRCTBridge() -> RCTBridge? {
+//        return bridge
+//    }
     
-    func getRCTBridge() -> RCTBridge? {
-        return bridge
+    func getRCTReactNativeFactory() -> RCTReactNativeFactory? {
+        return reactNativeFactory
     }
 }
 
@@ -317,4 +317,19 @@ extension AppDelegate {
             Router.route(to: RouteMap.Wallet.jailbreakAlert)
         }
     }
+}
+
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+#endif
+  }
 }

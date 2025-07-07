@@ -15,6 +15,7 @@ class ReactNativeViewController: UIViewController {
     private var wallet: WalletManager
     
     private var reactView: UIView?
+    private var surface: RCTSurface?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,36 +37,59 @@ class ReactNativeViewController: UIViewController {
     }
     
     private func loadReactNativeView() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-              let bridge = appDelegate.getRCTBridge() else {
+        print("🔧 DEBUG: Starting Modern React Native Loading")
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("❌ DEBUG: Failed to get AppDelegate")
             showErrorView()
+            return
+        }
+        
+        // Try the modern RCTSurfaceHostingView approach first
+        loadWithSurfaceHostingView(appDelegate: appDelegate)
+    }
+    
+    private func loadWithSurfaceHostingView(appDelegate: AppDelegate) {
+        print("🚀 DEBUG: Using RCTSurfaceHostingView approach")
+        
+        guard let factory = appDelegate.getRCTReactNativeFactory() else {
+            print("❌ DEBUG: Failed to get bridge")
             return
         }
         
         let initialProps: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
+            "initialRoute" : "Home",
+            "embedded" : true
         ]
         
-        let reactView = RCTRootView(
-            bridge: bridge,
-            moduleName: "FRWRN",
-            initialProperties: initialProps
-        )
+        print("🚀 DEBUG: Creating RCTSurfaceHostingView")
         
-        reactView.backgroundColor = UIColor.white
+        // Create RCTSurface with proper parameters
+        let surfaceView = factory.rootViewFactory.view(withModuleName: "FRWRN", initialProperties: initialProps)
         
-        view.addSubview(reactView)
-        reactView.translatesAutoresizingMaskIntoConstraints = false
+        // Create RCTSurfaceHostingView
+//        let surfaceView = RCTSurfaceHostingView(surface: surface, sizeMeasureMode: .optimistic)
+        surfaceView.backgroundColor = UIColor.systemBackground
+        
+        // Add to view hierarchy
+        view.addSubview(surfaceView)
+        surfaceView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            reactView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            reactView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            reactView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            reactView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            surfaceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            surfaceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            surfaceView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
-        self.reactView = reactView
+        // Start the surface
+//        surface.start()
+        
+        self.reactView = surfaceView
+//        self.surface = surface
+        print("✅ DEBUG: RCTSurfaceHostingView setup complete")
     }
     
     private func showErrorView() {
