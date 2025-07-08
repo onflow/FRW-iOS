@@ -38,11 +38,8 @@ struct AmountView: View {
                 .multilineTextAlignment(.center)
                 .frame(minWidth: 60)
                 .focused($isFocused)
-                .onChange(of: inputText) { newValue in
-                    let filtered = newValue.filter { $0.isNumber }
-                    if filtered != newValue {
-                        inputText = filtered
-                    }
+                .onChange(of: inputText) { _ in
+                    commitInput()
                 }
                 .onSubmit {
                     commitInput()
@@ -75,9 +72,7 @@ struct AmountView: View {
         .onAppear {
             inputText = "\(value)"
         }
-        .onChange(of: value) { newValue in
-            inputText = "\(newValue)"
-        }
+
         .accessibilityElement(children: .contain)
     }
 

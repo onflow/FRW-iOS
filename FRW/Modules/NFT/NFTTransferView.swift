@@ -526,7 +526,7 @@ struct NFTTransferView: View {
                 .transition(.move(edge: .top))
 
                 if vm.nft.ERCType == .erc1155 {
-                    AmountView(value: $vm.amountValue)
+                    AmountView(value: $vm.amountValue, maxValue: Int(vm.nft.response.amount ?? "0") ?? 0)
                         .padding(.top, 8)
                 }
 
