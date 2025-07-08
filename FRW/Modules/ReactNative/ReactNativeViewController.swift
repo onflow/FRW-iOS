@@ -60,14 +60,17 @@ class ReactNativeViewController: UIViewController {
         let initialProps: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : "Home",
-            "embedded" : true
+            "initialRoute" : "Profile",
+            "embedded" : false
         ]
         
         print("🚀 DEBUG: Creating RCTSurfaceHostingView")
         
         // Create RCTSurface with proper parameters
-        let surfaceView = factory.rootViewFactory.view(withModuleName: "FRWRN", initialProperties: initialProps)
+        let surfaceView = factory.rootViewFactory.view(
+            withModuleName: "FRWRN",
+            initialProperties: initialProps
+        )
         
         // Create RCTSurfaceHostingView
 //        let surfaceView = RCTSurfaceHostingView(surface: surface, sizeMeasureMode: .optimistic)
