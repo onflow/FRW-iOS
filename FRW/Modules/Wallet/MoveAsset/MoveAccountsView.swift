@@ -156,7 +156,7 @@ class MoveAccountsViewModel: ObservableObject {
         selectedAddr = address
         self.callback = callback
 
-        if let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() {
+        if let primaryAddr = WalletManager.shared.getPrimaryWalletAddress() {
             let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
             let contact = Contact(
                 address: primaryAddr,
