@@ -236,7 +236,7 @@ class NFTTransferViewModel: ObservableObject {
                             receiver: toAddress
                         )
                     }
-                case (.coa, .eoa):
+                case (.coa, .eoa), (.coa, .coa):
                     // sendTransaction
 
                     let ERCContract = try await FlowProvider.Web3.NFTContract(nft.ERCType)
