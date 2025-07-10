@@ -275,6 +275,10 @@ struct NFTModel: Codable, Hashable, Identifiable {
         }
         return FlowProvider.ABIType(rawValue: value) ?? .erc721
     }
+
+    var canMove: Bool {
+        (collection?.flowIdentifier ?? response.maskFlowIdentifier) != nil
+    }
 }
 
 // MARK: - CollectionItem

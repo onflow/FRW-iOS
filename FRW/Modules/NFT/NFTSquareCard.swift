@@ -55,7 +55,7 @@ struct NFTSquareCard: View {
                 }
             }
             .overlay(alignment: .topTrailing) {
-                if let amount = nft.response.amount {
+                if let amount = nft.response.amount, nft.ERCType == .erc1155 {
                     Text(amount)
                         .font(.inter(size: 14, weight: .semibold))
                         .foregroundStyle(Color.Theme.Text.white9)
