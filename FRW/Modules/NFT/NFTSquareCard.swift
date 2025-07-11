@@ -54,6 +54,17 @@ struct NFTSquareCard: View {
                         .visibility(isAccessible() ? .visible : .gone)
                 }
             }
+            .overlay(alignment: .topTrailing) {
+                if let amount = nft.response.amount, nft.ERCType == .erc1155 {
+                    Text(amount)
+                        .font(.inter(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.Theme.Text.white9)
+                        .frame(width: 22, height: 22)
+                        .background(Color.Theme.Background.icon)
+                        .clipShape(Circle())
+                        .offset(x: -8, y: 8)
+                }
+            }
         }
         .onTapGesture {
             onClick(nft)
