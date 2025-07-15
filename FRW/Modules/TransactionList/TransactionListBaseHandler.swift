@@ -5,7 +5,6 @@
 //  Created by Selina on 9/9/2022.
 //
 
-import JXSegmentedView
 import SnapKit
 import UIKit
 

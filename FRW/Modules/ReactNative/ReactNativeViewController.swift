@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import React
 import Factory
 
 class ReactNativeViewController: UIViewController {
@@ -15,7 +14,6 @@ class ReactNativeViewController: UIViewController {
     private var wallet: WalletManager
     
     private var reactView: UIView?
-    private var surface: RCTSurface?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +58,7 @@ class ReactNativeViewController: UIViewController {
         let initialProps: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : "Profile",
+            "initialRoute" : "Home",
             "embedded" : false
         ]
         
@@ -73,7 +71,6 @@ class ReactNativeViewController: UIViewController {
         )
         
         // Create RCTSurfaceHostingView
-//        let surfaceView = RCTSurfaceHostingView(surface: surface, sizeMeasureMode: .optimistic)
         surfaceView.backgroundColor = UIColor.systemBackground
         
         // Add to view hierarchy

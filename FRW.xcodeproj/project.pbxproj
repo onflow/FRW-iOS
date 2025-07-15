@@ -17,6 +17,94 @@
 		15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */ = {isa = PBXBuildFile; productRef = 15185ED7278A73A3006B74A9 /* SPConfetti */; };
 		15192C5D2DC1EB4B00DA47BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
 		15192C5F2DC20BF500DA47BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15EC9DF5274FD1FD00F70CD9 /* Assets.xcassets */; };
+		151FEA112E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FF2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift */; };
+		151FEA122E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA082E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift */; };
+		151FEA132E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EC2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift */; };
+		151FEA142E26F2F100A33927 /* JXSegmentedIndicatorParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F42E26F2F100A33927 /* JXSegmentedIndicatorParams.swift */; };
+		151FEA152E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0A2E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift */; };
+		151FEA162E26F2F100A33927 /* JXSegmentedBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E12E26F2F100A33927 /* JXSegmentedBaseCell.swift */; };
+		151FEA172E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9D82E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift */; };
+		151FEA182E26F2F100A33927 /* JXSegmentedTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FD2E26F2F100A33927 /* JXSegmentedTitleCell.swift */; };
+		151FEA192E26F2F100A33927 /* JXSegmentedComponetGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EB2E26F2F100A33927 /* JXSegmentedComponetGradientView.swift */; };
+		151FEA1A2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FB2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift */; };
+		151FEA1B2E26F2F100A33927 /* JXSegmentedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E42E26F2F100A33927 /* JXSegmentedCollectionView.swift */; };
+		151FEA1C2E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9D92E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift */; };
+		151FEA1D2E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F12E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift */; };
+		151FEA1E2E26F2F100A33927 /* JXSegmentedListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DD2E26F2F100A33927 /* JXSegmentedListContainerView.swift */; };
+		151FEA1F2E26F2F100A33927 /* JXSegmentedBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E22E26F2F100A33927 /* JXSegmentedBaseDataSource.swift */; };
+		151FEA202E26F2F100A33927 /* JXSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E52E26F2F100A33927 /* JXSegmentedView.swift */; };
+		151FEA212E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F72E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift */; };
+		151FEA222E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0B2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift */; };
+		151FEA232E26F2F100A33927 /* JXSegmentedRTLLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DE2E26F2F100A33927 /* JXSegmentedRTLLayout.swift */; };
+		151FEA242E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA072E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift */; };
+		151FEA252E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA022E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift */; };
+		151FEA262E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F62E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift */; };
+		151FEA272E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F22E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift */; };
+		151FEA282E26F2F100A33927 /* JXSegmentedTitleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FE2E26F2F100A33927 /* JXSegmentedTitleDataSource.swift */; };
+		151FEA292E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F02E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift */; };
+		151FEA2A2E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F32E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift */; };
+		151FEA2B2E26F2F100A33927 /* JXSegmentedDotItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E92E26F2F100A33927 /* JXSegmentedDotItemModel.swift */; };
+		151FEA2C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift */; };
+		151FEA2D2E26F2F100A33927 /* JXSegmentedViewTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DF2E26F2F100A33927 /* JXSegmentedViewTool.swift */; };
+		151FEA2E2E26F2F100A33927 /* JXSegmentedNumberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F92E26F2F100A33927 /* JXSegmentedNumberCell.swift */; };
+		151FEA2F2E26F2F100A33927 /* JXSegmentedAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DC2E26F2F100A33927 /* JXSegmentedAnimator.swift */; };
+		151FEA302E26F2F100A33927 /* JXSegmentedDotDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E82E26F2F100A33927 /* JXSegmentedDotDataSource.swift */; };
+		151FEA312E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F52E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift */; };
+		151FEA322E26F2F100A33927 /* JXSegmentedTitleItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA002E26F2F100A33927 /* JXSegmentedTitleItemModel.swift */; };
+		151FEA332E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E72E26F2F100A33927 /* JXSegmentedDotCell.swift */; };
+		151FEA342E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA032E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift */; };
+		151FEA352E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EE2E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift */; };
+		151FEA362E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EF2E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift */; };
+		151FEA372E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA042E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift */; };
+		151FEA382E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E32E26F2F100A33927 /* JXSegmentedBaseItemModel.swift */; };
+		151FEA392E26F2F100A33927 /* JXSegmentedNumberDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FA2E26F2F100A33927 /* JXSegmentedNumberDataSource.swift */; };
+		151FEA3A2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DA2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift */; };
+		151FEA3B2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9ED2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift */; };
+		151FEA3C2E26F2F100A33927 /* JXSegmentedTitleImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA062E26F2F100A33927 /* JXSegmentedTitleImageCell.swift */; };
+		151FEA3D2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FF2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift */; };
+		151FEA3E2E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA082E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift */; };
+		151FEA3F2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EC2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift */; };
+		151FEA402E26F2F100A33927 /* JXSegmentedIndicatorParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F42E26F2F100A33927 /* JXSegmentedIndicatorParams.swift */; };
+		151FEA412E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0A2E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift */; };
+		151FEA422E26F2F100A33927 /* JXSegmentedBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E12E26F2F100A33927 /* JXSegmentedBaseCell.swift */; };
+		151FEA432E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9D82E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift */; };
+		151FEA442E26F2F100A33927 /* JXSegmentedTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FD2E26F2F100A33927 /* JXSegmentedTitleCell.swift */; };
+		151FEA452E26F2F100A33927 /* JXSegmentedComponetGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EB2E26F2F100A33927 /* JXSegmentedComponetGradientView.swift */; };
+		151FEA462E26F2F100A33927 /* JXSegmentedNumberItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FB2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift */; };
+		151FEA472E26F2F100A33927 /* JXSegmentedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E42E26F2F100A33927 /* JXSegmentedCollectionView.swift */; };
+		151FEA482E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9D92E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift */; };
+		151FEA492E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F12E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift */; };
+		151FEA4A2E26F2F100A33927 /* JXSegmentedListContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DD2E26F2F100A33927 /* JXSegmentedListContainerView.swift */; };
+		151FEA4B2E26F2F100A33927 /* JXSegmentedBaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E22E26F2F100A33927 /* JXSegmentedBaseDataSource.swift */; };
+		151FEA4C2E26F2F100A33927 /* JXSegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E52E26F2F100A33927 /* JXSegmentedView.swift */; };
+		151FEA4D2E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F72E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift */; };
+		151FEA4E2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0B2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift */; };
+		151FEA4F2E26F2F100A33927 /* JXSegmentedRTLLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DE2E26F2F100A33927 /* JXSegmentedRTLLayout.swift */; };
+		151FEA502E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA072E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift */; };
+		151FEA512E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA022E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift */; };
+		151FEA522E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F62E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift */; };
+		151FEA532E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F22E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift */; };
+		151FEA542E26F2F100A33927 /* JXSegmentedTitleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FE2E26F2F100A33927 /* JXSegmentedTitleDataSource.swift */; };
+		151FEA552E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F02E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift */; };
+		151FEA562E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F32E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift */; };
+		151FEA572E26F2F100A33927 /* JXSegmentedDotItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E92E26F2F100A33927 /* JXSegmentedDotItemModel.swift */; };
+		151FEA582E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA0C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift */; };
+		151FEA592E26F2F100A33927 /* JXSegmentedViewTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DF2E26F2F100A33927 /* JXSegmentedViewTool.swift */; };
+		151FEA5A2E26F2F100A33927 /* JXSegmentedNumberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F92E26F2F100A33927 /* JXSegmentedNumberCell.swift */; };
+		151FEA5B2E26F2F100A33927 /* JXSegmentedAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DC2E26F2F100A33927 /* JXSegmentedAnimator.swift */; };
+		151FEA5C2E26F2F100A33927 /* JXSegmentedDotDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E82E26F2F100A33927 /* JXSegmentedDotDataSource.swift */; };
+		151FEA5D2E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9F52E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift */; };
+		151FEA5E2E26F2F100A33927 /* JXSegmentedTitleItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA002E26F2F100A33927 /* JXSegmentedTitleItemModel.swift */; };
+		151FEA5F2E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E72E26F2F100A33927 /* JXSegmentedDotCell.swift */; };
+		151FEA602E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA032E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift */; };
+		151FEA612E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EE2E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift */; };
+		151FEA622E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9EF2E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift */; };
+		151FEA632E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA042E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift */; };
+		151FEA642E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9E32E26F2F100A33927 /* JXSegmentedBaseItemModel.swift */; };
+		151FEA652E26F2F100A33927 /* JXSegmentedNumberDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9FA2E26F2F100A33927 /* JXSegmentedNumberDataSource.swift */; };
+		151FEA662E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9DA2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift */; };
+		151FEA672E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FE9ED2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift */; };
+		151FEA682E26F2F100A33927 /* JXSegmentedTitleImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151FEA062E26F2F100A33927 /* JXSegmentedTitleImageCell.swift */; };
 		152516FB2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152516FC2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
@@ -202,11 +290,7 @@
 		158CE8892782DAD7006A8394 /* UserResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158CE8872782DAD7006A8394 /* UserResponses.swift */; };
 		158CE88C2782F1FA006A8394 /* RecoveryPhraseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158CE88A2782F1FA006A8394 /* RecoveryPhraseViewModel.swift */; };
 		1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */; };
-		1596A8D22E1AD76200E85303 /* ReactNativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */; };
-		1596A8D32E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */; };
 		1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */; };
-		1596A8D52E1AD76200E85303 /* ReactNativeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */; };
-		1596A8D62E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */; };
 		1596A8D82E1AD9B300E85303 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1596A8D72E1AD9B300E85303 /* main.jsbundle */; };
 		1596A8D92E1AD9B300E85303 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 1596A8D72E1AD9B300E85303 /* main.jsbundle */; };
 		1599F771278892680094B196 /* InputMnemonicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1599F76F278892680094B196 /* InputMnemonicViewModel.swift */; };
@@ -216,6 +300,10 @@
 		159DEC8928C6753700493E9F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC8728C6753700493E9F /* Colors.swift */; };
 		159DEC9228C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */; };
 		159DEC9328C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */; };
+		15A87E8E2E26D9CF00F0E550 /* CalcModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* CalcModule.mm */; };
+		15A87E8F2E26D9CF00F0E550 /* CalcModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* CalcModule.mm */; };
+		15A87E912E26D9E100F0E550 /* CalcModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* CalcModuleSwift.swift */; };
+		15A87E922E26D9E100F0E550 /* CalcModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* CalcModuleSwift.swift */; };
 		15ADAE2A28F51EBB0014B722 /* SymmetricEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */; };
 		15ADAE2B28F51EBB0014B722 /* SymmetricEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */; };
 		15B1F62D2786ABE400847BB5 /* BackupPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B1F62B2786ABE400847BB5 /* BackupPasswordView.swift */; };
@@ -1640,8 +1728,6 @@
 		6A29113B28CAEADC003295BD /* AccountResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29113928CAEADC003295BD /* AccountResponses.swift */; };
 		6A29113E28CB2377003295BD /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29113D28CB2377003295BD /* TransactionListViewController.swift */; };
 		6A29113F28CB2377003295BD /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29113D28CB2377003295BD /* TransactionListViewController.swift */; };
-		6A29114228CB2A87003295BD /* JXSegmentedView in Frameworks */ = {isa = PBXBuildFile; productRef = 6A29114128CB2A87003295BD /* JXSegmentedView */; };
-		6A29114428CB2AA3003295BD /* JXSegmentedView in Frameworks */ = {isa = PBXBuildFile; productRef = 6A29114328CB2AA3003295BD /* JXSegmentedView */; };
 		6A29114628CB377A003295BD /* TransactionListHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29114528CB377A003295BD /* TransactionListHandler.swift */; };
 		6A29114728CB377A003295BD /* TransactionListHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29114528CB377A003295BD /* TransactionListHandler.swift */; };
 		6A29114928CB37AF003295BD /* TransactionListBaseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A29114828CB37AF003295BD /* TransactionListBaseHandler.swift */; };
@@ -2127,6 +2213,50 @@
 		1505E5FD2836365C007B98D8 /* FRWAPI+AddressBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+AddressBook.swift"; sourceTree = "<group>"; };
 		1507A66E28BFA4CA009B050A /* WalletSendButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSendButtonView.swift; sourceTree = "<group>"; };
 		1507C7EE275634C900890C5D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		151FE9D82E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleAttributeCell.swift; sourceTree = "<group>"; };
+		151FE9D92E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleAttributeDataSource.swift; sourceTree = "<group>"; };
+		151FE9DA2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleAttributeItemModel.swift; sourceTree = "<group>"; };
+		151FE9DC2E26F2F100A33927 /* JXSegmentedAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedAnimator.swift; sourceTree = "<group>"; };
+		151FE9DD2E26F2F100A33927 /* JXSegmentedListContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedListContainerView.swift; sourceTree = "<group>"; };
+		151FE9DE2E26F2F100A33927 /* JXSegmentedRTLLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedRTLLayout.swift; sourceTree = "<group>"; };
+		151FE9DF2E26F2F100A33927 /* JXSegmentedViewTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedViewTool.swift; sourceTree = "<group>"; };
+		151FE9E12E26F2F100A33927 /* JXSegmentedBaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedBaseCell.swift; sourceTree = "<group>"; };
+		151FE9E22E26F2F100A33927 /* JXSegmentedBaseDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedBaseDataSource.swift; sourceTree = "<group>"; };
+		151FE9E32E26F2F100A33927 /* JXSegmentedBaseItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedBaseItemModel.swift; sourceTree = "<group>"; };
+		151FE9E42E26F2F100A33927 /* JXSegmentedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedCollectionView.swift; sourceTree = "<group>"; };
+		151FE9E52E26F2F100A33927 /* JXSegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedView.swift; sourceTree = "<group>"; };
+		151FE9E72E26F2F100A33927 /* JXSegmentedDotCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedDotCell.swift; sourceTree = "<group>"; };
+		151FE9E82E26F2F100A33927 /* JXSegmentedDotDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedDotDataSource.swift; sourceTree = "<group>"; };
+		151FE9E92E26F2F100A33927 /* JXSegmentedDotItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedDotItemModel.swift; sourceTree = "<group>"; };
+		151FE9EB2E26F2F100A33927 /* JXSegmentedComponetGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedComponetGradientView.swift; sourceTree = "<group>"; };
+		151FE9EC2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorBackgroundView.swift; sourceTree = "<group>"; };
+		151FE9ED2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorBaseView.swift; sourceTree = "<group>"; };
+		151FE9EE2E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorDotLineView.swift; sourceTree = "<group>"; };
+		151FE9EF2E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorDoubleLineView.swift; sourceTree = "<group>"; };
+		151FE9F02E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorGradientLineView.swift; sourceTree = "<group>"; };
+		151FE9F12E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorGradientView.swift; sourceTree = "<group>"; };
+		151FE9F22E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorImageView.swift; sourceTree = "<group>"; };
+		151FE9F32E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorLineView.swift; sourceTree = "<group>"; };
+		151FE9F42E26F2F100A33927 /* JXSegmentedIndicatorParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorParams.swift; sourceTree = "<group>"; };
+		151FE9F52E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorProtocol.swift; sourceTree = "<group>"; };
+		151FE9F62E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorRainbowLineView.swift; sourceTree = "<group>"; };
+		151FE9F72E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedIndicatorTriangleView.swift; sourceTree = "<group>"; };
+		151FE9F92E26F2F100A33927 /* JXSegmentedNumberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedNumberCell.swift; sourceTree = "<group>"; };
+		151FE9FA2E26F2F100A33927 /* JXSegmentedNumberDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedNumberDataSource.swift; sourceTree = "<group>"; };
+		151FE9FB2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedNumberItemModel.swift; sourceTree = "<group>"; };
+		151FE9FD2E26F2F100A33927 /* JXSegmentedTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleCell.swift; sourceTree = "<group>"; };
+		151FE9FE2E26F2F100A33927 /* JXSegmentedTitleDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleDataSource.swift; sourceTree = "<group>"; };
+		151FE9FF2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleDynamicConfiguration.swift; sourceTree = "<group>"; };
+		151FEA002E26F2F100A33927 /* JXSegmentedTitleItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleItemModel.swift; sourceTree = "<group>"; };
+		151FEA022E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleGradientCell.swift; sourceTree = "<group>"; };
+		151FEA032E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleGradientDataSource.swift; sourceTree = "<group>"; };
+		151FEA042E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleGradientItemModel.swift; sourceTree = "<group>"; };
+		151FEA062E26F2F100A33927 /* JXSegmentedTitleImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleImageCell.swift; sourceTree = "<group>"; };
+		151FEA072E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleImageDataSource.swift; sourceTree = "<group>"; };
+		151FEA082E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleImageItemModel.swift; sourceTree = "<group>"; };
+		151FEA0A2E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleOrImageCell.swift; sourceTree = "<group>"; };
+		151FEA0B2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleOrImageDataSource.swift; sourceTree = "<group>"; };
+		151FEA0C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXSegmentedTitleOrImageItemModel.swift; sourceTree = "<group>"; };
 		152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddressV2Response.swift; sourceTree = "<group>"; };
 		1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTEmptyView_dev.swift; sourceTree = "<group>"; };
 		152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizableLottieView.swift; sourceTree = "<group>"; };
@@ -2223,8 +2353,6 @@
 		158CE87F2782BEAA006A8394 /* TYNKViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TYNKViewModel.swift; sourceTree = "<group>"; };
 		158CE8872782DAD7006A8394 /* UserResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponses.swift; sourceTree = "<group>"; };
 		158CE88A2782F1FA006A8394 /* RecoveryPhraseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryPhraseViewModel.swift; sourceTree = "<group>"; };
-		1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeDemoView.swift; sourceTree = "<group>"; };
-		1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeView.swift; sourceTree = "<group>"; };
 		1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeViewController.swift; sourceTree = "<group>"; };
 		1596A8D72E1AD9B300E85303 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		1599F76F278892680094B196 /* InputMnemonicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicViewModel.swift; sourceTree = "<group>"; };
@@ -2236,6 +2364,8 @@
 		159CFF2A27887ED3006421FB /* InputMnemonicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicView.swift; sourceTree = "<group>"; };
 		159DEC8728C6753700493E9F /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTDetailPageViewModel.swift; sourceTree = "<group>"; };
+		15A87E8D2E26D9CF00F0E550 /* CalcModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = CalcModule.mm; sourceTree = "<group>"; };
+		15A87E902E26D9E100F0E550 /* CalcModuleSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcModuleSwift.swift; sourceTree = "<group>"; };
 		15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymmetricEncryption.swift; sourceTree = "<group>"; };
 		15ADAE2C28F51ECE0014B722 /* SymmetricEncryptionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymmetricEncryptionTests.swift; sourceTree = "<group>"; };
 		15B1F62B2786ABE400847BB5 /* BackupPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPasswordView.swift; sourceTree = "<group>"; };
@@ -3171,7 +3301,6 @@
 				4E2FA6B82CF4177C00D46EA7 /* WalletConnectVerify in Frameworks */,
 				4EEE9DC72BD243DB00685AAA /* FirebaseAnalytics in Frameworks */,
 				4E2FA6AA2CF4177C00D46EA7 /* ReownWalletKit in Frameworks */,
-				6A29114428CB2AA3003295BD /* JXSegmentedView in Frameworks */,
 				4E2FA6B22CF4177C00D46EA7 /* WalletConnectNotify in Frameworks */,
 				4EE090AA2DB0ADB5001515FE /* ZIPFoundation in Frameworks */,
 				6EA3389FC62684EFDC3DEEB7 /* libPods-FRW-dev.a in Frameworks */,
@@ -3246,7 +3375,6 @@
 				4E2FA69C2CF40FE700D46EA7 /* WalletConnectVerify in Frameworks */,
 				4E2FA6A62CF410B700D46EA7 /* ReownRouter in Frameworks */,
 				4E2FA68E2CF40FE700D46EA7 /* ReownWalletKit in Frameworks */,
-				6A29114228CB2A87003295BD /* JXSegmentedView in Frameworks */,
 				4E2FA6962CF40FE700D46EA7 /* WalletConnectNotify in Frameworks */,
 				4EE090AC2DB0ADBD001515FE /* ZIPFoundation in Frameworks */,
 				DEA0F471FF364FC32FFF178C /* libPods-FRW.a in Frameworks */,
@@ -3375,6 +3503,137 @@
 				6A2D35B8283B6AD6008293D9 /* ProfileViewModel.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		151FE9DB2E26F2F100A33927 /* AttributeTitle */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9D82E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift */,
+				151FE9D92E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift */,
+				151FE9DA2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift */,
+			);
+			path = AttributeTitle;
+			sourceTree = "<group>";
+		};
+		151FE9E02E26F2F100A33927 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9DC2E26F2F100A33927 /* JXSegmentedAnimator.swift */,
+				151FE9DD2E26F2F100A33927 /* JXSegmentedListContainerView.swift */,
+				151FE9DE2E26F2F100A33927 /* JXSegmentedRTLLayout.swift */,
+				151FE9DF2E26F2F100A33927 /* JXSegmentedViewTool.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		151FE9E62E26F2F100A33927 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9E12E26F2F100A33927 /* JXSegmentedBaseCell.swift */,
+				151FE9E22E26F2F100A33927 /* JXSegmentedBaseDataSource.swift */,
+				151FE9E32E26F2F100A33927 /* JXSegmentedBaseItemModel.swift */,
+				151FE9E42E26F2F100A33927 /* JXSegmentedCollectionView.swift */,
+				151FE9E52E26F2F100A33927 /* JXSegmentedView.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		151FE9EA2E26F2F100A33927 /* Dot */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9E72E26F2F100A33927 /* JXSegmentedDotCell.swift */,
+				151FE9E82E26F2F100A33927 /* JXSegmentedDotDataSource.swift */,
+				151FE9E92E26F2F100A33927 /* JXSegmentedDotItemModel.swift */,
+			);
+			path = Dot;
+			sourceTree = "<group>";
+		};
+		151FE9F82E26F2F100A33927 /* Indicator */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9EB2E26F2F100A33927 /* JXSegmentedComponetGradientView.swift */,
+				151FE9EC2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift */,
+				151FE9ED2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift */,
+				151FE9EE2E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift */,
+				151FE9EF2E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift */,
+				151FE9F02E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift */,
+				151FE9F12E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift */,
+				151FE9F22E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift */,
+				151FE9F32E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift */,
+				151FE9F42E26F2F100A33927 /* JXSegmentedIndicatorParams.swift */,
+				151FE9F52E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift */,
+				151FE9F62E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift */,
+				151FE9F72E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift */,
+			);
+			path = Indicator;
+			sourceTree = "<group>";
+		};
+		151FE9FC2E26F2F100A33927 /* Number */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9F92E26F2F100A33927 /* JXSegmentedNumberCell.swift */,
+				151FE9FA2E26F2F100A33927 /* JXSegmentedNumberDataSource.swift */,
+				151FE9FB2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift */,
+			);
+			path = Number;
+			sourceTree = "<group>";
+		};
+		151FEA012E26F2F100A33927 /* Title */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9FD2E26F2F100A33927 /* JXSegmentedTitleCell.swift */,
+				151FE9FE2E26F2F100A33927 /* JXSegmentedTitleDataSource.swift */,
+				151FE9FF2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift */,
+				151FEA002E26F2F100A33927 /* JXSegmentedTitleItemModel.swift */,
+			);
+			path = Title;
+			sourceTree = "<group>";
+		};
+		151FEA052E26F2F100A33927 /* TitleGradient */ = {
+			isa = PBXGroup;
+			children = (
+				151FEA022E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift */,
+				151FEA032E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift */,
+				151FEA042E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift */,
+			);
+			path = TitleGradient;
+			sourceTree = "<group>";
+		};
+		151FEA092E26F2F100A33927 /* TitleImage */ = {
+			isa = PBXGroup;
+			children = (
+				151FEA062E26F2F100A33927 /* JXSegmentedTitleImageCell.swift */,
+				151FEA072E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift */,
+				151FEA082E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift */,
+			);
+			path = TitleImage;
+			sourceTree = "<group>";
+		};
+		151FEA0D2E26F2F100A33927 /* TitleOrImage */ = {
+			isa = PBXGroup;
+			children = (
+				151FEA0A2E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift */,
+				151FEA0B2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift */,
+				151FEA0C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift */,
+			);
+			path = TitleOrImage;
+			sourceTree = "<group>";
+		};
+		151FEA0F2E26F2F100A33927 /* JXSegmentedView */ = {
+			isa = PBXGroup;
+			children = (
+				151FE9DB2E26F2F100A33927 /* AttributeTitle */,
+				151FE9E02E26F2F100A33927 /* Common */,
+				151FE9E62E26F2F100A33927 /* Core */,
+				151FE9EA2E26F2F100A33927 /* Dot */,
+				151FE9F82E26F2F100A33927 /* Indicator */,
+				151FE9FC2E26F2F100A33927 /* Number */,
+				151FEA012E26F2F100A33927 /* Title */,
+				151FEA052E26F2F100A33927 /* TitleGradient */,
+				151FEA092E26F2F100A33927 /* TitleImage */,
+				151FEA0D2E26F2F100A33927 /* TitleOrImage */,
+			);
+			path = JXSegmentedView;
 			sourceTree = "<group>";
 		};
 		152516F92DAFC1AF00DBC83A /* KeyStore */ = {
@@ -3766,8 +4025,6 @@
 		1596A8D02E1AD76200E85303 /* ReactNative */ = {
 			isa = PBXGroup;
 			children = (
-				1596A8CD2E1AD76200E85303 /* ReactNativeDemoView.swift */,
-				1596A8CE2E1AD76200E85303 /* ReactNativeView.swift */,
 				1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */,
 			);
 			path = ReactNative;
@@ -3872,12 +4129,22 @@
 		159A56062753848B004BCACC /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				15A87E8C2E26D9C000F0E550 /* Bridge */,
 				6A41B6A72861D06100999451 /* Define */,
 				6ABAE52C2836295100C97AE2 /* Model */,
 				159A54302753680C004BCACC /* Base */,
 				4E0F48462DA4ABD300F5552D /* BridgeFeePayer.swift */,
 			);
 			path = Foundation;
+			sourceTree = "<group>";
+		};
+		15A87E8C2E26D9C000F0E550 /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				15A87E902E26D9E100F0E550 /* CalcModuleSwift.swift */,
+				15A87E8D2E26D9CF00F0E550 /* CalcModule.mm */,
+			);
+			path = Bridge;
 			sourceTree = "<group>";
 		};
 		15ADAE2828F51EA50014B722 /* Crypto */ = {
@@ -6261,6 +6528,7 @@
 		6ABAE52D2836297C00C97AE2 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				151FEA0F2E26F2F100A33927 /* JXSegmentedView */,
 				15DFD32B2CD4576A004B0DB8 /* FluidGradient */,
 				4E3138052C658FB2003A73E5 /* DebugViewer */,
 				4E5646532C0606A300890E61 /* PopupView */,
@@ -6595,7 +6863,6 @@
 				15D3BA7128C3B90A009AEA6E /* ViewAnimator */,
 				15D3BA7628C45F21009AEA6E /* Hero */,
 				15F517FC28C6577000504FDC /* Atlantis */,
-				6A29114328CB2AA3003295BD /* JXSegmentedView */,
 				15D6D8F528CBAEE000CBA152 /* FancyScrollView */,
 				155E372F28D3ADC100834C30 /* Highlightr */,
 				6A46754728F2D46500F705A8 /* FMDB */,
@@ -6689,7 +6956,6 @@
 				15D3BA7428C45EFF009AEA6E /* Hero */,
 				15CC8A6028C4E0FD001D2696 /* RiveRuntime */,
 				15F517FA28C6574C00504FDC /* Atlantis */,
-				6A29114128CB2A87003295BD /* JXSegmentedView */,
 				15D6D8F328CBAEBD00CBA152 /* FancyScrollView */,
 				155E372D28D3AD4700834C30 /* Highlightr */,
 				6A46754528F2D44800F705A8 /* FMDB */,
@@ -6874,7 +7140,6 @@
 				15D3BA7328C45EFF009AEA6E /* XCRemoteSwiftPackageReference "Hero" */,
 				15CC8A5F28C4E0FD001D2696 /* XCRemoteSwiftPackageReference "rive-ios" */,
 				15F517F928C6574C00504FDC /* XCRemoteSwiftPackageReference "atlantis" */,
-				6A29114028CB2A87003295BD /* XCRemoteSwiftPackageReference "JXSegmentedView" */,
 				15D6D8F228CBAEBD00CBA152 /* XCRemoteSwiftPackageReference "FancyScrollView" */,
 				155E372C28D3AD4700834C30 /* XCRemoteSwiftPackageReference "Highlightr" */,
 				6A46754428F2D44800F705A8 /* XCRemoteSwiftPackageReference "fmdb" */,
@@ -7069,9 +7334,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7125,9 +7394,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7200,9 +7473,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7239,9 +7516,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7514,6 +7795,7 @@
 				6AEF839928647A3B0081E285 /* WalletResponses.swift in Sources */,
 				15DC20B527819C56000B187A /* VChevronButtonDirection.swift in Sources */,
 				15DC20CF27819C56000B187A /* VNavigationLinkExtension.swift in Sources */,
+				15A87E8F2E26D9CF00F0E550 /* CalcModule.mm in Sources */,
 				15DC212727819C56000B187A /* VSpinnerModelContinous.swift in Sources */,
 				6AF95B3D2848686D0012C837 /* AddressBookRequest.swift in Sources */,
 				15DC215D27819C56000B187A /* VMenuRow.swift in Sources */,
@@ -7736,8 +8018,6 @@
 				57312EC62CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE1A2C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
-				1596A8D52E1AD76200E85303 /* ReactNativeView.swift in Sources */,
-				1596A8D62E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */,
 				154E31572DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F142BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15BA24B628C785B300755CBF /* GradientButton.swift in Sources */,
@@ -7822,6 +8102,7 @@
 				15DC210727819C56000B187A /* VSliderState.swift in Sources */,
 				6AFE1D062A384E3000824D5C /* AccountSwitchView.swift in Sources */,
 				15DC215B27819C56000B187A /* VMenuButtonType.swift in Sources */,
+				15A87E912E26D9E100F0E550 /* CalcModuleSwift.swift in Sources */,
 				158832E228942D5800142B35 /* RequestInfo.swift in Sources */,
 				6A16F19128B8B0D80055936E /* TransactionUIHandler.swift in Sources */,
 				15DC217F27819C56000B187A /* VActionSheetRow.swift in Sources */,
@@ -7988,6 +8269,50 @@
 				15DC210F27819C56000B187A /* VRangeSliderState.swift in Sources */,
 				6AB5FBA02892652900FA2261 /* BackupiCloudTarget.swift in Sources */,
 				15D5774B277C0FFB00045E79 /* UsernameViewModel.swift in Sources */,
+				151FEA112E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */,
+				151FEA122E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */,
+				151FEA132E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift in Sources */,
+				151FEA142E26F2F100A33927 /* JXSegmentedIndicatorParams.swift in Sources */,
+				151FEA152E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift in Sources */,
+				151FEA162E26F2F100A33927 /* JXSegmentedBaseCell.swift in Sources */,
+				151FEA172E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift in Sources */,
+				151FEA182E26F2F100A33927 /* JXSegmentedTitleCell.swift in Sources */,
+				151FEA192E26F2F100A33927 /* JXSegmentedComponetGradientView.swift in Sources */,
+				151FEA1A2E26F2F100A33927 /* JXSegmentedNumberItemModel.swift in Sources */,
+				151FEA1B2E26F2F100A33927 /* JXSegmentedCollectionView.swift in Sources */,
+				151FEA1C2E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift in Sources */,
+				151FEA1D2E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift in Sources */,
+				151FEA1E2E26F2F100A33927 /* JXSegmentedListContainerView.swift in Sources */,
+				151FEA1F2E26F2F100A33927 /* JXSegmentedBaseDataSource.swift in Sources */,
+				151FEA202E26F2F100A33927 /* JXSegmentedView.swift in Sources */,
+				151FEA212E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift in Sources */,
+				151FEA222E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift in Sources */,
+				151FEA232E26F2F100A33927 /* JXSegmentedRTLLayout.swift in Sources */,
+				151FEA242E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift in Sources */,
+				151FEA252E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift in Sources */,
+				151FEA262E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift in Sources */,
+				151FEA272E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift in Sources */,
+				151FEA282E26F2F100A33927 /* JXSegmentedTitleDataSource.swift in Sources */,
+				151FEA292E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift in Sources */,
+				151FEA2A2E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift in Sources */,
+				151FEA2B2E26F2F100A33927 /* JXSegmentedDotItemModel.swift in Sources */,
+				151FEA2C2E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift in Sources */,
+				151FEA2D2E26F2F100A33927 /* JXSegmentedViewTool.swift in Sources */,
+				151FEA2E2E26F2F100A33927 /* JXSegmentedNumberCell.swift in Sources */,
+				151FEA2F2E26F2F100A33927 /* JXSegmentedAnimator.swift in Sources */,
+				151FEA302E26F2F100A33927 /* JXSegmentedDotDataSource.swift in Sources */,
+				151FEA312E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift in Sources */,
+				151FEA322E26F2F100A33927 /* JXSegmentedTitleItemModel.swift in Sources */,
+				151FEA332E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */,
+				151FEA342E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */,
+				151FEA352E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */,
+				151FEA362E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */,
+				151FEA372E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */,
+				151FEA382E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */,
+				151FEA392E26F2F100A33927 /* JXSegmentedNumberDataSource.swift in Sources */,
+				151FEA3A2E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift in Sources */,
+				151FEA3B2E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift in Sources */,
+				151FEA3C2E26F2F100A33927 /* JXSegmentedTitleImageCell.swift in Sources */,
 				15DC21E527819C57000B187A /* StateColors_EFSED.swift in Sources */,
 				4E82C0202B2AF85800A61439 /* BackupUploadTimeline.swift in Sources */,
 				15DC218927819C56000B187A /* VRadioButtonState.swift in Sources */,
@@ -8401,6 +8726,7 @@
 				15C58B0C2868A4EE00BD4FC6 /* VChevronButtonDirection.swift in Sources */,
 				15C58B0D2868A4EE00BD4FC6 /* VNavigationLinkExtension.swift in Sources */,
 				15C58B0E2868A4EE00BD4FC6 /* VSpinnerModelContinous.swift in Sources */,
+				15A87E8E2E26D9CF00F0E550 /* CalcModule.mm in Sources */,
 				15C58B0F2868A4EE00BD4FC6 /* AddressBookRequest.swift in Sources */,
 				15C58B102868A4EE00BD4FC6 /* VMenuRow.swift in Sources */,
 				15C58B112868A4EE00BD4FC6 /* CreatePinCodeViewModel.swift in Sources */,
@@ -8623,8 +8949,6 @@
 				57312EC52CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE192C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
-				1596A8D22E1AD76200E85303 /* ReactNativeView.swift in Sources */,
-				1596A8D32E1AD76200E85303 /* ReactNativeDemoView.swift in Sources */,
 				154E31562DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
 				4E9D8F132BF730E500E11CC7 /* MoveAssetsView.swift in Sources */,
 				15C58B702868A4EE00BD4FC6 /* HUDManager.swift in Sources */,
@@ -8709,6 +9033,7 @@
 				6AFE1D052A384E3000824D5C /* AccountSwitchView.swift in Sources */,
 				158832E128942D5800142B35 /* RequestInfo.swift in Sources */,
 				6A16F19028B8B0D80055936E /* TransactionUIHandler.swift in Sources */,
+				15A87E922E26D9E100F0E550 /* CalcModuleSwift.swift in Sources */,
 				15C58B9E2868A4EE00BD4FC6 /* VActionSheetRow.swift in Sources */,
 				15C58B9F2868A4EE00BD4FC6 /* VSecondaryButton.swift in Sources */,
 				6AE8E22829479B5E00BE395F /* StakingDetailViewModel.swift in Sources */,
@@ -8875,6 +9200,50 @@
 				15C58BEB2868A4EE00BD4FC6 /* VRangeSliderState.swift in Sources */,
 				6AB5FB9F2892652900FA2261 /* BackupiCloudTarget.swift in Sources */,
 				15C58BEC2868A4EE00BD4FC6 /* UsernameViewModel.swift in Sources */,
+				151FEA3D2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */,
+				151FEA3E2E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */,
+				151FEA3F2E26F2F100A33927 /* JXSegmentedIndicatorBackgroundView.swift in Sources */,
+				151FEA402E26F2F100A33927 /* JXSegmentedIndicatorParams.swift in Sources */,
+				151FEA412E26F2F100A33927 /* JXSegmentedTitleOrImageCell.swift in Sources */,
+				151FEA422E26F2F100A33927 /* JXSegmentedBaseCell.swift in Sources */,
+				151FEA432E26F2F100A33927 /* JXSegmentedTitleAttributeCell.swift in Sources */,
+				151FEA442E26F2F100A33927 /* JXSegmentedTitleCell.swift in Sources */,
+				151FEA452E26F2F100A33927 /* JXSegmentedComponetGradientView.swift in Sources */,
+				151FEA462E26F2F100A33927 /* JXSegmentedNumberItemModel.swift in Sources */,
+				151FEA472E26F2F100A33927 /* JXSegmentedCollectionView.swift in Sources */,
+				151FEA482E26F2F100A33927 /* JXSegmentedTitleAttributeDataSource.swift in Sources */,
+				151FEA492E26F2F100A33927 /* JXSegmentedIndicatorGradientView.swift in Sources */,
+				151FEA4A2E26F2F100A33927 /* JXSegmentedListContainerView.swift in Sources */,
+				151FEA4B2E26F2F100A33927 /* JXSegmentedBaseDataSource.swift in Sources */,
+				151FEA4C2E26F2F100A33927 /* JXSegmentedView.swift in Sources */,
+				151FEA4D2E26F2F100A33927 /* JXSegmentedIndicatorTriangleView.swift in Sources */,
+				151FEA4E2E26F2F100A33927 /* JXSegmentedTitleOrImageDataSource.swift in Sources */,
+				151FEA4F2E26F2F100A33927 /* JXSegmentedRTLLayout.swift in Sources */,
+				151FEA502E26F2F100A33927 /* JXSegmentedTitleImageDataSource.swift in Sources */,
+				151FEA512E26F2F100A33927 /* JXSegmentedTitleGradientCell.swift in Sources */,
+				151FEA522E26F2F100A33927 /* JXSegmentedIndicatorRainbowLineView.swift in Sources */,
+				151FEA532E26F2F100A33927 /* JXSegmentedIndicatorImageView.swift in Sources */,
+				151FEA542E26F2F100A33927 /* JXSegmentedTitleDataSource.swift in Sources */,
+				151FEA552E26F2F100A33927 /* JXSegmentedIndicatorGradientLineView.swift in Sources */,
+				151FEA562E26F2F100A33927 /* JXSegmentedIndicatorLineView.swift in Sources */,
+				151FEA572E26F2F100A33927 /* JXSegmentedDotItemModel.swift in Sources */,
+				151FEA582E26F2F100A33927 /* JXSegmentedTitleOrImageItemModel.swift in Sources */,
+				151FEA592E26F2F100A33927 /* JXSegmentedViewTool.swift in Sources */,
+				151FEA5A2E26F2F100A33927 /* JXSegmentedNumberCell.swift in Sources */,
+				151FEA5B2E26F2F100A33927 /* JXSegmentedAnimator.swift in Sources */,
+				151FEA5C2E26F2F100A33927 /* JXSegmentedDotDataSource.swift in Sources */,
+				151FEA5D2E26F2F100A33927 /* JXSegmentedIndicatorProtocol.swift in Sources */,
+				151FEA5E2E26F2F100A33927 /* JXSegmentedTitleItemModel.swift in Sources */,
+				151FEA5F2E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */,
+				151FEA602E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */,
+				151FEA612E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */,
+				151FEA622E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */,
+				151FEA632E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */,
+				151FEA642E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */,
+				151FEA652E26F2F100A33927 /* JXSegmentedNumberDataSource.swift in Sources */,
+				151FEA662E26F2F100A33927 /* JXSegmentedTitleAttributeItemModel.swift in Sources */,
+				151FEA672E26F2F100A33927 /* JXSegmentedIndicatorBaseView.swift in Sources */,
+				151FEA682E26F2F100A33927 /* JXSegmentedTitleImageCell.swift in Sources */,
 				15C58BED2868A4EE00BD4FC6 /* StateColors_EFSED.swift in Sources */,
 				4E82C01F2B2AF85800A61439 /* BackupUploadTimeline.swift in Sources */,
 				15C58BEE2868A4EE00BD4FC6 /* VRadioButtonState.swift in Sources */,
@@ -9232,6 +9601,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FRW/App/FRW-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -9275,6 +9645,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FRW/App/FRW-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -9320,6 +9691,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LILICOPROD";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FRW/App/FRW-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -9362,6 +9734,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = LILICOPROD;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "FRW/App/FRW-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -9371,6 +9744,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -9402,6 +9776,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CXX = "";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -9420,14 +9795,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD = "";
+				LDPLUSPLUS = "";
 				MARKETING_VERSION = 2.4.10;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -9441,6 +9815,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -9472,6 +9847,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CXX = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -9484,13 +9860,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD = "";
+				LDPLUSPLUS = "";
 				MARKETING_VERSION = 2.4.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -10293,14 +10668,6 @@
 				minimumVersion = 2.5.0;
 			};
 		};
-		6A29114028CB2A87003295BD /* XCRemoteSwiftPackageReference "JXSegmentedView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pujiaxin33/JXSegmentedView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		6A46754428F2D44800F705A8 /* XCRemoteSwiftPackageReference "fmdb" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ccgus/fmdb";
@@ -10926,16 +11293,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		6A29114128CB2A87003295BD /* JXSegmentedView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6A29114028CB2A87003295BD /* XCRemoteSwiftPackageReference "JXSegmentedView" */;
-			productName = JXSegmentedView;
-		};
-		6A29114328CB2AA3003295BD /* JXSegmentedView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6A29114028CB2A87003295BD /* XCRemoteSwiftPackageReference "JXSegmentedView" */;
-			productName = JXSegmentedView;
 		};
 		6A46754528F2D44800F705A8 /* FMDB */ = {
 			isa = XCSwiftPackageProductDependency;

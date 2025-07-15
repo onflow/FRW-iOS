@@ -1,5 +1,5 @@
 {
-  "originHash" : "998ee3de990b48f5b2679eb61fc692136a0599eb187bcaa7ffd99a7c6fd20d05",
+  "originHash" : "bfac52bc31ad5e5b0e11a022e9a1c4996e66a1ef56fda0fc073549bb17c0e5f9",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -294,15 +294,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "080ff88258eb507fb5164010d0832601a7014591"
-      }
-    },
-    {
-      "identity" : "jxsegmentedview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pujiaxin33/JXSegmentedView",
-      "state" : {
-        "revision" : "fbbf965d7396bd99ac1ce88a80b6c950b85313f6",
-        "version" : "1.4.1"
       }
     },
     {
