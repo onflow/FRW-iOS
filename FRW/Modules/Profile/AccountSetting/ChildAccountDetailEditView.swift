@@ -51,12 +51,12 @@ class ChildAccountDetailEditViewModel: ObservableObject {
 
     @objc
     func saveAction() {
-        if newInfo.name.trim.count > 100 {
+        if newInfo.name.trim().count > 100 {
             HUD.error(title: "name must be less than 100 characters")
             return
         }
 
-        if newInfo.desc.trim.count > 1000 {
+        if newInfo.desc.trim().count > 1000 {
             HUD.error(title: "description must be less than 1000 characters")
             return
         }
@@ -81,9 +81,9 @@ class ChildAccountDetailEditViewModel: ObservableObject {
 
                 let txId = try await FlowNetwork.editChildAccountMeta(
                     childAccount.addr ?? "",
-                    name: newInfo.name.trim,
-                    desc: newInfo.desc.trim,
-                    thumbnail: newInfo.imageURL?.trim ?? ""
+                    name: newInfo.name.trim(),
+                    desc: newInfo.desc.trim(),
+                    thumbnail: newInfo.imageURL?.trim() ?? ""
                 )
                 let holder = TransactionManager.TransactionHolder(id: txId, type: .editChildAccount)
 
