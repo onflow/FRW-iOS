@@ -1274,6 +1274,8 @@
 		4E97F3B82D5348F9003842AB /* SwapProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E97F3B72D5348F9003842AB /* SwapProviderView.swift */; };
 		4E97F3B92D5348F9003842AB /* SwapProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E97F3B72D5348F9003842AB /* SwapProviderView.swift */; };
 		4E9BFF5D2867631300601339 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E9BFF5C2867631300601339 /* UIKit.framework */; };
+		4E9CDEDC2E165EAF00A8B9AE /* AmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9CDEDB2E165EAF00A8B9AE /* AmountView.swift */; };
+		4E9CDEDD2E165EAF00A8B9AE /* AmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9CDEDB2E165EAF00A8B9AE /* AmountView.swift */; };
 		4E9D8F082BF5DC2100E11CC7 /* Web3Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */; };
 		4E9D8F092BF5DC2100E11CC7 /* Web3Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */; };
 		4E9D8F0B2BF5E3AD00E11CC7 /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F0A2BF5E3AD00E11CC7 /* NetworkProvider.swift */; };
@@ -2668,6 +2670,7 @@
 		4E9621DA2B985BAB006859AD /* scripts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scripts.json; sourceTree = "<group>"; };
 		4E97F3B72D5348F9003842AB /* SwapProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderView.swift; sourceTree = "<group>"; };
 		4E9BFF5C2867631300601339 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4E9CDEDB2E165EAF00A8B9AE /* AmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountView.swift; sourceTree = "<group>"; };
 		4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Provider.swift; sourceTree = "<group>"; };
 		4E9D8F0A2BF5E3AD00E11CC7 /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
 		4E9D8F122BF730E500E11CC7 /* MoveAssetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAssetsView.swift; sourceTree = "<group>"; };
@@ -4890,6 +4893,7 @@
 				4EE0909E2DA750B3001515FE /* WarningView.swift */,
 				4E611D132DD1E1BC000DAA74 /* GuidePopover.swift */,
 				4E611D162DD1E4B4000DAA74 /* TooltipView.swift */,
+				4E9CDEDB2E165EAF00A8B9AE /* AmountView.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -7910,6 +7914,7 @@
 				6AE69EA028C0AE7A004D4709 /* BrowserSearchInputBar.swift in Sources */,
 				15DC1D4727814A68000B187A /* ButtonStyle.swift in Sources */,
 				15DC219527819C56000B187A /* VTextField.swift in Sources */,
+				4E9CDEDD2E165EAF00A8B9AE /* AmountView.swift in Sources */,
 				15CB4DFD28CA298C0069ABB4 /* MoonPayRequest.swift in Sources */,
 				4EB2EF6A2C958A88002E59B4 /* TextCheckBox.swift in Sources */,
 				15DC20A527819C56000B187A /* VWebLinkType.swift in Sources */,
@@ -8797,6 +8802,7 @@
 				15C58BC22868A4EE00BD4FC6 /* ButtonStyle.swift in Sources */,
 				15C58BC42868A4EE00BD4FC6 /* VTextField.swift in Sources */,
 				15CB4DFC28CA298C0069ABB4 /* MoonPayRequest.swift in Sources */,
+				4E9CDEDC2E165EAF00A8B9AE /* AmountView.swift in Sources */,
 				15C58BC52868A4EE00BD4FC6 /* VWebLinkType.swift in Sources */,
 				15C58BC62868A4EE00BD4FC6 /* ViewExtensions.swift in Sources */,
 				4EB2EF692C958A88002E59B4 /* TextCheckBox.swift in Sources */,
@@ -9420,7 +9426,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 2.4.10;
+				MARKETING_VERSION = 2.4.12;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -9484,7 +9490,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 2.4.10;
+				MARKETING_VERSION = 2.4.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
