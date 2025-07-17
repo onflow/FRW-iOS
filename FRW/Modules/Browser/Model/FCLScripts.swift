@@ -282,7 +282,7 @@ extension FCLScripts {
             SignatureReplacement: hex,
             KeyIDReplacement: "\(keyId)",
         ]
-        return FCLScripts.signMessageResponse.replace(by: dict)
+        return FCLScripts.signMessageResponse.replace(from: dict)
     }
 
     static func generateAuthnResponse(
