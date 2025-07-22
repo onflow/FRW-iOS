@@ -43,14 +43,24 @@
   }];
 }
 
-- (NSString * _Nullable)getNetwork { 
+- (NSString * _Nullable)getNetwork {
     return [TurboModuleSwift getNetwork];
 }
 
-
-- (NSString * _Nullable)getSelectedAddress { 
+- (NSString * _Nullable)getSelectedAddress {
     return [TurboModuleSwift getCurrentAddress];
 }
 
+- (void)sign:(nonnull NSString *)hexData
+      resolve:(nonnull RCTPromiseResolveBlock)resolve
+      reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signWithHexData:hexData completionHandler:^(NSString *_Nullable signature, NSError *_Nullable error) {
+    if (error) {
+      reject(@"sign_error", error.localizedDescription, error);
+    } else {
+      resolve(signature);
+    }
+  }];
+}
 
 @end
