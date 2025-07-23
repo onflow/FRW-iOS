@@ -15,7 +15,16 @@
 #import <FirebaseMessaging/FirebaseMessaging.h>
 #import <AVKit/AVCaptureEventInteraction.h>
 #import <AVFoundation/AVCaptureMetadataOutput.h>
+
+#if defined(TARGET_FRW)
+
 #import "FRW-Swift.h"
+
+#elif defined(TARGET_FRWDEV)
+
+#import "FRW_dev-Swift.h"
+
+#endif
 
 @interface RCTNativeFRWBridge ()
 @end
