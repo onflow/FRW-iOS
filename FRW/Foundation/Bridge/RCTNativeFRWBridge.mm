@@ -52,6 +52,14 @@
   }];
 }
 
+- (NSString *)getVersion {
+    return [TurboModuleSwift getVersion];
+}
+
+- (NSString *)getBuildNumber {
+    return [TurboModuleSwift getBuildNumber];
+}
+
 - (NSString * _Nullable)getNetwork {
     return [TurboModuleSwift getNetwork];
 }

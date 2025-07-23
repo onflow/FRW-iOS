@@ -1,8 +1,17 @@
 import Foundation
-import Factory
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
+
+    @objc
+    static func getVersion() -> String {
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+    }
+
+    @objc
+    static func getBuildNumber() -> String {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+    }
 
     @objc
     static func getJWT() async throws -> String {
