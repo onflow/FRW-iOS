@@ -32,4 +32,34 @@ class TurboModuleSwift: NSObject {
     static func sign(hexData: String) async throws -> String {
         return try await WalletManager.shared.sign(signableData: Data(hexData.hexValue)).hexString
     }
+  
+    @objc
+    static func getCurrentAllAccounts() async throws -> [String: Any] {
+      var list: [RNBridge.WalletAccount] = []
+      if let account = await WalletManager.shared.mainAccount {
+        list.append(account.toWalletAccount())
+      }
+      if let account = await WalletManager.shared.coa {
+        list.append(account.toWalletAccount())
+      }
+      if let childList = await WalletManager.shared.childs {
+        let result = childList.map { $0.toWalletAccount() }
+        list.append(contentsOf: result)
+      }
+      
+      let response = RNBridge.WalletAccountsResponse(accounts: list)
+      return try response.toDictionary()
+    }
+  
+    @objc
+    static func getCOAFlowBalance() -> String {
+      return ""
+    }
+  
+  @objc
+  static func getRecentContacts() async throws -> [String: Any] {
+    let result = RecentListCache.cache.list.map { $0.toRNContact() }
+    let response = RNBridge.RecentContactsResponse(contacts: result)
+    return try response.toDictionary()
+  }
 }

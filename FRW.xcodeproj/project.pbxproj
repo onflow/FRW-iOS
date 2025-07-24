@@ -1757,6 +1757,10 @@
 		4EE8E4962834DC7100DFEF59 /* NFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8E4942834DC7100DFEF59 /* NFTModel.swift */; };
 		4EE8E4992835EAF500DFEF59 /* NFTFavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8E4972835EAF100DFEF59 /* NFTFavoriteView.swift */; };
 		4EE8E49C283626D000DFEF59 /* NFTLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE8E49A283626D000DFEF59 /* NFTLoading.swift */; };
+		4EECEB1E2E3235AB008E21B6 /* NativeToRNModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */; };
+		4EECEB1F2E3235AB008E21B6 /* NativeToRNModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */; };
+		4EECEB212E323F3E008E21B6 /* RNEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEB202E323F29008E21B6 /* RNEncoder.swift */; };
+		4EECEB222E323F3E008E21B6 /* RNEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEB202E323F29008E21B6 /* RNEncoder.swift */; };
 		4EEDA38D2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEDA38C2B4D788A0000D382 /* MultiBackupDetailViewModel.swift */; };
 		4EEDA38E2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EEDA38C2B4D788A0000D382 /* MultiBackupDetailViewModel.swift */; };
 		4EEE9DC72BD243DB00685AAA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4EEE9DC62BD243DB00685AAA /* FirebaseAnalytics */; };
@@ -3185,6 +3189,8 @@
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
 		4EE8E4972835EAF100DFEF59 /* NFTFavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTFavoriteView.swift; sourceTree = "<group>"; };
 		4EE8E49A283626D000DFEF59 /* NFTLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTLoading.swift; sourceTree = "<group>"; };
+		4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeToRNModel.swift; sourceTree = "<group>"; };
+		4EECEB202E323F29008E21B6 /* RNEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNEncoder.swift; sourceTree = "<group>"; };
 		4EEDA38C2B4D788A0000D382 /* MultiBackupDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupDetailViewModel.swift; sourceTree = "<group>"; };
 		4EEEF0712D05FE66008393E9 /* EventTrack+Dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventTrack+Dev.swift"; sourceTree = "<group>"; };
 		4EF0B8DB2C2CF914003BFDD6 /* WalletNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletNotificationView.swift; sourceTree = "<group>"; };
@@ -4620,10 +4626,12 @@
 		15A87E8C2E26D9C000F0E550 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
+				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -8348,6 +8356,7 @@
 				4E97F3B92D5348F9003842AB /* SwapProviderView.swift in Sources */,
 				15DC21A327819C56000B187A /* VBaseTextFieldActions.swift in Sources */,
 				6A43BCFF2872D19C003E9D16 /* Date.swift in Sources */,
+				4EECEB1E2E3235AB008E21B6 /* NativeToRNModel.swift in Sources */,
 				4EB2C6CC2B4A529500EB899C /* RestoreMultiConnectViewModel.swift in Sources */,
 				15362A162DA02B7E008F4E51 /* WalletActionButton.swift in Sources */,
 				15F2444928CB370D00C1090E /* ShrinkingCapsule.swift in Sources */,
@@ -8392,6 +8401,7 @@
 				15DC21F32781F7D9000B187A /* Keyboard.swift in Sources */,
 				15DC208127819C56000B187A /* VBaseViewNavigationBarCenter.swift in Sources */,
 				6A8FA4B6285B192900EE5BE3 /* View+SnappableIDModifier.swift in Sources */,
+				4EECEB222E323F3E008E21B6 /* RNEncoder.swift in Sources */,
 				6A164F682845F1CB0026B31E /* UITableViewCustomizer.swift in Sources */,
 				6A7F6512289A8391007188DC /* VerifyPinView.swift in Sources */,
 				6AB90ADA2937C2D00008E74A /* StakingInfo.swift in Sources */,
@@ -9368,6 +9378,7 @@
 				4E97F3B82D5348F9003842AB /* SwapProviderView.swift in Sources */,
 				6A43BCFE2872D19C003E9D16 /* Date.swift in Sources */,
 				15F2444828CB370D00C1090E /* ShrinkingCapsule.swift in Sources */,
+				4EECEB1F2E3235AB008E21B6 /* NativeToRNModel.swift in Sources */,
 				4EB2C6CB2B4A529500EB899C /* RestoreMultiConnectViewModel.swift in Sources */,
 				15362A152DA02B7E008F4E51 /* WalletActionButton.swift in Sources */,
 				15C58B072868A4EE00BD4FC6 /* UIKitTextFieldCoordinator.swift in Sources */,
@@ -9412,6 +9423,7 @@
 				15C58B202868A4EE00BD4FC6 /* VBaseViewNavigationBarCenter.swift in Sources */,
 				15C58B212868A4EE00BD4FC6 /* View+SnappableIDModifier.swift in Sources */,
 				15C58B222868A4EE00BD4FC6 /* UITableViewCustomizer.swift in Sources */,
+				4EECEB212E323F3E008E21B6 /* RNEncoder.swift in Sources */,
 				6A7F6511289A8391007188DC /* VerifyPinView.swift in Sources */,
 				15C58B232868A4EE00BD4FC6 /* VMenuPicker.swift in Sources */,
 				6AB90AD92937C2D00008E74A /* StakingInfo.swift in Sources */,

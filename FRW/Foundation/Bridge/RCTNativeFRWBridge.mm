@@ -52,6 +52,30 @@
   }];
 }
 
+- (void)getWalletAccounts:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getCurrentAllAccountsWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable list, NSError * _Nullable error) {
+      if (error) {
+          reject(@"wallet error", error.localizedDescription,error);
+      } else {
+          resolve(list);
+      }
+  }];
+}
+
+- (void)getRecentContacts:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [TurboModuleSwift getRecentContactsWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+        if (error) {
+            reject(@"recent_error", error.localizedDescription, error);
+        } else {
+            resolve(result);
+        }
+    }];
+}
+
+- (void)getCOAFlowBalance:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    resolve([TurboModuleSwift getCOAFlowBalance]);
+}
+
 - (NSString *)getVersion {
     return [TurboModuleSwift getVersion];
 }
