@@ -29,6 +29,7 @@ enum RNBridge {
         let name: String
         let address: String
         let emoji: String
+        let avatar: String?
         let isActive: Bool
         let isIncompatible: Bool
         let type: AccountType
