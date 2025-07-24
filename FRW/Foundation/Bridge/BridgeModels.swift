@@ -8,36 +8,38 @@
 
 import Foundation
 
-enum AccountType: String, Codable {
-    case main = "main"
-    case child = "child"
-    case evm = "evm"
-}
+enum RNBridge {
+    enum AccountType: String, Codable {
+        case main = "main"
+        case child = "child"
+        case evm = "evm"
+    }
 
-struct Contact: Codable {
-    let id: String
-    let name: String
-    let address: String
-    let avatar: String?
-    let username: String?
-    let contactName: String?
-}
+    struct Contact: Codable {
+        let id: String
+        let name: String
+        let address: String
+        let avatar: String?
+        let username: String?
+        let contactName: String?
+    }
 
-struct WalletAccount: Codable {
-    let id: String
-    let name: String
-    let address: String
-    let emoji: String
-    let isActive: Bool
-    let isIncompatible: Bool
-    let type: AccountType
-}
+    struct WalletAccount: Codable {
+        let id: String
+        let name: String
+        let address: String
+        let emoji: String
+        let isActive: Bool
+        let isIncompatible: Bool
+        let type: AccountType
+    }
 
-struct RecentContactsResponse: Codable {
-    let contacts: [Contact]
-}
+    struct RecentContactsResponse: Codable {
+        let contacts: [Contact]
+    }
 
-struct WalletAccountsResponse: Codable {
-    let accounts: [WalletAccount]
-}
+    struct WalletAccountsResponse: Codable {
+        let accounts: [WalletAccount]
+    }
 
+}
