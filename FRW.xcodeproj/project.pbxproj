@@ -386,6 +386,8 @@
 		157046792793243400D1747B /* NFTTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157046772793243400D1747B /* NFTTabViewModel.swift */; };
 		1570467C2793D60000D1747B /* NFTListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1570467A2793D60000D1747B /* NFTListResponse.swift */; };
 		1570467F2793EBA100D1747B /* GithubEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1570467D2793EBA100D1747B /* GithubEndpoint.swift */; };
+		1575765E2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */; };
+		1575765F2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */; };
 		1575A71428B25EE800ADC513 /* FluidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575A71328B25EE800ADC513 /* FluidView.swift */; };
 		1575A71528B25EE800ADC513 /* FluidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575A71328B25EE800ADC513 /* FluidView.swift */; };
 		1575A72628B26B9600ADC513 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1575A72128B26B9600ADC513 /* index.html */; };
@@ -2571,6 +2573,7 @@
 		157046772793243400D1747B /* NFTTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTTabViewModel.swift; sourceTree = "<group>"; };
 		1570467A2793D60000D1747B /* NFTListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTListResponse.swift; sourceTree = "<group>"; };
 		1570467D2793EBA100D1747B /* GithubEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubEndpoint.swift; sourceTree = "<group>"; };
+		1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeModels.swift; sourceTree = "<group>"; };
 		1575A71328B25EE800ADC513 /* FluidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidView.swift; sourceTree = "<group>"; };
 		1575A72128B26B9600ADC513 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		1575A72228B26B9600ADC513 /* dat.gui.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = dat.gui.min.js; sourceTree = "<group>"; };
@@ -4617,6 +4620,7 @@
 		15A87E8C2E26D9C000F0E550 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
@@ -7809,9 +7813,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7865,9 +7873,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7940,9 +7952,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7979,9 +7995,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8480,6 +8500,7 @@
 				4E297BD92DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */,
 				15DC20BD27819C56000B187A /* VSquareButtonModel.swift in Sources */,
 				4EC482D3284A3D75000A7E1B /* MMCQ.swift in Sources */,
+				1575765F2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */,
 				15DC21AB27819C56000B187A /* FocusableTextField.swift in Sources */,
 				15DC219B27819C56000B187A /* VTextFieldActions.swift in Sources */,
 				6A98509C28C71B5D00A07C2D /* BrowserAuthnViewModel.swift in Sources */,
@@ -9499,6 +9520,7 @@
 				4E297BD82DC9B14D006A8052 /* ManageTokensViewModel.swift in Sources */,
 				15C58B512868A4EE00BD4FC6 /* FocusableTextField.swift in Sources */,
 				15C58B522868A4EE00BD4FC6 /* VTextFieldActions.swift in Sources */,
+				1575765E2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */,
 				6A98509B28C71B5D00A07C2D /* BrowserAuthnViewModel.swift in Sources */,
 				6A73BF5228C59028004B836A /* JSMessageHandler.swift in Sources */,
 				4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */,
@@ -10444,10 +10466,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10511,10 +10530,7 @@
 				MARKETING_VERSION = 2.4.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
