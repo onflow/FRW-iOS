@@ -76,6 +76,44 @@
     resolve([TurboModuleSwift getCOAFlowBalance]);
 }
 
+- (void)getAllEnvVars:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    @try {
+        NSString *debugMode = [NSBundle.mainBundle objectForInfoDictionaryKey:@"DEBUG_MODE"];
+        NSString *analyticsEnabled = [NSBundle.mainBundle objectForInfoDictionaryKey:@"ANALYTICS_ENABLED"];
+        NSString *environment = [NSBundle.mainBundle objectForInfoDictionaryKey:@"ENVIRONMENT"];
+        
+        NSDictionary *envVars = @{
+            @"API_BASE_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"API_BASE_URL"] ?: @"",
+            @"API_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"API_KEY"] ?: @"",
+            @"DEBUG_MODE": @([debugMode.lowercaseString isEqualToString:@"true"]),
+            @"APP_VERSION": [TurboModuleSwift getVersion],
+            @"ANALYTICS_ENABLED": @([analyticsEnabled.lowercaseString isEqualToString:@"true"]),
+            @"ENVIRONMENT": environment.length > 0 ? environment : @"production",
+            @"FLOW_NETWORK": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_NETWORK"] ?: @"mainnet",
+            @"FLOW_ACCESS_NODE_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_ACCESS_NODE_URL"] ?: @"",
+            @"FLOW_DISCOVERY_WALLET_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_DISCOVERY_WALLET_URL"] ?: @"",
+            
+            // Native App Environment Variables
+            @"DRIVE_AES_IV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DRIVE_AES_IV"] ?: @"",
+            @"DRIVE_AES_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DRIVE_AES_KEY"] ?: @"",
+            @"WALLET_CONNECT_PROJECT_ID": [NSBundle.mainBundle objectForInfoDictionaryKey:@"WALLET_CONNECT_PROJECT_ID"] ?: @"",
+            @"INSTABUG_TOKEN_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"INSTABUG_TOKEN_DEV"] ?: @"",
+            @"INSTABUG_TOKEN_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"INSTABUG_TOKEN_PROD"] ?: @"",
+            @"CROWDIN_PROJECT_ID": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_PROJECT_ID"] ?: @"",
+            @"CROWDIN_API_TOKEN": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_API_TOKEN"] ?: @"",
+            @"CROWDIN_DISTRIBUTION": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_DISTRIBUTION"] ?: @"",
+            @"MIXPANEL_TOKEN_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"MIXPANEL_TOKEN_DEV"] ?: @"",
+            @"MIXPANEL_TOKEN_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"MIXPANEL_TOKEN_PROD"] ?: @"",
+            @"DROPBOX_APP_KEY_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DROPBOX_APP_KEY_DEV"] ?: @"",
+            @"DROPBOX_APP_KEY_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DROPBOX_APP_KEY_PROD"] ?: @"",
+            @"X_SIGNATURE_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"X_SIGNATURE_KEY"] ?: @""
+        };
+        resolve(envVars);
+    } @catch (NSException *exception) {
+        reject(@"ENV_ERROR", @"Failed to get environment variables", nil);
+    }
+}
+
 - (NSString *)getVersion {
     return [TurboModuleSwift getVersion];
 }
