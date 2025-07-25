@@ -54,6 +54,9 @@ struct NFTCollectionInfo: Codable, Hashable, Mockable {
 //    var socials: NFTCollectionInfo.Social?
     let flowIdentifier: String?
     var externalURL: String? = nil
+    var nftTypeId: String? = nil
+    var contractType: String? = nil
+
     var logoURL: URL {
         if let logoString = logo {
             if logoString.hasSuffix("svg") {
@@ -264,6 +267,17 @@ struct NFTModel: Codable, Hashable, Identifiable {
             return nil
         }
         return String(identifier)
+    }
+
+    var ERCType: FlowProvider.ABIType {
+        guard let value = response.contractType?.lowercased() else {
+            return .erc721
+        }
+        return FlowProvider.ABIType(rawValue: value) ?? .erc721
+    }
+
+    var canMove: Bool {
+        (collection?.flowIdentifier ?? response.maskFlowIdentifier) != nil
     }
 }
 

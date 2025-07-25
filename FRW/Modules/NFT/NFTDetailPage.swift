@@ -66,9 +66,6 @@ struct NFTDetailPage: RouteableView {
     }
 
     var theColor: Color {
-//        if let color = viewModel.state.colorsMap[vm.nft.imageURL.absoluteString]?[safe: 1] {
-//            return color.adjustbyTheme()
-//        }
         Color.LL.Primary.salmonPrimary
     }
 
@@ -116,45 +113,7 @@ struct NFTDetailPage: RouteableView {
                                     width: UIScreen.screenWidth - 16 * 2,
                                     height: UIScreen.screenWidth - 16 * 2
                                 )
-                        }
-//                        else if let base64ImageData = vm.nft.imageData {
-//                            let provider = Base64ImageDataProvider.init(base64String: base64ImageData, cacheKey: vm.nft.id)
-//                            KFImage.source(.provider(provider))
-//                                .placeholder {
-//                                    Image("placeholder")
-//                                        .resizable()
-//                                }
-//                                .onSuccess { _ in
-//                                    fetchColor()
-//                                }
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                                .frame(alignment: .center)
-//                                .cornerRadius(8)
-//                                .padding(.horizontal, 18)
-//                                .clipped()
-//                                .scaleEffect(isDragging ? 0.9 : 1)
-//                                .animation(.timingCurve(0.2, 0.8, 0.2, 1, duration: 0.8), value: isDragging)
-//
-//                                .rotation3DEffect(Angle(degrees: 5), axis: (x: viewState.width, y: viewState.height, z: 0))
-//                                .modifier(DragGestureViewModifier(onStart: nil, onUpdate: { value in
-//                                    self.viewState = value.translation
-//                                    self.isDragging = true
-//                                }, onEnd: {
-//                                    self.viewState = .zero
-//                                    self.isDragging = false
-//                                }, onCancel: {
-//                                    self.viewState = .zero
-//                                    self.isDragging = false
-//                                }))
-//                                .coordinateSpace(name: "NFTImage")
-//                                .onTapGesture {
-//                                    showImageViewer.toggle()
-//                                }
-//                                .matchedGeometryEffect(id: "imageView", in: heroAnimation)
-//                                .visible(!showImageViewer)
-//                        }
-                        else {
+                        } else {
                             KFImage
                                 .url(vm.nft.imageURL)
                                 .placeholder {
@@ -235,6 +194,19 @@ struct NFTDetailPage: RouteableView {
                         }
                         .padding(.top, 16)
                         .padding(.horizontal, 26)
+                    }
+                    if let amount = vm.nft.response.amount {
+                        HStack {
+                            Text("Amount::message".localized)
+                                .font(.inter(size: 14, weight: .medium))
+                                .foregroundStyle(Color.Brain.Text.primary)
+                            Spacer()
+                            Text("\(amount) \("items".localized)")
+                                .font(.inter(size: 14, weight: .medium))
+                                .foregroundStyle(Color.Brain.Text.primary)
+                        }
+                        .padding(.horizontal, 26)
+                        .padding(.top, 16)
                     }
 
                     VStack(alignment: .leading, spacing: 18) {

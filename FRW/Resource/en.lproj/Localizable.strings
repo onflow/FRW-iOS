@@ -27,7 +27,7 @@
 "create_user_failed" = "Create User Failed";
 "Back::message" = "Back";
 "invalid_address" = "Invalid address";
-"Amount::message" = "Amount";
+"Items" = "Amount";
 "can_not_find_address" = "Can't find address in chain";
 "Edit::message" = "Edit";
 "contact_exists" = "Contact already exists";
@@ -1174,3 +1174,5 @@ Key Store and Private Key.";
 "hide_dust_tokens_tip" = "Tokens with less than 0.01$ USD balance";
 "only_show_tokens" = "Only show verified tokens";
 "Filters" = "Filters";
+"invalid_count" = "invalid count";
+"items" = "Items";

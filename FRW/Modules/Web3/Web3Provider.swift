@@ -6,11 +6,16 @@
 //
 
 import BigInt
+import Flow
 import Foundation
 import web3swift
-import Flow
 
 enum FlowProvider {
+    enum ABIType: String {
+        case erc721
+        case erc1155
+    }
+
     struct Web3 {
         static func `default`(
             networkType: Flow.ChainID = currentNetwork
@@ -31,6 +36,19 @@ enum FlowProvider {
         static func erc721NFTContract() async throws -> web3swift.Web3.Contract? {
             let web3 = try await FlowProvider.Web3.default()
             let erc721Contract = web3?.contract(Web3Utils.erc721ABI)
+            return erc721Contract
+        }
+
+        static func NFTContract(_ type: FlowProvider.ABIType = .erc721) async throws -> web3swift.Web3.Contract? {
+            var abi = Web3Utils.erc721ABI
+            switch type {
+            case .erc721:
+                abi = Web3Utils.erc721ABI
+            case .erc1155:
+                abi = Web3Utils.erc1155ABI
+            }
+            let web3 = try await FlowProvider.Web3.default()
+            let erc721Contract = web3?.contract(abi)
             return erc721Contract
         }
     }
