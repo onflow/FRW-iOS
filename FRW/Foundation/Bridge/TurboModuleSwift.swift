@@ -62,4 +62,9 @@ class TurboModuleSwift: NSObject {
     let response = RNBridge.RecentContactsResponse(contacts: result)
     return try response.toDictionary()
   }
+  
+  @objc
+  static func getSignKeyIndex() -> Int {
+    return WalletManager.shared.keyIndex
+  }
 }

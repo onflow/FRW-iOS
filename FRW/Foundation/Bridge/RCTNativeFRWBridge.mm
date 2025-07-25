@@ -104,4 +104,8 @@
   }];
 }
 
+- (NSNumber *)getSignKeyIndex {
+  return @([TurboModuleSwift getSignKeyIndex]);
+}
+
 @end
