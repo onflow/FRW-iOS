@@ -71,71 +71,51 @@ class TurboModuleSwift: NSObject {
 
   @objc
   static func closeRN() {
-    guard let topVC = UIApplication.shared.topMostViewController else {
-      print("❌ DEBUG: No top view controller found")
-      return
-    }
+    runOnMain {
+      // Debug current state
+      ReactNativeViewController.debugInstances()
 
-    // Recursive function to find and dismiss ReactNativeViewController
-    func findAndDismissReactNative(_ viewController: UIViewController) -> Bool {
-      // Check if current view controller is ReactNativeViewController
-      if let reactNativeVC = viewController as? ReactNativeViewController {
-        print("✅ DEBUG: Found ReactNativeViewController")
+      // Try container management first
+      if ReactNativeViewController.instances.count > 0 {
+        print("✅ DEBUG: Found \(ReactNativeViewController.instances.count) ReactNativeViewController instances")
+        ReactNativeViewController.dismissLatest()
+        return
+      }
+
+      // Fallback to view hierarchy search if instances is empty
+      print("⚠️ DEBUG: No instances found, falling back to view hierarchy search")
+
+      guard let topVC = UIApplication.shared.topMostViewController else {
+        print("❌ DEBUG: No top view controller found")
+        return
+      }
+
+      // Check if top view controller is ReactNativeViewController
+      if let reactNativeVC = topVC as? ReactNativeViewController {
+        print("✅ DEBUG: Found ReactNativeViewController at top level")
         reactNativeVC.dismiss(animated: true, completion: nil)
-        return true
+        return
       }
 
-      // Check in navigation controller
-      if let navigationController = viewController as? UINavigationController {
-        if let reactNativeVC = navigationController.viewControllers.first(where: { $0 is ReactNativeViewController }) as? ReactNativeViewController {
+      // Check if top view controller is a navigation controller with ReactNativeViewController
+      if let navController = topVC as? UINavigationController {
+        if let reactNativeVC = navController.topViewController as? ReactNativeViewController {
+          print("✅ DEBUG: Found ReactNativeViewController as top of navigation")
+          navController.popViewController(animated: true)
+          return
+        }
+      }
+
+      // Check if top view controller has a navigation controller with ReactNativeViewController
+      if let navController = topVC.navigationController {
+        if let reactNativeVC = navController.topViewController as? ReactNativeViewController {
           print("✅ DEBUG: Found ReactNativeViewController in navigation")
-
-          if navigationController.topViewController === reactNativeVC {
-            navigationController.popViewController(animated: true)
-          } else {
-            // Pop to the previous view controller
-            if let rnIndex = navigationController.viewControllers.firstIndex(of: reactNativeVC) {
-              let targetIndex = max(0, rnIndex - 1)
-              let targetViewController = navigationController.viewControllers[targetIndex]
-              print("✅ DEBUG: Popping to view controller at index \(targetIndex)")
-              navigationController.popToViewController(targetViewController, animated: true)
-            }
-          }
-          return true
+          navController.popViewController(animated: true)
+          return
         }
       }
 
-      // Check in navigation stack if current VC has a navigation controller
-      if let navigationController = viewController.navigationController {
-        if let reactNativeVC = navigationController.viewControllers.first(where: { $0 is ReactNativeViewController }) as? ReactNativeViewController {
-          print("✅ DEBUG: Found ReactNativeViewController in navigation stack")
-
-          if navigationController.topViewController === reactNativeVC {
-            navigationController.popViewController(animated: true)
-          } else {
-            // Pop to the previous view controller
-            if let rnIndex = navigationController.viewControllers.firstIndex(of: reactNativeVC) {
-              let targetIndex = max(0, rnIndex - 1)
-              let targetViewController = navigationController.viewControllers[targetIndex]
-              print("✅ DEBUG: Popping to view controller at index \(targetIndex)")
-              navigationController.popToViewController(targetViewController, animated: true)
-            }
-          }
-          return true
-        }
-      }
-
-      // Recursively search in presented view controllers
-      if let presentedVC = viewController.presentedViewController {
-        return findAndDismissReactNative(presentedVC)
-      }
-
-      return false
-    }
-
-    // Start search from top view controller
-    if !findAndDismissReactNative(topVC) {
-      print("❌ DEBUG: ReactNativeViewController not found in view hierarchy")
+      print("❌ DEBUG: ReactNativeViewController not found anywhere")
     }
   }
 }
