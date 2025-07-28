@@ -40,8 +40,7 @@ enum RNBridge {
         let emoji: String
         let avatar: String?
         let isActive: Bool
-        let isIncompatible: Bool
-        let type: AccountType
+        let type: AccountType?
     }
 
     struct RecentContactsResponse: Codable {

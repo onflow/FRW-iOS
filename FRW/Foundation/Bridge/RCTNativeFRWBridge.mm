@@ -108,4 +108,8 @@
   return @([TurboModuleSwift getSignKeyIndex]);
 }
 
+- (void)closeRN {
+  [TurboModuleSwift closeRN];
+}
+
 @end

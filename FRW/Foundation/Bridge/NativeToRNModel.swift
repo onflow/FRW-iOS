@@ -19,7 +19,6 @@ extension FlowWalletKit.Account {
         emoji: user.emoji.rawValue,
         avatar: nil,
         isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-        isIncompatible: false,
         type: .main
       )
     }
@@ -35,7 +34,6 @@ extension FlowWalletKit.ChildAccount {
         emoji: "",
         avatar: icon?.absoluteString,
         isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-        isIncompatible: false,
         type: .child
       )
     }
@@ -52,7 +50,6 @@ extension FlowWalletKit.COA {
         emoji: user.emoji.rawValue,
         avatar: nil,
         isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-        isIncompatible: false,
         type: .evm
       )
     }
