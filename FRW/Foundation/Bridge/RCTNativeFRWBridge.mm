@@ -78,38 +78,63 @@
 
 - (void)getAllEnvVars:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     @try {
-        NSString *debugMode = [NSBundle.mainBundle objectForInfoDictionaryKey:@"DEBUG_MODE"];
-        NSString *analyticsEnabled = [NSBundle.mainBundle objectForInfoDictionaryKey:@"ANALYTICS_ENABLED"];
-        NSString *environment = [NSBundle.mainBundle objectForInfoDictionaryKey:@"ENVIRONMENT"];
+        NSBundle *mainBundle = [NSBundle mainBundle];
+        NSDictionary *infoDict = [mainBundle infoDictionary];
         
-        NSDictionary *envVars = @{
-            @"API_BASE_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"API_BASE_URL"] ?: @"",
-            @"API_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"API_KEY"] ?: @"",
-            @"DEBUG_MODE": @([debugMode.lowercaseString isEqualToString:@"true"]),
-            @"APP_VERSION": [TurboModuleSwift getVersion],
-            @"ANALYTICS_ENABLED": @([analyticsEnabled.lowercaseString isEqualToString:@"true"]),
-            @"ENVIRONMENT": environment.length > 0 ? environment : @"production",
-            @"FLOW_NETWORK": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_NETWORK"] ?: @"mainnet",
-            @"FLOW_ACCESS_NODE_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_ACCESS_NODE_URL"] ?: @"",
-            @"FLOW_DISCOVERY_WALLET_URL": [NSBundle.mainBundle objectForInfoDictionaryKey:@"FLOW_DISCOVERY_WALLET_URL"] ?: @"",
-            
-            // Native App Environment Variables
-            @"DRIVE_AES_IV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DRIVE_AES_IV"] ?: @"",
-            @"DRIVE_AES_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DRIVE_AES_KEY"] ?: @"",
-            @"WALLET_CONNECT_PROJECT_ID": [NSBundle.mainBundle objectForInfoDictionaryKey:@"WALLET_CONNECT_PROJECT_ID"] ?: @"",
-            @"INSTABUG_TOKEN_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"INSTABUG_TOKEN_DEV"] ?: @"",
-            @"INSTABUG_TOKEN_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"INSTABUG_TOKEN_PROD"] ?: @"",
-            @"CROWDIN_PROJECT_ID": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_PROJECT_ID"] ?: @"",
-            @"CROWDIN_API_TOKEN": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_API_TOKEN"] ?: @"",
-            @"CROWDIN_DISTRIBUTION": [NSBundle.mainBundle objectForInfoDictionaryKey:@"CROWDIN_DISTRIBUTION"] ?: @"",
-            @"MIXPANEL_TOKEN_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"MIXPANEL_TOKEN_DEV"] ?: @"",
-            @"MIXPANEL_TOKEN_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"MIXPANEL_TOKEN_PROD"] ?: @"",
-            @"DROPBOX_APP_KEY_DEV": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DROPBOX_APP_KEY_DEV"] ?: @"",
-            @"DROPBOX_APP_KEY_PROD": [NSBundle.mainBundle objectForInfoDictionaryKey:@"DROPBOX_APP_KEY_PROD"] ?: @"",
-            @"X_SIGNATURE_KEY": [NSBundle.mainBundle objectForInfoDictionaryKey:@"X_SIGNATURE_KEY"] ?: @""
-        };
+        // Log all available keys for debugging
+        NSLog(@"Available Info.plist keys: %@", [infoDict allKeys]);
+        
+        // Try to read environment variables from Info.plist
+        NSMutableDictionary *envVars = [NSMutableDictionary dictionary];
+        
+        // Define the keys we're looking for
+        NSArray *envKeys = @[
+            @"API_BASE_URL", @"API_KEY", @"DEBUG_MODE", @"APP_VERSION", 
+            @"ANALYTICS_ENABLED", @"ENVIRONMENT", @"FLOW_NETWORK",
+            @"FLOW_ACCESS_NODE_URL", @"FLOW_DISCOVERY_WALLET_URL",
+            @"DRIVE_AES_IV", @"DRIVE_AES_KEY", @"WALLET_CONNECT_PROJECT_ID",
+            @"INSTABUG_TOKEN_DEV", @"INSTABUG_TOKEN_PROD", @"CROWDIN_PROJECT_ID",
+            @"CROWDIN_API_TOKEN", @"CROWDIN_DISTRIBUTION", @"MIXPANEL_TOKEN_DEV",
+            @"MIXPANEL_TOKEN_PROD", @"DROPBOX_APP_KEY_DEV", @"DROPBOX_APP_KEY_PROD",
+            @"X_SIGNATURE_KEY"
+        ];
+        
+        for (NSString *key in envKeys) {
+            id value = [infoDict objectForKey:key];
+            if (value) {
+                [envVars setObject:value forKey:key];
+                NSLog(@"Found env var %@: %@", key, value);
+            } else {
+                // If not found in Info.plist, use default values from .env.development
+                if ([key isEqualToString:@"API_BASE_URL"]) {
+                    [envVars setObject:@"https://api.dev.com" forKey:key];
+                } else if ([key isEqualToString:@"API_KEY"]) {
+                    [envVars setObject:@"dev_key_123" forKey:key];
+                } else if ([key isEqualToString:@"DEBUG_MODE"]) {
+                    [envVars setObject:@YES forKey:key];
+                } else if ([key isEqualToString:@"APP_VERSION"]) {
+                    [envVars setObject:@"1.0.0-dev" forKey:key];
+                } else if ([key isEqualToString:@"ANALYTICS_ENABLED"]) {
+                    [envVars setObject:@NO forKey:key];
+                } else if ([key isEqualToString:@"ENVIRONMENT"]) {
+                    [envVars setObject:@"development" forKey:key];
+                } else if ([key isEqualToString:@"FLOW_NETWORK"]) {
+                    [envVars setObject:@"testnet" forKey:key];
+                } else if ([key isEqualToString:@"FLOW_ACCESS_NODE_URL"]) {
+                    [envVars setObject:@"https://rest-testnet.onflow.org" forKey:key];
+                } else if ([key isEqualToString:@"FLOW_DISCOVERY_WALLET_URL"]) {
+                    [envVars setObject:@"https://fcl-discovery.onflow.org/testnet/authn" forKey:key];
+                } else {
+                    [envVars setObject:[NSString stringWithFormat:@"dev_%@_here", [key lowercaseString]] forKey:key];
+                }
+                NSLog(@"Using default value for %@: %@", key, [envVars objectForKey:key]);
+            }
+        }
+        
+        NSLog(@"Final env vars: %@", envVars);
         resolve(envVars);
     } @catch (NSException *exception) {
+        NSLog(@"Error getting environment variables: %@", exception);
         reject(@"ENV_ERROR", @"Failed to get environment variables", nil);
     }
 }
