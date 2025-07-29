@@ -24,6 +24,15 @@ enum RNBridge {
         let contactName: String?
     }
 
+    struct AddressBookContact: Codable {
+        let id: String
+        let name: String
+        let address: String
+        let avatar: String?
+        let username: String?
+        let contactName: String?
+    }
+
     struct WalletAccount: Codable {
         let id: String
         let name: String
@@ -31,8 +40,7 @@ enum RNBridge {
         let emoji: String
         let avatar: String?
         let isActive: Bool
-        let isIncompatible: Bool
-        let type: AccountType
+        let type: AccountType?
     }
 
     struct RecentContactsResponse: Codable {
@@ -41,6 +49,10 @@ enum RNBridge {
 
     struct WalletAccountsResponse: Codable {
         let accounts: [WalletAccount]
+    }
+
+    struct AddressBookResponse: Codable {
+        let contacts: [AddressBookContact]
     }
 
 }
