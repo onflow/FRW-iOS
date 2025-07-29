@@ -25,7 +25,7 @@ class TurboModuleSwift: NSObject {
     }
 
     @objc
-    static func getNetwork() -> String? {
+    static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
     }
 
