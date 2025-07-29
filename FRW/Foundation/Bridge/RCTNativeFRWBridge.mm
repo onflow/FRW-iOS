@@ -147,7 +147,7 @@
     return [TurboModuleSwift getBuildNumber];
 }
 
-- (NSString * _Nullable)getNetwork {
+- (NSString *)getNetwork {
     return [TurboModuleSwift getNetwork];
 }
 
