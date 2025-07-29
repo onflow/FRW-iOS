@@ -41,4 +41,9 @@ post_install do |installer|
     :mac_catalyst_enabled => false,
     # :ccache_enabled => true
     )
+    installer.pods_project.targets.each do |target|
+          if target.name == "React-Core.common-React-Core_privacy"
+            target.remove_from_project
+          end
+      end
 end
