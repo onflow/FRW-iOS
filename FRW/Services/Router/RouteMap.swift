@@ -239,7 +239,7 @@ extension RouteMap {
         case addCustomToken
         case showCustomToken(CustomToken)
         case addTokenSheet(CustomToken, BoolClosure)
-        case reactNativeDemo
+        case reactNative(route: String)
         case swapProvider(TokenModel?)
         case managerTokens
     }
@@ -366,8 +366,8 @@ extension RouteMap.Wallet: RouterTarget {
             navi.present(vc, completion: nil)
         case .managerTokens:
             navi.push(content: ManageTokensView())
-        case .reactNativeDemo:
-            navi.present(ReactNativeViewController())
+        case let .reactNative(route):
+            navi.present(ReactNativeViewController(initialRoute: route))
         }
     }
 }

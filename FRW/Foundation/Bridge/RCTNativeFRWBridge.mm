@@ -167,4 +167,12 @@
   }];
 }
 
+- (NSNumber *)getSignKeyIndex {
+  return @([TurboModuleSwift getSignKeyIndex]);
+}
+
+- (void)closeRN {
+  [TurboModuleSwift closeRN];
+}
+
 @end
