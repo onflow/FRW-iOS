@@ -28,6 +28,11 @@ class TurboModuleSwift: NSObject {
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
     }
+  
+    @objc
+    static func isFreeGasEnabled() -> Bool {
+        return RemoteConfigManager.shared.freeGasEnabled
+    }
 
     @objc
     static func sign(hexData: String) async throws -> String {
