@@ -127,4 +127,8 @@
   resolve(@([TurboModuleSwift isFreeGasEnabled]));
 }
 
+- (void)listenTransaction:(NSString *)txid {
+  [TurboModuleSwift listenTransactionWithTxid:txid];
+}
+
 @end

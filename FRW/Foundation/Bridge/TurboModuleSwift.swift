@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Flow
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -152,6 +153,17 @@ class TurboModuleSwift: NSObject {
 
       print("❌ DEBUG: ReactNativeViewController not found anywhere")
     }
+  }
+}
+
+extension TurboModuleSwift {
+  @objc
+  static func listenTransaction(txid: String) {
+    guard !txid.isEmpty else {
+      return
+    }
+    let holder = TransactionManager.TransactionHolder(id: Flow.ID(hex: txid), type: .common)
+    TransactionManager.shared.newTransaction(holder: holder)
   }
 }
 
