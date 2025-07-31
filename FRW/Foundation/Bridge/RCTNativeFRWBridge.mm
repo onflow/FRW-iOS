@@ -113,13 +113,7 @@
 }
 
 - (void)isFreeGasEnabled:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-  [TurboModuleSwift isFreeGasEnabledWithCompletionHandler:^(BOOL isFreeGas, NSError *_Nullable error) {
-    if (error) {
-      reject(@"free_gas_error", error.localizedDescription, error);
-    } else {
-      resolve(isFreeGas);
-    }
-  }];
+  resolve(@([TurboModuleSwift isFreeGasEnabled]));
 }
 
 @end
