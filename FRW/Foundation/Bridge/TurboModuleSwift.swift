@@ -75,6 +75,36 @@ class TurboModuleSwift: NSObject {
   }
 
   @objc
+  static func scanQRCode() async throws -> String {
+    guard let lastVC = await ReactNativeViewController.getLatestInstance() else {
+      throw RNBridgeError.scanInvalidProvider
+    }
+    
+    return await withCheckedContinuation { continuation in
+      var isResumed = false
+      let handler: SPQRCodeCallback = { data, vc in
+        switch data {
+        case let .flowWallet(address), let .ethWallet(address):
+          DispatchQueue.main.async {
+            vc.stopRunning()
+            vc.dismiss(animated: true, completion: {
+              if !isResumed {
+                isResumed = true
+                continuation.resume(returning: address)
+              }
+            })
+          }
+        default:
+            break
+        }
+      }
+      DispatchQueue.main.async {
+        SPQRCode.scanning(handled: handler, click: nil, on: lastVC)
+      }
+    }
+  }
+  
+  @objc
   static func closeRN() {
     runOnMain {
       // Debug current state
@@ -124,3 +154,4 @@ class TurboModuleSwift: NSObject {
     }
   }
 }
+

@@ -1472,6 +1472,8 @@
 		4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED4912BAA79F6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */; };
 		4E6ED4932BAA7CB6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */; };
+		4E7712E12E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
+		4E7712E22E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */; };
 		4E777CAF2B1ECF8900300A3E /* SyncInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */; };
 		4E777CB12B1EE69E00300A3E /* WalletConnect+SyncDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */; };
@@ -3033,6 +3035,7 @@
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNBridgeError.swift; sourceTree = "<group>"; };
 		4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncInfo.swift; sourceTree = "<group>"; };
 		4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncDevice.swift"; sourceTree = "<group>"; };
 		4E7918452B214EEF00DA832F /* BackupMultiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiView.swift; sourceTree = "<group>"; };
@@ -4632,6 +4635,7 @@
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
 				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
+				4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -7821,9 +7825,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7877,9 +7885,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7952,9 +7964,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7991,9 +8007,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8052,6 +8072,7 @@
 				4EE8E4992835EAF500DFEF59 /* NFTFavoriteView.swift in Sources */,
 				4EB2C30A2DC0E2F900E79FC5 /* FilterButton.swift in Sources */,
 				4E9D8F1A2BF7479E00E11CC7 /* MoveNFTsViewModel.swift in Sources */,
+				4E7712E12E3B2AD70011C1DA /* RNBridgeError.swift in Sources */,
 				4E5F2F202C193A2B008589C4 /* DefaultCryptoProvider.swift in Sources */,
 				4EAFBD462C0FF72B0031EA20 /* CreateProfileWaitingView.swift in Sources */,
 				4E5646572C0606A300890E61 /* Modifiers.swift in Sources */,
@@ -9074,6 +9095,7 @@
 				4E9D8F192BF7479E00E11CC7 /* MoveNFTsViewModel.swift in Sources */,
 				4EB2C30B2DC0E2F900E79FC5 /* FilterButton.swift in Sources */,
 				4E5F2F1F2C193A2B008589C4 /* DefaultCryptoProvider.swift in Sources */,
+				4E7712E22E3B2AD70011C1DA /* RNBridgeError.swift in Sources */,
 				4EAFBD452C0FF72B0031EA20 /* CreateProfileWaitingView.swift in Sources */,
 				4E5646562C0606A300890E61 /* Modifiers.swift in Sources */,
 				6AE95D512A2EDB25009F9AA4 /* BackupTipsView.swift in Sources */,
@@ -10462,10 +10484,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10529,10 +10548,7 @@
 				MARKETING_VERSION = 2.4.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
