@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Flow
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -27,6 +28,11 @@ class TurboModuleSwift: NSObject {
     @objc
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
+    }
+  
+    @objc
+    static func isFreeGasEnabled() -> Bool {
+        return RemoteConfigManager.shared.freeGasEnabled
     }
 
     @objc
@@ -69,6 +75,36 @@ class TurboModuleSwift: NSObject {
     return WalletManager.shared.keyIndex
   }
 
+  @objc
+  static func scanQRCode() async throws -> String {
+    guard let lastVC = await ReactNativeViewController.getLatestInstance() else {
+      throw RNBridgeError.scanInvalidProvider
+    }
+    
+    return await withCheckedContinuation { continuation in
+      var isResumed = false
+      let handler: SPQRCodeCallback = { data, vc in
+        switch data {
+        case let .flowWallet(address), let .ethWallet(address):
+          DispatchQueue.main.async {
+            vc.stopRunning()
+            vc.dismiss(animated: true, completion: {
+              if !isResumed {
+                isResumed = true
+                continuation.resume(returning: address)
+              }
+            })
+          }
+        default:
+            break
+        }
+      }
+      DispatchQueue.main.async {
+        SPQRCode.scanning(handled: handler, click: nil, on: lastVC)
+      }
+    }
+  }
+  
   @objc
   static func closeRN() {
     runOnMain {
@@ -119,3 +155,15 @@ class TurboModuleSwift: NSObject {
     }
   }
 }
+
+extension TurboModuleSwift {
+  @objc
+  static func listenTransaction(txid: String) {
+    guard !txid.isEmpty else {
+      return
+    }
+    let holder = TransactionManager.TransactionHolder(id: Flow.ID(hex: txid), type: .common)
+    TransactionManager.shared.newTransaction(holder: holder)
+  }
+}
+

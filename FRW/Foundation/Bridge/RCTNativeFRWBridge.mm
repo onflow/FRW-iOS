@@ -171,8 +171,27 @@
   return @([TurboModuleSwift getSignKeyIndex]);
 }
 
+- (void)scanQRCode:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  
+  [TurboModuleSwift scanQRCodeWithCompletionHandler:^(NSString * _Nullable address, NSError * _Nullable error) {
+    if (error) {
+      reject(@"sign_error", error.localizedDescription, error);
+    } else {
+      resolve(address);
+    }
+  }];
+}
+
 - (void)closeRN {
   [TurboModuleSwift closeRN];
+}
+
+- (void)isFreeGasEnabled:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  resolve(@([TurboModuleSwift isFreeGasEnabled]));
+}
+
+- (void)listenTransaction:(NSString *)txid {
+  [TurboModuleSwift listenTransactionWithTxid:txid];
 }
 
 @end

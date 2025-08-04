@@ -123,33 +123,37 @@ extension WalletAccount {
         }
 
         var color: Color {
-            switch self {
-            case .lion:
-                Color(hex: "#FFA600")
-            case .panda:
-                Color(hex: "#EEEEED")
-            case .butterfly:
-                Color(hex: "#36A5F8")
-            case .loong:
-                Color(hex: "#AEE676")
-            case .peach:
-                Color(hex: "#FBB06B")
-            case .lemon:
-                Color(hex: "#FDEF85")
-            case .chestnut:
-                Color(hex: "#EBCA84")
-            case .avocado:
-                Color(hex: "#B2C45C")
-            case .koala:
-                Color(hex: "#DFCFC8")
-            case .penguin:
-                Color(hex: "#FFCB6C")
-            case .cherry:
-                Color(hex: "#FED5DB")
-            case .coconut:
-                Color(hex: "#E3CAAA")
-            }
+            Color(hex: colorHex)
         }
+      
+      var colorHex: String {
+        switch self {
+        case .lion:
+            "#FFA600"
+        case .panda:
+            "#EEEEED"
+        case .butterfly:
+            "#36A5F8"
+        case .loong:
+            "#AEE676"
+        case .peach:
+            "#FBB06B"
+        case .lemon:
+            "#FDEF85"
+        case .chestnut:
+            "#EBCA84"
+        case .avocado:
+            "#B2C45C"
+        case .koala:
+            "#DFCFC8"
+        case .penguin:
+            "#FFCB6C"
+        case .cherry:
+            "#FED5DB"
+        case .coconut:
+            "#E3CAAA"
+        }
+      }
 
         func icon(size: CGFloat = 24) -> some View {
             VStack {

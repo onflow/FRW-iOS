@@ -15,6 +15,12 @@ enum RNBridge {
         case evm = "evm"
     }
 
+    struct EmojiInfo: Codable {
+        let emoji: String
+        let name: String
+        let color: String
+    }
+
     struct Contact: Codable {
         let id: String
         let name: String
@@ -37,7 +43,8 @@ enum RNBridge {
         let id: String
         let name: String
         let address: String
-        let emoji: String
+        let emojiInfo: EmojiInfo?
+        let parentEmoji: EmojiInfo?
         let avatar: String?
         let isActive: Bool
         let type: AccountType?
