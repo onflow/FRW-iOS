@@ -28,7 +28,7 @@ extension FRWAPI.Account: TargetType, AccessTokenAuthorizable {
 
     var baseURL: URL {
         switch self {
-        case .evmTransfers(let transfersRequest):
+        case .evmTransfers,.transfers:
             return Config.get(.lilicoWeb)
         default:
             return Config.get(.lilico)
@@ -40,7 +40,7 @@ extension FRWAPI.Account: TargetType, AccessTokenAuthorizable {
         case .flowScanQuery:
             return "/v2/account/query"
         case .transfers:
-            return "/v1/account/transfers"
+            return "v1/account/transfers"
         case .tokenTransfers:
             return "/v1/account/tokentransfers"
         case .evmTransfers(let model):
