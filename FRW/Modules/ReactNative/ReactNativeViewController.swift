@@ -8,9 +8,18 @@
 import UIKit
 import Factory
 
+extension ReactNativeViewController {
+  enum Route: String {
+    case selectAssets = "SelectTokens"
+    case selectAddress = "SendTo"
+  }
+
+}
+
 class ReactNativeViewController: UIViewController {
 
-  var initialRoute: String
+  var initialRoute: ReactNativeViewController.Route
+  var initialProps: [String: Any]? = nil
   
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
@@ -26,8 +35,9 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialRoute: String) {
+  init(initialRoute: ReactNativeViewController.Route, initialProps: [String: Any]? = nil) {
     self.initialRoute = initialRoute
+    self.initialProps = initialProps
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -106,19 +116,25 @@ class ReactNativeViewController: UIViewController {
             return
         }
 
-        let initialProps: [String: Any] = [
+        var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialRoute,
+            "initialRoute" : initialRoute.rawValue,
             "embedded" : false
         ]
+        
+        // Merge with additional initial props if provided
+        if let mergeProps =  initialProps {
+          props["sendToConfig"] = mergeProps
+        }
+        
 
         print("🚀 DEBUG: Creating RCTSurfaceHostingView")
 
         // Create RCTSurface with proper parameters
         let surfaceView = factory.rootViewFactory.view(
             withModuleName: "FRWRN",
-            initialProperties: initialProps
+            initialProperties: props
         )
 
         // Create RCTSurfaceHostingView
@@ -155,3 +171,4 @@ class ReactNativeViewController: UIViewController {
         ])
     }
 }
+

@@ -1378,6 +1378,14 @@
 		4E3138112C658FB2003A73E5 /* DebugViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3138032C658FB2003A73E5 /* DebugViewModel.swift */; };
 		4E3138122C658FB2003A73E5 /* ResizeableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3138042C658FB2003A73E5 /* ResizeableView.swift */; };
 		4E3138132C658FB2003A73E5 /* ResizeableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3138042C658FB2003A73E5 /* ResizeableView.swift */; };
+		4E33F7D52E42423F00B3D62F /* RNNFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */; };
+		4E33F7D62E42423F00B3D62F /* RNTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */; };
+		4E33F7D72E42423F00B3D62F /* RNNFTModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */; };
+		4E33F7D82E42423F00B3D62F /* RNTokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */; };
+		4E33F7EC2E432BF100B3D62F /* RouteMap+React.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7EB2E432BF100B3D62F /* RouteMap+React.swift */; };
+		4E33F7ED2E432BF100B3D62F /* RouteMap+React.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7EB2E432BF100B3D62F /* RouteMap+React.swift */; };
+		4E33F7EF2E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7EE2E432F5D00B3D62F /* SendToConfig+Helper.swift */; };
+		4E33F7F02E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E33F7EE2E432F5D00B3D62F /* SendToConfig+Helper.swift */; };
 		4E344480282EC1C40040E5A4 /* NFTCollectionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E34447E282EC1C40040E5A4 /* NFTCollectionCard.swift */; };
 		4E3670042B2A8B32000F2693 /* BackupUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3670032B2A8B32000F2693 /* BackupUploadView.swift */; };
 		4E3670052B2A8B32000F2693 /* BackupUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3670032B2A8B32000F2693 /* BackupUploadView.swift */; };
@@ -2987,6 +2995,10 @@
 		4E3138022C658FB2003A73E5 /* DebugViewerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewerWindow.swift; sourceTree = "<group>"; };
 		4E3138032C658FB2003A73E5 /* DebugViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewModel.swift; sourceTree = "<group>"; };
 		4E3138042C658FB2003A73E5 /* ResizeableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeableView.swift; sourceTree = "<group>"; };
+		4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNNFTModel.swift; sourceTree = "<group>"; };
+		4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNTokenModel.swift; sourceTree = "<group>"; };
+		4E33F7EB2E432BF100B3D62F /* RouteMap+React.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+React.swift"; sourceTree = "<group>"; };
+		4E33F7EE2E432F5D00B3D62F /* SendToConfig+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendToConfig+Helper.swift"; sourceTree = "<group>"; };
 		4E34447E282EC1C40040E5A4 /* NFTCollectionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionCard.swift; sourceTree = "<group>"; };
 		4E3670032B2A8B32000F2693 /* BackupUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUploadView.swift; sourceTree = "<group>"; };
 		4E3670062B2A8BB6000F2693 /* BackupUploadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUploadViewModel.swift; sourceTree = "<group>"; };
@@ -4636,6 +4648,7 @@
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
 				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
 				4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */,
+				4E33F7EE2E432F5D00B3D62F /* SendToConfig+Helper.swift */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -6451,10 +6464,13 @@
 			children = (
 				6A11596A288E710C005EF797 /* Router.swift */,
 				6A11596D288E7134005EF797 /* RouteMap.swift */,
+				4E33F7EB2E432BF100B3D62F /* RouteMap+React.swift */,
 				6A115970288E72CC005EF797 /* Coordinator.swift */,
 				6AE8821A288E9FE900ADF36E /* RouteableUIHostingController.swift */,
 				6AE8821D288EB67A00ADF36E /* RouterExtensions.swift */,
 				6A65690A289128EE007D9BDA /* RouterNavigationController.swift */,
+				4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */,
+				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -7825,9 +7841,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7881,9 +7901,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7956,9 +7980,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7995,9 +8023,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8665,6 +8697,7 @@
 				15DC21A727819C56000B187A /* VBaseTextField.swift in Sources */,
 				6A0137672897E7A0009BEF20 /* HalfSheetModal.swift in Sources */,
 				57ACE9AF2CE17901004DCA3E /* PersistentToastView.swift in Sources */,
+				4E33F7F02E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */,
 				1575A73528B286DA00ADC513 /* LottieButton.swift in Sources */,
 				15DC210727819C56000B187A /* VSliderState.swift in Sources */,
 				6AFE1D062A384E3000824D5C /* AccountSwitchView.swift in Sources */,
@@ -8809,6 +8842,7 @@
 				158832DF28942D0400142B35 /* FCLModel.swift in Sources */,
 				6A164F722845F1CB0026B31E /* IndexedList.swift in Sources */,
 				4ECE28C52ADF6D170035787D /* AccountKeys.swift in Sources */,
+				4E33F7EC2E432BF100B3D62F /* RouteMap+React.swift in Sources */,
 				6A3AD5CA291D4F9B00C30D57 /* StakingListView.swift in Sources */,
 				15B302B52D9AD51A007C792C /* SideContainerView.swift in Sources */,
 				6A95CFB228B7258100267F86 /* NFTTransferView.swift in Sources */,
@@ -8873,6 +8907,8 @@
 				151FEA332E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */,
 				151FEA342E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */,
 				151FEA352E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */,
+				4E33F7D52E42423F00B3D62F /* RNNFTModel.swift in Sources */,
+				4E33F7D62E42423F00B3D62F /* RNTokenModel.swift in Sources */,
 				151FEA362E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */,
 				151FEA372E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */,
 				151FEA382E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */,
@@ -9688,6 +9724,7 @@
 				1575A73428B286DA00ADC513 /* LottieButton.swift in Sources */,
 				15C58B9C2868A4EE00BD4FC6 /* VSliderState.swift in Sources */,
 				57ACE9AE2CE17901004DCA3E /* PersistentToastView.swift in Sources */,
+				4E33F7EF2E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */,
 				15C58B9D2868A4EE00BD4FC6 /* VMenuButtonType.swift in Sources */,
 				6AFE1D052A384E3000824D5C /* AccountSwitchView.swift in Sources */,
 				158832E128942D5800142B35 /* RequestInfo.swift in Sources */,
@@ -9832,6 +9869,7 @@
 				4E9532322CD2089C00AAECD1 /* AddCustomTokenViewModel.swift in Sources */,
 				15C58BDD2868A4EE00BD4FC6 /* IndexedList.swift in Sources */,
 				4ECE28C42ADF6D170035787D /* AccountKeys.swift in Sources */,
+				4E33F7ED2E432BF100B3D62F /* RouteMap+React.swift in Sources */,
 				6A3AD5C9291D4F9B00C30D57 /* StakingListView.swift in Sources */,
 				6A95CFB128B7258100267F86 /* NFTTransferView.swift in Sources */,
 				15B302B62D9AD51A007C792C /* SideContainerView.swift in Sources */,
@@ -9896,6 +9934,8 @@
 				151FEA5F2E26F2F100A33927 /* JXSegmentedDotCell.swift in Sources */,
 				151FEA602E26F2F100A33927 /* JXSegmentedTitleGradientDataSource.swift in Sources */,
 				151FEA612E26F2F100A33927 /* JXSegmentedIndicatorDotLineView.swift in Sources */,
+				4E33F7D72E42423F00B3D62F /* RNNFTModel.swift in Sources */,
+				4E33F7D82E42423F00B3D62F /* RNTokenModel.swift in Sources */,
 				151FEA622E26F2F100A33927 /* JXSegmentedIndicatorDoubleLineView.swift in Sources */,
 				151FEA632E26F2F100A33927 /* JXSegmentedTitleGradientItemModel.swift in Sources */,
 				151FEA642E26F2F100A33927 /* JXSegmentedBaseItemModel.swift in Sources */,
@@ -10464,14 +10504,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 2.4.10;
+				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10532,13 +10569,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 2.4.10;
+				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

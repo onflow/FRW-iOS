@@ -15,6 +15,13 @@ enum RNBridge {
         case evm = "evm"
     }
 
+    enum TransactionType: String, Codable {
+        case tokens = "tokens"
+        case singleNft = "single-nft"
+        case multipleNfts = "multiple-nfts"
+        case targetAddress = "targetAddress"
+    }
+
     struct EmojiInfo: Codable {
         let emoji: String
         let name: String
@@ -60,6 +67,14 @@ enum RNBridge {
 
     struct AddressBookResponse: Codable {
         let contacts: [AddressBookContact]
+    }
+
+    struct SendToConfig: Codable {
+        let selectedToken: RNTokenModel?
+        let fromAccount: WalletAccount?
+        let transactionType: TransactionType
+        let selectedNFTs: [RNNFTModel]?
+        let targetAddress: String?
     }
 
 }

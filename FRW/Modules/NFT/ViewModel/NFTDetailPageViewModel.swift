@@ -65,14 +65,19 @@ class NFTDetailPageViewModel: ObservableObject {
     let animationView = AnimationView(name: "inAR", bundle: .main)
 
     func sendNFTAction(fromChildAccount: ChildAccount? = nil) {
-        Router.route(to: RouteMap.AddressBook.pick { [weak self] contact in
-            Router.dismiss(animated: true) {
-                guard let self = self else {
-                    return
-                }
-                Router.route(to: RouteMap.NFT.send(self.nft, contact, fromChildAccount))
-            }
-        })
+      guard let config = RNBridge.SendToConfig.nft(nft) else {
+        HUD.error(title: "Incorrect nft")
+        return
+      }
+      Router.route(to: RouteMap.ReactNative.selectAddress(config))
+//        Router.route(to: RouteMap.AddressBook.pick { [weak self] contact in
+//            Router.dismiss(animated: true) {
+//                guard let self = self else {
+//                    return
+//                }
+//                Router.route(to: RouteMap.NFT.send(self.nft, contact, fromChildAccount))
+//            }
+//        })
     }
 
     func image() async -> UIImage {

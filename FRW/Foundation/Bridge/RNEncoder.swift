@@ -14,3 +14,10 @@ extension Encodable {
         return jsonObject as? [String: Any] ?? [:]
     }
 }
+
+extension Decodable {
+  static func fromDictionary(_ dictionary: [String: Any]) throws -> Self {
+      let data = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+      return try JSONDecoder().decode(Self.self, from: data)
+  }
+}

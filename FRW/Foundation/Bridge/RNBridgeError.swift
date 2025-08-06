@@ -9,4 +9,6 @@ import Foundation
 
 enum RNBridgeError: Error {
   case scanInvalidProvider
+  case invalidParameters
+  case sendToFlowConfigurationError
 }

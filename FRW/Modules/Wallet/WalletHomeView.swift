@@ -414,7 +414,7 @@ struct WalletHomeView: View {
             ) {
                 LocalUserDefaults.shared.recentToken = nil
 //                Router.route(to: RouteMap.Wallet.send())
-                Router.route(to: RouteMap.Wallet.reactNative(route: "SelectTokens"))
+              Router.route(to: RouteMap.ReactNative.selectAssets(nil))
             }
 
             WalletActionButton(
