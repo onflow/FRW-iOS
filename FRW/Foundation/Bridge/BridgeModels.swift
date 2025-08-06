@@ -19,7 +19,7 @@ enum RNBridge {
         case tokens = "tokens"
         case singleNft = "single-nft"
         case multipleNfts = "multiple-nfts"
-        case targetAddress = "targetAddress"
+        case targetAddress = "target-address"
     }
 
     struct EmojiInfo: Codable {
