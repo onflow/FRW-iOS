@@ -165,5 +165,14 @@ extension TurboModuleSwift {
     let holder = TransactionManager.TransactionHolder(id: Flow.ID(hex: txid), type: .common)
     TransactionManager.shared.newTransaction(holder: holder)
   }
+  
+  @objc
+  static func getEnv() -> [String: String] {
+    return [
+      "NODE_API_URL": Config.get(.lilicoWeb),
+      "GO_API_URL": Config.get(.lilico),
+      "INSTABUG_TOKEN": ServiceConfig.InstabutToken,
+    ]
+  }
 }
 

@@ -131,4 +131,8 @@
   [TurboModuleSwift listenTransactionWithTxid:txid];
 }
 
+- (NSDictionary *)getEnv {
+  return [TurboModuleSwift getEnv];
+}
+
 @end

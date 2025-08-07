@@ -34,6 +34,10 @@ class ServiceConfig {
     // MARK: Private
 
     private let dict: [String: String]
+    
+    static var InstabutToken: String {
+      ServiceConfig.shared.dict["instabug-key"] ?? ""
+    }
 }
 
 // MARK: config

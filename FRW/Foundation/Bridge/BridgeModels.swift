@@ -77,4 +77,10 @@ enum RNBridge {
         let targetAddress: String?
     }
 
+    struct EnvironmentVariables: Codable {
+        let NODE_API_URL: String
+        let GO_API_URL: String
+        let INSTABUG_TOKEN: String
+    }
+
 }
