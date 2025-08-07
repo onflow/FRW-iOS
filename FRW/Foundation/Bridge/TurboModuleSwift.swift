@@ -169,7 +169,7 @@ extension TurboModuleSwift {
   @objc
   static func getEnv() -> [String: String] {
     return [
-      "NODE_API_URL": Config.get(.lilicoWeb),
+      "NODE_API_URL": Config.get(.lilicoWeb).removeSuffix("/api/"),
       "GO_API_URL": Config.get(.lilico),
       "INSTABUG_TOKEN": ServiceConfig.InstabutToken,
     ]
