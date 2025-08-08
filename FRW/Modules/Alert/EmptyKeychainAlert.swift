@@ -5,7 +5,7 @@
 //  Created by cat on 4/23/25.
 //
 
-import Instabug
+import InstabugSDK
 import SwiftUI
 
 extension AlertViewController {

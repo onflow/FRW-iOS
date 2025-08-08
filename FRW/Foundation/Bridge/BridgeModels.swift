@@ -70,10 +70,10 @@ enum RNBridge {
     }
 
     struct SendToConfig: Codable {
-        let selectedToken: RNTokenModel?
+        let selectedToken: TokenModel?
         let fromAccount: WalletAccount?
         let transactionType: TransactionType
-        let selectedNFTs: [RNNFTModel]?
+        let selectedNFTs: [NFTModel]?
         let targetAddress: String?
     }
 
@@ -81,6 +81,68 @@ enum RNBridge {
         let NODE_API_URL: String
         let GO_API_URL: String
         let INSTABUG_TOKEN: String
+    }
+
+    struct NFTModel: Codable {
+        let id: String?
+        let name: String?
+        let description: String?
+        let thumbnail: String?
+        let externalURL: String?
+        let collectionName: String?
+        let collectionContractName: String?
+        let contractAddress: String?
+        let evmAddress: String?
+        let address: String?
+        let contractName: String?
+        let collectionDescription: String?
+        let collectionSquareImage: String?
+        let collectionBannerImage: String?
+        let collectionExternalURL: String?
+        let flowIdentifier: String?
+        let postMedia: NFTPostMedia?
+        let contractType: String?
+        let amount: String?
+        let type: WalletType
+    }
+
+    struct TokenModel: Codable {
+        let type: WalletType
+        let name: String
+        let symbol: String?
+        let description: String?
+        let balance: String?
+        let contractAddress: String?
+        let contractName: String?
+        let storagePath: FlowPath?
+        let receiverPath: FlowPath?
+        let balancePath: FlowPath?
+        let identifier: String?
+        let isVerified: Bool?
+        let logoURI: String?
+        let priceInUSD: String?
+        let balanceInUSD: String?
+        let priceInFLOW: String?
+        let balanceInFLOW: String?
+        let currency: String?
+        let priceInCurrency: String?
+        let balanceInCurrency: String?
+        let displayBalance: String?
+        let availableBalanceToUse: String?
+        let change: String?
+        let decimal: Int?
+        let evmAddress: String?
+        let website: String?
+    }
+
+    enum WalletType: String, Codable {
+        case flow = "flow"
+        case evm = "evm"
+    }
+
+    struct FlowPath: Codable {
+        let domain: String?
+        let identifier: String?
     }
 
 }

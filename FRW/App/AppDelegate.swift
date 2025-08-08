@@ -11,7 +11,7 @@ import FirebaseAnalytics
 import FirebaseMessaging
 import Foundation
 import GoogleSignIn
-import Instabug
+import InstabugSDK
 import ReownWalletKit
 import Resolver
 import SwiftUI

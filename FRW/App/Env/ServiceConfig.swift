@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Instabug
+import InstabugSDK
 import SwiftyDropbox
 
 // MARK: - ServiceConfig

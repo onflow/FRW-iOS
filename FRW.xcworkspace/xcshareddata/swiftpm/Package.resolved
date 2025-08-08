@@ -1,5 +1,5 @@
 {
-  "originHash" : "27ca9a5f70bab3a90db41859bff3e801ba38e49937e878c1af6b61d04f02be3f",
+  "originHash" : "d027461791b868dc1f2db6e6002d9ec477aed0709f04043bd814387022d2198e",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -267,15 +267,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "32561b17602e7f2c69a1defb264ade2d52314eb7"
-      }
-    },
-    {
-      "identity" : "instabug-sp",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Instabug/Instabug-SP",
-      "state" : {
-        "revision" : "27b4e61ac0597b43542cdfe3272db2c512c7d36e",
-        "version" : "14.3.0"
       }
     },
     {

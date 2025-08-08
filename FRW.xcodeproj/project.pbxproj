@@ -1294,8 +1294,6 @@
 		4E1A8B762B71AAFD00485EDE /* MultiBackupVerifyPinViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1A8B742B71AAFD00485EDE /* MultiBackupVerifyPinViewModel.swift */; };
 		4E1B2FE32BA038C000F30379 /* DevicesInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B2FE22BA038C000F30379 /* DevicesInfoViewModel.swift */; };
 		4E1B2FE42BA038C000F30379 /* DevicesInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1B2FE22BA038C000F30379 /* DevicesInfoViewModel.swift */; };
-		4E1DD8C72B1622030055E510 /* Instabug in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1DD8C62B1622030055E510 /* Instabug */; };
-		4E1DD8C92B16222A0055E510 /* Instabug in Frameworks */ = {isa = PBXBuildFile; productRef = 4E1DD8C82B16222A0055E510 /* Instabug */; };
 		4E1DD8CB2B1629560055E510 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DD8CA2B1629560055E510 /* QRCodeView.swift */; };
 		4E1DD8CC2B1629560055E510 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DD8CA2B1629560055E510 /* QRCodeView.swift */; };
 		4E1DD8D12B162F9B0055E510 /* SyncConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DD8D02B162F9B0055E510 /* SyncConfirmView.swift */; };
@@ -3557,7 +3555,6 @@
 				15F22F1A278B21B600FCF772 /* BiometricAuthentication in Frameworks */,
 				4E2FA6AE2CF4177C00D46EA7 /* WalletConnectIdentity in Frameworks */,
 				154B891C276A1EEB00780E93 /* Resolver in Frameworks */,
-				4E1DD8C92B16222A0055E510 /* Instabug in Frameworks */,
 				15DC1D53278165DB000B187A /* Haneke in Frameworks */,
 				4E5D4FAE2AEF9A7400DC419B /* DeviceGuru in Frameworks */,
 				156AC7AD27802FAC00ED5E3E /* GoogleAPIClientForRESTCore in Frameworks */,
@@ -3616,7 +3613,6 @@
 				4E2E8CBF2C61BB2300095D5B /* LogView in Frameworks */,
 				15C58C412868A4EE00BD4FC6 /* AuthenticationServices.framework in Frameworks */,
 				6A5F15F82A3185310035AC38 /* SwiftyBeaver in Frameworks */,
-				4E1DD8C72B1622030055E510 /* Instabug in Frameworks */,
 				15C58C422868A4EE00BD4FC6 /* UIKit.framework in Frameworks */,
 				6A0454CD28768E9E00A9131C /* SwiftUIPager in Frameworks */,
 				152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */,
@@ -4641,6 +4637,8 @@
 		15A87E8C2E26D9C000F0E550 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */,
+				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
@@ -6469,8 +6467,6 @@
 				6AE8821A288E9FE900ADF36E /* RouteableUIHostingController.swift */,
 				6AE8821D288EB67A00ADF36E /* RouterExtensions.swift */,
 				6A65690A289128EE007D9BDA /* RouterNavigationController.swift */,
-				4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */,
-				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -7382,7 +7378,6 @@
 				150D3E382A58719A00F7F2DC /* QRCode */,
 				6A19A74D2A612FAB00B84F09 /* FirebaseMessaging */,
 				4E5D4FAD2AEF9A7400DC419B /* DeviceGuru */,
-				4E1DD8C82B16222A0055E510 /* Instabug */,
 				4E3682C62BB6A59100B24785 /* web3swift */,
 				4EEE9DC62BD243DB00685AAA /* FirebaseAnalytics */,
 				4E2E8CBC2C61B9A800095D5B /* LogView */,
@@ -7473,7 +7468,6 @@
 				150D3E362A58718700F7F2DC /* QRCode */,
 				6A19A74F2A612FC600B84F09 /* FirebaseMessaging */,
 				4E5D4FAB2AEF9A5A00DC419B /* DeviceGuru */,
-				4E1DD8C62B1622030055E510 /* Instabug */,
 				4E947C912BBEB2E300E87A85 /* web3swift */,
 				4E2E8CBE2C61BB2300095D5B /* LogView */,
 				4E660F1B2C80B42F00E5239E /* CollectionViewPagingLayout */,
@@ -7654,7 +7648,6 @@
 				6A5F15F62A3185300035AC38 /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 				150D3E352A58718700F7F2DC /* XCRemoteSwiftPackageReference "QRCode" */,
 				4E5D4FAA2AEF9A5A00DC419B /* XCRemoteSwiftPackageReference "DeviceGuru" */,
-				4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */,
 				4E3682C52BB6A59100B24785 /* XCRemoteSwiftPackageReference "web3swift" */,
 				4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */,
 				4E660F1A2C80B42F00E5239E /* XCRemoteSwiftPackageReference "CollectionViewPagingLayout" */,
@@ -7841,9 +7834,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7897,9 +7894,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7972,9 +7973,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8011,9 +8016,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -10492,10 +10501,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10559,10 +10565,7 @@
 				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -11276,15 +11279,6 @@
 				minimumVersion = 2.8.0;
 			};
 		};
-		4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Instabug/Instabug-SP";
-			requirement = {
-				kind = versionRange;
-				maximumVersion = 15.0.0;
-				minimumVersion = 14.2.0;
-			};
-		};
 		4E2E8CBB2C61B9A800095D5B /* XCRemoteSwiftPackageReference "LogView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alexejn/LogView";
@@ -11744,16 +11738,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */;
 			productName = Mixpanel;
-		};
-		4E1DD8C62B1622030055E510 /* Instabug */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */;
-			productName = Instabug;
-		};
-		4E1DD8C82B16222A0055E510 /* Instabug */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E1DD8C52B1622030055E510 /* XCRemoteSwiftPackageReference "Instabug-SP" */;
-			productName = Instabug;
 		};
 		4E2E8CBC2C61B9A800095D5B /* LogView */ = {
 			isa = XCSwiftPackageProductDependency;

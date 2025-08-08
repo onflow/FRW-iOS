@@ -335,6 +335,113 @@ extension RNTokenModel {
     }
 }
 
+// MARK: - Conversion to RNBridge.TokenModel
+
+extension RNTokenModel {
+    
+    /// Convert to RNBridge.TokenModel for codegen bridge communication
+    func toBridgeModel() -> RNBridge.TokenModel {
+        // Convert RNWalletType to RNBridge.WalletType
+        let bridgeType: RNBridge.WalletType = (type == .Flow) ? .flow : .evm
+        
+        // Convert RNFlowPath to RNBridge.FlowPath
+        let bridgeStoragePath = storagePath.map { path in
+            RNBridge.FlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        let bridgeReceiverPath = receiverPath.map { path in
+            RNBridge.FlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        let bridgeBalancePath = balancePath.map { path in
+            RNBridge.FlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        
+        return RNBridge.TokenModel(
+            type: bridgeType,
+            name: name,
+            symbol: symbol,
+            description: description,
+            balance: balance,
+            contractAddress: contractAddress,
+            contractName: contractName,
+            storagePath: bridgeStoragePath,
+            receiverPath: bridgeReceiverPath,
+            balancePath: bridgeBalancePath,
+            identifier: identifier,
+            isVerified: isVerified,
+            logoURI: logoURI,
+            priceInUSD: priceInUSD,
+            balanceInUSD: balanceInUSD,
+            priceInFLOW: priceInFLOW,
+            balanceInFLOW: balanceInFLOW,
+            currency: currency,
+            priceInCurrency: priceInCurrency,
+            balanceInCurrency: balanceInCurrency,
+            displayBalance: displayBalance,
+            availableBalanceToUse: availableBalanceToUse,
+            change: change,
+            decimal: decimal,
+            evmAddress: evmAddress,
+            website: website
+        )
+    }
+    
+    /// Convert from RNBridge.TokenModel to RNTokenModel
+    static func fromBridgeModel(_ bridgeModel: RNBridge.TokenModel) -> RNTokenModel {
+        // Convert RNBridge.WalletType to RNWalletType
+        let rnType: RNWalletType = (bridgeModel.type == .flow) ? .Flow : .EVM
+        
+        // Convert RNBridge.FlowPath to RNFlowPath
+        let rnStoragePath = bridgeModel.storagePath.map { path in
+            RNFlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        let rnReceiverPath = bridgeModel.receiverPath.map { path in
+            RNFlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        let rnBalancePath = bridgeModel.balancePath.map { path in
+            RNFlowPath(domain: path.domain, identifier: path.identifier)
+        }
+        
+        return RNTokenModel(
+            type: rnType,
+            name: bridgeModel.name,
+            symbol: bridgeModel.symbol,
+            description: bridgeModel.description,
+            balance: bridgeModel.balance,
+            contractAddress: bridgeModel.contractAddress,
+            contractName: bridgeModel.contractName,
+            storagePath: rnStoragePath,
+            receiverPath: rnReceiverPath,
+            balancePath: rnBalancePath,
+            identifier: bridgeModel.identifier,
+            isVerified: bridgeModel.isVerified,
+            logoURI: bridgeModel.logoURI,
+            priceInUSD: bridgeModel.priceInUSD,
+            balanceInUSD: bridgeModel.balanceInUSD,
+            priceInFLOW: bridgeModel.priceInFLOW,
+            balanceInFLOW: bridgeModel.balanceInFLOW,
+            currency: bridgeModel.currency,
+            priceInCurrency: bridgeModel.priceInCurrency,
+            balanceInCurrency: bridgeModel.balanceInCurrency,
+            displayBalance: bridgeModel.displayBalance,
+            availableBalanceToUse: bridgeModel.availableBalanceToUse,
+            change: bridgeModel.change,
+            decimal: bridgeModel.decimal,
+            evmAddress: bridgeModel.evmAddress,
+            website: bridgeModel.website
+        )
+    }
+    
+    /// Convert array of RNTokenModels to RNBridge.TokenModels
+    static func toBridgeModels(_ tokenModels: [RNTokenModel]) -> [RNBridge.TokenModel] {
+        return tokenModels.map { $0.toBridgeModel() }
+    }
+    
+    /// Convert array of RNBridge.TokenModels to RNTokenModels
+    static func fromBridgeModels(_ bridgeModels: [RNBridge.TokenModel]) -> [RNTokenModel] {
+        return bridgeModels.map { fromBridgeModel($0) }
+    }
+}
+
 // MARK: - Conversion from Native TokenModel
 
 extension RNTokenModel {
@@ -383,5 +490,49 @@ extension RNTokenModel {
             evmAddress: tokenModel.evmAddress,
             website: tokenModel.website?.absoluteString
         )
+    }
+}
+
+// MARK: - Testing & Validation
+
+extension RNTokenModel {
+    
+    /// Test conversion to and from bridge models
+    static func testBridgeConversion() -> Bool {
+        // Create a test token
+        let originalToken = RNTokenModel.mockFlow()
+        
+        // Convert to bridge model
+        let bridgeModel = originalToken.toBridgeModel()
+        
+        // Convert back to RN model
+        let convertedToken = RNTokenModel.fromBridgeModel(bridgeModel)
+        
+        // Verify all properties match
+        return originalToken.type == convertedToken.type &&
+               originalToken.name == convertedToken.name &&
+               originalToken.symbol == convertedToken.symbol &&
+               originalToken.description == convertedToken.description &&
+               originalToken.balance == convertedToken.balance &&
+               originalToken.contractAddress == convertedToken.contractAddress &&
+               originalToken.contractName == convertedToken.contractName &&
+               originalToken.identifier == convertedToken.identifier &&
+               originalToken.isVerified == convertedToken.isVerified &&
+               originalToken.logoURI == convertedToken.logoURI &&
+               originalToken.priceInUSD == convertedToken.priceInUSD &&
+               originalToken.balanceInUSD == convertedToken.balanceInUSD &&
+               originalToken.priceInFLOW == convertedToken.priceInFLOW &&
+               originalToken.balanceInFLOW == convertedToken.balanceInFLOW &&
+               originalToken.currency == convertedToken.currency &&
+               originalToken.priceInCurrency == convertedToken.priceInCurrency &&
+               originalToken.balanceInCurrency == convertedToken.balanceInCurrency &&
+               originalToken.displayBalance == convertedToken.displayBalance &&
+               originalToken.availableBalanceToUse == convertedToken.availableBalanceToUse &&
+               originalToken.change == convertedToken.change &&
+               originalToken.decimal == convertedToken.decimal &&
+               originalToken.evmAddress == convertedToken.evmAddress &&
+               originalToken.website == convertedToken.website &&
+               originalToken.storagePath?.domain == convertedToken.storagePath?.domain &&
+               originalToken.storagePath?.identifier == convertedToken.storagePath?.identifier
     }
 }

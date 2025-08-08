@@ -8,6 +8,7 @@ PODS:
   - hermes-engine (0.80.1):
     - hermes-engine/Pre-built (= 0.80.1)
   - hermes-engine/Pre-built (0.80.1)
+  - Instabug (15.1.1)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2360,6 +2361,9 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - RNInstabug (15.0.1):
+    - Instabug (= 15.1.1)
+    - React-Core
   - RNReanimated (4.0.1):
     - boost
     - DoubleConversion
@@ -2743,6 +2747,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNInstabug (from `../node_modules/instabug-reactnative`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2752,6 +2757,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Instabug
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2910,6 +2916,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNInstabug:
+    :path: "../node_modules/instabug-reactnative"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2929,6 +2937,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
+  Instabug: 3e7af445c14d7823fcdecba223f09b5f7c0c6ce1
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630
@@ -2999,6 +3008,7 @@ SPEC CHECKSUMS:
   ReactCommon: 96684b90b235d6ae340d126141edd4563b7a446a
   RNCAsyncStorage: 767abb068db6ad28b5f59a129fbc9fab18b377e2
   RNGestureHandler: cdca641e24d0ab743dcd90a24de4e6259e6aa0de
+  RNInstabug: f17d4e6c679fbc921f2692c223a1c21395589cc5
   RNReanimated: f6d3e9f4075e96833981eaee1498e989aba802ed
   RNScreens: 75074e642b69b086813a943bdf63da7085fb2166
   RNSVG: 432ca012e24410cab11449afef353ce20573a59f

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Instabug
+import InstabugSDK
 
 enum BugReport {
     static func build(error: Error, level: NonFatalLevel = .error, userAttribute: [String: String] = [:], group: BugReport.Group = .app) -> NonFatalException? {

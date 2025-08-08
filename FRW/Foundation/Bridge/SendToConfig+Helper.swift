@@ -15,7 +15,7 @@ extension RNBridge.SendToConfig {
       return nil
     }
     return RNBridge.SendToConfig(
-      selectedToken: RNTokenModel.fromTokenModel(token),
+      selectedToken: RNBridge.TokenModel.fromTokenModel(token),
       fromAccount: currentAccount,
       transactionType: .tokens,
       selectedNFTs: nil,
@@ -24,7 +24,7 @@ extension RNBridge.SendToConfig {
   }
   
   static func nft(_ nft: NFTModel) -> RNBridge.SendToConfig? {
-    guard let currentAccount = getCurrentAccount(), let model = RNNFTModel.fromNFTModel(nft) else {
+    guard let currentAccount = getCurrentAccount(), let model = RNBridge.NFTModel.fromNFTModel(nft) else {
       log.error("❌ No selected account found")
       return nil
     }
@@ -39,7 +39,7 @@ extension RNBridge.SendToConfig {
 
   static func nfts(_ nfts: [NFTModel]) -> RNBridge.SendToConfig? {
     guard let currentAccount = getCurrentAccount() ,
-            let list = RNNFTModel.fromNFTModels(nfts) else {
+          let list = RNBridge.NFTModel.fromNFTModels(nfts) else {
       log.error("❌ No selected account found")
       return nil
     }

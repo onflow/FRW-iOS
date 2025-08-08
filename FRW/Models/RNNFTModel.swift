@@ -391,6 +391,99 @@ extension RNNFTModel {
     }
 }
 
+// MARK: - Conversion to RNBridge.NFTModel
+
+extension RNNFTModel {
+    
+    /// Convert to RNBridge.NFTModel for codegen bridge communication
+    func toBridgeModel() -> RNBridge.NFTModel {
+        // Convert RNWalletType to RNBridge.WalletType
+        let bridgeType: RNBridge.WalletType = (type == .Flow) ? .flow : .evm
+        
+        // Convert RNNFTPostMedia to RNBridge.NFTPostMedia
+        let bridgePostMedia = postMedia.map { media in
+            RNBridge.NFTPostMedia(
+                image: media.image,
+                isSvg: media.isSvg,
+                description: media.description,
+                title: media.title
+            )
+        }
+        
+        return RNBridge.NFTModel(
+            id: id,
+            name: name,
+            description: description,
+            thumbnail: thumbnail,
+            externalURL: externalURL,
+            collectionName: collectionName,
+            collectionContractName: collectionContractName,
+            contractAddress: contractAddress,
+            evmAddress: evmAddress,
+            address: address,
+            contractName: contractName,
+            collectionDescription: collectionDescription,
+            collectionSquareImage: collectionSquareImage,
+            collectionBannerImage: collectionBannerImage,
+            collectionExternalURL: collectionExternalURL,
+            flowIdentifier: flowIdentifier,
+            postMedia: bridgePostMedia,
+            contractType: contractType,
+            amount: amount,
+            type: bridgeType
+        )
+    }
+    
+    /// Convert from RNBridge.NFTModel to RNNFTModel
+    static func fromBridgeModel(_ bridgeModel: RNBridge.NFTModel) -> RNNFTModel {
+        // Convert RNBridge.WalletType to RNWalletType
+        let rnType: RNWalletType = (bridgeModel.type == .flow) ? .Flow : .EVM
+        
+        // Convert RNBridge.NFTPostMedia to RNNFTPostMedia
+        let rnPostMedia = bridgeModel.postMedia.map { media in
+            RNNFTPostMedia(
+                image: media.image,
+                isSvg: media.isSvg,
+                description: media.description,
+                title: media.title
+            )
+        }
+        
+        return RNNFTModel(
+            id: bridgeModel.id,
+            name: bridgeModel.name,
+            description: bridgeModel.description,
+            thumbnail: bridgeModel.thumbnail,
+            externalURL: bridgeModel.externalURL,
+            collectionName: bridgeModel.collectionName,
+            collectionContractName: bridgeModel.collectionContractName,
+            contractAddress: bridgeModel.contractAddress,
+            evmAddress: bridgeModel.evmAddress,
+            address: bridgeModel.address,
+            contractName: bridgeModel.contractName,
+            collectionDescription: bridgeModel.collectionDescription,
+            collectionSquareImage: bridgeModel.collectionSquareImage,
+            collectionBannerImage: bridgeModel.collectionBannerImage,
+            collectionExternalURL: bridgeModel.collectionExternalURL,
+            flowIdentifier: bridgeModel.flowIdentifier,
+            postMedia: rnPostMedia,
+            contractType: bridgeModel.contractType,
+            amount: bridgeModel.amount,
+            type: rnType
+        )
+    }
+    
+    /// Convert array of RNNFTModels to RNBridge.NFTModels
+    static func toBridgeModels(_ nftModels: [RNNFTModel]) -> [RNBridge.NFTModel] {
+        return nftModels.map { $0.toBridgeModel() }
+    }
+    
+    /// Convert array of RNBridge.NFTModels to RNNFTModels
+    static func fromBridgeModels(_ bridgeModels: [RNBridge.NFTModel]) -> [RNNFTModel] {
+        return bridgeModels.map { fromBridgeModel($0) }
+    }
+}
+
 // MARK: - Conversion from Native NFTModel
 
 extension RNNFTModel {
@@ -445,5 +538,47 @@ extension RNNFTModel {
     /// Convert array of native NFTModels to RNNFTModels
     static func fromNFTModels(_ nftModels: [NFTModel]) -> [RNNFTModel] {
         return nftModels.map { fromNFTModel($0) }
+    }
+}
+
+// MARK: - Testing & Validation
+
+extension RNNFTModel {
+    
+    /// Test conversion to and from bridge models
+    static func testBridgeConversion() -> Bool {
+        // Create a test NFT
+        let originalNFT = RNNFTModel.mockFlowNFT()
+        
+        // Convert to bridge model
+        let bridgeModel = originalNFT.toBridgeModel()
+        
+        // Convert back to RN model
+        let convertedNFT = RNNFTModel.fromBridgeModel(bridgeModel)
+        
+        // Verify all properties match
+        return originalNFT.id == convertedNFT.id &&
+               originalNFT.name == convertedNFT.name &&
+               originalNFT.description == convertedNFT.description &&
+               originalNFT.thumbnail == convertedNFT.thumbnail &&
+               originalNFT.externalURL == convertedNFT.externalURL &&
+               originalNFT.collectionName == convertedNFT.collectionName &&
+               originalNFT.collectionContractName == convertedNFT.collectionContractName &&
+               originalNFT.contractAddress == convertedNFT.contractAddress &&
+               originalNFT.evmAddress == convertedNFT.evmAddress &&
+               originalNFT.address == convertedNFT.address &&
+               originalNFT.contractName == convertedNFT.contractName &&
+               originalNFT.collectionDescription == convertedNFT.collectionDescription &&
+               originalNFT.collectionSquareImage == convertedNFT.collectionSquareImage &&
+               originalNFT.collectionBannerImage == convertedNFT.collectionBannerImage &&
+               originalNFT.collectionExternalURL == convertedNFT.collectionExternalURL &&
+               originalNFT.flowIdentifier == convertedNFT.flowIdentifier &&
+               originalNFT.contractType == convertedNFT.contractType &&
+               originalNFT.amount == convertedNFT.amount &&
+               originalNFT.type == convertedNFT.type &&
+               originalNFT.postMedia?.image == convertedNFT.postMedia?.image &&
+               originalNFT.postMedia?.isSvg == convertedNFT.postMedia?.isSvg &&
+               originalNFT.postMedia?.description == convertedNFT.postMedia?.description &&
+               originalNFT.postMedia?.title == convertedNFT.postMedia?.title
     }
 }

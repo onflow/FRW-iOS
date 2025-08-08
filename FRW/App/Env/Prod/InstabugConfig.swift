@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Instabug
+import InstabugSDK
 
 class InstabugConfig {
     static func start(token: String) {
