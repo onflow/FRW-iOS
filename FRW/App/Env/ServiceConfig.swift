@@ -35,8 +35,8 @@ class ServiceConfig {
 
     private let dict: [String: String]
     
-    static var InstabutToken: String {
-      ServiceConfig.shared.dict["instabug-key"] ?? ""
+    static var instabugRNToken: String {
+      ServiceConfig.shared.dict["INSTABUG_RN_TOKEN"] ?? ""
     }
 }
 
