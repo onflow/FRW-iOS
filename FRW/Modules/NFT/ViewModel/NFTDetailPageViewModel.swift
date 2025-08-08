@@ -62,7 +62,7 @@ class NFTDetailPageViewModel: ObservableObject {
     @Published
     var isPresentMove = false
 
-    let animationView = AnimationView(name: "inAR", bundle: .main)
+    let animationView = LottieAnimationView(name: "inAR", bundle: .main)
 
     func sendNFTAction(fromChildAccount: ChildAccount? = nil) {
       guard let config = RNBridge.SendToConfig.nft(nft) else {

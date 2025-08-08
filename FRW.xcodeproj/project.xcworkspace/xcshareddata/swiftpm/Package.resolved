@@ -1,5 +1,5 @@
 {
-  "originHash" : "27ca9a5f70bab3a90db41859bff3e801ba38e49937e878c1af6b61d04f02be3f",
+  "originHash" : "60644b0e479234a6200a23fd98dca93582e37414d7385bcc8db2e979342e7059",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -270,15 +270,6 @@
       }
     },
     {
-      "identity" : "instabug-sp",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Instabug/Instabug-SP",
-      "state" : {
-        "revision" : "27b4e61ac0597b43542cdfe3272db2c512c7d36e",
-        "version" : "14.3.0"
-      }
-    },
-    {
       "identity" : "interop-ios-for-google-sdks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
@@ -330,15 +321,6 @@
       "state" : {
         "revision" : "7f031eb8f0d9570e4d8a10b6291dcc94a65b3d1b",
         "version" : "1.0.6"
-      }
-    },
-    {
-      "identity" : "lottie-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-ios",
-      "state" : {
-        "revision" : "b4bd0604ded9574807f41b4004b57dd1226a30a4",
-        "version" : "3.5.0"
       }
     },
     {

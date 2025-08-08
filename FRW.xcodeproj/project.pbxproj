@@ -108,8 +108,6 @@
 		152516FB2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152516FC2DAFEE8B00DBC83A /* UserAddressV2Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */; };
 		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
-		152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 152BB09328AE8FD100B2A2AA /* Lottie */; };
-		152BB09628AE900C00B2A2AA /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 152BB09528AE900C00B2A2AA /* Lottie */; };
 		152BB09828AE91A700B2A2AA /* ResizableLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */; };
 		152BB09928AE91A700B2A2AA /* ResizableLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */; };
 		152EEC6928E4F26300C37A67 /* FRWWebEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC6828E4F26300C37A67 /* FRWWebEndpoint.swift */; };
@@ -3543,7 +3541,6 @@
 				6AADFB54293CB7F800E5D6B2 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				4E3682C72BB6A59100B24785 /* web3swift in Frameworks */,
 				15D6D8F628CBAEE000CBA152 /* FancyScrollView in Frameworks */,
-				152BB09628AE900C00B2A2AA /* Lottie in Frameworks */,
 				6AEA375A28A51792004545D4 /* MJRefresh in Frameworks */,
 				15185ED8278A73A3006B74A9 /* SPConfetti in Frameworks */,
 				15DD619C2D7AA6B600F96F0F /* YttriumWrapper in Frameworks */,
@@ -3615,7 +3612,6 @@
 				6A5F15F82A3185310035AC38 /* SwiftyBeaver in Frameworks */,
 				15C58C422868A4EE00BD4FC6 /* UIKit.framework in Frameworks */,
 				6A0454CD28768E9E00A9131C /* SwiftUIPager in Frameworks */,
-				152BB09428AE8FD100B2A2AA /* Lottie in Frameworks */,
 				6AEA374028A49DBE004545D4 /* MJRefresh in Frameworks */,
 				15C58C442868A4EE00BD4FC6 /* SPConfetti in Frameworks */,
 				1549CF03299A10C2002B37A5 /* Gzip in Frameworks */,
@@ -7363,7 +7359,6 @@
 				6AE1D48D287690E7000FA0B7 /* SwiftUIPager */,
 				6AC1AE6A289BAD0600F76C7A /* SnapKit */,
 				6AEA375928A51792004545D4 /* MJRefresh */,
-				152BB09528AE900C00B2A2AA /* Lottie */,
 				15D3BA6C28C3B217009AEA6E /* ColorKit */,
 				15D3BA7128C3B90A009AEA6E /* ViewAnimator */,
 				15D3BA7628C45F21009AEA6E /* Hero */,
@@ -7453,7 +7448,6 @@
 				6A0454CC28768E9E00A9131C /* SwiftUIPager */,
 				6AC1AE68289BACDF00F76C7A /* SnapKit */,
 				6AEA373F28A49DBE004545D4 /* MJRefresh */,
-				152BB09328AE8FD100B2A2AA /* Lottie */,
 				15D3BA6A28C3B1EE009AEA6E /* ColorKit */,
 				15D3BA6F28C3B8E3009AEA6E /* ViewAnimator */,
 				15D3BA7428C45EFF009AEA6E /* Hero */,
@@ -7635,7 +7629,6 @@
 				6A0454CB28768E9E00A9131C /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 				6AC1AE67289BACDF00F76C7A /* XCRemoteSwiftPackageReference "SnapKit" */,
 				6AEA373E28A49DBD004545D4 /* XCRemoteSwiftPackageReference "MJRefresh" */,
-				152BB09228AE8FD100B2A2AA /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				15D3BA6928C3B1ED009AEA6E /* XCRemoteSwiftPackageReference "ColorKit" */,
 				15D3BA6E28C3B8E3009AEA6E /* XCRemoteSwiftPackageReference "ViewAnimator" */,
 				15D3BA7328C45EFF009AEA6E /* XCRemoteSwiftPackageReference "Hero" */,
@@ -7834,13 +7827,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7894,13 +7883,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7973,13 +7958,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8016,13 +7997,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -10501,7 +10478,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10565,7 +10545,10 @@
 				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -10908,14 +10891,6 @@
 			requirement = {
 				kind = revision;
 				revision = 41bcc4587f504196975eca4d7ddbc54fe2a9b57c;
-			};
-		};
-		152BB09228AE8FD100B2A2AA /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
 			};
 		};
 		1549CF01299A10C2002B37A5 /* XCRemoteSwiftPackageReference "GzipSwift" */ = {
@@ -11413,16 +11388,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1599F7752789734B0094B196 /* XCRemoteSwiftPackageReference "SPConfetti" */;
 			productName = SPConfetti;
-		};
-		152BB09328AE8FD100B2A2AA /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 152BB09228AE8FD100B2A2AA /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = Lottie;
-		};
-		152BB09528AE900C00B2A2AA /* Lottie */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 152BB09228AE8FD100B2A2AA /* XCRemoteSwiftPackageReference "lottie-ios" */;
-			productName = Lottie;
 		};
 		15455B5E2DCD1B1900E87FBB /* FlowWalletKit */ = {
 			isa = XCSwiftPackageProductDependency;
