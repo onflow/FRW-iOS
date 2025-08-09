@@ -312,8 +312,7 @@ extension BrowserViewController {
     @objc
     private func onMoveAssets() {
         if MoveAssetsAction.shared.allowMoveAssets {
-            let vc = PresentHostingController(rootView: MoveAssetsView())
-            navigationController?.present(vc, completion: nil)
+          Router.route(to: RouteMap.ReactNative.selectAssets(nil))
         } else {
             HUD.info(title: "Features Coming Soon")
         }
