@@ -19,7 +19,7 @@ extension ReactNativeViewController {
 class ReactNativeViewController: UIViewController {
 
   var initialRoute: ReactNativeViewController.Route
-  var initialProps: [String: Any]? = nil
+  var initialProps: RNBridge.InitialProps? = nil
   
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
@@ -35,7 +35,7 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialRoute: ReactNativeViewController.Route, initialProps: [String: Any]? = nil) {
+  init(initialRoute: ReactNativeViewController.Route, initialProps: RNBridge.InitialProps? = nil) {
     self.initialRoute = initialRoute
     self.initialProps = initialProps
     super.init(nibName: nil, bundle: nil)
@@ -124,9 +124,8 @@ class ReactNativeViewController: UIViewController {
         ]
         
         // Merge with additional initial props if provided
-        if let mergeProps =  initialProps {
-          props["sendToConfig"] = mergeProps
-        }
+        let dic = try? initialProps?.toDictionary()
+        props["initialProps"] = mergeProps
         
 
         print("🚀 DEBUG: Creating RCTSurfaceHostingView")

@@ -22,6 +22,11 @@ enum RNBridge {
         case targetAddress = "target-address"
     }
 
+    enum ScreenType: String, Codable {
+        case sendAsset = "send-asset"
+        case tokenDetail = "token-detail"
+    }
+
     struct EmojiInfo: Codable {
         let emoji: String
         let name: String
@@ -75,6 +80,11 @@ enum RNBridge {
         let transactionType: TransactionType
         let selectedNFTs: [NFTModel]?
         let targetAddress: String?
+    }
+
+    struct InitialProps: Codable {
+        let screen: ScreenType
+        let sendToConfig: SendToConfig?
     }
 
     struct EnvironmentVariables: Codable {

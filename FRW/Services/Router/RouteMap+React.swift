@@ -19,10 +19,10 @@ extension RouteMap.ReactNative: RouterTarget {
   func onPresent(navi: UINavigationController) {
     switch self {
     case .selectAssets(let config):
-      let props = try? config.toDictionary()
+      let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config)
       navi.present(ReactNativeViewController(initialRoute: .selectAssets,initialProps: props))
     case .selectAddress(let config):
-      let props = try? config.toDictionary()
+      let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config)
       navi.present(ReactNativeViewController(initialRoute: .selectAddress,initialProps: props))
     }
   }
