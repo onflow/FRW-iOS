@@ -125,7 +125,7 @@ class ReactNativeViewController: UIViewController {
         
         // Merge with additional initial props if provided
         let dic = try? initialProps?.toDictionary()
-        props["initialProps"] = mergeProps
+        props["initialProps"] = dic
         
 
         print("🚀 DEBUG: Creating RCTSurfaceHostingView")
