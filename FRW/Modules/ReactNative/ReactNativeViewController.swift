@@ -10,15 +10,16 @@ import Factory
 
 extension ReactNativeViewController {
   enum Route: String {
+    case home = "home"
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
+    case sendToken = "SendTokens"
   }
 
 }
 
 class ReactNativeViewController: UIViewController {
 
-  var initialRoute: ReactNativeViewController.Route
   var initialProps: RNBridge.InitialProps? = nil
   
     // Static identifier for easy identification
@@ -35,8 +36,7 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialRoute: ReactNativeViewController.Route, initialProps: RNBridge.InitialProps? = nil) {
-    self.initialRoute = initialRoute
+  init(initialProps: RNBridge.InitialProps? = nil) {
     self.initialProps = initialProps
     super.init(nibName: nil, bundle: nil)
   }
@@ -119,7 +119,7 @@ class ReactNativeViewController: UIViewController {
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialRoute.rawValue,
+            "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
             "embedded" : false
         ]
         
@@ -171,3 +171,20 @@ class ReactNativeViewController: UIViewController {
     }
 }
 
+extension RNBridge.InitialProps {
+  var route: ReactNativeViewController.Route {
+    if screen == .sendAsset {
+      guard let config = sendToConfig else {
+        return .selectAssets
+      }
+      if config.targetAddress != nil && config.selectedToken != nil {
+        return .sendToken
+      } else if config.selectedToken != nil {
+        return .selectAddress
+      } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
+        return .selectAddress
+      }
+    }
+    return .selectAssets
+  }
+}

@@ -69,7 +69,7 @@ class NFTDetailPageViewModel: ObservableObject {
         HUD.error(title: "Incorrect nft")
         return
       }
-      Router.route(to: RouteMap.ReactNative.selectAddress(config))
+      Router.route(to: RouteMap.ReactNative.sendAsset(config))
 //        Router.route(to: RouteMap.AddressBook.pick { [weak self] contact in
 //            Router.dismiss(animated: true) {
 //                guard let self = self else {

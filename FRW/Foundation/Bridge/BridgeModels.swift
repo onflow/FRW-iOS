@@ -15,13 +15,6 @@ enum RNBridge {
         case evm = "evm"
     }
 
-    enum TransactionType: String, Codable {
-        case tokens = "tokens"
-        case singleNft = "single-nft"
-        case multipleNfts = "multiple-nfts"
-        case targetAddress = "target-address"
-    }
-
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
         case tokenDetail = "token-detail"
@@ -77,7 +70,6 @@ enum RNBridge {
     struct SendToConfig: Codable {
         let selectedToken: TokenModel?
         let fromAccount: WalletAccount?
-        let transactionType: TransactionType
         let selectedNFTs: [NFTModel]?
         let targetAddress: String?
     }

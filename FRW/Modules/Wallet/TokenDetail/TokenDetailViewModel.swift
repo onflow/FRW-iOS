@@ -266,7 +266,7 @@ extension TokenDetailViewModel {
         HUD.error(title: "Incorrect token")
         return
       }
-      Router.route(to: RouteMap.ReactNative.selectAddress(config))
+      Router.route(to: RouteMap.ReactNative.sendAsset(config))
         LocalUserDefaults.shared.recentToken = token.vaultIdentifier
 //        Router.route(to: RouteMap.Wallet.send())
     }

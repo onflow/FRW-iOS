@@ -10,22 +10,16 @@ import UIKit
 
 extension RouteMap {
   enum ReactNative {
-    case selectAssets(RNBridge.SendToConfig?)
-    case selectAddress(RNBridge.SendToConfig)
+    case sendAsset(RNBridge.SendToConfig?)
   }
 }
 
 extension RouteMap.ReactNative: RouterTarget {
   func onPresent(navi: UINavigationController) {
     switch self {
-    case .selectAssets(let config):
+    case .sendAsset(let config):
       let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config)
-      navi.present(ReactNativeViewController(initialRoute: .selectAssets,initialProps: props))
-    case .selectAddress(let config):
-      let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config)
-      navi.present(ReactNativeViewController(initialRoute: .selectAddress,initialProps: props))
+      navi.present(ReactNativeViewController(initialProps: props))
     }
   }
 }
-
-
