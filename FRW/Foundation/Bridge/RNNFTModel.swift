@@ -19,14 +19,9 @@ extension RNBridge.NFTModel {
     let rnType: RNBridge.WalletType = WalletManager.shared.selectedAccount?.vmType == .evm ? .evm : .flow
 
     // Convert postMedia if exists
-    var rnPostMedia: NFTPostMedia?
+    var rnPostMedia: RNBridge.NFTPostMedia?
     if let postMedia = nftModel.response.postMedia {
-      rnPostMedia = NFTPostMedia(
-        title: postMedia.title, image: postMedia.image,
-        description: postMedia.description,
-        video: postMedia.description,
-        isSvg: nil
-      )
+      rnPostMedia = RNBridge.NFTPostMedia(image: postMedia.image, isSvg: postMedia.isSvg, description: postMedia.description, title: postMedia.title)
     }
 
     return RNBridge.NFTModel(

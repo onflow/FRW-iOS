@@ -50,6 +50,7 @@ enum RNBridge {
         let address: String
         let emojiInfo: EmojiInfo?
         let parentEmoji: EmojiInfo?
+        let parentAddress: String?
         let avatar: String?
         let isActive: Bool
         let type: AccountType?
@@ -106,6 +107,13 @@ enum RNBridge {
         let contractType: String?
         let amount: String?
         let type: WalletType
+    }
+
+    struct NFTPostMedia: Codable {
+        let image: String?
+        let isSvg: Bool?
+        let description: String?
+        let title: String?
     }
 
     struct TokenModel: Codable {

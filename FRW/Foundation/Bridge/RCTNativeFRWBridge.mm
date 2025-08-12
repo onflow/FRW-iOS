@@ -135,4 +135,16 @@
   return [TurboModuleSwift getEnv];
 }
 
+- (void)getSelectedAccount:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getSelectedWalletAccountWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"selected account", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+  
+}
+
 @end
+

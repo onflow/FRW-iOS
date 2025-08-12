@@ -176,3 +176,20 @@ extension TurboModuleSwift {
   }
 }
 
+// MARK: - Wallet
+extension TurboModuleSwift {
+  
+  @objc
+  static func getSelectedWalletAccount() async throws -> [String: Any] {
+    let manager = await WalletManager.shared
+    if let account = await manager.selectedChildAccount {
+      return try account.toWalletAccount().toDictionary()
+    } else if let account = await manager.selectedEVMAccount {
+      return try account.toWalletAccount().toDictionary()
+    } else if let account = await manager.mainAccount {
+      return try account.toWalletAccount().toDictionary()
+    }
+    return [:]
+  }
+  
+}
