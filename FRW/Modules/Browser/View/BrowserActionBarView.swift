@@ -61,11 +61,9 @@ class BrowserActionBarView: UIView {
 
     lazy var moveBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(UIImage(named: "icon-btn-move"), for: .normal)
-        btn.setImage(
-            UIImage(named: "icon-btn-move")?.withRenderingMode(.alwaysTemplate),
-            for: .selected
-        )
+      let image = UIImage(named: "icon_token_send")?.withRenderingMode(.alwaysTemplate)
+        btn.setImage(image, for: .normal)
+        btn.setImage(image,for: .selected)
         btn.tintColor = .white
 
         btn.snp.makeConstraints { make in
@@ -78,11 +76,9 @@ class BrowserActionBarView: UIView {
 
     lazy var reloadBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setImage(UIImage(named: "icon-btn-reload"), for: .normal)
-        btn.setImage(
-            UIImage(named: "icon-btn-reload-stop")?.withRenderingMode(.alwaysTemplate),
-            for: .selected
-        )
+      let image = UIImage(named: "icon-btn-reload-stop")?.withRenderingMode(.alwaysTemplate)
+        btn.setImage(image, for: .normal)
+        btn.setImage(image,for: .selected)
         btn.tintColor = .white
 
         btn.snp.makeConstraints { make in
