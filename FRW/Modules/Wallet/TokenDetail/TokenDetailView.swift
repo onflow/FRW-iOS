@@ -426,7 +426,7 @@ struct TokenDetailView: RouteableView {
         WalletActionBar {
             WalletActionButton(
                 event: .send,
-                allowClick: !WalletManager.shared.isSelectedChildAccount,
+                allowClick: true,
                 action: vm.sendAction
             )
             WalletActionButton(event: .swap, allowClick: true) {
