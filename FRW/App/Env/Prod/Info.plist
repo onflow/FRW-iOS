@@ -79,6 +79,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CodePushDeploymentKey</key>
+	<string>vlyqC_TtJMC-E3PZucBQ028H5bzhNyqH53Buze</string>
 	<key>CrowdinDistributionHash</key>
 	<string>f4bff0f0e2ed98c2ba53a29qzvm</string>
 	<key>CrowdinSourceLanguage</key>

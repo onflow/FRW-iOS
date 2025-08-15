@@ -106,52 +106,15 @@ class TurboModuleSwift: NSObject {
   }
   
   @objc
-  static func closeRN() {
+  static func closeRN(id: String?) {
     runOnMain {
-      // Debug current state
-      ReactNativeViewController.debugInstances()
-
-      // Try container management first
-      if ReactNativeViewController.instances.count > 0 {
-        print("✅ DEBUG: Found \(ReactNativeViewController.instances.count) ReactNativeViewController instances")
-        ReactNativeViewController.dismissLatest()
-        return
+      if let id {
+        ReactNativeCoordinator.shared.closeById(id)
+      } else {
+        // Use the new coordinator to manage ReactNative instances
+        print("🔄 DEBUG: Attempting to close ReactNative via coordinator")
+        ReactNativeCoordinator.shared.closeLatest()
       }
-
-      // Fallback to view hierarchy search if instances is empty
-      print("⚠️ DEBUG: No instances found, falling back to view hierarchy search")
-
-      guard let topVC = UIApplication.shared.topMostViewController else {
-        print("❌ DEBUG: No top view controller found")
-        return
-      }
-
-      // Check if top view controller is ReactNativeViewController
-      if let reactNativeVC = topVC as? ReactNativeViewController {
-        print("✅ DEBUG: Found ReactNativeViewController at top level")
-        reactNativeVC.dismiss(animated: true, completion: nil)
-        return
-      }
-
-      // Check if top view controller is a navigation controller with ReactNativeViewController
-      if let navController = topVC as? UINavigationController {
-        if let reactNativeVC = navController.topViewController as? ReactNativeViewController {
-          print("✅ DEBUG: Found ReactNativeViewController as top of navigation")
-          navController.popViewController(animated: true)
-          return
-        }
-      }
-
-      // Check if top view controller has a navigation controller with ReactNativeViewController
-      if let navController = topVC.navigationController {
-        if let reactNativeVC = navController.topViewController as? ReactNativeViewController {
-          print("✅ DEBUG: Found ReactNativeViewController in navigation")
-          navController.popViewController(animated: true)
-          return
-        }
-      }
-
-      print("❌ DEBUG: ReactNativeViewController not found anywhere")
     }
   }
 }
@@ -173,6 +136,36 @@ extension TurboModuleSwift {
       "GO_API_URL": Config.get(.lilico),
       "INSTABUG_TOKEN": ServiceConfig.instabugRNToken,
     ]
+  }
+}
+
+// MARK: - React Native Management
+extension TurboModuleSwift {
+  
+  @objc
+  static func closeRNById(_ instanceId: String) {
+    runOnMain {
+      print("🔄 DEBUG: Attempting to close ReactNative instance: \(instanceId)")
+      ReactNativeCoordinator.shared.closeById(instanceId)
+    }
+  }
+  
+  @objc
+  static func closeAllRN() {
+    runOnMain {
+      print("🔄 DEBUG: Attempting to close all ReactNative instances")
+      ReactNativeCoordinator.shared.closeAll()
+    }
+  }
+  
+  @objc
+  static func getRNInstanceCount() -> Int {
+    return ReactNativeCoordinator.shared.getInstanceCount()
+  }
+  
+  @objc
+  static func debugRNInstances() {
+    ReactNativeCoordinator.shared.debugAllInstances()
   }
 }
 

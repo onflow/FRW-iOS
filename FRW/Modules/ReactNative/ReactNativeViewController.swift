@@ -25,10 +25,7 @@ class ReactNativeViewController: UIViewController {
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
 
-    // Static container to track all ReactNativeViewController instances
-    public static var instances: [ReactNativeViewController] = []
-
-    // Instance identifier for tracking specific instances
+    // Instance identifier for tracking specific instances (now managed by coordinator)
     let instanceId = UUID().uuidString
 
     @Injected(\.wallet)
@@ -46,9 +43,8 @@ class ReactNativeViewController: UIViewController {
   }
   
     deinit {
-        // Remove from instances when destroyed
-        ReactNativeViewController.instances.removeAll { $0 === self }
         print("✅ DEBUG: ReactNativeViewController destroyed: \(instanceId)")
+        // Coordinator will automatically clean up weak references
     }
 
     override func viewDidLoad() {
@@ -58,41 +54,73 @@ class ReactNativeViewController: UIViewController {
         view.accessibilityIdentifier = "\(ReactNativeViewController.identifier)_\(instanceId)"
 
         loadReactNativeView()
-
-      ReactNativeViewController.instances.append(self)
+        
+        // Register with coordinator for management
+        ReactNativeCoordinator.shared.register(self, id: instanceId)
     }
 
-    // Static method to get the most recent instance
+    // Static method to get the most recent instance (deprecated - use coordinator)
     static func getLatestInstance() -> ReactNativeViewController? {
-        return instances.last
+        let ids = ReactNativeCoordinator.shared.getCurrentInstanceIds()
+        guard let latestId = ids.last else { return nil }
+        
+        // This is a workaround - ideally we'd get the instance directly from coordinator
+        // For now, we'll traverse the view hierarchy
+        return findInstanceById(latestId)
+    }
+    
+    // Helper method to find instance by ID in view hierarchy
+    private static func findInstanceById(_ id: String) -> ReactNativeViewController? {
+        guard let rootVC = UIApplication.shared.keyWindow?.rootViewController else { return nil }
+        return findReactNativeViewController(in: rootVC, withId: id)
+    }
+    
+    private static func findReactNativeViewController(in vc: UIViewController, withId id: String) -> ReactNativeViewController? {
+        if let rnVC = vc as? ReactNativeViewController, rnVC.instanceId == id {
+            return rnVC
+        }
+        
+        // Check presented controller
+        if let presented = vc.presentedViewController {
+            if let found = findReactNativeViewController(in: presented, withId: id) {
+                return found
+            }
+        }
+        
+        // Check navigation controller
+        if let navVC = vc as? UINavigationController {
+            for childVC in navVC.viewControllers {
+                if let found = findReactNativeViewController(in: childVC, withId: id) {
+                    return found
+                }
+            }
+        }
+        
+        // Check child controllers
+        for child in vc.children {
+            if let found = findReactNativeViewController(in: child, withId: id) {
+                return found
+            }
+        }
+        
+        return nil
     }
 
-    // Static method to dismiss all instances
+    // Static method to dismiss all instances (now uses coordinator)
     static func dismissAll() {
-        for instance in instances {
-            instance.dismiss(animated: true, completion: nil)
-        }
-        instances.removeAll()
-        print("✅ DEBUG: Dismissed all ReactNativeViewController instances")
+        ReactNativeCoordinator.shared.closeAll()
+        print("✅ DEBUG: Requested dismissal of all ReactNativeViewController instances via coordinator")
     }
 
-    // Static method to dismiss the most recent instance
+    // Static method to dismiss the most recent instance (now uses coordinator)
     static func dismissLatest() {
-        if let latest = instances.last {
-            latest.dismiss(animated: true, completion: nil)
-            instances.removeLast()
-            print("✅ DEBUG: Dismissed latest ReactNativeViewController: \(latest.instanceId)")
-        } else {
-            print("❌ DEBUG: No ReactNativeViewController instances found")
-        }
+        ReactNativeCoordinator.shared.closeLatest()
+        print("✅ DEBUG: Requested dismissal of latest ReactNativeViewController via coordinator")
     }
 
-    // Static method to debug current state
+    // Static method to debug current state (now uses coordinator)
     static func debugInstances() {
-        print("🔍 DEBUG: Current instances count: \(instances.count)")
-        for (index, instance) in instances.enumerated() {
-            print("  [\(index)] Instance ID: \(instance.instanceId)")
-        }
+        ReactNativeCoordinator.shared.debugAllInstances()
     }
 
     private func loadReactNativeView() {
@@ -120,7 +148,8 @@ class ReactNativeViewController: UIViewController {
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
             "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
-            "embedded" : false
+            "embedded" : false,
+            "instanceId": instanceId
         ]
         
         // Merge with additional initial props if provided

@@ -185,6 +185,17 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     func getRCTReactNativeFactory() -> RCTReactNativeFactory? {
         return reactNativeFactory
     }
+    
+    deinit {
+        // Clean up notification observers to prevent memory leaks
+        NotificationCenter.default.removeObserver(self)
+        
+        // Clean up React Native resources
+        reactNativeDelegate = nil
+        reactNativeFactory = nil
+        
+        print("✅ DEBUG: AppDelegate cleaned up successfully")
+    }
 }
 
 // MARK: - Config

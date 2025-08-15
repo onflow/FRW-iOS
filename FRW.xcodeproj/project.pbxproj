@@ -373,6 +373,8 @@
 		1565FBB428B171BB0086A652 /* Copy-soild.json in Resources */ = {isa = PBXBuildFile; fileRef = 1565FBAA28B171BB0086A652 /* Copy-soild.json */; };
 		1565FBB728B173960086A652 /* ExploreTabScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565FBB628B173960086A652 /* ExploreTabScreen.swift */; };
 		1565FBB828B173960086A652 /* ExploreTabScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1565FBB628B173960086A652 /* ExploreTabScreen.swift */; };
+		1566FAF42E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1566FAF32E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift */; };
+		1566FAF52E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1566FAF32E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift */; };
 		156AC7AB27802F9D00ED5E3E /* GoogleAPIClientForREST_Drive in Frameworks */ = {isa = PBXBuildFile; productRef = 156AC7AA27802F9D00ED5E3E /* GoogleAPIClientForREST_Drive */; };
 		156AC7AD27802FAC00ED5E3E /* GoogleAPIClientForRESTCore in Frameworks */ = {isa = PBXBuildFile; productRef = 156AC7AC27802FAC00ED5E3E /* GoogleAPIClientForRESTCore */; };
 		156E84AA281CDE7500415896 /* FlowNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156E84A8281CDE7500415896 /* FlowNetwork.swift */; };
@@ -2574,6 +2576,7 @@
 		1565FBA928B171BA0086A652 /* Copy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Copy.json; sourceTree = "<group>"; };
 		1565FBAA28B171BB0086A652 /* Copy-soild.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Copy-soild.json"; sourceTree = "<group>"; };
 		1565FBB628B173960086A652 /* ExploreTabScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabScreen.swift; sourceTree = "<group>"; };
+		1566FAF32E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeCoordinator.swift; sourceTree = "<group>"; };
 		156AC7AE2780427900ED5E3E /* FRW-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FRW-Bridging-Header.h"; sourceTree = "<group>"; };
 		156E84A8281CDE7500415896 /* FlowNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowNetwork.swift; sourceTree = "<group>"; };
 		156E84AC281CDF4F00415896 /* WalletModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletModels.swift; sourceTree = "<group>"; };
@@ -4633,6 +4636,7 @@
 		15A87E8C2E26D9C000F0E550 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				1566FAF32E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift */,
 				4E33F7D32E42423F00B3D62F /* RNNFTModel.swift */,
 				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
@@ -8418,6 +8422,7 @@
 				4E3BFD5A2C93D28A00517FAB /* ImportUserNameView.swift in Sources */,
 				15DC208527819C56000B187A /* VLazyScrollViewHorizontal.swift in Sources */,
 				6ACFAB982939DD0E004DE47F /* SelectProviderViewModel.swift in Sources */,
+				1566FAF52E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift in Sources */,
 				15DC211327819C56000B187A /* VPageIndicatorInfinite.swift in Sources */,
 				6A6BD9E0287D5467009FA262 /* PlaceholderStyle.swift in Sources */,
 				1588331128943D1D00142B35 /* SPQRFrameLayer.swift in Sources */,
@@ -9445,6 +9450,7 @@
 				4E3BFD592C93D28A00517FAB /* ImportUserNameView.swift in Sources */,
 				15C58B2D2868A4EE00BD4FC6 /* VPageIndicatorInfinite.swift in Sources */,
 				6ACFAB972939DD0E004DE47F /* SelectProviderViewModel.swift in Sources */,
+				1566FAF42E4EFF2F00B2A1D5 /* ReactNativeCoordinator.swift in Sources */,
 				6A6BD9DF287D5467009FA262 /* PlaceholderStyle.swift in Sources */,
 				1588331028943D1D00142B35 /* SPQRFrameLayer.swift in Sources */,
 				15C58B2E2868A4EE00BD4FC6 /* NFTDetailPage.swift in Sources */,
@@ -10250,6 +10256,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FRW/App/Env/Dev/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flow Wallet-dev";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Flow Wallet-dev need camera to scan QR Code";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Flow Wallet(dev) use Face ID to secure your assests";
@@ -10298,6 +10305,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FRW/App/Env/Dev/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flow Wallet-dev";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Flow Wallet-dev need camera to scan QR Code";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Flow Wallet(dev) use Face ID to secure your assests";

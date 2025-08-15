@@ -119,8 +119,8 @@
   }];
 }
 
-- (void)closeRN {
-  [TurboModuleSwift closeRN];
+- (void)closeRN:(NSString * _Nullable)id; {
+  [TurboModuleSwift closeRN: id];
 }
 
 - (void)isFreeGasEnabled:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
