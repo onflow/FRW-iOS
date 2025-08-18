@@ -545,8 +545,16 @@ extension WalletManager {
     }
 
     private func preloadActivatedIcons() {
-        for token in activatedCoins {
-            KingfisherManager.shared.retrieveImage(with: token.iconURL, completionHandler: nil)
+        // Create a snapshot to avoid concurrent modification issues
+        let tokens = activatedCoins
+        for token in tokens {
+            // Safely access iconURL with error handling
+            do {
+                let iconURL = token.iconURL
+                KingfisherManager.shared.retrieveImage(with: iconURL, completionHandler: nil)
+            } catch {
+                log.error("Failed to get iconURL for token: \(token.name), error: \(error)")
+            }
         }
     }
 }
