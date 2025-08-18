@@ -146,5 +146,13 @@
   
 }
 
+- (NSDictionary *)getCurrency {
+  return [TurboModuleSwift getCurrency];
+}
+
+- (NSString *)getTokenRate:(NSString *)token {
+  return @([TurboModuleSwift getTokenRateWithTokenId:token]).stringValue;
+}
+
 @end
 

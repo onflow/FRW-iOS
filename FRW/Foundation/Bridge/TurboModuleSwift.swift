@@ -185,4 +185,18 @@ extension TurboModuleSwift {
     return [:]
   }
   
+  @objc
+  static func getCurrency() -> [String: Any] {
+    let currency = CurrencyCache.cache.currentCurrency
+    let rate = CurrencyCache.cache.currentCurrencyRate
+    let model = RNBridge.Currency(name: currency.rawValue, symbol: currency.symbol, rate: String(rate))
+    return (try? model.toDictionary()) ?? [:]
+  }
+  
+  @objc
+  static func getTokenRate(tokenId: String) -> Double {
+    let response = CoinRateCache.cache.getSummary(by: tokenId)
+    let result =  response?.getLastRate() ?? 0
+    return result
+  }
 }

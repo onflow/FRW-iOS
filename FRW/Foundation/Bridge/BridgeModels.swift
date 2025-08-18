@@ -86,6 +86,12 @@ enum RNBridge {
         let INSTABUG_TOKEN: String
     }
 
+    struct Currency: Codable {
+        let name: String
+        let symbol: String
+        let rate: String
+    }
+
     struct NFTModel: Codable {
         let id: String?
         let name: String?
