@@ -23,6 +23,7 @@ import WalletCore
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import CodePush
 
 #if DEBUG
     import Atlantis
@@ -172,7 +173,7 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         // Force Metro connection for debugging
         return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+        CodePush.bundleURL()
     #endif
     }
     
