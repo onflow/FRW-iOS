@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: Resizable Lottie View
 
 struct ResizableLottieView: UIViewRepresentable {
-    var lottieView: AnimationView
+    var lottieView: LottieAnimationView
     var color: SwiftUI.Color = .black
 
     func makeUIView(context _: Context) -> UIView {
@@ -26,8 +26,8 @@ struct ResizableLottieView: UIViewRepresentable {
 
         // Finding Attached Lottie View
         if let animationView = uiView.subviews.first(where: { view in
-            view is AnimationView
-        }) as? AnimationView {
+            view is LottieAnimationView
+        }) as? LottieAnimationView {
             // MARK: Finding Keypaths With the Help of Log
 
             // Key may be changed based on Lottie File

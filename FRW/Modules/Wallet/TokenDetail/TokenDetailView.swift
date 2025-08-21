@@ -145,24 +145,6 @@ struct TokenDetailView: RouteableView {
                     .visibility(vm.token.isVerifiedValue ? .visible : .gone)
 
                 Spacer()
-
-                Button {
-                    vm.onMoveToken()
-                } label: {
-                    HStack {
-                        Text("move".localized)
-                            .font(.inter(size: 14))
-                            .foregroundStyle(Color.Theme.Accent.green)
-                        Image("button_move_double")
-                            .resizable()
-                            .frame(width: 12, height: 12)
-                    }
-                    .frame(height: 24)
-                    .padding(.horizontal, 9)
-                    .background(Color.Theme.Accent.green.fixedOpacity())
-                    .cornerRadius(8)
-                }
-                .visibility(vm.movable ? .visible : .gone)
             }
 
             HStack(alignment: .bottom, spacing: 6) {
@@ -444,7 +426,7 @@ struct TokenDetailView: RouteableView {
         WalletActionBar {
             WalletActionButton(
                 event: .send,
-                allowClick: !WalletManager.shared.isSelectedChildAccount,
+                allowClick: true,
                 action: vm.sendAction
             )
             WalletActionButton(event: .swap, allowClick: true) {

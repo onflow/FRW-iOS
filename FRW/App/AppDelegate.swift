@@ -11,7 +11,7 @@ import FirebaseAnalytics
 import FirebaseMessaging
 import Foundation
 import GoogleSignIn
-import Instabug
+import InstabugSDK
 import ReownWalletKit
 import Resolver
 import SwiftUI
@@ -20,6 +20,9 @@ import SwiftyDropbox
 import UIKit
 import WalletConnectNotify
 import WalletCore
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
 
 #if DEBUG
     import Atlantis
@@ -30,7 +33,7 @@ let log = FlowLog.shared
 // MARK: - AppDelegate
 
 @main
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     static var isUnitTest: Bool {
         #if DEBUG
             return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
@@ -40,12 +43,22 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     var window: UIWindow?
+    var reactNativeDelegate: ReactNativeDelegate?
+    var reactNativeFactory: RCTReactNativeFactory?
+//    private var bridge: RCTBridge?
     lazy var coordinator = Coordinator(window: window!)
 
     func application(
         _: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        
+        let delegate = ReactNativeDelegate()
+        let factory = RCTReactNativeFactory(delegate: delegate)
+        delegate.dependencyProvider = RCTAppDependencyProvider()
+        reactNativeDelegate = delegate
+        reactNativeFactory = factory
+        
         KeyChainAccessibilityUpdate.udpate()
 
         _ = LocalEnvManager.shared
@@ -148,6 +161,40 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
         return false
+    }
+    
+    override func sourceURL(for bridge: RCTBridge) -> URL? {
+        self.bundleURL()
+    }
+    
+    override func bundleURL() -> URL? {
+    #if DEBUG
+        // Force Metro connection for debugging
+        return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    #else
+        return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    #endif
+    }
+    
+    // MARK: - React Native Bridge Access
+//    
+//    func getRCTBridge() -> RCTBridge? {
+//        return bridge
+//    }
+    
+    func getRCTReactNativeFactory() -> RCTReactNativeFactory? {
+        return reactNativeFactory
+    }
+    
+    deinit {
+        // Clean up notification observers to prevent memory leaks
+        NotificationCenter.default.removeObserver(self)
+        
+        // Clean up React Native resources
+        reactNativeDelegate = nil
+        reactNativeFactory = nil
+        
+        print("✅ DEBUG: AppDelegate cleaned up successfully")
     }
 }
 
@@ -281,4 +328,19 @@ extension AppDelegate {
             Router.route(to: RouteMap.Wallet.jailbreakAlert)
         }
     }
+}
+
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+#else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+#endif
+  }
 }

@@ -28,7 +28,7 @@ struct FCLAuthzResponse: Codable, FCLResponseProtocol {
     }
 
     var isLinkAccount: Bool {
-        body.cadence.trim.hasPrefix("#allowAccountLinking")
+        body.cadence.trim().hasPrefix("#allowAccountLinking")
     }
 
     func uniqueId() -> String {

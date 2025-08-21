@@ -5,7 +5,7 @@
 //  Created by cat on 5/14/25.
 //
 
-import Instabug
+import InstabugSDK
 import SwiftUI
 
 extension View {

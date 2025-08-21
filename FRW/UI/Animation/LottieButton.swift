@@ -26,7 +26,7 @@ struct LottieButton: View {
         self.size = size
         self.padding = padding
         self.action = action
-        self.animationView = AnimationView(name: iconName, bundle: .main)
+        self.animationView = LottieAnimationView(name: iconName, bundle: .main)
     }
 
     // MARK: Internal
@@ -36,7 +36,7 @@ struct LottieButton: View {
     var size: CGSize
     var padding: CGFloat
     var action: () -> Void
-    var animationView: AnimationView!
+    var animationView: LottieAnimationView!
 
     var body: some View {
         ResizableLottieView(

@@ -79,6 +79,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CodePushDeploymentKey</key>
+	<string>vlyqC_TtJMC-E3PZucBQ028H5bzhNyqH53Buze</string>
 	<key>CrowdinDistributionHash</key>
 	<string>f4bff0f0e2ed98c2ba53a29qzvm</string>
 	<key>CrowdinSourceLanguage</key>
@@ -129,6 +131,8 @@
 			<string>Any</string>
 		</dict>
 	</dict>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter.ttf</string>
@@ -173,5 +177,7 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

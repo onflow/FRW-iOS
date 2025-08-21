@@ -5,7 +5,7 @@
 //  Created by Hao Fu on 30/11/21.
 //
 
-import Instabug
+import InstabugSDK
 import Kingfisher
 import SwiftUI
 

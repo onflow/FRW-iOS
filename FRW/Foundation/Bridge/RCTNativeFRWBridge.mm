@@ -1,0 +1,158 @@
+#import "RCTNativeFRWBridge.h"
+#import <AVFoundation/AVCaptureMetadataOutput.h>
+#import <AVKit/AVCaptureEventInteraction.h>
+#import <FirebaseMessaging/FirebaseMessaging.h>
+#import <React-RCTAppDelegate/RCTDefaultReactNativeFactoryDelegate.h>
+#import <React/RCTBridgeModule.h>
+#import <React/RCTLog.h>
+#import <ReactCommon/RCTTurboModule.h>
+#import <React-RCTAppDelegate/RCTDefaultReactNativeFactoryDelegate.h>
+#import <WebKit/WebKit.h>
+#import <WebKit/WKUIDelegate.h>
+#import <WebKit/WKNavigationDelegate.h>
+#import <WebKit/WKNavigationAction.h>
+#import <WebKit/WKScriptMessageHandler.h>
+#import <FirebaseMessaging/FirebaseMessaging.h>
+#import <AVKit/AVCaptureEventInteraction.h>
+#import <AVFoundation/AVCaptureMetadataOutput.h>
+
+#if defined(TARGET_FRW)
+
+#import "FRW-Swift.h"
+
+#elif defined(TARGET_FRWDEV)
+
+#import "FRW_dev-Swift.h"
+
+#endif
+
+@interface RCTNativeFRWBridge ()
+@end
+
+@implementation RCTNativeFRWBridge
+
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params {
+  return std::make_shared<facebook::react::NativeFRWBridgeSpecJSI>(params);
+}
+
++ (NSString *)moduleName {
+  return @"NativeFRWBridge";
+}
+
+- (void)getJWT:(nonnull RCTPromiseResolveBlock)resolve
+        reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getJWTWithCompletionHandler:^(
+                        NSString *_Nullable token, NSError *_Nullable error) {
+    if (error) {
+      reject(@"jwt_error", error.localizedDescription, error);
+    } else {
+      resolve(token);
+    }
+  }];
+}
+
+- (void)getWalletAccounts:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getCurrentAllAccountsWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable list, NSError * _Nullable error) {
+      if (error) {
+          reject(@"wallet error", error.localizedDescription,error);
+      } else {
+          resolve(list);
+      }
+  }];
+}
+
+- (void)getRecentContacts:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    [TurboModuleSwift getRecentContactsWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+        if (error) {
+            reject(@"recent_error", error.localizedDescription, error);
+        } else {
+            resolve(result);
+        }
+    }];
+}
+
+- (void)getCOAFlowBalance:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    resolve([TurboModuleSwift getCOAFlowBalance]);
+}
+
+- (NSString *)getVersion {
+    return [TurboModuleSwift getVersion];
+}
+
+- (NSString *)getBuildNumber {
+    return [TurboModuleSwift getBuildNumber];
+}
+
+- (NSString *)getNetwork {
+    return [TurboModuleSwift getNetwork];
+}
+
+- (NSString * _Nullable)getSelectedAddress {
+    return [TurboModuleSwift getCurrentAddress];
+}
+
+- (void)sign:(nonnull NSString *)hexData
+      resolve:(nonnull RCTPromiseResolveBlock)resolve
+      reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signWithHexData:hexData completionHandler:^(NSString *_Nullable signature, NSError *_Nullable error) {
+    if (error) {
+      reject(@"sign_error", error.localizedDescription, error);
+    } else {
+      resolve(signature);
+    }
+  }];
+}
+
+- (NSNumber *)getSignKeyIndex {
+  return @([TurboModuleSwift getSignKeyIndex]);
+}
+
+- (void)scanQRCode:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  
+  [TurboModuleSwift scanQRCodeWithCompletionHandler:^(NSString * _Nullable address, NSError * _Nullable error) {
+    if (error) {
+      reject(@"sign_error", error.localizedDescription, error);
+    } else {
+      resolve(address);
+    }
+  }];
+}
+
+- (void)closeRN:(NSString * _Nullable)id; {
+  [TurboModuleSwift closeRNWithId:id];
+}
+
+- (void)isFreeGasEnabled:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  resolve(@([TurboModuleSwift isFreeGasEnabled]));
+}
+
+- (void)listenTransaction:(NSString *)txid {
+  [TurboModuleSwift listenTransactionWithTxid:txid];
+}
+
+- (NSDictionary *)getEnv {
+  return [TurboModuleSwift getEnv];
+}
+
+- (void)getSelectedAccount:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getSelectedWalletAccountWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"selected account", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+  
+}
+
+- (NSDictionary *)getCurrency {
+  return [TurboModuleSwift getCurrency];
+}
+
+- (NSString *)getTokenRate:(NSString *)token {
+  return @([TurboModuleSwift getTokenRateWithTokenId:token]).stringValue;
+}
+
+@end
+

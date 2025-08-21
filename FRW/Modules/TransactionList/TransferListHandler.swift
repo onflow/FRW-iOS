@@ -159,12 +159,12 @@ extension TransferListHandler {
                         self.requestSuccess(response, start: start)
                     }
                 } else {
-                    let request = TransfersRequest(
+                  let request = await TransfersRequest(
                         address: WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "",
                         limit: Limit,
                         after: start
                     )
-                    let target = WalletManager.shared.isSelectedEVMAccount ? FRWAPI.Account.evmTransfers(request) : FRWAPI.Account.transfers(request)
+                  let target = await WalletManager.shared.isSelectedEVMAccount ? FRWAPI.Account.evmTransfers(request) : FRWAPI.Account.transfers(request)
                     let response: TransfersResponse = try await Network.request(target)
                     await MainActor.run {
                         self.isRequesting = false
