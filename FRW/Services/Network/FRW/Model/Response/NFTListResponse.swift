@@ -83,9 +83,6 @@ struct NFTResponse: Codable, Hashable {
     var contractType: String? = nil
     var amount: String? = nil
 
-    var contractType: String? = nil
-    var amount: String? = nil
-
     var uniqueId: String {
         (contractAddress ?? "") + "." + (collectionName ?? "") + "-" + "\(id)"
     }
