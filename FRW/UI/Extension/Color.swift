@@ -306,3 +306,61 @@ extension Color {
         opacity(0.16)
     }
 }
+
+// MARK: - Color for Brain
+
+extension Color {
+    enum Brain {
+        enum Primary {
+            /// 00EF8B
+            /// Used for main brand elements, key actions like buttons and highlights.
+            static let main = Color(.Brain.Primary.main)
+            static let main20 = Color(.Brain.Primary.main).opacity(0.2)
+            static let main10 = Color(.Brain.Primary.main).opacity(0.1)
+        }
+
+        enum Core {
+            /// dark: 000000, light: FFFFFF
+            static let background = Color(.Brain.Core.background)
+            /// dark: 1a1a1a, light: f2f2f7
+            static let cards = Color(.Brain.Core.cards)
+            /// dark: ffffff-50%, light: 767676-50%
+            static let icons = Color(.Brain.Core.icons)
+            /// dark: ffffff-25%, light: 000d07-25%
+            static let borders = Color(.Brain.Core.borders)
+            /// dark: 0a0a0b, light:
+            static let navigation = Color(.Brain.Core.navigation)
+        }
+
+        enum Text {
+            /// dark: FFFFF, light: 000000
+            static let primary = Color(.Brain.Text.primary)
+            /// dark: B3B3B3, light: 767676
+            static let secondary = Color(.Brain.Text.secondary)
+            /// dark: FFFFFF, light: 000d07
+            static let disabled = Color(.Brain.Text.disabled)
+        }
+
+        enum Light {
+            /// dark: FFFFFF-80%, light: 000000
+            static let lines = Color(.Brain.Light.lines).opacity(0.8)
+            /// dark: FFFFFF-40%
+            static let lines40 = Color(.Brain.Light.lines).opacity(0.4)
+            /// dark:
+            static let lines25 = Color(.Brain.Light.lines).opacity(0.25)
+
+            static let lines10 = Color(.Brain.Light.lines).opacity(0.1)
+
+            static let lines5 = Color(.Brain.Light.lines).opacity(0.05)
+        }
+
+        enum System {
+            static let green = Color(.Brain.System.green)
+            static let green15 = Color(.Brain.System.green).opacity(0.15)
+            static let yellow = Color(.Brain.System.yellow)
+            static let yellow20 = Color(.Brain.System.yellow).opacity(0.2)
+            static let red = Color(.Brain.System.red)
+            static let red15 = Color(.Brain.System.red).opacity(0.15)
+        }
+    }
+}

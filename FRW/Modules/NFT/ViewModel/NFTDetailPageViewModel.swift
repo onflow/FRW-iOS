@@ -97,7 +97,8 @@ class NFTDetailPageViewModel: ObservableObject {
             movable = false
             return
         }
-        movable = true
+
+        movable = nft.canMove
     }
 
     // MARK: Private

@@ -313,7 +313,7 @@ extension TokenModel {
     func aboutTokenUrl() -> URL? {
         let host = currentNetwork.baseUrl(accountType: AccountType.current)
         let path = AccountType.current == .flow ? "/ft/token" : "/token"
-        guard let target = AccountType.current == .flow ? identifier : evmAddress else {
+        guard let target = AccountType.current == .flow ? identifier : (evmAddress ?? contractAddress) else {
             HUD.error(title: "invalid identifier")
             log.error("invalid identifier")
             return nil

@@ -6,10 +6,10 @@
 //
 
 import Combine
+import Factory
 import Flow
 import SwiftUI
 import SwiftUICharts
-import Factory
 
 extension TokenDetailView {
     struct Quote: Codable {
@@ -139,6 +139,7 @@ class TokenDetailViewModel: ObservableObject {
 
     @Injected(\.wallet)
     private var wallet: WalletManager
+
     // MARK: Internal
 
     @Published
@@ -179,7 +180,7 @@ class TokenDetailViewModel: ObservableObject {
     var showSheet: Bool = false
     var buttonAction: TokenDetailViewModel.Action = .none
 
-    // Only show storage info when it's flow token under flow account 
+    // Only show storage info when it's flow token under flow account
     var showStorageView: Bool { token.isFlowCoin && wallet.selectedAccount?.type == .main }
 
     var isTokenDetailsButtonEnabled: Bool { token.website.isNotNullNorEmpty }
@@ -483,7 +484,7 @@ extension TokenDetailViewModel {
                     address: WalletManager.shared.getPrimaryWalletAddress() ?? "",
                     limit: 3,
                     after: "",
-                    token: self.token.contractId
+                    token: self.token.identifier ?? self.token.contractId
                 )
                 let response: TransfersResponse = try await Network
                     .request(FRWAPI.Account.tokenTransfers(request))
