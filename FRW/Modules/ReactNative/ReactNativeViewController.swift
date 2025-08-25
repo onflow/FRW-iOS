@@ -144,8 +144,7 @@ class ReactNativeViewController: UIViewController {
             return
         }
         // zh,en,ru,ja
-        let fullLanguageCode = Locale.preferredLanguages.first ?? "en"
-        let languageCode = String(fullLanguageCode.prefix(2))
+        let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
