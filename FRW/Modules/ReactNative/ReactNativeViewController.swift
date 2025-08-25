@@ -144,20 +144,22 @@ class ReactNativeViewController: UIViewController {
             return
         }
       // zh,en,ru,ja
+      let fullLanguageCode = Locale.preferredLanguages.first ?? "en"
+      let languageCode = String(fullLanguageCode.prefix(2))
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
             "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
             "embedded" : false,
             "instanceId": instanceId,
-            "language": Locale.current.language.languageCode?.identifier ?? Locale.current.identifier
+            "language": languageCode
         ]
         
         // Merge with additional initial props if provided
         let dic = try? initialProps?.toDictionary()
         props["initialProps"] = dic
         
-
+      log.info("props:\(props)")
         print("🚀 DEBUG: Creating RCTSurfaceHostingView")
 
         // Create RCTSurface with proper parameters
