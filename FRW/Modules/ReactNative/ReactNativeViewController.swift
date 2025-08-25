@@ -143,9 +143,9 @@ class ReactNativeViewController: UIViewController {
             print("❌ DEBUG: Failed to get bridge")
             return
         }
-      // zh,en,ru,ja
-      let fullLanguageCode = Locale.preferredLanguages.first ?? "en"
-      let languageCode = String(fullLanguageCode.prefix(2))
+        // zh,en,ru,ja
+        let fullLanguageCode = Locale.preferredLanguages.first ?? "en"
+        let languageCode = String(fullLanguageCode.prefix(2))
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
