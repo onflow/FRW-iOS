@@ -74,7 +74,10 @@ extension WalletViewModel {
 
 // MARK: - WalletViewModel
 
+@MainActor
 final class WalletViewModel: ObservableObject {
+    // EMERGENCY FIX: Task management to prevent concurrent reloadWalletData calls
+    private var reloadTask: Task<Void, Never>?
     // MARK: Lifecycle
 
     init() {
@@ -275,14 +278,17 @@ extension WalletViewModel {
         guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
             return
         }
+        
+        // EMERGENCY FIX: Cancel previous reload task to prevent concurrent execution
+        reloadTask?.cancel()
+        
         UserManager.shared.verifyUserType()
         if isReloading {
             return
         }
 
         isReloading = true
-
-        log.debug("reloadWalletData")
+        log.debug("reloadWalletData - starting new task")
 
         lastRefreshTS = Date().timeIntervalSince1970
         walletState = .idle
@@ -291,21 +297,28 @@ extension WalletViewModel {
             isMock = true
         }
 
-        Task {
+        // EMERGENCY FIX: Store task reference to enable cancellation
+        reloadTask = Task {
             do {
+                // Check if task was cancelled before starting network request
+                try Task.checkCancellation()
+                
                 try await WalletManager.shared.fetchWalletDatas()
 
-                await MainActor.run {
-                    self.isMock = false
-                    self.isReloading = false
-                }
+                // Check cancellation before updating UI
+                try Task.checkCancellation()
+                
+                self.isMock = false
+                self.isReloading = false
+                log.debug("reloadWalletData - completed successfully")
+            } catch is CancellationError {
+                log.debug("reloadWalletData - task was cancelled")
+                self.isReloading = false
             } catch {
                 log.error("reload wallet data failed", context: error)
-                await MainActor.run {
-                    self.walletState = .error
-                    self.isReloading = false
-                    self.isMock = false
-                }
+                self.walletState = .error
+                self.isReloading = false
+                self.isMock = false
             }
         }
     }

@@ -43,7 +43,7 @@ class TokenBalanceHandler: ObservableObject {
         isLoadingFlowBalance = true
         defer { isLoadingFlowBalance = false }
 
-        let provider = generateProvider(address: first, network: network)
+      let provider = await generateProvider(address: first, network: network)
         let dict = try await provider.getAvailableFlowBalance(addresses: [address])
         for (key, value) in dict {
             flowBalance[key] = value
@@ -66,7 +66,7 @@ class TokenBalanceHandler: ObservableObject {
         isLoadingFlowBalance = true
         defer { isLoadingFlowBalance = false }
 
-        let provider = generateProvider(address: first, network: network)
+      let provider = await generateProvider(address: first, network: network)
         let dict = try await provider.getAvailableFlowBalance(addresses: addresses)
         for (key, value) in dict {
             flowBalance[key] = value
@@ -75,7 +75,7 @@ class TokenBalanceHandler: ObservableObject {
     }
 
     func fetchUserTokens(address: FWAddress, network: Flow.ChainID = currentNetwork, ignoreCache _: Bool = true) async throws -> [TokenModel] {
-        let provider = generateProvider(address: address, network: network)
+      let provider = await generateProvider(address: address, network: network)
         return try await provider.fetchUserTokens(address: address)
     }
 
@@ -84,7 +84,7 @@ class TokenBalanceHandler: ObservableObject {
         network: Flow.ChainID = currentNetwork,
         ignoreCache _: Bool = true
     ) async throws -> [TokenModel] {
-        let provider = generateProvider(address: address, network: network)
+      let provider = await generateProvider(address: address, network: network)
         return try await provider.getFTBalance(address: address)
     }
 
@@ -101,7 +101,7 @@ class TokenBalanceHandler: ObservableObject {
         address: FWAddress,
         network: Flow.ChainID = currentNetwork
     ) async throws -> [NFTCollection] {
-        let provider = generateProvider(address: address, network: network)
+      let provider = await generateProvider(address: address, network: network)
         return try await provider.getNFTCollections(address: address)
     }
 
@@ -111,7 +111,7 @@ class TokenBalanceHandler: ObservableObject {
         collectionIdentifier: String,
         offset: String
     ) async throws -> NFTListResponse {
-        let provider = generateProvider(address: address, network: network)
+      let provider = await generateProvider(address: address, network: network)
         return try await provider.getNFTCollectionDetail(
             address: address,
             collectionIdentifier: collectionIdentifier,
@@ -125,7 +125,7 @@ class TokenBalanceHandler: ObservableObject {
         network: Flow.ChainID = currentNetwork,
         progressHandler: @escaping (Int, Int) -> Void
     ) async throws -> [NFTModel] {
-        let provider = generateProvider(address: address, network: network)
+      let provider = await generateProvider(address: address, network: network)
         return try await provider.getAllNFTsUnderCollection(
             address: address,
             collectionIdentifier: collectionIdentifier,
@@ -137,7 +137,7 @@ class TokenBalanceHandler: ObservableObject {
 // MARK: - Private
 
 extension TokenBalanceHandler {
-    private func generateProvider(
+  @MainActor private func generateProvider(
         address: FWAddress,
         network: Flow.ChainID,
         ignoreCache: Bool = false
