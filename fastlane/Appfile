@@ -1,0 +1,2 @@
+app_identifier("com.flowfoundation.wallet") # The bundle identifier of your app
+apple_id("appledev@flowfoundation.org") # Your Apple Developer Portal username

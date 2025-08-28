@@ -1,0 +1,47 @@
+jobs:
+  checkout:
+    executor:
+      name: rn/linux_js
+      node_version: '18.20.3'
+    steps:
+      - checkout
+      - rn/yarn_install
+      - persist_to_workspace:
+          root: .
+          paths: .
+
+  ios-build-release:
+    macos:
+      xcode: 15.0.0
+    resource_class: macos.m1.medium.gen1
+    steps:
+      - checkout
+      - run: rbenv install 3.0.0
+      - run: bundler install
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: gem install fastlane --version 2.217.0
+      - run: gem install cocoapods
+      - run: yes | gem uninstall --force activesupport || result=$?
+      - run: yes | gem install activesupport -v 7.0.8 || result=$?
+      - run: cd ios && pod install
+      - run:
+          name: Build IOS release
+          no_output_timeout: 45m
+          command: cd ios && fastlane release
+
+orbs:
+  rn: react-native-community/react-native@7.1.1
+
+version: 2.1
+workflows:
+  release_internal:
+    when:
+      equal: [circleci, << pipeline.git.branch >>]
+    jobs:
+      - checkout
+      - ios-build-release:
+          requires:
+            - checkout
+
+

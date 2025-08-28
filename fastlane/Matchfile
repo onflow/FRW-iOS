@@ -1,0 +1,7 @@
+git_url("git@github.com:onflow/FRW-monorepo.git")
+storage_mode("git")
+app_identifier("com.flowfoundation.wallet")
+type("appstore") 
+
+
+

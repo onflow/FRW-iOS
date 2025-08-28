@@ -1,0 +1,47 @@
+default_platform(:ios)
+
+platform :ios do
+
+  before_all do
+    setup_circle_ci
+  end
+
+  desc "Push a new release build to the App Store"
+  lane :release do
+    build
+    upload_to_testflight
+    bump_ios_version
+  end
+   
+  private_lane :build do
+    increment_build_number()
+    match(type:'appstore', readonly: is_ci)
+    build_app(
+      scheme: "FRW",
+      export_method: 'app-store',
+      include_bitcode: false,
+      clean: true
+    )
+  end
+
+  private_lane :bump_ios_version do 
+    git_pull
+    git_commit(
+        path: "./FRW.xcodeproj/project.pbxproj",
+        message: "[ci skip] Fastlane IOS: Increment build number"
+    )
+    push_to_git_remote
+  end
+
+  private_lane :update_app_name do
+    app_name = "Flow wallet"
+
+    set_info_plist_value(
+      app_identifier: "com.flowfoundation.wallet",
+      key: "CFBundleDisplayName",
+      value: app_name
+    )
+  end
+
+end
+
