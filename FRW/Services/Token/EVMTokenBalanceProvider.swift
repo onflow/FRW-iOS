@@ -47,13 +47,15 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
         let customToken = await fetchCustomBalance()
         tokens.append(contentsOf: customToken)
         
-        // EMERGENCY FIX: Memory-safe sorting with defensive copying
+        // THREAD-SAFE FIX: Pure Swift Decimal comparison without ObjC bridging
         let tokensCopy = tokens.map { $0 } // Create defensive copy
         tokens = tokensCopy.sorted { lhs, rhs in
-            // Create local copies to prevent concurrent modification
-            guard let lBal = lhs.balanceInUSD?.doubleValue, 
-                  let rBal = rhs.balanceInUSD?.doubleValue else {
-                return true
+            // Convert String to Decimal directly, avoiding NSNumberFormatter bridging
+            guard let lBalString = lhs.balanceInUSD,
+                  let rBalString = rhs.balanceInUSD,
+                  let lBal = Decimal(string: lBalString),
+                  let rBal = Decimal(string: rBalString) else {
+                return false // Put invalid balances at end
             }
             return lBal > rBal
         }

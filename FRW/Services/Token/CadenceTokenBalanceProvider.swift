@@ -43,8 +43,12 @@ class CadenceTokenBalanceProvider: TokenBalanceProvider {
             }
         }
         tokenList.sort { lhs, rhs in
-            guard let lBal = lhs.balanceInUSD?.doubleValue, let rBal = rhs.balanceInUSD?.doubleValue else {
-                return true
+            // THREAD-SAFE FIX: Pure Swift Decimal comparison without ObjC bridging
+            guard let lBalString = lhs.balanceInUSD,
+                  let rBalString = rhs.balanceInUSD,
+                  let lBal = Decimal(string: lBalString),
+                  let rBal = Decimal(string: rBalString) else {
+                return false // Put invalid balances at end
             }
             return lBal > rBal
         }
