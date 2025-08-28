@@ -9,8 +9,10 @@ import Flow
 import Foundation
 import Web3Core
 
+@MainActor
 class EVMTokenBalanceProvider: TokenBalanceProvider {
     var tokens: [TokenModel] = []
+    private var isLoading = false
 
     // MARK: Lifecycle
 
@@ -25,21 +27,37 @@ class EVMTokenBalanceProvider: TokenBalanceProvider {
     var currency: Currency
 
     func fetchUserTokens(address: any FWAddress) async throws -> [TokenModel] {
+        // EMERGENCY FIX: Prevent concurrent calls that cause memory corruption
+        guard !isLoading else {
+            print("⚠️ EVMTokenBalanceProvider: Concurrent fetch prevented")
+            return tokens // Return cached tokens to prevent crash
+        }
+        
         guard let addr = address as? EthereumAddress
         else {
             throw EVMError.addressError
         }
+        
+        isLoading = true
+        defer { isLoading = false }
+        
         currency = CurrencyCache.cache.currentCurrency
         let response: [EVMTokenResponse] = try await Network.request(FRWAPI.Token.evm(.init(address: addr.hexAddr, currency: currency.rawValue, network: network)))
         tokens = response.compactMap { $0.toTokenModel(type: .evm) }
         let customToken = await fetchCustomBalance()
         tokens.append(contentsOf: customToken)
-        tokens.sort { lhs, rhs in
-            guard let lBal = lhs.balanceInUSD?.doubleValue, let rBal = rhs.balanceInUSD?.doubleValue else {
+        
+        // EMERGENCY FIX: Memory-safe sorting with defensive copying
+        let tokensCopy = tokens.map { $0 } // Create defensive copy
+        tokens = tokensCopy.sorted { lhs, rhs in
+            // Create local copies to prevent concurrent modification
+            guard let lBal = lhs.balanceInUSD?.doubleValue, 
+                  let rBal = rhs.balanceInUSD?.doubleValue else {
                 return true
             }
             return lBal > rBal
         }
+        
         return tokens
     }
 
