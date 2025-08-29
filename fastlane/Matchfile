@@ -1,7 +1,6 @@
-git_url("git@github.com:onflow/FRW-monorepo.git")
+# ✅ Point to certificates repository (not main repo)
+# You'll need to create this repository for storing certificates
+git_url("git@github.com:onflow/FRW-certificates.git")
 storage_mode("git")
 app_identifier("com.flowfoundation.wallet")
 type("appstore") 
-
-
-

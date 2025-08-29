@@ -3,14 +3,14 @@ default_platform(:ios)
 platform :ios do
 
   before_all do
-    setup_circle_ci
+    # ✅ Use modern CircleCI setup
+    setup_ci if is_ci
   end
 
   desc "Push a new release build to the App Store"
   lane :release do
     build
     upload_to_testflight
-    bump_ios_version
   end
    
   private_lane :build do
@@ -24,15 +24,7 @@ platform :ios do
     )
   end
 
-  private_lane :bump_ios_version do 
-    git_pull
-    git_commit(
-        path: "./FRW.xcodeproj/project.pbxproj",
-        message: "[ci skip] Fastlane IOS: Increment build number"
-    )
-    push_to_git_remote
-  end
-
+  # ✅ Remove problematic lanes that reference non-existent actions
   private_lane :update_app_name do
     app_name = "Flow wallet"
 

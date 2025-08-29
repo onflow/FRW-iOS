@@ -1,2 +1,4 @@
+itc_team_id "120059635"
+team_id "444MY26W7F"
 app_identifier("com.flowfoundation.wallet") # The bundle identifier of your app
 apple_id("appledev@flowfoundation.org") # Your Apple Developer Portal username
