@@ -1176,3 +1176,6 @@ Key Store and Private Key.";
 "Filters" = "Filters";
 "invalid_count" = "invalid count";
 "items" = "Items";
+"settings" = "Settings";
+"camera_permission_required_title" = "Camera Access Required";
+"camera_permission_required_message" = "Flow Wallet needs camera access to scan QR codes. Please enable camera access in Settings to continue.";

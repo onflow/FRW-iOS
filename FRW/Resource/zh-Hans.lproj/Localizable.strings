@@ -957,4 +957,7 @@
 "share_qr_code" = "共享 QR 代码";
 "move_single_nft" = "移动 NFT";
 "do_not_ask" = "不要再问我了。";
+"settings" = "设置";
+"camera_permission_required_title" = "需要相机访问权限";
+"camera_permission_required_message" = "Flow Wallet 需要相机权限来扫描二维码。请在设置中启用相机权限以继续。";
 "move_asset_browser_title_x" = "在 Flow 上的 cadence 地址之间移动您的资产，以便 %@ 查看您的资产";
