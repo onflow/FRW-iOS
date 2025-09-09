@@ -22,8 +22,8 @@ class ScanHandler {
             case let .flowWallet(address):
                 vc.stopRunning()
                 vc.presentingViewController?.dismiss(animated: true, completion: {
-                    let vaultIdentifier = LocalUserDefaults.shared.recentToken
-                    guard let token = WalletManager.shared.getToken(by: vaultIdentifier) else {
+                  
+                    guard let token = WalletManager.shared.flowToken else {
                         return
                     }
                     let contract = Contact(
@@ -36,7 +36,9 @@ class ScanHandler {
                         username: nil,
                         user: nil
                     )
-                    Router.route(to: RouteMap.Wallet.sendAmount(contract, token, isPush: false))
+                    let config = RNBridge.SendToConfig.token(token, targetAddress: address)
+                  Router.route(to: RouteMap.ReactNative.sendAsset(config))
+//                    Router.route(to: RouteMap.Wallet.sendAmount(contract, token, isPush: false))
                 })
             case let .ethWallet(address):
                 vc.stopRunning()

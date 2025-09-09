@@ -1,5 +1,5 @@
 {
-  "originHash" : "998ee3de990b48f5b2679eb61fc692136a0599eb187bcaa7ffd99a7c6fd20d05",
+  "originHash" : "60644b0e479234a6200a23fd98dca93582e37414d7385bcc8db2e979342e7059",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -270,15 +270,6 @@
       }
     },
     {
-      "identity" : "instabug-sp",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Instabug/Instabug-SP",
-      "state" : {
-        "revision" : "27b4e61ac0597b43542cdfe3272db2c512c7d36e",
-        "version" : "14.3.0"
-      }
-    },
-    {
       "identity" : "interop-ios-for-google-sdks",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
@@ -294,15 +285,6 @@
       "state" : {
         "branch" : "main",
         "revision" : "080ff88258eb507fb5164010d0832601a7014591"
-      }
-    },
-    {
-      "identity" : "jxsegmentedview",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pujiaxin33/JXSegmentedView",
-      "state" : {
-        "revision" : "fbbf965d7396bd99ac1ce88a80b6c950b85313f6",
-        "version" : "1.4.1"
       }
     },
     {
@@ -339,15 +321,6 @@
       "state" : {
         "revision" : "7f031eb8f0d9570e4d8a10b6291dcc94a65b3d1b",
         "version" : "1.0.6"
-      }
-    },
-    {
-      "identity" : "lottie-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/airbnb/lottie-ios",
-      "state" : {
-        "revision" : "b4bd0604ded9574807f41b4004b57dd1226a30a4",
-        "version" : "3.5.0"
       }
     },
     {
@@ -392,15 +365,6 @@
       "state" : {
         "revision" : "b7e1104502eca3a213b46303391ca4d3bc8ddec1",
         "version" : "2.30910.0"
-      }
-    },
-    {
-      "identity" : "nativeuikit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivanvorobei/NativeUIKit",
-      "state" : {
-        "revision" : "bcb42acd73c4044c7e7099bd22a8decf79e74e11",
-        "version" : "1.4.7"
       }
     },
     {
@@ -475,15 +439,6 @@
       }
     },
     {
-      "identity" : "sparrowkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivanvorobei/SparrowKit",
-      "state" : {
-        "revision" : "74690b7fcb54f060008878dfb1769eaac225d60b",
-        "version" : "3.6.1"
-      }
-    },
-    {
       "identity" : "spconfetti",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivanvorobei/SPConfetti",
@@ -493,38 +448,11 @@
       }
     },
     {
-      "identity" : "spdiffable",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivanvorobei/SPDiffable",
-      "state" : {
-        "revision" : "fd80c65d5b63f3c8825f11a06da1f1e91bdf4036",
-        "version" : "4.2.0"
-      }
-    },
-    {
       "identity" : "spindicator",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivanvorobei/SPIndicator",
       "state" : {
         "revision" : "f9676f1d56239b1836587794923cb89cec8ae18a"
-      }
-    },
-    {
-      "identity" : "sppagecontroller",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivanvorobei/SPPageController",
-      "state" : {
-        "revision" : "6bf5378947f5ef123d6b65a391c63de97b1ccf77",
-        "version" : "1.3.3"
-      }
-    },
-    {
-      "identity" : "spperspective",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivanvorobei/SPPerspective",
-      "state" : {
-        "revision" : "0813262760c7388fc821e5068ad31005ac397b9f",
-        "version" : "1.4.1"
       }
     },
     {

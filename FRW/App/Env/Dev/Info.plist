@@ -61,13 +61,13 @@
 			</array>
 		</dict>
 	</array>
+	<key>CodePushDeploymentKey</key>
+	<string>ujjN_EgHdO7ezQm7bNQ8SPilm1wZNyqH53Buze</string>
 	<key>CrowdinDistributionHash</key>
 	<string>f4bff0f0e2ed98c2ba53a29qzvm</string>
 	<key>CrowdinSourceLanguage</key>
 	<string>en</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
-	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
@@ -95,6 +95,8 @@
 			<string>Any</string>
 		</dict>
 	</dict>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter.ttf</string>
@@ -118,5 +120,7 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

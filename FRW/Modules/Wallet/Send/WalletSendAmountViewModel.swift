@@ -535,17 +535,22 @@ extension WalletSendAmountViewModel {
 }
 
 extension String {
-    static let numberFormatter = NumberFormatter()
     var doubleValue: Double {
-        String.numberFormatter.decimalSeparator = "."
-        if let result = String.numberFormatter.number(from: self) {
+        // Create thread-safe local instances instead of using shared static formatter
+        let dotFormatter = NumberFormatter()
+        dotFormatter.decimalSeparator = "."
+        
+        if let result = dotFormatter.number(from: self) {
             return result.doubleValue
-        } else {
-            String.numberFormatter.decimalSeparator = ","
-            if let result = String.numberFormatter.number(from: self) {
-                return result.doubleValue
-            }
         }
+        
+        let commaFormatter = NumberFormatter()
+        commaFormatter.decimalSeparator = ","
+        
+        if let result = commaFormatter.number(from: self) {
+            return result.doubleValue
+        }
+        
         return 0
     }
 }

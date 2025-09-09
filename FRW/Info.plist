@@ -2,44 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- ... existing entries ... -->
-    
-    <!-- URL Scheme -->
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>flowwallet</string>
-            </array>
-            <key>CFBundleURLName</key>
-            <string>com.flow.wallet</string>
-        </dict>
-    </array>
-    
-    <!-- Universal Links -->
-    <key>CFBundleTypeRole</key>
-    <string>Editor</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>com.flow.wallet</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>flowwallet</string>
-            </array>
-        </dict>
-    </array>
-    
-    <!-- Associated Domains -->
-    <key>com.apple.developer.associated-domains</key>
-    <array>
-        <string>applinks:link.wallet.flow.com</string>
-    </array>
-    
-    <!-- ... existing entries ... -->
+	<key>CFBundleTypeRole</key>
+	<string>Editor</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.flow.wallet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>flowwallet</string>
+			</array>
+		</dict>
+	</array>
+	<key>RCTNewArchEnabled</key>
+	<true/>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:link.wallet.flow.com</string>
+	</array>
 </dict>
-</plist> 
+</plist>

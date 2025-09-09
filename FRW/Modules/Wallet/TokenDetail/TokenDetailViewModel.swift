@@ -263,8 +263,13 @@ extension TokenDetailViewModel {
 
 extension TokenDetailViewModel {
     func sendAction() {
+      guard let config = RNBridge.SendToConfig.token(token) else {
+        HUD.error(title: "Incorrect token")
+        return
+      }
+      Router.route(to: RouteMap.ReactNative.sendAsset(config))
         LocalUserDefaults.shared.recentToken = token.vaultIdentifier
-        Router.route(to: RouteMap.Wallet.send())
+//        Router.route(to: RouteMap.Wallet.send())
     }
 
     func receiveAction() {

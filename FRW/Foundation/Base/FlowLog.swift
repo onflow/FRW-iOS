@@ -7,7 +7,7 @@
 
 import Flow
 import Foundation
-import Instabug
+import InstabugSDK
 import LogView
 import OSLog
 import SwiftyBeaver

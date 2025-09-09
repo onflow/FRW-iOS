@@ -295,26 +295,6 @@ struct NFTDetailPage: RouteableView {
                 .visibility(vm.showSendButton ? .visible : .gone)
                 .disabled(!WalletManager.shared.accessibleManager.isAccessible(vm.nft))
 
-                Button {
-                    vm.showMoveAction()
-                } label: {
-                    HStack {
-                        Image("icon_move")
-                            .resizable()
-                            .renderingMode(.template)
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(theColor.opacity(childOpacity))
-                        Text("move".localized)
-                            .foregroundColor(.LL.Neutrals.text.opacity(childOpacity))
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 10)
-                .cornerRadius(12)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                .shadow(color: theColor.opacity(0.1), radius: 15, x: 0, y: 5)
-                .visibility(vm.movable ? .visible : .gone)
-                .disabled(!WalletManager.shared.accessibleManager.isAccessible(vm.nft))
 
                 Menu {
                     Button {

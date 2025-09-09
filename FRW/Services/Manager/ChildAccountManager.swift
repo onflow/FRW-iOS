@@ -34,7 +34,7 @@ struct ChildAccount: Codable {
     var time: TimeInterval?
 
     var aName: String {
-        if let n = name?.trim, !n.isEmpty {
+        if let n = name?.trim(), !n.isEmpty {
             return n
         }
         return "Linked Account"

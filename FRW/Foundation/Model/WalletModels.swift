@@ -159,15 +159,15 @@ struct TokenModel: Codable, Identifiable, Mockable {
     }
 
     var iconURL: URL {
-        if let logoString = logoURI {
-            if logoString.hasSuffix("svg") {
-                return logoString.convertedSVGURL() ?? URL(string: placeholder)!
-            }
-
-            return URL(string: logoString) ?? URL(string: placeholder)!
+        guard let logoString = logoURI, !logoString.isEmpty else {
+          return AppPlaceholder.imageURL
+        }
+      
+        if logoString.hasSuffix("svg") {
+          return logoString.convertedSVGURL() ?? AppPlaceholder.imageURL
         }
 
-        return URL(string: placeholder)!
+        return URL(string: logoString) ?? AppPlaceholder.imageURL
     }
 
     var readableBalance: Decimal? {

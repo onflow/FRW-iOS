@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Instabug
+import InstabugSDK
 import SwiftyDropbox
 
 // MARK: - ServiceConfig
@@ -34,6 +34,10 @@ class ServiceConfig {
     // MARK: Private
 
     private let dict: [String: String]
+    
+    static var instabugRNToken: String {
+      ServiceConfig.shared.dict["INSTABUG_RN_TOKEN"] ?? ""
+    }
 }
 
 // MARK: config

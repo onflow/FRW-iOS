@@ -104,8 +104,8 @@ class WalletConnectManager: ObservableObject {
     var setSessions: [Session] = []
 
     func connect(link: String) {
-        debugPrint("WalletConnectManager -> connect(), Thread: \(Thread.isMainThread)")
-        print("[RESPONDER] Pairing to: \(link)")
+        log.debug("WalletConnectManager -> connect(), Thread: \(Thread.isMainThread)")
+        log.debug("[RESPONDER] Pairing to: \(link)")
         Task {
             do {
                 if let removedLink = link.removingPercentEncoding {
@@ -118,7 +118,7 @@ class WalletConnectManager: ObservableObject {
                     try await Pair.instance.pair(uri: uri)
                 }
             } catch {
-                print("[PROPOSER] Pairing connect error: \(error)")
+                log.error("[PROPOSER] Pairing connect error: \(error)")
                 HUD.error(title: "Connect failed")
             }
         }
@@ -137,7 +137,7 @@ class WalletConnectManager: ObservableObject {
             try await Sign.instance.disconnect(topic: topic)
             reloadActiveSessions()
         } catch {
-            print(error)
+            log.debug(error)
             HUD.error(title: "Disconnect failed")
         }
     }
@@ -159,6 +159,7 @@ class WalletConnectManager: ObservableObject {
             Data(hex: nonce),
         ]
         guard let rlp = RLP.encode(list) else {
+          log.error("[WALLET] RLP encode failed.")
             return nil
         }
 
@@ -177,7 +178,7 @@ class WalletConnectManager: ObservableObject {
             .sink { [weak self] status in
                 if status == .connected {
                     self?.onClientConnected?()
-                    print("[RESPONDER] Client connected")
+                  log.debug("[RESPONDER] Client connected")
                 }
             }.store(in: &publishers)
 
@@ -185,7 +186,7 @@ class WalletConnectManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] (sessions: [Session]) in
                 // reload UI
-                print("[RESPONDER] WC: Did session")
+              log.debug("[RESPONDER] WC: Did session")
                 self.setSessions = sessions
             }.store(in: &publishers)
 
@@ -193,7 +194,7 @@ class WalletConnectManager: ObservableObject {
         Sign.instance.sessionProposalPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] context in
-                print("[RESPONDER] WC: Did receive session proposal")
+              log.debug("[RESPONDER] WC: Did receive session proposal")
                 self?.currentProposal = context.proposal
                 let sessionProposal = context.proposal
                 self?.handleSessionProposal(sessionProposal)
@@ -218,7 +219,7 @@ class WalletConnectManager: ObservableObject {
         Sign.instance.sessionRequestPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] data in
-                print("[RESPONDER] WC: Did receive session request")
+              log.debug("[RESPONDER] WC: Did receive session request")
                 log.info("[Session] request top:\(data.request.topic) ")
                 if !SecurityManager.shared.isLocked {
                     self?.handleRequest(data.request)
@@ -234,20 +235,20 @@ class WalletConnectManager: ObservableObject {
         Sign.instance.sessionExtendPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                print("[RESPONDER] WC: sessionExtendPublisher")
+              log.debug("[RESPONDER] WC: sessionExtendPublisher")
             }.store(in: &publishers)
 
         Sign.instance.sessionEventPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                print("[RESPONDER] WC: sessionEventPublisher")
+              log.debug("[RESPONDER] WC: sessionEventPublisher")
                 //                self?.showSessionRequest(sessionRequest)
             }.store(in: &publishers)
 
         Sign.instance.sessionUpdatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                print("[RESPONDER] WC: sessionUpdatePublisher")
+              log.debug("[RESPONDER] WC: sessionUpdatePublisher")
                 //                self?.showSessionRequest(sessionRequest)
             }.store(in: &publishers)
     }
@@ -379,6 +380,7 @@ extension WalletConnectManager {
         let keyId = WalletManager.shared.keyIndex
 
         if cacheReqeust.contains(sessionRequest.id.string) {
+            log.info("[WALLET] cache request: \(sessionRequest.id.string)")
             return
         }
         cacheReqeust.append(sessionRequest.id.string)
@@ -442,7 +444,7 @@ extension WalletConnectManager {
                     )
                     self.navigateBackTodApp(topic: sessionRequest.topic)
                 } catch {
-                    print("[WALLET] Respond Error: \(error.localizedDescription)")
+                    log.error("[WALLET] Respond Error: \(error.localizedDescription)")
                     rejectRequest(request: sessionRequest)
                 }
             }
@@ -488,7 +490,7 @@ extension WalletConnectManager {
                         response: .response(AnyCodable(result))
                     )
                 } catch {
-                    print("[WALLET] Respond Error: \(error.localizedDescription)")
+                    log.error("[WALLET] Respond Error: \(error.localizedDescription)")
                     rejectRequest(request: sessionRequest)
                 }
             }
@@ -516,6 +518,7 @@ extension WalletConnectManager {
                 }
 
                 guard let model else {
+                    log.error("[WALLET] LLError.decodeFailed")
                     throw LLError.decodeFailed
                 }
 
@@ -526,6 +529,7 @@ extension WalletConnectManager {
                         message: model.message
                     )
                     navigateBackTodApp(topic: sessionRequest.topic)
+                    log.info("[WALLET] approve payer request")
                     return
                 }
 
@@ -567,7 +571,7 @@ extension WalletConnectManager {
                 }
 
             } catch {
-                print("[WALLET] Respond Error: \(error.localizedDescription)")
+                log.error("[WALLET] Respond Error: \(error.localizedDescription)")
                 log.error("WalletConnectManager -> Respond Error:", context: error)
                 rejectRequest(request: sessionRequest)
             }
@@ -578,6 +582,7 @@ extension WalletConnectManager {
                 let jsonString = try sessionRequest.params.get([String].self)
 
                 guard let json = jsonString.first else {
+                    log.error("[WALLET] userSignature-LLError.decodeFailed")
                     throw LLError.decodeFailed
                 }
                 var model: SignableMessage?
@@ -590,6 +595,7 @@ extension WalletConnectManager {
                     model = try JSONDecoder().decode(SignableMessage.self, from: data)
                 }
                 guard let model = model else {
+                    log.error("[WALLET] userSignature-LLError.decodeFailed")
                     throw LLError.decodeFailed
                 }
 
@@ -626,7 +632,7 @@ extension WalletConnectManager {
                     Router.route(to: RouteMap.Explore.signMessage(vm))
                 }
             } catch {
-                print(error)
+              log.error(error)
                 rejectRequest(request: sessionRequest)
             }
         case FCLWalletConnectMethod.accountInfo.rawValue:
@@ -659,9 +665,7 @@ extension WalletConnectManager {
                                     )
                                 } catch {
                                     self.rejectRequest(request: sessionRequest)
-                                    print(
-                                        "[WALLET] Request Error: [addDeviceInfo] \(error.localizedDescription)"
-                                    )
+                                    log.error("[WALLET] Request Error: [addDeviceInfo] \(error.localizedDescription)")
                                 }
                             }
                         } else {
@@ -670,7 +674,7 @@ extension WalletConnectManager {
                     }
                     Router.route(to: RouteMap.RestoreLogin.syncDevice(viewModel))
                 } catch {
-                    print("[WALLET] Request Error: [addDeviceInfo] \(error.localizedDescription)")
+                    log.error("[WALLET] Request Error: [addDeviceInfo] \(error.localizedDescription)")
                     rejectRequest(request: sessionRequest)
                 }
             }
@@ -722,6 +726,7 @@ extension WalletConnectManager {
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
         default:
+            log.error("[WALLET] reject request \(sessionRequest)")
             rejectRequest(request: sessionRequest, reason: "unspport method")
         }
     }
@@ -740,10 +745,7 @@ extension WalletConnectManager {
                     let user = try WalletConnectSyncDevice.parseAccount(data: data)
                     Router.route(to: RouteMap.RestoreLogin.syncAccount(user))
                 } catch {
-                    log
-                        .error(
-                            "[WALLET] Respond Error: [account info] \(error.localizedDescription)"
-                        )
+                    log.error("[WALLET] Respond Error: [account info] \(error.localizedDescription)")
                 }
             } else if WalletConnectSyncDevice.isDevice(request: request, with: response) {
                 NotificationCenter.default.post(
@@ -756,7 +758,7 @@ extension WalletConnectManager {
                 let obj = WalletConnectSyncDevice.SyncResult.failed("process_failed_text".localized)
                 NotificationCenter.default.post(name: .syncDeviceStatusDidChanged, object: obj)
             }
-            print("[WALLET] Respond Error: [addDeviceInfo] \(error.localizedDescription)")
+            log.error("[WALLET] Respond Error: [addDeviceInfo] \(error.localizedDescription)")
             HUD.error(title: "process_failed_text".localized)
         }
     }
@@ -818,7 +820,7 @@ extension WalletConnectManager {
                 _ = try await Sign.instance.approve(proposalId: proposal.id, namespaces: namespaces)
                 HUD.success(title: "approved".localized)
             } catch {
-                debugPrint("WalletConnectManager -> approveSession failed: \(error)")
+                log.error("WalletConnectManager -> approveSession failed: \(error)")
                 HUD.error(title: "approve_failed".localized)
             }
         }
@@ -833,6 +835,7 @@ extension WalletConnectManager {
                 )
                 HUD.success(title: "rejected".localized)
             } catch {
+                log.error("[WALLET] reject session:\(proposal)")
                 HUD.error(title: "reject_failed".localized)
             }
         }
@@ -840,6 +843,7 @@ extension WalletConnectManager {
 
     private func approveRequest(request: Request, requestInfo: RequestInfo) {
         guard let account = WalletManager.shared.getPrimaryWalletAddress() else {
+          log.error("[WALLET] don't login")
             return
         }
 
@@ -881,6 +885,7 @@ extension WalletConnectManager {
 
     private func approvePayerRequest(request: Request, model: Signable, message: String) {
         guard let account = WalletManager.shared.getPrimaryWalletAddress() else {
+          log.error("[WALLET] don't login")
             return
         }
 
@@ -932,7 +937,7 @@ extension WalletConnectManager {
 
         Task {
             do {
-                let isEVM = WalletManager.shared.isSelectedEVMAccount
+              let isEVM = await WalletManager.shared.isSelectedEVMAccount
                 let response: RPCResult = isEVM ? .error(.init(code: 400, message: reason)) : .response(AnyCodable(result))
 
                 try await Sign.instance.respond(
@@ -953,6 +958,7 @@ extension WalletConnectManager {
 
     private func approveRequestMessage(request: Request, requestInfo: RequestMessageInfo) {
         guard let account = WalletManager.shared.getPrimaryWalletAddress() else {
+            log.error("[WALLET] don't login")
             return
         }
 
@@ -983,7 +989,7 @@ extension WalletConnectManager {
                 )
                 HUD.success(title: "approved".localized)
             } catch {
-                debugPrint("WalletConnectManager -> approveRequestMessage failed: \(error)")
+                log.error("WalletConnectManager -> approveRequestMessage failed: \(error)")
                 HUD.error(title: "approve_failed".localized)
                 rejectRequest(request: request)
             }

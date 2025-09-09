@@ -181,7 +181,7 @@ struct WalletConnectView: RouteableView {
 
 extension WalletConnectView {
     struct EmptyView: View {
-        let animationView = AnimationView(name: "QRScan", bundle: .main)
+        let animationView = LottieAnimationView(name: "QRScan", bundle: .main)
 
         var body: some View {
             VStack(alignment: .center, spacing: 18) {

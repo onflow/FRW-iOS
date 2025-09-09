@@ -20,9 +20,7 @@
 // SOFTWARE.
 
 import AVKit
-import NativeUIKit
 import SnapKit
-import SparrowKit
 import SwiftUI
 import UIKit
 
@@ -64,7 +62,11 @@ open class SPQRCameraController: SPController {
         view.layoutMargins = .init(horizontal: 20, vertical: .zero)
         view.layer.addSublayer(previewLayer)
         view.layer.addSublayer(frameLayer)
-        captureSession.startRunning()
+        
+        // Start camera session on background thread to avoid UI blocking
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.captureSession.startRunning()
+        }
 
         maskView.statusBarHeight = statusBarHeight
         view.addSubviews(maskView)
@@ -112,8 +114,12 @@ open class SPQRCameraController: SPController {
     }
 
     func stopRunning() {
-        if captureSession.isRunning {
-            captureSession.stopRunning()
+        // Stop camera session on background thread to avoid UI blocking
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            if self.captureSession.isRunning {
+                self.captureSession.stopRunning()
+            }
         }
     }
 
