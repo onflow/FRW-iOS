@@ -57,6 +57,7 @@ class TurboModuleSwift: NSObject {
       let response = RNBridge.WalletAccountsResponse(accounts: list)
       return try response.toDictionary()
     }
+  
 
     @objc
     static func getCOAFlowBalance() -> String {
@@ -198,5 +199,39 @@ extension TurboModuleSwift {
     let response = CoinRateCache.cache.getSummary(by: tokenId)
     let result =  response?.getLastRate() ?? 0
     return result
+  }
+  
+  @objc
+  static func getWalletProfiles() async throws -> [String: Any] {
+    guard let userInfo = UserManager.shared.userInfo, let uid = UserManager.shared.activatedUID else {
+      throw LLError.accountNotFound
+    }
+    let profile = try await RNBridge.WalletProfile(
+      name: userInfo.nickname, 
+      avatar: userInfo.avatar,
+      uid: uid,
+      accounts: getAllWalletAccount()
+      )
+    let response = RNBridge.WalletProfilesResponse(profiles: [profile])
+    return try response.toDictionary()
+  }
+  
+  private static func getAllWalletAccount() async throws -> [RNBridge.WalletAccount] {
+    var list: [RNBridge.WalletAccount] = []
+    
+    let accounts = await WalletManager.shared.currentNetworkAccounts
+    for account in accounts {
+      list.append(account.toWalletAccount())
+      
+      if let linked = account.coa {
+        list.append(linked.toWalletAccount(parentAddress: account.hexAddr))
+      }
+      
+      if let childList = account.childs {
+        let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr) }
+        list.append(contentsOf: result)
+      }
+    }
+    return list
   }
 }

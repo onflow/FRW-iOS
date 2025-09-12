@@ -66,6 +66,17 @@ enum RNBridge {
         let accounts: [WalletAccount]
     }
 
+    struct WalletProfile: Codable {
+        let name: String
+        let avatar: String
+        let uid: String
+        let accounts: [WalletAccount]
+    }
+
+    struct WalletProfilesResponse: Codable {
+        let profiles: [WalletProfile]
+    }
+
     struct AddressBookResponse: Codable {
         let contacts: [AddressBookContact]
     }
