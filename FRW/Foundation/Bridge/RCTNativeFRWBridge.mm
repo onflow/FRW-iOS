@@ -154,5 +154,15 @@
   return @([TurboModuleSwift getTokenRateWithTokenId:token]).stringValue;
 }
 
+- (void)getWalletProfiles:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  
+  [TurboModuleSwift getWalletProfilesWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"get wallet profile", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
 @end
 
