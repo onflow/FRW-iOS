@@ -60,33 +60,37 @@ open class SPQRCameraController: SPController {
 
         view.backgroundColor = .black
         view.layoutMargins = .init(horizontal: 20, vertical: .zero)
-        view.layer.addSublayer(previewLayer)
-        view.layer.addSublayer(frameLayer)
         
-        // Start camera session on background thread to avoid UI blocking
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.captureSession.startRunning()
-        }
-
+        // Set up UI elements on main thread
+        previewLayer.videoGravity = .resizeAspectFill
+        
+        // Fix layer order: ensure previewLayer is visible but below maskView
+        view.layer.addSublayer(previewLayer)
+        
         maskView.statusBarHeight = statusBarHeight
         view.addSubviews(maskView)
+        
+        // Ensure frameLayer is on top for QR code highlighting
+        view.layer.addSublayer(frameLayer)
 
         detailView.addTarget(self, action: #selector(didTapDetailButtonClick), for: .touchUpInside)
         view.addSubview(detailView)
 
         addBackButton()
         updateInterface()
+        
+        // Configure camera session on dedicated background queue
+        sessionQueue.async { [weak self] in
+            self?.configureSession()
+        }
     }
 
     override open func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        previewLayer.frame = .init(
-            x: .zero, y: .zero,
-            width: view.layer.bounds.width,
-            height: view.layer.bounds.height
-        )
-        maskView.frame = previewLayer.frame
+        // UI updates on main thread
+        previewLayer.frame = view.bounds
+        maskView.frame = view.bounds
     }
 
     // MARK: Internal
@@ -97,13 +101,14 @@ open class SPQRCameraController: SPController {
     ]
 
     var updateTimer: Timer?
-    lazy var captureSession: AVCaptureSession = makeCaptureSession()
+    private let captureSession = AVCaptureSession()
+    private let sessionQueue = DispatchQueue(label: "com.frw.camera.session.queue")
 
     // MARK: - Views
 
     let frameLayer = SPQRFrameLayer()
     let detailView = SPQRDetailButton()
-    lazy var previewLayer = makeVideoPreviewLayer()
+    lazy var previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     let maskView = SPQRMaskView()
 
     var qrCodeData: SPQRCodeData? {
@@ -114,14 +119,14 @@ open class SPQRCameraController: SPController {
     }
 
     func stopRunning() {
-        // Stop camera session on background thread to avoid UI blocking
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        sessionQueue.async { [weak self] in
             guard let self = self else { return }
             if self.captureSession.isRunning {
                 self.captureSession.stopRunning()
             }
         }
     }
+    
 
     // MARK: - Actions
 
@@ -179,22 +184,122 @@ open class SPQRCameraController: SPController {
         }
     }
 
-    func makeVideoPreviewLayer() -> AVCaptureVideoPreviewLayer {
-        let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        videoPreviewLayer.videoGravity = .resizeAspectFill
-        return videoPreviewLayer
-    }
 
-    func makeCaptureSession() -> AVCaptureSession {
-        let captureSession = AVCaptureSession()
-        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else { fatalError() }
-        guard let input = try? AVCaptureDeviceInput(device: device) else { fatalError() }
-        captureSession.addInput(input)
+    private func configureSession() {
+        // Check camera permissions first
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        
+        switch status {
+        case .authorized:
+            // Permission granted, continue with session configuration
+            break
+        case .notDetermined:
+            // Request permission first
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                if granted {
+                    // Permission granted, retry configuration
+                    self?.configureSession()
+                } else {
+                    // Permission denied, show alert
+                    DispatchQueue.main.async {
+                        self?.handleCameraPermissionDenied()
+                    }
+                }
+            }
+            return
+        case .denied, .restricted:
+            // Permission denied or restricted, show alert
+            DispatchQueue.main.async { [weak self] in
+                self?.handleCameraPermissionDenied()
+            }
+            return
+        @unknown default:
+            // Handle future cases
+            DispatchQueue.main.async { [weak self] in
+                self?.handleCameraPermissionDenied()
+            }
+            return
+        }
+        
+        // If session is already configured and running, just restart it
+        if captureSession.isRunning {
+            return
+        }
+        
+        // Check if session is already configured (has inputs)
+        if !captureSession.inputs.isEmpty {
+            // Session was previously configured, just restart it
+            captureSession.startRunning()
+            return
+        }
+        
+        // First time configuration
+        captureSession.beginConfiguration()
+        
+        // Configure video input
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video) else {
+            print("Failed to get camera device")
+            captureSession.commitConfiguration()
+            return
+        }
+        
+        do {
+            let input = try AVCaptureDeviceInput(device: device)
+            if captureSession.canAddInput(input) {
+                captureSession.addInput(input)
+            }
+        } catch {
+            print("Failed to create camera input: \(error)")
+            captureSession.commitConfiguration()
+            return
+        }
+        
+        // Configure metadata output for QR code detection
         let captureMetadataOutput = AVCaptureMetadataOutput()
-        captureSession.addOutput(captureMetadataOutput)
-        captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-        captureMetadataOutput.metadataObjectTypes = Self.supportedCodeTypes
-        return captureSession
+        if captureSession.canAddOutput(captureMetadataOutput) {
+            captureSession.addOutput(captureMetadataOutput)
+            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            captureMetadataOutput.metadataObjectTypes = Self.supportedCodeTypes
+        }
+        
+        captureSession.commitConfiguration()
+        
+        // Start running the session
+        captureSession.startRunning()
+        
+        // Debug logging to help diagnose camera issues
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            print("🔍 Camera Debug - Session started: \(self.captureSession.isRunning)")
+            print("🔍 Camera Debug - Preview layer frame: \(self.previewLayer.frame)")
+            print("🔍 Camera Debug - View bounds: \(self.view.bounds)")
+        }
+    }
+    
+    private func handleCameraPermissionDenied() {
+        let title = "camera_permission_required_title".localized
+        let message = "camera_permission_required_message".localized
+        let settingsButtonTitle = "settings".localized
+        let cancelButtonTitle = "cancel".localized
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        // Settings button - opens app settings
+        let settingsAction = UIAlertAction(title: settingsButtonTitle, style: .default) { _ in
+            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(settingsURL)
+            }
+        }
+        
+        // Cancel button - dismisses the scanner
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel) { [weak self] _ in
+            self?.dismissAnimated()
+        }
+        
+        alert.addAction(settingsAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
 
     // MARK: Private

@@ -103,12 +103,11 @@ class SideMenuViewModel: ObservableObject {
             }
             do {
                 let result = try await token.getAvailableFlowBalance(addresses: accounts, forceReload: true)
-                print("JJJJJJJJJJ ====> \(result)")
                 await MainActor.run {
                     walletBalance = result
                 }
             } catch {
-                print("JJJJJJJJJJ 1111 ====> \(error)")
+                log.debug(error)
             }
         }
     }

@@ -957,4 +957,7 @@
 "share_qr_code" = "QRコードを共有する";
 "move_single_nft" = "NFTを動かす";
 "do_not_ask" = "二度と聞かないでくれ。";
+"settings" = "設定";
+"camera_permission_required_title" = "カメラへのアクセスが必要";
+"camera_permission_required_message" = "Flow WalletはQRコードをスキャンするためにカメラへのアクセスが必要です。設定でカメラアクセスを有効にして続行してください。";
 "move_asset_browser_title_x" = "Flow上のケイデンスアドレス間でアセットを移動させ、 %@ 、アセットを閲覧できるようにする。";

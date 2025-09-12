@@ -957,4 +957,7 @@
 "share_qr_code" = "Поделиться QR-кодом";
 "move_single_nft" = "Переместить НМТ";
 "do_not_ask" = "Не спрашивайте меня больше.";
+"settings" = "Настройки";
+"camera_permission_required_title" = "Требуется доступ к камере";
+"camera_permission_required_message" = "Flow Wallet нужен доступ к камере для сканирования QR-кодов. Пожалуйста, включите доступ к камере в настройках, чтобы продолжить.";
 "move_asset_browser_title_x" = "Move your assets between your cadence address on Flow, so %@ can view your assets";
