@@ -54,6 +54,8 @@ enum RNBridge {
         let avatar: String?
         let isActive: Bool
         let type: AccountType?
+        let balance: String?
+        let nfts: String?
     }
 
     struct RecentContactsResponse: Codable {

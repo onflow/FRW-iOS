@@ -21,7 +21,9 @@ extension FlowWalletKit.Account {
       parentAddress: nil,
       avatar: nil,
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-      type: .main
+      type: .main,
+      balance: nil,
+      nfts: nil,
     )
   }
 
@@ -53,7 +55,9 @@ extension FlowWalletKit.ChildAccount {
       parentAddress: parentAddress,
       avatar: icon?.absoluteString,
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-      type: .child
+      type: .child,
+      balance: nil,
+      nfts: nil,
     )
   }
 }
@@ -79,7 +83,9 @@ extension FlowWalletKit.COA {
       parentAddress: parentAddress,
       avatar: nil,
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-      type: .evm
+      type: .evm,
+      balance: nil,
+      nfts: nil,
     )
   }
 }
