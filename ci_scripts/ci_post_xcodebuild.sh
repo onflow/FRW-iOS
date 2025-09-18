@@ -15,24 +15,24 @@ if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
   SINCE_DATE=$(date -v-3d '+%Y-%m-%d')
   COMMIT_RANGE="--since=\"$SINCE_DATE\""
   
-  # Generate comprehensive release notes
+  # Generate comprehensive release notes (without emojis for TestFlight compatibility)
   {
-    echo "🚀 What's New in This Build"
+    echo "What's New in This Build"
     echo "================================="
     echo ""
     echo "Recent changes (last 3 days):"
     echo ""
     
-    # Get commit messages with better formatting and highlight issue numbers
-    git log --since="$SINCE_DATE" --pretty=format:"• %s%n  └ %an (%ar)%n" --reverse | \
-    sed -E 's/\[#([0-9]+)\]/🎫 #\1/g' | \
-    sed -E 's/\(#([0-9]+)\)/🎫 #\1/g' | \
-    sed -E 's/\[([A-Z]+-[0-9]+)\]/🎫 \1/g' | \
-    sed -E 's/\(([A-Z]+-[0-9]+)\)/🎫 \1/g'
+    # Get commit messages with better formatting and highlight issue numbers (no emojis)
+    git log --since="$SINCE_DATE" --pretty=format:"* %s%n  Author: %an (%ar)%n" --reverse | \
+    sed -E 's/\[#([0-9]+)\]/[#\1]/g' | \
+    sed -E 's/\(#([0-9]+)\)/(#\1)/g' | \
+    sed -E 's/\[([A-Z]+-[0-9]+)\]/[\1]/g' | \
+    sed -E 's/\(([A-Z]+-[0-9]+)\)/(\1)/g'
     
     echo ""
     echo "================================="
-    echo "🎫 Issues/Tickets Resolved"
+    echo "Issues/Tickets Resolved"
     echo "================================="
     
     # Extract and list all unique issue numbers
@@ -43,19 +43,19 @@ if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
     
     if [[ -n "$TICKETS" ]]; then
       echo "$TICKETS" | while read -r ticket; do
-        echo "• $ticket"
+        echo "* $ticket"
       done
     else
-      echo "• No ticket references found in commits"
+      echo "* No ticket references found in commits"
     fi
     
     echo ""
     echo "================================="
-    echo "📱 Build Information"
-    echo "• Build Date: $(date)"
-    echo "• Branch: $(git branch --show-current 2>/dev/null || echo 'Unknown')"
-    echo "• Latest Commit: $(git log -1 --pretty=format:'%h - %s')"
-    echo "• Total Commits: $(git log --since="$SINCE_DATE" --oneline | wc -l | tr -d ' ')"
+    echo "Build Information"
+    echo "* Build Date: $(date)"
+    echo "* Branch: $(git branch --show-current 2>/dev/null || echo 'Unknown')"
+    echo "* Latest Commit: $(git log -1 --pretty=format:'%h - %s')"
+    echo "* Total Commits: $(git log --since="$SINCE_DATE" --oneline | wc -l | tr -d ' ')"
     
   } >! $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
   
