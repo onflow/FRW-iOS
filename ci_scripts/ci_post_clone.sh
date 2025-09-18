@@ -151,6 +151,10 @@ echo "[Xcode Cloud] Ruby version: $(ruby -v)"
 echo "[Xcode Cloud] Installing bundler 2.7.1..."
 gem install bundler:2.7.1 -N
 
+# Set Swift version for compatibility
+echo "[Xcode Cloud] Setting Swift version compatibility..."
+export SWIFT_VERSION=5.0
+
 # Install Ruby gems
 echo "[Xcode Cloud] Installing Ruby dependencies..."
 bundle install || {
