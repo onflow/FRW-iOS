@@ -36,11 +36,13 @@ fi
 # Install JavaScript dependencies from monorepo root
 echo "[Xcode Cloud] Installing JavaScript dependencies..."
 cd ../../.. # Go to monorepo root (from ios/ci_scripts to repository root)
+echo "[Xcode Cloud] Current directory: $(pwd)"
 pnpm install --frozen-lockfile
 pnpm build:packages
 
 # Navigate to FRW submodule for environment file generation
-cd apps/react-native/FRW/App/Env/ 
+cd apps/react-native/ios/FRW/App/Env/
+echo "[Xcode Cloud] Current directory for env files: $(pwd)" 
 
 LOCAL_ENV_FILE=./LocalEnv
 
@@ -99,11 +101,13 @@ fi
 echo "[Xcode Cloud] Installing iOS dependencies..."
 
 # Go back to React Native app directory for bundling
-cd ../.. # Go to apps/react-native/ directory
+cd ../../../../.. # Go to apps/react-native/ directory (from ios/FRW/App/Env/ to apps/react-native/)
+echo "[Xcode Cloud] Current directory for bundling: $(pwd)"
 pnpm bundle:ios
 
 # Go to iOS directory and install pods
 cd ios # Go to ios directory
+echo "[Xcode Cloud] Current directory for CocoaPods: $(pwd)"
 
 # Ensure bundler is available
 if ! command -v bundle >/dev/null 2>&1; then
