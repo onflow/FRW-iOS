@@ -33,15 +33,19 @@ else
   echo "[Xcode Cloud] CocoaPods already available: $(pod --version)"
 fi
 
+# Store the repository root for later use
+REPO_ROOT=$(cd ../../../.. && pwd)
+echo "[Xcode Cloud] Repository root: $REPO_ROOT"
+
 # Install JavaScript dependencies from monorepo root
 echo "[Xcode Cloud] Installing JavaScript dependencies..."
-cd ../../../.. # Go to monorepo root (from ios/ci_scripts to repository root)
+cd "$REPO_ROOT"
 echo "[Xcode Cloud] Current directory: $(pwd)"
 pnpm install --frozen-lockfile
 pnpm build:packages
 
 # Navigate to FRW submodule for environment file generation
-cd apps/react-native/ios/FRW/App/Env/
+cd "$REPO_ROOT/apps/react-native/ios/FRW/App/Env/"
 echo "[Xcode Cloud] Current directory for env files: $(pwd)" 
 
 LOCAL_ENV_FILE=./LocalEnv
@@ -101,12 +105,12 @@ fi
 echo "[Xcode Cloud] Installing iOS dependencies..."
 
 # Go back to React Native app directory for bundling
-cd ../../../../.. # Go to apps/react-native/ directory (from ios/FRW/App/Env/ to apps/react-native/)
+cd "$REPO_ROOT/apps/react-native"
 echo "[Xcode Cloud] Current directory for bundling: $(pwd)"
 pnpm bundle:ios
 
 # Go to iOS directory and install pods
-cd ios # Go to ios directory
+cd "$REPO_ROOT/apps/react-native/ios"
 echo "[Xcode Cloud] Current directory for CocoaPods: $(pwd)"
 
 # Ensure bundler is available
