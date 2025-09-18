@@ -120,12 +120,16 @@ if ! command -v bundle >/dev/null 2>&1; then
   brew install ruby
 fi
 
-# Install the specific bundler version required by Gemfile.lock
-gem install bundler:2.7.1 -N
+# Install the specific bundler version required by Gemfile.lock to user directory
+gem install bundler:2.7.1 --user-install -N
 
 # Install Ruby gems
 echo "[Xcode Cloud] Installing Ruby dependencies..."
-bundle install
+bundle install || {
+  echo "[Xcode Cloud] Bundle install failed, trying to update bundler..."
+  bundle update --bundler
+  bundle install
+}
 
 # Install CocoaPods dependencies
 echo "[Xcode Cloud] Installing CocoaPods dependencies..."
