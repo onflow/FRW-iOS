@@ -113,15 +113,36 @@ pnpm bundle:ios
 cd "$REPO_ROOT/apps/react-native/ios"
 echo "[Xcode Cloud] Current directory for CocoaPods: $(pwd)"
 
-# Ensure correct bundler version is available
-echo "[Xcode Cloud] Installing correct bundler version..."
-if ! command -v bundle >/dev/null 2>&1; then
-  echo "[Xcode Cloud] Installing bundler via Homebrew..."
-  brew install ruby
+# Install and configure rbenv for Ruby version management
+echo "[Xcode Cloud] Setting up Ruby with rbenv..."
+
+# Install rbenv if not available
+if ! command -v rbenv >/dev/null 2>&1; then
+  echo "[Xcode Cloud] Installing rbenv via Homebrew..."
+  brew install rbenv ruby-build
 fi
 
-# Install the specific bundler version required by Gemfile.lock to user directory
-gem install bundler:2.7.1 --user-install -N
+# Initialize rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - --no-rehash)"
+
+# Install Ruby 3.2.0 (compatible with bundler 2.7.1)
+RUBY_VERSION="3.2.0"
+echo "[Xcode Cloud] Installing Ruby $RUBY_VERSION..."
+if ! rbenv versions | grep -q "$RUBY_VERSION"; then
+  rbenv install "$RUBY_VERSION"
+fi
+
+# Set Ruby version for this project
+rbenv local "$RUBY_VERSION"
+rbenv rehash
+
+# Verify Ruby version
+echo "[Xcode Cloud] Ruby version: $(ruby -v)"
+
+# Install bundler 2.7.1
+echo "[Xcode Cloud] Installing bundler 2.7.1..."
+gem install bundler:2.7.1 -N
 
 # Install Ruby gems
 echo "[Xcode Cloud] Installing Ruby dependencies..."
