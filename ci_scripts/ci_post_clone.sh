@@ -126,8 +126,15 @@ fi
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - --no-rehash)"
 
-# Install Ruby 3.2.0 (compatible with bundler 2.7.1)
-RUBY_VERSION="3.2.0"
+# Read Ruby version from Gemfile
+if [ -f "Gemfile" ]; then
+  RUBY_VERSION=$(grep -E "^ruby ['\"]" Gemfile | sed -E "s/ruby ['\"]([^'\"]+)['\"].*/\1/")
+  echo "[Xcode Cloud] Ruby version specified in Gemfile: $RUBY_VERSION"
+else
+  RUBY_VERSION="3.4.4"
+  echo "[Xcode Cloud] No Gemfile found, using default Ruby version: $RUBY_VERSION"
+fi
+
 echo "[Xcode Cloud] Installing Ruby $RUBY_VERSION..."
 if ! rbenv versions | grep -q "$RUBY_VERSION"; then
   rbenv install "$RUBY_VERSION"
