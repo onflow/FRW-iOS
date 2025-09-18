@@ -35,7 +35,7 @@ fi
 
 # Install JavaScript dependencies from monorepo root
 echo "[Xcode Cloud] Installing JavaScript dependencies..."
-cd ../../.. # Go to monorepo root (from ios/ci_scripts to repository root)
+cd ../../../.. # Go to monorepo root (from ios/ci_scripts to repository root)
 echo "[Xcode Cloud] Current directory: $(pwd)"
 pnpm install --frozen-lockfile
 pnpm build:packages
