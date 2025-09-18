@@ -113,12 +113,15 @@ pnpm bundle:ios
 cd "$REPO_ROOT/apps/react-native/ios"
 echo "[Xcode Cloud] Current directory for CocoaPods: $(pwd)"
 
-# Ensure bundler is available
+# Ensure correct bundler version is available
+echo "[Xcode Cloud] Installing correct bundler version..."
 if ! command -v bundle >/dev/null 2>&1; then
   echo "[Xcode Cloud] Installing bundler via Homebrew..."
   brew install ruby
-  gem install bundler -N
 fi
+
+# Install the specific bundler version required by Gemfile.lock
+gem install bundler:2.7.1 -N
 
 # Install Ruby gems
 echo "[Xcode Cloud] Installing Ruby dependencies..."
