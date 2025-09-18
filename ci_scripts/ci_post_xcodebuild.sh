@@ -15,38 +15,105 @@ if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
   SINCE_DATE=$(date -v-3d '+%Y-%m-%d')
   COMMIT_RANGE="--since=\"$SINCE_DATE\""
   
-  # Generate comprehensive release notes (without emojis for TestFlight compatibility)
+  # Generate comprehensive release notes based on merge commits and closed issues
   {
     echo "What's New in This Build"
     echo "================================="
     echo ""
-    echo "Recent changes (last 3 days):"
-    echo ""
     
-    # Get commit messages with better formatting and highlight issue numbers (no emojis)
-    git log --since="$SINCE_DATE" --pretty=format:"* %s%n  Author: %an (%ar)%n" --reverse | \
-    sed -E 's/\[#([0-9]+)\]/[#\1]/g' | \
-    sed -E 's/\(#([0-9]+)\)/(#\1)/g' | \
-    sed -E 's/\[([A-Z]+-[0-9]+)\]/[\1]/g' | \
-    sed -E 's/\(([A-Z]+-[0-9]+)\)/(\1)/g'
+    # Find merge commits from last 3 days
+    MERGE_COMMITS=$(git log --since="$SINCE_DATE" --merges --pretty=format:"%H|%s|%b" | head -20)
     
-    echo ""
-    echo "================================="
-    echo "Issues/Tickets Resolved"
-    echo "================================="
-    
-    # Extract and list all unique issue numbers
-    TICKETS=$(git log --since="$SINCE_DATE" --pretty=format:"%s" | \
-              grep -oE '(\[#[0-9]+\]|\(#[0-9]+\)|\[[A-Z]+-[0-9]+\]|\([A-Z]+-[0-9]+\))' | \
-              sed -E 's/[\(\[\)]//g' | \
-              sort -u)
-    
-    if [[ -n "$TICKETS" ]]; then
-      echo "$TICKETS" | while read -r ticket; do
-        echo "* $ticket"
+    if [[ -n "$MERGE_COMMITS" ]]; then
+      echo "Issues Resolved:"
+      echo ""
+      
+      # Process each merge commit to extract issue numbers and titles
+      echo "$MERGE_COMMITS" | while IFS='|' read -r commit_hash subject body; do
+        # Extract PR number from merge commit subject
+        PR_NUMBER=$(echo "$subject" | grep -oE '#[0-9]+' | head -1)
+        PR_TITLE=$(echo "$subject" | sed -E 's/Merge pull request #[0-9]+ from [^[:space:]]+[[:space:]]*//')
+        
+        # Extract closed issue numbers from commit body
+        CLOSED_ISSUES=$(echo "$body" | grep -iE "(closes?|fixes?|resolves?) #[0-9]+" | grep -oE '#[0-9]+' | sort -u)
+        
+        if [[ -n "$CLOSED_ISSUES" || -n "$PR_NUMBER" ]]; then
+          if [[ -n "$PR_TITLE" ]]; then
+            echo "* $PR_TITLE"
+          fi
+          
+          if [[ -n "$CLOSED_ISSUES" ]]; then
+            echo "$CLOSED_ISSUES" | while read -r issue; do
+              ISSUE_NUM=$(echo "$issue" | sed 's/#//')
+              
+              # Try to get issue title from GitHub API (if available)
+              # Extract repository info from git remote
+              REPO_URL=$(git remote get-url origin 2>/dev/null || echo "")
+              if [[ "$REPO_URL" =~ github\.com[:/]([^/]+)/([^/\.]+) ]]; then
+                REPO_OWNER="${BASH_REMATCH[1]}"
+                REPO_NAME="${BASH_REMATCH[2]}"
+                
+                # Attempt to get issue title via GitHub API (requires network access)
+                ISSUE_TITLE=$(curl -s -f "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUM" 2>/dev/null | \
+                             grep '"title"' | head -1 | sed -E 's/.*"title": "([^"]*)".*$/\1/' 2>/dev/null || echo "")
+                
+                if [[ -n "$ISSUE_TITLE" && "$ISSUE_TITLE" != "Not Found" ]]; then
+                  echo "  - $issue: $ISSUE_TITLE"
+                else
+                  echo "  - Resolves $issue"
+                fi
+              else
+                echo "  - Resolves $issue"
+              fi
+            done
+          elif [[ -n "$PR_NUMBER" ]]; then
+            echo "  - Pull Request $PR_NUMBER"
+          fi
+          echo ""
+        fi
       done
+      
+      echo ""
+      echo "================================="
+      echo "All Resolved Issues Summary"
+      echo "================================="
+      
+      # Extract all unique issue numbers
+      ALL_ISSUES=$(echo "$MERGE_COMMITS" | grep -ioE "(closes?|fixes?|resolves?) #[0-9]+" | grep -oE '#[0-9]+' | sort -u)
+      
+      if [[ -n "$ALL_ISSUES" ]]; then
+        echo "$ALL_ISSUES" | while read -r issue; do
+          ISSUE_NUM=$(echo "$issue" | sed 's/#//')
+          
+          # Get repository info for API call
+          REPO_URL=$(git remote get-url origin 2>/dev/null || echo "")
+          if [[ "$REPO_URL" =~ github\.com[:/]([^/]+)/([^/\.]+) ]]; then
+            REPO_OWNER="${BASH_REMATCH[1]}"
+            REPO_NAME="${BASH_REMATCH[2]}"
+            
+            # Get issue title via GitHub API
+            ISSUE_TITLE=$(curl -s -f "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUM" 2>/dev/null | \
+                         grep '"title"' | head -1 | sed -E 's/.*"title": "([^"]*)".*$/\1/' 2>/dev/null || echo "")
+            
+            if [[ -n "$ISSUE_TITLE" && "$ISSUE_TITLE" != "Not Found" ]]; then
+              echo "* $issue: $ISSUE_TITLE"
+            else
+              echo "* $issue"
+            fi
+          else
+            echo "* $issue"
+          fi
+        done
+      else
+        echo "* No issue references found in merge commits"
+        echo "* Note: Please include 'Closes #123' in PR descriptions"
+      fi
+      
     else
-      echo "* No ticket references found in commits"
+      echo "No merge commits found in the last 3 days."
+      echo ""
+      echo "Recent commits:"
+      git log --since="$SINCE_DATE" --pretty=format:"* %s (%an, %ar)" --reverse | head -10
     fi
     
     echo ""
@@ -55,7 +122,7 @@ if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
     echo "* Build Date: $(date)"
     echo "* Branch: $(git branch --show-current 2>/dev/null || echo 'Unknown')"
     echo "* Latest Commit: $(git log -1 --pretty=format:'%h - %s')"
-    echo "* Total Commits: $(git log --since="$SINCE_DATE" --oneline | wc -l | tr -d ' ')"
+    echo "* Merge Commits: $(echo "$MERGE_COMMITS" | wc -l | tr -d ' ')"
     
   } >! $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
   
