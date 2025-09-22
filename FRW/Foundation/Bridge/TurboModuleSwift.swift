@@ -221,6 +221,8 @@ extension TurboModuleSwift {
     
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
+      try await account.fetchAccount()
+      
       list.append(account.toWalletAccount())
       
       if let linked = account.coa {
