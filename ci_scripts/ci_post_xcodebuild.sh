@@ -99,7 +99,8 @@ if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
     echo "------------------------"
     echo ""
     echo "Build Information:"
-    echo "  • Build Date: $(date '+%Y-%m-%d %H:%M')"
+    # Show build time in Australia/Sydney timezone for consistency
+    echo "  • Build Date (Sydney): $(TZ=Australia/Sydney date '+%Y-%m-%d %H:%M %Z')"
     echo "  • Branch: $(cd "$MONOREPO_ROOT" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'detached')"
     echo "  • Latest Commit: $(cd "$MONOREPO_ROOT" && git log -1 --pretty=format:'%h - %s')"
     echo "  • Total Commits (3 days): $(cd "$MONOREPO_ROOT" && git log --since="$SINCE_DATE" --oneline | wc -l | tr -d ' ')"
