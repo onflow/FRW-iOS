@@ -109,9 +109,9 @@ struct AccountSwitchView: PresentActionView {
                 self.offset = offset
             } content: {
                 LazyVStack(spacing: 20) {
-                    ForEach(vm.placeholders, id: \.uid) { placeholder in
+                  ForEach(vm.profiles, id: \.userIdAndPublickKeyPrefix) { placeholder in
                         Button {
-                            vm.selectedUid = placeholder.uid
+                          vm.selectedUid = placeholder.uid
                             if currentNetwork != .mainnet {
                                 showSwitchUserAlert = true
                             } else {
@@ -177,9 +177,9 @@ struct AccountSwitchView: PresentActionView {
         }
     }
 
-    func createAccountCell(_ placeholder: AccountSwitchViewModel.Placeholder) -> some View {
+  func createAccountCell(_ placeholder: ProfileModel) -> some View {
         HStack(spacing: 16) {
-            KFImage.url(URL(string: placeholder.avatar.convertedAvatarString()))
+          KFImage.url(URL(string: placeholder.avatar?.convertedAvatarString() ?? ""))
                 .placeholder {
                     Image("placeholder")
                         .resizable()
@@ -190,11 +190,13 @@ struct AccountSwitchView: PresentActionView {
                 .cornerRadius(16)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("\(placeholder.username)")
+                Text("\(placeholder.username ?? "")")
+                    .lineLimit(1)
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundColor(Color.LL.Neutrals.text)
 
-                Text("\(placeholder.address)")
+                Text("\(placeholder.subTitle)")
+                    .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(Color.LL.Neutrals.text2)
             }

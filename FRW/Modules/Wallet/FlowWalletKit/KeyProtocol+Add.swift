@@ -41,6 +41,14 @@ enum KeyProvider {
         }
         return suffix
     }
+  
+    static func createKey(userId: String, publicKey: String) -> String {
+      guard !userId.contains(sTag) else {
+          return userId
+      }
+      let suffix = publicKey.prefix(8)
+      return userId + sTag + suffix
+    }
 }
 
 extension KeyProtocol {

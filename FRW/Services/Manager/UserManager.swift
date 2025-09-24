@@ -684,6 +684,7 @@ extension UserManager {
 //        }
 //
 //        throw WalletError.mnemonicMissing
+      
     }
 }
 

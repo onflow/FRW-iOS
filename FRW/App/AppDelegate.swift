@@ -64,6 +64,7 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
 
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
+        _ = ProfileManager.shared
         FirebaseApp.configure()
 
         Analytics.setAnalyticsCollectionEnabled(true)
