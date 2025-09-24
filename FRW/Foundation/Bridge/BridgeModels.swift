@@ -173,5 +173,4 @@ enum RNBridge {
         let domain: String?
         let identifier: String?
     }
-
 }
