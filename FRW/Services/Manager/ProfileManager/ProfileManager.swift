@@ -20,7 +20,6 @@ class ProfileManager: ObservableObject {
   static let shared = ProfileManager()
   
     private init() {
-        clearAllProfiles()
         loadCachedProfiles()
         migrateExistingProfilesIfNeeded()
     }
@@ -226,19 +225,7 @@ extension ProfileManager {
         log.warning("[Profile] SeedPhraseKey get failed.\(key) ")
         continue
       }
-      var result = false
-      if let signature = try? provider.sign(data: message, signAlgo: .ECDSA_SECP256k1, hashAlgo: .SHA2_256) {
-        result = provider.isValidSignature(signature: signature, message: message, signAlgo: .ECDSA_SECP256k1)
-      }
-      
-      if !result,  let signature = try? provider.sign(data: message, signAlgo: .ECDSA_P256, hashAlgo: .SHA2_256) {
-        result = provider.isValidSignature(signature: signature, message: message, signAlgo: .ECDSA_P256)
-      }
-      if result {
-        userIdAndPublicKeyPre.append(key)
-      } else {
-        log.warning("[Profile] SeedPhraseKey valid signature failed.\(key) ")
-      }
+      userIdAndPublicKeyPre.append(key)
     }
     // PrivateKey
     let pkKeyList = FlowWalletKit.PrivateKey.PKStorage.allKeys
@@ -247,18 +234,7 @@ extension ProfileManager {
         log.warning("[Profile] PrivateKey get failed.\(key) ")
         continue
       }
-      var result = false
-      if let signature = try? provider.sign(data: message, signAlgo: .ECDSA_P256, hashAlgo: .SHA2_256) {
-        result = provider.isValidSignature(signature: signature, message: message, signAlgo: .ECDSA_P256)
-      }
-      if !result, let signature = try? provider.sign(data: message, signAlgo: .ECDSA_SECP256k1, hashAlgo: .SHA2_256) {
-        result = provider.isValidSignature(signature: signature, message: message, signAlgo: .ECDSA_SECP256k1)
-      }
-      if result {
-        userIdAndPublicKeyPre.append(key)
-      } else {
-        log.warning("[Profile] PrivateKey valid signature failed.\(key) ")
-      }
+      userIdAndPublicKeyPre.append(key)
     }
     return userIdAndPublicKeyPre
   }
