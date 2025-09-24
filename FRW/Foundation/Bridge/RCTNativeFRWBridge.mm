@@ -164,5 +164,21 @@
     }
   }];
 }
+
+- (void)clearAllToasts { 
+  return [TurboModuleSwift clearAllToasts];
+}
+
+- (void)hideToast:(nonnull NSString *)id { 
+  return [TurboModuleSwift hideToastWithId: id];
+}
+
+- (void)showToast:(NSString *)title
+          message:(NSString *)message
+             type:(NSString *)type
+         duration:(NSNumber *)duration {
+  return [TurboModuleSwift showToastWithTitile:title message:message type:type duration:duration.intValue];
+}
+
 @end
 

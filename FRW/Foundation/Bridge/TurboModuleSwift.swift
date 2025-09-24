@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import Flow
+import SPIndicator
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -235,5 +236,30 @@ extension TurboModuleSwift {
       }
     }
     return list
+  }
+  
+  // MARK: Toast
+  @objc
+  static func clearAllToasts() {
+    HUD.dismissLoading()
+  }
+  
+  @objc
+  static func hideToast(id: String) {
+    HUD.dismissLoading()
+  }
+  
+  @objc
+  static func showToast(titile: String, message: String, type: String, duration: Int) {
+    switch type {
+    case "info", "warning":
+      HUD.info(title: titile, message: message)
+    case "error":
+      HUD.error(title: titile, message: message)
+    case "success":
+      HUD.success(title: titile, message: message)
+    default:
+      HUD.info(title: titile, message: message)
+    }
   }
 }
