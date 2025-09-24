@@ -1472,6 +1472,14 @@
 		4E63A57F2B8D75F200BBD15F /* MoveTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E63A57D2B8D75F200BBD15F /* MoveTokenViewModel.swift */; };
 		4E660F1C2C80B42F00E5239E /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 4E660F1B2C80B42F00E5239E /* CollectionViewPagingLayout */; };
 		4E660F1E2C80B43E00E5239E /* CollectionViewPagingLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 4E660F1D2C80B43E00E5239E /* CollectionViewPagingLayout */; };
+		4E67369A2E839326000AD4FD /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736992E839326000AD4FD /* ProfileManager.swift */; };
+		4E67369B2E839326000AD4FD /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736992E839326000AD4FD /* ProfileManager.swift */; };
+		4E67369E2E83DF16000AD4FD /* ProfileManager+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */; };
+		4E67369F2E83DF16000AD4FD /* ProfileManager+Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */; };
+		4E6736A12E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */; };
+		4E6736A22E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */; };
+		4E6736A42E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
+		4E6736A52E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
 		4E6ED48B2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
 		4E6ED48C2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
 		4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
@@ -3044,6 +3052,10 @@
 		4E63A5762B8BBD7700BBD15F /* ReceiveQRViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveQRViewModel.swift; sourceTree = "<group>"; };
 		4E63A57A2B8D6A4100BBD15F /* MoveTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveTokenView.swift; sourceTree = "<group>"; };
 		4E63A57D2B8D75F200BBD15F /* MoveTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveTokenViewModel.swift; sourceTree = "<group>"; };
+		4E6736992E839326000AD4FD /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Model.swift"; sourceTree = "<group>"; };
+		4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Error.swift"; sourceTree = "<group>"; };
+		4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Store.swift"; sourceTree = "<group>"; };
 		4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAccountManager.swift; sourceTree = "<group>"; };
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -5684,6 +5696,7 @@
 		15DE22CC277DBDC300B5EE03 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				4E67369C2E83DEFB000AD4FD /* ProfileManager */,
 				15F5311D2DCE03C4004C610A /* Transaction */,
 				152516F92DAFC1AF00DBC83A /* KeyStore */,
 				15E9E5D82D9A2729003A5816 /* Wallet */,
@@ -6056,6 +6069,17 @@
 				4E411DBE2CB91C3A005AD540 /* MoveComponentView.swift */,
 			);
 			path = MoveAsset;
+			sourceTree = "<group>";
+		};
+		4E67369C2E83DEFB000AD4FD /* ProfileManager */ = {
+			isa = PBXGroup;
+			children = (
+				4E6736992E839326000AD4FD /* ProfileManager.swift */,
+				4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */,
+				4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */,
+				4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */,
+			);
+			path = ProfileManager;
 			sourceTree = "<group>";
 		};
 		4E7918422B214D4900DA832F /* MultiBackup */ = {
@@ -7835,13 +7859,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7895,13 +7915,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7974,13 +7990,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8017,13 +8029,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8098,6 +8106,7 @@
 				15DFD34C2CE197F9004B0DB8 /* AppExternalLinks.swift in Sources */,
 				4E31380B2C658FB2003A73E5 /* CappedCollection.swift in Sources */,
 				15DFD3312CD4576A004B0DB8 /* FluidGradientView.swift in Sources */,
+				4E67369F2E83DF16000AD4FD /* ProfileManager+Model.swift in Sources */,
 				15DFD3322CD4576A004B0DB8 /* FluidGradient.swift in Sources */,
 				15DFD3332CD4576A004B0DB8 /* CGPoint+Extensions.swift in Sources */,
 				15DFD3342CD4576A004B0DB8 /* BlobLayer.swift in Sources */,
@@ -8446,6 +8455,7 @@
 				15DC211327819C56000B187A /* VPageIndicatorInfinite.swift in Sources */,
 				6A6BD9E0287D5467009FA262 /* PlaceholderStyle.swift in Sources */,
 				1588331128943D1D00142B35 /* SPQRFrameLayer.swift in Sources */,
+				4E6736A22E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */,
 				4E297BDB2DC9D82F006A8052 /* WalletManager+Filter.swift in Sources */,
 				4EF5129A28329ADA0014F4EC /* NFTDetailPage.swift in Sources */,
 				6A4EA49D28759554006B74D2 /* WalletSendView.swift in Sources */,
@@ -8692,6 +8702,7 @@
 				15DC21A727819C56000B187A /* VBaseTextField.swift in Sources */,
 				6A0137672897E7A0009BEF20 /* HalfSheetModal.swift in Sources */,
 				57ACE9AF2CE17901004DCA3E /* PersistentToastView.swift in Sources */,
+				4E6736A52E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */,
 				4E33F7F02E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */,
 				1575A73528B286DA00ADC513 /* LottieButton.swift in Sources */,
 				15DC210727819C56000B187A /* VSliderState.swift in Sources */,
@@ -8768,6 +8779,7 @@
 				6A5D99AC2A4D5B1600C43D36 /* DAppsListView.swift in Sources */,
 				15DC21D727819C56000B187A /* StateColors_ED.swift in Sources */,
 				4E31380D2C658FB2003A73E5 /* DebugViewer.swift in Sources */,
+				4E67369B2E839326000AD4FD /* ProfileManager.swift in Sources */,
 				6A998DAA2936769000EF133B /* StakingManager.swift in Sources */,
 				15DC21D327819C56000B187A /* StateColors_EFSEPD.swift in Sources */,
 				4E5054252C3D17A300D4BA56 /* RestoreErrorView.swift in Sources */,
@@ -9127,6 +9139,7 @@
 				4E31380A2C658FB2003A73E5 /* CappedCollection.swift in Sources */,
 				15DFD32C2CD4576A004B0DB8 /* FluidGradientView.swift in Sources */,
 				15DFD32D2CD4576A004B0DB8 /* FluidGradient.swift in Sources */,
+				4E67369E2E83DF16000AD4FD /* ProfileManager+Model.swift in Sources */,
 				15DFD32E2CD4576A004B0DB8 /* CGPoint+Extensions.swift in Sources */,
 				15DFD32F2CD4576A004B0DB8 /* BlobLayer.swift in Sources */,
 				15DFD3302CD4576A004B0DB8 /* ResizableLayer.swift in Sources */,
@@ -9475,6 +9488,7 @@
 				6A6BD9DF287D5467009FA262 /* PlaceholderStyle.swift in Sources */,
 				1588331028943D1D00142B35 /* SPQRFrameLayer.swift in Sources */,
 				15C58B2E2868A4EE00BD4FC6 /* NFTDetailPage.swift in Sources */,
+				4E6736A12E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */,
 				4E297BDC2DC9D82F006A8052 /* WalletManager+Filter.swift in Sources */,
 				6A4EA49C28759554006B74D2 /* WalletSendView.swift in Sources */,
 				6A29114928CB37AF003295BD /* TransactionListBaseHandler.swift in Sources */,
@@ -9721,6 +9735,7 @@
 				1575A73428B286DA00ADC513 /* LottieButton.swift in Sources */,
 				15C58B9C2868A4EE00BD4FC6 /* VSliderState.swift in Sources */,
 				57ACE9AE2CE17901004DCA3E /* PersistentToastView.swift in Sources */,
+				4E6736A42E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */,
 				4E33F7EF2E432F5D00B3D62F /* SendToConfig+Helper.swift in Sources */,
 				15C58B9D2868A4EE00BD4FC6 /* VMenuButtonType.swift in Sources */,
 				6AFE1D052A384E3000824D5C /* AccountSwitchView.swift in Sources */,
@@ -9797,6 +9812,7 @@
 				4EC5E0692BD8B20D003A1A24 /* EVMModels.swift in Sources */,
 				15C58BB92868A4EE00BD4FC6 /* StateColors_EFSEPD.swift in Sources */,
 				6A998DA92936769000EF133B /* StakingManager.swift in Sources */,
+				4E67369A2E839326000AD4FD /* ProfileManager.swift in Sources */,
 				4E31380C2C658FB2003A73E5 /* DebugViewer.swift in Sources */,
 				6AEA374D28A4E3FD004545D4 /* NFTUIKitListView.swift in Sources */,
 				15C58BBA2868A4EE00BD4FC6 /* NFTTabScreen.swift in Sources */,
@@ -10516,6 +10532,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -10580,6 +10597,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};

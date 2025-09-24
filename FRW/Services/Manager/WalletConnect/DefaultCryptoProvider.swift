@@ -25,7 +25,8 @@ struct DefaultCryptoProvider: CryptoProvider {
 
     public func keccak256(_ data: Data) -> Data {
         let digest = SHA3(variant: .keccak256)
-        let hash = digest.calculate(for: [UInt8](data))
+        let bytes = [UInt8](data)
+        let hash = digest.calculate(for: bytes.withUnsafeBytes { Array($0) })
         return Data(hash)
     }
 }

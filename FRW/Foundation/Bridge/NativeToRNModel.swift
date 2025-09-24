@@ -23,7 +23,7 @@ extension FlowWalletKit.Account {
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
       type: .main,
       balance: nil,
-      nfts: nil,
+      nfts: nil
     )
   }
 
@@ -57,7 +57,7 @@ extension FlowWalletKit.ChildAccount {
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
       type: .child,
       balance: nil,
-      nfts: nil,
+      nfts: nil
     )
   }
 }
@@ -85,7 +85,7 @@ extension FlowWalletKit.COA {
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
       type: .evm,
       balance: nil,
-      nfts: nil,
+      nfts: nil
     )
   }
 }
