@@ -59,14 +59,37 @@ class EmptyWalletViewModel: ObservableObject {
                     )
                 }
             }.store(in: &cancelSets)
+      
+      ProfileManager.shared.$profiles
+        .receive(on: DispatchQueue.main)
+        .map { $0 }
+        .sink { [weak self] list in
+          guard let self = self else { return }
+          self.updateList(list)
+        }.store(in: &cancelSets)
     }
+  
+  private func updateList(_ list: [ProfileModel]) {
+    var index = 0
+    let showList = ProfileManager.shared.showProfileList()
+    let result = showList.map { model in
+      index += 1
+      if model.username == nil {
+        return model.updated(username: "Profile \(index)")
+      }
+      return model
+    }
+    
+    self.profiles = result
+  }
 
     // MARK: Internal
 
     @Published
     var placeholders: [EmptyWalletViewModel.Placeholder] = []
-
-    @Published
+    @Published var profiles: [ProfileModel] = []
+    
+  @Published
     var isLoading: Bool = false
 
     func switchAccountAction(_ uid: String) {

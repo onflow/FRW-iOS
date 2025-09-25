@@ -1480,6 +1480,8 @@
 		4E6736A22E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */; };
 		4E6736A42E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
 		4E6736A52E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
+		4E6736B22E851F94000AD4FD /* UserManager+Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736B12E851F94000AD4FD /* UserManager+Profile.swift */; };
+		4E6736B32E851F94000AD4FD /* UserManager+Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736B12E851F94000AD4FD /* UserManager+Profile.swift */; };
 		4E6ED48B2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
 		4E6ED48C2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
 		4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
@@ -3056,6 +3058,7 @@
 		4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Model.swift"; sourceTree = "<group>"; };
 		4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Error.swift"; sourceTree = "<group>"; };
 		4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Store.swift"; sourceTree = "<group>"; };
+		4E6736B12E851F94000AD4FD /* UserManager+Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserManager+Profile.swift"; sourceTree = "<group>"; };
 		4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAccountManager.swift; sourceTree = "<group>"; };
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -5708,6 +5711,7 @@
 				6AA591F328854F5900F4B5CA /* Backup */,
 				4EB006D42A82660C0027D1CC /* ChildAccountAccessibleManager.swift */,
 				15DE22D1277DBE0000B5EE03 /* UserManager.swift */,
+				4E6736B12E851F94000AD4FD /* UserManager+Profile.swift */,
 				15D9282B2783395F00382226 /* HUDManager.swift */,
 				6A9D7C3D2833AC9700078F63 /* ThemeManager.swift */,
 				6AE08415284EF667003BEEF0 /* LocalUserDefaults.swift */,
@@ -8187,6 +8191,7 @@
 				153749042E26FDD60040E3F8 /* UINavigationControllerExtension.swift in Sources */,
 				153749052E26FDD60040E3F8 /* UIAlertControllerExtension.swift in Sources */,
 				153749062E26FDD60040E3F8 /* SPImagePicker.swift in Sources */,
+				4E6736B22E851F94000AD4FD /* UserManager+Profile.swift in Sources */,
 				153749072E26FDD60040E3F8 /* SPCollectionReusableView.swift in Sources */,
 				153749082E26FDD60040E3F8 /* SPPopoverController.swift in Sources */,
 				153749092E26FDD60040E3F8 /* SPDimmedButton+Colorise.swift in Sources */,
@@ -9220,6 +9225,7 @@
 				1537495C2E26FDD60040E3F8 /* UINavigationControllerExtension.swift in Sources */,
 				1537495D2E26FDD60040E3F8 /* UIAlertControllerExtension.swift in Sources */,
 				1537495E2E26FDD60040E3F8 /* SPImagePicker.swift in Sources */,
+				4E6736B32E851F94000AD4FD /* UserManager+Profile.swift in Sources */,
 				1537495F2E26FDD60040E3F8 /* SPCollectionReusableView.swift in Sources */,
 				153749602E26FDD60040E3F8 /* SPPopoverController.swift in Sources */,
 				153749612E26FDD60040E3F8 /* SPDimmedButton+Colorise.swift in Sources */,
@@ -10526,10 +10532,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10594,10 +10597,7 @@
 				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

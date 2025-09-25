@@ -81,14 +81,14 @@ struct EmptyWalletView: View {
 
     var recentListContent: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("registerd_accounts".localized)
+          Text("registerd_accounts".localized + ": (\(vm.profiles.count))")
                 .font(.inter(size: 16, weight: .bold))
                 .foregroundColor(Color.Theme.Text.black8)
                 .padding(.top, 4)
 
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 8) {
-                    ForEach(vm.placeholders, id: \.uid) { placeholder in
+                  ForEach(vm.profiles, id: \.userIdAndPublickKeyPrefix) { placeholder in
                         Button {
                             vm.switchAccountAction(placeholder.uid)
                         } label: {
@@ -115,9 +115,9 @@ struct EmptyWalletView: View {
         .maxWidth(.infinity)
     }
 
-    func createRecentLoginCell(_ placeholder: EmptyWalletViewModel.Placeholder) -> some View {
+  func createRecentLoginCell(_ placeholder: ProfileModel) -> some View {
         HStack(spacing: 16) {
-            KFImage.url(URL(string: placeholder.avatar.convertedAvatarString()))
+          KFImage.url(URL(string: placeholder.avatar?.convertedAvatarString() ?? ""))
                 .placeholder {
                     Image("placeholder")
                         .resizable()
@@ -128,11 +128,13 @@ struct EmptyWalletView: View {
                 .cornerRadius(18)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("\(placeholder.username)")
+                Text("\(placeholder.username ?? "")")
+                    .lineLimit(1)
                     .font(.inter(size: 12, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black8)
 
-                Text("\(placeholder.address)")
+                Text("\(placeholder.subTitle)")
+                    .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundStyle(Color.Theme.Text.black3)
             }

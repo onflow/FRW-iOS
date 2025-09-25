@@ -20,6 +20,9 @@ class ProfileManager: ObservableObject {
   static let shared = ProfileManager()
   
     private init() {
+#if DEBUG
+      clearAllProfiles()
+#endif
         loadCachedProfiles()
         migrateExistingProfilesIfNeeded()
     }
@@ -76,6 +79,21 @@ class ProfileManager: ObservableObject {
         let updatedProfile = existingProfile.updated(username: username, avatar: avatar)
         saveProfile(updatedProfile)
     }
+  
+  func updateProfile(userId: String, publicKey: String, with user: [UserManager.StoreUser]) {
+    let key = KeyProvider.createKey(userId: userId, publicKey: publicKey)
+    guard let existingProfile = loadProfile(userId: key) else {
+        log.warning("[Profile] Cannot update non-existent profile for user: \(userId)")
+        return
+    }
+    let result = existingProfile.updated(fromWallets: user)
+    saveProfile(result)
+  }
+  
+  func addUser(profile: ProfileModel, with users: [UserManager.StoreUser]) {
+    let result = profile.updated(fromWallets: users)
+    saveProfile(result)
+  }
 
     // MARK: - Cache Management
 
@@ -136,7 +154,7 @@ class ProfileManager: ObservableObject {
               avatar: userInfo?.avatar ?? "",
               wallets: filterList
             )
-
+            
             saveProfile(profile)
             log.info("[Profile] Migrated profile for user: \(userIdAndPublickKeyPrefix):")
         }

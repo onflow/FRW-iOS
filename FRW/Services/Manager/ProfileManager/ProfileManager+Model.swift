@@ -28,7 +28,20 @@ struct ProfileModel: Codable {
         self.wallets = wallets
     }
 
-    func updated(username: String? = nil, avatar: String? = nil, wallets: [UserManager.StoreUser]? = nil) -> ProfileModel {
+    func updated(username: String? = nil, avatar: String? = nil, fromWallets: [UserManager.StoreUser]? = nil) -> ProfileModel {
+        var existWallets = self.wallets
+        existWallets.append(contentsOf: fromWallets ?? [])
+        // Remove those with the same address
+        var seenAddresses = Set<String>()
+        existWallets = existWallets.filter { user in
+            let addr = (user.address ?? "").lowercased()
+            guard !addr.isEmpty else { return false }
+            guard !seenAddresses.contains(addr) else { return false }
+            seenAddresses.insert(addr)
+            return true
+        }
+        // sort by address
+        existWallets.sort { ($0.address ?? "") > ($1.address ?? "") }
         // Preserve original creation date but update lastUpdated
         return ProfileModel(
             userIdAndPublickKeyPrefix: self.userIdAndPublickKeyPrefix,
@@ -37,7 +50,7 @@ struct ProfileModel: Codable {
             createdAt: self.createdAt, // Preserve original creation date
             lastUpdated: Date(), // Update timestamp
             version: self.version,
-            wallets: wallets ?? self.wallets
+            wallets: existWallets
         )
     }
 
@@ -59,11 +72,11 @@ extension ProfileModel {
   }
   
   var address: String {
-    wallets.first?.address ?? "0x"
+    wallets.first?.address ?? ""
   }
   
   var subTitle: String {
-    let count = wallets.count
+    let count = Set(wallets.compactMap { $0.address?.lowercased() }.filter { !$0.isEmpty }).count
     if count > 1 {
       return "\(count) \("addresses_tag".localized)"
     }

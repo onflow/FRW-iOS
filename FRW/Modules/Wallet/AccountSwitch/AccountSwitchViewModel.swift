@@ -61,7 +61,7 @@ class AccountSwitchViewModel: ObservableObject {
 
   @Published
   var placeholders: [Placeholder] = []
-  var selectedUid: String?
+  var selectedProfile: ProfileModel?
 
   @Published var profiles: [ProfileModel] = []
 
@@ -73,11 +73,11 @@ class AccountSwitchViewModel: ObservableObject {
     Router.route(to: RouteMap.RestoreLogin.restoreList)
   }
 
-  func switchAccountAction(_ uid: String) {
+  func switchAccount(_ profile: ProfileModel) {
     Task {
       do {
         HUD.loading()
-        try await UserManager.shared.switchAccount(withUID: uid)
+        try await UserManager.shared.switchAccount(with: profile)
         HUD.dismissLoading()
       } catch {
         log.error("switch account failed", context: error)
@@ -86,6 +86,20 @@ class AccountSwitchViewModel: ObservableObject {
       }
     }
   }
+  
+//  func switchAccountAction(_ uid: String) {
+//    Task {
+//      do {
+//        HUD.loading()
+//        try await UserManager.shared.switchAccount(withUID: uid)
+//        HUD.dismissLoading()
+//      } catch {
+//        log.error("switch account failed", context: error)
+//        HUD.dismissLoading()
+//        HUD.error(title: error.localizedDescription)
+//      }
+//    }
+//  }
 
   // MARK: Private
 
