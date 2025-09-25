@@ -81,7 +81,7 @@ struct EmptyWalletView: View {
 
     var recentListContent: some View {
         VStack(alignment: .leading, spacing: 0) {
-          Text("registerd_accounts".localized + ": (\(vm.profiles.count))")
+          Text("\(vm.profiles.count) " + "registerd_accounts".localized)
                 .font(.inter(size: 16, weight: .bold))
                 .foregroundColor(Color.Theme.Text.black8)
                 .padding(.top, 4)
