@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - ProfileModel
 
-struct ProfileModel: Codable {
+struct ProfileModel: Codable, Equatable {
     let userIdAndPublickKeyPrefix: String
     let username: String?
     let avatar: String?
@@ -63,6 +63,11 @@ struct ProfileModel: Codable {
         self.lastUpdated = lastUpdated
         self.version = version
         self.wallets = wallets
+    }
+
+    // MARK: - Equatable
+    static func == (lhs: ProfileModel, rhs: ProfileModel) -> Bool {
+      return lhs.uid == rhs.uid
     }
 }
 
