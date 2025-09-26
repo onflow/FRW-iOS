@@ -92,8 +92,8 @@
     return [TurboModuleSwift getCurrentAddress];
 }
 
-- (NSString *)getWatchAddress {
-    return [TurboModuleSwift getWatchAddress];
+- (NSString * _Nullable)getDebugAddress {
+  return [TurboModuleSwift getDebugAddress];
 }
 
 - (void)sign:(nonnull NSString *)hexData
