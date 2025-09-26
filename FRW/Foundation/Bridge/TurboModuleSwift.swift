@@ -27,8 +27,8 @@ class TurboModuleSwift: NSObject {
     }
 
     @objc
-    static func getWatchAddress() -> String {
-      return LocalUserDefaults.shared.customWatchAddress ?? ""
+    static func getDebugAddress() -> String? {
+      return LocalUserDefaults.shared.customWatchAddress
     }
 
     @objc
