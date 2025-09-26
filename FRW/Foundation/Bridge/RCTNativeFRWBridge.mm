@@ -92,6 +92,10 @@
     return [TurboModuleSwift getCurrentAddress];
 }
 
+- (NSString *)getWatchAddress {
+    return [TurboModuleSwift getWatchAddress];
+}
+
 - (void)sign:(nonnull NSString *)hexData
       resolve:(nonnull RCTPromiseResolveBlock)resolve
       reject:(nonnull RCTPromiseRejectBlock)reject {

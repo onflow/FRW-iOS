@@ -135,6 +135,11 @@ enum RNBridge {
         let title: String?
     }
 
+    struct FlowPath: Codable {
+        let domain: String?
+        let identifier: String?
+    }
+
     struct TokenModel: Codable {
         let type: WalletType
         let name: String
@@ -169,8 +174,4 @@ enum RNBridge {
         case evm = "evm"
     }
 
-    struct FlowPath: Codable {
-        let domain: String?
-        let identifier: String?
-    }
 }

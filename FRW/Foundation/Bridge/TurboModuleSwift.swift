@@ -27,6 +27,11 @@ class TurboModuleSwift: NSObject {
     }
 
     @objc
+    static func getWatchAddress() -> String {
+      return WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() ?? ""
+    }
+
+    @objc
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
     }
