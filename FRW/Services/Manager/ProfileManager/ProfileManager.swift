@@ -133,7 +133,7 @@ class ProfileManager: ObservableObject {
 
         let userStoreList = LocalUserDefaults.shared.userList
         let validUserIdAndPublicKey = ProfileManager.fetchValidUserId()
-        for userIdAndPublickKeyPrefix in validUserIdAndPublicKey {
+        for (userIdAndPublickKeyPrefix, mixPublicKey) in validUserIdAndPublicKey {
             // Check if profile already exists in keychain
             if loadProfile(userId: userIdAndPublickKeyPrefix) != nil {
                 continue
@@ -144,13 +144,12 @@ class ProfileManager: ObservableObject {
             let userInfo = MultiAccountStorage.shared.getUserInfo(uid)
             
             var filterList = userStoreList.filter { store in
-              let result = KeyProvider.createKey(userId: store.userId, publicKey: store.publicKey)
-              return result == userIdAndPublickKeyPrefix
+              return uid == store.userId && mixPublicKey.lowercased().contains(store.publicKey.lowercased())
             }
             filterList.sort { $0.address ?? "" > $1.address ?? "" }
             let profile = ProfileModel(
               userIdAndPublickKeyPrefix: userIdAndPublickKeyPrefix,
-              username: userInfo?.username ?? userInfo?.username ?? "",
+              username: userInfo?.nickname ?? userInfo?.username ?? "",
               avatar: userInfo?.avatar ?? "",
               wallets: filterList
             )
@@ -211,18 +210,18 @@ extension ProfileManager {
 
 // MARK: Valid Profile List
 extension ProfileManager {
-  static func fetchValidUserId() -> [String] {
-    var userIdAndPublicKeyPre: [String] = []
+  static func fetchValidUserId() -> [String: String] {
+    var userIdAndPublicKeyPre: [String: String] = [:]
     // Secure Enclave Key
     let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
-    guard let message = "test message".data(using: .utf8) else {
-      log.error("[Profile] encode message failed. This shouldn't happen")
-      return []
-    }
-
+    
     for key in seKeylist {
       guard let se = try? SecureEnclaveKey.wallet(id: key) else {
         log.warning("[Profile] SecureEnclaveKey get failed.\(key) ")
+        continue
+      }
+      guard let message = "test message".data(using: .utf8) else {
+        log.error("[Profile] encode message failed. This shouldn't happen")
         continue
       }
       guard let signature = try? se.sign(data: message, hashAlgo: .SHA2_256) else {
@@ -231,7 +230,8 @@ extension ProfileManager {
       }
       let result = se.isValidSignature(signature: signature, message: message)
       if result {
-        userIdAndPublicKeyPre.append(key)
+        let publicKey = se.publicKey()?.hexValue
+        userIdAndPublicKeyPre[key] = publicKey
       } else {
         log.warning("[Profile] SecureEnclaveKey valid signature failed.\(key) ")
       }
@@ -243,7 +243,8 @@ extension ProfileManager {
         log.warning("[Profile] SeedPhraseKey get failed.\(key) ")
         continue
       }
-      userIdAndPublicKeyPre.append(key)
+      let publicKey = (provider.publicKey(signAlgo: .ECDSA_P256)?.hexValue ?? "") + "," + (provider.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue ?? "") 
+      userIdAndPublicKeyPre[key] = publicKey
     }
     // PrivateKey
     let pkKeyList = FlowWalletKit.PrivateKey.PKStorage.allKeys
@@ -252,7 +253,8 @@ extension ProfileManager {
         log.warning("[Profile] PrivateKey get failed.\(key) ")
         continue
       }
-      userIdAndPublicKeyPre.append(key)
+      let publicKey = (provider.publicKey(signAlgo: .ECDSA_P256)?.hexValue ?? "") + "," + (provider.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue ?? "") 
+      userIdAndPublicKeyPre[key] = publicKey
     }
     return userIdAndPublicKeyPre
   }
