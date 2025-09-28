@@ -44,17 +44,7 @@ class AccountSwitchViewModel: ObservableObject {
   }
   
   private func updateList(_ list: [ProfileModel]) {
-    var index = 0
-    let showList = ProfileManager.shared.showProfileList()
-    let result = showList.map { model in
-      index += 1
-      if model.username == nil {
-        return model.updated(username: "Profile \(index)")
-      }
-      return model
-    }
-    
-    self.profiles = result
+    self.profiles = ProfileManager.shared.showProfileList()
   }
 
   // MARK: Internal

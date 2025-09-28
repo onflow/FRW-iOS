@@ -70,18 +70,7 @@ class EmptyWalletViewModel: ObservableObject {
     }
   
   private func updateList(_ list: [ProfileModel]) {
-    
-    var result: [ProfileModel] = []
-    let showList = ProfileManager.shared.showProfileList()
-    for (index, model) in showList.enumerated() {
-      var tmp = model
-      if model.username == nil {
-        tmp = model.updated(username: "Profile \(index + 1)")
-      }
-      result.append(tmp)
-    }
-    
-    self.profiles = result
+    self.profiles = ProfileManager.shared.showProfileList()
   }
 
     // MARK: Internal

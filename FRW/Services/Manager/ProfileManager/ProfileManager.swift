@@ -196,6 +196,7 @@ class ProfileManager: ObservableObject {
 extension ProfileManager {
   func showProfileList() -> [ProfileModel] {
     var profileList: [String: ProfileModel] = [:]
+    // filter key and find the largest number
     for profile in profiles {
       let key = profile.uid + (profile.wallets.first?.address ?? "")
       if let existingProfile = profileList[key], existingProfile.wallets.count > profile.wallets.count {
@@ -204,7 +205,20 @@ extension ProfileManager {
         profileList[key] = profile
       }
     }
-    return profileList.map { $0.value }
+    // get the list of Profile
+    let showList = profileList.map { $0.value }
+    // name if username is nil, Preventive
+    var result: [ProfileModel] = []
+    for (index, model) in showList.enumerated() {
+      var tmp = model
+      if model.username == nil {
+        tmp = model.updated(username: "Profile \(index + 1)")
+      }
+      result.append(tmp)
+    }
+    // sort by username for user
+    result.sort { ($0.username ?? "") < ($1.username ?? "") }
+    return result
   }
 }
 
