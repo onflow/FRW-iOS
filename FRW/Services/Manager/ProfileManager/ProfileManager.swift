@@ -71,39 +71,8 @@ class ProfileManager: ObservableObject {
       log.error("[Profile] Failed to delete profile for user \(userId): \(error)")
     }
   }
-
-  func updateProfile(userId: String, username: String? = nil, avatar: String? = nil) {
-    guard let existingProfile = loadProfile(userId: userId) else {
-      log.warning("[Profile] Cannot update non-existent profile for user: \(userId)")
-      return
-    }
-
-    let updatedProfile = existingProfile.updated(username: username, avatar: avatar)
-    saveProfile(updatedProfile)
-  }
-
-  func addUser(userInfo: UserInfo, uid: String) {
-    let userStoreList = LocalUserDefaults.shared.userList
-    var filterList = userStoreList.filter { store in
-      uid == store.userId
-    }
-    filterList.sort { $0.address ?? "" > $1.address ?? "" }
-    var newProfile: ProfileModel?
-    if var existProfile = profiles.filter({ $0.uid == uid }).first {
-      newProfile = existProfile.updated(fromWallets: filterList)
-    } else {}
-  }
-
-  func updateProfile(userId: String, publicKey: String, with user: [UserManager.StoreUser]) {
-    guard let existingProfile = loadProfile(userId: userId) else {
-      log.warning("[Profile] Cannot update non-existent profile for user: \(userId)")
-      return
-    }
-    let result = existingProfile.updated(fromWallets: user)
-    saveProfile(result)
-  }
-
-  func addUser(profile: ProfileModel, with users: [UserManager.StoreUser]) {
+  
+  func replace(profile: ProfileModel, with users: [UserManager.StoreUser]) {
     let result = profile.updated(fromWallets: users)
     saveProfile(result)
   }
