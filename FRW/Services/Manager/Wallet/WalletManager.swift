@@ -210,6 +210,8 @@ extension WalletManager {
             Task {
                 do {
                     try await walletEntity?.fetchAccount()
+                    ProfileManager.shared.update(uid: uid, keyProvider: provider, with: walletEntity)
+                  
                 } catch {
                     let _ = try await walletEntity?.fetchAllNetworkAccounts()
                 }

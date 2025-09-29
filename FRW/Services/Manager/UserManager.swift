@@ -59,7 +59,7 @@ class UserManager: ObservableObject {
       do {
         guard let uid = activatedUID else { return }
         try MultiAccountStorage.shared.saveUserInfo(userInfo, uid: uid)
-        try ProfileManager.shared.updateProfile(userInfo: userInfo, with: uid)
+        try ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
       } catch {
         log.error("save user info failed", context: error)
       }
@@ -569,7 +569,8 @@ extension UserManager {
     userName: String,
     flowKey: Flow.AccountKey,
     privateKey: any KeyProtocol,
-    isImport: Bool = false
+    isImport: Bool = false,
+    flowAccounts: [FlowWalletKit.Account]? = nil
   ) async throws {
     if Auth.auth().currentUser?.isAnonymous != true {
       try await Auth.auth().signInAnonymously()
@@ -735,7 +736,7 @@ extension UserManager {
         )
         userStoreList.append(storeUser)
       }
-      ProfileManager.shared.addUser(profile: profile, with: userStoreList)
+      ProfileManager.shared.replace(profile: profile, with: userStoreList)
     }
 
     try await finishLogin(customToken: customToken)

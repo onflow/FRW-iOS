@@ -406,6 +406,17 @@ struct DeveloperModeView: RouteableView {
                                     LocalUserDefaults.shared.customToken = []
                                     HUD.success(title: "done.")
                                 }
+                              
+                              HStack {
+                                Text("Copy all Profile Info. (click)")
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                  copyProfile()
+                                  HUD.success(title: "done.")
+                              }
                             }
                             .background(.LL.bgForIcon)
                             .cornerRadius(16)
@@ -456,6 +467,13 @@ struct DeveloperModeView: RouteableView {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 8)
     }
+}
+
+extension DeveloperModeView {
+  private func copyProfile() {
+    let result = ProfileManager.shared.profiles.map { "\($0.username ?? $0.uid):" + $0.wallets.reduce("", { $0 + ($1.address ?? "") + "," }) }
+    UIPasteboard.general.string = result.reduce("", { $0 + $1 + "###" })
+  }
 }
 
 // MARK: DeveloperModeView.Cell
