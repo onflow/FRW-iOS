@@ -267,4 +267,11 @@ extension TurboModuleSwift {
       HUD.info(title: titile, message: message)
     }
   }
+  
+  @objc
+  static func getLanguage() -> String {
+    // zh,en,ru,ja
+    let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+    return languageCode
+  }
 }
