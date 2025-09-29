@@ -1300,6 +1300,8 @@
 		4E1DD8D22B162F9B0055E510 /* SyncConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DD8D02B162F9B0055E510 /* SyncConfirmView.swift */; };
 		4E1DE2C52C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DE2C42C6AF412001022B7 /* ThreadSafeDictionary.swift */; };
 		4E1DE2C62C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DE2C42C6AF412001022B7 /* ThreadSafeDictionary.swift */; };
+		4E20AFCD2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */; };
+		4E20AFCE2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */; };
 		4E2380FE2B186A6000756874 /* WalletConnect+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */; };
 		4E2380FF2B186A6000756874 /* WalletConnect+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */; };
 		4E2381012B186FD600756874 /* DeviceInfoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2381002B186FD600756874 /* DeviceInfoItem.swift */; };
@@ -2977,6 +2979,7 @@
 		4E1DD8CA2B1629560055E510 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		4E1DD8D02B162F9B0055E510 /* SyncConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmView.swift; sourceTree = "<group>"; };
 		4E1DE2C42C6AF412001022B7 /* ThreadSafeDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeDictionary.swift; sourceTree = "<group>"; };
+		4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Login.swift"; sourceTree = "<group>"; };
 		4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+Tools.swift"; sourceTree = "<group>"; };
 		4E2381002B186FD600756874 /* DeviceInfoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoItem.swift; sourceTree = "<group>"; };
 		4E2381032B18707D00756874 /* SyncAddDeviceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAddDeviceViewModel.swift; sourceTree = "<group>"; };
@@ -6078,6 +6081,7 @@
 				4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */,
 				4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */,
 				4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */,
+				4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */,
 			);
 			path = ProfileManager;
 			sourceTree = "<group>";
@@ -8877,6 +8881,7 @@
 				4EFF94BC2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
 				15DC210F27819C56000B187A /* VRangeSliderState.swift in Sources */,
 				6AB5FBA02892652900FA2261 /* BackupiCloudTarget.swift in Sources */,
+				4E20AFCD2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */,
 				15D5774B277C0FFB00045E79 /* UsernameViewModel.swift in Sources */,
 				151FEA112E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */,
 				151FEA122E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */,
@@ -9910,6 +9915,7 @@
 				4EFF94BB2AEED15300365EF7 /* DevicesInfoView.swift in Sources */,
 				15C58BEB2868A4EE00BD4FC6 /* VRangeSliderState.swift in Sources */,
 				6AB5FB9F2892652900FA2261 /* BackupiCloudTarget.swift in Sources */,
+				4E20AFCE2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */,
 				15C58BEC2868A4EE00BD4FC6 /* UsernameViewModel.swift in Sources */,
 				151FEA3D2E26F2F100A33927 /* JXSegmentedTitleDynamicConfiguration.swift in Sources */,
 				151FEA3E2E26F2F100A33927 /* JXSegmentedTitleImageItemModel.swift in Sources */,
@@ -10526,10 +10532,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10594,10 +10597,7 @@
 				MARKETING_VERSION = 2.4.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

@@ -57,7 +57,8 @@ enum LLError: String, BaseError {
     case decodeFailed
     case cannotFindFlowAccount
     case unknown
-
+    case providerNotFoundWithProfile
+  
     var baseCode: Int { 1000 }
 }
 

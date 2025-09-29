@@ -308,6 +308,46 @@ extension WalletManager {
         }
         return provider
     }
+  
+    /*
+     * find the key by public key from keychain.
+     * for profile.
+     */
+    func keyProvider(uidAndPublicKey: String) -> (any KeyProtocol)? {
+      let uid = KeyProvider.getId(with: uidAndPublicKey)
+      let suffix = KeyProvider.getSuffix(with: uidAndPublicKey)
+      if let provider = try? SecureEnclaveKey.wallet(id: uid), let publicKey = provider.publicKey()?.hexString {
+        if publicKey.contains(suffix) {
+          return provider
+        }
+      }
+      
+      if let provider = try? SeedPhraseKey.wallet(id: uid) {
+        if let publicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString, publicKey.contains(suffix) {
+          return provider
+        }
+        if let publicKey = provider.publicKey(signAlgo: .ECDSA_P256)?.hexString, publicKey.contains(suffix) {
+          return provider
+        }
+      }
+      
+      if let provider = try? PrivateKey.wallet(id: uid) {
+        if let publicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString, publicKey.contains(suffix) {
+          return provider
+        }
+        if let publicKey = provider.publicKey(signAlgo: .ECDSA_P256)?.hexString, publicKey.contains(suffix) {
+          return provider
+        }
+      }
+      return nil
+    }
+    // Find the corresponding user based on the uid and public
+    private func user(uidAndPublicKey: String) -> [UserManager.StoreUser] {
+        let uid = KeyProvider.getId(with: uidAndPublicKey)
+        let suffix = KeyProvider.getSuffix(with: uidAndPublicKey)
+        let list = LocalUserDefaults.shared.userList.filter { $0.userId == uid && $0.publicKey.contains(suffix) }
+        return list
+    }
 }
 
 // MARK: - Child Account

@@ -109,14 +109,14 @@ struct AccountSwitchView: PresentActionView {
                 self.offset = offset
             } content: {
                 LazyVStack(spacing: 20) {
-                  ForEach(vm.profiles, id: \.userIdAndPublickKeyPrefix) { placeholder in
+                  ForEach(vm.profiles, id: \.uid) { placeholder in
                         Button {
-                          vm.selectedUid = placeholder.uid
+                          vm.selectedProfile = placeholder
                             if currentNetwork != .mainnet {
                                 showSwitchUserAlert = true
                             } else {
                                 Router.dismiss {
-                                    vm.switchAccountAction(placeholder.uid)
+                                  vm.switchAccount(placeholder)
                                 }
                             }
 
@@ -126,9 +126,9 @@ struct AccountSwitchView: PresentActionView {
                         .alert("wrong_network_title".localized, isPresented: $showSwitchUserAlert) {
                             Button("switch_to_mainnet".localized) {
                                 WalletManager.shared.changeNetwork(.mainnet)
-                                if let uid = vm.selectedUid {
+                              if let profile = vm.selectedProfile {
                                     Router.dismiss {
-                                        vm.switchAccountAction(uid)
+                                      vm.switchAccount(profile)
                                     }
                                 }
                             }
