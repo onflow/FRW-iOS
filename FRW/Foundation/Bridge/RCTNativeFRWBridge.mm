@@ -184,5 +184,8 @@
   return [TurboModuleSwift showToastWithTitile:title message:message type:type duration:duration.intValue];
 }
 
+- (NSString *)getLanguage {
+  return [TurboModuleSwift getLanguage];
+}
 @end
 
