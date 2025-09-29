@@ -92,6 +92,10 @@
     return [TurboModuleSwift getCurrentAddress];
 }
 
+- (NSString * _Nullable)getDebugAddress {
+  return [TurboModuleSwift getDebugAddress];
+}
+
 - (void)sign:(nonnull NSString *)hexData
       resolve:(nonnull RCTPromiseResolveBlock)resolve
       reject:(nonnull RCTPromiseRejectBlock)reject {
