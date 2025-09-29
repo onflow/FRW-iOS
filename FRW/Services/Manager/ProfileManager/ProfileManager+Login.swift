@@ -9,16 +9,18 @@ import Foundation
 
 extension ProfileManager {
   func updateOrDeleteProfile(userInfo: UserInfo?, with uid: String) throws {
-    if let userInfo {
-      guard loadProfile(userId: uid) == nil else {
-        return
-      }
+    guard let userInfo else {
+//      deleteProfile(userId: uid)
+      return
+    }
+    guard let profile = loadProfile(userId: uid) else {
       let users = findStoreUser(uid: uid)
       let newProfile = ProfileModel(userInfo: userInfo, with: uid, wallets: users)
       saveProfile(newProfile)
-    } else {
-      deleteProfile(userId: uid)
+      return
     }
+    let result = profile.updated(username: userInfo.nickname, avatar: userInfo.avatar )
+    saveProfile(result)
   }
   
   func findStoreUser(uid: String) -> [UserManager.StoreUser] {
