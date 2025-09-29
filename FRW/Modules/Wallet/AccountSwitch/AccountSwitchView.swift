@@ -109,7 +109,7 @@ struct AccountSwitchView: PresentActionView {
                 self.offset = offset
             } content: {
                 LazyVStack(spacing: 20) {
-                  ForEach(vm.profiles, id: \.userIdAndPublickKeyPrefix) { placeholder in
+                  ForEach(vm.profiles, id: \.uid) { placeholder in
                         Button {
                           vm.selectedProfile = placeholder
                             if currentNetwork != .mainnet {

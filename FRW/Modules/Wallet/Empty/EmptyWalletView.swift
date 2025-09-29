@@ -88,7 +88,7 @@ struct EmptyWalletView: View {
 
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 8) {
-                  ForEach(vm.profiles, id: \.userIdAndPublickKeyPrefix) { placeholder in
+                  ForEach(vm.profiles, id: \.uid) { placeholder in
                         Button {
                             vm.switchAccountAction(placeholder.uid)
                         } label: {
@@ -156,7 +156,7 @@ struct EmptyWalletView: View {
 
     @ViewBuilder
     private var middleContent: some View {
-        if vm.placeholders.isEmpty {
+      if vm.profiles.isEmpty {
             noAccountsMiddleContent
         } else {
             recentListContent

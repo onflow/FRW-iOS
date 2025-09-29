@@ -59,6 +59,7 @@ class UserManager: ObservableObject {
       do {
         guard let uid = activatedUID else { return }
         try MultiAccountStorage.shared.saveUserInfo(userInfo, uid: uid)
+        try ProfileManager.shared.updateProfile(userInfo: userInfo, with: uid)
       } catch {
         log.error("save user info failed", context: error)
       }
@@ -372,7 +373,7 @@ extension UserManager {
     )
 
     let secpPublicKey = provider.publicKey(signAlgo: .ECDSA_SECP256k1)
-    guard var publicKey = secpPublicKey?.hexString else {
+    guard let publicKey = secpPublicKey?.hexString else {
       throw WalletError.emptyPublicKey
     }
 
@@ -381,7 +382,7 @@ extension UserManager {
     let hashAlgo = Flow.HashAlgorithm.SHA2_256
     let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
 
-    guard var signature = try? provider.sign(
+    guard let signature = try? provider.sign(
       data: data,
       signAlgo: signAlgo,
       hashAlgo: hashAlgo
@@ -509,26 +510,6 @@ extension UserManager {
       account: accountKey
     )
     await WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: storeUser)
-
-    if let validAccount {
-      var userStoreList: [StoreUser] = []
-      for account in validAccount {
-        let storeUser = StoreUser(
-          publicKey: publicKey,
-          address: account.hexAddr,
-          userId: userId,
-          keyType: keyProvider.keyType,
-          account: accountKey
-        )
-        userStoreList.append(storeUser)
-      }
-      ProfileManager.shared.updateProfile(
-        userId: userId,
-        publicKey: publicKey,
-        with: userStoreList
-      )
-    }
-
     try await finishLogin(customToken: customToken)
   }
 
@@ -580,6 +561,7 @@ extension UserManager {
       throw LLError.restoreLoginFailed
     }
     try await finishLogin(customToken: customToken)
+    
   }
 
   func importLogin(
@@ -669,7 +651,7 @@ extension UserManager {
       account: flowKey.toStoreKey()
     )
     LocalUserDefaults.shared.addUser(user: store)
-    WalletManager.shared.updateKeyProvider(provider: privateKey, storeUser: store)
+    await WalletManager.shared.updateKeyProvider(provider: privateKey, storeUser: store)
     log.debug("[user] \(store)")
     try await finishLogin(customToken: customToken)
   }
@@ -683,9 +665,7 @@ extension UserManager {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
     }
-
-    guard let keyProvider = await WalletManager.shared
-      .keyProvider(uidAndPublicKey: profile.userIdAndPublickKeyPrefix) else {
+    guard let keyProvider = await WalletManager.shared.keyProvider(with: profile.uid) else {
       throw LLError.providerNotFoundWithProfile
     }
 
