@@ -561,7 +561,6 @@ extension UserManager {
       throw LLError.restoreLoginFailed
     }
     try await finishLogin(customToken: customToken)
-    
   }
 
   func importLogin(
@@ -666,7 +665,7 @@ extension UserManager {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
     }
-    guard let keyProvider = await WalletManager.shared.keyProvider(with: profile.uid) else {
+    guard let keyProvider = await WalletManager.shared.keyProvider(profile: profile) else {
       throw LLError.providerNotFoundWithProfile
     }
 

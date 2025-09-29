@@ -8,6 +8,7 @@
 import Foundation
 import FlowWalletKit
 import WalletCore
+import Flow
 
 // MARK: - ProfileManager
 
@@ -16,10 +17,12 @@ class ProfileManager: ObservableObject {
 
   private init() {
     #if DEBUG
-//      clearAllProfiles()
+    clearAllProfiles()
     #endif
     loadCachedProfiles()
-    migrateExistingProfilesIfNeeded()
+    Task {
+      await migrateExistingProfilesIfNeeded()
+    }
   }
 
   // MARK: Internal
@@ -71,7 +74,7 @@ class ProfileManager: ObservableObject {
       log.error("[Profile] Failed to delete profile for user \(userId): \(error)")
     }
   }
-  
+
   func replace(profile: ProfileModel, with users: [UserManager.StoreUser]) {
     let result = profile.updated(fromWallets: users)
     saveProfile(result)
@@ -136,7 +139,7 @@ class ProfileManager: ObservableObject {
 
   // MARK: - Migration
 
-  private func migrateExistingProfilesIfNeeded() {
+  private func migrateExistingProfilesIfNeeded() async {
     // Check if migration has already been completed
     let migrationKey = "profiles_migration_completed_v301"
     if UserDefaults.standard.bool(forKey: migrationKey) {
@@ -146,18 +149,22 @@ class ProfileManager: ObservableObject {
     log.info("[Profile] Starting profile migration...")
 
     let userStoreList = LocalUserDefaults.shared.userList
-    let validUserIdAndPublicKey = ProfileManager.fetchValidUserId()
+    let validUserIdAndPublicKey = await fetchValidUserId()
     for (uid, _) in validUserIdAndPublicKey {
       if loadProfile(userId: uid) != nil {
         continue
       }
       let userInfo = MultiAccountStorage.shared.getUserInfo(uid)
+      log.info("[Profile]-userInfo: \(uid) ## \(userInfo)")
       var filterList = userStoreList.filter { $0.userId == uid }
       filterList.sort { $0.address ?? "" > $1.address ?? "" }
+      guard !filterList.isEmpty else {
+        continue
+      }
       let profile = ProfileModel(
         uid: uid,
-        username: userInfo?.nickname ?? userInfo?.username ?? "",
-        avatar: userInfo?.avatar ?? "",
+        username: userInfo?.nickname ?? userInfo?.username,
+        avatar: userInfo?.avatar,
         wallets: filterList
       )
       saveProfile(profile)
@@ -205,13 +212,13 @@ extension ProfileManager {
 // MARK: Valid Profile List
 
 extension ProfileManager {
-  static func fetchValidUserId() -> [String: String] {
+  func fetchValidUserId() async -> [String: String] {
     var userIdAndPublicKeyPre: [String: String] = [:]
     // Secure Enclave Key
     let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
 
     for key in seKeylist {
-      guard let se = try? SecureEnclaveKey.wallet(id: key) else {
+      guard let provider = try? SecureEnclaveKey.wallet(id: key) else {
         log.warning("[Profile] SecureEnclaveKey get failed.\(key) ")
         continue
       }
@@ -219,13 +226,18 @@ extension ProfileManager {
         log.error("[Profile] encode message failed. This shouldn't happen")
         continue
       }
-      guard let signature = try? se.sign(data: message, hashAlgo: .SHA2_256) else {
+      guard let allAccount = try? await fetchAllAccount(keyProvider: provider),
+            !allAccount.isEmpty
+      else {
+        continue
+      }
+      guard let signature = try? provider.sign(data: message, hashAlgo: .SHA2_256) else {
         log.warning("[Profile] SecureEnclaveKey sign message failed.\(key) ")
         continue
       }
-      let result = se.isValidSignature(signature: signature, message: message)
+      let result = provider.isValidSignature(signature: signature, message: message)
       if result {
-        let publicKey = se.publicKey()?.hexValue
+        let publicKey = provider.publicKey()?.hexValue
         let uid = KeyProvider.getId(with: key)
         userIdAndPublicKeyPre[uid] = publicKey
       } else {
@@ -257,5 +269,16 @@ extension ProfileManager {
       userIdAndPublicKeyPre[uid] = publicKey
     }
     return userIdAndPublicKeyPre
+  }
+
+  private func fetchAllAccount(keyProvider: any KeyProtocol) async throws
+    -> [FlowWalletKit.Account] {
+    let supportNetworks: Set<Flow.ChainID> = [
+      .mainnet,
+      .testnet,
+    ]
+    let entity = FlowWalletKit.Wallet(type: .key(keyProvider), networks: supportNetworks)
+    try await entity.fetchAccount()
+    return entity.accounts?[.mainnet] ?? []
   }
 }

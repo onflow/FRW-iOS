@@ -90,7 +90,7 @@ struct EmptyWalletView: View {
                 LazyVStack(spacing: 8) {
                   ForEach(vm.profiles, id: \.uid) { placeholder in
                         Button {
-                            vm.switchAccountAction(placeholder.uid)
+                          vm.switchAccount(placeholder)
                         } label: {
                             createRecentLoginCell(placeholder)
                         }
