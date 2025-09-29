@@ -1302,6 +1302,8 @@
 		4E1DE2C62C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1DE2C42C6AF412001022B7 /* ThreadSafeDictionary.swift */; };
 		4E20AFCD2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */; };
 		4E20AFCE2E8A188000EEC969 /* ProfileManager+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */; };
+		4E20AFD02E8AAFB600EEC969 /* ProfileManager+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCF2E8AAFB600EEC969 /* ProfileManager+Wallet.swift */; };
+		4E20AFD12E8AAFB600EEC969 /* ProfileManager+Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E20AFCF2E8AAFB600EEC969 /* ProfileManager+Wallet.swift */; };
 		4E2380FE2B186A6000756874 /* WalletConnect+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */; };
 		4E2380FF2B186A6000756874 /* WalletConnect+Tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */; };
 		4E2381012B186FD600756874 /* DeviceInfoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2381002B186FD600756874 /* DeviceInfoItem.swift */; };
@@ -2980,6 +2982,7 @@
 		4E1DD8D02B162F9B0055E510 /* SyncConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmView.swift; sourceTree = "<group>"; };
 		4E1DE2C42C6AF412001022B7 /* ThreadSafeDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeDictionary.swift; sourceTree = "<group>"; };
 		4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Login.swift"; sourceTree = "<group>"; };
+		4E20AFCF2E8AAFB600EEC969 /* ProfileManager+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Wallet.swift"; sourceTree = "<group>"; };
 		4E2380FD2B186A6000756874 /* WalletConnect+Tools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+Tools.swift"; sourceTree = "<group>"; };
 		4E2381002B186FD600756874 /* DeviceInfoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoItem.swift; sourceTree = "<group>"; };
 		4E2381032B18707D00756874 /* SyncAddDeviceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAddDeviceViewModel.swift; sourceTree = "<group>"; };
@@ -6082,6 +6085,7 @@
 				4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */,
 				4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */,
 				4E20AFCC2E8A188000EEC969 /* ProfileManager+Login.swift */,
+				4E20AFCF2E8AAFB600EEC969 /* ProfileManager+Wallet.swift */,
 			);
 			path = ProfileManager;
 			sourceTree = "<group>";
@@ -8471,6 +8475,7 @@
 				4E49B72E2DDDAAC600BC0D46 /* Int.swift in Sources */,
 				4EB2C6AC2B49017000EB899C /* BackupListViewModel.swift in Sources */,
 				15DC20D727819C56000B187A /* VPlainButtonState.swift in Sources */,
+				4E20AFD12E8AAFB600EEC969 /* ProfileManager+Wallet.swift in Sources */,
 				1575A74428B29D2700ADC513 /* SVGWebView.swift in Sources */,
 				15DC1D4A27814AD1000B187A /* TextFieldStyle.swift in Sources */,
 				15D9283027843D4900382226 /* ManualBackupView.swift in Sources */,
@@ -9505,6 +9510,7 @@
 				4E49B72D2DDDAAC600BC0D46 /* Int.swift in Sources */,
 				1575A74328B29D2700ADC513 /* SVGWebView.swift in Sources */,
 				15C58B312868A4EE00BD4FC6 /* TextFieldStyle.swift in Sources */,
+				4E20AFD02E8AAFB600EEC969 /* ProfileManager+Wallet.swift in Sources */,
 				15C58B322868A4EE00BD4FC6 /* ManualBackupView.swift in Sources */,
 				15C58B332868A4EE00BD4FC6 /* StateColors_EPLD.swift in Sources */,
 				15F2443428CAC47100C1090E /* SafariView.swift in Sources */,

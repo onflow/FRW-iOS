@@ -16,6 +16,8 @@ struct ProfileModel: Codable, Equatable {
     uid: String,
     username: String? = nil,
     avatar: String? = nil,
+    createdAt: Date = Date(),
+    lastUpdated: Date = Date(),
     wallets: [UserManager.StoreUser] = []
   ) {
     let version = Bundle.main
@@ -23,13 +25,13 @@ struct ProfileModel: Codable, Equatable {
     self.uid = uid
     self.username = username
     self.avatar = avatar
-    self.createdAt = Date()
-    self.lastUpdated = Date()
+    self.createdAt = createdAt
+    self.lastUpdated = lastUpdated
     self.version = version
     self.wallets = wallets
   }
 
-  init(userInfo: UserInfo, with uid: String) {
+  init(userInfo: UserInfo, with uid: String, wallets: [UserManager.StoreUser] = []) {
     let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
     self.uid = uid
     self.username = userInfo.nickname
@@ -37,7 +39,7 @@ struct ProfileModel: Codable, Equatable {
     self.createdAt = Date()
     self.lastUpdated = Date()
     self.version = version
-    self.wallets = []
+    self.wallets = wallets
   }
 
   // Additional initializer to support preserving dates
@@ -75,8 +77,18 @@ struct ProfileModel: Codable, Equatable {
     lhs.uid == rhs.uid
   }
 
-  func updated(
-    username: String? = nil,
+  func replace(with users: [UserManager.StoreUser]) -> ProfileModel {
+    let sortedUser = users.sorted { ($0.address ?? "") > ($1.address ?? "") }
+    return ProfileModel(
+      uid: uid,
+      username: username,
+      avatar: avatar,
+      lastUpdated: Date(),
+      wallets: sortedUser
+    )
+  }
+  
+  func updated(username: String? = nil,
     avatar: String? = nil,
     fromWallets: [UserManager.StoreUser]? = nil
   ) -> ProfileModel {
