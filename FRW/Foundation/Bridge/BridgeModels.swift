@@ -90,7 +90,7 @@ enum RNBridge {
 
     struct InitialProps: Codable {
         let screen: ScreenType
-        let sendToConfig: SendToConfig?
+        let sendToConfig: String?
     }
 
     struct EnvironmentVariables: Codable {

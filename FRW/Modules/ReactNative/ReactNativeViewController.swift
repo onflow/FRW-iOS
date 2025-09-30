@@ -205,9 +205,11 @@ class ReactNativeViewController: UIViewController {
 extension RNBridge.InitialProps {
   var route: ReactNativeViewController.Route {
     if screen == .sendAsset {
-      guard let config = sendToConfig else {
+      
+      guard let json = sendToConfig, let config = RNBridge.SendToConfig.fromJson(json: json) else {
         return .selectAssets
       }
+      
       if config.targetAddress != nil && config.selectedToken != nil {
         return .sendToken
       } else if config.selectedToken != nil {

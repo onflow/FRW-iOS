@@ -110,3 +110,24 @@ extension RNBridge.SendToConfig {
       }
   }
 }
+
+extension RNBridge.SendToConfig {
+  func toJSON() -> String? {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    guard let data = try? encoder.encode(self) else { return nil }
+    return String(data: data, encoding: .utf8)
+  }
+  
+  static func fromJson(json: String) -> RNBridge.SendToConfig? {
+
+    let decoder = JSONDecoder()
+    guard let data = json.data(using: .utf8),
+          let config = try? decoder.decode(RNBridge.SendToConfig.self, from: data) else {
+      log.error("❌ Failed to decode SendToConfig from json: \(json)")
+      return nil
+    }
+    return config
+  }
+  
+}
