@@ -18,7 +18,7 @@ extension RouteMap.ReactNative: RouterTarget {
   func onPresent(navi: UINavigationController) {
     switch self {
     case .sendAsset(let config):
-      let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config)
+      let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config?.toJSON())
       navi.present(ReactNativeViewController(initialProps: props))
     }
   }
