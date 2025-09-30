@@ -125,7 +125,6 @@ extension RNBridge.SendToConfig {
     guard let data = json.data(using: .utf8),
           let config = try? decoder.decode(RNBridge.SendToConfig.self, from: data) else {
       log.error("❌ Failed to decode SendToConfig from json: \(json)")
-      // 这里假设SendToConfig有默认构造器，否则需要补全所有字段
       return nil
     }
     return config
