@@ -476,6 +476,8 @@
 		159DEC8928C6753700493E9F /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC8728C6753700493E9F /* Colors.swift */; };
 		159DEC9228C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */; };
 		159DEC9328C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */; };
+		159F7FC42E96B78600B153A2 /* AlertOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */; };
+		159F7FC52E96B78600B153A2 /* AlertOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */; };
 		15A87E8E2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */; };
 		15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */; };
 		15A87E912E26D9E100F0E550 /* TurboModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */; };
@@ -2671,6 +2673,7 @@
 		159CFF2A27887ED3006421FB /* InputMnemonicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicView.swift; sourceTree = "<group>"; };
 		159DEC8728C6753700493E9F /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		159DEC9128C67DB900493E9F /* NFTDetailPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTDetailPageViewModel.swift; sourceTree = "<group>"; };
+		159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertOverlayView.swift; sourceTree = "<group>"; };
 		15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeFRWBridge.mm; sourceTree = "<group>"; };
 		15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboModuleSwift.swift; sourceTree = "<group>"; };
 		15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymmetricEncryption.swift; sourceTree = "<group>"; };
@@ -5926,6 +5929,7 @@
 		15F607322E963E82008D0EDD /* Alert */ = {
 			isa = PBXGroup;
 			children = (
+				159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */,
 				15F607312E963E82008D0EDD /* AlertCenter.swift */,
 				15F607382E963E82008D0EDD /* SurgePricingAlertView.swift */,
 			);
@@ -8359,6 +8363,7 @@
 				15DC1F7327819B74000B187A /* SpinnerStyle.swift in Sources */,
 				4E1DE2C62C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */,
 				4E2381022B186FD600756874 /* DeviceInfoItem.swift in Sources */,
+				159F7FC52E96B78600B153A2 /* AlertOverlayView.swift in Sources */,
 				15DC20A927819C56000B187A /* VWebLink.swift in Sources */,
 				4E131AA12CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */,
 				4EB9A7C12AE9EF53004DA67F /* AccountKeyRevokeView.swift in Sources */,
@@ -9401,6 +9406,7 @@
 				4E1DE2C52C6AF412001022B7 /* ThreadSafeDictionary.swift in Sources */,
 				4E2381012B186FD600756874 /* DeviceInfoItem.swift in Sources */,
 				15C58AE42868A4EE00BD4FC6 /* VWebLink.swift in Sources */,
+				159F7FC42E96B78600B153A2 /* AlertOverlayView.swift in Sources */,
 				4E131AA22CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */,
 				4EB9A7C02AE9EF53004DA67F /* AccountKeyRevokeView.swift in Sources */,
 				158832DA2894287700142B35 /* SessionItem.swift in Sources */,
