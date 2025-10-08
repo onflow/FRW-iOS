@@ -7,7 +7,7 @@
 
 import Flow
 import Foundation
-import UIKit
+import SwiftUI
 
 final class Payer429Interceptor: FlowTransactionErrorInterceptor {
     func onError(error: Error, context: FlowTxContext) async -> FlowTxDecision? {
@@ -29,21 +29,11 @@ final class Payer429Interceptor: FlowTransactionErrorInterceptor {
     }
 
     private func promptRetry() async -> Bool {
-        await withCheckedContinuation { continuation in
-            runOnMain {
-                let alert = UIAlertController(
-                    title: "Service Busy",
-                    message: "Free gas service is rate-limited. Retry and pay gas yourself?",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
-                    continuation.resume(returning: false)
-                }))
-                alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: { _ in
-                    continuation.resume(returning: true)
-                }))
-                Router.topPresentedController().present(alert, animated: true)
-            }
-        }
+        await AlertCenter.shared.presentConfirmation(
+            title: "Service Busy",
+            message: "Free gas service is rate-limited. Retry and pay gas yourself?",
+            confirmTitle: "Retry",
+            cancelTitle: "Cancel"
+        )
     }
 }
