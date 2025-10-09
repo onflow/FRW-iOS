@@ -71,6 +71,7 @@ class ProfileKeychainService {
   func getAllProfileIds() throws -> [String] {
     do {
       guard let data = try keychain.getData(indexKey) else {
+        log.warning("[Profile] empty profile")
         return []
       }
 
@@ -85,10 +86,12 @@ class ProfileKeychainService {
 
   func getAllProfiles() throws -> [ProfileModel] {
     let profileIds = try getAllProfileIds()
+    log.debug("[Profile] all profile ids \n \(profileIds)")
     var profiles: [ProfileModel] = []
 
     for userId in profileIds {
       if let profile = try loadProfile(userId: userId) {
+        log.debug("[Profile] get profile for \(userId)")
         profiles.append(profile)
       }
     }

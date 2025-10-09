@@ -121,6 +121,7 @@ class ProfileManager: ObservableObject {
         profileCache[profile.uid] = profile
       }
       profiles = allProfiles
+      log.debug("[Profile] load profile: \n \(profiles)")
     } catch {
       log.error("[Profile] Failed to load cached profiles: \(error)")
     }
