@@ -14,7 +14,6 @@ enum FRWWebEndpoint {
     case txTemplate(TxTemplateRequest)
     case swapEstimate(SwapEstimateRequest)
     case signAsPayer(SignPayerRequest)
-    case signAsBridgePayer()
     case payerStatus
 }
 
