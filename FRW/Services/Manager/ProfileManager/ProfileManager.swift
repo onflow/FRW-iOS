@@ -14,7 +14,7 @@ import Flow
 
 class ProfileManager: ObservableObject {
   // MARK: Lifecycle
-  let migrationKey = "profiles_migration_completed_v301"
+  let migrationKey = "profiles_migration_completed_v302"
   
   private init() {
     #if DEBUG
@@ -36,6 +36,10 @@ class ProfileManager: ObservableObject {
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
+    guard keyExist(profile: profile) else {
+      log.warning("[Profile] Profile saved failed for user(\(profile.uid)), key don't found. ")
+      return
+    }
     do {
       try keychainService.saveProfile(profile)
       profileCache[profile.uid] = profile
@@ -90,8 +94,6 @@ class ProfileManager: ObservableObject {
       DispatchQueue.main.async {
         self.profiles = []
       }
-
-      // Reset migration flag
       UserDefaults.standard.removeObject(forKey: migrationKey)
 
       log.info("[Profile] All profiles cleared successfully")
@@ -122,6 +124,12 @@ class ProfileManager: ObservableObject {
         profileCache[profile.uid] = profile
       }
       profiles = allProfiles
+      // Check whether the uid of the profile contains a key on keyChain
+      for profile in allProfiles {
+        if !keyExist(profile: profile) {
+          deleteProfile(userId: profile.uid)
+        }
+      }
       log.debug("[Profile] load profile: \n \(profiles)")
     } catch {
       log.error("[Profile] Failed to load cached profiles: \(error)")
@@ -174,9 +182,7 @@ class ProfileManager: ObservableObject {
     }
 
     // Mark migration as completed
-    #if !DEBUG
     UserDefaults.standard.set(true, forKey: migrationKey)
-    #endif
     log.info("[Profile] Profile migration completed successfully")
   }
 }
@@ -211,8 +217,44 @@ extension ProfileManager {
   }
 }
 
-// MARK: Valid Profile List
+// MARK: Keys
+extension ProfileManager {
+  func keyExist(profile: ProfileModel) -> Bool {
+    
+    let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
+    for key in seKeylist {
+      guard key.contains(profile.uid) else {
+        continue
+      }
+      guard let provider = try? SecureEnclaveKey.wallet(id: key) else {
+        return true
+      }
+    }
+    // SeedPhraseKey
+    let spKeyList = SeedPhraseKey.seedPhraseStorage.allKeys
+    for key in spKeyList {
+      guard key.contains(profile.uid) else {
+        continue
+      }
+      guard let provider = try? SeedPhraseKey.wallet(id: key) else {
+        return true
+      }
+    }
+    // PrivateKey
+    let pkKeyList = FlowWalletKit.PrivateKey.PKStorage.allKeys
+    for key in pkKeyList {
+      guard key.contains(profile.uid) else {
+        continue
+      }
+      guard let provider = try? FlowWalletKit.PrivateKey.wallet(id: key) else {
+        return true
+      }
+    }
+    return false
+  }
+}
 
+// MARK: Valid Profile List
 extension ProfileManager {
   func fetchValidUserId() async -> [String: String] {
     var userIdAndPublicKeyPre: [String: String] = [:]

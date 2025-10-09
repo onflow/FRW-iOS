@@ -230,6 +230,7 @@ extension WalletManager {
   }
 
   private func logUserInfo() {
+    
     // Profile
     log.debug("↓↓↓↓↓↓ Profile ↓↓↓↓↓↓")
     let result = ProfileManager.shared.profiles.map { "\($0.username ?? $0.uid):" + $0.wallets.reduce("", { $0 + ($1.address ?? "") + "," }) }
@@ -327,9 +328,9 @@ extension WalletManager {
   func keyProvider(with uid: String) -> (any KeyProtocol)? {
     guard let userStore = userStore(with: uid) else {
       log.error("[Wallet] not found user at \(uid)")
-      return nil
+      return getKeyProvider(uid: uid)
     }
-    logUserInfo()
+//    logUserInfo()
     log.debug("[user] \(userStore)")
     var provider: (any KeyProtocol)?
     switch userStore.keyType {
@@ -356,6 +357,10 @@ extension WalletManager {
    */
   func keyProvider(profile: ProfileModel) -> (any KeyProtocol)? {
     let uid = profile.uid
+    return getKeyProvider(uid: uid)
+  }
+  
+  private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
     if let provider = try? SecureEnclaveKey.wallet(id: uid),
        let publicKey = provider.publicKey()?.hexString {
       return provider
@@ -370,6 +375,7 @@ extension WalletManager {
     }
     return nil
   }
+  
 
   // Find the corresponding user based on the uid and public
   private func user(uidAndPublicKey: String) -> [UserManager.StoreUser] {
