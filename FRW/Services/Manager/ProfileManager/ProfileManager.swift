@@ -14,7 +14,8 @@ import Flow
 
 class ProfileManager: ObservableObject {
   // MARK: Lifecycle
-
+  let migrationKey = "profiles_migration_completed_v301"
+  
   private init() {
     #if DEBUG
     clearAllProfiles()
@@ -91,7 +92,7 @@ class ProfileManager: ObservableObject {
       }
 
       // Reset migration flag
-      UserDefaults.standard.removeObject(forKey: "profile_migration_completed_v1")
+      UserDefaults.standard.removeObject(forKey: migrationKey)
 
       log.info("[Profile] All profiles cleared successfully")
     } catch {
@@ -142,7 +143,7 @@ class ProfileManager: ObservableObject {
 
   private func migrateExistingProfilesIfNeeded() async {
     // Check if migration has already been completed
-    let migrationKey = "profiles_migration_completed_v301"
+    
     if UserDefaults.standard.bool(forKey: migrationKey) {
       return
     }
