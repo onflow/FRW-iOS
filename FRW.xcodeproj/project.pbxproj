@@ -11337,7 +11337,7 @@
 			repositoryURL = "https://github.com/Outblock/web3swift.git";
 			requirement = {
 				kind = revision;
-				revision = 873e12cb498b66c7ee7d2a58389f74db5c6fa751;
+				revision = 12971bafa72bfc243cc4b6f35c107e12ddc6f106;
 			};
 		};
 		4E5B04302D0FFC0F00ED4C20 /* XCRemoteSwiftPackageReference "SwiftyDropbox" */ = {
