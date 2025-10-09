@@ -13,6 +13,9 @@ import Moya
 enum FRWWebEndpoint {
     case txTemplate(TxTemplateRequest)
     case swapEstimate(SwapEstimateRequest)
+    case signAsPayer(SignPayerRequest)
+    case signAsBridgePayer()
+    case payerStatus
 }
 
 // MARK: TargetType
@@ -23,7 +26,7 @@ extension FRWWebEndpoint: TargetType {
     }
 
     var baseURL: URL {
-        URL(string: "https://web.api.wallet.flow.com/api/")!
+        Config.get(.lilicoWeb)
     }
 
     var path: String {
@@ -32,20 +35,26 @@ extension FRWWebEndpoint: TargetType {
             return "template"
         case .swapEstimate:
             return "swap/v1/\(LocalUserDefaults.shared.network.rawValue)/estimate"
+        case .signAsPayer:
+            return "signAsPayer"
+        case .payerStatus:
+            return "v1/payer/status"
         }
     }
 
     var method: Moya.Method {
         switch self {
-        case .txTemplate:
+        case .txTemplate, .signAsPayer:
             return .post
-        case .swapEstimate:
+        case .swapEstimate, .payerStatus:
             return .get
         }
     }
 
     var task: Task {
         switch self {
+        case .payerStatus:
+          return .requestPlain
         case let .txTemplate(request):
             return .requestJSONEncodable(request)
         case let .swapEstimate(request):
@@ -53,6 +62,8 @@ extension FRWWebEndpoint: TargetType {
                 parameters: request.dictionary ?? [:],
                 encoding: URLEncoding.queryString
             )
+        case let .signAsPayer(request):
+            return .requestJSONEncodable(request)
         }
     }
 
