@@ -25,10 +25,16 @@ class UserManager: ObservableObject {
     self.loginUIDList = LocalUserDefaults.shared.loginUIDList
 
     if let activatedUID = activatedUID {
-      self.userInfo = MultiAccountStorage.shared.getUserInfo(activatedUID)
-      uploadUserNameIfNeeded()
-      initRefreshUserInfo()
-      verifyUserType()
+      if ProfileManager.shared.keyExist(uid: activatedUID) {
+        self.userInfo = MultiAccountStorage.shared.getUserInfo(activatedUID)
+        uploadUserNameIfNeeded()
+        initRefreshUserInfo()
+        verifyUserType()
+      } else {
+        Task {
+          try? await logout()
+        }
+      }
     }
 
     loginAnonymousIfNeeded()
