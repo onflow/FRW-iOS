@@ -43,7 +43,8 @@ class RestoreMultiAccountViewModel: ObservableObject {
         }
 
         // If it is in the login list, switch user
-        if UserManager.shared.loginUIDList.contains(selectedUserId) {
+      
+        if ProfileManager.shared.hasProfile(userId: selectedUserId) {
             Task {
                 do {
                     HUD.loading()

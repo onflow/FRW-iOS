@@ -18,7 +18,7 @@ class ProfileManager: ObservableObject {
   
   private init() {
     #if DEBUG
-    clearAllProfiles()
+//    clearAllProfiles()
     #endif
     loadCachedProfiles()
     Task {
@@ -36,7 +36,7 @@ class ProfileManager: ObservableObject {
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
-    guard keyExist(profile: profile) else {
+    guard keyExist(uid: profile.uid) else {
       log.warning("[Profile] Profile saved failed for user(\(profile.uid)), key don't found. ")
       return
     }
@@ -126,7 +126,7 @@ class ProfileManager: ObservableObject {
       profiles = allProfiles
       // Check whether the uid of the profile contains a key on keyChain
       for profile in allProfiles {
-        if !keyExist(profile: profile) {
+        if !keyExist(uid: profile.uid) {
           deleteProfile(userId: profile.uid)
         }
       }
@@ -219,37 +219,41 @@ extension ProfileManager {
 
 // MARK: Keys
 extension ProfileManager {
-  func keyExist(profile: ProfileModel) -> Bool {
+  func keyExist(uid: String) -> Bool {
     
     let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
     for key in seKeylist {
-      guard key.contains(profile.uid) else {
+      guard key.contains(uid) else {
         continue
       }
-      guard let provider = try? SecureEnclaveKey.wallet(id: key) else {
-        return true
+      guard let provider = try? SecureEnclaveKey.wallet(id: uid) else {
+        continue
       }
+      return true
     }
     // SeedPhraseKey
     let spKeyList = SeedPhraseKey.seedPhraseStorage.allKeys
     for key in spKeyList {
-      guard key.contains(profile.uid) else {
+      guard key.contains(uid) else {
         continue
       }
-      guard let provider = try? SeedPhraseKey.wallet(id: key) else {
-        return true
+      guard let provider = try? SeedPhraseKey.wallet(id: uid) else {
+        continue
       }
+      return true
     }
     // PrivateKey
     let pkKeyList = FlowWalletKit.PrivateKey.PKStorage.allKeys
     for key in pkKeyList {
-      guard key.contains(profile.uid) else {
+      guard key.contains(uid) else {
         continue
       }
-      guard let provider = try? FlowWalletKit.PrivateKey.wallet(id: key) else {
-        return true
+      guard let provider = try? FlowWalletKit.PrivateKey.wallet(id: uid) else {
+        continue
       }
+      return true
     }
+    log.info("[Profile] \(uid) don't found key")
     return false
   }
 }
