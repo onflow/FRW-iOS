@@ -64,7 +64,10 @@ final class PrivateKeyLoginViewModel: ObservableObject {
                 try await fetchAllAddresses()
                 HUD.dismissLoading()
                 if wantedAddress.isEmpty {
-                    await self.showAllAccounts()
+                  guard let account = wallet?.flowAccounts?[currentNetwork]?.first else {
+                    return
+                  }
+                  selectedAccount(by: account)
                 } else {
                     guard let keys = wallet?.flowAccounts?[currentNetwork] else {
                         return
@@ -188,26 +191,14 @@ final class PrivateKeyLoginViewModel: ObservableObject {
         buttonState = (key.isEmpty) ? .disabled : .enabled
     }
 
-    // select one address
-    @MainActor
-    private func showAllAccounts() {
-        let chainId = currentNetwork
-        let list = wallet?.flowAccounts?[chainId] ?? []
-
-        let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in
-            log.info("[Import] selected address: \(account.address.hex)")
-            self?.selectedAccount(by: account)
-        }
-        Router.route(to: RouteMap.RestoreLogin.importAddress(viewModel))
-    }
 }
 
 extension PrivateKeyLoginViewModel {
     private var p256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_P256))?.hexValue.dropPrefix("04")
+        privateKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.dropPrefix("04")
     }
 
     private var secp256PublicKey: String? {
-        (try? privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1))?.hexValue.dropPrefix("04")
+        privateKey?.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue.dropPrefix("04")
     }
 }
