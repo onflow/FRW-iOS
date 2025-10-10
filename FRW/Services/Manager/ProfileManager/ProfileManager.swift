@@ -14,10 +14,11 @@ import Flow
 
 class ProfileManager: ObservableObject {
   // MARK: Lifecycle
-
+  let migrationKey = "profiles_migration_completed_v302"
+  
   private init() {
     #if DEBUG
-    clearAllProfiles()
+//    clearAllProfiles()
     #endif
     loadCachedProfiles()
     Task {
@@ -35,6 +36,10 @@ class ProfileManager: ObservableObject {
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
+    guard keyExist(uid: profile.uid) else {
+      log.warning("[Profile] Profile saved failed for user(\(profile.uid)), key don't found. ")
+      return
+    }
     do {
       try keychainService.saveProfile(profile)
       profileCache[profile.uid] = profile
@@ -89,9 +94,7 @@ class ProfileManager: ObservableObject {
       DispatchQueue.main.async {
         self.profiles = []
       }
-
-      // Reset migration flag
-      UserDefaults.standard.removeObject(forKey: "profile_migration_completed_v1")
+      UserDefaults.standard.removeObject(forKey: migrationKey)
 
       log.info("[Profile] All profiles cleared successfully")
     } catch {
@@ -121,6 +124,13 @@ class ProfileManager: ObservableObject {
         profileCache[profile.uid] = profile
       }
       profiles = allProfiles
+      // Check whether the uid of the profile contains a key on keyChain
+      for profile in allProfiles {
+        if !keyExist(uid: profile.uid) {
+          deleteProfile(userId: profile.uid)
+        }
+      }
+      log.debug("[Profile] load profile: \n \(profiles)")
     } catch {
       log.error("[Profile] Failed to load cached profiles: \(error)")
     }
@@ -141,7 +151,7 @@ class ProfileManager: ObservableObject {
 
   private func migrateExistingProfilesIfNeeded() async {
     // Check if migration has already been completed
-    let migrationKey = "profiles_migration_completed_v301"
+    
     if UserDefaults.standard.bool(forKey: migrationKey) {
       return
     }
@@ -172,9 +182,7 @@ class ProfileManager: ObservableObject {
     }
 
     // Mark migration as completed
-    #if !DEBUG
     UserDefaults.standard.set(true, forKey: migrationKey)
-    #endif
     log.info("[Profile] Profile migration completed successfully")
   }
 }
@@ -209,8 +217,48 @@ extension ProfileManager {
   }
 }
 
-// MARK: Valid Profile List
+// MARK: Keys
+extension ProfileManager {
+  func keyExist(uid: String) -> Bool {
+    
+    let seKeylist = SecureEnclaveKey.KeychainStorage.allKeys
+    for key in seKeylist {
+      guard key.contains(uid) else {
+        continue
+      }
+      guard let provider = try? SecureEnclaveKey.wallet(id: uid) else {
+        continue
+      }
+      return true
+    }
+    // SeedPhraseKey
+    let spKeyList = SeedPhraseKey.seedPhraseStorage.allKeys
+    for key in spKeyList {
+      guard key.contains(uid) else {
+        continue
+      }
+      guard let provider = try? SeedPhraseKey.wallet(id: uid) else {
+        continue
+      }
+      return true
+    }
+    // PrivateKey
+    let pkKeyList = FlowWalletKit.PrivateKey.PKStorage.allKeys
+    for key in pkKeyList {
+      guard key.contains(uid) else {
+        continue
+      }
+      guard let provider = try? FlowWalletKit.PrivateKey.wallet(id: uid) else {
+        continue
+      }
+      return true
+    }
+    log.info("[Profile] \(uid) don't found key")
+    return false
+  }
+}
 
+// MARK: Valid Profile List
 extension ProfileManager {
   func fetchValidUserId() async -> [String: String] {
     var userIdAndPublicKeyPre: [String: String] = [:]

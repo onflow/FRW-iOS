@@ -42,7 +42,6 @@ extension RouteMap {
         case restoreErrorView(RestoreErrorView.RestoreError)
 
         case keystore
-        case importAddress(ImportAccountsViewModel)
         case importUserName(ImportUserNameViewModel)
         case privateKey
         case seedPhrase
@@ -87,9 +86,6 @@ extension RouteMap.RestoreLogin: RouterTarget {
             navi.push(content: RestoreErrorView(error: error))
         case .keystore:
             navi.push(content: KeyStoreLoginView())
-        case let .importAddress(viewModel):
-            let vc = PresentHostingController(rootView: ImportAccountsView(viewModel: viewModel))
-            navi.present(vc, animated: true, completion: nil)
         case let .importUserName(viewModel):
             navi.push(content: ImportUserNameView(viewModel: viewModel))
         case .privateKey:

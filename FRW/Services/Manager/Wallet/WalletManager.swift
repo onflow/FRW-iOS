@@ -196,8 +196,12 @@ extension WalletManager {
   private func initWallet() {
     if let uid = UserManager.shared.activatedUID {
       keyProvider = keyProvider(with: uid)
-      guard let provider = keyProvider, let user = userStore(with: uid) else {
-        log.error("[Wallet] not found provider or user at \(uid)")
+      guard let provider = keyProvider else {
+        log.error("[Wallet] not found provider at \(uid)")
+        return
+      }
+      guard let user = userStore(with: uid) else {
+        log.error("[Wallet] not found user at \(uid)")
         Task {
           do {
             try await UserManager.shared.logout()
@@ -225,6 +229,29 @@ extension WalletManager {
     }
   }
 
+  private func logUserInfo() {
+    
+    // Profile
+    log.debug("↓↓↓↓↓↓ Profile ↓↓↓↓↓↓")
+    let result = ProfileManager.shared.profiles.map { "\($0.username ?? $0.uid):" + $0.wallets.reduce("", { $0 + ($1.address ?? "") + "," }) }
+    log.debug(result)
+    log.debug("↑↑↑↑↑↑↑  Profile ↑↑↑↑↑↑↑")
+    // User
+    log.debug("↓↓↓↓↓↓ User ↓↓↓↓↓↓↓↓")
+    for user in LocalUserDefaults.shared.userList {
+      log.debug(user)
+    }
+    log.debug("↑↑↑↑↑↑ User ↑↑↑↑↑↑↑")
+    // Keychain
+    let keychain = SeedPhraseKey.seedPhraseStorage
+    let keys = keychain.allKeys
+    log.debug("↓↓↓↓↓↓ SeedPhraseKey ↓↓↓↓↓↓↓↓")
+    for key in keys {
+      log.debug(key)
+    }
+    log.debug("↑↑↑↑↑↑ SeedPhraseKey ↑↑↑↑↑↑↑")
+  }
+  
   private func loadRecentFlowAccount() {
     guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
       reloadWalletInfo()
@@ -300,20 +327,27 @@ extension WalletManager {
 
   func keyProvider(with uid: String) -> (any KeyProtocol)? {
     guard let userStore = userStore(with: uid) else {
-      return nil
+      log.error("[Wallet] not found user at \(uid)")
+      return getKeyProvider(uid: uid)
     }
+//    logUserInfo()
     log.debug("[user] \(userStore)")
     var provider: (any KeyProtocol)?
     switch userStore.keyType {
     case .secureEnclave:
       provider = try? SecureEnclaveKey.wallet(id: uid)
+      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .seedPhrase:
       provider = try? SeedPhraseKey.wallet(id: uid)
+      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .privateKey:
       provider = try? PrivateKey.wallet(id: uid)
+      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .keyStore:
       provider = try? PrivateKey.wallet(id: uid)
+      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     }
+    log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
     return provider
   }
 
@@ -323,6 +357,10 @@ extension WalletManager {
    */
   func keyProvider(profile: ProfileModel) -> (any KeyProtocol)? {
     let uid = profile.uid
+    return getKeyProvider(uid: uid)
+  }
+  
+  private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
     if let provider = try? SecureEnclaveKey.wallet(id: uid),
        let publicKey = provider.publicKey()?.hexString {
       return provider
@@ -337,6 +375,7 @@ extension WalletManager {
     }
     return nil
   }
+  
 
   // Find the corresponding user based on the uid and public
   private func user(uidAndPublicKey: String) -> [UserManager.StoreUser] {
