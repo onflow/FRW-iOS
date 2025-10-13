@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import Flow
 import SPIndicator
+import FlowWalletKit
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -209,36 +210,83 @@ extension TurboModuleSwift {
   
   @objc
   static func getWalletProfiles() async throws -> [String: Any] {
-    guard let userInfo = UserManager.shared.userInfo, let uid = UserManager.shared.activatedUID else {
-      throw LLError.accountNotFound
+    
+    var result = try? await getAllProfiles()
+    if result == nil {
+      let current = try await getCurrentProfile()
+      result = [current]
     }
-    let profile = try await RNBridge.WalletProfile(
-      name: userInfo.nickname, 
-      avatar: userInfo.avatar,
-      uid: uid,
-      accounts: getAllWalletAccount()
-      )
-    let response = RNBridge.WalletProfilesResponse(profiles: [profile])
+    let response = RNBridge.WalletProfilesResponse(profiles: result ?? [])
     return try response.toDictionary()
   }
   
-  private static func getAllWalletAccount() async throws -> [RNBridge.WalletAccount] {
+  private static func getCurrentProfile() async throws -> RNBridge.WalletProfile {
+    guard let userInfo = UserManager.shared.userInfo, let uid = UserManager.shared.activatedUID else {
+      throw LLError.accountNotFound
+    }
     var list: [RNBridge.WalletAccount] = []
     
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
-      try await account.fetchAccount()
-      
-      list.append(account.toWalletAccount())
-      
-      if let linked = account.coa {
-        list.append(linked.toWalletAccount(parentAddress: account.hexAddr))
+      guard let result = try? await parseAccount(account: account) else {
+        continue
       }
+      list.append(contentsOf: result)
+    }
+    
+    let profile = RNBridge.WalletProfile(
+      name: userInfo.nickname,
+      avatar: userInfo.avatar,
+      uid: uid,
+      accounts: list
+      )
+    return profile
+  }
+  
+  private static func getAllProfiles() async throws -> [RNBridge.WalletProfile] {
+    
+    var resultOfProfiles: [RNBridge.WalletProfile] = []
+    let allProfiles = ProfileManager.shared.profiles
+    var supportNetworks: Set<Flow.ChainID> = [currentNetwork]
+    for profile in allProfiles {
       
-      if let childList = account.childs {
-        let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr) }
-        list.append(contentsOf: result)
+      guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
+        continue
       }
+      var walletAccounts: [RNBridge.WalletAccount] = []
+      let walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+      try? await walletEntity.fetchAccount()
+      guard let accountList =  walletEntity.accounts?[currentNetwork] else {
+        continue
+      }
+      for account in accountList {
+        guard let result = try? await parseAccount(account: account) else {
+          continue
+        }
+        walletAccounts.append(contentsOf: result)
+      }
+      let walletProfile = RNBridge.WalletProfile(
+        name: profile.username ?? "",
+        avatar: profile.avatar ?? "",
+        uid: profile.uid,
+        accounts: walletAccounts
+        )
+      resultOfProfiles.append(walletProfile)
+    }
+    return resultOfProfiles
+  }
+  
+  private static func parseAccount(account: FlowWalletKit.Account) async throws ->  [RNBridge.WalletAccount] {
+    var list: [RNBridge.WalletAccount] = []
+    try await account.fetchAccount()
+    list.append(account.toWalletAccount())
+    if let linked = account.coa {
+      list.append(linked.toWalletAccount(parentAddress: account.hexAddr))
+    }
+
+    if let childList = account.childs {
+      let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr) }
+      list.append(contentsOf: result)
     }
     return list
   }
