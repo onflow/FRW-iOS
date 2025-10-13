@@ -136,6 +136,8 @@ class WalletManager: ObservableObject {
       .receive(on: DispatchQueue.main)
       .map { $0 }
       .sink { _ in
+        log.debug("[Login] activeated uid did changed")
+        self.resetAfterSwitchProfile()
         self.initWallet()
       }.store(in: &cancellableSet)
 
