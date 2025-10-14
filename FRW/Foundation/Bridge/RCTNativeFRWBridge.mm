@@ -187,5 +187,10 @@
 - (NSString *)getLanguage {
   return [TurboModuleSwift getLanguage];
 }
+
+- (void)logToNative:(NSString *)level message:(NSString *)message args:(NSArray *)args {
+  [TurboModuleSwift logToNativeWithLevel:level message:message args:args];
+}
+
 @end
 

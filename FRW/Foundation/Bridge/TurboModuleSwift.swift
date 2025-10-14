@@ -322,4 +322,19 @@ extension TurboModuleSwift {
     let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
     return languageCode
   }
+  
+  @objc
+  static func logToNative(level: String, message: String, args: [String]) {
+    // 'debug' | 'info' | 'warn' | 'error
+    switch level {
+    case "debug":
+      log.debug(message, context: args)
+    case "warn":
+      log.warning(message, context: args)
+    case "error":
+      log.error(message, context: args)
+    default:
+      log.info(message, context: args)
+    }
+  }
 }
