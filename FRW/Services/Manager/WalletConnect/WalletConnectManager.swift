@@ -450,39 +450,47 @@ extension WalletConnectManager {
             }
         case FCLWalletConnectMethod.preAuthz.rawValue:
 
-            let result = AuthnResponse(
-                fType: "PollingResponse",
-                fVsn: "1.0.0",
-                status: .approved,
-                data: AuthnData(
-                    addr: address,
-                    fType: "AuthnResponse",
-                    fVsn: "1.0.0",
-                    services: nil,
-                    proposer: serviceDefinition(
-                        address: address,
-                        keyId: keyId,
-                        type: .authz
-                    ),
-                    payer:
-                    [serviceDefinition(
-                        address: RemoteConfigManager.shared
-                            .payer,
-                        keyId: RemoteConfigManager.shared
-                            .keyIndex,
-                        type: .authz
-                    )],
-                    authorization: [serviceDefinition(
-                        address: address,
-                        keyId: keyId,
-                        type: .authz
-                    )]
-                ),
-                reason: nil,
-                compositeSignature: nil
-            )
-
             Task {
+              let localPayerAddress = RemoteConfigManager.shared.payer
+              let localPayerIndex = RemoteConfigManager.shared.keyIndex
+              var payerAddress: String = localPayerAddress
+              var payerIndex = localPayerIndex
+              let payerStatusData: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+              if let payerStatus = payerStatusData {
+                payerAddress = payerStatus.shouldUserPay ? address : (payerStatus.feePayer?.address ?? localPayerAddress)
+                payerIndex = payerStatus.shouldUserPay ? keyId : (payerStatus.feePayer?.keyIndex ?? localPayerIndex)
+              }
+
+              let result = AuthnResponse(
+                  fType: "PollingResponse",
+                  fVsn: "1.0.0",
+                  status: .approved,
+                  data: AuthnData(
+                      addr: address,
+                      fType: "AuthnResponse",
+                      fVsn: "1.0.0",
+                      services: nil,
+                      proposer: serviceDefinition(
+                          address: address,
+                          keyId: keyId,
+                          type: .authz
+                      ),
+                      payer:
+                      [serviceDefinition(
+                          address: payerAddress,
+                          keyId: payerIndex,
+                          type: .authz
+                      )],
+                      authorization: [serviceDefinition(
+                          address: address,
+                          keyId: keyId,
+                          type: .authz
+                      )]
+                  ),
+                  reason: nil,
+                  compositeSignature: nil
+              )
+              
                 do {
                     try await Sign.instance.respond(
                         topic: sessionRequest.topic,

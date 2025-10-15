@@ -19,7 +19,7 @@ enum FRWWebEndpoint {
 
 // MARK: TargetType
 
-extension FRWWebEndpoint: TargetType {
+extension FRWWebEndpoint: TargetType, AccessTokenAuthorizable {
     var authorizationType: AuthorizationType? {
         .bearer
     }
