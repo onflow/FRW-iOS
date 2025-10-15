@@ -230,29 +230,6 @@ extension WalletManager {
       }
     }
   }
-
-  private func logUserInfo() {
-    
-    // Profile
-    log.debug("↓↓↓↓↓↓ Profile ↓↓↓↓↓↓")
-    let result = ProfileManager.shared.profiles.map { "\($0.username ?? $0.uid):" + $0.wallets.reduce("", { $0 + ($1.address ?? "") + "," }) }
-    log.debug(result)
-    log.debug("↑↑↑↑↑↑↑  Profile ↑↑↑↑↑↑↑")
-    // User
-    log.debug("↓↓↓↓↓↓ User ↓↓↓↓↓↓↓↓")
-    for user in LocalUserDefaults.shared.userList {
-      log.debug(user)
-    }
-    log.debug("↑↑↑↑↑↑ User ↑↑↑↑↑↑↑")
-    // Keychain
-    let keychain = SeedPhraseKey.seedPhraseStorage
-    let keys = keychain.allKeys
-    log.debug("↓↓↓↓↓↓ SeedPhraseKey ↓↓↓↓↓↓↓↓")
-    for key in keys {
-      log.debug(key)
-    }
-    log.debug("↑↑↑↑↑↑ SeedPhraseKey ↑↑↑↑↑↑↑")
-  }
   
   private func loadRecentFlowAccount() {
     guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
@@ -332,13 +309,9 @@ extension WalletManager {
       log.error("[Wallet] not found user at \(uid)")
       return getKeyProvider(uid: uid)
     }
-//    logUserInfo()
     log.debug("[user] \(userStore)")
     var provider: (any KeyProtocol)?
     switch userStore.keyType {
-    case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .seedPhrase:
       provider = try? SeedPhraseKey.wallet(id: uid)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
@@ -347,6 +320,9 @@ extension WalletManager {
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .keyStore:
       provider = try? PrivateKey.wallet(id: uid)
+      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
+    case .secureEnclave:
+      provider = try? SecureEnclaveKey.wallet(id: uid)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     }
     log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
