@@ -96,7 +96,10 @@ final class SeedPhraseLoginViewModel: ObservableObject {
             try await fetchAllAddresses()
             HUD.dismissLoading()
             if wantedAddress.isEmpty {
-                await self.showAllAccounts()
+              guard let account = wallet?.flowAccounts?[currentNetwork]?.first else {
+                return
+              }
+              selectedAccount(by: account)
             } else {
                 let chainId = currentNetwork
                 guard let keys = wallet?.flowAccounts?[chainId] else {
@@ -218,26 +221,14 @@ final class SeedPhraseLoginViewModel: ObservableObject {
     private var wallet: FlowWalletKit.Wallet? = nil
     private var account: Flow.Account? = nil
 
-    // select one address
-    @MainActor
-    private func showAllAccounts() {
-        let chainId = currentNetwork
-        let list = wallet?.flowAccounts?[chainId] ?? []
-
-        let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in
-            log.info("[Import] selected address: \(account.address.hex)")
-            self?.selectedAccount(by: account)
-        }
-        Router.route(to: RouteMap.RestoreLogin.importAddress(viewModel))
-    }
 }
 
 extension SeedPhraseLoginViewModel {
     private var p256PublicKey: String? {
-        (try? providerKey?.publicKey(signAlgo: .ECDSA_P256))?.hexValue.dropPrefix("04")
+        providerKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.dropPrefix("04")
     }
 
     private var secp256PublicKey: String? {
-        (try? providerKey?.publicKey(signAlgo: .ECDSA_SECP256k1))?.hexValue.dropPrefix("04")
+        providerKey?.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue.dropPrefix("04")
     }
 }

@@ -66,7 +66,10 @@ final class KeyStoreLoginViewModel: ObservableObject {
                 HUD.dismissLoading()
 
                 if wantedAddress.isEmpty {
-                    await self.showAllAccounts()
+                  guard let account = wallet?.flowAccounts?[currentNetwork]?.first else {
+                    return
+                  }
+                  selectedAccount(by: account)
                 } else {
                     guard let keys = wallet?.flowAccounts?[currentNetwork] else {
                         HUD.error(title: "not_find_address".localized)
@@ -201,19 +204,6 @@ final class KeyStoreLoginViewModel: ObservableObject {
 
     private func updateButtonState() {
         buttonState = (json.isEmpty || password.isEmpty) ? .disabled : .enabled
-    }
-
-    // select one address
-    @MainActor
-    private func showAllAccounts() {
-        let chainId = currentNetwork
-        let list = wallet?.flowAccounts?[chainId] ?? []
-
-        let viewModel = ImportAccountsViewModel(list: list) { [weak self] account in
-            log.info("[Import] selected address: \(account.address.hex)")
-            self?.selectedAccount(by: account)
-        }
-        Router.route(to: RouteMap.RestoreLogin.importAddress(viewModel))
     }
 }
 

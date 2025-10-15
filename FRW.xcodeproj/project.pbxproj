@@ -1255,8 +1255,6 @@
 		4E03BE1D2C73222A00EF04DC /* KeyStoreLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE1B2C73222A00EF04DC /* KeyStoreLoginViewModel.swift */; };
 		4E03BE1F2C7334EC00EF04DC /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE1E2C7334EC00EF04DC /* TextView.swift */; };
 		4E03BE202C7334EC00EF04DC /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE1E2C7334EC00EF04DC /* TextView.swift */; };
-		4E03BE222C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
-		4E03BE232C7349E300EF04DC /* ImportAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */; };
 		4E05BFC32DCCF29000659097 /* InstallInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */; };
 		4E05BFC42DCCF29000659097 /* InstallInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */; };
 		4E093AD82DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */; };
@@ -1506,6 +1504,10 @@
 		4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED4912BAA79F6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */; };
 		4E6ED4932BAA7CB6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */; };
+		4E7153212E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */; };
+		4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */; };
+		4E7153242E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */; };
+		4E7153252E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */; };
 		4E7712E12E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E7712E22E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */; };
@@ -2973,7 +2975,6 @@
 		4E03BE182C731F3500EF04DC /* ViewsInLoginModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsInLoginModule.swift; sourceTree = "<group>"; };
 		4E03BE1B2C73222A00EF04DC /* KeyStoreLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreLoginViewModel.swift; sourceTree = "<group>"; };
 		4E03BE1E2C7334EC00EF04DC /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
-		4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportAccountsView.swift; sourceTree = "<group>"; };
 		4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallInfoManager.swift; sourceTree = "<group>"; };
 		4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWDevWidgetsExtension.entitlements; sourceTree = "<group>"; };
@@ -3092,6 +3093,8 @@
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSEKeychain.swift; sourceTree = "<group>"; };
+		4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+Dev.swift"; sourceTree = "<group>"; };
 		4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNBridgeError.swift; sourceTree = "<group>"; };
 		4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncInfo.swift; sourceTree = "<group>"; };
 		4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncDevice.swift"; sourceTree = "<group>"; };
@@ -4629,7 +4632,6 @@
 				4E4A6B632CA68D6500231A85 /* SeedPhraseLoginView.swift */,
 				4E03BE152C731E2300EF04DC /* KeyStoreLoginView.swift */,
 				4EA106722C738BB300555350 /* PrivateKeyLoginView.swift */,
-				4E03BE212C7349E300EF04DC /* ImportAccountsView.swift */,
 				4E03BE182C731F3500EF04DC /* ViewsInLoginModule.swift */,
 				4E3BFD582C93D28A00517FAB /* ImportUserNameView.swift */,
 			);
@@ -6550,6 +6552,7 @@
 			children = (
 				6A11596A288E710C005EF797 /* Router.swift */,
 				6A11596D288E7134005EF797 /* RouteMap.swift */,
+				4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */,
 				4E33F7EB2E432BF100B3D62F /* RouteMap+React.swift */,
 				6A115970288E72CC005EF797 /* Coordinator.swift */,
 				6AE8821A288E9FE900ADF36E /* RouteableUIHostingController.swift */,
@@ -7201,6 +7204,7 @@
 				6A2772A128D306B0007E06E9 /* DeveloperModeViewModel.swift */,
 				4EFBB2B62BDB7DA400359FAA /* KeychainListView.swift */,
 				4EFBB2B92BDB7E9000359FAA /* KeychainListViewModel.swift */,
+				4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */,
 			);
 			path = DeveloperMode;
 			sourceTree = "<group>";
@@ -8462,6 +8466,7 @@
 				15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
 				15DC212727819C56000B187A /* VSpinnerModelContinous.swift in Sources */,
 				6AF95B3D2848686D0012C837 /* AddressBookRequest.swift in Sources */,
+				4E7153212E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,
 				15DC215D27819C56000B187A /* VMenuRow.swift in Sources */,
 				15F22F20278B33EE00FCF772 /* CreatePinCodeViewModel.swift in Sources */,
 				15DC210527819C56000B187A /* VSliderModel.swift in Sources */,
@@ -8693,7 +8698,6 @@
 				15BA24B628C785B300755CBF /* GradientButton.swift in Sources */,
 				15DC20B127819C56000B187A /* VBaseButtonState.swift in Sources */,
 				15D9282D2783395F00382226 /* HUDManager.swift in Sources */,
-				4E03BE232C7349E300EF04DC /* ImportAccountsView.swift in Sources */,
 				4E63A57F2B8D75F200BBD15F /* MoveTokenViewModel.swift in Sources */,
 				4E4F794C2831FCB700ED027C /* ImageName.swift in Sources */,
 				15B1F6302786AC9E00847BB5 /* BackupPasswordViewModel.swift in Sources */,
@@ -9013,6 +9017,7 @@
 				15DC21F02781F388000B187A /* TYNKView.swift in Sources */,
 				6ADA4C0228F180C400C7B341 /* UIImageView.swift in Sources */,
 				158637272D6CD8310083A068 /* TokenBalanceProvider.swift in Sources */,
+				4E7153252E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */,
 				1505E5FF2836365C007B98D8 /* FRWAPI+AddressBook.swift in Sources */,
 				7652E32E2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */,
 				158832EE28942FCE00142B35 /* Signable.swift in Sources */,
@@ -9506,6 +9511,7 @@
 				15A87E8E2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
 				15C58B0F2868A4EE00BD4FC6 /* AddressBookRequest.swift in Sources */,
 				15C58B102868A4EE00BD4FC6 /* VMenuRow.swift in Sources */,
+				4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,
 				15C58B112868A4EE00BD4FC6 /* CreatePinCodeViewModel.swift in Sources */,
 				15C58B122868A4EE00BD4FC6 /* VSliderModel.swift in Sources */,
 				6A45898628C1A70200B1024B /* BrowserSearchItemCell.swift in Sources */,
@@ -9737,7 +9743,6 @@
 				15C58B702868A4EE00BD4FC6 /* HUDManager.swift in Sources */,
 				15C58B712868A4EE00BD4FC6 /* ImageName.swift in Sources */,
 				15C58B722868A4EE00BD4FC6 /* BackupPasswordViewModel.swift in Sources */,
-				4E03BE222C7349E300EF04DC /* ImportAccountsView.swift in Sources */,
 				4E63A57E2B8D75F200BBD15F /* MoveTokenViewModel.swift in Sources */,
 				15C58B732868A4EE00BD4FC6 /* ScrollAccessory.swift in Sources */,
 				4EA0D0A32A7A357E004C6A19 /* LLSegmenControl.swift in Sources */,
@@ -10057,6 +10062,7 @@
 				15C58BF72868A4EE00BD4FC6 /* TYNKView.swift in Sources */,
 				6ADA4C0128F180C400C7B341 /* UIImageView.swift in Sources */,
 				15C58BF82868A4EE00BD4FC6 /* FRWAPI+AddressBook.swift in Sources */,
+				4E7153242E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */,
 				158637262D6CD8310083A068 /* TokenBalanceProvider.swift in Sources */,
 				158832ED28942FCE00142B35 /* Signable.swift in Sources */,
 				7652E32D2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */,
@@ -10393,7 +10399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -10442,7 +10448,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -10489,7 +10495,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LILICOPROD";
@@ -10535,7 +10541,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = LILICOPROD;
@@ -10604,7 +10610,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -10673,7 +10679,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 3.0.2;
+				MARKETING_VERSION = 3.0.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
@@ -10697,7 +10703,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = FRWNotificationServiceExtension/FRWNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(CFBundleVersion)";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FRWNotificationServiceExtension/Info.plist;
@@ -10725,7 +10731,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = FRWNotificationServiceExtension/FRWNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(CFBundleVersion)";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FRWNotificationServiceExtension/Info.plist;
@@ -10871,7 +10877,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = FRWWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(CFBundleVersion)";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FRWWidgets/Info.plist;
@@ -10901,7 +10907,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = FRWWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "$(CFBundleVersion)";
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 444MY26W7F;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = FRWWidgets/Info.plist;
