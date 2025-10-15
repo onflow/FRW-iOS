@@ -51,14 +51,13 @@ class RestoreMultiAccountViewModel: ObservableObject {
                     try await UserManager.shared.switchAccount(withUID: selectedUserId)
                     MultiAccountStorage.shared.setBackupType(.multi, uid: selectedUserId)
                     HUD.dismissLoading()
-                } catch {
-                  guard let theError = error as? LLError, theError == LLError.accountNotFound else {
-                    log.error("switch account failed", context: error)
-                    HUD.dismissLoading()
-                    HUD.error(title: error.localizedDescription)
-                    return
-                  }
+                } catch LLError.accountNotFound {
                   addKey(item: selectedUser)
+                } catch {
+                  log.error("switch account failed", context: error)
+                  HUD.dismissLoading()
+                  HUD.error(title: error.localizedDescription)
+                  return
                 }
             }
             return
