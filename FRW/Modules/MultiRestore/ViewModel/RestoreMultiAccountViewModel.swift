@@ -51,10 +51,13 @@ class RestoreMultiAccountViewModel: ObservableObject {
                     try await UserManager.shared.switchAccount(withUID: selectedUserId)
                     MultiAccountStorage.shared.setBackupType(.multi, uid: selectedUserId)
                     HUD.dismissLoading()
+                } catch LLError.accountNotFound {
+                  addKey(item: selectedUser)
                 } catch {
-                    log.error("switch account failed", context: error)
-                    HUD.dismissLoading()
-                    HUD.error(title: error.localizedDescription)
+                  log.error("switch account failed", context: error)
+                  HUD.dismissLoading()
+                  HUD.error(title: error.localizedDescription)
+                  return
                 }
             }
             return
@@ -64,17 +67,22 @@ class RestoreMultiAccountViewModel: ObservableObject {
             return
         }
 
-        Task {
-            do {
-                HUD.loading()
-                try await MultiBackupManager.shared.addKeyToAccount(with: selectedUser)
-                HUD.dismissLoading()
-            } catch {
-                log.error("add new device failed", context: error)
-                HUD.dismissLoading()
-                // TODO: des
-                HUD.error(title: "restore failed")
-            }
+        addKey(item: selectedUser)
+    }
+  
+  private func addKey(item: [MultiBackupManager.StoreItem]) {
+    Task {
+        do {
+            HUD.loading()
+            try await MultiBackupManager.shared.addKeyToAccount(with: item)
+            HUD.dismissLoading()
+        } catch {
+            log.error("add new device failed", context: error)
+            HUD.dismissLoading()
+            // TODO: des
+            HUD.error(title: "restore failed")
         }
     }
+  }
+  
 }
