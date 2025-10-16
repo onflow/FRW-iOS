@@ -156,10 +156,17 @@ extension BrowserViewController {
             log.error("primary address is nil")
             return
         }
-        let keyIndex = WalletManager.shared.keyIndex
-        log.debug("will post pre authz response")
-        postMessage(FCLScripts.generatePreAuthzResponse(address: address, keyIndex: keyIndex))
-        log.debug("did post pre authz response")
+        Task {
+            var surgeAddress: String? = nil
+            let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+            if let payerStatus = result {
+                surgeAddress = payerStatus.shouldUserPay ? address : payerStatus.feePayer?.address
+            }
+            let keyIndex = WalletManager.shared.keyIndex
+            log.debug("will post pre authz response")
+            postMessage(FCLScripts.generatePreAuthzResponse(address: address, keyIndex: keyIndex, surgedAddress: surgeAddress))
+            log.debug("did post pre authz response")
+        }
     }
 
     func postAuthnViewReadyResponse(response: FCLAuthnResponse) async throws {

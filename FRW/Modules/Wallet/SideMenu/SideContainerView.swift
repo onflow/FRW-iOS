@@ -63,6 +63,8 @@ struct SideContainerView: View {
                     PushHandler.shared.showPushAlertIfNeeded()
                 }
             }
+            // Global custom alert overlay host (fully customizable)
+            .overlay(AlertOverlayView())
         }
     }
 
@@ -149,6 +151,8 @@ struct SideContainerView: View {
     private var vm = SideContainerViewModel()
     @StateObject
     private var um = UserManager.shared
+    @ObservedObject
+    private var alertCenter = AlertCenter.shared
     @State
     private var dragOffset: CGSize = .zero
     @State

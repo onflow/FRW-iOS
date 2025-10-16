@@ -13,6 +13,7 @@ import Moya
 // MARK: - FirebaseAPI
 
 enum FirebaseAPI {
+//    @available(*, deprecated, renamed: "Please use FRWWebEndpoint.signAsPayer instead", message: "Don't use this anymore")
     case signAsPayer(SignPayerRequest)
     case moonPay(MoonPayRequest)
 }
