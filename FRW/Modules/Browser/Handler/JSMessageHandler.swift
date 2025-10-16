@@ -527,7 +527,7 @@ extension JSMessageHandler {
                 message: .init(envelopeMessage: authzResponse.body.message)
             )
             let signature: SignPayerResponse = try await Network
-                .requestWithRawModel(FirebaseAPI.signAsPayer(request))
+                .requestWithRawModel(FRWAPI.Cadence.signAsFeePayer(request))
             let sign = signature.envelopeSigs
 
             DispatchQueue.main.async {

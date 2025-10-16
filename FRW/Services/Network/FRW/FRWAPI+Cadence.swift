@@ -14,6 +14,7 @@ extension FRWAPI {
     enum Cadence {
         case list
         case signAsBridgeFeePayer(SignPayerRequest)
+        case signAsFeePayer(SignPayerRequest)
     }
 }
 
@@ -26,7 +27,7 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
 
     var baseURL: URL {
         switch self {
-        case .list, .signAsBridgeFeePayer:
+        case .list, .signAsBridgeFeePayer, .signAsFeePayer:
             return Config.get(.lilicoWeb)
         }
     }
@@ -36,7 +37,9 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         case .list:
             return "v2/scripts"
         case .signAsBridgeFeePayer:
-            return "signAsBridgeFeePayer"
+            return "signAsBridgePayer"
+        case .signAsFeePayer:
+          return "signAsFeePayer"
         }
     }
 
@@ -44,7 +47,7 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         switch self {
         case .list:
             return .get
-        case .signAsBridgeFeePayer:
+        case .signAsBridgeFeePayer, .signAsFeePayer:
             return .post
         }
     }
@@ -54,6 +57,8 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         case .list:
             return .requestParameters(parameters: [:], encoding: URLEncoding.queryString)
         case let .signAsBridgeFeePayer(request):
+            return .requestJSONEncodable(request)
+        case let .signAsFeePayer(request):
             return .requestJSONEncodable(request)
         }
     }
