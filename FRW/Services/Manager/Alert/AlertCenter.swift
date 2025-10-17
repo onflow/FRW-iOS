@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 // MARK: - Models
 
@@ -47,6 +48,8 @@ final class AlertCenter: ObservableObject {
     @Published var model: AlertModel? = nil
 
     private var continuation: CheckedContinuation<String, Never>? = nil
+    private var overlayWindow: UIWindow?
+    private var hostingController: UIHostingController<AlertOverlayView>?
 
     // Present a fully custom model (including custom content / actions)
     func present(model: AlertModel) async -> String {
@@ -55,11 +58,50 @@ final class AlertCenter: ObservableObject {
             continuation?.resume(returning: "__cancelled__")
             continuation = nil
         }
+
+        // Ensure we have a window to display the alert
+        ensureOverlayWindow()
+
         self.model = model
 
         return await withCheckedContinuation { (cont: CheckedContinuation<String, Never>) in
             self.continuation = cont
         }
+    }
+
+    private func ensureOverlayWindow() {
+        guard overlayWindow == nil else { return }
+
+        // Find the key window
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene else {
+            log.error("[AlertCenter] No active window scene found")
+            return
+        }
+
+        // Create a new window for the overlay
+        let window = UIWindow(windowScene: windowScene)
+        window.windowLevel = .alert
+        window.backgroundColor = .clear
+
+        // Create the hosting controller
+        let overlayView = AlertOverlayView()
+        let hosting = UIHostingController(rootView: overlayView)
+        hosting.view.backgroundColor = .clear
+
+        window.rootViewController = hosting
+        window.isHidden = false
+
+        self.overlayWindow = window
+        self.hostingController = hosting
+
+        log.info("[AlertCenter] Overlay window created and shown")
+    }
+
+    private func hideOverlayWindow() {
+        overlayWindow?.isHidden = true
+        overlayWindow = nil
+        hostingController = nil
     }
 
     // Convenience: custom content with actions
@@ -115,6 +157,12 @@ final class AlertCenter: ObservableObject {
         model = nil
         continuation?.resume(returning: id)
         continuation = nil
+
+        // Hide the overlay window after a short delay to allow animation
+        Task {
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+            hideOverlayWindow()
+        }
     }
 
     // Resolve as cancelled
