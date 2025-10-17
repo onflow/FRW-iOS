@@ -35,7 +35,7 @@ class BridgeFeePayer: FlowSigner {
             message: .init(envelopeMessage: signableData.hexValue)
         )
         let signature: SignPayerResponse = try await Network
-            .requestWithRawModel(FRWAPI.Cadence.signAsBridgeFeePayer(request))
+        .requestWithRawModel(FRWWebEndpoint.signAsBridgeFeePayer(request))
         return Data(hex: signature.envelopeSigs.sig)
     }
 }

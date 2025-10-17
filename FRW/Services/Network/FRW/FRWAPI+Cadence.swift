@@ -13,7 +13,7 @@ import Moya
 extension FRWAPI {
     enum Cadence {
         case list
-        case signAsBridgeFeePayer(SignPayerRequest)
+        
     }
 }
 
@@ -26,7 +26,7 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
 
     var baseURL: URL {
         switch self {
-        case .list, .signAsBridgeFeePayer:
+        case .list:
             return Config.get(.lilicoWeb)
         }
     }
@@ -35,8 +35,7 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         switch self {
         case .list:
             return "v2/scripts"
-        case .signAsBridgeFeePayer:
-            return "signAsBridgeFeePayer"
+        
         }
     }
 
@@ -44,8 +43,6 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         switch self {
         case .list:
             return .get
-        case .signAsBridgeFeePayer:
-            return .post
         }
     }
 
@@ -53,8 +50,6 @@ extension FRWAPI.Cadence: TargetType, AccessTokenAuthorizable {
         switch self {
         case .list:
             return .requestParameters(parameters: [:], encoding: URLEncoding.queryString)
-        case let .signAsBridgeFeePayer(request):
-            return .requestJSONEncodable(request)
         }
     }
 
