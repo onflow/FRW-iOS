@@ -1297,33 +1297,58 @@ extension FlowNetwork {
     private static func sendTransaction(
         funcName: String,
         cadenceStr: String,
-        argumentList: [Flow.Cadence.FValue]
+        argumentList: [Flow.Cadence.FValue],
+        payerAddress: Flow.Address? = nil,
+        signers: [FlowSigner]? = nil,
+        authorizerAddresses: [Flow.Address]? = nil
     ) async throws -> Flow.ID {
-        guard let fromAddress = WalletManager.shared.getPrimaryWalletAddress() else {
+      guard let fromAddress = await WalletManager.shared.getPrimaryWalletAddress() else {
             log.error("[Cadence] transaction invalid address on \(funcName)")
             throw LLError.invalidAddress
         }
+        let cadenceHash = hashCadence(cadence: cadenceStr.toHexEncodedString())
+        let fromKeyIndex = await WalletManager.shared.keyIndex
+
+        // Baseline defaults: self payer + self signer + authorizers(self)
+        let defaultSigners: [FlowSigner] = await [WalletManager.shared]
+        let defaultPayerAddr: Flow.Address = Flow.Address(hex: fromAddress)
+        var chosenSigners = signers ?? defaultSigners
+        var chosenPayer = payerAddress ?? defaultPayerAddr
+        var chosenAuthorizers: [Flow.Address] = authorizerAddresses ?? [Flow.Address(hex: fromAddress)]
+        let reqCtx = FlowTxContext(
+          phase: .request,
+          funcName: funcName,
+          from: Flow.Address(hex: fromAddress),
+          proposer: Flow.Address(hex: fromAddress),
+          cadenceHash: nil,
+          txId: nil,
+          payer: chosenPayer,
+          authorizers: chosenAuthorizers,
+          defaultSigners: defaultSigners,
+          defaultPayer: defaultPayerAddr
+        )
+        for interceptor in FlowTxInterceptorCenter.shared.requestInterceptors {
+          if let overrides = await interceptor.onRequest(context: reqCtx) {
+            // Only allow interceptors to override when caller didn't specify explicit values
+            if payerAddress == nil, let payer = overrides.payer { chosenPayer = payer }
+            if signers == nil, let s = overrides.signers { chosenSigners = s }
+            if payerAddress == nil && authorizerAddresses == nil, let a = overrides.authorizers { chosenAuthorizers = a }
+          }
+        }
+
         do {
-            let needBridgeFeePayer = RemoteConfigManager.shared.coverBridgeFee && funcName.lowercased().hasSuffix("withpayer")
-            let bridgeFeePayerAddress = Flow.Address(hex: RemoteConfigManager.shared.bridgeFeePayer)
-            let fromKeyIndex = WalletManager.shared.keyIndex
-            let signers = WalletManager.shared.defaultSigners + (needBridgeFeePayer ? [BridgeFeePayer()] : [])
-            let tranId = try await flow
-                .sendTransaction(signers: signers) {
+          let txId = try await flow
+                .sendTransaction(signers: chosenSigners) {
                     cadence {
                         cadenceStr
                     }
 
-                    payer {
-                        if needBridgeFeePayer {
-                            RemoteConfigManager.shared.bridgeFeePayer
-                        } else {
-                            RemoteConfigManager.shared.payer
-                        }
-                    }
+                    payer { chosenPayer.hexAddr }
+                  
                     arguments {
                         argumentList
                     }
+                  
                     proposer {
                         Flow.TransactionProposalKey(
                             address: Flow.Address(hex: fromAddress),
@@ -1331,45 +1356,62 @@ extension FlowNetwork {
                         )
                     }
 
-                    authorizers {
-                        if needBridgeFeePayer {
-                            [Flow.Address(hex: fromAddress), bridgeFeePayerAddress]
-                        } else {
-                            [Flow.Address(hex: fromAddress)]
-                        }
-                    }
+                    authorizers { chosenAuthorizers }
 
                     gasLimit {
                         9999
                     }
                 }
-            log.info("[Flow] transaction Id:\(tranId.description)")
-            EventTrack.Transaction
-                .flowSigned(
-                    cadence: hashCadence(cadence: cadenceStr.toHexEncodedString()),
-                    txId: tranId.hex,
-                    authorizers: [fromAddress],
-                    proposer: fromAddress,
-                    payer: RemoteConfigManager.shared.payer,
-                    success: true
-                )
-            await scriptStore.setScriptId(tranId.description, funcName)
-            return tranId
+            log.info("[Flow] transaction Id:\(txId.description)")
+            await scriptStore.setScriptId(txId.description, funcName)
+            // Response interceptors
+            let respCtx = FlowTxContext(
+              phase: .response,
+              funcName: funcName,
+              from: Flow.Address(hex: fromAddress),
+              proposer: Flow.Address(hex: fromAddress),
+              cadenceHash: cadenceHash,
+              txId: txId,
+              payer: chosenPayer,
+              authorizers: chosenAuthorizers,
+              defaultSigners: nil,
+              defaultPayer: nil
+            )
+            for interceptor in FlowTxInterceptorCenter.shared.responseInterceptors {
+              interceptor.onResponse(context: respCtx)
+            }
+            return txId
         } catch {
-            EventTrack.General
-                .rpcError(
-                    error: error.localizedDescription,
-                    scriptId: funcName
-                )
-            EventTrack.Transaction
-                .flowSigned(
-                    cadence: hashCadence(cadence: cadenceStr.toHexEncodedString()),
-                    txId: "",
-                    authorizers: [fromAddress],
-                    proposer: fromAddress,
-                    payer: RemoteConfigManager.shared.payer,
-                    success: false
-                )
+            // Interceptor chain for error handling and retry policies
+            let ctx = FlowTxContext(
+                phase: .error,
+                funcName: funcName,
+                from: Flow.Address(hex: fromAddress),
+                proposer: Flow.Address(hex: fromAddress),
+                cadenceHash: cadenceHash,
+                txId: nil,
+                payer: chosenPayer,
+                authorizers: chosenAuthorizers,
+                defaultSigners: nil,
+                defaultPayer: nil
+            )
+            for interceptor in FlowTxInterceptorCenter.shared.errorInterceptors {
+                if let decision = await interceptor.onError(error: error, context: ctx),
+                   case let .retry(overrides) = decision {
+                    do {
+                        return try await sendTransaction(
+                            funcName: funcName,
+                            cadenceStr: cadenceStr,
+                            argumentList: argumentList,
+                            payerAddress: overrides.payer,
+                            signers: chosenSigners,
+                            authorizerAddresses: chosenAuthorizers
+                        )
+                    } catch {
+                        // continue to next interceptor or fall through
+                    }
+                }
+            }
             log.error("[Cadence] transaction error:\(error.localizedDescription)")
             throw error
         }

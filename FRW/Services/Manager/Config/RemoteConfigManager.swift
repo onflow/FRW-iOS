@@ -257,7 +257,7 @@ extension RemoteConfigManager: FlowSigner {
             message: .init(envelopeMessage: signableData.hexValue)
         )
         let signature: SignPayerResponse = try await Network
-        .requestWithRawModel(FRWAPI.Cadence.signAsFeePayer(request))
+            .requestWithRawModel(FRWWebEndpoint.signAsPayer(request))
         return Data(hex: signature.envelopeSigs.sig)
     }
 
@@ -267,7 +267,7 @@ extension RemoteConfigManager: FlowSigner {
             message: .init(envelopeMessage: signableData.hexValue)
         )
         let signature: SignPayerResponse = try await Network
-            .requestWithRawModel(FRWAPI.Cadence.signAsFeePayer(request))
+            .requestWithRawModel(FRWWebEndpoint.signAsPayer(request))
         return Data(hex: signature.envelopeSigs.sig)
     }
 }

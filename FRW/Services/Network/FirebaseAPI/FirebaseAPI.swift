@@ -13,7 +13,6 @@ import Moya
 // MARK: - FirebaseAPI
 
 enum FirebaseAPI {
-    case signAsPayer(SignPayerRequest)
     case moonPay(MoonPayRequest)
 }
 
@@ -30,8 +29,6 @@ extension FirebaseAPI: TargetType, AccessTokenAuthorizable {
 
     var path: String {
         switch self {
-        case .signAsPayer:
-            return "/signAsPayer"
         case .moonPay:
             return "/moonPaySignature"
         }
@@ -39,7 +36,7 @@ extension FirebaseAPI: TargetType, AccessTokenAuthorizable {
 
     var method: Moya.Method {
         switch self {
-        case .moonPay, .signAsPayer:
+        case .moonPay:
             return .post
         }
     }
@@ -47,8 +44,6 @@ extension FirebaseAPI: TargetType, AccessTokenAuthorizable {
     var task: Task {
         switch self {
         case let .moonPay(request):
-            return .requestJSONEncodable(request)
-        case let .signAsPayer(request):
             return .requestJSONEncodable(request)
         }
     }

@@ -257,10 +257,10 @@ extension FCLScripts {
 }
 
 extension FCLScripts {
-    static func generatePreAuthzResponse(address: String, keyIndex: Int = 0) -> String {
+    static func generatePreAuthzResponse(address: String, keyIndex: Int = 0, surgedAddress: String? = nil) -> String {
         let dict = [
             AddressReplacement: address,
-            PayerAddressReplacement: RemoteConfigManager.shared.payer,
+            PayerAddressReplacement: surgedAddress ?? RemoteConfigManager.shared.payer,
             KeyIDReplacement: String(keyIndex),
         ]
         return FCLScripts.preAuthzResponse.replace(from: dict)

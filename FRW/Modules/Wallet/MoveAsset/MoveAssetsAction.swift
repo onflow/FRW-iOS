@@ -34,13 +34,7 @@ class MoveAssetsAction {
     }
 
     func startBrowserWithMoveAssets(appName: String?, callback: @escaping EmptyClosure) {
-        if !allowMoveAssets || !LocalUserDefaults.shared.showMoveAssetOnBrowser {
-            callback()
-            return
-        }
-        self.appName = appName
-        browserCallback = callback
-        Router.route(to: RouteMap.Wallet.moveAssets)
+      callback()
     }
 
     func endBrowser() {
