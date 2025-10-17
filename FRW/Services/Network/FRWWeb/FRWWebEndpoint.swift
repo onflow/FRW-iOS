@@ -35,7 +35,7 @@ extension FRWWebEndpoint: TargetType, AccessTokenAuthorizable {
         case .swapEstimate:
             return "swap/v1/\(LocalUserDefaults.shared.network.rawValue)/estimate"
         case .signAsPayer:
-            return "signAsPayer"
+            return "signAsFeePayer"
         case .payerStatus:
             return "v1/payer/status"
         }
