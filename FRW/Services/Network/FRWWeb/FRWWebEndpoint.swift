@@ -15,6 +15,7 @@ enum FRWWebEndpoint {
     case swapEstimate(SwapEstimateRequest)
     case signAsPayer(SignPayerRequest)
     case payerStatus
+    case signAsBridgeFeePayer(SignPayerRequest)
 }
 
 // MARK: TargetType
@@ -38,12 +39,14 @@ extension FRWWebEndpoint: TargetType, AccessTokenAuthorizable {
             return "signAsFeePayer"
         case .payerStatus:
             return "v1/payer/status"
+        case .signAsBridgeFeePayer:
+            return "signAsBridgePayer"
         }
     }
 
     var method: Moya.Method {
         switch self {
-        case .txTemplate, .signAsPayer:
+        case .txTemplate, .signAsPayer, .signAsBridgeFeePayer:
             return .post
         case .swapEstimate, .payerStatus:
             return .get
@@ -62,6 +65,8 @@ extension FRWWebEndpoint: TargetType, AccessTokenAuthorizable {
                 encoding: URLEncoding.queryString
             )
         case let .signAsPayer(request):
+            return .requestJSONEncodable(request)
+        case let .signAsBridgeFeePayer(request):
             return .requestJSONEncodable(request)
         }
     }
