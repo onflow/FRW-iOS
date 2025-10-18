@@ -526,12 +526,11 @@ extension JSMessageHandler {
                 transaction: authzResponse.body.voucher.toFCLVoucher(),
                 message: .init(envelopeMessage: authzResponse.body.message)
             )
-            let signature: SignPayerResponse = try await Network
-                .requestWithRawModel(FRWWebEndpoint.signAsPayer(request))
-            let sign = signature.envelopeSigs
+            let signature: FCLVoucher.Signature = try await Network
+            .request(FRWWebEndpoint.signAsPayer(request))
 
             DispatchQueue.main.async {
-                self.webVC?.postAuthzEnvelopeSignResponse(sign: sign)
+                self.webVC?.postAuthzEnvelopeSignResponse(sign: signature)
 
                 let authzTransaction = AuthzTransaction(
                     url: url?.absoluteString,

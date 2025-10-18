@@ -34,8 +34,8 @@ class BridgeFeePayer: FlowSigner {
             transaction: transaction.voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
-        let signature: SignPayerResponse = try await Network
-        .requestWithRawModel(FRWWebEndpoint.signAsBridgeFeePayer(request))
-        return Data(hex: signature.envelopeSigs.sig)
+        let signature: FCLVoucher.Signature = try await Network
+        .request(FRWWebEndpoint.signAsBridgePayer(request))
+        return Data(hex: signature.sig)
     }
 }

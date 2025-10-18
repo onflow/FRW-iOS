@@ -256,9 +256,9 @@ extension RemoteConfigManager: FlowSigner {
             transaction: transaction.voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
-        let signature: SignPayerResponse = try await Network
-            .requestWithRawModel(FRWWebEndpoint.signAsPayer(request))
-        return Data(hex: signature.envelopeSigs.sig)
+        let signature: FCLVoucher.Signature = try await Network
+        .request(FRWWebEndpoint.signAsPayer(request))
+        return Data(hex: signature.sig)
     }
 
     func sign(voucher: FCLVoucher, signableData: Data) async throws -> Data {
@@ -266,9 +266,9 @@ extension RemoteConfigManager: FlowSigner {
             transaction: voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
-        let signature: SignPayerResponse = try await Network
-            .requestWithRawModel(FRWWebEndpoint.signAsPayer(request))
-        return Data(hex: signature.envelopeSigs.sig)
+        let signature: FCLVoucher.Signature = try await Network
+        .request(FRWWebEndpoint.signAsPayer(request))
+        return Data(hex: signature.sig)
     }
 }
 
