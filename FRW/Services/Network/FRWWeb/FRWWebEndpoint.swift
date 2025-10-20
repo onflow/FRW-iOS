@@ -15,7 +15,7 @@ enum FRWWebEndpoint {
     case swapEstimate(SwapEstimateRequest)
     case signAsPayer(SignPayerRequest)
     case payerStatus
-    case signAsBridgePayer(SignPayerRequest)
+    case signAsBridgePayer(SignBridgePayerRequest)
 }
 
 // MARK: TargetType
