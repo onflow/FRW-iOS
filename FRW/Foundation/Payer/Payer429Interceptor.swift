@@ -41,7 +41,7 @@ final class Payer429Interceptor: FlowTransactionErrorInterceptor {
   private func promptRetry(data: PayerStatusData) async -> Bool {
     let multiplierValue = data.surge?.multiplier?.doubleValue ?? 0
     let maxFee = data.surge?.maxFee ?? 0
-    let amount = maxFee * multiplierValue
+    let amount = maxFee
     let multiDisplay = multiplierValue.truncatingRemainder(dividingBy: 1) == 0
       ? String(Int(multiplierValue))
       : String(format: "%.1f", multiplierValue)
