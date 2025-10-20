@@ -417,35 +417,45 @@ extension JSMessageHandler {
 
 extension JSMessageHandler {
     private func signAuthz(_ authzResponse: FCLAuthzResponse, url: URL?) {
-        let title = authzResponse.config?.app?.title ?? webVC?.webView.title ?? "unknown"
-        let urlHost = url?.host ?? "unknown"
-        let vm = BrowserAuthzViewModel(
-            title: title,
-            url: urlHost,
-            logo: authzResponse.config?.app?.icon,
-            cadence: authzResponse.body.cadence,
-            arguments: authzResponse.body.voucher.arguments
-        ) { [weak self] result in
-            guard let self = self else {
-                return
-            }
+      
+      let title = authzResponse.config?.app?.title ?? webVC?.webView.title ?? "unknown"
+      let urlHost = url?.host ?? "unknown"
+      let vm = BrowserAuthzViewModel(
+          title: title,
+          url: urlHost,
+          logo: authzResponse.config?.app?.icon,
+          cadence: authzResponse.body.cadence,
+          arguments: authzResponse.body.voucher.arguments
+      ) { [weak self] result in
+          guard let self = self else {
+              return
+          }
 
-            DispatchQueue.main.async {
-                if result {
-                    self.processingAuthzTransaction = AuthzTransaction(
-                        url: url?.absoluteString,
-                        title: self.webVC?.webView.title,
-                        voucher: authzResponse.body.voucher
-                    )
-                    self.didConfirmSignPayload(authzResponse)
-                } else {
-                    self.rejectRequest()
-                }
-            }
+          DispatchQueue.main.async {
+              if result {
+                  self.processingAuthzTransaction = AuthzTransaction(
+                      url: url?.absoluteString,
+                      title: self.webVC?.webView.title,
+                      voucher: authzResponse.body.voucher
+                  )
+                  self.didConfirmSignPayload(authzResponse)
+              } else {
+                  self.rejectRequest()
+              }
+          }
 
-            self.finishService()
+          self.finishService()
+      }
+      
+      Task {  
+        let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+        if let payerStatus = result, let available = payerStatus.feePayer?.available, let active = payerStatus.surge?.active {
+          if available && active {
+            _ = await AlertCenter.shared.presentSurge(data: payerStatus)
+          }
         }
         Router.route(to: RouteMap.Explore.authz(vm))
+      }
     }
 
     private func linkAccount(_ authzResponse: FCLAuthzResponse, url: URL?) {

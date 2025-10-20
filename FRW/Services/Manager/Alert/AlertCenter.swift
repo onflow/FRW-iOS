@@ -170,3 +170,18 @@ final class AlertCenter: ObservableObject {
         resolve(selection: "cancel")
     }
 }
+
+extension AlertCenter {
+  func presentSurge(data: PayerStatusData) async -> Bool {
+    let multiplierValue = data.surge?.multiplier?.doubleValue ?? 0
+    let maxFee = data.surge?.maxFee ?? 0
+    let amount = maxFee
+    let multiDisplay = multiplierValue.truncatingRemainder(dividingBy: 1) == 0
+      ? String(Int(multiplierValue))
+      : String(format: "%.1f", multiplierValue)
+    return await presentSurgePricingConfirmation(
+      feeAmount: String(format: "%.3f", amount),
+      networkDescription: "Due to high network activity, transaction fees are elevated, and Flow Wallet is temporarily not paying for your gas. Current network fees are \(multiDisplay)× higher than usual."
+    )
+  }
+}
