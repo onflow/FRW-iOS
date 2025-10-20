@@ -42,8 +42,15 @@ struct SignPayerResponse: Codable {
 // MARK: - SignPayerRequest
 
 struct SignPayerRequest: Codable {
-    let transaction: FCLVoucher
     let message: PayerMessage
+}
+
+struct SignBridgePayerRequest: Codable {
+    let message: PayerPayload
+}
+
+struct PayerPayload: Codable {
+    let payload: String
 }
 
 // MARK: - PayerMessage

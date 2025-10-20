@@ -30,10 +30,7 @@ class BridgeFeePayer: FlowSigner {
             throw WalletError.emptyTransaction
         }
         
-        let request = SignPayerRequest(
-            transaction: transaction.voucher,
-            message: .init(envelopeMessage: signableData.hexValue)
-        )
+        let request = SignBridgePayerRequest(message: .init(payload: signableData.hexValue))
         let signature: FCLVoucher.Signature = try await Network
         .request(FRWWebEndpoint.signAsBridgePayer(request))
         return Data(hex: signature.sig)

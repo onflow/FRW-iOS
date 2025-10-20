@@ -253,7 +253,6 @@ extension RemoteConfigManager: FlowSigner {
         }
         
         let request = SignPayerRequest(
-            transaction: transaction.voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
         let signature: FCLVoucher.Signature = try await Network
@@ -263,7 +262,6 @@ extension RemoteConfigManager: FlowSigner {
 
     func sign(voucher: FCLVoucher, signableData: Data) async throws -> Data {
         let request = SignPayerRequest(
-            transaction: voucher,
             message: .init(envelopeMessage: signableData.hexValue)
         )
         let signature: FCLVoucher.Signature = try await Network

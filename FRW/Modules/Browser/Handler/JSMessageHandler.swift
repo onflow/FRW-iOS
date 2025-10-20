@@ -523,7 +523,6 @@ extension JSMessageHandler {
 
         Task {
             let request = SignPayerRequest(
-                transaction: authzResponse.body.voucher.toFCLVoucher(),
                 message: .init(envelopeMessage: authzResponse.body.message)
             )
             let signature: FCLVoucher.Signature = try await Network
