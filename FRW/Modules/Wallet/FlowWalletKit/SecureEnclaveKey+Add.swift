@@ -17,15 +17,36 @@ extension SecureEnclaveKey {
         return SecureEnclaveKey
     }
 
-    static func wallet(id: String) throws -> SecureEnclaveKey {
+    static func wallet(id: String, publicKey: String? = nil) throws -> SecureEnclaveKey {
         let pw = KeyProvider.password(with: id)
-        let key = KeyProvider.lastKey(with: id, in: SecureEnclaveKey.KeychainStorage) ?? id
-        let secureEnclaveKey = try SecureEnclaveKey.get(
-            id: key,
+        let keys = KeyProvider.keys(with: id, in: SecureEnclaveKey.KeychainStorage)
+        let fallbackKey = keys.last ?? id
+
+        // If a target publicKey is provided, try to find the matching stored key first.
+        if let targetPubKey = publicKey {
+            if let matched = try keys.first(where: { k in
+                let seKey = try SecureEnclaveKey.get(
+                    id: k,
+                    password: pw,
+                    storage: SecureEnclaveKey.KeychainStorage
+                )
+                let pubK = seKey.publicKey(signAlgo: .ECDSA_P256)?.hexString
+                return pubK == targetPubKey
+            }) {
+                return try SecureEnclaveKey.get(
+                    id: matched,
+                    password: pw,
+                    storage: SecureEnclaveKey.KeychainStorage
+                )
+            }
+        }
+
+        // Fallback to the last stored key (or the provided id when none stored).
+        return try SecureEnclaveKey.get(
+            id: fallbackKey,
             password: pw,
             storage: SecureEnclaveKey.KeychainStorage
         )
-        return secureEnclaveKey
     }
 
     func flowAccountKey(
