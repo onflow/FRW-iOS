@@ -15,11 +15,13 @@ enum KeyProvider {
         let aseKey = LocalEnvManager.shared.backupAESKey
         return aseKey
     }
-
+  
+    static func keys(with uid: String, in store: FlowWalletKit.KeychainStorage ) -> [String] {
+        return store.allKeys.filter { $0.contains(uid) }
+    }
+  
     static func lastKey(with uid: String, in store: FlowWalletKit.KeychainStorage ) -> String? {
-        let allKeys = store.allKeys
-        let result = allKeys.last { $0.contains(uid) }
-        return result
+        return store.allKeys.last { $0.contains(uid) }
     }
 
     static func getId(with key: String) -> String {

@@ -322,7 +322,7 @@ extension WalletManager {
       provider = try? PrivateKey.wallet(id: uid)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid)
+      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     }
     log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
