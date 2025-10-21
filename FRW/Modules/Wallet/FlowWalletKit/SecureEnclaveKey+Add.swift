@@ -66,12 +66,15 @@ extension SecureEnclaveKey: WalletKeyProvidable {
         id: String,
         password: String,
         storage: FlowWalletKit.KeychainStorage
-    ) throws -> SecureEnclaveKey {
-        try SecureEnclaveKey.get(
+    ) throws -> Self {
+        guard let key = try SecureEnclaveKey.get(
             id: id,
             password: password,
             storage: storage
-        )
+        ) as? Self else {
+            throw WalletError.emptyKeyProvider
+        }
+        return key
     }
 }
 

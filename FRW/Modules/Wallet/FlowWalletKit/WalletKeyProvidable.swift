@@ -10,8 +10,8 @@ import FlowWalletKit
 import Foundation
 
 /// Shared behaviour for key types that can be retrieved from keychain storage by uid.
-/// Conforming types only need to describe how to access their specific storage and how
-/// to reconstruct a key instance from a stored identifier.
+/// Conforming types need to provide their dedicated storage, supported signature algorithms,
+/// and an implementation that fetches a concrete key instance from storage.
 protocol WalletKeyProvidable: KeyProtocol {
     static var keychainStorage: FlowWalletKit.KeychainStorage { get }
     static var matchableSignAlgorithms: [Flow.SignatureAlgorithm] { get }
@@ -23,7 +23,7 @@ protocol WalletKeyProvidable: KeyProtocol {
 }
 
 extension WalletKeyProvidable {
-    /// Restores a key of the current type.
+    /// Restores a key for the given uid, optionally matching a stored public key.
     /// - Parameters:
     ///   - id: The activated user id (without suffix) we use to build storage keys.
     ///   - publicKey: Optional public key string(s) saved with the account metadata.
@@ -38,17 +38,16 @@ extension WalletKeyProvidable {
         let searchKeys = storedKeys.isEmpty ? [id] : storedKeys
         let fallbackKey = storedKeys.last ?? id
 
-        let targets = normalizedTargets(from: publicKey)
-        if !targets.isEmpty {
-            // Stored metadata may contain multiple public keys per uid; try to find the match first
-            // so we return the precise key that produced the stored account.
+        let targetPublicKey = publicKey?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let targetPublicKey, !targetPublicKey.isEmpty {
+            // Try to locate the exact key whose public key matches what we stored alongside the profile.
             for keyId in searchKeys {
                 let candidate = try loadStoredKey(
                     id: keyId,
                     password: password,
                     storage: keychainStorage
                 )
-                if candidate.matchesPublicKeys(targets: targets, algorithms: matchableSignAlgorithms) {
+                if candidate.matchesPublicKey(targetPublicKey, algorithms: matchableSignAlgorithms) {
                     return candidate
                 }
             }
@@ -70,58 +69,21 @@ extension WalletKeyProvidable {
 }
 
 private extension KeyProtocol {
-    func matchesPublicKeys(targets: [String], algorithms: [Flow.SignatureAlgorithm]) -> Bool {
-        guard !targets.isEmpty else {
+    func matchesPublicKey(_ target: String, algorithms: [Flow.SignatureAlgorithm]) -> Bool {
+        let normalizedTarget = target.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+      
+        guard !normalizedTarget.isEmpty else {
             return false
         }
+      
         for algorithm in algorithms {
             guard let publicKey = publicKey(signAlgo: algorithm) else {
                 continue
             }
 
-            // Different SDK APIs expose the hex string via different properties; try each form
-            // because existing stored metadata could have been produced by any of them.
-            let candidateValues = [
-                publicKey.hexString,
-                publicKey.hexValue,
-                publicKey.description,
-            ]
-
-            for value in candidateValues.compactMap({ $0 }) {
-                if targets.contains(value.normalizedPublicKeyValue()) {
-                    return true
-                }
-            }
+            return publicKey.hexValue.lowercased() == normalizedTarget
         }
+      
         return false
-    }
-}
-
-private extension String {
-    func normalizedPublicKeyValue() -> String {
-        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            return trimmed
-        }
-        let lowercased = trimmed.lowercased()
-        if lowercased.hasPrefix("0x") {
-            return String(lowercased.dropFirst(2))
-        }
-        return lowercased
-    }
-}
-
-private extension WalletKeyProvidable {
-    static func normalizedTargets(from publicKey: String?) -> [String] {
-        guard let raw = publicKey, !raw.isEmpty else {
-            return []
-        }
-        // Support multiple comma-separated public keys saved during migration. Each entry may have
-        // different casing or optional `0x` prefixes, so we normalize them before comparison.
-        return raw
-            .split(separator: ",")
-            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-            .map { $0.normalizedPublicKeyValue() }
     }
 }

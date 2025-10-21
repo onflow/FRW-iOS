@@ -48,11 +48,14 @@ extension FlowWalletKit.PrivateKey: WalletKeyProvidable {
         id: String,
         password: String,
         storage: FlowWalletKit.KeychainStorage
-    ) throws -> FlowWalletKit.PrivateKey {
-        try FlowWalletKit.PrivateKey.get(
+    ) throws -> Self {
+        guard let key = try FlowWalletKit.PrivateKey.get(
             id: id,
             password: password,
             storage: storage
-        )
+        ) as? Self else {
+            throw WalletError.emptyKeyProvider
+        }
+        return key
     }
 }
