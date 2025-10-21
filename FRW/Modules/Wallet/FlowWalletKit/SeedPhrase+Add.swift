@@ -11,23 +11,6 @@ import Foundation
 
 extension SeedPhraseKey {
     private static let suffix = ".SP"
-    static func wallet(id: String) throws -> SeedPhraseKey {
-        let pw = KeyProvider.password(with: id)
-        let key = KeyProvider.lastKey(with: id, in: seedPhraseStorage) ?? id
-        let seedPhraseKey = try SeedPhraseKey.get(
-            id: key,
-            password: pw,
-            storage: SeedPhraseKey.seedPhraseStorage
-        )
-        return seedPhraseKey
-    }
-
-    func store(id: String) throws {
-        let pw = KeyProvider.password(with: id)
-        let key = createKey(uid: id)
-        try store(id: key, password: pw)
-    }
-
     static var seedPhraseStorage: FlowWalletKit.KeychainStorage {
         let storage = FlowWalletKit.KeychainStorage(
             service: keychainService,
@@ -36,6 +19,31 @@ extension SeedPhraseKey {
             deviceOnly: true
         )
         return storage
+    }
+}
+
+extension SeedPhraseKey: WalletKeyProvidable {
+    static var keychainStorage: FlowWalletKit.KeychainStorage {
+        seedPhraseStorage
+    }
+
+    static var matchableSignAlgorithms: [Flow.SignatureAlgorithm] {
+        [
+            .ECDSA_SECP256k1,
+            .ECDSA_P256,
+        ]
+    }
+
+    static func loadStoredKey(
+        id: String,
+        password: String,
+        storage: FlowWalletKit.KeychainStorage
+    ) throws -> SeedPhraseKey {
+        try SeedPhraseKey.get(
+            id: id,
+            password: password,
+            storage: storage
+        )
     }
 }
 

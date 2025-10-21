@@ -311,21 +311,22 @@ extension WalletManager {
     }
     log.debug("[user] \(userStore)")
     var provider: (any KeyProtocol)?
+    let trimmedPublicKey = userStore.publicKey.trimmingCharacters(in: .whitespacesAndNewlines)
+    let targetPublicKey = trimmedPublicKey.isEmpty ? nil : trimmedPublicKey
     switch userStore.keyType {
     case .seedPhrase:
-      provider = try? SeedPhraseKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
+      provider = try? SeedPhraseKey.wallet(id: uid, publicKey: targetPublicKey)
+      log.debug("[Wallet] \(provider != nil ? "found" : "not found") provider for \(uid) by \(userStore.keyType)")
     case .privateKey:
-      provider = try? PrivateKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
+      provider = try? PrivateKey.wallet(id: uid, publicKey: targetPublicKey)
+      log.debug("[Wallet] \(provider != nil ? "found" : "not found") provider for \(uid) by \(userStore.keyType)")
     case .keyStore:
-      provider = try? PrivateKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
+      provider = try? PrivateKey.wallet(id: uid, publicKey: targetPublicKey)
+      log.debug("[Wallet] \(provider != nil ? "found" : "not found") provider for \(uid) by \(userStore.keyType)")
     case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
+      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: targetPublicKey)
+      log.debug("[Wallet] \(provider != nil ? "found" : "not found") provider for \(uid) by \(userStore.keyType)")
     }
-    log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
     return provider
   }
 

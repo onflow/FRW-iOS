@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1500373B2EA7DB4D00400E2F /* WalletKeyProvidable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1500373A2EA7DB4D00400E2F /* WalletKeyProvidable.swift */; };
+		1500373C2EA7DB4D00400E2F /* WalletKeyProvidable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1500373A2EA7DB4D00400E2F /* WalletKeyProvidable.swift */; };
 		1500783428682BF700A00109 /* SPIndicator in Frameworks */ = {isa = PBXBuildFile; productRef = 1500783328682BF700A00109 /* SPIndicator */; };
 		1505E5FC28363578007B98D8 /* FRWAPI+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1505E5FA28363578007B98D8 /* FRWAPI+User.swift */; };
 		1505E5FF2836365C007B98D8 /* FRWAPI+AddressBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1505E5FD2836365C007B98D8 /* FRWAPI+AddressBook.swift */; };
@@ -2429,6 +2431,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1500373A2EA7DB4D00400E2F /* WalletKeyProvidable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeyProvidable.swift; sourceTree = "<group>"; };
 		1500783B286830EF00A00109 /* FRWTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FRWTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1500783D286830EF00A00109 /* FlowReferenceWalletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowReferenceWalletTests.swift; sourceTree = "<group>"; };
 		1505E5FA28363578007B98D8 /* FRWAPI+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+User.swift"; sourceTree = "<group>"; };
@@ -6443,6 +6446,7 @@
 				4EDEA7672C9044E800DE76B6 /* PKWallet+Add.swift */,
 				4E4A6B6C2CA6ECEF00231A85 /* KeyProtocol+Add.swift */,
 				4E611D3E2DD21B26000DAA74 /* KeyChainAccessibilityUpdate.swift */,
+				1500373A2EA7DB4D00400E2F /* WalletKeyProvidable.swift */,
 			);
 			path = FlowWalletKit;
 			sourceTree = "<group>";
@@ -7923,9 +7927,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -7979,9 +7987,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8054,9 +8066,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8093,9 +8109,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8938,6 +8958,7 @@
 				6A9C34FC28AB939600AA41A5 /* NFTUIKitCache.swift in Sources */,
 				4E777CAF2B1ECF8900300A3E /* SyncInfo.swift in Sources */,
 				6A164F442840A1380026B31E /* TabBarItemView.swift in Sources */,
+				1500373B2EA7DB4D00400E2F /* WalletKeyProvidable.swift in Sources */,
 				152BB09928AE91A700B2A2AA /* ResizableLottieView.swift in Sources */,
 				4EB2C6D52B4AEF6A00EB899C /* SignedRequest.swift in Sources */,
 				15DC219727819C56000B187A /* VTextFieldType.swift in Sources */,
@@ -9983,6 +10004,7 @@
 				6A9C34FB28AB939600AA41A5 /* NFTUIKitCache.swift in Sources */,
 				4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */,
 				15C58BE72868A4EE00BD4FC6 /* TabBarItemView.swift in Sources */,
+				1500373C2EA7DB4D00400E2F /* WalletKeyProvidable.swift in Sources */,
 				152BB09828AE91A700B2A2AA /* ResizableLottieView.swift in Sources */,
 				4EB2C6D42B4AEF6900EB899C /* SignedRequest.swift in Sources */,
 				15C58BE82868A4EE00BD4FC6 /* VTextFieldType.swift in Sources */,

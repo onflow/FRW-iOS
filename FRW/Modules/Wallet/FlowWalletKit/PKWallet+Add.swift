@@ -11,25 +11,6 @@ import Foundation
 
 extension FlowWalletKit.PrivateKey {
     private static let suffix = ".PK"
-    static func wallet(id: String) throws -> FlowWalletKit.PrivateKey {
-        let pw = KeyProvider.password(with: id)
-        let key = KeyProvider.lastKey(with: id, in: PKStorage) ?? id
-        let privateKey = try FlowWalletKit.PrivateKey.get(
-            id: key,
-            password: pw,
-            storage: PrivateKey.PKStorage
-        )
-        return privateKey
-    }
-
-    func store(id: String) throws {
-        let pw = KeyProvider.password(with: id)
-        let key = createKey(uid: id)
-        try store(id: key, password: pw)
-    }
-}
-
-extension FlowWalletKit.PrivateKey {
     static var PKStorage: FlowWalletKit.KeychainStorage {
         let storage = FlowWalletKit.KeychainStorage(
             service: keychainService,
@@ -48,5 +29,30 @@ extension FlowWalletKit.PrivateKey {
 
     static var keychainTag: String {
         "PKWallet"
+    }
+}
+
+extension FlowWalletKit.PrivateKey: WalletKeyProvidable {
+    static var keychainStorage: FlowWalletKit.KeychainStorage {
+        PKStorage
+    }
+
+    static var matchableSignAlgorithms: [Flow.SignatureAlgorithm] {
+        [
+            .ECDSA_SECP256k1,
+            .ECDSA_P256,
+        ]
+    }
+
+    static func loadStoredKey(
+        id: String,
+        password: String,
+        storage: FlowWalletKit.KeychainStorage
+    ) throws -> FlowWalletKit.PrivateKey {
+        try FlowWalletKit.PrivateKey.get(
+            id: id,
+            password: password,
+            storage: storage
+        )
     }
 }
