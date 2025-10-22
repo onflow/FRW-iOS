@@ -269,6 +269,19 @@ struct DeveloperModeView: RouteableView {
                             }
                             .frame(height: 64)
                             .padding(.horizontal, 16)
+                          
+                            Divider()
+                            HStack {
+                                Button {
+                                    HUD.success(title: "done")
+                                  LocalUserDefaults.shared.walletAccount = nil
+                                } label: {
+                                    Text("Reset User Emoji")
+                                }
+                                Spacer()
+                            }
+                            .frame(height: 64)
+                            .padding(.horizontal, 16)
 
 //                            Divider()
 //                            HStack {

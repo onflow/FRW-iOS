@@ -228,7 +228,7 @@ extension TurboModuleSwift {
     
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
-      guard let result = try? await parseAccount(account: account) else {
+      guard let result = try? await parseAccount(account: account, userId: uid) else {
         continue
       }
       list.append(contentsOf: result)
@@ -247,7 +247,7 @@ extension TurboModuleSwift {
     
     var resultOfProfiles: [RNBridge.WalletProfile] = []
     let allProfiles = ProfileManager.shared.profiles
-    var supportNetworks: Set<Flow.ChainID> = [currentNetwork]
+    let supportNetworks: Set<Flow.ChainID> = [currentNetwork]
     for profile in allProfiles {
       
       guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
@@ -260,7 +260,7 @@ extension TurboModuleSwift {
         continue
       }
       for account in accountList {
-        guard let result = try? await parseAccount(account: account) else {
+        guard let result = try? await parseAccount(account: account, userId: profile.uid) else {
           continue
         }
         walletAccounts.append(contentsOf: result)
@@ -276,16 +276,16 @@ extension TurboModuleSwift {
     return resultOfProfiles
   }
   
-  private static func parseAccount(account: FlowWalletKit.Account) async throws ->  [RNBridge.WalletAccount] {
+  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
     var list: [RNBridge.WalletAccount] = []
     try await account.fetchAccount()
-    list.append(account.toWalletAccount())
+    list.append(account.toWalletAccount(userId: userId))
     if let linked = account.coa {
-      list.append(linked.toWalletAccount(parentAddress: account.hexAddr))
+      list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
     }
 
     if let childList = account.childs {
-      let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr) }
+      let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
       list.append(contentsOf: result)
     }
     return list

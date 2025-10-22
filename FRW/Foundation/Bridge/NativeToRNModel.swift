@@ -9,9 +9,9 @@ import Foundation
 import FlowWalletKit
 
 extension FlowWalletKit.Account {
-  func toWalletAccount() -> RNBridge.WalletAccount {
+  func toWalletAccount(userId: String? = nil) -> RNBridge.WalletAccount {
     let addr = address.hexAddr
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr)
+    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
     return RNBridge.WalletAccount(
       id: UUID().uuidString,
       name: user.name,
@@ -36,13 +36,13 @@ extension FlowWalletKit.Account {
 
 extension FlowWalletKit.ChildAccount {
   func toWalletAccount(
-    parentAddress: String? = WalletManager.shared.mainAccount?
-      .hexAddr
+    parentAddress: String? = WalletManager.shared.mainAccount?.hexAddr,
+    userId: String? = nil
   ) -> RNBridge.WalletAccount {
     let addr = address.hexAddr
     var parentEmoji: RNBridge.EmojiInfo?
     if let parentAddress {
-      let user = WalletManager.shared.walletAccount.readInfo(at: parentAddress)
+      let user = WalletManager.shared.walletAccount.readInfo(at: parentAddress, key: userId)
       parentEmoji = user.toRNEmoji()
     }
 
@@ -65,13 +65,14 @@ extension FlowWalletKit.ChildAccount {
 extension FlowWalletKit.COA {
   func toWalletAccount(
     parentAddress: String? = WalletManager.shared.mainAccount?
-      .hexAddr
+      .hexAddr,
+    userId: String? = nil
   ) -> RNBridge.WalletAccount {
     let addr = address.addHexPrefix()
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr)
+    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
     var parentEmoji: RNBridge.EmojiInfo?
     if let parentAddress {
-      let parentUser = WalletManager.shared.walletAccount.readInfo(at: parentAddress)
+      let parentUser = WalletManager.shared.walletAccount.readInfo(at: parentAddress, key: userId)
       parentEmoji = parentUser.toRNEmoji()
     }
     return RNBridge.WalletAccount(
