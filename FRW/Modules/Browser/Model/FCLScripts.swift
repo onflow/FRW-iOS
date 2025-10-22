@@ -21,6 +21,7 @@ class FCLScripts {
     private static let NonceReplacement = "$NONCE_REPLACEMENT"
     private static let NetworkReplacement = "$NETWORK"
     private static let ReasonReplacement = "$REASON"
+    private static let PayerKeyIDReplacement = "$PAYER_KEY_ID_REPLACEMENT"
 
     private static let preAuthzResponse = """
         {
@@ -50,7 +51,7 @@ class FCLScripts {
                         "method": "EXT/RPC",
                         "identity": {
                             "address": "$PAYER_ADDRESS_REPLACEMENT",
-                            "keyId": 0
+                            "keyId": $PAYER_KEY_ID_REPLACEMENT
                         }
                     }
                 ],
@@ -257,11 +258,12 @@ extension FCLScripts {
 }
 
 extension FCLScripts {
-    static func generatePreAuthzResponse(address: String, keyIndex: Int = 0, surgedAddress: String? = nil) -> String {
+  static func generatePreAuthzResponse(address: String, keyIndex: Int = 0, surgedAddress: String? = nil, surgedIndex: Int? =  nil) -> String {
         let dict = [
             AddressReplacement: address,
             PayerAddressReplacement: surgedAddress ?? RemoteConfigManager.shared.payer,
             KeyIDReplacement: String(keyIndex),
+            PayerKeyIDReplacement: String(surgedIndex ?? 0)
         ]
         return FCLScripts.preAuthzResponse.replace(from: dict)
     }
