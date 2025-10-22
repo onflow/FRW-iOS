@@ -570,8 +570,15 @@ extension WalletConnectManager {
                             self.rejectRequest(request: sessionRequest)
                         }
                     }
-
+                  Task {
+                    let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+                    if let payerStatus = result, let available = payerStatus.feePayer?.available, let active = payerStatus.surge?.active {
+                      if available && active {
+                        _ = await AlertCenter.shared.presentSurge(data: payerStatus)
+                      }
+                    }
                     Router.route(to: RouteMap.Explore.authz(authzVM))
+                  }
                 }
 
                 if model.roles.payer {

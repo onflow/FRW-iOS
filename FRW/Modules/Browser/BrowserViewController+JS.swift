@@ -158,13 +158,16 @@ extension BrowserViewController {
         }
         Task {
             var surgeAddress: String? = nil
+            var surgedKeyIndex: Int? = nil
+            var keyIndex = WalletManager.shared.keyIndex
             let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
             if let payerStatus = result {
                 surgeAddress = payerStatus.shouldUserPay ? address : payerStatus.feePayer?.address
+                surgedKeyIndex = payerStatus.shouldUserPay ? keyIndex : payerStatus.feePayer?.keyIndex
             }
-            let keyIndex = WalletManager.shared.keyIndex
-            log.debug("will post pre authz response")
-            postMessage(FCLScripts.generatePreAuthzResponse(address: address, keyIndex: keyIndex, surgedAddress: surgeAddress))
+            
+            log.debug("will post pre authz response \(surgeAddress)")
+          postMessage(FCLScripts.generatePreAuthzResponse(address: address, keyIndex: keyIndex, surgedAddress: surgeAddress, surgedIndex: surgedKeyIndex))
             log.debug("did post pre authz response")
         }
     }
