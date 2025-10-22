@@ -56,10 +56,6 @@ struct PayerPayload: Codable {
 // MARK: - PayerMessage
 
 struct PayerMessage: Codable {
-    enum CodingKeys: String, CodingKey {
-        case envelopeMessage = "envelope_message"
-    }
-
     let envelopeMessage: String
 }
 
