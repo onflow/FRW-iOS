@@ -278,7 +278,7 @@ extension TurboModuleSwift {
   
   private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
     var list: [RNBridge.WalletAccount] = []
-    try await account.fetchAccount()
+    try? await account.fetchAccount()
     list.append(account.toWalletAccount(userId: userId))
     if let linked = account.coa {
       list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
