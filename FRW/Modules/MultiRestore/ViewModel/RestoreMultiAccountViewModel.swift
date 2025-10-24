@@ -20,7 +20,9 @@ class RestoreMultiAccountViewModel: ObservableObject {
     var items: [[MultiBackupManager.StoreItem]]
 
     func onClickUser(at index: Int) {
+      log.debug("🟢 [RestoreMultiAccountVM] onClickUser called with index: \(index)")
         guard index < items.count else {
+          log.debug("⚠️ [RestoreMultiAccountVM] Invalid index: \(index), items count: \(items.count)")
             return
         }
         let selectedUser = items[index]
@@ -38,13 +40,15 @@ class RestoreMultiAccountViewModel: ObservableObject {
 
         // If it is the current user, do nothing and return directly.
         if let userId = UserManager.shared.activatedUID, userId == selectedUserId {
+          log.debug("ℹ️ [RestoreMultiAccountVM] Already current user, popping to root")
             Router.popToRoot()
             return
         }
 
         // If it is in the login list, switch user
-      
+
         if ProfileManager.shared.hasProfile(userId: selectedUserId) {
+          log.debug("🔄 [RestoreMultiAccountVM] Switching to existing user: \(selectedUserId)")
             Task {
                 do {
                     HUD.loading()
