@@ -75,38 +75,40 @@ extension RestoreMultiAccountView {
         let onClick: (Int) -> Void
 
         var body: some View {
-            HStack(spacing: 12) {
-                KFImage.url(URL(string: (user.userAvatar ?? "").convertedAvatarString()))
-                    .placeholder {
-                        Image("placeholder")
-                            .resizable()
-                    }
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 36, height: 36)
-                    .cornerRadius(18)
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("@\(user.userName)")
-                        .font(.inter(size: 12, weight: .bold))
-                        .foregroundColor(Color.Theme.Text.black8)
-
-                    Text("\(user.address)")
-                        .font(.inter(size: 12))
-                        .foregroundColor(Color.Theme.Text.black3)
-                }
-
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-            .frame(height: 64)
-            .frame(maxWidth: .infinity)
-            .background(Color.Theme.Line.line)
-            .contentShape(Rectangle())
-            .cornerRadius(24)
-            .shadow(color: Color.black.opacity(0.04), x: 0, y: 4, blur: 16)
-            .onTapGesture {
+            Button(action: {
+                print("🔵 [RestoreMultiAccount] Button tapped at index: \(index)")
                 onClick(index)
+            }) {
+                HStack(spacing: 12) {
+                    KFImage.url(URL(string: (user.userAvatar ?? "").convertedAvatarString()))
+                        .placeholder {
+                            Image("placeholder")
+                                .resizable()
+                        }
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 36, height: 36)
+                        .cornerRadius(18)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("@\(user.userName)")
+                            .font(.inter(size: 12, weight: .bold))
+                            .foregroundColor(Color.Theme.Text.black8)
+
+                        Text("\(user.address)")
+                            .font(.inter(size: 12))
+                            .foregroundColor(Color.Theme.Text.black3)
+                    }
+
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .frame(height: 64)
+                .frame(maxWidth: .infinity)
+                .background(Color.Theme.Line.line)
+                .cornerRadius(24)
             }
+            .buttonStyle(PlainButtonStyle())
+            .shadow(color: Color.black.opacity(0.04), x: 0, y: 4, blur: 16)
         }
     }
 }
