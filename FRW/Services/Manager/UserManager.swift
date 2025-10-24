@@ -157,6 +157,7 @@ extension UserManager {
       self.activatedUID = nil
       self.userInfo = nil
       self.deleteLoginUID(willResetUID)
+      ProfileManager.shared.deleteProfile(userId: willResetUID)
 
       NotificationCenter.default.post(name: .didResetWallet)
 
