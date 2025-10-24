@@ -564,21 +564,22 @@ extension WalletConnectManager {
                         cadence: request.cadence,
                         arguments: request.agrument
                     ) { result in
+                      Task {
+                        let statusData: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+                        if let payerStatus = statusData, let available = payerStatus.feePayer?.available, let active =    payerStatus.surge?.active {
+                            if available && active {
+                                _ = await AlertCenter.shared.presentSurge(data: payerStatus)
+                            }
+                        }
                         if result {
                             self.approveRequest(request: sessionRequest, requestInfo: request)
                         } else {
                             self.rejectRequest(request: sessionRequest)
                         }
-                    }
-                  Task {
-                    let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
-                    if let payerStatus = result, let available = payerStatus.feePayer?.available, let active = payerStatus.surge?.active {
-                      if available && active {
-                        _ = await AlertCenter.shared.presentSurge(data: payerStatus)
                       }
                     }
-                    Router.route(to: RouteMap.Explore.authz(authzVM))
-                  }
+                  
+                  Router.route(to: RouteMap.Explore.authz(authzVM))
                 }
 
                 if model.roles.payer {

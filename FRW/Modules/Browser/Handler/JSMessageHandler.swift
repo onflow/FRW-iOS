@@ -430,7 +430,13 @@ extension JSMessageHandler {
           guard let self = self else {
               return
           }
-
+        Task {
+          let statusData: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
+          if let payerStatus = statusData, let available = payerStatus.feePayer?.available, let active = payerStatus.surge?.active {
+            if available && active {
+              _ = await AlertCenter.shared.presentSurge(data: payerStatus)
+            }
+          }
           DispatchQueue.main.async {
               if result {
                   self.processingAuthzTransaction = AuthzTransaction(
@@ -445,17 +451,9 @@ extension JSMessageHandler {
           }
 
           self.finishService()
-      }
-      
-      Task {  
-        let result: PayerStatusData? =  try? await Network.request(FRWWebEndpoint.payerStatus)
-        if let payerStatus = result, let available = payerStatus.feePayer?.available, let active = payerStatus.surge?.active {
-          if available && active {
-            _ = await AlertCenter.shared.presentSurge(data: payerStatus)
-          }
         }
-        Router.route(to: RouteMap.Explore.authz(vm))
       }
+      Router.route(to: RouteMap.Explore.authz(vm))
     }
 
     private func linkAccount(_ authzResponse: FCLAuthzResponse, url: URL?) {
