@@ -126,6 +126,8 @@ class WalletManager: ObservableObject {
   var coa: COA? {
     mainAccount?.coa
   }
+  
+  var EOAs: [EOA]? = nil
 
   var childs: [FlowWalletKit.ChildAccount]? {
     mainAccount?.childs
@@ -218,6 +220,7 @@ extension WalletManager {
       Task {
         do {
           try await walletEntity?.fetchAccount()
+          self.EOAs = walletEntity?.eoaAddress?.compactMap{ EOA($0,network: currentNetwork) }
           ProfileManager.shared.update(
             uid: uid,
             keyProvider: provider,
@@ -427,15 +430,6 @@ extension WalletManager {
 // MARK: - account type
 
 extension WalletManager {
-  func isCoa(_ address: String?) -> Bool {
-    guard let address = address, !address.isEmpty else {
-      return false
-    }
-    return !EVMAccountManager.shared.accounts
-      .filter {
-        $0.showAddress.lowercased().contains(address.lowercased())
-      }.isEmpty
-  }
 
   func isMain() -> Bool {
     guard let currentAddress = getWatchAddressOrChildAccountAddressOrPrimaryAddress(),

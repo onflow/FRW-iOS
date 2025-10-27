@@ -198,6 +198,22 @@ struct SideMenuView: View {
                             WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                         }
                     }
+                    
+                  if let eoaList = wallet.EOAs {
+                    ForEach(0..<eoaList.count, id:\.self) { index in
+                      let eoaAccount = eoaList[index]
+                      AccountSideCell(
+                        address: eoaAccount.address,
+                          currentAddress: vm.currentAddress,
+                          balance: Binding<String?>(
+                              get: { vm.walletBalance[eoaAccount.address]?.doubleValue.formatDisplayFlowBalance },
+                              set: { _ in }
+                          )
+                      ) { address in
+                          WalletManager.shared.changeSelectedAccount(address: eoaAccount.address, type: .eoa)
+                      }
+                    }
+                  }
 
                     if let childs = wallet.childs, !childs.isEmpty {
                         ForEach(childs, id: \.address) { child in

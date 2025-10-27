@@ -56,6 +56,10 @@ class TurboModuleSwift: NSObject {
       if let account = await WalletManager.shared.coa {
         list.append(account.toWalletAccount())
       }
+      if let eoaAccounts = await WalletManager.shared.EOAs {
+        let result = eoaAccounts.map{ $0.toWalletAccount()}
+        list.append(contentsOf: result)
+      }
       if let childList = await WalletManager.shared.childs {
         let result = childList.map { $0.toWalletAccount() }
         list.append(contentsOf: result)
@@ -225,10 +229,10 @@ extension TurboModuleSwift {
       throw LLError.accountNotFound
     }
     var list: [RNBridge.WalletAccount] = []
-    
+    let eoas = await WalletManager.shared.walletEntity?.eoaAddress
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
-      guard let result = try? await parseAccount(account: account, userId: uid) else {
+      guard let result = try? await parseAccount(account: account, userId: uid, eoa: eoas) else {
         continue
       }
       list.append(contentsOf: result)
@@ -260,7 +264,7 @@ extension TurboModuleSwift {
         continue
       }
       for account in accountList {
-        guard let result = try? await parseAccount(account: account, userId: profile.uid) else {
+        guard let result = try? await parseAccount(account: account, userId: profile.uid, eoa: walletEntity.eoaAddress) else {
           continue
         }
         walletAccounts.append(contentsOf: result)
@@ -276,12 +280,17 @@ extension TurboModuleSwift {
     return resultOfProfiles
   }
   
-  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
+  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil, eoa: Set<String>? = nil) async throws ->  [RNBridge.WalletAccount] {
     var list: [RNBridge.WalletAccount] = []
     try? await account.fetchAccount()
     list.append(account.toWalletAccount(userId: userId))
     if let linked = account.coa {
       list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
+    }
+    
+    if let eoas = eoa {
+      let result = Array(eoas).compactMap { EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
+      list.append(contentsOf: result)
     }
 
     if let childList = account.childs {

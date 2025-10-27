@@ -89,9 +89,9 @@ class SideMenuViewModel: ObservableObject {
 
     func loadBalance() {
         Task {
-            let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
+          let mainAccounts = await wallet.currentNetworkAccounts.compactMap(\.hexAddr)
             var linksAccounts: [String] = []
-            linksAccounts = wallet.childs?.compactMap(\.address.hex) ?? []
+            linksAccounts = await wallet.childs?.compactMap(\.address.hex) ?? []
             if let coa = wallet.coa {
                 linksAccounts.insert(coa.address, at: 0)
             }
