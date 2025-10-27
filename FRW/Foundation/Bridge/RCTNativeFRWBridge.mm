@@ -173,8 +173,8 @@
   return [TurboModuleSwift clearAllToasts];
 }
 
-- (void)hideToast:(nonnull NSString *)id { 
-  return [TurboModuleSwift hideToastWithId: id];
+- (void)hideToast:(NSString *)toastId { 
+  return [TurboModuleSwift hideToastWithId: toastId];
 }
 
 - (void)showToast:(NSString *)title
