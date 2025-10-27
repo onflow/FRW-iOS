@@ -149,7 +149,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "revision" : "fd4cea203171d47e488fa7adea3f8ff65f67d486"
+        "revision" : "ee91b0d0371810743dfe872153c08d53d009b6dc"
       }
     },
     {
