@@ -173,15 +173,15 @@
   return [TurboModuleSwift clearAllToasts];
 }
 
-- (void)hideToast:(nonnull NSString *)id { 
-  return [TurboModuleSwift hideToastWithId: id];
+- (void)hideToast:(NSString *)toastId { 
+  return [TurboModuleSwift hideToastWithId: toastId];
 }
 
 - (void)showToast:(NSString *)title
-          message:(NSString *)message
+          message:(NSString * _Nullable)message
              type:(NSString *)type
          duration:(NSNumber *)duration {
-  return [TurboModuleSwift showToastWithTitile:title message:message type:type duration:duration.intValue];
+  return [TurboModuleSwift showToastWithTitle:title message:message type:type duration:duration.intValue];
 }
 
 - (NSString *)getLanguage {
@@ -193,4 +193,3 @@
 }
 
 @end
-

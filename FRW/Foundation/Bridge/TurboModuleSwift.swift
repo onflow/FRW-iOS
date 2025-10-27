@@ -303,16 +303,16 @@ extension TurboModuleSwift {
   }
   
   @objc
-  static func showToast(titile: String, message: String, type: String, duration: Int) {
+  static func showToast(title: String, message: String? = nil, type: String, duration: Int) {
     switch type {
     case "info", "warning":
-      HUD.info(title: titile, message: message)
+      HUD.info(title: title, message: message)
     case "error":
-      HUD.error(title: titile, message: message)
+      HUD.error(title: title, message: message)
     case "success":
-      HUD.success(title: titile, message: message)
+      HUD.success(title: title, message: message)
     default:
-      HUD.info(title: titile, message: message)
+      HUD.info(title: title, message: message)
     }
   }
   
