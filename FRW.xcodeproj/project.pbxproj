@@ -1792,6 +1792,16 @@
 		4EE196502DE58F4E003EE55D /* DelegateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */; };
 		4EE282A52EAF3AAA0070A3E4 /* WalletManager+EOA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282A42EAF3AAA0070A3E4 /* WalletManager+EOA.swift */; };
 		4EE282A62EAF3AAA0070A3E4 /* WalletManager+EOA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282A42EAF3AAA0070A3E4 /* WalletManager+EOA.swift */; };
+		4EE282ED2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EB2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift */; };
+		4EE282EE2EB078FB0070A3E4 /* LoginViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EA2EB078FB0070A3E4 /* LoginViewModelProtocol.swift */; };
+		4EE282EF2EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282E92EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift */; };
+		4EE282F02EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift */; };
+		4EE282F12EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EB2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift */; };
+		4EE282F22EB078FB0070A3E4 /* LoginViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EA2EB078FB0070A3E4 /* LoginViewModelProtocol.swift */; };
+		4EE282F32EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282E92EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift */; };
+		4EE282F42EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift */; };
+		4EE282F62EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */; };
+		4EE282F72EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -3251,6 +3261,11 @@
 		4EE090A62DB0ABB8001515FE /* ZipFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipFile.swift; sourceTree = "<group>"; };
 		4EE1964E2DE58F4E003EE55D /* DelegateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelegateInfo.swift; sourceTree = "<group>"; };
 		4EE282A42EAF3AAA0070A3E4 /* WalletManager+EOA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManager+EOA.swift"; sourceTree = "<group>"; };
+		4EE282E92EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreLoginViewModel.refactored.swift; sourceTree = "<group>"; };
+		4EE282EA2EB078FB0070A3E4 /* LoginViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelProtocol.swift; sourceTree = "<group>"; };
+		4EE282EB2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyLoginViewModel.refactored.swift; sourceTree = "<group>"; };
+		4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginViewModel.refactored.swift; sourceTree = "<group>"; };
+		4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNotFoundAlertView.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -5771,6 +5786,10 @@
 		15DE22FE2780206F00B5EE03 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				4EE282E92EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift */,
+				4EE282EA2EB078FB0070A3E4 /* LoginViewModelProtocol.swift */,
+				4EE282EB2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift */,
+				4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift */,
 				15DE22FF2780208300B5EE03 /* RestoreWalletViewModel.swift */,
 				1599F76F278892680094B196 /* InputMnemonicViewModel.swift */,
 				15F22F08278B009200FCF772 /* ChooseAccountViewModel.swift */,
@@ -5942,6 +5961,7 @@
 				159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */,
 				15F607312E963E82008D0EDD /* AlertCenter.swift */,
 				15F607382E963E82008D0EDD /* SurgePricingAlertView.swift */,
+				4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -8269,6 +8289,10 @@
 				153749122E26FDD60040E3F8 /* SPView.swift in Sources */,
 				153749132E26FDD60040E3F8 /* SPInsetsTextField.swift in Sources */,
 				153749142E26FDD60040E3F8 /* SPDimmedButton+AppearanceState.swift in Sources */,
+				4EE282F12EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift in Sources */,
+				4EE282F22EB078FB0070A3E4 /* LoginViewModelProtocol.swift in Sources */,
+				4EE282F32EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift in Sources */,
+				4EE282F42EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift in Sources */,
 				153749152E26FDD60040E3F8 /* UITabBarExtension.swift in Sources */,
 				4EF18DFF2E9F825200D665D8 /* PayerStatus.swift in Sources */,
 				153749162E26FDD60040E3F8 /* SPPopoverNavigationController.swift in Sources */,
@@ -8283,6 +8307,7 @@
 				1537491F2E26FDD60040E3F8 /* UITabBarControllerExtension.swift in Sources */,
 				153749202E26FDD60040E3F8 /* SPScrollView.swift in Sources */,
 				153749212E26FDD60040E3F8 /* SPWindowSceneDelegate.swift in Sources */,
+				4EE282F62EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */,
 				153749222E26FDD60040E3F8 /* SPLocale.swift in Sources */,
 				153749232E26FDD60040E3F8 /* UISliderExtension.swift in Sources */,
 				153749242E26FDD60040E3F8 /* UIGestureRecognizerExtension.swift in Sources */,
@@ -9315,6 +9340,10 @@
 				1537496A2E26FDD60040E3F8 /* SPView.swift in Sources */,
 				1537496B2E26FDD60040E3F8 /* SPInsetsTextField.swift in Sources */,
 				1537496C2E26FDD60040E3F8 /* SPDimmedButton+AppearanceState.swift in Sources */,
+				4EE282ED2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.refactored.swift in Sources */,
+				4EE282EE2EB078FB0070A3E4 /* LoginViewModelProtocol.swift in Sources */,
+				4EE282EF2EB078FB0070A3E4 /* KeyStoreLoginViewModel.refactored.swift in Sources */,
+				4EE282F02EB078FB0070A3E4 /* SeedPhraseLoginViewModel.refactored.swift in Sources */,
 				1537496D2E26FDD60040E3F8 /* UITabBarExtension.swift in Sources */,
 				4EF18DFE2E9F825200D665D8 /* PayerStatus.swift in Sources */,
 				1537496E2E26FDD60040E3F8 /* SPPopoverNavigationController.swift in Sources */,
@@ -9329,6 +9358,7 @@
 				153749772E26FDD60040E3F8 /* UITabBarControllerExtension.swift in Sources */,
 				153749782E26FDD60040E3F8 /* SPScrollView.swift in Sources */,
 				153749792E26FDD60040E3F8 /* SPWindowSceneDelegate.swift in Sources */,
+				4EE282F72EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */,
 				1537497A2E26FDD60040E3F8 /* SPLocale.swift in Sources */,
 				1537497B2E26FDD60040E3F8 /* UISliderExtension.swift in Sources */,
 				1537497C2E26FDD60040E3F8 /* UIGestureRecognizerExtension.swift in Sources */,

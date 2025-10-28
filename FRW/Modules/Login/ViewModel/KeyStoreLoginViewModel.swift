@@ -15,7 +15,7 @@ import SwiftUI
 
 // MARK: - KeyStoreLoginViewModel
 
-final class KeyStoreLoginViewModel: ObservableObject {
+final class KeyStoreLoginViewModel_Old: ObservableObject {
     // MARK: Internal
 
     @Published
@@ -207,7 +207,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
     }
 }
 
-extension KeyStoreLoginViewModel {
+extension KeyStoreLoginViewModel_Old {
     private var p256PublicKey: String? {
         privateKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue
     }

@@ -14,7 +14,7 @@ import WalletCore
 
 // MARK: - PrivateKeyLoginViewModel
 
-final class PrivateKeyLoginViewModel: ObservableObject {
+final class PrivateKeyLoginViewModel_Old: ObservableObject {
     // MARK: Internal
 
     @Published
@@ -193,7 +193,7 @@ final class PrivateKeyLoginViewModel: ObservableObject {
 
 }
 
-extension PrivateKeyLoginViewModel {
+extension PrivateKeyLoginViewModel_Old {
     private var p256PublicKey: String? {
         privateKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.dropPrefix("04")
     }

@@ -13,7 +13,7 @@ import WalletCore
 
 // MARK: - SeedPhraseLoginViewModel
 
-final class SeedPhraseLoginViewModel: ObservableObject {
+final class SeedPhraseLoginViewModel_Old: ObservableObject {
     // MARK: Internal
 
     @Published
@@ -97,6 +97,7 @@ final class SeedPhraseLoginViewModel: ObservableObject {
             HUD.dismissLoading()
             if wantedAddress.isEmpty {
               guard let account = wallet?.flowAccounts?[currentNetwork]?.first else {
+                //
                 return
               }
               selectedAccount(by: account)
@@ -223,7 +224,7 @@ final class SeedPhraseLoginViewModel: ObservableObject {
 
 }
 
-extension SeedPhraseLoginViewModel {
+extension SeedPhraseLoginViewModel_Old {
     private var p256PublicKey: String? {
         providerKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.dropPrefix("04")
     }

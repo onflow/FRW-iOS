@@ -184,4 +184,16 @@ extension AlertCenter {
       networkDescription: "Due to high network activity, transaction fees are elevated, and Flow Wallet is temporarily not paying for your gas. Current network fees are \(multiDisplay)× higher than usual."
     )
   }
+  
+  func presentAccountNotFound(onCreate: @escaping EmptyClosure, onCancel: @escaping EmptyClosure) async {
+    let view = AccountNotFoundAlertView(onCreateWallet: { [weak self] in
+      onCreate()
+      self?.resolve(selection: "agree")
+    }, onCancel: { [weak self] in
+      onCancel()
+      self?.cancel()
+    })
+    _ = await presentCustom(content: AnyView(view), actions: [])
+
+  }
 }
