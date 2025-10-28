@@ -57,11 +57,6 @@ protocol LoginViewModelProtocol: ObservableObject {
 extension LoginViewModelProtocol {
     // MARK: - Common Properties Access
 
-    /// Computed property to access the crypto key (for protocol extension use)
-    private var key: KeyType? {
-        get { cryptoKey }
-        set { cryptoKey = newValue }
-    }
 
     // MARK: - Account Fetching
 
@@ -115,42 +110,37 @@ extension LoginViewModelProtocol {
         }
     }
 
-  func showAccountNotFound() {
-    
-    guard let address = try? wallet?.ethAddress(),
-          let publicKey = try? wallet?.ethPublicKey().hexValue else {
-      //TODO:
-      return
-    }
-    
-    let flowKey = Flow.AccountKey(
-      publicKey: Flow.PublicKey(hex: publicKey),
-      signAlgo: .ECDSA_SECP256k1,
-      hashAlgo: .SHA2_256,
-      weight: 1000
-    )
-    Task {
+    func showAccountNotFound() {
       
-      await AlertCenter.shared.presentAccountNotFound(onCreate: {
-        self.createUserName{ [weak self] name in
-          Task {
-            HUD.loading()
-            try await self?.performLogin(
-              address: address,
-              userName: name,
-              flowKey: flowKey,
-              isImport: true
-            )
-            HUD.dismissLoading()
-            Router.popToRoot()
-          }
-        }
-      }, onCancel: {
+      guard let address = try? wallet?.ethAddress(),
+            let publicKey = try? wallet?.ethPublicKey().hexValue else {
+        //TODO:
+        return
+      }
+      
+      let flowKey = Flow.AccountKey(
+        publicKey: Flow.PublicKey(hex: publicKey),
+        signAlgo: .ECDSA_SECP256k1,
+        hashAlgo: .SHA2_256,
+        weight: 1000
+      )
+      Task {
         
-      })
-      
+        await AlertCenter.shared.presentAccountNotFound(onCreate: {
+          self.createUserName{ [weak self] name in
+            Task {
+              HUD.loading()
+              try await self?.regist(address: address, userName: name, flowKey: flowKey)
+              HUD.dismissLoading()
+              Router.popToRoot()
+            }
+          }
+        }, onCancel: {
+          
+        })
+        
+      }
     }
-  }
   
     // MARK: - Username Creation
 
@@ -277,19 +267,11 @@ extension LoginViewModelProtocol {
         }
     }
 
-//    /// Wrapper to call UserManager.shared.importLogin
-//    /// Subclasses must implement this to handle their specific KeyType
-//    /// - Parameters:
-//    ///   - address: Flow account address
-//    ///   - userName: Username for new account
-//    ///   - flowKey: Flow account key
-//    ///   - isImport: Whether this is a new import
-//    func performLogin(
-//        address: String,
-//        userName: String,
-//        flowKey: Flow.AccountKey,
-//        isImport: Bool
-//    ) async throws {
-//      
-//    }
+    private func regist(address: String, userName: String, flowKey: Flow.AccountKey) async throws {
+      guard let keyProtocol = cryptoKey as? (any KeyProtocol) else {
+        log.error("[regist] cryptoKey is empty or KeyProtocol\(cryptoKey ?? " ")")
+        return
+      }
+      _ = try await UserManager.shared.register(name: userName, key: flowKey, keyProvider: keyProtocol)
+    }
 }
