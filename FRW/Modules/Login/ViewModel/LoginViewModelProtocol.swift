@@ -113,7 +113,7 @@ extension LoginViewModelProtocol {
     func showAccountNotFound() {
       
       guard let address = try? wallet?.ethAddress(),
-            let publicKey = try? wallet?.ethPublicKey().hexValue.dropPrefix("04") else {
+            let publicKey = try? wallet?.ethPublicKey().hexValue.format() else {
         //TODO:
         return
       }
@@ -273,5 +273,41 @@ extension LoginViewModelProtocol {
         return
       }
       _ = try await UserManager.shared.register(name: userName, key: flowKey, keyProvider: keyProtocol)
+    }
+}
+
+extension String {
+    /// Removes the "04" uncompressed public key prefix if needed
+    /// - Returns: Public key string without the uncompressed key indicator (should be 128 hex chars)
+    /// - Note: Standard uncompressed ECDSA public key format is "04" + 64 bytes (128 hex chars)
+    ///         Preserves original case to ensure compatibility with Flow SDK
+    func format() -> String {
+        // Case 1: Standard uncompressed key (130 chars with "04" prefix)
+        // Remove the "04" prefix to get 128 chars
+        if self.count == 130 && self.hasPrefix("04") {
+            let result = String(self.dropFirst(2))
+            log.debug("[PublicKey] Removed '04' prefix from 130-char key")
+            return result
+        }
+        
+        // Case 2: Already formatted key (128 chars, no prefix needed)
+        // Should NOT start with "04" - if it does, it's suspicious but keep as-is
+        if self.count == 128 {
+            if self.hasPrefix("04") {
+                log.warning("[PublicKey] 128-char key starts with '04' - unusual but keeping as-is")
+            }
+            return self
+        }
+        
+        // Case 3: Unexpected format - try to remove "04" if present
+        if self.hasPrefix("04") {
+            let result = String(self.dropFirst(2))
+            log.warning("[PublicKey] Non-standard length (\(self.count) chars), removed '04' prefix -> \(result.count) chars")
+            return result
+        }
+        
+        // Case 4: No "04" prefix and non-standard length
+        log.warning("[PublicKey] Non-standard public key format: \(self.count) chars, no '04' prefix")
+        return self
     }
 }
