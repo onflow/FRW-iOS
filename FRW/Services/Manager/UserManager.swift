@@ -205,7 +205,7 @@ extension UserManager {
       publicKey: key.publicKey.description,
       address: nil,
       userId: model.id,
-      keyType: .secureEnclave,
+      keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
     await WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: store)

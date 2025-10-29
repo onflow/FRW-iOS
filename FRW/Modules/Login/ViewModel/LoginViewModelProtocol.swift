@@ -113,7 +113,7 @@ extension LoginViewModelProtocol {
     func showAccountNotFound() {
       
       guard let address = try? wallet?.ethAddress(),
-            let publicKey = try? wallet?.ethPublicKey().hexValue else {
+            let publicKey = try? wallet?.ethPublicKey().hexValue.dropPrefix("04") else {
         //TODO:
         return
       }
@@ -269,7 +269,7 @@ extension LoginViewModelProtocol {
 
     private func regist(address: String, userName: String, flowKey: Flow.AccountKey) async throws {
       guard let keyProtocol = cryptoKey as? (any KeyProtocol) else {
-        log.error("[regist] cryptoKey is empty or KeyProtocol\(cryptoKey ?? " ")")
+        log.error("[regist] cryptoKey is empty or cannot be cast to KeyProtocol")
         return
       }
       _ = try await UserManager.shared.register(name: userName, key: flowKey, keyProvider: keyProtocol)
