@@ -11,7 +11,9 @@ import WalletCore
 
 extension TrustWeb3Provider {
     static func flowConfig() -> TrustWeb3Provider? {
-        guard let address = EVMAccountManager.shared.accounts.first?.showAddress else {
+      
+        var evmAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
+        guard let address = evmAddress else {
             return nil
         }
         let url = currentNetwork.evmURL.absoluteString

@@ -58,6 +58,8 @@ extension LocalUserDefaults {
         case selectedAddress
 
         case filterToken
+        // default address for evm
+        case EVMDefaultAddress
     }
 }
 
@@ -445,6 +447,9 @@ class LocalUserDefaults: ObservableObject {
         users[index] = newUser
         userList = users
     }
+  
+    @AppStorage(Keys.EVMDefaultAddress.rawValue)
+    var EVMDefaultAddress: String?
 }
 
 extension LocalUserDefaults {
