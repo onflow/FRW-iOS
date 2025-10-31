@@ -17,7 +17,7 @@ protocol LoginViewModelProtocol: ObservableObject {
     // MARK: - Associated Types
 
     /// The type of cryptographic key used for login (e.g., PrivateKey, SeedPhraseKey)
-    associatedtype KeyType
+  associatedtype KeyType: FlowWalletKit.KeyProtocol
 
     // MARK: - Required Properties
 
@@ -112,15 +112,17 @@ extension LoginViewModelProtocol {
 
     func showAccountNotFound() {
       
+      let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
+      
       guard let address = try? wallet?.ethAddress(),
-            let publicKey = try? wallet?.ethPublicKey().hexValue.format() else {
+            let publicKey = cryptoKey?.publicKey(signAlgo: signAlgo)?.hexValue else {
         //TODO:
         return
       }
       
       let flowKey = Flow.AccountKey(
         publicKey: Flow.PublicKey(hex: publicKey),
-        signAlgo: .ECDSA_SECP256k1,
+        signAlgo: signAlgo,
         hashAlgo: .SHA2_256,
         weight: 1000
       )
