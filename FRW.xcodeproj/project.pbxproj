@@ -1580,6 +1580,8 @@
 		4E9D62AB2EB46055000BAA4E /* AuthnViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D62A92EB46055000BAA4E /* AuthnViewModel.swift */; };
 		4E9D62AE2EB4B431000BAA4E /* WalletAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D62AD2EB4B431000BAA4E /* WalletAvatarView.swift */; };
 		4E9D62AF2EB4B431000BAA4E /* WalletAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D62AD2EB4B431000BAA4E /* WalletAvatarView.swift */; };
+		4E9D62CC2EB60C53000BAA4E /* AuthnAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D62CB2EB60C53000BAA4E /* AuthnAccountView.swift */; };
+		4E9D62CD2EB60C53000BAA4E /* AuthnAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D62CB2EB60C53000BAA4E /* AuthnAccountView.swift */; };
 		4E9D8F082BF5DC2100E11CC7 /* Web3Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */; };
 		4E9D8F092BF5DC2100E11CC7 /* Web3Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */; };
 		4E9D8F0B2BF5E3AD00E11CC7 /* NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9D8F0A2BF5E3AD00E11CC7 /* NetworkProvider.swift */; };
@@ -3145,6 +3147,7 @@
 		4E9D62A62EB46048000BAA4E /* AuthnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthnView.swift; sourceTree = "<group>"; };
 		4E9D62A92EB46055000BAA4E /* AuthnViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthnViewModel.swift; sourceTree = "<group>"; };
 		4E9D62AD2EB4B431000BAA4E /* WalletAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAvatarView.swift; sourceTree = "<group>"; };
+		4E9D62CB2EB60C53000BAA4E /* AuthnAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthnAccountView.swift; sourceTree = "<group>"; };
 		4E9D8F072BF5DC2100E11CC7 /* Web3Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Provider.swift; sourceTree = "<group>"; };
 		4E9D8F0A2BF5E3AD00E11CC7 /* NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProvider.swift; sourceTree = "<group>"; };
 		4E9D8F122BF730E500E11CC7 /* MoveAssetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAssetsView.swift; sourceTree = "<group>"; };
@@ -6257,6 +6260,7 @@
 			isa = PBXGroup;
 			children = (
 				4E9D62A62EB46048000BAA4E /* AuthnView.swift */,
+				4E9D62CB2EB60C53000BAA4E /* AuthnAccountView.swift */,
 				4E9D62A92EB46055000BAA4E /* AuthnViewModel.swift */,
 			);
 			path = Auth;
@@ -9214,6 +9218,7 @@
 				4E09FF802DB923EE00F2E527 /* EmptyKeychainAlert.swift in Sources */,
 				6A074E392922962D00D976F1 /* SelectProviderView.swift in Sources */,
 				15DC217327819C56000B187A /* VDialogModel.swift in Sources */,
+				4E9D62CC2EB60C53000BAA4E /* AuthnAccountView.swift in Sources */,
 				15DC219327819C56000B187A /* VCheckBoxModel.swift in Sources */,
 				4EC26FCB2BFCB312001330DF /* EVMAssetProvider.swift in Sources */,
 				4EE282A62EAF3AAA0070A3E4 /* WalletManager+EOA.swift in Sources */,
@@ -10265,6 +10270,7 @@
 				15C58C322868A4EE00BD4FC6 /* VTextFieldHighlight.swift in Sources */,
 				6A074E382922962D00D976F1 /* SelectProviderView.swift in Sources */,
 				15C58C332868A4EE00BD4FC6 /* VDialogModel.swift in Sources */,
+				4E9D62CD2EB60C53000BAA4E /* AuthnAccountView.swift in Sources */,
 				15C58C342868A4EE00BD4FC6 /* VCheckBoxModel.swift in Sources */,
 				4EC26FCA2BFCAF5C001330DF /* EVMAssetProvider.swift in Sources */,
 				4EE282A52EAF3AAA0070A3E4 /* WalletManager+EOA.swift in Sources */,

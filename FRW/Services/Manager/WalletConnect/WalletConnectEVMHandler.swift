@@ -49,6 +49,8 @@ extension Flow.ChainID {
 // MARK: - WalletConnectEVMHandler
 
 struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
+  
+    var currentIsCOA: Bool = false
     var supportNetwork: [Flow.ChainID] {
         [currentNetwork]
     }
@@ -160,6 +162,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         ) { result in
             Task {
                 if result {
+                  if currentIsCOA {
                     guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                         HUD.error(title: "invalid_address".localized)
                         cancel()
@@ -186,6 +189,15 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         return
                     }
                     confirm(encoded.hexString.addHexPrefix())
+                  } else {
+                    guard let sig = try? await WalletManager.shared.walletEntity?.ethSignPersonalMessage(data) else {
+                      log.error("[SOA] sign for data is error")
+                      cancel()
+                      return
+                    }
+                    confirm(sig.hexString.addHexPrefix())
+                  }
+                    
                 } else {
                     cancel()
                 }
@@ -299,6 +311,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 Task {
                     if result {
                         do {
+                          if currentIsCOA {
                             guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                                 HUD.error(title: "invalid_address".localized)
                                 return
@@ -319,9 +332,19 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                                 signatures: [sig]
                             )
                             guard let encoded = RLP.encode(proof.rlpList) else {
+                                cancel()
                                 return
                             }
                             confirm(encoded.hexString.addHexPrefix())
+                          } else {
+                            let raw: String = dataStr
+                            guard let signature = try? await WalletManager.shared.walletEntity?.ethSignTypedData(json: raw) else {
+                              cancel()
+                              return
+                            }
+                            confirm(signature.hexString.addHexPrefix())
+                          }
+                            
                         } catch {
                             cancel()
                         }
@@ -466,4 +489,9 @@ extension WalletConnectEVMHandler {
         let model = try? await FlowNetwork.fetchEVMTransactionResult(txid: txid.hex)
         return model?.hashString?.addHexPrefix()
     }
+}
+
+// MARK: EOA
+extension WalletConnectEVMHandler {
+  
 }

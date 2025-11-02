@@ -227,14 +227,16 @@ extension TrustJSMessageHandler {
                 }
 
                 Task {
-                    let address = Flow.Address(hex: addrStr)
+                  if self.currentIsCoa() {
                     guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
                     let joinData = Flow.DomainTag.user.normalize + hashedData
+                    let address = Flow.Address(hex: addrStr)
                     guard let sig = try? await self.signWithMessage(data: joinData) else {
                         HUD.error(title: "sign failed")
+                        await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
                         return
                     }
-                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let keyIndex = await BigUInt(WalletManager.shared.keyIndex)
                     let proof = COAOwnershipProof(
                         keyIninces: [keyIndex],
                         address: address.data,
@@ -242,6 +244,7 @@ extension TrustJSMessageHandler {
                         signatures: [sig]
                     )
                     guard let encoded = RLP.encode(proof.rlpList) else {
+                        await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
                         return
                     }
                     
@@ -250,6 +253,15 @@ extension TrustJSMessageHandler {
                         result: encoded.hexString.addHexPrefix(),
                         to: id
                     )
+                  } else {
+                    
+                    guard let sig = try? await WalletManager.shared.walletEntity?.ethSignPersonalMessage(data) else {
+                      log.error("[SOA] sign for data is error")
+                      await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
+                      return
+                    }
+                    await self.webVC?.webView.tw.send(network: .ethereum, result: sig.hexString.addHexPrefix(), to: id)
+                  }
                 }
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
@@ -285,6 +297,7 @@ extension TrustJSMessageHandler {
                 }
                 
                 Task {
+                  if self.currentIsCoa() {
                     let address = Flow.Address(hex: addrStr)
                     let joinData = Flow.DomainTag.user.normalize + data
                     guard let sig = try? await self.signWithMessage(data: joinData) else {
@@ -306,6 +319,17 @@ extension TrustJSMessageHandler {
                         result: encoded.hexString.addHexPrefix(),
                         to: id
                     )
+                  } else {
+                    guard let signature = try? await WalletManager.shared.walletEntity?.ethSignTypedData(json: raw) else {
+                      return
+                    }
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: signature.hexString.addHexPrefix(),
+                        to: id
+                    )
+                  }
+                    
                 }
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
@@ -466,6 +490,18 @@ extension TrustJSMessageHandler {
             Router.route(to: RouteMap.Wallet.addTokenSheet(token, callback))
         }
     }
+}
+
+extension TrustJSMessageHandler {
+  func currentIsCoa() -> Bool {
+    guard let webAddress = webVC?.trustProvider?.config.ethereum.address else {
+      return false
+    }
+    guard let coaAddress = WalletManager.shared.coa?.address else {
+      return false
+    }
+    return coaAddress == webAddress
+  }
 }
 
 extension TrustJSMessageHandler {

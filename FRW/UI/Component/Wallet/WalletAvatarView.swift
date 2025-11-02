@@ -41,7 +41,6 @@ struct WalletAvatarView: View {
             ),
             lineWidth: size.boarder
           )
-          .frame(width: size.width, height: size.width)
       }
       
       // 内容
@@ -65,6 +64,7 @@ struct WalletAvatarView: View {
         }
       }
     }
+    .frame(width: size.width, height: size.width)
   }
 }
 
