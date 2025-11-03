@@ -190,70 +190,18 @@ extension AuthnView {
   }
 
   private var accountCard: some View {
-    // TODO: Replace with actual account data from ViewModel
-    let mockAccount = RNBridge.WalletAccount(
-      id: "1",
-      name: "Panda",
-      address: viewModel.provider.address,
-      emojiInfo: RNBridge.EmojiInfo(
-        emoji: "🐼",
-        name: "Panda",
-        color: "#D6D6D6"
-      ),
-      parentEmoji: nil,
-      parentAddress: nil,
-      avatar: nil,
-      isActive: true,
-      type: .main,
-      balance: "550.66",
-      nfts: nil
-    )
-
-    let mockChildAccounts = [
-      RNBridge.WalletAccount(
-        id: "2",
-        name: "Penguin",
-        address: "0x123456",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐧",
-          name: "Penguin",
-          color: "#FFCB6C"
-        ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      ),
-      RNBridge.WalletAccount(
-        id: "3",
-        name: "Fox",
-        address: "0x789abc",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🦊",
-          name: "Fox",
-          color: "#FFB6C1"
-        ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      ),
-    ]
-
-    return AuthnAccountView(
-      account: mockAccount,
-      childAccounts: mockChildAccounts,
-      onTap: {
-        // TODO: Handle account selection
-        print("Account tapped")
+    return VStack {
+      if let account = viewModel.currentAccount {
+        AuthnAccountView(
+          account: account,
+          childAccounts: viewModel.linkedAccount,
+          onTap: {
+            // TODO: Handle account selection
+            print("Account tapped")
+          }
+        )
       }
-    )
+    }
   }
 
   // MARK: - Action Buttons
@@ -313,17 +261,9 @@ extension AuthnView {
 
 // MARK: - Test Data
 
-private struct TestAuthnData: AuthnDataProvider {
-  var title: String
-  var url: String
-  var address: String
-  var logo: String?
-
-  init() {
-    title = "NBA Top Shot"
-    url = "https://port.topshot.com"
-    logo = "https://nbatopshot.com/static/favicon/apple-touch-icon.png"
-    address = "0x8888888888888ab"
+extension AuthnDataProvider {
+  static func mock() -> AuthnDataProvider {
+    AuthnDataProvider(title: "NBA Top Shot", url: "https://port.topshot.com", address: "0x23947239847", logo: "https://nbatopshot.com/static/favicon/apple-touch-icon.png")
   }
 }
 
@@ -333,7 +273,7 @@ private struct TestAuthnData: AuthnDataProvider {
 
     AuthnView(
       viewModel: .init(
-        provider: TestAuthnData(),
+        provider: AuthnDataProvider.mock(),
         callback: { result in
           print("User selected: \(result ? "Connect" : "Cancel")")
         }

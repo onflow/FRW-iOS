@@ -28,7 +28,7 @@ struct AuthnAccountView: View {
     }) {
       accountCardContent
     }
-    .buttonStyle(PlainButtonStyle())
+    .buttonStyle(ScaleButtonStyle())
   }
   
   private var accountCardContent: some View {

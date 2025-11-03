@@ -658,6 +658,8 @@ extension RouteMap {
             SwitchNetworkClosure?
         )
         case signTypedMessage(BrowserSignTypedMessageViewModel)
+        /// new authn UI
+        case authnV2(AuthnViewModel)
     }
 }
 
@@ -727,6 +729,9 @@ extension RouteMap.Explore: RouterTarget {
                 showLarge: true
             )
             Router.topPresentedController().present(vc, animated: true, completion: nil)
+        case let .authnV2(viewModel):
+          let vc = CustomHostingController(rootView: AuthnView(viewModel: viewModel))
+          Router.topPresentedController().present(vc, animated: true, completion: nil)
         }
     }
 }

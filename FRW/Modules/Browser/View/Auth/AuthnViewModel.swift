@@ -12,29 +12,42 @@ extension AuthnViewModel {
   typealias Callback = (Bool) -> Void
 }
 
-protocol AuthnDataProvider {
+struct AuthnDataProvider {
   
-  var title: String { get }
-  var url: String { get }
-  var address: String { get }
-  var logo: String? { get }
-  var network: Flow.ChainID { get }
-}
-
-extension AuthnDataProvider {
-  var network: Flow.ChainID {
-    currentNetwork
-  }
+  var title: String
+  var url: String
+  var address: String
+  var logo: String?
+  var network: Flow.ChainID = currentNetwork
 }
 
 class AuthnViewModel: ObservableObject {
   
-  @Published var provider: AuthnDataProvider
+  var provider: AuthnDataProvider
+  private var accounts: [RNBridge.WalletAccount] = []
   private var callback: AuthnViewModel.Callback?
+  
+  @Published var currentAccount: RNBridge.WalletAccount?
+  @Published var linkedAccount: [RNBridge.WalletAccount] = []
   
   init(provider: AuthnDataProvider,callback: @escaping AuthnViewModel.Callback) {
     self.provider = provider
     self.callback = callback
+    buildEVMAccounts()
+  }
+  
+  private func buildEVMAccounts() {
+    accounts = []
+    if let list = WalletManager.shared.EOAs {
+      let result = list.map{ $0.toWalletAccount()}
+      accounts.append(contentsOf: result)
+      currentAccount = accounts.first
+    }
+    if let coa = WalletManager.shared.coa {
+      accounts.append(coa.toWalletAccount())
+    }
+    
+    
   }
   
   deinit {
