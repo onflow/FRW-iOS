@@ -9,7 +9,6 @@ import Kingfisher
 import SwiftUI
 
 struct AddTokenSheetView: RouteableView {
-    var changeHeight: (() -> Void)?
 
     let customToken: CustomToken
     let callback: (Bool) -> Void

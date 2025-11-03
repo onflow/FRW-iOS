@@ -11,8 +11,6 @@ import SwiftUIX
 struct MoveAssetsView: RouteableView {
     // MARK: Internal
 
-    var changeHeight: (() -> Void)?
-
     var token: TokenModel?
 
     var title: String {

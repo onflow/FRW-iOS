@@ -23,8 +23,6 @@ struct MoveTokenView: RouteableView {
 
     // MARK: Internal
 
-    var changeHeight: (() -> Void)?
-
     var title: String {
         ""
     }
