@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - SwapProviderView
 
-struct SwapProviderView: RouteableView & PresentActionDelegate {
+struct SwapProviderView: RouteableView {
     // MARK: Lifecycle
 
     init(token: TokenModel?) {
@@ -29,8 +29,6 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
     }
 
     // MARK: Internal
-
-    var changeHeight: (() -> Void)?
 
     @State
     var list: [SwapProviderModel]

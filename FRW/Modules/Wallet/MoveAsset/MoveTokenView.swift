@@ -11,7 +11,7 @@ import SwiftUIX
 
 // MARK: - MoveTokenView
 
-struct MoveTokenView: RouteableView, PresentActionDelegate {
+struct MoveTokenView: RouteableView {
     // MARK: Lifecycle
 
     init(tokenModel: TokenModel, isPresent: Binding<Bool>) {

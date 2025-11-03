@@ -327,13 +327,13 @@ extension RouteMap.Wallet: RouterTarget {
         case .enableEVM:
             navi.push(content: EVMEnableView())
         case .moveNFTs:
-            let vc = PresentHostingController(rootView: MoveNFTsView())
+            let vc = AdaptiveHostingController(rootView: MoveNFTsView())
             navi.present(vc, animated: true, completion: nil)
         case .moveAssets:
-            let vc = PresentHostingController(rootView: MoveAssetsView())
+            let vc = AdaptiveHostingController(rootView: MoveAssetsView())
             navi.present(vc, animated: true, completion: nil)
         case let .moveToken(tokenModel):
-            let vc = PresentHostingController(rootView: MoveTokenView(
+            let vc = AdaptiveHostingController(rootView: MoveTokenView(
                 tokenModel: tokenModel,
                 isPresent: .constant(true)
             ))
@@ -342,14 +342,14 @@ extension RouteMap.Wallet: RouterTarget {
             let vm = TokenBalanceListViewModel(address: address, selectCallback: callback)
             Router.topPresentedController().present(content: TokenBalanceListView(vm: vm))
         case let .chooseChild(model):
-            let vc = PresentHostingController(rootView: MoveAccountsView(viewModel: model))
+            let vc = AdaptiveHostingController(rootView: MoveAccountsView(viewModel: model))
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case .addCustomToken:
             navi.push(content: AddCustomTokenView())
         case let .showCustomToken(token):
             navi.push(content: CustomTokenDetailView(token: token))
         case let .addTokenSheet(token, callback):
-            let vc = PresentHostingController(
+            let vc = AdaptiveHostingController(
                 rootView: AddTokenSheetView(
                     customToken: token,
                     callback: callback
@@ -357,7 +357,7 @@ extension RouteMap.Wallet: RouterTarget {
             )
             navi.present(vc, completion: nil)
         case let .swapProvider(token):
-            let vc = PresentHostingController(rootView: SwapProviderView(token: token))
+            let vc = AdaptiveHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
         case .managerTokens:
             navi.push(content: ManageTokensView())
@@ -470,7 +470,7 @@ extension RouteMap.Profile: RouterTarget {
                 navi.push(content: ChildAccountDetailView(vm: vm))
             }
         case .switchProfile:
-            let vc = PresentHostingController(rootView: AccountSwitchView())
+            let vc = AdaptiveHostingController(rootView: AccountSwitchView())
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case let .editChildAccount(childAccount):
             let vm = ChildAccountDetailEditViewModel(childAccount: childAccount)
@@ -730,7 +730,8 @@ extension RouteMap.Explore: RouterTarget {
             )
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case let .authnV2(viewModel):
-          let vc = CustomHostingController(rootView: AuthnView(viewModel: viewModel))
+          // Use AdaptiveHostingController for automatic content-based sizing
+          let vc = AdaptiveHostingController(rootView: AuthnView(viewModel: viewModel))
           Router.topPresentedController().present(vc, animated: true, completion: nil)
         }
     }

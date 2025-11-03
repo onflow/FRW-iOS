@@ -18,23 +18,19 @@ struct AuthnView: View {
   var body: some View {
     VStack(spacing: 0) {
       // Main content
-      ScrollView {
-        VStack(spacing: 13) {
-          headerSection
-          networkCard
-          permissionsTitleCard
-          permissionsListCard
-          accountSection
-        }
-        .padding(.horizontal, 18)
-        .padding(.top, 18)
+      VStack(spacing: 16) {
+        headerSection
+        networkCard
+        permissionsTitleCard
+        permissionsListCard
+        accountSection
+        actionButtons
       }
-
-      // Bottom buttons (fixed)
-      actionButtons
-        .padding(.horizontal, 18)
-        .padding(.bottom, 36)
+      
     }
+    .padding(.horizontal, 16)
+    .padding(.top, 16)
+    .padding(.bottom, 24)
     .background(Color.Brain.Core.background)
     .cornerRadius(16, corners: [.topLeft, .topRight])
   }

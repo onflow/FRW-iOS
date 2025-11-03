@@ -11,10 +11,8 @@ import SwiftUI
 
 // MARK: - AccountSwitchView
 
-struct AccountSwitchView: PresentActionView {
+struct AccountSwitchView: View {
     // MARK: Internal
-
-    var changeHeight: (() -> Void)?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -160,7 +158,7 @@ struct AccountSwitchView: PresentActionView {
 
     var moreView: some View {
         Button {
-            self.changeHeight?()
+            
         } label: {
             HStack {
                 Text("view_more".localized)
