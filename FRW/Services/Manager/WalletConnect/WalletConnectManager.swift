@@ -353,17 +353,13 @@ extension WalletConnectManager {
         let info = handler.sessionInfo(sessionProposal: sessionProposal)
         var address = WalletManager.shared.getPrimaryWalletAddress()
         if handler.currentTypes(sessionProposal: sessionProposal).contains(.evm) {
-            // TODO: if evm not enable
-            address = EVMAccountManager.shared.accounts.first?.showAddress ?? ""
+          address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
         }
         currentSessionInfo = info
-        let authnVM = BrowserAuthnViewModel(
-            title: info.name,
-            url: info.dappURL,
-            logo: info.iconURL,
-            walletAddress: address,
-            network: network
-        ) { result in
+      
+      let authnViewModel = AuthnViewModel(
+        provider: .init(title: info.name, url: info.dappURL, address: address ?? "")
+      ) { result in
             if result {
                 // TODO: Handle network mismatch
                 self.approveSession(proposal: sessionProposal)
@@ -371,8 +367,8 @@ extension WalletConnectManager {
                 self.rejectSession(proposal: sessionProposal)
             }
         }
-
-        Router.route(to: RouteMap.Explore.authn(authnVM))
+        Router.route(to: RouteMap.Explore.authnV2(authnViewModel))
+        
     }
 
     func handleRequest(_ sessionRequest: WalletConnectSign.Request) {
@@ -741,6 +737,8 @@ extension WalletConnectManager {
             handleSignTypedData(sessionRequest)
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
+        case WalletConnectEVMMethod.switchEthereumChain.rawValue:
+            log.info("don't support")
         default:
             log.error("[WALLET] reject request \(sessionRequest)")
             rejectRequest(request: sessionRequest, reason: "unspport method")
@@ -819,6 +817,21 @@ extension WalletConnectManager {
             log.error("[EVM] invalid token")
             self.rejectRequest(request: sessionRequest)
         }
+    }
+  
+    private func handleSwitchEthereumChain(_ sessionRequest: WalletConnectSign.Request) {
+      Task {
+          do {
+              try await Sign.instance.respond(
+                  topic: sessionRequest.topic,
+                  requestId: sessionRequest.id,
+                  response: .response(AnyCodable(""))
+              )
+          } catch {
+              self.rejectRequest(request: sessionRequest)
+              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
+          }
+      }
     }
 }
 
