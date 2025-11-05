@@ -217,7 +217,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         let title = request.name ?? ""
         let url = request.dappURL?.absoluteString ?? ""
         let logo = request.logoURL?.absoluteString ?? ""
-
+        let chainId = Int(request.chainId.reference) ?? 747
         let originCadence = CadenceManager.shared.current.evm?.callContractV2?.toFunc() ?? ""
 
         do {
@@ -276,7 +276,6 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                       cancel()
                       return
                     }
-                    let chainId = currentNetwork.networkID
                     guard let amount = receiveModel.value
                     else {
                       cancel()

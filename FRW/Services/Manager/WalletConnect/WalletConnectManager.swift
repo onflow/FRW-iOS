@@ -119,7 +119,10 @@ class WalletConnectManager: ObservableObject {
                 }
             } catch {
                 log.error("[PROPOSER] Pairing connect error: \(error)")
-                HUD.error(title: "Connect failed")
+                let isRedirect = link.contains("sessionTopic") && link.contains("requestId")
+                if !isRedirect {
+                  HUD.error(title: "Connect failed")
+                }
             }
         }
         onClientConnected = nil
