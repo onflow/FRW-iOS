@@ -93,7 +93,7 @@ final class PrivateKeyLoginViewModel: ObservableObject, LoginViewModelProtocol {
                 HUD.dismissLoading()
 
                 // Select account (common logic from protocol)
-                await selectAccountFromWallet()
+                selectAccountFromWallet()
 
             } catch {
                 HUD.dismissLoading()
