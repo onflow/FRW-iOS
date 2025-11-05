@@ -187,11 +187,10 @@ extension AuthnView {
 
   private var accountCard: some View {
     VStack {
-      if let account = viewModel.currentAccount {
+      if let provider = viewModel.currentAccount {
         AccountRow(
-          account: account,
-          childAccounts: viewModel.linkedAccount,
-          showArrow: viewModel.compatibleAccounts.count > 0,
+          provider: provider,
+          showArrow: viewModel.allowSelection,
           onTap: viewModel.toggleAccountSelection
         )
       }
@@ -203,37 +202,8 @@ extension AuthnView {
   private var accountSelectionOverlay: some View {
     GeometryReader { geometry in
       ZStack {
-        // Dimmed background with fade animation
-        if viewModel.showAccountSelection {
-          Color.black.opacity(0.5)
-            .ignoresSafeArea()
-            .onTapGesture {
-              viewModel.toggleAccountSelection()
-            }
-            .transition(.opacity)
-        }
-
-        // Account selection view with push-style animation
-        if let selectedAccount = viewModel.currentAccount, viewModel.showAccountSelection {
-          AuthnAccountsView(
-            selectedAccount: selectedAccount,
-            compatibleAccounts: viewModel.compatibleAccounts,
-            childAccounts: viewModel.linkedAccount,
-            onBack: {
-              viewModel.toggleAccountSelection()
-            },
-            onSelectAccount: { account in
-              viewModel.selectAccount(account)
-            }
-          )
-          .frame(width: geometry.size.width, height: geometry.size.height)
-          .background(Color.Brain.Core.background)
-          .transition(.move(edge: .trailing))
-          .zIndex(1)
-        }
       }
     }
-    .ignoresSafeArea()
   }
 
   // MARK: - Action Buttons

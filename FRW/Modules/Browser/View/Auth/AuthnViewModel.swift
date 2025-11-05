@@ -14,7 +14,6 @@ extension AuthnViewModel {
 }
 
 struct AuthnDataProvider {
-  
   var title: String
   var url: String
   var address: String
@@ -22,32 +21,39 @@ struct AuthnDataProvider {
   var network: Flow.ChainID = currentNetwork
 }
 
+struct AuthnAccountProvider {
+  let account: RNBridge.WalletAccount
+  let linkAccounts: [RNBridge.WalletAccount]
+}
+
 class AuthnViewModel: ObservableObject {
 
   var provider: AuthnDataProvider
-  private var accounts: [RNBridge.WalletAccount] = []
   private var callback: AuthnViewModel.Callback?
 
-  @Published var currentAccount: RNBridge.WalletAccount?
-  @Published var linkedAccount: [RNBridge.WalletAccount] = []
+  @Published var currentAccount: AuthnAccountProvider? = nil
+  @Published var allowSelection = false
   @Published var showAccountSelection: Bool = false
   
   init(provider: AuthnDataProvider,callback: @escaping AuthnViewModel.Callback) {
     self.provider = provider
     self.callback = callback
-    buildEVMAccounts()
+    loadCurrentEVM()
   }
   
-  private func buildEVMAccounts() {
-    accounts = []
-    if let list = WalletManager.shared.EOAs {
-      let result = list.map{ $0.toWalletAccount()}
-      accounts.append(contentsOf: result)
-      currentAccount = accounts.first
+  private func loadCurrentEVM() {
+    
+    var accounts: [RNBridge.WalletAccount] = []
+    let eoa = WalletManager.shared.EOAs?.map { $0.toWalletAccount() } ?? []
+    accounts.append(contentsOf: eoa)
+    if let coa = WalletManager.shared.coa?.toWalletAccount() {
+      accounts.append(coa)
     }
-    if let coa = WalletManager.shared.coa {
-      accounts.append(coa.toWalletAccount())
+    let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
+    if let account =  accounts.first { $0.address == preAddress } ?? accounts.first {
+      currentAccount = AuthnAccountProvider(account: account, linkAccounts: [])
     }
+    allowSelection = accounts.count > 1
   }
   
   deinit {
@@ -59,17 +65,13 @@ class AuthnViewModel: ObservableObject {
     BlocklistHandler.shared.inBlacklist(url: provider.url)
   }
 
-  var compatibleAccounts: [RNBridge.WalletAccount] {
-    accounts.filter { $0.id != currentAccount?.id }
-  }
-
   func toggleAccountSelection() {
-    withAnimation(.easeInOut(duration: 0.35)) {
-      showAccountSelection.toggle()
+    if allowSelection {
+      
     }
   }
 
-  func selectAccount(_ account: RNBridge.WalletAccount) {
+  func selectAccount(_ account: AuthnAccountProvider) {
     currentAccount = account
     withAnimation(.easeInOut(duration: 0.35)) {
       showAccountSelection = false

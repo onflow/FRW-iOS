@@ -19,6 +19,7 @@ typealias EmptyClosure = () -> Void
 typealias SwitchNetworkClosure = (Flow.ChainID) -> Void
 typealias BoolClosure = (Bool) -> Void
 
+
 // MARK: - RouteMap.RestoreLogin
 
 extension RouteMap {
@@ -660,6 +661,7 @@ extension RouteMap {
         case signTypedMessage(BrowserSignTypedMessageViewModel)
         /// new authn UI
         case authnV2(AuthnViewModel)
+        case accounts(AuthnAccountProvider,)
     }
 }
 
@@ -733,6 +735,8 @@ extension RouteMap.Explore: RouterTarget {
           // Use AdaptiveHostingController for automatic content-based sizing
           let vc = AdaptiveHostingController(rootView: AuthnView(viewModel: viewModel))
           Router.topPresentedController().present(vc, animated: true, completion: nil)
+        case let .accounts(provider)
+          let vc = AdaptiveHostingController(rootView: AuthnAccountsView(selectedAccount: provider))
         }
     }
 }

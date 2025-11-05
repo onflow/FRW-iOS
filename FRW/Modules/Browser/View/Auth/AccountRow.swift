@@ -8,19 +8,16 @@
 import SwiftUI
 
 struct AccountRow: View {
-  let account: RNBridge.WalletAccount
-  let childAccounts: [RNBridge.WalletAccount]
+  let provider: AuthnAccountProvider
   var showArrow: Bool = false
   var onTap: (() -> Void)?
 
   init(
-    account: RNBridge.WalletAccount,
-    childAccounts: [RNBridge.WalletAccount] = [],
+    provider: AuthnAccountProvider,
     showArrow: Bool = false,
     onTap: (() -> Void)? = nil
   ) {
-    self.account = account
-    self.childAccounts = childAccounts
+    self.provider = provider
     self.showArrow = showArrow
     self.onTap = onTap
   }
@@ -37,9 +34,9 @@ struct AccountRow: View {
   private var accountCardContent: some View {
     let content = HStack(spacing: 12) {
       WalletAvatarView(
-        emoji: .init(name: account.emojiInfo?.emoji),
-        avatar: account.avatar,
-        showBorder: account.isActive
+        emoji: .init(name: provider.account.emojiInfo?.emoji),
+        avatar: provider.account.avatar,
+        showBorder: provider.account.isActive
       )
       accountInfo
       Spacer()
@@ -65,7 +62,7 @@ struct AccountRow: View {
   private var accountInfo: some View {
     VStack(alignment: .leading, spacing: 2) {
       // Name and address
-      if account.type == .main {
+      if provider.account.type == .main {
         HStack {
           nameView
           addressView
@@ -75,7 +72,7 @@ struct AccountRow: View {
         addressView
       }
       // Balance
-      if let balance = account.balance {
+      if let balance = provider.account.balance {
         Text("\(balance) FLOW")
           .font(.inter(size: 12))
           .foregroundColor(.Brain.Text.secondary)
@@ -83,14 +80,14 @@ struct AccountRow: View {
       }
 
       // Child accounts indicators
-      if !childAccounts.isEmpty {
+      if !provider.linkAccounts.isEmpty {
         childAccountsRow
       }
     }
   }
   
   private var nameView: some View {
-    Text(account.name)
+    Text(provider.account.name)
       .font(.inter(size: 14, weight: .semibold))
       .lineLimit(1)
       .foregroundColor(.Brain.Text.primary)
@@ -119,7 +116,7 @@ struct AccountRow: View {
   
   private var childAccountAvatars: some View {
     HStack(spacing: 4) {
-      ForEach(childAccounts, id: \.id) { child in
+      ForEach(provider.linkAccounts, id: \.address) { child in
         WalletAvatarView(
           emoji: .init(name: child.emojiInfo?.name),
           avatar: child.avatar,
@@ -130,10 +127,10 @@ struct AccountRow: View {
   }
   
   var showAddress: String {
-    if account.type == .main {
-      return "(\(account.address))"
+    if provider.account.type == .main {
+      return "(\(provider.account.address))"
     } else {
-      return account.address
+      return provider.account.address
     }
   }
 }
@@ -142,24 +139,25 @@ struct AccountRow: View {
   VStack(spacing: 20) {
     // Main account with child accounts
     AccountRow(
-      account: RNBridge.WalletAccount(
-        id: "1",
-        name: "Panda",
-        address: "0x8888888888888ab",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐼",
-          name: "Panda",
-          color: "#D6D6D6"
+      provider: .init(
+        account: RNBridge.WalletAccount(
+              id: "1",
+              name: "Panda",
+              address: "0x8888888888888ab",
+              emojiInfo: RNBridge.EmojiInfo(
+                emoji: "🐼",
+                name: "Panda",
+                color: "#D6D6D6"
+              ),
+              parentEmoji: nil,
+              parentAddress: nil,
+              avatar: nil,
+              isActive: true,
+              type: .main,
+              balance: "550.66",
+              nfts: nil
         ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: true,
-        type: .main,
-        balance: "550.66",
-        nfts: nil
-      ),
-      childAccounts: [
+        linkAccounts: [
         RNBridge.WalletAccount(
           id: "2",
           name: "Penguin",
@@ -194,36 +192,16 @@ struct AccountRow: View {
           balance: nil,
           nfts: nil
         ),
-      ],
+        ],
+      ),
       onTap: {
         print("Account tapped")
       }
     )
 
-    // Account without balance or children
-    AccountRow(
-      account: RNBridge.WalletAccount(
-        id: "4",
-        name: "Lion",
-        address: "0xabcdef123456",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🦁",
-          name: "Lion",
-          color: "#FFD700"
-        ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      )
-    )
-
     // EVM account
     AccountRow(
-      account: RNBridge.WalletAccount(
+      provider: .init(account: RNBridge.WalletAccount(
         id: "5",
         name: "EVM Account",
         address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
@@ -239,8 +217,9 @@ struct AccountRow: View {
         type: .evm,
         balance: "1.23",
         nfts: nil
-      )
-    )
+      ), linkAccounts: []), showArrow: false) {
+        
+      }
   }
   .padding()
   .background(Color.Brain.Core.background)

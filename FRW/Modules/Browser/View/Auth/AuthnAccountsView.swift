@@ -8,22 +8,19 @@
 import SwiftUI
 
 struct AuthnAccountsView: View {
-  let selectedAccount: RNBridge.WalletAccount
-  let compatibleAccounts: [RNBridge.WalletAccount]
-  let childAccounts: [RNBridge.WalletAccount]
+  let selectedAccount: AuthnAccountProvider
+  let compatibleAccounts: [AuthnAccountProvider]
   var onBack: (() -> Void)?
-  var onSelectAccount: ((RNBridge.WalletAccount) -> Void)?
+  var onSelectAccount: ((AuthnAccountProvider) -> Void)?
 
   init(
-    selectedAccount: RNBridge.WalletAccount,
-    compatibleAccounts: [RNBridge.WalletAccount] = [],
-    childAccounts: [RNBridge.WalletAccount] = [],
+    selectedAccount: AuthnAccountProvider,
+    compatibleAccounts: [AuthnAccountProvider] = [],
     onBack: (() -> Void)? = nil,
-    onSelectAccount: ((RNBridge.WalletAccount) -> Void)? = nil
+    onSelectAccount: ((AuthnAccountProvider) -> Void)? = nil
   ) {
     self.selectedAccount = selectedAccount
     self.compatibleAccounts = compatibleAccounts
-    self.childAccounts = childAccounts
     self.onBack = onBack
     self.onSelectAccount = onSelectAccount
   }
@@ -42,8 +39,10 @@ struct AuthnAccountsView: View {
 
         // Selected account row with darker background
         AccountRow(
-          account: selectedAccount,
-          childAccounts: childAccounts
+          provider: selectedAccount,
+          onTap: {
+            onBackAction()
+          }
         )
         .background(Color.Brain.Light.lines5)
         .cornerRadius(16)
@@ -70,7 +69,7 @@ struct AuthnAccountsView: View {
     ZStack {
       HStack {
         Button(action: {
-          onBack?()
+          onBackAction()
         }) {
           Image("icon-back-arrow-grey")
             .resizable()
@@ -98,9 +97,9 @@ struct AuthnAccountsView: View {
 
   private var compatibleAccountsList: some View {
     VStack(spacing: 15) {
-      ForEach(compatibleAccounts, id: \.id) { account in
+      ForEach(compatibleAccounts, id: \.account.address) { account in
         AccountRow(
-          account: account,
+          provider: account,
           onTap: {
             onSelectAccount?(account)
           }
@@ -108,11 +107,15 @@ struct AuthnAccountsView: View {
       }
     }
   }
+  
+  private func onBackAction() {
+    onBack?()
+  }
 }
 
 #Preview {
   AuthnAccountsView(
-    selectedAccount: RNBridge.WalletAccount(
+    selectedAccount: .init(account: RNBridge.WalletAccount(
       id: "1",
       name: "Panda",
       address: "0x8888...888ab",
@@ -128,9 +131,9 @@ struct AuthnAccountsView: View {
       type: .main,
       balance: "550.66",
       nfts: nil
-    ),
+    ), linkAccounts: []),
     compatibleAccounts: [
-      RNBridge.WalletAccount(
+      .init(account: RNBridge.WalletAccount(
         id: "2",
         name: "Fox",
         address: "0x0c666c888d8fb259",
@@ -146,83 +149,83 @@ struct AuthnAccountsView: View {
         type: .main,
         balance: "550.66",
         nfts: nil
-      )
-    ],
-    childAccounts: [
-      RNBridge.WalletAccount(
-        id: "3",
-        name: "Penguin",
-        address: "0x123456",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐧",
+      ), linkAccounts: [
+        RNBridge.WalletAccount(
+          id: "3",
           name: "Penguin",
-          color: "#FFCB6C"
+          address: "0x123456",
+          emojiInfo: RNBridge.EmojiInfo(
+            emoji: "🐧",
+            name: "Penguin",
+            color: "#FFCB6C"
+          ),
+          parentEmoji: nil,
+          parentAddress: nil,
+          avatar: nil,
+          isActive: false,
+          type: .child,
+          balance: nil,
+          nfts: nil
         ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      ),
-      RNBridge.WalletAccount(
-        id: "4",
-        name: "Cat",
-        address: "0x789abc",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐱",
+        RNBridge.WalletAccount(
+          id: "4",
           name: "Cat",
-          color: "#FFB6C1"
+          address: "0x789abc",
+          emojiInfo: RNBridge.EmojiInfo(
+            emoji: "🐱",
+            name: "Cat",
+            color: "#FFB6C1"
+          ),
+          parentEmoji: nil,
+          parentAddress: nil,
+          avatar: nil,
+          isActive: false,
+          type: .child,
+          balance: nil,
+          nfts: nil
         ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      ),
-      RNBridge.WalletAccount(
-        id: "5",
-        name: "Dog",
-        address: "0xdef456",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐶",
+        RNBridge.WalletAccount(
+          id: "5",
           name: "Dog",
-          color: "#87CEEB"
+          address: "0xdef456",
+          emojiInfo: RNBridge.EmojiInfo(
+            emoji: "🐶",
+            name: "Dog",
+            color: "#87CEEB"
+          ),
+          parentEmoji: nil,
+          parentAddress: nil,
+          avatar: nil,
+          isActive: false,
+          type: .child,
+          balance: nil,
+          nfts: nil
         ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      ),
-      RNBridge.WalletAccount(
-        id: "6",
-        name: "Bear",
-        address: "0xabc789",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐻",
+        RNBridge.WalletAccount(
+          id: "6",
           name: "Bear",
-          color: "#CD853F"
-        ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: false,
-        type: .child,
-        balance: nil,
-        nfts: nil
-      )
+          address: "0xabc789",
+          emojiInfo: RNBridge.EmojiInfo(
+            emoji: "🐻",
+            name: "Bear",
+            color: "#CD853F"
+          ),
+          parentEmoji: nil,
+          parentAddress: nil,
+          avatar: nil,
+          isActive: false,
+          type: .child,
+          balance: nil,
+          nfts: nil
+        )
+      ])
+      
     ],
     onBack: {
       print("Back tapped")
     },
     onSelectAccount: { account in
-      print("Selected account: \(account.name)")
+      print("Selected account: \(account.account.name)")
     }
   )
   .background(Color.black)
