@@ -31,9 +31,11 @@ class AuthnViewModel: ObservableObject {
   var provider: AuthnDataProvider
   private var callback: AuthnViewModel.Callback?
 
+  private var accounts: [AuthnAccountProvider] = []
   @Published var currentAccount: AuthnAccountProvider? = nil
   @Published var allowSelection = false
   @Published var showAccountSelection: Bool = false
+  
   
   init(provider: AuthnDataProvider,callback: @escaping AuthnViewModel.Callback) {
     self.provider = provider
@@ -42,21 +44,21 @@ class AuthnViewModel: ObservableObject {
   }
   
   private func loadCurrentEVM() {
-    
-    var accounts: [RNBridge.WalletAccount] = []
-    let eoa = WalletManager.shared.EOAs?.map { $0.toWalletAccount() } ?? []
+    accounts = []
+    let eoa = WalletManager.shared.EOAs?.compactMap { AuthnAccountProvider(account: $0.toWalletAccount(), linkAccounts: []) } ?? []
     accounts.append(contentsOf: eoa)
     if let coa = WalletManager.shared.coa?.toWalletAccount() {
-      accounts.append(coa)
+      accounts.append(AuthnAccountProvider(account: coa, linkAccounts: []))
     }
     let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
-    if let account =  accounts.first { $0.address == preAddress } ?? accounts.first {
-      currentAccount = AuthnAccountProvider(account: account, linkAccounts: [])
+    if let account =  accounts.first { $0.account.address == preAddress } ?? accounts.first {
+      currentAccount = account
     }
     allowSelection = accounts.count > 1
   }
   
   deinit {
+    log.debug("[Authn] deinit call")
     callback?(false)
     WalletConnectManager.shared.reloadPendingRequests()
   }
@@ -66,8 +68,13 @@ class AuthnViewModel: ObservableObject {
   }
 
   func toggleAccountSelection() {
-    if allowSelection {
-      
+    if allowSelection, let selectedAccount = currentAccount {
+      let viewModel = AuthnAccountsViewModel(
+        selectedAccount: selectedAccount,
+        compatibleAccounts: accounts) { [weak self] provider in
+          self?.currentAccount = provider
+        }
+      Router.route(to: RouteMap.Explore.accounts(viewModel))
     }
   }
 
@@ -79,10 +86,12 @@ class AuthnViewModel: ObservableObject {
   }
 
   func didChooseAction(_ result: Bool) {
+      LocalUserDefaults.shared.EVMDefaultAddress = currentAccount?.account.address
       Router.dismiss { [weak self] in
           guard let self else { return }
           callback?(result)
           callback = nil
+          log.debug("[Authn] confirm clicked")
       }
   }
 }

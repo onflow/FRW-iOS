@@ -661,7 +661,7 @@ extension RouteMap {
         case signTypedMessage(BrowserSignTypedMessageViewModel)
         /// new authn UI
         case authnV2(AuthnViewModel)
-        case accounts(AuthnAccountProvider,)
+        case accounts(AuthnAccountsViewModel)
     }
 }
 
@@ -735,8 +735,9 @@ extension RouteMap.Explore: RouterTarget {
           // Use AdaptiveHostingController for automatic content-based sizing
           let vc = AdaptiveHostingController(rootView: AuthnView(viewModel: viewModel))
           Router.topPresentedController().present(vc, animated: true, completion: nil)
-        case let .accounts(provider)
-          let vc = AdaptiveHostingController(rootView: AuthnAccountsView(selectedAccount: provider))
+        case let .accounts(viewModel):
+          let vc = AdaptiveHostingController(rootView: AuthnAccountsView(viewModel: viewModel))
+          Router.topPresentedController().present(vc, animated: true, completion: nil)
         }
     }
 }

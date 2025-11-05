@@ -1832,6 +1832,8 @@
 		4EF3FAE12A7B8D8400D7B09B /* FlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF3FADF2A7B8D8400D7B09B /* FlowModel.swift */; };
 		4EF5129A28329ADA0014F4EC /* NFTDetailPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF5129828329ADA0014F4EC /* NFTDetailPage.swift */; };
 		4EF5129D28333A230014F4EC /* NFTTagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF5129B28333A230014F4EC /* NFTTagsView.swift */; };
+		4EF5B45C2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF5B45B2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift */; };
+		4EF5B45D2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF5B45B2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift */; };
 		4EFBB2B42BDB723600359FAA /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBB2B32BDB723600359FAA /* Migration.swift */; };
 		4EFBB2B52BDB723600359FAA /* Migration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBB2B32BDB723600359FAA /* Migration.swift */; };
 		4EFBB2B72BDB7DA400359FAA /* KeychainListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBB2B62BDB7DA400359FAA /* KeychainListView.swift */; };
@@ -3287,6 +3289,7 @@
 		4EF3FADF2A7B8D8400D7B09B /* FlowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowModel.swift; sourceTree = "<group>"; };
 		4EF5129828329ADA0014F4EC /* NFTDetailPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTDetailPage.swift; sourceTree = "<group>"; };
 		4EF5129B28333A230014F4EC /* NFTTagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTTagsView.swift; sourceTree = "<group>"; };
+		4EF5B45B2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthnAccountsViewModel.swift; sourceTree = "<group>"; };
 		4EFBB2B32BDB723600359FAA /* Migration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Migration.swift; sourceTree = "<group>"; };
 		4EFBB2B62BDB7DA400359FAA /* KeychainListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainListView.swift; sourceTree = "<group>"; };
 		4EFBB2B92BDB7E9000359FAA /* KeychainListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainListViewModel.swift; sourceTree = "<group>"; };
@@ -6262,10 +6265,11 @@
 		4E9D62A52EB45FF3000BAA4E /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				4E9D62A62EB46048000BAA4E /* AuthnView.swift */,
 				4E9D62CB2EB60C53000BAA4E /* AccountRow.swift */,
-				4E9D62A92EB46055000BAA4E /* AuthnViewModel.swift */,
 				4EC8675C2EBAF25400AFD76D /* AuthnAccountsView.swift */,
+				4EF5B45B2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift */,
+				4E9D62A62EB46048000BAA4E /* AuthnView.swift */,
+				4E9D62A92EB46055000BAA4E /* AuthnViewModel.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -9171,6 +9175,7 @@
 				6A32213A2927B49B000B8E1F /* StakingDetailView.swift in Sources */,
 				6AF4A6C828D4725300B12FAB /* FlownsResponses.swift in Sources */,
 				6A45898D28C1E05100B1024B /* BrowserResponses.swift in Sources */,
+				4EF5B45C2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */,
 				6A998DA029366EF700EF133B /* StakingProviderCache.swift in Sources */,
 				4E09A1EB2CC793FE0099606E /* EventTrack.swift in Sources */,
 				6A29114D28CB37E8003295BD /* TransferListHandler.swift in Sources */,
@@ -10224,6 +10229,7 @@
 				15C58C1E2868A4EE00BD4FC6 /* ShareSheet.swift in Sources */,
 				6A3221392927B49B000B8E1F /* StakingDetailView.swift in Sources */,
 				6AF4A6C728D4725300B12FAB /* FlownsResponses.swift in Sources */,
+				4EF5B45D2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */,
 				6A45898C28C1E05100B1024B /* BrowserResponses.swift in Sources */,
 				6A998D9F29366EF700EF133B /* StakingProviderCache.swift in Sources */,
 				4E09A1EA2CC793FE0099606E /* EventTrack.swift in Sources */,

@@ -49,7 +49,7 @@ struct AccountRow: View {
       .padding(.horizontal, 16)
       .padding(.vertical, 10)
       .frame(maxWidth: .infinity)
-      .background(Color.Brain.Light.lines5)
+      .background(Color.Brain.Core.cards)
       .cornerRadius(16)
   }
   

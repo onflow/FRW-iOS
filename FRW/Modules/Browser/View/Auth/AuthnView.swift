@@ -219,9 +219,9 @@ extension AuthnView {
     Button(action: {
       viewModel.didChooseAction(false)
     }) {
-      Text("Cancel")
+      Text("cancel".localized)
         .font(.inter(size: 16, weight: .bold))
-        .foregroundColor(.Theme.Text.black)
+        .foregroundColor(.Theme.Text.white9)
         .frame(maxWidth: .infinity)
         .frame(height: 52)
         .background(
@@ -235,7 +235,7 @@ extension AuthnView {
     Button(action: {
       viewModel.didChooseAction(true)
     }) {
-      Text("Connect")
+      Text("connect".localized)
         .font(.system(size: 16, weight: .semibold))
         .foregroundColor(.Theme.Text.white9)
         .frame(maxWidth: .infinity)

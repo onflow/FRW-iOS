@@ -198,10 +198,11 @@ extension TrustJSMessageHandler {
         guard let self = self else {
             return
         }
-
+        webVC?.trustProvider = TrustWeb3Provider.flowConfig()
+        let currentAddress = webVC?.trustProvider?.config.ethereum.address ?? ""
         if result {
-          webVC?.webView.tw.set(network: network.rawValue, address: address)
-          webVC?.webView.tw.send(network: network, results: [address], to: id)
+          webVC?.webView.tw.set(network: network.rawValue, address: currentAddress)
+          webVC?.webView.tw.send(network: network, results: [currentAddress], to: id)
         } else {
             webVC?.webView.tw.send(network: network, error: "Canceled", to: id)
             log.debug("handle authn cancelled")
