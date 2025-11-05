@@ -29,12 +29,8 @@ struct AuthnView: View {
         }
       }
       .padding(.horizontal, 16)
-      .padding(.top, 16)
-      .padding(.bottom, 24)
       .background(Color.Brain.Core.background)
-      .cornerRadius(16, corners: [.topLeft, .topRight])
-
-      // Account selection overlay (always present, manages its own visibility)
+      
       accountSelectionOverlay
     }
   }
