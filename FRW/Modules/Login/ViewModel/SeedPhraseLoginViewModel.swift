@@ -109,14 +109,14 @@ final class SeedPhraseLoginViewModel: ObservableObject, LoginViewModelProtocol {
                 )
             }
 
-            guard cryptoKey != nil else {
+            guard let cryptoKey else {
                 HUD.error(title: "invalid_data".localized)
                 return
             }
 
             // Create wallet with seed phrase key
             wallet = FlowWalletKit.Wallet(
-                type: .key(cryptoKey!),
+                type: .key(cryptoKey),
                 networks: [currentNetwork]
             )
 
