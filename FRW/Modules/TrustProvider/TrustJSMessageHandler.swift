@@ -521,10 +521,6 @@ extension TrustJSMessageHandler {
 
                     // Send raw transaction to the network
                     let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
-                    let receipt = try? await web3.eth.transactionReceipt(txHash.hash.data(using: .utf8)!)
-                    if let receipt = receipt {
-                        print("Status:", receipt.status)
-                    }
                     log.info("[SOA] Transaction sent successfully with hash: \(txHash.hash)")
 
                     // Return the transaction hash to frontend
