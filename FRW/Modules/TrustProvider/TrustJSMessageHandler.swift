@@ -208,35 +208,6 @@ extension TrustJSMessageHandler {
         }
       }
       Router.route(to: RouteMap.Explore.authnV2(viewModel))
-      
-//      let title = webVC?.webView.title ?? "unknown"
-//      let chainID = currentNetwork
-//      let vm = BrowserAuthnViewModel(
-//          title: title,
-//          url: url?.host ?? "unknown",
-//          logo: url?.absoluteString.toFavIcon()?.absoluteString,
-//          walletAddress: address,
-//          network: chainID
-//      ) { [weak self] result in
-//          guard let self = self else {
-//              return
-//          }
-//
-//          if result {
-//              switch network {
-//              case .ethereum:
-//                  webVC?.webView.tw.set(network: network.rawValue, address: address)
-//                  webVC?.webView.tw.send(network: network, results: [address], to: id)
-//              default:
-//                  print("not support")
-//              }
-//          } else {
-//              webVC?.webView.tw.send(network: network, error: "Canceled", to: id)
-//              log.debug("handle authn cancelled")
-//          }
-//      }
-//
-//      Router.route(to: RouteMap.Explore.authn(vm))
     }
 
     private func handleSignPersonal(

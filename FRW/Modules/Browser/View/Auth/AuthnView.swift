@@ -16,23 +16,27 @@ struct AuthnView: View {
   }
 
   var body: some View {
-    VStack(spacing: 0) {
+    ZStack {
       // Main content
-      VStack(spacing: 16) {
-        headerSection
-        networkCard
-        permissionsTitleCard
-        permissionsListCard
-        accountSection
-        actionButtons
+      VStack(spacing: 0) {
+        VStack(spacing: 16) {
+          headerSection
+          networkCard
+          permissionsTitleCard
+          permissionsListCard
+          accountSection
+          actionButtons
+        }
       }
-      
+      .padding(.horizontal, 16)
+      .padding(.top, 16)
+      .padding(.bottom, 24)
+      .background(Color.Brain.Core.background)
+      .cornerRadius(16, corners: [.topLeft, .topRight])
+
+      // Account selection overlay (always present, manages its own visibility)
+      accountSelectionOverlay
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 16)
-    .padding(.bottom, 24)
-    .background(Color.Brain.Core.background)
-    .cornerRadius(16, corners: [.topLeft, .topRight])
   }
 }
 
@@ -186,18 +190,54 @@ extension AuthnView {
   }
 
   private var accountCard: some View {
-    return VStack {
+    VStack {
       if let account = viewModel.currentAccount {
-        AuthnAccountView(
+        AccountRow(
           account: account,
           childAccounts: viewModel.linkedAccount,
-          onTap: {
-            // TODO: Handle account selection
-            print("Account tapped")
-          }
+          showArrow: viewModel.compatibleAccounts.count > 0,
+          onTap: viewModel.toggleAccountSelection
         )
       }
     }
+  }
+
+  // MARK: - Account Selection Overlay
+
+  private var accountSelectionOverlay: some View {
+    GeometryReader { geometry in
+      ZStack {
+        // Dimmed background with fade animation
+        if viewModel.showAccountSelection {
+          Color.black.opacity(0.5)
+            .ignoresSafeArea()
+            .onTapGesture {
+              viewModel.toggleAccountSelection()
+            }
+            .transition(.opacity)
+        }
+
+        // Account selection view with push-style animation
+        if let selectedAccount = viewModel.currentAccount, viewModel.showAccountSelection {
+          AuthnAccountsView(
+            selectedAccount: selectedAccount,
+            compatibleAccounts: viewModel.compatibleAccounts,
+            childAccounts: viewModel.linkedAccount,
+            onBack: {
+              viewModel.toggleAccountSelection()
+            },
+            onSelectAccount: { account in
+              viewModel.selectAccount(account)
+            }
+          )
+          .frame(width: geometry.size.width, height: geometry.size.height)
+          .background(Color.Brain.Core.background)
+          .transition(.move(edge: .trailing))
+          .zIndex(1)
+        }
+      }
+    }
+    .ignoresSafeArea()
   }
 
   // MARK: - Action Buttons

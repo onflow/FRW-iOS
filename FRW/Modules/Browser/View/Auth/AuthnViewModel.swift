@@ -7,6 +7,7 @@
 
 import Foundation
 import Flow
+import SwiftUI
 
 extension AuthnViewModel {
   typealias Callback = (Bool) -> Void
@@ -22,13 +23,14 @@ struct AuthnDataProvider {
 }
 
 class AuthnViewModel: ObservableObject {
-  
+
   var provider: AuthnDataProvider
   private var accounts: [RNBridge.WalletAccount] = []
   private var callback: AuthnViewModel.Callback?
-  
+
   @Published var currentAccount: RNBridge.WalletAccount?
   @Published var linkedAccount: [RNBridge.WalletAccount] = []
+  @Published var showAccountSelection: Bool = false
   
   init(provider: AuthnDataProvider,callback: @escaping AuthnViewModel.Callback) {
     self.provider = provider
@@ -46,8 +48,6 @@ class AuthnViewModel: ObservableObject {
     if let coa = WalletManager.shared.coa {
       accounts.append(coa.toWalletAccount())
     }
-    
-    
   }
   
   deinit {
@@ -58,7 +58,24 @@ class AuthnViewModel: ObservableObject {
   var inBlacklist: Bool {
     BlocklistHandler.shared.inBlacklist(url: provider.url)
   }
-  
+
+  var compatibleAccounts: [RNBridge.WalletAccount] {
+    accounts.filter { $0.id != currentAccount?.id }
+  }
+
+  func toggleAccountSelection() {
+    withAnimation(.easeInOut(duration: 0.35)) {
+      showAccountSelection.toggle()
+    }
+  }
+
+  func selectAccount(_ account: RNBridge.WalletAccount) {
+    currentAccount = account
+    withAnimation(.easeInOut(duration: 0.35)) {
+      showAccountSelection = false
+    }
+  }
+
   func didChooseAction(_ result: Bool) {
       Router.dismiss { [weak self] in
           guard let self else { return }

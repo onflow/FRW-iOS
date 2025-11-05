@@ -1,5 +1,5 @@
 //
-//  AuthnAccountView.swift
+//  AccountRow.swift
 //  FRW
 //
 //  Created by cat on 11/1/25.
@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-struct AuthnAccountView: View {
+struct AccountRow: View {
   let account: RNBridge.WalletAccount
   let childAccounts: [RNBridge.WalletAccount]
+  var showArrow: Bool = false
   var onTap: (() -> Void)?
 
   init(
     account: RNBridge.WalletAccount,
     childAccounts: [RNBridge.WalletAccount] = [],
+    showArrow: Bool = false,
     onTap: (() -> Void)? = nil
   ) {
     self.account = account
     self.childAccounts = childAccounts
+    self.showArrow = showArrow
     self.onTap = onTap
   }
 
@@ -40,7 +43,9 @@ struct AuthnAccountView: View {
       )
       accountInfo
       Spacer()
-      chevronIcon
+      if showArrow {
+        chevronIcon
+      }
     }
     
     return content
@@ -133,10 +138,10 @@ struct AuthnAccountView: View {
   }
 }
 
-#Preview("AuthnAccountView - Account Card") {
+#Preview("AccountRow - Account Card") {
   VStack(spacing: 20) {
     // Main account with child accounts
-    AuthnAccountView(
+    AccountRow(
       account: RNBridge.WalletAccount(
         id: "1",
         name: "Panda",
@@ -196,7 +201,7 @@ struct AuthnAccountView: View {
     )
 
     // Account without balance or children
-    AuthnAccountView(
+    AccountRow(
       account: RNBridge.WalletAccount(
         id: "4",
         name: "Lion",
@@ -217,7 +222,7 @@ struct AuthnAccountView: View {
     )
 
     // EVM account
-    AuthnAccountView(
+    AccountRow(
       account: RNBridge.WalletAccount(
         id: "5",
         name: "EVM Account",
