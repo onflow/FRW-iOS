@@ -110,15 +110,15 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Flow Wallet need camera to scan QR Code</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Flow Wallet use Face ID to secure your assests</string>
+	<string>Flow Wallet requires Face ID to secure your assests</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Atlantis would use Bonjour Service to discover Proxyman app from your local network.</string>
+	<string>Flow Wallet would use Bonjour Service to discover Proxyman app from your local network.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Flow Wallet requires access to Microphone</string>
+	<string>Flow Wallet needs access to your microphone so you can attach voice notes on bug report</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Flow Wallet requires access to photo library</string>
+	<string>Flow Wallet needs permission to save screenshots to your photo library when submitting bug reports</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Flow Wallet requires access to photo library</string>
+	<string>Flow Wallet needs access to your photo library so you can choose an image as your profile picture</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.com.flowfoundation.wallet</key>
