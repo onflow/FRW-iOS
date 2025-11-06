@@ -102,6 +102,11 @@ class WalletConnectManager: ObservableObject {
 
     @Published
     var setSessions: [Session] = []
+  
+    private var supportChainID: [Int: Flow.ChainID] = [
+        Flow.ChainID.mainnet.networkID: .mainnet,
+        Flow.ChainID.testnet.networkID: .testnet,
+    ]
 
     func connect(link: String) {
         log.debug("WalletConnectManager -> connect(), Thread: \(Thread.isMainThread)")
@@ -741,7 +746,8 @@ extension WalletConnectManager {
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
         case WalletConnectEVMMethod.switchEthereumChain.rawValue:
-            log.info("don't support")
+          handleSwitchEthereumChain(sessionRequest)
+          
         default:
             log.error("[WALLET] reject request \(sessionRequest)")
             rejectRequest(request: sessionRequest, reason: "unspport method")
@@ -823,18 +829,45 @@ extension WalletConnectManager {
     }
   
     private func handleSwitchEthereumChain(_ sessionRequest: WalletConnectSign.Request) {
-      Task {
-          do {
-              try await Sign.instance.respond(
-                  topic: sessionRequest.topic,
-                  requestId: sessionRequest.id,
-                  response: .response(AnyCodable(""))
-              )
-          } catch {
-              self.rejectRequest(request: sessionRequest)
-              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
-          }
-      }
+      log.info(sessionRequest)
+//      guard let id = Int(sessionRequest.chainId.reference), let targetID = supportChainID[id] else {
+//        self.rejectRequest(request: sessionRequest)
+//        return
+//      }
+//      Task {
+//          do {
+//            if targetID == currentNetwork {
+//              try await Sign.instance.respond(
+//                  topic: sessionRequest.topic,
+//                  requestId: sessionRequest.id,
+//                  response: .response(AnyCodable(["chainId": id]))
+//              )
+//            } else {
+//              let callback: SwitchNetworkClosure = { [weak self] curId in
+//                Task {
+//                  do {
+//                    if curId == targetID {
+//                        try await Sign.instance.respond(
+//                            topic: sessionRequest.topic,
+//                            requestId: sessionRequest.id,
+//                            response: .response(AnyCodable(["chainId": id]))
+//                        )
+//                      } else {
+//                        self?.rejectRequest(request: sessionRequest)
+//                      }
+//                  } catch {
+//                    log.error(error)
+//                  }
+//                }
+//              }
+//              Router.route(to: RouteMap.Explore.switchNetwork(currentNetwork, targetID, callback))
+//            }
+//              
+//          } catch {
+//              self.rejectRequest(request: sessionRequest)
+//              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
+//          }
+//      }
     }
 }
 

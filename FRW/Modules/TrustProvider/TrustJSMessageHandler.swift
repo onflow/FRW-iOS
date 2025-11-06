@@ -16,6 +16,7 @@ import WalletCore
 import Web3Core
 import web3swift
 import WebKit
+import FlowWalletKit
 
 // MARK: - TrustJSMessageHandler
 
@@ -158,6 +159,12 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
             log.info("[Trust] sendTransaction")
         case .ecRecover:
             log.info("[Trust] ecRecover")
+          guard let obj = extractObject(json: json)
+          else {
+              log.info("[Trust] data is missing\(method)")
+              return
+          }
+          handleECRecover(network: network, id: id, json: obj)
         case .watchAsset:
             print("[Trust] watchAsset")
             guard let obj = extractObject(json: json)
@@ -584,7 +591,30 @@ extension TrustJSMessageHandler {
             self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
         }
     }
-
+  
+    private func handleECRecover(network: ProviderNetwork, id: Int64, json: [String: Any]) {
+      guard let message = json["message"] as? String, let signature = json["signature"] as? String else {
+          log.error("[Trust] message or signature is nil")
+          cancel(id: id)
+          return
+      }
+      guard let signatureData = Data(hexString: signature) else {
+        log.error("[Trust] signature decode failed")
+        cancel(id: id)
+        return
+      }
+      let messageData = Data(message.utf8)
+      
+      let wallet = WalletManager.shared.walletEntity
+      let eoaAddress = wallet?.eoaAddress
+      let recovered = try? FlowWalletKit.Wallet.ethRecoverAddress(signature: signatureData, message: messageData)
+      if let result = recovered {
+        self.webVC?.webView.tw.send(network: .ethereum, result: result, to: id)
+      } else {
+        self.webVC?.webView.tw.send(network: .ethereum, error: "Invalid signature v value", to: id)
+      }
+    }
+  
     private func handleWatchAsset(network: ProviderNetwork, id: Int64, json: [String: Any]) {
         let manager = WalletManager.shared.customTokenManager
         guard let contract = json["contract"] as? String else {
