@@ -747,7 +747,8 @@ extension WalletConnectManager {
             handleWatchAsset(sessionRequest)
         case WalletConnectEVMMethod.switchEthereumChain.rawValue:
           handleSwitchEthereumChain(sessionRequest)
-          
+        case WalletConnectEVMMethod.personalECRecover.rawValue:
+          handlePersonalECRecover(sessionRequest)
         default:
             log.error("[WALLET] reject request \(sessionRequest)")
             rejectRequest(request: sessionRequest, reason: "unspport method")
@@ -827,47 +828,56 @@ extension WalletConnectManager {
             self.rejectRequest(request: sessionRequest)
         }
     }
-  
+  //TODO: need test
     private func handleSwitchEthereumChain(_ sessionRequest: WalletConnectSign.Request) {
       log.info(sessionRequest)
-//      guard let id = Int(sessionRequest.chainId.reference), let targetID = supportChainID[id] else {
-//        self.rejectRequest(request: sessionRequest)
-//        return
-//      }
-//      Task {
-//          do {
-//            if targetID == currentNetwork {
-//              try await Sign.instance.respond(
-//                  topic: sessionRequest.topic,
-//                  requestId: sessionRequest.id,
-//                  response: .response(AnyCodable(["chainId": id]))
-//              )
-//            } else {
-//              let callback: SwitchNetworkClosure = { [weak self] curId in
-//                Task {
-//                  do {
-//                    if curId == targetID {
-//                        try await Sign.instance.respond(
-//                            topic: sessionRequest.topic,
-//                            requestId: sessionRequest.id,
-//                            response: .response(AnyCodable(["chainId": id]))
-//                        )
-//                      } else {
-//                        self?.rejectRequest(request: sessionRequest)
-//                      }
-//                  } catch {
-//                    log.error(error)
-//                  }
-//                }
-//              }
-//              Router.route(to: RouteMap.Explore.switchNetwork(currentNetwork, targetID, callback))
-//            }
-//              
-//          } catch {
-//              self.rejectRequest(request: sessionRequest)
-//              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
-//          }
-//      }
+      guard let id = Int(sessionRequest.chainId.reference), let targetID = supportChainID[id] else {
+        self.rejectRequest(request: sessionRequest)
+        return
+      }
+      Task {
+          do {
+            if targetID == currentNetwork {
+              try await Sign.instance.respond(
+                  topic: sessionRequest.topic,
+                  requestId: sessionRequest.id,
+                  response: .response(AnyCodable(["chainId": id]))
+              )
+            } else {
+              let callback: SwitchNetworkClosure = { [weak self] curId in
+                Task {
+                  do {
+                    if curId == targetID {
+                        try await Sign.instance.respond(
+                            topic: sessionRequest.topic,
+                            requestId: sessionRequest.id,
+                            response: .response(AnyCodable(["chainId": id]))
+                        )
+                      } else {
+                        self?.rejectRequest(request: sessionRequest)
+                      }
+                  } catch {
+                    log.error(error)
+                  }
+                }
+              }
+              Router.route(to: RouteMap.Explore.switchNetwork(currentNetwork, targetID, callback))
+            }
+              
+          } catch {
+              self.rejectRequest(request: sessionRequest)
+              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
+          }
+      }
+    }
+  
+    private func handlePersonalECRecover(_ sessionReqeust: WalletConnectSign.Request) {
+      guard let model = try? sessionReqeust.params.get([String: String].self)
+      else {
+          log.error("[EVM] params error")
+          self.rejectRequest(request: sessionReqeust)
+          return
+      }
     }
 }
 

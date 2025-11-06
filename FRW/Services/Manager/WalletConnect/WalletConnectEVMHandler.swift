@@ -26,6 +26,7 @@ enum WalletConnectEVMMethod: String, Codable, CaseIterable {
     case signTypedDataV4 = "eth_signTypedData_v4"
     case switchEthereumChain = "wallet_switchEthereumChain"
     case watchAsset = "wallet_watchAsset"
+    case personalECRecover = "personal_ecRecover"
 }
 
 extension Flow.ChainID {
