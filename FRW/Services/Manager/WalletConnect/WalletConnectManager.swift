@@ -7,6 +7,7 @@
 
 import Combine
 import Flow
+import FlowWalletKit
 import Foundation
 import Gzip
 import ReownRouter
@@ -871,13 +872,40 @@ extension WalletConnectManager {
       }
     }
   
-    private func handlePersonalECRecover(_ sessionReqeust: WalletConnectSign.Request) {
-      guard let model = try? sessionReqeust.params.get([String: String].self)
+    private func handlePersonalECRecover(_ sessionRequest: WalletConnectSign.Request) {
+      guard let model = try? sessionRequest.params.get([String: String].self),
+            let message = model["message"],
+            let signature = model["signature"]
       else {
           log.error("[EVM] params error")
-          self.rejectRequest(request: sessionReqeust)
+          self.rejectRequest(request: sessionRequest)
           return
       }
+      
+      guard let signatureData = Data(hexString: signature) else {
+        log.error("[EVM] signatureData error")
+        self.rejectRequest(request: sessionRequest)
+        return
+      }
+      let messageData = Data(message.utf8)
+      let recovered = try? FlowWalletKit.Wallet.ethRecoverAddress(signature: signatureData, message: messageData)
+      if let result = recovered {
+        Task {
+          do {
+            try await Sign.instance.respond(
+                topic: sessionRequest.topic,
+                requestId: sessionRequest.id,
+                response: .response(AnyCodable(result))
+            )
+          } catch {
+            log.error("error: \(error)")
+            HUD.error(title: "failed".localized, message: error.localizedDescription)
+          }
+        }
+      } else {
+        self.rejectRequest(request: sessionRequest)
+      }
+      
     }
 }
 

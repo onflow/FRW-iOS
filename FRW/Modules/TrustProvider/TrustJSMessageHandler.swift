@@ -604,9 +604,6 @@ extension TrustJSMessageHandler {
         return
       }
       let messageData = Data(message.utf8)
-      
-      let wallet = WalletManager.shared.walletEntity
-      let eoaAddress = wallet?.eoaAddress
       let recovered = try? FlowWalletKit.Wallet.ethRecoverAddress(signature: signatureData, message: messageData)
       if let result = recovered {
         self.webVC?.webView.tw.send(network: .ethereum, result: result, to: id)
