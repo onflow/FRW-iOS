@@ -11451,7 +11451,7 @@
 			repositoryURL = "https://github.com/Outblock/trust-web3-provider";
 			requirement = {
 				kind = revision;
-				revision = 0d58818bae73d6996b6a8caae15dc2e5a0ff88f8;
+				revision = ee8a29fb3c2dd75e8cca18361a0ed701a375d899;
 			};
 		};
 		4E09A1EC2CC794900099606E /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
