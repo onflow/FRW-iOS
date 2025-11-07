@@ -13,13 +13,12 @@ extension TrustWeb3Provider {
     static func flowConfig() -> TrustWeb3Provider? {
         
         var allAddresses: [String] = []
-      if let eoa = WalletManager.shared.EOAs?.first {
-        allAddresses.append(eoa.address)
-      }
-        if let coa = WalletManager.shared.coa {
-        allAddresses.append(coa.address)
-      }
-      
+        if let eoa = WalletManager.shared.EOAs?.first {
+          allAddresses.append(eoa.address)
+        }
+          if let coa = WalletManager.shared.coa {
+          allAddresses.append(coa.address)
+        }
       
         let url = currentNetwork.evmURL.absoluteString
         let chainId = currentNetwork.networkID
