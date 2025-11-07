@@ -29,10 +29,11 @@ struct AuthnView: View {
         }
       }
       .padding(.horizontal, 16)
-      .background(Color.Brain.Core.background)
+      .background(Color.Brain.Core.cards)
       
       accountSelectionOverlay
     }
+    .background(Color.blue)
   }
 }
 
@@ -195,6 +196,8 @@ extension AuthnView {
         )
       }
     }
+    .background(Color.Brain.Light.lines5)
+    .cornerRadius(16)
   }
 
   // MARK: - Account Selection Overlay
@@ -221,7 +224,7 @@ extension AuthnView {
     }) {
       Text("cancel".localized)
         .font(.inter(size: 16, weight: .bold))
-        .foregroundColor(.Theme.Text.white9)
+        .foregroundColor(.Theme.Text.black)
         .frame(maxWidth: .infinity)
         .frame(height: 52)
         .background(

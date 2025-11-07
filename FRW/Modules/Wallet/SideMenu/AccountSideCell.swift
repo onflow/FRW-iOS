@@ -54,7 +54,7 @@ struct AccountSideCell: View {
 
                         EVMTagView()
                             .visibility(isEVM ? .visible : .gone)
-                        EOATagView()
+                        EVMTagView()
                           .visibility(isEOA ? .visible : .gone)
 
                         Circle()

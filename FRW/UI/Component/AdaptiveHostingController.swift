@@ -39,7 +39,7 @@ final class AdaptiveHostingController<Content: View>: UIHostingController<Adapti
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = UIColor.Brand.Core.cards
         // Configure sheet presentation
         if let sheetController = presentationController as? UISheetPresentationController {
             // Use a custom detent that adapts to content
@@ -48,7 +48,7 @@ final class AdaptiveHostingController<Content: View>: UIHostingController<Adapti
             }
 
             sheetController.detents = [customDetent]
-            sheetController.prefersGrabberVisible = false
+            sheetController.prefersGrabberVisible = true
             sheetController.prefersScrollingExpandsWhenScrolledToEdge = false
             sheetController.preferredCornerRadius = 16
         }
