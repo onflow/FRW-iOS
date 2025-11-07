@@ -27,6 +27,13 @@ extension WalletManager {
         }
         return coa
     }
+  
+    var selectedEOAAccount: EOA? {
+      guard isSelectedEOAAccount else {
+        return nil
+      }
+      return EOAs?.first
+  }
 
     var selectedAccountContact: Contact? {
         guard let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() else {

@@ -32,15 +32,14 @@ struct SideMenuView: View {
                             enableEVMView
                                 .padding(.top, 24)
                                 .visibility(evmManager.showEVM ? .visible : .gone)
-
-                            addressListView
+                            accountListView
                         }
                     }
 
                     bottomMenu
                         .padding(.bottom, 16 + proxy.safeAreaInsets.bottom)
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.Theme.Background.white)
                 .ignoresSafeArea()
@@ -55,51 +54,37 @@ struct SideMenuView: View {
 
     var cardView: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(spacing: 16) {
                 KFImage.url(URL(string: um.userInfo?.avatar.convertedAvatarString() ?? ""))
                     .placeholder {
                         Image("placeholder")
                             .resizable()
                     }
-                    .onSuccess { _ in
-                        vm.pickColor(from: um.userInfo?.avatar.convertedAvatarString() ?? "")
-                    }
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 48, height: 48)
-                    .cornerRadius(24)
-
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(8)
+              
+                Text(um.userInfo?.nickname ?? "lilico".localized)
+                    .foregroundColor(.LL.Neutrals.text)
+                    .font(.inter(size: 14, weight: .bold))
+              
                 Spacer()
 
                 Button {
                     vm.switchAccountMoreAction()
                 } label: {
-                    Image("icon-more")
+                    Image("profile_switch_icon")
                         .renderingMode(.template)
-                        .foregroundColor(Color.LL.Neutrals.text)
+                        .foregroundColor(Color.Brain.Core.icons)
                 }
             }
+            .padding(.vertical, 14)
 
-            Text(um.userInfo?.nickname ?? "lilico".localized)
-                .foregroundColor(.LL.Neutrals.text)
-                .font(.inter(size: 20, weight: .bold))
-                .frame(height: 32)
-                .padding(.top, 4)
-                .padding(.bottom, 24)
+            Divider()
+            .background(Color.Brain.Light.lines25)
         }
-        .padding(.horizontal, 18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background {
-            LinearGradient(
-                stops: [
-                    Gradient.Stop(color: vm.userInfoBackgroudColor.opacity(00), location: 0.00),
-                    Gradient.Stop(color: vm.userInfoBackgroudColor.opacity(0.64), location: 1.00),
-                ],
-                startPoint: UnitPoint(x: 0.5, y: 0),
-                endPoint: UnitPoint(x: 0.5, y: 1)
-            )
-            .cornerRadius(12)
-        }
     }
 
     var enableEVMView: some View {
@@ -151,101 +136,49 @@ struct SideMenuView: View {
         }
     }
 
-    var addressListView: some View {
-        VStack(spacing: 0) {
+    var accountListView: some View {
+      VStack(spacing: 0) {
+          if let account = vm.currentAccount {
             Section {
-                VStack(spacing: 0) {
-                    ForEach(wallet.currentNetworkAccounts, id: \.address) { account in
-                        AccountSideCell(
-                            address: account.hexAddr,
-                            currentAddress: vm.currentAddress,
-                            balance: Binding<String?>(
-                                get: { vm.walletBalance[account.hexAddr]?.doubleValue.formatDisplayFlowBalance },
-                                set: { _ in }
-                            )
-                        ) { address in
-                            WalletManager.shared.changeSelectedAccount(address: address, type: .main)
-                        }
-                    }
-                }
-                .cornerRadius(12)
-                .animation(.easeInOut, value: WalletManager.shared.getPrimaryWalletAddress())
-                .mockPlaceholder(vm.accountLoading)
+              SideMenuView.AccountRow(account: account, isActivity: true, onClick: { clickedAccount in
+              })
+              .padding(.horizontal, 16)
+                .background(Color.Brain.Core.cards)
+                .cornerRadius(16)
             } header: {
-                HStack {
-                    Text("main_account".localized)
-                        .font(.inter(size: 12))
-                        .foregroundStyle(Color.Theme.Text.black3)
-                        .padding(.vertical, 8)
-                    Spacer()
-                }
-            }
-
-            Color.clear
-                .frame(height: 16)
-
-            Section {
-                VStack(spacing: 0) {
-                    if let coa = wallet.coa {
-                        AccountSideCell(
-                            address: coa.address,
-                            currentAddress: vm.currentAddress,
-                            balance: Binding<String?>(
-                                get: { vm.walletBalance[coa.address]?.doubleValue.formatDisplayFlowBalance },
-                                set: { _ in }
-                            )
-                        ) { address in
-                            WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
-                        }
-                    }
-                    
-                  if let eoaList = wallet.EOAs {
-                    ForEach(0..<eoaList.count, id:\.self) { index in
-                      let eoaAccount = eoaList[index]
-                      AccountSideCell(
-                        address: eoaAccount.address,
-                          currentAddress: vm.currentAddress,
-                          balance: Binding<String?>(
-                              get: { vm.walletBalance[eoaAccount.address]?.doubleValue.formatDisplayFlowBalance },
-                              set: { _ in }
-                          )
-                      ) { address in
-                          WalletManager.shared.changeSelectedAccount(address: eoaAccount.address, type: .eoa)
-                      }
-                    }
-                  }
-
-                    if let childs = wallet.childs, !childs.isEmpty {
-                        ForEach(childs, id: \.address) { child in
-                                AccountSideCell(
-                                    address: child.address.hex,
-                                    currentAddress: vm.currentAddress,
-                                    name: child.name,
-                                    logo: child.icon?.absoluteString,
-                                    balance: Binding<String?>(
-                                        get: { vm.walletBalance[child.address.hex]?.doubleValue.formatDisplayFlowBalance },
-                                        set: { _ in }
-                                    )
-                                ) { address in
-                                    WalletManager.shared.changeSelectedAccount(address: address, type: .child)
-                                }
-                        }
-                    }
-                }
-                .mockPlaceholder(vm.linkLoading)
-            } header: {
-                HStack {
-                    Text("Linked_Account::message".localized)
-                        .font(.inter(size: 12))
-                        .foregroundStyle(Color.Theme.Text.black3)
-                        .padding(.vertical, 8)
-                    Spacer()
-                }
-                .visibility(
-                    wallet.mainAccount?.hasLinkedAccounts ?? false
-                )
+              HStack {
+                  Text("active_account".localized)
+                      .font(.inter(size: 14))
+                      .foregroundStyle(Color.Theme.Text.black8)
+                      .padding(.vertical, 16)
+                  Spacer()
+              }
             }
         }
+        
+        if !vm.allAccounts.isEmpty {
+          Section {
+            ForEach(0..<vm.allAccounts.count, id: \.self) { index in
+              let section = vm.allAccounts[index]
+              ForEach(0..<section.count, id: \.self) { subIndex in
+                let account = section[subIndex]
+                let isActive = vm.currentAccount?.address == account.address
+                SideMenuView.AccountRow(account: account, isActivity: isActive) { clickedAccount in
+                  vm.updateCurrentAccount(clickedAccount)
+                }
+              }
+            }
+          } header: {
+            HStack {
+                Text("other_accounts".localized)
+                  .font(.inter(size: 14))
+                  .foregroundStyle(Color.Theme.Text.black8)
+                  .padding(.vertical, 16)
+                Spacer()
+            }
+          }
+        }
+      }
     }
 
     var bottomMenu: some View {
