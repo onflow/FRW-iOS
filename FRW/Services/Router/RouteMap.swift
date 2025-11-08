@@ -471,7 +471,7 @@ extension RouteMap.Profile: RouterTarget {
                 navi.push(content: ChildAccountDetailView(vm: vm))
             }
         case .switchProfile:
-            let vc = CustomHostingController(rootView: AccountSwitchView())
+            let vc = AdaptiveHostingController(rootView: AccountSwitchView())
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case let .editChildAccount(childAccount):
             let vm = ChildAccountDetailEditViewModel(childAccount: childAccount)
