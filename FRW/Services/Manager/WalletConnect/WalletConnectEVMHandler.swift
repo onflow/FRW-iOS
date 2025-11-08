@@ -91,11 +91,11 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
 
     func approveProposalNamespace(
         required: ProposalNamespace?,
-        optional: ProposalNamespace?
+        optional: ProposalNamespace?,
+        EVMAddress: String? = nil
     ) throws -> SessionNamespace? {
-        // Ensure we have an account available.
-        let address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
-        guard let account = address else {
+        guard let account = EVMAddress else {
+            log.error("[EVM] Cannot approve proposal without an EVM address.")
             return nil
         }
 

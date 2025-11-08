@@ -31,7 +31,8 @@ struct WalletConnectFlowHandler: WalletConnectChildHandlerProtocol {
 
     func approveProposalNamespace(
         required: ProposalNamespace?,
-        optional: ProposalNamespace?
+        optional: ProposalNamespace?,
+        EVMAddress: String? = nil
     ) throws -> SessionNamespace? {
         guard let account = WalletManager.shared.getPrimaryWalletAddress() else {
             return nil

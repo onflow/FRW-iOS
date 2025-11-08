@@ -10,7 +10,7 @@ import Flow
 import SwiftUI
 
 extension AuthnViewModel {
-  typealias Callback = (Bool) -> Void
+  typealias Callback = (String?) -> Void
 }
 
 struct AuthnDataProvider {
@@ -59,7 +59,7 @@ class AuthnViewModel: ObservableObject {
   
   deinit {
     log.debug("[Authn] deinit call")
-    callback?(false)
+    callback?(nil)
     WalletConnectManager.shared.reloadPendingRequests()
   }
   
@@ -89,7 +89,7 @@ class AuthnViewModel: ObservableObject {
       LocalUserDefaults.shared.EVMDefaultAddress = currentAccount?.account.address
       Router.dismiss { [weak self] in
           guard let self else { return }
-          callback?(result)
+          callback?(currentAccount?.account.address)
           callback = nil
           log.debug("[Authn] confirm clicked")
       }

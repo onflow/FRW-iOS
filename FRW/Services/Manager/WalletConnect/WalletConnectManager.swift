@@ -369,9 +369,8 @@ extension WalletConnectManager {
       let authnViewModel = AuthnViewModel(
         provider: .init(title: info.name, url: info.dappURL, address: address ?? "")
       ) { result in
-            if result {
-                // TODO: Handle network mismatch
-                self.approveSession(proposal: sessionProposal)
+            if let address = result {
+                self.approveSession(proposal: sessionProposal, EVMAddress: address)
             } else {
                 self.rejectSession(proposal: sessionProposal)
             }
@@ -912,14 +911,14 @@ extension WalletConnectManager {
 // MARK: - Action
 
 extension WalletConnectManager {
-    private func approveSession(proposal: Session.Proposal) {
+    private func approveSession(proposal: Session.Proposal, EVMAddress: String? = nil) {
         guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
             return
         }
 
         Task {
             do {
-                let namespaces = try handler.approveSessionNamespaces(sessionProposal: proposal)
+                let namespaces = try handler.approveSessionNamespaces(sessionProposal: proposal, EVMAddress: EVMAddress)
                 _ = try await Sign.instance.approve(proposalId: proposal.id, namespaces: namespaces)
                 HUD.success(title: "approved".localized)
             } catch {

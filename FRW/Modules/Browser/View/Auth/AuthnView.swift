@@ -280,7 +280,8 @@ extension AuthnDataProvider {
       viewModel: .init(
         provider: AuthnDataProvider.mock(),
         callback: { result in
-          print("User selected: \(result ? "Connect" : "Cancel")")
+          
+          print("User selected: \(result)")
         }
       )
     )
