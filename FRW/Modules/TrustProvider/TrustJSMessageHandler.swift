@@ -81,6 +81,16 @@ extension TrustJSMessageHandler {
         }
         return data
     }
+  
+    private func extractEVMAddress(json: [String: Any]) -> String? {
+      guard let params = json["object"] as? [String: Any]
+      else {
+        return nil
+      }
+      let address = params["address"] as? String
+      let from = params["from"] as? String
+      return address ?? from
+    }
 
     private func extractRaw(json: [String: Any]) -> String? {
         guard let params = json["object"] as? [String: Any],
@@ -138,7 +148,8 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
                 log.info("[Trust] data is missing")
                 return
             }
-            handleSendTransaction(url: url, network: network, id: id, info: obj)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSendTransaction(url: url, network: network, id: id, info: obj, EVMAddress: EVMAddress)
         case .signMessage:
             log.info("[Trust] signMessage")
         case .signTypedMessage:
@@ -148,13 +159,15 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
                 print("data is missing")
                 return
             }
-            handleSignTypedMessage(url: url, id: id, data: data, raw: raw)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSignTypedMessage(url: url, id: id, data: data, raw: raw, EVMAddress: EVMAddress)
         case .signPersonalMessage:
             guard let data = extractMessage(json: json) else {
                 log.info("[Trust] data is missing")
                 return
             }
-            handleSignPersonal(url: url, network: network, id: id, data: data, addPrefix: true)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSignPersonal(url: url, network: network, id: id, data: data, addPrefix: true, EVMAddress: EVMAddress)
         case .sendTransaction:
             log.info("[Trust] sendTransaction")
         case .ecRecover:
@@ -222,7 +235,8 @@ extension TrustJSMessageHandler {
         network: ProviderNetwork,
         id: Int64,
         data: Data,
-        addPrefix _: Bool
+        addPrefix _: Bool,
+        EVMAddress: String? = nil
     ) {
         Task {
             await TrustJSMessageHandler.checkCoa()
@@ -249,7 +263,7 @@ extension TrustJSMessageHandler {
                 }
 
                 Task {
-                  if self.currentIsCoa() {
+                  if self.currentIsCoa(EVMAddress) {
                     guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
                     let joinData = Flow.DomainTag.user.normalize + hashedData
                     let address = Flow.Address(hex: addrStr)
@@ -293,7 +307,7 @@ extension TrustJSMessageHandler {
         Router.route(to: RouteMap.Explore.signMessage(vm))
     }
 
-    func handleSignTypedMessage(url: URL?, id: Int64, data: Data, raw: String) {
+    func handleSignTypedMessage(url: URL?, id: Int64, data: Data, raw: String, EVMAddress: String? = nil) {
         Task {
             await TrustJSMessageHandler.checkCoa()
         }
@@ -319,7 +333,7 @@ extension TrustJSMessageHandler {
                 }
                 
                 Task {
-                  if self.currentIsCoa() {
+                  if self.currentIsCoa(EVMAddress) {
                     let address = Flow.Address(hex: addrStr)
                     let joinData = Flow.DomainTag.user.normalize + data
                     guard let sig = try? await self.signWithMessage(data: joinData) else {
@@ -365,7 +379,8 @@ extension TrustJSMessageHandler {
         url: URL?,
         network _: ProviderNetwork,
         id: Int64,
-        info: [String: Any]
+        info: [String: Any],
+        EVMAddress: String? = nil
     ) {
         var title = webVC?.webView.title ?? "unknown"
         if title.isEmpty {
@@ -412,7 +427,7 @@ extension TrustJSMessageHandler {
 
             Task {
                 do {
-                  if self.currentIsCoa() {
+                  if self.currentIsCoa(EVMAddress) {
                     let txid = try await FlowNetwork.sendTransaction(
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,
@@ -640,14 +655,14 @@ extension TrustJSMessageHandler {
 }
 
 extension TrustJSMessageHandler {
-  func currentIsCoa() -> Bool {
-    guard let webAddress = webVC?.trustProvider?.config.ethereum.address else {
-      return false
+  func currentIsCoa(_ EVMAddress: String?) -> Bool {
+//    webVC?.webView.trustGetConnectedAddress { address in
+//      
+//    }
+    guard let EVMAddress else {
+      return true
     }
-    guard let coaAddress = WalletManager.shared.coa?.address else {
-      return false
-    }
-    return coaAddress == webAddress
+    return WalletManager.shared.coa?.address == EVMAddress
   }
 }
 
