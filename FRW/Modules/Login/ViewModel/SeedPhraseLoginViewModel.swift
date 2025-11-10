@@ -124,9 +124,6 @@ final class SeedPhraseLoginViewModel: ObservableObject, LoginViewModelProtocol {
 
             // Fetch all addresses (common logic from protocol)
             try await fetchAllAddresses()
-
-            HUD.dismissLoading()
-
             // Select account (common logic from protocol)
             selectAccountFromWallet()
         }
