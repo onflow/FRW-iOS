@@ -89,6 +89,7 @@ class SideMenuViewModel: ObservableObject {
     func updateCurrentAccount(_ selectedAccount: RNBridge.WalletAccount) {
         self.currentAccount = selectedAccount
         WalletManager.shared.changeSelectedAccount(address: selectedAccount.address, type: selectedAccount.FWAccountType)
+        NotificationCenter.default.post(name: .toggleSideMenu)
     }
 
     func loadBalance() {
