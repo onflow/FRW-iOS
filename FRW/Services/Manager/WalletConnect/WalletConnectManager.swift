@@ -747,9 +747,9 @@ extension WalletConnectManager {
             handleSignTypedData(sessionRequest)
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
-        case WalletConnectEVMMethod.switchEthereumChain.rawValue:
-          handleSwitchEthereumChain(sessionRequest)
-          break
+//        case WalletConnectEVMMethod.switchEthereumChain.rawValue:
+//          handleSwitchEthereumChain(sessionRequest)
+//          break
         case WalletConnectEVMMethod.personalECRecover.rawValue:
           handlePersonalECRecover(sessionRequest)
         default:

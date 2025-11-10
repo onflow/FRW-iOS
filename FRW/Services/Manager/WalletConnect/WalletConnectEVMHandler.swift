@@ -24,7 +24,7 @@ enum WalletConnectEVMMethod: String, Codable, CaseIterable {
     case signTypedData = "eth_signTypedData"
     case signTypedDataV3 = "eth_signTypedData_v3"
     case signTypedDataV4 = "eth_signTypedData_v4"
-    case switchEthereumChain = "wallet_switchEthereumChain"
+//    case switchEthereumChain = "wallet_switchEthereumChain"
     case watchAsset = "wallet_watchAsset"
     case personalECRecover = "personal_ecRecover"
 }
