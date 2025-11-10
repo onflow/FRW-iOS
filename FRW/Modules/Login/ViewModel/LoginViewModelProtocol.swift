@@ -116,7 +116,8 @@ extension LoginViewModelProtocol {
       
       guard let address = try? wallet?.ethAddress(),
             let publicKey = cryptoKey?.publicKey(signAlgo: signAlgo)?.hexValue else {
-        //TODO:
+        HUD.error(title: "Invalide Key", message: "Please check the Mnemonic")
+        log.error("[import] address\(String(describing: try? wallet?.ethAddress())) or publicKey is nil")
         return
       }
       
