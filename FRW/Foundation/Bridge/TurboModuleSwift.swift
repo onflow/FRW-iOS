@@ -191,6 +191,8 @@ extension TurboModuleSwift {
       return try account.toWalletAccount().toDictionary()
     } else if let account = await manager.selectedEVMAccount {
       return try account.toWalletAccount().toDictionary()
+    } else if let account = await manager.selectedEOAAccount {
+      return try account.toWalletAccount().toDictionary()
     } else if let account = await manager.mainAccount {
       return try account.toWalletAccount().toDictionary()
     }
