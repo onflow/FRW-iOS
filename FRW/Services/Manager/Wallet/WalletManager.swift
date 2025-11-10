@@ -126,6 +126,8 @@ class WalletManager: ObservableObject {
   var coa: COA? {
     mainAccount?.coa
   }
+  
+  var EOAs: [EOA]? = nil
 
   var childs: [FlowWalletKit.ChildAccount]? {
     mainAccount?.childs
@@ -218,6 +220,10 @@ extension WalletManager {
       Task {
         do {
           try await walletEntity?.fetchAccount()
+          for account in self.currentNetworkAccounts {
+            try? await account.fetchAccount()
+          }
+          self.EOAs = walletEntity?.eoaAddress?.compactMap{ EOA($0,network: currentNetwork) }
           ProfileManager.shared.update(
             uid: uid,
             keyProvider: provider,
@@ -281,9 +287,12 @@ extension WalletManager {
   }
 
   func loadLinkedAccounts() {
+    guard let mainAccount else { return }
     Task {
       do {
-        try await mainAccount?.loadLinkedAccounts()
+        if mainAccount.hasLinkedAccounts {
+          try await mainAccount.fetchAccount()
+        }
       } catch {
         log.error(error)
         log.error(WalletError.fetchLinkedAccountsFailed)
@@ -382,7 +391,6 @@ extension WalletManager {
       selectedAccount?.value,
       forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
     )
-
     // If it's main account, reload the linked account
     if type == .main,
        let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
@@ -390,6 +398,40 @@ extension WalletManager {
        }) {
       mainAccount = account
       loadLinkedAccounts()
+    }
+  }
+  
+  func switchSelectedAccount(_ selectingAccount: RNBridge.WalletAccount) {
+    UIFeedbackGenerator.impactOccurred(.selectionChanged)
+    guard let fwAddress = FWAddressDector.create(address: selectingAccount.address) else {
+      HUD.error(WalletError.invaildAddress)
+      return
+    }
+    
+    selectedAccount = .init(type: selectingAccount.FWAccountType, addr: fwAddress)
+    UserDefaults.standard.set(
+      selectedAccount?.value,
+      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
+    )
+    
+    switch selectingAccount.FWAccountType {
+      case .main:
+        if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
+          account.hexAddr == selectingAccount.address
+        }) {
+          mainAccount = account
+          loadLinkedAccounts()
+        }
+      case .coa, .child:
+        if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
+          account.hexAddr == selectingAccount.parentAddress
+        }) {
+          mainAccount = account
+          loadLinkedAccounts()
+        }
+      case .eoa:
+        break
+      
     }
   }
 
@@ -427,15 +469,6 @@ extension WalletManager {
 // MARK: - account type
 
 extension WalletManager {
-  func isCoa(_ address: String?) -> Bool {
-    guard let address = address, !address.isEmpty else {
-      return false
-    }
-    return !EVMAccountManager.shared.accounts
-      .filter {
-        $0.showAddress.lowercased().contains(address.lowercased())
-      }.isEmpty
-  }
 
   func isMain() -> Bool {
     guard let currentAddress = getWatchAddressOrChildAccountAddressOrPrimaryAddress(),

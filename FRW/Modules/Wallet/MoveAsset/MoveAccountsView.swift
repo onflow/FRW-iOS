@@ -11,7 +11,7 @@ import SwiftUIX
 
 // MARK: - MoveAccountsView
 
-struct MoveAccountsView: RouteableView, PresentActionDelegate {
+struct MoveAccountsView: RouteableView {
     // MARK: Lifecycle
 
     init(viewModel: MoveAccountsViewModel) {
@@ -20,7 +20,6 @@ struct MoveAccountsView: RouteableView, PresentActionDelegate {
 
     // MARK: Internal
 
-    var changeHeight: (() -> Void)?
 
     @StateObject
     var viewModel: MoveAccountsViewModel

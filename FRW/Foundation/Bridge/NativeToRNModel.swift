@@ -91,6 +91,63 @@ extension FlowWalletKit.COA {
   }
 }
 
+extension EOA {
+  func toWalletAccount(
+    parentAddress: String? = nil,
+    userId: String? = nil
+  ) -> RNBridge.WalletAccount {
+    let addr = address.addHexPrefix()
+    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
+    
+    return RNBridge.WalletAccount(
+      id: UUID().uuidString,
+      name: user.name,
+      address: addr,
+      emojiInfo: user.toRNEmoji(),
+      parentEmoji: nil,
+      parentAddress: parentAddress,
+      avatar: nil,
+      isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
+      type: .evm,
+      balance: nil,
+      nfts: nil
+    )
+  }
+}
+
+extension RNBridge.WalletAccount {
+  var FWAccountType: FWAccount.AccountType {
+    switch self.type {
+    case .main:
+      return .main
+    case .child:
+      return .child
+    case .evm:
+      if parentAddress == nil {
+        return .eoa
+      }
+      return .coa
+    case .none:
+      return .main
+    }
+  }
+  
+  func copyWith(flow: String?, nft: String? = nil) -> RNBridge.WalletAccount {
+    RNBridge.WalletAccount(
+      id: self.id,
+      name: self.name,
+      address: self.address,
+      emojiInfo: self.emojiInfo,
+      parentEmoji: self.parentEmoji,
+      parentAddress: self.parentAddress,
+      avatar: self.avatar,
+      isActive: self.isActive,
+      type: self.type,
+      balance: flow,
+      nfts: nft
+    )
+  }
+}
 // MARK: Tool for RN Model
 
 extension Contact {

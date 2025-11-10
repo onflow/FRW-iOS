@@ -11,6 +11,7 @@ import Foundation
 import ReownRouter
 import ReownWalletKit
 import WalletConnectSign
+import WalletCore
 import Web3Core
 import web3swift
 
@@ -23,8 +24,9 @@ enum WalletConnectEVMMethod: String, Codable, CaseIterable {
     case signTypedData = "eth_signTypedData"
     case signTypedDataV3 = "eth_signTypedData_v3"
     case signTypedDataV4 = "eth_signTypedData_v4"
-    case switchEthereumChain = "wallet_switchEthereumChain"
+//    case switchEthereumChain = "wallet_switchEthereumChain"
     case watchAsset = "wallet_watchAsset"
+    case personalECRecover = "personal_ecRecover"
 }
 
 extension Flow.ChainID {
@@ -49,6 +51,8 @@ extension Flow.ChainID {
 // MARK: - WalletConnectEVMHandler
 
 struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
+  
+    var currentIsCOA: Bool = false
     var supportNetwork: [Flow.ChainID] {
         [currentNetwork]
     }
@@ -87,10 +91,11 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
 
     func approveProposalNamespace(
         required: ProposalNamespace?,
-        optional: ProposalNamespace?
+        optional: ProposalNamespace?,
+        EVMAddress: String? = nil
     ) throws -> SessionNamespace? {
-        // Ensure we have an account available.
-        guard let account = EVMAccountManager.shared.accounts.first?.address.addHexPrefix() else {
+        guard let account = EVMAddress else {
+            log.error("[EVM] Cannot approve proposal without an EVM address.")
             return nil
         }
 
@@ -160,6 +165,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         ) { result in
             Task {
                 if result {
+                  if currentIsCOA {
                     guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                         HUD.error(title: "invalid_address".localized)
                         cancel()
@@ -186,6 +192,15 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         return
                     }
                     confirm(encoded.hexString.addHexPrefix())
+                  } else {
+                    guard let sig = try? await WalletManager.shared.walletEntity?.ethSignPersonalMessage(data) else {
+                      log.error("[SOA] sign for data is error")
+                      cancel()
+                      return
+                    }
+                    confirm(sig.hexString.addHexPrefix())
+                  }
+                    
                 } else {
                     cancel()
                 }
@@ -203,7 +218,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         let title = request.name ?? ""
         let url = request.dappURL?.absoluteString ?? ""
         let logo = request.logoURL?.absoluteString ?? ""
-
+        let chainId = Int(request.chainId.reference) ?? 747
         let originCadence = CadenceManager.shared.current.evm?.callContractV2?.toFunc() ?? ""
 
         do {
@@ -232,6 +247,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     return
                 }
                 Task {
+                  if currentIsCOA {
                     let txid = try await FlowNetwork.sendTransaction(
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,
@@ -255,6 +271,112 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                             txId: txid.hex,
                             success: true
                         )
+                  } else {
+                    guard let web3 = try? await web3() else {
+                      log.error("[SOA] Invalid RPC URL for sending transaction")
+                      cancel()
+                      return
+                    }
+                    guard let amount = receiveModel.value
+                    else {
+                      cancel()
+                      return
+                    }
+                    let defaultGas = await WalletManager.defaultGas
+                    // Normalize all hex strings using the helper function
+                    let chainIdHex = self.normalizeHexString(String(format: "%x", chainId))
+                    let gasValue = self.normalizeHexString(receiveModel.gas ?? String(format: "%x", defaultGas))
+
+                    //MARK: get nonce
+                    let address = evmAddress()
+                    let nonce = try await self.getTransactionNonce(for: address)
+                    let nonceHex = self.normalizeHexString(String(nonce, radix: 16))
+
+                    //MARK: Get current gas price from network
+                    let gasPrice = try await web3.eth.gasPrice()
+                    let gasPriceHex = self.normalizeHexString(String(gasPrice, radix: 16))
+
+                    // Prepare transaction input
+                    var input = EthereumSigningInput()
+
+                    // Debug logging for hex values
+                    log.info("[SOA] Transaction hex values - chainId: \(chainIdHex), nonce: \(nonceHex), gasPrice: \(gasPriceHex), gasLimit: \(gasValue)")
+
+                    guard let chainIdData = Data(hexString: chainIdHex),
+                          let nonceData = Data(hexString: nonceHex),
+                          let gasPriceData = Data(hexString: gasPriceHex),
+                          let gasLimitData = Data(hexString: gasValue)
+                    else {
+                      log.error("[SOA] Invalid hex data for transaction parameters")
+                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasPriceHex: \(gasPriceHex), gasValue: \(gasValue)")
+                      cancel()
+                      return
+                    }
+
+                    input.chainID = chainIdData
+                    input.nonce = nonceData
+                    input.gasPrice = gasPriceData
+                    input.gasLimit = gasLimitData
+                    input.toAddress = toAddr.addHexPrefix()
+
+                    // Handle both transfer and contract call transactions
+                    let normalizedAmount = self.normalizeHexString(amount)
+                    guard let amountData = Data(hexString: normalizedAmount) else {
+                      log.error("[SOA] Invalid amount data: \(normalizedAmount)")
+                      cancel()
+                      return
+                    }
+
+                    // Check if this is a contract call (has data) or simple transfer
+                    if let dataString = receiveModel.data, !dataString.isEmpty, dataString != "0x" {
+                      // Contract call transaction
+                      let normalizedData = self.normalizeHexString(dataString)
+                      guard let callData = Data(hexString: normalizedData) else {
+                        log.error("[SOA] Invalid contract call data: \(normalizedData)")
+                        cancel()
+                        return
+                      }
+                      input.transaction = EthereumTransaction.with {
+                        $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                          $0.amount = amountData
+                          $0.data = callData
+                        }
+                      }
+                    } else {
+                      // Simple transfer transaction
+                      input.transaction = EthereumTransaction.with {
+                        $0.transfer = EthereumTransaction.Transfer.with {
+                          $0.amount = amountData
+                        }
+                      }
+                    }
+
+                    // Sign the transaction
+                    guard let signedTransaction = try await WalletManager.shared.walletEntity?.ethSignTransaction(input) else {
+                      log.error("[SOA] Failed to sign transaction")
+                      cancel()
+                      return
+                    }
+
+                    // Send raw transaction to the network
+                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
+                    let receipt = try? await web3.eth.transactionReceipt(txHash.hash.data(using: .utf8)!)
+                    if let receipt = receipt {
+                        print("Status:", receipt.status)
+                    }
+                    let txid = Hash.keccak256(data: signedTransaction.encoded)
+                    log.info("[SOA] Transaction sent successfully with hash: \(txHash.hash)")
+                    log.info("txid: \(txid)")
+                    await MainActor.run {
+                        confirm(txHash.hash.addHexPrefix())
+                    }
+                    EventTrack.Transaction
+                        .evmSigned(
+                            txId: txHash.hash.addHexPrefix(),
+                            success: true
+                        )
+                  }
+                    
                 }
             }
 
@@ -299,6 +421,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 Task {
                     if result {
                         do {
+                          if currentIsCOA {
                             guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                                 HUD.error(title: "invalid_address".localized)
                                 return
@@ -319,9 +442,19 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                                 signatures: [sig]
                             )
                             guard let encoded = RLP.encode(proof.rlpList) else {
+                                cancel()
                                 return
                             }
                             confirm(encoded.hexString.addHexPrefix())
+                          } else {
+                            let raw: String = dataStr
+                            guard let signature = try? await WalletManager.shared.walletEntity?.ethSignTypedData(json: raw) else {
+                              cancel()
+                              return
+                            }
+                            confirm(signature.hexString.addHexPrefix())
+                          }
+                            
                         } catch {
                             cancel()
                         }
@@ -466,4 +599,50 @@ extension WalletConnectEVMHandler {
         let model = try? await FlowNetwork.fetchEVMTransactionResult(txid: txid.hex)
         return model?.hashString?.addHexPrefix()
     }
+}
+
+// MARK: EOA
+extension WalletConnectEVMHandler {
+  private func web3() async throws -> Web3 {
+    let url = currentNetwork.evmURL.absoluteString
+    guard let rpcURL = URL(string: url) else {
+        throw NSError(domain: "InvalidRPC", code: -1)
+    }
+    let web3 = try await Web3.new(rpcURL)
+    return web3
+  }
+  
+  private func normalizeHexString(_ hex: String) -> String {
+      // Remove "0x" prefix if present
+      var normalizedHex = hex.hasPrefix("0x") || hex.hasPrefix("0X")
+          ? String(hex.dropFirst(2))
+          : hex
+
+      // Ensure even length by padding with leading zero
+      if normalizedHex.count % 2 != 0 {
+          normalizedHex = "0" + normalizedHex
+      }
+
+      return normalizedHex
+  }
+  
+  private func evmAddress() -> String {
+    let address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
+    return address ?? ""
+  }
+  
+  private func getTransactionNonce(for address: String) async throws -> BigUInt {
+
+      guard let web3 = try? await web3() else {
+        throw NSError(domain: "InvalidRPC", code: -1)
+      }
+      guard let ethAddress = EthereumAddress(address) else {
+          throw NSError(domain: "InvalidAddress", code: -2)
+      }
+      let nonce = try await web3.eth.getTransactionCount(
+          for: ethAddress,
+          onBlock: .latest
+      )
+      return nonce
+  }
 }

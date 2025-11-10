@@ -16,6 +16,7 @@ import WalletCore
 import Web3Core
 import web3swift
 import WebKit
+import FlowWalletKit
 
 // MARK: - TrustJSMessageHandler
 
@@ -26,6 +27,15 @@ class TrustJSMessageHandler: NSObject {
         Flow.ChainID.mainnet.networkID: .mainnet,
         Flow.ChainID.testnet.networkID: .testnet,
     ]
+    
+    func web3() async throws ->  Web3? {
+        guard let url = TrustWeb3Provider.flowConfig()?.config.ethereum.rpcUrl,
+            let rpcURL = URL(string: url) else {
+            throw NSError(domain: "InvalidRPC", code: -1)
+        }
+        let web3 = try await Web3.new(rpcURL)
+        return web3
+    }
 }
 
 // MARK: - helper
@@ -55,6 +65,16 @@ extension TrustJSMessageHandler {
             return nil
         }
         return data
+    }
+  
+    private func extractEVMAddress(json: [String: Any]) -> String? {
+      guard let params = json["object"] as? [String: Any]
+      else {
+        return nil
+      }
+      let address = params["address"] as? String
+      let from = params["from"] as? String
+      return address ?? from
     }
 
     private func extractRaw(json: [String: Any]) -> String? {
@@ -99,7 +119,7 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
             log.error("[Trust] json:\(json)")
             return
         }
-
+        log.info("[Trust]  method: \(method)")
         switch method {
         case .requestAccounts:
             log.info("[Trust] requestAccounts")
@@ -113,7 +133,8 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
                 log.info("[Trust] data is missing")
                 return
             }
-            handleSendTransaction(url: url, network: network, id: id, info: obj)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSendTransaction(url: url, network: network, id: id, info: obj, EVMAddress: EVMAddress)
         case .signMessage:
             log.info("[Trust] signMessage")
         case .signTypedMessage:
@@ -123,17 +144,25 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
                 print("data is missing")
                 return
             }
-            handleSignTypedMessage(url: url, id: id, data: data, raw: raw)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSignTypedMessage(url: url, id: id, data: data, raw: raw, EVMAddress: EVMAddress)
         case .signPersonalMessage:
             guard let data = extractMessage(json: json) else {
                 log.info("[Trust] data is missing")
                 return
             }
-            handleSignPersonal(url: url, network: network, id: id, data: data, addPrefix: true)
+            let EVMAddress = extractEVMAddress(json: json)
+            handleSignPersonal(url: url, network: network, id: id, data: data, addPrefix: true, EVMAddress: EVMAddress)
         case .sendTransaction:
             log.info("[Trust] sendTransaction")
         case .ecRecover:
             log.info("[Trust] ecRecover")
+          guard let obj = extractObject(json: json)
+          else {
+              log.info("[Trust] data is missing\(method)")
+              return
+          }
+          handleECRecover(network: network, id: id, json: obj)
         case .watchAsset:
             print("[Trust] watchAsset")
             guard let obj = extractObject(json: json)
@@ -164,35 +193,26 @@ extension TrustJSMessageHandler: WKScriptMessageHandler {
 extension TrustJSMessageHandler {
     private func handleRequestAccounts(url: URL?, network: ProviderNetwork, id: Int64) {
       let address = webVC?.trustProvider?.config.ethereum.address ?? ""
-
-      let title = webVC?.webView.title ?? "unknown"
-      let chainID = currentNetwork
-      let vm = BrowserAuthnViewModel(
-          title: title,
-          url: url?.host ?? "unknown",
-          logo: url?.absoluteString.toFavIcon()?.absoluteString,
-          walletAddress: address,
-          network: chainID
-      ) { [weak self] result in
-          guard let self = self else {
-              return
-          }
-
-          if result {
-              switch network {
-              case .ethereum:
-                  webVC?.webView.tw.set(network: network.rawValue, address: address)
-                  webVC?.webView.tw.send(network: network, results: [address], to: id)
-              default:
-                  print("not support")
-              }
-          } else {
-              webVC?.webView.tw.send(network: network, error: "Canceled", to: id)
-              log.debug("handle authn cancelled")
-          }
+      
+      let provider = AuthnDataProvider(title: webVC?.webView.title ?? "unknown",
+                                       url: url?.host() ?? "unknown",
+                                       address: address,
+                                       logo: url?.absoluteString.toFavIcon()?.absoluteString
+      )
+      let viewModel = AuthnViewModel(provider: provider) { [weak self] result in
+        guard let self = self else {
+            return
+        }
+        
+        if let address =  result {
+          webVC?.webView.tw.set(network: network.rawValue, address: address)
+          webVC?.webView.tw.send(network: network, results: [address], to: id)
+        } else {
+            webVC?.webView.tw.send(network: network, error: "Canceled", to: id)
+            log.debug("handle authn cancelled")
+        }
       }
-
-      Router.route(to: RouteMap.Explore.authn(vm))
+      Router.route(to: RouteMap.Explore.authnV2(viewModel))
     }
 
     private func handleSignPersonal(
@@ -200,7 +220,8 @@ extension TrustJSMessageHandler {
         network: ProviderNetwork,
         id: Int64,
         data: Data,
-        addPrefix _: Bool
+        addPrefix _: Bool,
+        EVMAddress: String? = nil
     ) {
         Task {
             await TrustJSMessageHandler.checkCoa()
@@ -227,14 +248,16 @@ extension TrustJSMessageHandler {
                 }
 
                 Task {
-                    let address = Flow.Address(hex: addrStr)
+                  if self.currentIsCoa(EVMAddress) {
                     guard let hashedData = Utilities.hashPersonalMessage(data) else { return }
                     let joinData = Flow.DomainTag.user.normalize + hashedData
+                    let address = Flow.Address(hex: addrStr)
                     guard let sig = try? await self.signWithMessage(data: joinData) else {
                         HUD.error(title: "sign failed")
+                        await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
                         return
                     }
-                    let keyIndex = BigUInt(WalletManager.shared.keyIndex)
+                    let keyIndex = await BigUInt(WalletManager.shared.keyIndex)
                     let proof = COAOwnershipProof(
                         keyIninces: [keyIndex],
                         address: address.data,
@@ -242,6 +265,7 @@ extension TrustJSMessageHandler {
                         signatures: [sig]
                     )
                     guard let encoded = RLP.encode(proof.rlpList) else {
+                        await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
                         return
                     }
                     
@@ -250,6 +274,15 @@ extension TrustJSMessageHandler {
                         result: encoded.hexString.addHexPrefix(),
                         to: id
                     )
+                  } else {
+                    
+                    guard let sig = try? await WalletManager.shared.walletEntity?.ethSignPersonalMessage(data) else {
+                      log.error("[SOA] sign for data is error")
+                      await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
+                      return
+                    }
+                    await self.webVC?.webView.tw.send(network: .ethereum, result: sig.hexString.addHexPrefix(), to: id)
+                  }
                 }
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
@@ -259,7 +292,7 @@ extension TrustJSMessageHandler {
         Router.route(to: RouteMap.Explore.signMessage(vm))
     }
 
-    func handleSignTypedMessage(url: URL?, id: Int64, data: Data, raw: String) {
+    func handleSignTypedMessage(url: URL?, id: Int64, data: Data, raw: String, EVMAddress: String? = nil) {
         Task {
             await TrustJSMessageHandler.checkCoa()
         }
@@ -285,6 +318,7 @@ extension TrustJSMessageHandler {
                 }
                 
                 Task {
+                  if self.currentIsCoa(EVMAddress) {
                     let address = Flow.Address(hex: addrStr)
                     let joinData = Flow.DomainTag.user.normalize + data
                     guard let sig = try? await self.signWithMessage(data: joinData) else {
@@ -306,6 +340,17 @@ extension TrustJSMessageHandler {
                         result: encoded.hexString.addHexPrefix(),
                         to: id
                     )
+                  } else {
+                    guard let signature = try? await WalletManager.shared.walletEntity?.ethSignTypedData(json: raw) else {
+                      return
+                    }
+                    await self.webVC?.webView.tw.send(
+                        network: .ethereum,
+                        result: signature.hexString.addHexPrefix(),
+                        to: id
+                    )
+                  }
+                    
                 }
             } else {
                 webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
@@ -319,7 +364,8 @@ extension TrustJSMessageHandler {
         url: URL?,
         network _: ProviderNetwork,
         id: Int64,
-        info: [String: Any]
+        info: [String: Any],
+        EVMAddress: String? = nil
     ) {
         var title = webVC?.webView.title ?? "unknown"
         if title.isEmpty {
@@ -366,6 +412,7 @@ extension TrustJSMessageHandler {
 
             Task {
                 do {
+                  if self.currentIsCoa(EVMAddress) {
                     let txid = try await FlowNetwork.sendTransaction(
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,
@@ -388,6 +435,110 @@ extension TrustJSMessageHandler {
                             to: id
                         )
                     }
+                  } else {
+                    // Send the signed transaction to the network
+                    guard let web3 = try await self.web3() else {
+                      log.error("[SOA] Invalid RPC URL for sending transaction")
+                      self.cancel(id: id)
+                      return
+                    }
+                    
+                    guard let chainId = await self.webVC?.trustProvider?.config.ethereum.chainId,
+                          let amount = receiveModel.value
+                    else {
+                      self.cancel(id: id)
+                      return
+                    }
+                    let defaultGas = await WalletManager.defaultGas
+                    // Normalize all hex strings using the helper function
+                    let chainIdHex = String(format: "%x", chainId).normalizeHexString()
+                    let gasValue = (receiveModel.gas ?? String(format: "%x", defaultGas)).normalizeHexString()
+
+                    //MARK: get nonce
+                    let address = await self.webVC?.trustProvider?.config.ethereum.address ?? ""
+                    let nonce = try await self.getTransactionNonce(for: address)
+                    let nonceHex = String(nonce, radix: 16).normalizeHexString()
+
+                    //MARK: Get current gas price from network
+                    let gasPrice = try await web3.eth.gasPrice()
+                    let gasPriceHex = String(gasPrice, radix: 16).normalizeHexString()
+
+                    // Prepare transaction input
+                    var input = EthereumSigningInput()
+
+                    // Debug logging for hex values
+                    log.info("[SOA] Transaction hex values - chainId: \(chainIdHex), nonce: \(nonceHex), gasPrice: \(gasPriceHex), gasLimit: \(gasValue)")
+
+                    guard let chainIdData = Data(hexString: chainIdHex),
+                          let nonceData = Data(hexString: nonceHex),
+                          let gasPriceData = Data(hexString: gasPriceHex),
+                          let gasLimitData = Data(hexString: gasValue)
+                    else {
+                      log.error("[SOA] Invalid hex data for transaction parameters")
+                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasPriceHex: \(gasPriceHex), gasValue: \(gasValue)")
+                      self.cancel(id: id)
+                      return
+                    }
+
+                    input.chainID = chainIdData
+                    input.nonce = nonceData
+                    input.gasPrice = gasPriceData
+                    input.gasLimit = gasLimitData
+                    input.toAddress = toAddr.addHexPrefix()
+
+                    // Handle both transfer and contract call transactions
+                    let normalizedAmount = amount.normalizeHexString()
+                    guard let amountData = Data(hexString: normalizedAmount) else {
+                      log.error("[SOA] Invalid amount data: \(normalizedAmount)")
+                      self.cancel(id: id)
+                      return
+                    }
+
+                    // Check if this is a contract call (has data) or simple transfer
+                    if let dataString = receiveModel.data, !dataString.isEmpty, dataString != "0x" {
+                      // Contract call transaction
+                      let normalizedData = dataString.normalizeHexString()
+                      guard let callData = Data(hexString: normalizedData) else {
+                        log.error("[SOA] Invalid contract call data: \(normalizedData)")
+                        self.cancel(id: id)
+                        return
+                      }
+                      input.transaction = EthereumTransaction.with {
+                        $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
+                          $0.amount = amountData
+                          $0.data = callData
+                        }
+                      }
+                    } else {
+                      // Simple transfer transaction
+                      input.transaction = EthereumTransaction.with {
+                        $0.transfer = EthereumTransaction.Transfer.with {
+                          $0.amount = amountData
+                        }
+                      }
+                    }
+
+                    // Sign the transaction
+                    guard let signedTransaction = try await WalletManager.shared.walletEntity?.ethSignTransaction(input) else {
+                      log.error("[SOA] Failed to sign transaction")
+                      self.cancel(id: id)
+                      return
+                    }
+
+                    // Send raw transaction to the network
+                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
+                    log.info("[SOA] Transaction sent successfully with hash: \(txHash.hash)")
+
+                    // Return the transaction hash to frontend
+                    await MainActor.run {
+                      self.webVC?.webView.tw.send(
+                          network: .ethereum,
+                          result: txHash.hash.addHexPrefix(),
+                          to: id
+                      )
+                    }
+                  }
+                    
                 } catch {
                     log.error("\(error)")
                     self.cancel(id: id)
@@ -439,7 +590,27 @@ extension TrustJSMessageHandler {
             self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
         }
     }
-
+  
+    private func handleECRecover(network: ProviderNetwork, id: Int64, json: [String: Any]) {
+      guard let message = json["message"] as? String, let signature = json["signature"] as? String else {
+          log.error("[Trust] message or signature is nil")
+          cancel(id: id)
+          return
+      }
+      guard let signatureData = Data(hexString: signature) else {
+        log.error("[Trust] signature decode failed")
+        cancel(id: id)
+        return
+      }
+      let messageData = Data(message.utf8)
+      let recovered = try? FlowWalletKit.Wallet.ethRecoverAddress(signature: signatureData, message: messageData)
+      if let result = recovered {
+        self.webVC?.webView.tw.send(network: .ethereum, result: result, to: id)
+      } else {
+        self.webVC?.webView.tw.send(network: .ethereum, error: "Invalid signature v value", to: id)
+      }
+    }
+  
     private func handleWatchAsset(network: ProviderNetwork, id: Int64, json: [String: Any]) {
         let manager = WalletManager.shared.customTokenManager
         guard let contract = json["contract"] as? String else {
@@ -469,6 +640,18 @@ extension TrustJSMessageHandler {
 }
 
 extension TrustJSMessageHandler {
+  func currentIsCoa(_ EVMAddress: String?) -> Bool {
+//    webVC?.webView.trustGetConnectedAddress { address in
+//      
+//    }
+    guard let EVMAddress else {
+      return true
+    }
+    return WalletManager.shared.coa?.address == EVMAddress
+  }
+}
+
+extension TrustJSMessageHandler {
     static func checkCoa() async {
         guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
             return
@@ -495,4 +678,40 @@ extension TrustJSMessageHandler {
             HUD.dismissLoading()
         }
     }
+}
+
+extension TrustJSMessageHandler {
+    
+  
+    private func getTransactionNonce(for address: String) async throws -> BigUInt {
+
+        guard let web3 = try await web3() else {
+          throw NSError(domain: "InvalidRPC", code: -1)
+        }
+        guard let ethAddress = EthereumAddress(address) else {
+            throw NSError(domain: "InvalidAddress", code: -2)
+        }
+        let nonce = try await web3.eth.getTransactionCount(
+            for: ethAddress,
+            onBlock: .latest
+        )
+        return nonce
+    }
+}
+
+extension String {
+  // Helper function to normalize hex strings for Data conversion
+  func normalizeHexString() -> String {
+      // Remove "0x" prefix if present
+      var normalizedHex = self.hasPrefix("0x") || self.hasPrefix("0X")
+          ? String(self.dropFirst(2))
+          : self
+
+      // Ensure even length by padding with leading zero
+      if normalizedHex.count % 2 != 0 {
+          normalizedHex = "0" + normalizedHex
+      }
+
+      return normalizedHex
+  }
 }

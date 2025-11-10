@@ -28,7 +28,7 @@ class BrowserViewController: UIViewController {
 
     // MARK: Internal
 
-    let trustProvider = TrustWeb3Provider.flowConfig()
+    var trustProvider = TrustWeb3Provider.flowConfig()
 
     lazy var webView: WKWebView = {
         let view = WKWebView(frame: .zero, configuration: generateWebViewConfiguration())

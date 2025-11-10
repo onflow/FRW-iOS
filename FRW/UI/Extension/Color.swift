@@ -342,8 +342,9 @@ extension Color {
         }
 
         enum Light {
-            /// dark: FFFFFF-80%, light: 000000
-            static let lines = Color(.Brain.Light.lines).opacity(0.8)
+            static let lines = Color(.Brain.Light.lines)
+          /// dark: FFFFFF-80%, light: 000000
+            static let lines80 = Color(.Brain.Light.lines).opacity(0.8)
             /// dark: FFFFFF-40%
             static let lines40 = Color(.Brain.Light.lines).opacity(0.4)
             /// dark:

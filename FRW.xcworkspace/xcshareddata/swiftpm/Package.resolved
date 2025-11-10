@@ -149,7 +149,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "revision" : "fd4cea203171d47e488fa7adea3f8ff65f67d486"
+        "revision" : "f278a9d5bd0432d21dadcd7c40afb0c3da19e628"
       }
     },
     {
@@ -559,7 +559,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/trust-web3-provider",
       "state" : {
-        "revision" : "0d58818bae73d6996b6a8caae15dc2e5a0ff88f8"
+        "revision" : "aa16f67b5417e53192fd04482e5c7c2487cf7e92"
       }
     },
     {

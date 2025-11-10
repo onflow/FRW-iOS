@@ -10,15 +10,6 @@ import Factory
 import Foundation
 import SwiftUI
 
-// MARK: - SideMenuViewModel.AccountPlaceholder
-
-extension SideMenuViewModel {
-    struct AccountPlaceholder {
-        let uid: String
-        let avatar: String
-    }
-}
-
 // MARK: - SideMenuViewModel
 
 class SideMenuViewModel: ObservableObject {
@@ -30,8 +21,7 @@ class SideMenuViewModel: ObservableObject {
     @Injected(\.token)
     private var token: TokenBalanceHandler
 
-    @Published
-    var accountLoading: Bool = false
+    @Published var accountLoading: Bool = false
 
     @Published
     var linkLoading: Bool = false
@@ -40,40 +30,27 @@ class SideMenuViewModel: ObservableObject {
     var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
 
     @Published
-    var mainAccounts: [String] = []
-
-    @Published
-    var linkedAccounts: [String] = []
-
-    @Published
     var walletBalance: [String: Decimal] = [:]
 
     var colorsMap: [String: Color] = [:]
 
-    var currentAddress: String {
-        WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
-    }
 
+    @Published var currentAccount: RNBridge.WalletAccount? = nil
+    @Published var allAccounts: [[RNBridge.WalletAccount]] = []
     private var cancellableSet = Set<AnyCancellable>()
 
     // MARK: Lifecycle
 
     init() {
-        wallet.$mainAccount
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.loadBalance()
-            }
-            .store(in: &cancellableSet)
 
         wallet.$walletEntity
             .compactMap { $0 }
             .flatMap { $0.$isLoading }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                self?.accountLoading = value
+                if value {
+                    self?.fetchAllAccounts()
+                }
             }
             .store(in: &cancellableSet)
 
@@ -85,30 +62,59 @@ class SideMenuViewModel: ObservableObject {
                 self?.linkLoading = value
             }
             .store(in: &cancellableSet)
+    
+    }
+  
+    private func fetchAllAccounts() {
+      self.accountLoading = true
+      Task {
+        do {
+          let userId = UserManager.shared.activatedUID
+          let result = try await wallet.walletEntity?.buildWalletAccounts(userId: userId) ?? []
+          await MainActor.run {
+            self.currentAccount =  wallet.mainAccount?.toWalletAccount()
+            self.allAccounts = result
+            self.accountLoading = false
+            self.loadBalance()
+          }
+        } catch {
+          await MainActor.run {
+            self.accountLoading = false
+          }
+          log.error("[SideMenu] Failed to build wallet accounts: \(error)")
+        }
+      }
+    }
+  
+    func updateCurrentAccount(_ selectedAccount: RNBridge.WalletAccount) {
+        self.currentAccount = selectedAccount
+        WalletManager.shared.changeSelectedAccount(address: selectedAccount.address, type: selectedAccount.FWAccountType)
+        NotificationCenter.default.post(name: .toggleSideMenu)
     }
 
     func loadBalance() {
         Task {
-            let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
-            var linksAccounts: [String] = []
-            linksAccounts = wallet.childs?.compactMap(\.address.hex) ?? []
-            if let coa = wallet.coa {
-                linksAccounts.insert(coa.address, at: 0)
-            }
-
-            let accounts = mainAccounts + linksAccounts
-
-            if accounts.isEmpty {
-                return
-            }
-            do {
-                let result = try await token.getAvailableFlowBalance(addresses: accounts, forceReload: true)
-                await MainActor.run {
-                    walletBalance = result
-                }
-            } catch {
-                log.debug(error)
-            }
+          do {
+              let allAddresses = allAccounts.flatMap { $0.compactMap(\.address) }
+              let result = try await token.getAvailableFlowBalance(addresses: allAddresses, forceReload: true)
+              await MainActor.run {
+                  // 遍历 allAccounts，更新每个 account 的 balance 字段
+                  self.allAccounts = self.allAccounts.map { group in
+                      group.map { account in
+                          let balance = result[account.address] ?? 0
+                          let flowString = balance.doubleValue.formatDisplayFlowBalance
+                          return account.copyWith(flow: flowString)
+                      }
+                  }
+                  self.currentAccount = self.currentAccount.map { account in
+                      let balance = result[account.address] ?? 0
+                    let flowString = balance.doubleValue.formatDisplayFlowBalance
+                    return account.copyWith(flow: flowString)
+                  }
+              }
+          } catch {
+              log.debug(error)
+          }
         }
     }
 
@@ -143,3 +149,4 @@ class SideMenuViewModel: ObservableObject {
 
     private var cancelSets = Set<AnyCancellable>()
 }
+

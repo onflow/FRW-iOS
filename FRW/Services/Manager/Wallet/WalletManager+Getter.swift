@@ -22,6 +22,10 @@ extension WalletManager {
     var isSelectedFlowAccount: Bool {
         selectedAccount?.type == .main
     }
+  
+    var isSelectedEOAAccount: Bool {
+        selectedAccount?.type == .eoa
+    }
 
     var selectedAccountAddress: String? {
         return selectedAccount?.address.hexAddr

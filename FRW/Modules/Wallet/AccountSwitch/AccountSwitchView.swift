@@ -11,38 +11,27 @@ import SwiftUI
 
 // MARK: - AccountSwitchView
 
-struct AccountSwitchView: PresentActionView {
+struct AccountSwitchView: View {
     // MARK: Internal
 
-    var changeHeight: (() -> Void)?
-
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 20) {
             titleView
-                .padding(.vertical, 36)
-
             contentView
-
             bottomView
-                .padding(.top, 7)
         }
-        .backgroundFill(Color.LL.Neutrals.background)
+        .padding(.horizontal, 18)
+        .backgroundFill(Color.Brain.Core.cards)
     }
 
     var titleView: some View {
         Text("accounts".localized)
-            .font(.inter(size: 24, weight: .bold))
-            .foregroundColor(Color.LL.Neutrals.text)
+            .font(.inter(size: 18, weight: .bold))
+            .foregroundColor(Color.Brain.Text.primary)
     }
 
     var bottomView: some View {
         VStack(spacing: 0) {
-            Divider()
-                .frame(height: 1)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(Color.LL.Neutrals.background)
-                .padding(.bottom, 30)
-
             Button {
                 if currentNetwork != .mainnet {
                     showAlert = true
@@ -53,19 +42,19 @@ struct AccountSwitchView: PresentActionView {
                 }
 
             } label: {
-                HStack(spacing: 15) {
-                    Image("icon-plus")
+                HStack(spacing: 8) {
+                    Image("user-circle-plus")
                         .renderingMode(.template)
-                        .foregroundColor(Color.LL.Neutrals.text)
-                        .frame(width: 14, height: 14)
+                        .foregroundColor(Color.Brain.Core.icons)
+                        .frame(width: 24, height: 24)
 
                     Text("create_new_account".localized)
                         .font(.inter(size: 14, weight: .semibold))
-                        .foregroundColor(Color.LL.Neutrals.text)
+                        .foregroundColor(Color.Brain.Text.primary)
 
                     Spacer()
                 }
-                .frame(height: 40)
+                .frame(height: 56)
             }
             .alert("wrong_network_title".localized, isPresented: $showAlert) {
                 Button("switch_to_mainnet".localized) {
@@ -78,28 +67,35 @@ struct AccountSwitchView: PresentActionView {
             } message: {
                 Text("wrong_network_des".localized)
             }
-
+            .buttonStyle(ScaleButtonStyle())
+            
+          Divider()
+            .background(Color.Brain.Light.lines10)
+          
             Button {
                 Router.dismiss {
                     vm.loginAccountAction()
                 }
             } label: {
-                HStack(spacing: 15) {
-                    Image("icon-down-arrow")
+                HStack(spacing: 8) {
+                    Image("user-circle-recover")
                         .renderingMode(.template)
-                        .foregroundColor(Color.LL.Neutrals.text)
-                        .frame(width: 14, height: 14)
+                        .foregroundColor(Color.Brain.Core.icons)
+                        .frame(width: 24, height: 24)
 
                     Text("add_existing_account".localized)
                         .font(.inter(size: 14, weight: .semibold))
-                        .foregroundColor(Color.LL.Neutrals.text)
+                        .foregroundColor(Color.Brain.Text.primary)
 
                     Spacer()
                 }
-                .frame(height: 40)
+                .frame(height: 56)
             }
+            .buttonStyle(ScaleButtonStyle())
         }
-        .padding(.horizontal, 28)
+        .padding(.horizontal, 18)
+        .background(Color.Brain.Light.lines10)
+        .cornerRadius(16)
         .padding(.bottom, 20)
     }
 
@@ -109,7 +105,8 @@ struct AccountSwitchView: PresentActionView {
                 self.offset = offset
             } content: {
                 LazyVStack(spacing: 20) {
-                  ForEach(vm.profiles, id: \.uid) { placeholder in
+                  ForEach(0..<vm.profiles.count, id: \.self) { index in
+                      let placeholder = vm.profiles[index]
                         Button {
                           vm.selectedProfile = placeholder
                             if currentNetwork != .mainnet {
@@ -123,6 +120,7 @@ struct AccountSwitchView: PresentActionView {
                         } label: {
                             createAccountCell(placeholder)
                         }
+                        .buttonStyle(ScaleButtonStyle())
                         .alert("wrong_network_title".localized, isPresented: $showSwitchUserAlert) {
                             Button("switch_to_mainnet".localized) {
                                 WalletManager.shared.changeNetwork(.mainnet)
@@ -136,9 +134,12 @@ struct AccountSwitchView: PresentActionView {
                         } message: {
                             Text("wrong_network_des".localized)
                         }
+                      if index < vm.profiles.count - 1 {
+                        Divider()
+                          .background(Color.Brain.Light.lines.opacity(0.15))
+                      }
                     }
                 }
-                .padding(.horizontal, 10)
                 .background {
                     GeometryReader { proxy in
                         Color.clear
@@ -149,18 +150,18 @@ struct AccountSwitchView: PresentActionView {
                     })
                 }
             }
-            .padding(.horizontal, 18)
             .overlay(alignment: .bottom) {
                 moreView
                     .opacity(offset < 10 ? max(0, 1 - (-offset / 50.0)) : 1)
                     .visibility(self.contentHeight > geometry.size.height ? .visible : .gone)
             }
         }
+        .frame(minHeight: CGFloat(84 * min(3, vm.profiles.count)))
     }
 
     var moreView: some View {
         Button {
-            self.changeHeight?()
+            
         } label: {
             HStack {
                 Text("view_more".localized)
@@ -178,7 +179,7 @@ struct AccountSwitchView: PresentActionView {
     }
 
   func createAccountCell(_ placeholder: ProfileModel) -> some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
           KFImage.url(URL(string: placeholder.avatar?.convertedAvatarString() ?? ""))
                 .placeholder {
                     Image("placeholder")
@@ -186,30 +187,42 @@ struct AccountSwitchView: PresentActionView {
                 }
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 32, height: 32)
-                .cornerRadius(16)
+                .frame(width: 40, height: 40)
+                .cornerRadius(8)
 
-            VStack(alignment: .leading, spacing: 5) {
+          HStack {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("\(placeholder.username ?? "")")
                     .lineLimit(1)
-                    .font(.inter(size: 14, weight: .semibold))
-                    .foregroundColor(Color.LL.Neutrals.text)
-
+                    .font(.inter(size: 14, weight: .bold))
+                    .foregroundColor(Color.Brain.Text.primary)
+              
+              if !placeholder.countDes.isEmpty {
+                Text("\(placeholder.countDes)")
+                    .lineLimit(1)
+                    .font(.inter(size: 12, weight: .regular))
+                    .foregroundColor(Color.Brain.Text.secondary)
+              }
+              
+              HStack {
                 Text("\(placeholder.subTitle)")
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
-                    .foregroundColor(Color.LL.Neutrals.text2)
+                    .foregroundColor(Color.Brain.Text.secondary)
+                Spacer()
+              }
             }
 
             Spacer()
-            Image("icon-backup-success")
-                .visibility(
-                    placeholder.uid == UserManager.shared
-                        .activatedUID ? .visible : .invisible
-                )
+            Image("check_circle_border")
+              .resizable()
+              .renderingMode(.template)
+              .foregroundColor( placeholder.uid == UserManager.shared
+                .activatedUID ? Color.Brain.Primary.main : Color.Brain.Core.icons)
+              .frame(width: 24, height: 24)
+          }
         }
-        .frame(height: 42)
-        .contentShape(Rectangle())
+        .frame(height: 56)
     }
 
     // MARK: Private

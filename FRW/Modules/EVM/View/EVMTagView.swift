@@ -21,6 +21,18 @@ struct EVMTagView: View {
     }
 }
 
+struct EOATagView: View {
+  var body: some View {
+    Text("EOA")
+        .font(.inter(size: 9))
+        .kerning(0.144)
+        .foregroundStyle(Color.white)
+        .frame(width: 36, height: 16)
+        .background(Color.Theme.Accent.orange)
+        .cornerRadius(8)
+  }
+}
+
 // MARK: - TagView
 
 struct TagView: View {

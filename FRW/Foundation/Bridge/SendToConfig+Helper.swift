@@ -107,6 +107,12 @@ extension RNBridge.SendToConfig {
               return nil
           }
           return coa.toWalletAccount()
+      case .eoa:
+        guard let account = WalletManager.shared.EOAs?.first(where: { $0.address == selectedAccount.address.hexAddr}) else {
+          log.error("❌ EOA account not found:\(selectedAccount.address.hexAddr)")
+          return nil
+        }
+        return account.toWalletAccount()
       }
   }
 }

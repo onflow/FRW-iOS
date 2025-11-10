@@ -8,6 +8,7 @@
 import Kingfisher
 import SwiftUI
 import Flow
+import FlowWalletKit
 
 struct AccountSideCell: View {
     // MARK: Internal
@@ -53,6 +54,8 @@ struct AccountSideCell: View {
 
                         EVMTagView()
                             .visibility(isEVM ? .visible : .gone)
+                        EVMTagView()
+                          .visibility(isEOA ? .visible : .gone)
 
                         Circle()
                             .frame(width: 8, height: 8)
@@ -140,9 +143,13 @@ struct AccountSideCell: View {
     }
 
     private var isEVM: Bool {
-        if let evmAddress = EVMAccountManager.shared.accounts.first?.showAddress {
+        if let evmAddress = WalletManager.shared.coa?.address {
             return evmAddress.lowercased() == address.lowercased()
         }
         return false
+    }
+  
+    private var isEOA: Bool {
+      WalletManager.shared.EOAs?.first { $0.address.lowercased() == address.lowercased() } != nil
     }
 }

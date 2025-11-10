@@ -185,29 +185,34 @@ extension UserManager {
   func register(_ userName: String) async throws -> String? {
     let secureKey = try SecureEnclaveKey.create()
     let key = try secureKey.flowAccountKey(index: 0)
+    return try await register(name: userName, key: key, keyProvider: secureKey)
+  }
+  
+  func register(name: String, key: Flow.AccountKey, keyProvider: any KeyProtocol) async throws -> String? {
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
     let request = RegisterRequest(
-      username: userName,
+      username: name,
       accountKey: key.toCodableModel(),
       deviceInfo: IPManager.shared.toParams()
     )
     let model: RegisterResponse = try await Network.request(FRWAPI.User.register(request))
 
-    try secureKey.store(id: model.id)
+    let pw = KeyProvider.password(with: model.id)
+    try keyProvider.store(id: model.id,password: pw)
     let store = UserManager.StoreUser(
       publicKey: key.publicKey.description,
       address: nil,
       userId: model.id,
-      keyType: .secureEnclave,
+      keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
-    WalletManager.shared.updateKeyProvider(provider: secureKey, storeUser: store)
+    await WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: store)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
-    WalletManager.shared.asyncCreateWalletAddressFromServer()
+    await WalletManager.shared.asyncCreateWalletAddressFromServer()
     userType = .secure
 
     EventTrack.Account

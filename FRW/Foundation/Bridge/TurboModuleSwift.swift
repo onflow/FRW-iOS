@@ -1,4 +1,5 @@
 import Foundation
+import WalletCore
 import UIKit
 import Flow
 import SPIndicator
@@ -55,6 +56,11 @@ class TurboModuleSwift: NSObject {
       }
       if let account = await WalletManager.shared.coa {
         list.append(account.toWalletAccount())
+      }
+      if let eoaAccounts = await WalletManager.shared.EOAs {
+        let address =  await WalletManager.shared.mainAccount?.hexAddr
+        let result = eoaAccounts.map{ $0.toWalletAccount(parentAddress: address)}
+        list.append(contentsOf: result)
       }
       if let childList = await WalletManager.shared.childs {
         let result = childList.map { $0.toWalletAccount() }
@@ -187,6 +193,9 @@ extension TurboModuleSwift {
       return try account.toWalletAccount().toDictionary()
     } else if let account = await manager.selectedEVMAccount {
       return try account.toWalletAccount().toDictionary()
+    } else if let account = await manager.selectedEOAAccount {
+      let address =  await WalletManager.shared.mainAccount?.hexAddr
+      return try account.toWalletAccount(parentAddress: address).toDictionary()
     } else if let account = await manager.mainAccount {
       return try account.toWalletAccount().toDictionary()
     }
@@ -225,10 +234,10 @@ extension TurboModuleSwift {
       throw LLError.accountNotFound
     }
     var list: [RNBridge.WalletAccount] = []
-    
+    let eoas = await WalletManager.shared.walletEntity?.eoaAddress
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
-      guard let result = try? await parseAccount(account: account, userId: uid) else {
+      guard let result = try? await parseAccount(account: account, userId: uid, eoa: eoas) else {
         continue
       }
       list.append(contentsOf: result)
@@ -259,8 +268,14 @@ extension TurboModuleSwift {
       guard let accountList =  walletEntity.accounts?[currentNetwork] else {
         continue
       }
+      if let eoas = walletEntity.eoaAddress, let address = accountList.first?.hexAddr {
+        let result = Array(eoas).compactMap {
+          EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: address, userId: profile.uid)
+        }
+        walletAccounts.append(contentsOf: result)
+      }
       for account in accountList {
-        guard let result = try? await parseAccount(account: account, userId: profile.uid) else {
+        guard let result = try? await parseAccount(account: account, userId: profile.uid, eoa: walletEntity.eoaAddress) else {
           continue
         }
         walletAccounts.append(contentsOf: result)
@@ -276,14 +291,14 @@ extension TurboModuleSwift {
     return resultOfProfiles
   }
   
-  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
+  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil, eoa: Set<String>? = nil) async throws ->  [RNBridge.WalletAccount] {
     var list: [RNBridge.WalletAccount] = []
     try? await account.fetchAccount()
     list.append(account.toWalletAccount(userId: userId))
     if let linked = account.coa {
       list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
     }
-
+    
     if let childList = account.childs {
       let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
       list.append(contentsOf: result)
@@ -336,5 +351,13 @@ extension TurboModuleSwift {
     default:
       log.info(message, context: args)
     }
+  }
+  
+  @objc
+  static func ethSign(_ hexData: String) -> String? {
+    guard let keyProvider = WalletManager.shared.keyProvider as? EthereumKeyProtocol else {
+      return nil
+    }
+    return try? keyProvider.ethSign(digest: Data(hexData.hexValue)).hexString
   }
 }

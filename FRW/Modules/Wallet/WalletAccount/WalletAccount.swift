@@ -186,11 +186,19 @@ extension WalletAccount {
         func icon(size: CGFloat = 24) -> some View {
             VStack {
                 Text(self.rawValue)
-                    .font(.system(size: size / 2 + 2))
+                    .font(.system(size: size / 2 ))
             }
             .frame(width: size, height: size)
             .background(color)
             .cornerRadius(size / 2.0)
+        }
+      
+        init(name: String?) {
+          guard let name, let result = Emoji.init(rawValue: name) else {
+            self = Emoji.random()
+            return
+          }
+          self = result
         }
 
         // MARK: - Random Selection

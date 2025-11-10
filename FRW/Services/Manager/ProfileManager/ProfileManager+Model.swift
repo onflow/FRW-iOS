@@ -121,9 +121,10 @@ struct ProfileModel: Codable, Equatable {
 extension ProfileModel {
   var subTitle: String {
     let count = Set(wallets.compactMap { $0.address?.lowercased() }.filter { !$0.isEmpty }).count
-    if count > 1 {
-      return "\(count) \("addresses_tag".localized)"
-    }
-    return wallets.first?.address ?? ""
+    return "\(count) Accounts"
+  }
+  
+  var countDes: String {
+    ""
   }
 }

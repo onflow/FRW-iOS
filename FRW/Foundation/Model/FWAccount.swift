@@ -13,6 +13,7 @@ enum FWAccount: RawRepresentable, Codable {
     case main(Flow.Address)
     case child(Flow.Address)
     case coa(EthereumAddress)
+    case eoa(EthereumAddress)
   
     // MARK: - RawRepresentable
     
@@ -28,6 +29,7 @@ enum FWAccount: RawRepresentable, Codable {
         case main
         case child
         case coa
+        case eoa
     }
     
     var value: String {
@@ -51,6 +53,11 @@ enum FWAccount: RawRepresentable, Codable {
                 return nil
             }
             self = .coa(address)
+        case .eoa:
+            guard let address = addr as? EthereumAddress else {
+                return nil
+            }
+            self = .eoa(address)
         }
     }
     
@@ -79,12 +86,14 @@ enum FWAccount: RawRepresentable, Codable {
             return .coa
         case .child:
             return .child
+        case .eoa:
+            return .eoa
         }
     }
     
     var vmType: VMType {
         switch self {
-        case .coa:
+        case .coa, .eoa: //TODO: #eoa need confirm
             return .evm
         default:
             return .cadence
@@ -98,6 +107,8 @@ enum FWAccount: RawRepresentable, Codable {
         case let .coa(address):
             return address
         case let .child(address):
+            return address
+        case let .eoa(address):
             return address
         }
     }
