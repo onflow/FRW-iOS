@@ -39,7 +39,15 @@ final class AdaptiveHostingController<Content: View>: UIHostingController<Adapti
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Apply background color for iOS 18 compatibility
         view.backgroundColor = UIColor.Brand.Core.cards
+
+        // Fix for iOS 18: Remove default system background
+        if #available(iOS 16.4, *) {
+            safeAreaRegions = []
+        }
+
         // Configure sheet presentation
         if let sheetController = presentationController as? UISheetPresentationController {
             // Use a custom detent that adapts to content
@@ -49,7 +57,7 @@ final class AdaptiveHostingController<Content: View>: UIHostingController<Adapti
 
             sheetController.detents = [customDetent]
             sheetController.prefersGrabberVisible = true
-            sheetController.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheetController.prefersScrollingExpandsWhenScrolledToEdge = true
             sheetController.preferredCornerRadius = 16
         }
     }
@@ -108,19 +116,26 @@ struct AdaptiveContentWrapper<Content: View>: View {
     @State private var contentHeight: CGFloat = 0
 
     var body: some View {
-        content
-            .frame(maxWidth: maxWidth)
-            .fixedSize(horizontal: false, vertical: true)
-            .background(
-                GeometryReader { geometry in
-                    Color.clear
-                        .onAppear {
-                            contentHeight = geometry.size.height
-                        }
-                        .onChange(of: geometry.size) { newSize in
-                            contentHeight = newSize.height
-                        }
-                }
-            )
+        ZStack {
+            // Background layer for iOS 18 compatibility
+            Color(UIColor.Brand.Core.cards)
+                .ignoresSafeArea()
+
+            // Content layer
+            content
+                .frame(maxWidth: maxWidth)
+                .fixedSize(horizontal: false, vertical: true)
+                .background(
+                    GeometryReader { geometry in
+                        Color.clear
+                            .onAppear {
+                                contentHeight = geometry.size.height
+                            }
+                            .onChange(of: geometry.size) { newSize in
+                                contentHeight = newSize.height
+                            }
+                    }
+                )
+        }
     }
 }

@@ -21,7 +21,7 @@ struct AccountSwitchView: View {
             bottomView
         }
         .padding(.horizontal, 18)
-        .backgroundFill(Color.Brain.Core.cards)
+//        .backgroundFill(Color.Brain.Core.cards)
     }
 
     var titleView: some View {
@@ -238,12 +238,6 @@ struct AccountSwitchView: View {
     private var offset: CGFloat = 0
     @State
     private var contentHeight: CGFloat = 0
-}
-
-extension AccountSwitchView {
-    var detents: [UISheetPresentationController.Detent] {
-        [.medium(), .large()]
-    }
 }
 
 // MARK: - ScrollViewOffset
