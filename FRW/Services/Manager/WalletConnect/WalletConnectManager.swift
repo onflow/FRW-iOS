@@ -345,6 +345,11 @@ extension WalletConnectManager {
             rejectSession(proposal: sessionProposal)
             return
         }
+        var address = WalletManager.shared.getPrimaryWalletAddress()
+        let isEVM = handler.currentTypes(sessionProposal: sessionProposal).contains(.evm)
+        if isEVM {
+          address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
+        }
         guard network == currentNetwork else {
             rejectSession(proposal: sessionProposal)
             let current = currentNetwork
@@ -353,27 +358,24 @@ extension WalletConnectManager {
         }
 
         if pairings
-            .contains(where: { $0.topic == sessionProposal.pairingTopic })
+            .contains(where: { $0.topic == sessionProposal.pairingTopic }) && !isEVM
         {
-            approveSession(proposal: sessionProposal)
+            approveSession(proposal: sessionProposal, EVMAddress: address ?? "")
             return
         }
 
         let info = handler.sessionInfo(sessionProposal: sessionProposal)
-        var address = WalletManager.shared.getPrimaryWalletAddress()
-        if handler.currentTypes(sessionProposal: sessionProposal).contains(.evm) {
-          address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
-        }
+        
         currentSessionInfo = info
       
-      let authnViewModel = AuthnViewModel(
-        provider: .init(title: info.name, url: info.dappURL, address: address ?? "")
-      ) { result in
-            if let address = result {
-                self.approveSession(proposal: sessionProposal, EVMAddress: address)
-            } else {
-                self.rejectSession(proposal: sessionProposal)
-            }
+        let authnViewModel = AuthnViewModel(
+          provider: .init(title: info.name, url: info.dappURL, address: address ?? "")
+        ) { result in
+              if let address = result {
+                  self.approveSession(proposal: sessionProposal, EVMAddress: address)
+              } else {
+                  self.rejectSession(proposal: sessionProposal)
+              }
         }
         Router.route(to: RouteMap.Explore.authnV2(authnViewModel))
         
@@ -747,6 +749,7 @@ extension WalletConnectManager {
             handleWatchAsset(sessionRequest)
         case WalletConnectEVMMethod.switchEthereumChain.rawValue:
           handleSwitchEthereumChain(sessionRequest)
+          break
         case WalletConnectEVMMethod.personalECRecover.rawValue:
           handlePersonalECRecover(sessionRequest)
         default:
@@ -830,6 +833,9 @@ extension WalletConnectManager {
     }
   //TODO: need test
     private func handleSwitchEthereumChain(_ sessionRequest: WalletConnectSign.Request) {
+      struct ChainSwitchParams: Codable {
+          let chainId: String
+      }
       log.info(sessionRequest)
       guard let id = Int(sessionRequest.chainId.reference), let targetID = supportChainID[id] else {
         self.rejectRequest(request: sessionRequest)
@@ -837,11 +843,13 @@ extension WalletConnectManager {
       }
       Task {
           do {
+            let chainIdHex = String(format: "%X", id)
+            let result = AnyCodable([AnyCodable(ChainSwitchParams(chainId: "\(chainIdHex)"))])
             if targetID == currentNetwork {
               try await Sign.instance.respond(
                   topic: sessionRequest.topic,
                   requestId: sessionRequest.id,
-                  response: .response(AnyCodable(["chainId": id]))
+                  response: .response(result)
               )
             } else {
               let callback: SwitchNetworkClosure = { [weak self] curId in
@@ -851,7 +859,7 @@ extension WalletConnectManager {
                         try await Sign.instance.respond(
                             topic: sessionRequest.topic,
                             requestId: sessionRequest.id,
-                            response: .response(AnyCodable(["chainId": id]))
+                            response: .response(result)
                         )
                       } else {
                         self?.rejectRequest(request: sessionRequest)

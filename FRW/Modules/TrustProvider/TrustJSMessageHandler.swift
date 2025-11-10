@@ -36,21 +36,6 @@ class TrustJSMessageHandler: NSObject {
         let web3 = try await Web3.new(rpcURL)
         return web3
     }
-
-    // Helper function to normalize hex strings for Data conversion
-    private func normalizeHexString(_ hex: String) -> String {
-        // Remove "0x" prefix if present
-        var normalizedHex = hex.hasPrefix("0x") || hex.hasPrefix("0X")
-            ? String(hex.dropFirst(2))
-            : hex
-
-        // Ensure even length by padding with leading zero
-        if normalizedHex.count % 2 != 0 {
-            normalizedHex = "0" + normalizedHex
-        }
-
-        return normalizedHex
-    }
 }
 
 // MARK: - helper
@@ -466,17 +451,17 @@ extension TrustJSMessageHandler {
                     }
                     let defaultGas = await WalletManager.defaultGas
                     // Normalize all hex strings using the helper function
-                    let chainIdHex = self.normalizeHexString(String(format: "%x", chainId))
-                    let gasValue = self.normalizeHexString(receiveModel.gas ?? String(format: "%x", defaultGas))
+                    let chainIdHex = String(format: "%x", chainId).normalizeHexString()
+                    let gasValue = (receiveModel.gas ?? String(format: "%x", defaultGas)).normalizeHexString()
 
                     //MARK: get nonce
                     let address = await self.webVC?.trustProvider?.config.ethereum.address ?? ""
                     let nonce = try await self.getTransactionNonce(for: address)
-                    let nonceHex = self.normalizeHexString(String(nonce, radix: 16))
+                    let nonceHex = String(nonce, radix: 16).normalizeHexString()
 
                     //MARK: Get current gas price from network
                     let gasPrice = try await web3.eth.gasPrice()
-                    let gasPriceHex = self.normalizeHexString(String(gasPrice, radix: 16))
+                    let gasPriceHex = String(gasPrice, radix: 16).normalizeHexString()
 
                     // Prepare transaction input
                     var input = EthereumSigningInput()
@@ -502,7 +487,7 @@ extension TrustJSMessageHandler {
                     input.toAddress = toAddr.addHexPrefix()
 
                     // Handle both transfer and contract call transactions
-                    let normalizedAmount = self.normalizeHexString(amount)
+                    let normalizedAmount = amount.normalizeHexString()
                     guard let amountData = Data(hexString: normalizedAmount) else {
                       log.error("[SOA] Invalid amount data: \(normalizedAmount)")
                       self.cancel(id: id)
@@ -512,7 +497,7 @@ extension TrustJSMessageHandler {
                     // Check if this is a contract call (has data) or simple transfer
                     if let dataString = receiveModel.data, !dataString.isEmpty, dataString != "0x" {
                       // Contract call transaction
-                      let normalizedData = self.normalizeHexString(dataString)
+                      let normalizedData = dataString.normalizeHexString()
                       guard let callData = Data(hexString: normalizedData) else {
                         log.error("[SOA] Invalid contract call data: \(normalizedData)")
                         self.cancel(id: id)
@@ -712,4 +697,21 @@ extension TrustJSMessageHandler {
         )
         return nonce
     }
+}
+
+extension String {
+  // Helper function to normalize hex strings for Data conversion
+  func normalizeHexString() -> String {
+      // Remove "0x" prefix if present
+      var normalizedHex = self.hasPrefix("0x") || self.hasPrefix("0X")
+          ? String(self.dropFirst(2))
+          : self
+
+      // Ensure even length by padding with leading zero
+      if normalizedHex.count % 2 != 0 {
+          normalizedHex = "0" + normalizedHex
+      }
+
+      return normalizedHex
+  }
 }
