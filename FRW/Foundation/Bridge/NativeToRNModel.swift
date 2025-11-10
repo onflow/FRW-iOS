@@ -105,7 +105,7 @@ extension EOA {
       address: addr,
       emojiInfo: user.toRNEmoji(),
       parentEmoji: nil,
-      parentAddress: nil,
+      parentAddress: parentAddress,
       avatar: nil,
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
       type: .evm,

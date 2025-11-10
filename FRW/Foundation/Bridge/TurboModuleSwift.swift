@@ -1,4 +1,5 @@
 import Foundation
+import WalletCore
 import UIKit
 import Flow
 import SPIndicator
@@ -57,7 +58,8 @@ class TurboModuleSwift: NSObject {
         list.append(account.toWalletAccount())
       }
       if let eoaAccounts = await WalletManager.shared.EOAs {
-        let result = eoaAccounts.map{ $0.toWalletAccount()}
+        let address =  await WalletManager.shared.mainAccount?.hexAddr
+        let result = eoaAccounts.map{ $0.toWalletAccount(parentAddress: address)}
         list.append(contentsOf: result)
       }
       if let childList = await WalletManager.shared.childs {
@@ -192,7 +194,8 @@ extension TurboModuleSwift {
     } else if let account = await manager.selectedEVMAccount {
       return try account.toWalletAccount().toDictionary()
     } else if let account = await manager.selectedEOAAccount {
-      return try account.toWalletAccount().toDictionary()
+      let address =  await WalletManager.shared.mainAccount?.hexAddr
+      return try account.toWalletAccount(parentAddress: address).toDictionary()
     } else if let account = await manager.mainAccount {
       return try account.toWalletAccount().toDictionary()
     }
@@ -265,6 +268,12 @@ extension TurboModuleSwift {
       guard let accountList =  walletEntity.accounts?[currentNetwork] else {
         continue
       }
+      if let eoas = walletEntity.eoaAddress, let address = accountList.first?.hexAddr {
+        let result = Array(eoas).compactMap {
+          EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: address, userId: profile.uid)
+        }
+        walletAccounts.append(contentsOf: result)
+      }
       for account in accountList {
         guard let result = try? await parseAccount(account: account, userId: profile.uid, eoa: walletEntity.eoaAddress) else {
           continue
@@ -290,11 +299,6 @@ extension TurboModuleSwift {
       list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
     }
     
-    if let eoas = eoa {
-      let result = Array(eoas).compactMap { EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
-      list.append(contentsOf: result)
-    }
-
     if let childList = account.childs {
       let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
       list.append(contentsOf: result)
@@ -347,5 +351,14 @@ extension TurboModuleSwift {
     default:
       log.info(message, context: args)
     }
+  }
+  
+  @objc
+  static func ethSign(_ hexData: String) -> String? {
+    guard let keyProvider = WalletManager.shared.keyProvider as? EthereumKeyProtocol else {
+      return nil
+    }
+    let digest = Hash.keccak256(data: Data(hexData.utf8))
+    return try? keyProvider.ethSign(digest: digest).hexString
   }
 }
