@@ -50,7 +50,7 @@ struct AuthnAccountsView: View {
     .padding(.horizontal, 22)
     .padding(.vertical, 20)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.Brain.Core.background)
+    .background(Color.Brain.Core.cards)
   }
 
   private var header: some View {
