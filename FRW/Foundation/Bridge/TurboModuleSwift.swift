@@ -358,7 +358,6 @@ extension TurboModuleSwift {
     guard let keyProvider = WalletManager.shared.keyProvider as? EthereumKeyProtocol else {
       return nil
     }
-    let digest = Hash.keccak256(data: Data(hexData.utf8))
-    return try? keyProvider.ethSign(digest: digest).hexString
+    return try? keyProvider.ethSign(digest: Data(hexData.hexValue)).hexString
   }
 }
