@@ -31,7 +31,7 @@ struct SideMenuView: View {
                         VStack {
                             enableEVMView
                                 .padding(.top, 24)
-                                .visibility(evmManager.showEVM ? .visible : .gone)
+                                .visibility(vm.hasCoa ? .gone : .visible)
                             accountListView
                         }
                     }
@@ -300,8 +300,7 @@ struct SideMenuView: View {
     
     @StateObject
     private var cm = ChildAccountManager.shared
-    @StateObject
-    private var evmManager = EVMAccountManager.shared
+    
     @AppStorage("isDeveloperMode")
     private var isDeveloperMode = false
     @State
