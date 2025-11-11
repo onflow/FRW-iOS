@@ -111,7 +111,7 @@ extension LoginViewModelProtocol {
     }
 
     func showAccountNotFound() {
-      
+      HUD.dismissLoading()
       let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
       
       guard let address = try? wallet?.ethAddress(),

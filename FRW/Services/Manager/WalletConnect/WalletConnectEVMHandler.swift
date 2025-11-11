@@ -52,7 +52,6 @@ extension Flow.ChainID {
 
 struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
   
-    var currentIsCOA: Bool = false
     var supportNetwork: [Flow.ChainID] {
         [currentNetwork]
     }
@@ -87,6 +86,13 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         default:
             return .unknown
         }
+    }
+  
+    private func currentIsCOA(address: String?) -> Bool {
+      guard let address else {
+        return true
+      }
+      return WalletManager.shared.coa?.address.lowercased() == address.lowercased()
     }
 
     func approveProposalNamespace(
@@ -153,6 +159,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
             cancel()
             return
         }
+        let fromAddress = address(sessionRequest: request)
         let title = request.name ?? ""
         let url = request.dappURL?.absoluteString ?? ""
         let logo = request.logoURL?.absoluteString ?? ""
@@ -165,7 +172,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         ) { result in
             Task {
                 if result {
-                  if currentIsCOA {
+                  if currentIsCOA(address: fromAddress) {
                     guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                         HUD.error(title: "invalid_address".localized)
                         cancel()
@@ -220,7 +227,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         let logo = request.logoURL?.absoluteString ?? ""
         let chainId = Int(request.chainId.reference) ?? 747
         let originCadence = CadenceManager.shared.current.evm?.callContractV2?.toFunc() ?? ""
-
+      let fromAddress = address(sessionRequest: request)
         do {
             let result = try request.params.get([EVMTransactionReceive].self)
             guard let receiveModel = result.first, let toAddr = receiveModel.toAddress else {
@@ -247,7 +254,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     return
                 }
                 Task {
-                  if currentIsCOA {
+                  if currentIsCOA(address: fromAddress) {
                     let txid = try await FlowNetwork.sendTransaction(
                         amount: receiveModel.amount,
                         data: receiveModel.dataValue,
@@ -399,7 +406,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
         do {
             let list = try request.params.get([String].self)
             let evmAddress = EVMAccountManager.shared.accounts.first?.showAddress.lowercased()
-
+          let fromAddress = address(sessionRequest: request)
             if list.count != 2 {
                 cancel()
                 return
@@ -421,7 +428,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                 Task {
                     if result {
                         do {
-                          if currentIsCOA {
+                          if currentIsCOA(address: fromAddress) {
                             guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
                                 HUD.error(title: "invalid_address".localized)
                                 return
@@ -515,6 +522,20 @@ extension WalletConnectEVMHandler {
     private func signWithMessage(data: Data) async throws -> Data? {
         try await WalletManager.shared.sign(signableData: data)
     }
+  
+  private func address(sessionRequest: Request) -> String? {
+    
+    if let list = try? sessionRequest.params.get([String].self), list.count == 2 {
+      return list[1]
+    }
+    if let list = try? sessionRequest.params.get([[String: String]].self),
+       let dic = list.first,
+       let from = dic["from"]
+    {
+      return from
+    }
+    return nil
+  }
 }
 
 // MARK: WalletConnectEVMHandler.WatchAsset

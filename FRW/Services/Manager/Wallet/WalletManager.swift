@@ -220,7 +220,8 @@ extension WalletManager {
       Task {
         do {
           try await walletEntity?.fetchAccount()
-          for account in self.currentNetworkAccounts {
+          let currentAccount = self.currentNetworkAccounts
+          for account in currentAccount {
             try? await account.fetchAccount()
           }
           self.EOAs = walletEntity?.eoaAddress?.compactMap{ EOA($0,network: currentNetwork) }

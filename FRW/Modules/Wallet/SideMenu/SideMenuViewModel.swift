@@ -34,7 +34,7 @@ class SideMenuViewModel: ObservableObject {
 
     var colorsMap: [String: Color] = [:]
 
-
+    @Published var hasCoa: Bool = true
     @Published var currentAccount: RNBridge.WalletAccount? = nil
     @Published var allAccounts: [[RNBridge.WalletAccount]] = []
     private var cancellableSet = Set<AnyCancellable>()
@@ -48,9 +48,7 @@ class SideMenuViewModel: ObservableObject {
             .flatMap { $0.$isLoading }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-                if value {
-                    self?.fetchAllAccounts()
-                }
+              self?.accountLoading = value
             }
             .store(in: &cancellableSet)
 
@@ -60,13 +58,18 @@ class SideMenuViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 self?.linkLoading = value
+                if !value {
+                    self?.fetchAllAccounts()
+                }
             }
             .store(in: &cancellableSet)
-    
+      
     }
   
     private func fetchAllAccounts() {
-      self.accountLoading = true
+      guard allAccounts.isEmpty else {
+        return
+      }
       Task {
         do {
           let userId = UserManager.shared.activatedUID
@@ -75,6 +78,7 @@ class SideMenuViewModel: ObservableObject {
             self.currentAccount =  wallet.mainAccount?.toWalletAccount()
             self.allAccounts = result
             self.accountLoading = false
+            self.hasCoa = (wallet.coa != nil)
             self.loadBalance()
           }
         } catch {
