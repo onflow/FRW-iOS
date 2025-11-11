@@ -405,15 +405,14 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
 
         do {
             let list = try request.params.get([String].self)
-            let evmAddress = EVMAccountManager.shared.accounts.first?.showAddress.lowercased()
-          let fromAddress = address(sessionRequest: request)
+            let fromAddress = address(sessionRequest: request)
             if list.count != 2 {
                 cancel()
                 return
             }
 
             var dataStr = ""
-            if list[0].lowercased() == evmAddress {
+            if list[0].lowercased() == fromAddress?.lowercased() {
                 dataStr = list[1]
             } else {
                 dataStr = list[0]
@@ -526,6 +525,9 @@ extension WalletConnectEVMHandler {
   private func address(sessionRequest: Request) -> String? {
     
     if let list = try? sessionRequest.params.get([String].self), list.count == 2 {
+      if (EthereumAddress.toChecksumAddress(list[0]) != nil) {
+        return list[0]
+      }
       return list[1]
     }
     if let list = try? sessionRequest.params.get([[String: String]].self),
