@@ -641,19 +641,17 @@ extension TrustJSMessageHandler {
 
 extension TrustJSMessageHandler {
   func currentIsCoa(_ EVMAddress: String?) -> Bool {
-//    webVC?.webView.trustGetConnectedAddress { address in
-//      
-//    }
+
     guard let EVMAddress else {
       return true
     }
-    return WalletManager.shared.coa?.address == EVMAddress
+    return WalletManager.shared.coa?.address.lowercased() == EVMAddress.lowercased()
   }
 }
 
 extension TrustJSMessageHandler {
     static func checkCoa() async {
-        guard let addrStr = WalletManager.shared.getPrimaryWalletAddress() else {
+        guard let addrStr = await WalletManager.shared.getPrimaryWalletAddress() else {
             return
         }
         var list = LocalUserDefaults.shared.checkCoa

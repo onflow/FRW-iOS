@@ -92,7 +92,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
       guard let address else {
         return true
       }
-      return WalletManager.shared.coa?.address == address
+      return WalletManager.shared.coa?.address.lowercased() == address.lowercased()
     }
 
     func approveProposalNamespace(
