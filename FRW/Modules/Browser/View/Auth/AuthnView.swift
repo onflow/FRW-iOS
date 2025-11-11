@@ -18,16 +18,15 @@ struct AuthnView: View {
   var body: some View {
     ZStack {
       // Main content
-      VStack(spacing: 0) {
-        VStack(spacing: 16) {
-          headerSection
-          networkCard
-          permissionsTitleCard
-          permissionsListCard
-          accountSection
-          actionButtons
-        }
+      VStack(spacing: 16) {
+        headerSection
+        networkCard
+        permissionsTitleCard
+        permissionsListCard
+        accountSection
+        actionButtons
       }
+      .padding(.bottom, 16)
       .padding(.horizontal, 16)
       .background(Color.Brain.Core.cards)
       
