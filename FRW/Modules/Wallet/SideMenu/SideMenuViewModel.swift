@@ -48,7 +48,6 @@ class SideMenuViewModel: ObservableObject {
             .flatMap { $0.$isLoading }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
-              log.debug("----1")
               self?.accountLoading = value
             }
             .store(in: &cancellableSet)
@@ -60,7 +59,6 @@ class SideMenuViewModel: ObservableObject {
             .sink { [weak self] value in
                 self?.linkLoading = value
                 if !value {
-                    log.debug("----2")
                     self?.fetchAllAccounts()
                 }
             }
