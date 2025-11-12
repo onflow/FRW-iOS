@@ -102,13 +102,13 @@ extension BackupManager {
     }
 
     func isExistOnCloud(_ type: BackupManager.BackupType) async throws -> Bool {
-        guard let username = UserManager.shared.userInfo?.username else {
+      guard let uid = UserManager.shared.activatedUID else {
             return false
         }
 
         let items = try await getCloudDriveItems(from: type)
         for item in items {
-            if item.username == username {
+          if item.uid == uid {
                 return true
             }
         }
@@ -138,8 +138,8 @@ extension BackupManager {
         _ list: [BackupManager.DriveItem],
         password: String
     ) throws -> [BackupManager.DriveItem] {
-        guard let username = UserManager.shared.userInfo?.username, !username.isEmpty else {
-            throw BackupError.missingUserName
+        guard let activatedUID = UserManager.shared.activatedUID, !activatedUID.isEmpty else {
+          throw BackupError.missingUid
         }
 
         guard let mnemonic = WalletManager.shared.getCurrentMnemonic(), !mnemonic.isEmpty,
@@ -150,7 +150,7 @@ extension BackupManager {
         let dataHexString = try encryptMnemonic(mnemonicData, password: password)
 
         let existItem = list.first { item in
-            item.username == username
+          item.uid == activatedUID
         }
 
         if let existItem = existItem {
@@ -159,13 +159,10 @@ extension BackupManager {
             return list
         }
 
-        guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
-            throw BackupError.missingUid
-        }
 
         let item = BackupManager.DriveItem()
-        item.username = username
-        item.uid = uid
+        item.username = UserManager.shared.userInfo?.nickname
+        item.uid = activatedUID
         item.version = "1"
         item.data = dataHexString
 

@@ -111,7 +111,7 @@ extension MultiBackupManager {
     }
 
     func registerKeyToChain(on type: MultiBackupType) async throws -> Bool {
-        guard let username = UserManager.shared.userInfo?.username, !username.isEmpty else {
+        guard let username = UserManager.shared.userInfo?.nickname, !username.isEmpty else {
             throw BackupError.missingUserName
         }
 
@@ -377,15 +377,12 @@ extension MultiBackupManager {
         _ list: [MultiBackupManager.StoreItem],
         password _: String
     ) async throws -> [MultiBackupManager.StoreItem] {
-        guard let username = UserManager.shared.userInfo?.username, !username.isEmpty else {
-            throw BackupError.missingUserName
-        }
 
         guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
             throw BackupError.missingUid
         }
         let res = list.filter { item in
-            item.userId != uid && item.userName != username
+            item.userId != uid
         }
         return res
     }
