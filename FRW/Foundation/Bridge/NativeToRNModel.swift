@@ -108,7 +108,7 @@ extension EOA {
       parentAddress: parentAddress,
       avatar: nil,
       isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
-      type: .evm,
+      type: .eoa,
       balance: nil,
       nfts: nil
     )
@@ -127,6 +127,8 @@ extension RNBridge.WalletAccount {
         return .eoa
       }
       return .coa
+    case .eoa:
+      return .eoa
     case .none:
       return .main
     }

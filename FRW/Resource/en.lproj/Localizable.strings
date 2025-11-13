@@ -1182,3 +1182,4 @@ Key Store and Private Key.";
 "addresses_tag" = "addresses";
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
+"hidden" = "Hidden";

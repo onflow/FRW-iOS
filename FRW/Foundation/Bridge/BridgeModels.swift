@@ -13,6 +13,7 @@ enum RNBridge {
         case main = "main"
         case child = "child"
         case evm = "evm"
+        case eoa = "eoa"
     }
 
     enum ScreenType: String, Codable {

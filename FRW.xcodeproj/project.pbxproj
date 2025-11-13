@@ -1858,6 +1858,10 @@
 		4EFBE5DE2BCE61FF0012968A /* WalletConnectEVMHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBE5DC2BCE61FF0012968A /* WalletConnectEVMHandler.swift */; };
 		4EFBE5E02BCE68FF0012968A /* WalletConnectChildHandlerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBE5DF2BCE68FF0012968A /* WalletConnectChildHandlerProtocol.swift */; };
 		4EFBE5E12BCE68FF0012968A /* WalletConnectChildHandlerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBE5DF2BCE68FF0012968A /* WalletConnectChildHandlerProtocol.swift */; };
+		4EFBF91D2EC5B2C5009964E1 /* AccountListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */; };
+		4EFBF91E2EC5B2C5009964E1 /* AccountListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */; };
+		4EFBF9202EC5BDE9009964E1 /* AccountListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBF91F2EC5BDE9009964E1 /* AccountListViewModel.swift */; };
+		4EFBF9212EC5BDE9009964E1 /* AccountListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFBF91F2EC5BDE9009964E1 /* AccountListViewModel.swift */; };
 		4EFF94B82AEEC76B00365EF7 /* DevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF94B72AEEC76B00365EF7 /* DevicesView.swift */; };
 		4EFF94B92AEEC76B00365EF7 /* DevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF94B72AEEC76B00365EF7 /* DevicesView.swift */; };
 		4EFF94BB2AEED15300365EF7 /* DevicesInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EFF94BA2AEED15300365EF7 /* DevicesInfoView.swift */; };
@@ -3306,6 +3310,8 @@
 		4EFBE5D92BCE61EB0012968A /* WalletConnectFlowHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectFlowHandler.swift; sourceTree = "<group>"; };
 		4EFBE5DC2BCE61FF0012968A /* WalletConnectEVMHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectEVMHandler.swift; sourceTree = "<group>"; };
 		4EFBE5DF2BCE68FF0012968A /* WalletConnectChildHandlerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectChildHandlerProtocol.swift; sourceTree = "<group>"; };
+		4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListView.swift; sourceTree = "<group>"; };
+		4EFBF91F2EC5BDE9009964E1 /* AccountListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListViewModel.swift; sourceTree = "<group>"; };
 		4EFF94B72AEEC76B00365EF7 /* DevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesView.swift; sourceTree = "<group>"; };
 		4EFF94BA2AEED15300365EF7 /* DevicesInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesInfoView.swift; sourceTree = "<group>"; };
 		4EFF94BD2AEEDB2D00365EF7 /* IPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPManager.swift; sourceTree = "<group>"; };
@@ -3851,6 +3857,7 @@
 		1507C7ED275634BC00890C5D /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				4EFBF91B2EC5B2B2009964E1 /* AccountList */,
 				4EFF94B62AEEC75700365EF7 /* Devices */,
 				6AEDD60B2A429E09008BC5CD /* AccountSetting */,
 				6A21605C29101D160078DCDA /* CurrencyList */,
@@ -6549,6 +6556,15 @@
 			path = Migration;
 			sourceTree = "<group>";
 		};
+		4EFBF91B2EC5B2B2009964E1 /* AccountList */ = {
+			isa = PBXGroup;
+			children = (
+				4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */,
+				4EFBF91F2EC5BDE9009964E1 /* AccountListViewModel.swift */,
+			);
+			path = AccountList;
+			sourceTree = "<group>";
+		};
 		4EFF94B62AEEC75700365EF7 /* Devices */ = {
 			isa = PBXGroup;
 			children = (
@@ -7983,9 +7999,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8039,9 +8059,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8114,9 +8138,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8153,9 +8181,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8796,6 +8828,7 @@
 				15DC208B27819C56000B187A /* VLazyScrollViewVertical.swift in Sources */,
 				15DC211B27819C56000B187A /* VPageIndicatorModel.swift in Sources */,
 				154B890D276A1EEB00780E93 /* AppDelegate.swift in Sources */,
+				4EFBF9202EC5BDE9009964E1 /* AccountListViewModel.swift in Sources */,
 				15DC215727819C56000B187A /* VMenuSubMenu.swift in Sources */,
 				6A204C6A286070A600D0D3A4 /* FirebaseStorageUtils.swift in Sources */,
 				6AEE39EE28A24DDB00F3C56E /* NFTRequests.swift in Sources */,
@@ -9005,6 +9038,7 @@
 				15DC20FB27819C56000B187A /* VBaseListElement.swift in Sources */,
 				4E63A5752B8BB79700BBD15F /* ReceiveQRView.swift in Sources */,
 				1570467C2793D60000D1747B /* NFTListResponse.swift in Sources */,
+				4EFBF91E2EC5B2C5009964E1 /* AccountListView.swift in Sources */,
 				6A9C34FC28AB939600AA41A5 /* NFTUIKitCache.swift in Sources */,
 				4E777CAF2B1ECF8900300A3E /* SyncInfo.swift in Sources */,
 				6A164F442840A1380026B31E /* TabBarItemView.swift in Sources */,
@@ -9852,6 +9886,7 @@
 				15C58B842868A4EE00BD4FC6 /* VPageIndicatorModel.swift in Sources */,
 				15C58B872868A4EE00BD4FC6 /* AppDelegate.swift in Sources */,
 				15C58B882868A4EE00BD4FC6 /* VMenuSubMenu.swift in Sources */,
+				4EFBF9212EC5BDE9009964E1 /* AccountListViewModel.swift in Sources */,
 				15C58B892868A4EE00BD4FC6 /* FirebaseStorageUtils.swift in Sources */,
 				6AEE39ED28A24DDB00F3C56E /* NFTRequests.swift in Sources */,
 				15C58B8A2868A4EE00BD4FC6 /* DashLine.swift in Sources */,
@@ -10061,6 +10096,7 @@
 				15C58BE42868A4EE00BD4FC6 /* VBaseListElement.swift in Sources */,
 				15C58BE52868A4EE00BD4FC6 /* NFTListResponse.swift in Sources */,
 				4E63A5742B8BB79700BBD15F /* ReceiveQRView.swift in Sources */,
+				4EFBF91D2EC5B2C5009964E1 /* AccountListView.swift in Sources */,
 				6A9C34FB28AB939600AA41A5 /* NFTUIKitCache.swift in Sources */,
 				4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */,
 				15C58BE72868A4EE00BD4FC6 /* TabBarItemView.swift in Sources */,
@@ -10696,10 +10732,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -10764,10 +10797,7 @@
 				MARKETING_VERSION = 3.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

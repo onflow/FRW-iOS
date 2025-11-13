@@ -17,7 +17,7 @@ struct EVMTagView: View {
             .foregroundStyle(Color.white)
             .frame(width: 26, height: 10)
             .background(Color.Theme.evm)
-            .cornerRadius(8)
+            .cornerRadius(5)
     }
 }
 
@@ -34,7 +34,7 @@ struct COATagView: View {
       }
       .frame(width: 34,height: 10)
       .background(Color.Theme.evm)
-      .cornerRadius(8)
+      .cornerRadius(5)
       Text("FLOW")
           .font(.inter(size: 8))
           .foregroundStyle(Color.black)
@@ -43,9 +43,6 @@ struct COATagView: View {
           .cornerRadius(8)
           .offset(x: -10)
     }
-    
-    
-     
   }
 }
 
