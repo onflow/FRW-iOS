@@ -13,9 +13,17 @@ extension SideMenuView {
       var isActivity: Bool = false
       var onClick: ((RNBridge.WalletAccount) -> Void)?
     
-      var isEVM: Bool {
-        account.type == .evm
+      private var isCOA: Bool {
+          if let evmAddress = WalletManager.shared.coa?.address {
+            return evmAddress.lowercased() == account.address.lowercased()
+          }
+          return false
       }
+    
+      private var isEOA: Bool {
+        WalletManager.shared.EOAs?.first { $0.address.lowercased() == account.address.lowercased() } != nil
+      }
+      
     
       var body: some View {
         Button {
@@ -39,8 +47,11 @@ extension SideMenuView {
                         .font(.inter(size: 14, weight: .semibold))
                         .foregroundStyle(Color.Theme.Text.black8)
                         .frame(height: 22)
-                  if isEVM {
+                  if isEOA {
                     EVMTagView()
+                  }
+                  if isCOA {
+                    COATagView()
                   }
                     
                 }
