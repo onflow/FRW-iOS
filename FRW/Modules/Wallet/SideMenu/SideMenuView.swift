@@ -156,10 +156,10 @@ struct SideMenuView: View {
             }
         }
         
-        if !vm.filterAccounts.isEmpty {
+        if !vm.allAccounts.isEmpty {
           Section {
-            ForEach(0..<vm.filterAccounts.count, id: \.self) { index in
-              let section = vm.filterAccounts[index]
+            ForEach(0..<vm.allAccounts.count, id: \.self) { index in
+              let section = vm.allAccounts[index]
               ForEach(0..<section.count, id: \.self) { subIndex in
                 let account = section[subIndex]
                 let isActive = vm.currentAccount?.account.address == account.account.address

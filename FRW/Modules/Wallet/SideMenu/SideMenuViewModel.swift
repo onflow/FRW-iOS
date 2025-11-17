@@ -41,7 +41,7 @@ class SideMenuViewModel: ObservableObject {
 
     @Published var hasCoa: Bool = true
     @Published var currentAccount: SideMenuItem? = nil
-    @Published var filterAccounts: [[SideMenuItem]] = []
+    @Published var allAccounts: [[SideMenuItem]] = []
     private var cancellableSet = Set<AnyCancellable>()
 
     // MARK: Lifecycle
@@ -72,7 +72,7 @@ class SideMenuViewModel: ObservableObject {
     }
   
     private func fetchAllAccounts() {
-      guard filterAccounts.isEmpty else {
+      guard allAccounts.isEmpty else {
         return
       }
       Task {
@@ -82,7 +82,7 @@ class SideMenuViewModel: ObservableObject {
           await MainActor.run {
             let currentWalletAccount = wallet.mainAccount?.toWalletAccount()
             self.currentAccount = currentWalletAccount.map { SideMenuItem(account: $0) }
-            self.filterAccounts = result.map { list in
+            self.allAccounts = result.map { list in
               list.map { SideMenuItem(account: $0, isHidden: $0.type == .evm) }
             }
             self.accountLoading = false
@@ -108,10 +108,10 @@ class SideMenuViewModel: ObservableObject {
     func loadBalance() {
         Task {
           do {
-              let allAddresses = filterAccounts.flatMap { $0.compactMap { $0.account.address } }
+              let allAddresses = allAccounts.flatMap { $0.compactMap { $0.account.address } }
               let result = try await token.getAvailableFlowBalance(addresses: allAddresses, forceReload: true)
               await MainActor.run {
-                  self.filterAccounts = self.filterAccounts.map { group in
+                  self.allAccounts = self.allAccounts.map { group in
                       group.map { item in
                           let balance = result[item.account.address] ?? 0
                           let flowString = balance.doubleValue.formatDisplayFlowBalance
@@ -135,7 +135,7 @@ class SideMenuViewModel: ObservableObject {
     func loadCOAAsset() {
       Task {
           // Collect all EVM account addresses
-          let evmAddresses = filterAccounts.flatMap { list in
+          let evmAddresses = allAccounts.flatMap { list in
             list.filter { $0.account.type == .evm }
                 .map { $0.account.address }
           }
@@ -156,7 +156,7 @@ class SideMenuViewModel: ObservableObject {
 
               // Update filterAccounts on main thread
               await MainActor.run {
-                  self.filterAccounts = self.filterAccounts.map { list in
+                  self.allAccounts = self.allAccounts.map { list in
                       list.map { item in
                           // Only update EVM accounts
                           guard item.account.type == .evm else { return item }
