@@ -72,9 +72,7 @@ class SideMenuViewModel: ObservableObject {
     }
   
     private func fetchAllAccounts() {
-      guard allAccounts.isEmpty else {
-        return
-      }
+
       Task {
         do {
           let userId = UserManager.shared.activatedUID
@@ -160,17 +158,14 @@ class SideMenuViewModel: ObservableObject {
                       list.map { item in
                           // Only update EVM accounts
                           guard item.account.type == .evm else { return item }
-
-                          // Check if COA asset exists (case-insensitive)
-                          let hasCoaAsset = coaAssetDict[item.account.address.lowercased()] != nil
-
-                          // Show EVM accounts that have COA assets, hide those that don't
+                          guard let asset = coaAssetDict[item.account.address.lowercased()] else { return item }
                           return SideMenuItem(
                               account: item.account,
-                              isHidden: !hasCoaAsset
+                              isHidden: !asset.hasAsset
                           )
                       }
                   }
+                log.debug(self.allAccounts)
               }
           } catch {
               log.error("[SideMenu] Failed to load COA assets: \(error)")

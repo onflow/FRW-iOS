@@ -17,6 +17,7 @@ extension ProfileManager {
         let BalanceResult = try await fetchFlowAmount(profiles: accountResult)
         await MainActor.run {
           profiles = BalanceResult
+          saveProfiles(BalanceResult)
         }
       }
     }
@@ -35,7 +36,7 @@ extension ProfileManager {
       guard let accountList =  walletEntity.accounts?[currentNetwork] else {
         continue
       }
-      if let eoas = walletEntity.eoaAddress, let address = accountList.first?.hexAddr {
+      if let eoas = walletEntity.eoaAddress {
         let result = Array(eoas).compactMap {
           EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: nil, userId: profile.uid)
         }

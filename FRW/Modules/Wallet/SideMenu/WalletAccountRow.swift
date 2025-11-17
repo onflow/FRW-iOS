@@ -14,14 +14,11 @@ extension SideMenuView {
       var onClick: ((SideMenuItem) -> Void)?
 
       private var isCOA: Bool {
-          if let evmAddress = WalletManager.shared.coa?.address {
-            return evmAddress.lowercased() == account.account.address.lowercased()
-          }
-          return false
+        account.account.type == .evm
       }
 
       private var isEOA: Bool {
-        WalletManager.shared.EOAs?.first { $0.address.lowercased() == account.account.address.lowercased() } != nil
+        account.account.type == .eoa
       }
       
     

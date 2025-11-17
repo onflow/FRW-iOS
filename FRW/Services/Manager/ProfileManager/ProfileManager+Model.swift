@@ -187,12 +187,18 @@ struct ProfileModel: Codable, Equatable {
 }
 
 extension ProfileModel {
-  var subTitle: String {
-    let count = Set(wallets.compactMap { $0.address?.lowercased() }.filter { !$0.isEmpty }).count
-    return "\(count) Accounts"
+
+  var amountDes: String {
+    let totalFlow = (accounts ?? []).reduce(0.0) { result, account in
+      result + (account.balance?.doubleValue ?? 0)
+    }
+    return totalFlow.formatDisplayFlowBalance
   }
-  
-  var countDes: String {
-    ""
+
+  var accountDes: String {
+    guard let count = accounts?.count else {
+      return ""
+    }
+    return "\(count) Accounts"
   }
 }

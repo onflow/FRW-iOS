@@ -156,7 +156,7 @@ struct AccountSwitchView: View {
                     .visibility(self.contentHeight > geometry.size.height ? .visible : .gone)
             }
         }
-        .frame(minHeight: CGFloat(84 * min(3, vm.profiles.count)))
+        .frame(minHeight: CGFloat(84 * min(5, vm.profiles.count)))
     }
 
     var moreView: some View {
@@ -197,19 +197,33 @@ struct AccountSwitchView: View {
                     .font(.inter(size: 14, weight: .bold))
                     .foregroundColor(Color.Brain.Text.primary)
               
-              if !placeholder.countDes.isEmpty {
-                Text("\(placeholder.countDes)")
+              if !placeholder.amountDes.isEmpty {
+                Text("\(placeholder.amountDes)")
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(Color.Brain.Text.secondary)
               }
               
-              HStack {
-                Text("\(placeholder.subTitle)")
+              HStack(spacing: 2) {
+                Text("\(placeholder.accountDes)")
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(Color.Brain.Text.secondary)
-                Spacer()
+                if let list = placeholder.accounts {
+                  ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 0) {
+                      ForEach(0..<list.count,id: \.self) { index in
+                        let account = list[index]
+                        WalletAvatarView(
+                          emoji: .init(name: account.emojiInfo?.emoji),
+                          avatar: account.avatar,
+                          size: .small,
+                          showBorder: false
+                        )
+                      }
+                    }
+                  }
+                }
               }
             }
 

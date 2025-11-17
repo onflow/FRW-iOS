@@ -50,6 +50,27 @@ class ProfileManager: ObservableObject {
     }
   }
 
+  func saveProfiles(_ profiles: [ProfileModel]) {
+    var didSaveAnyProfile = false
+    for profile in profiles {
+      guard keyExist(uid: profile.uid) else {
+        log.warning("[Profile] Profile save skipped for user(\(profile.uid)), key not found.")
+        continue
+      }
+      do {
+        try keychainService.saveProfile(profile)
+        profileCache[profile.uid] = profile
+        didSaveAnyProfile = true
+        log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
+      } catch {
+        log.error("[Profile] Failed to save profile for user \(profile.uid): \(error)")
+      }
+    }
+    if didSaveAnyProfile {
+      refreshProfiles()
+    }
+  }
+
   func loadProfile(userId: String) -> ProfileModel? {
     // Check cache first
     if let cachedProfile = profileCache[userId] {
