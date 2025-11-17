@@ -156,15 +156,17 @@ struct SideMenuView: View {
             }
         }
         
-        if !vm.allAccounts.isEmpty {
+        if !vm.filterAccounts.isEmpty {
           Section {
-            ForEach(0..<vm.allAccounts.count, id: \.self) { index in
-              let section = vm.allAccounts[index]
+            ForEach(0..<vm.filterAccounts.count, id: \.self) { index in
+              let section = vm.filterAccounts[index]
               ForEach(0..<section.count, id: \.self) { subIndex in
                 let account = section[subIndex]
-                let isActive = vm.currentAccount?.address == account.address
-                SideMenuView.AccountRow(account: account, isActivity: isActive) { clickedAccount in
-                  vm.updateCurrentAccount(clickedAccount)
+                let isActive = vm.currentAccount?.account.address == account.account.address
+                if !account.isHidden {
+                  SideMenuView.AccountRow(account: account, isActivity: isActive) { clickedAccount in
+                    vm.updateCurrentAccount(clickedAccount)
+                  }
                 }
               }
             }

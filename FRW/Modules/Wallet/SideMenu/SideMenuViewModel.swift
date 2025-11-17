@@ -12,6 +12,11 @@ import SwiftUI
 
 // MARK: - SideMenuViewModel
 
+struct SideMenuItem {
+  let account:RNBridge.WalletAccount
+  var isHidden: Bool = false
+}
+
 class SideMenuViewModel: ObservableObject {
     // MARK: Internal
 
@@ -35,8 +40,8 @@ class SideMenuViewModel: ObservableObject {
     var colorsMap: [String: Color] = [:]
 
     @Published var hasCoa: Bool = true
-    @Published var currentAccount: RNBridge.WalletAccount? = nil
-    @Published var allAccounts: [[RNBridge.WalletAccount]] = []
+    @Published var currentAccount: SideMenuItem? = nil
+    @Published var filterAccounts: [[SideMenuItem]] = []
     private var cancellableSet = Set<AnyCancellable>()
 
     // MARK: Lifecycle
@@ -67,7 +72,7 @@ class SideMenuViewModel: ObservableObject {
     }
   
     private func fetchAllAccounts() {
-      guard allAccounts.isEmpty else {
+      guard filterAccounts.isEmpty else {
         return
       }
       Task {
@@ -75,11 +80,15 @@ class SideMenuViewModel: ObservableObject {
           let userId = UserManager.shared.activatedUID
           let result = try await wallet.walletEntity?.buildWalletAccounts(userId: userId) ?? []
           await MainActor.run {
-            self.currentAccount =  wallet.mainAccount?.toWalletAccount()
-            self.allAccounts = result
+            let currentWalletAccount = wallet.mainAccount?.toWalletAccount()
+            self.currentAccount = currentWalletAccount.map { SideMenuItem(account: $0) }
+            self.filterAccounts = result.map { list in
+              list.map { SideMenuItem(account: $0, isHidden: $0.type == .evm) }
+            }
             self.accountLoading = false
             self.hasCoa = (wallet.coa != nil)
             self.loadBalance()
+            self.loadCOAAsset()
           }
         } catch {
           await MainActor.run {
@@ -90,36 +99,83 @@ class SideMenuViewModel: ObservableObject {
       }
     }
   
-    func updateCurrentAccount(_ selectedAccount: RNBridge.WalletAccount) {
+    func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
         self.currentAccount = selectedAccount
-        WalletManager.shared.changeSelectedAccount(address: selectedAccount.address, type: selectedAccount.FWAccountType)
+        WalletManager.shared.changeSelectedAccount(address: selectedAccount.account.address, type: selectedAccount.account.FWAccountType)
         NotificationCenter.default.post(name: .toggleSideMenu)
     }
 
     func loadBalance() {
         Task {
           do {
-              let allAddresses = allAccounts.flatMap { $0.compactMap(\.address) }
+              let allAddresses = filterAccounts.flatMap { $0.compactMap { $0.account.address } }
               let result = try await token.getAvailableFlowBalance(addresses: allAddresses, forceReload: true)
               await MainActor.run {
-                  // 遍历 allAccounts，更新每个 account 的 balance 字段
-                  self.allAccounts = self.allAccounts.map { group in
-                      group.map { account in
-                          let balance = result[account.address] ?? 0
+                  self.filterAccounts = self.filterAccounts.map { group in
+                      group.map { item in
+                          let balance = result[item.account.address] ?? 0
                           let flowString = balance.doubleValue.formatDisplayFlowBalance
-                          return account.copyWith(flow: flowString)
+                          let updatedAccount = item.account.copyWith(flow: flowString)
+                          return SideMenuItem(account: updatedAccount, isHidden: item.isHidden)
                       }
                   }
-                  self.currentAccount = self.currentAccount.map { account in
-                      let balance = result[account.address] ?? 0
+                  self.currentAccount = self.currentAccount.map { item in
+                      let balance = result[item.account.address] ?? 0
                     let flowString = balance.doubleValue.formatDisplayFlowBalance
-                    return account.copyWith(flow: flowString)
+                    let updatedAccount = item.account.copyWith(flow: flowString)
+                    return SideMenuItem(account: updatedAccount, isHidden: item.isHidden)
                   }
               }
           } catch {
               log.debug(error)
           }
         }
+    }
+
+    func loadCOAAsset() {
+      Task {
+          // Collect all EVM account addresses
+          let evmAddresses = filterAccounts.flatMap { list in
+            list.filter { $0.account.type == .evm }
+                .map { $0.account.address }
+          }
+
+          // Early return if no EVM accounts
+          guard !evmAddresses.isEmpty else { return }
+
+          do {
+              // Fetch COA assets
+              let coaAssets = try await WalletManager.shared.fetchCOAAsset(addresses: evmAddresses)
+
+              // Create lookup dictionary for O(1) access (case-insensitive)
+              let coaAssetDict = Dictionary(
+                  uniqueKeysWithValues: coaAssets.map {
+                      ($0.address.lowercased(), $0)
+                  }
+              )
+
+              // Update filterAccounts on main thread
+              await MainActor.run {
+                  self.filterAccounts = self.filterAccounts.map { list in
+                      list.map { item in
+                          // Only update EVM accounts
+                          guard item.account.type == .evm else { return item }
+
+                          // Check if COA asset exists (case-insensitive)
+                          let hasCoaAsset = coaAssetDict[item.account.address.lowercased()] != nil
+
+                          // Show EVM accounts that have COA assets, hide those that don't
+                          return SideMenuItem(
+                              account: item.account,
+                              isHidden: !hasCoaAsset
+                          )
+                      }
+                  }
+              }
+          } catch {
+              log.error("[SideMenu] Failed to load COA assets: \(error)")
+          }
+      }
     }
 
     func pickColor(from url: String) {

@@ -13,7 +13,7 @@ struct EVMTagView: View {
     
     var body: some View {
         Text("EVM")
-            .font(.inter(size: 8))
+            .font(.inter(size: 8,weight: .w500))
             .foregroundStyle(Color.white)
             .frame(width: 26, height: 10)
             .background(Color.Theme.evm)
@@ -27,7 +27,7 @@ struct COATagView: View {
     HStack(spacing: 0) {
       HStack(spacing: 0) {
         Text("EVM")
-            .font(.inter(size: 8))
+            .font(.inter(size: 8,weight: .w500))
             .foregroundStyle(Color.white)
             .offset(x:-4)
             
@@ -36,7 +36,7 @@ struct COATagView: View {
       .background(Color.Theme.evm)
       .cornerRadius(5)
       Text("FLOW")
-          .font(.inter(size: 8))
+          .font(.inter(size: 8,weight: .w500))
           .foregroundStyle(Color.black)
           .frame(width: 32, height: 10)
           .background(Color.Theme.Accent.green)
