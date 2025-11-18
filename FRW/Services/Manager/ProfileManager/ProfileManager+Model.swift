@@ -196,7 +196,8 @@ extension ProfileModel {
   }
 
   var accountDes: String {
-    guard let count = accounts?.count else {
+    let count = accounts?.filter ({ !$0.isHidden }).count
+    guard let count else {
       return ""
     }
     return "\(count) Accounts"

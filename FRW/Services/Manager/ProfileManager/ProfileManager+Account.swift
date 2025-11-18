@@ -15,9 +15,10 @@ extension ProfileManager {
       do {
         let accountResult = try await fetchAccounts(profiles: profiles)
         let BalanceResult = try await fetchFlowAmount(profiles: accountResult)
+        let result = try await fetchCOANFTs(profiles: BalanceResult)
         await MainActor.run {
-          profiles = BalanceResult
-          saveProfiles(BalanceResult)
+          profiles = result
+          saveProfiles(result)
         }
       }
     }
@@ -90,4 +91,36 @@ extension ProfileManager {
     }
     return profilesOfAddedBalance
   }
+
+  private func fetchCOANFTs(profiles: [ProfileModel]) async throws -> [ProfileModel] {
+    let addresses = profiles.flatMap { profile in
+      profile.accounts?.compactMap { ($0.type == .evm ? $0.address : nil) } ?? []
+    }
+    let token = EVMTokenBalanceProvider()
+    var countForCOA: [String: Int] = [:]
+    for addr in addresses {
+      if let FWAddr = FWAddressDector.create(address: addr) {
+        let result = try await token.getNFTCollections(address: FWAddr)
+        countForCOA[addr] = result.reduce(0) {$0 + $1.count}
+      }
+    }
+
+    var profilesOfAddedBalance: [ProfileModel] = []
+    for profile in profiles {
+      var newAccounts: [RNBridge.WalletAccount] = []
+      for account in profile.accounts ?? [] {
+        var newAccount = account
+        if newAccount.type == .evm {
+          if let amount = countForCOA[account.address], amount > 0 {
+            newAccount = account.copyWith(nft: String(amount))
+          }
+        }
+        newAccounts.append(newAccount)
+      }
+      let newProfile = profile.updatingAccounts(to: newAccounts)
+      profilesOfAddedBalance.append(newProfile)
+    }
+    return profilesOfAddedBalance
+  }
+
 }

@@ -45,15 +45,20 @@ class AuthnViewModel: ObservableObject {
   
   private func loadCurrentEVM() {
     accounts = []
-    let eoa = WalletManager.shared.EOAs?.compactMap { AuthnAccountProvider(account: $0.toWalletAccount(), linkAccounts: []) } ?? []
+    guard let profile = ProfileManager.shared.currentProfile,
+          let mainAddress = WalletManager.shared.mainAccount?.hexAddr
+    else {
+      return
+    }
+    let eoaAccount = profile.accounts?.filter { $0.type == .eoa }
+    let coaAccount = profile.accounts?.filter { $0.type == .evm && $0.parentAddress == mainAddress && !$0.isHidden }
+    let eoa = eoaAccount?.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) } ?? []
     accounts.append(contentsOf: eoa)
-    if let coa = WalletManager.shared.coa?.toWalletAccount() {
-      accounts.append(AuthnAccountProvider(account: coa, linkAccounts: []))
-    }
+    let coa = coaAccount?.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) } ?? []
+    accounts.append(contentsOf: coa)
+
     let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
-    if let account =  accounts.first { $0.account.address == preAddress } ?? accounts.first {
-      currentAccount = account
-    }
+    currentAccount =  accounts.first(where: { $0.account.address == preAddress }) ?? accounts.first
     allowSelection = accounts.count > 1
   }
   

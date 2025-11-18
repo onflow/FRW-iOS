@@ -33,6 +33,12 @@ class ProfileManager: ObservableObject {
   @Published
   var profiles: [ProfileModel] = []
 
+  var currentProfile: ProfileModel? {
+    guard let uid = UserManager.shared.activatedUID else {
+      return nil
+    }
+    return profiles.first { $0.uid == uid }
+  }
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
