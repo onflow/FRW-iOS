@@ -36,7 +36,15 @@ func serviceDefinition(address: String, keyId: Int, type: FCLServiceType) -> Ser
             icon: "https://web.api.wallet.flow.com/logo_mobile.png"
         )
     }
+  
     service.endpoint = FCLWalletConnectMethod(type: type)?.rawValue
+  
+    if type == .preAuthz {
+      service.method = .httpPost
+      service.endpoint = Config.get(.lilicoWeb) + "/api/wc/pre-authz"
+      service.params = ["address": address, "keyId": String(keyId), "network": currentNetwork.rawValue ]
+    }
+  
     return service
 }
 
