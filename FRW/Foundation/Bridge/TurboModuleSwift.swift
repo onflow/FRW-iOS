@@ -258,7 +258,9 @@ extension TurboModuleSwift {
     let allProfiles = ProfileManager.shared.profiles
     let supportNetworks: Set<Flow.ChainID> = [currentNetwork]
     for profile in allProfiles {
-      
+      guard let nickname = profile.username else {
+        continue
+      }
       guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
         continue
       }
@@ -281,7 +283,7 @@ extension TurboModuleSwift {
         walletAccounts.append(contentsOf: result)
       }
       let walletProfile = RNBridge.WalletProfile(
-        name: profile.username ?? "",
+        name: nickname,
         avatar: profile.avatar ?? "",
         uid: profile.uid,
         accounts: walletAccounts
