@@ -236,7 +236,7 @@ extension AppDelegate {
             DeviceManager.shared.updateDevice()
         }
 
-        ProfileManager.shared.fetchAllAccountsInfo()
+        ProfileManager.shared.setup()
     }
 
     private func commonConfig() {

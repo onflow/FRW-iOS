@@ -42,17 +42,22 @@ struct AccountInfoCard: View {
     VStack {
       ForEach(0..<list.count, id:\.self) { index in
         let account = list[index]
-        AccountInfoView(account: account, hideType: hideType)
+        AccountInfoView(account: account,parent: parent() ,hideType: hideType)
       }
     }
     .padding(18)
     .background(Color.Brain.Core.cards)
     .cornerRadius(16)
   }
+
+  func parent() -> RNBridge.WalletAccount? {
+    list.first { $0.type == .main }
+  }
 }
 
 struct AccountInfoView: View {
   let account: RNBridge.WalletAccount
+  let parent: RNBridge.WalletAccount?
   var hideType: AccountHideType = .none
   
   var body: some View {
@@ -136,7 +141,7 @@ struct AccountInfoView: View {
 
     switch account.type {
     case .main:
-      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
+      Router.route(to: RouteMap.Profile.account(account, parent))
     case .child:
       Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
     case .evm:

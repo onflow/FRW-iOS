@@ -115,60 +115,7 @@ extension EOA {
   }
 }
 
-extension RNBridge.WalletAccount {
-  var FWAccountType: FWAccount.AccountType {
-    switch self.type {
-    case .main:
-      return .main
-    case .child:
-      return .child
-    case .evm:
-      if parentAddress == nil {
-        return .eoa
-      }
-      return .coa
-    case .eoa:
-      return .eoa
-    case .none:
-      return .main
-    }
-  }
-  
-  func copyWith(flow: String? = nil, nft: String? = nil) -> RNBridge.WalletAccount {
-    RNBridge.WalletAccount(
-      id: self.id,
-      name: self.name,
-      address: self.address,
-      emojiInfo: self.emojiInfo,
-      parentEmoji: self.parentEmoji,
-      parentAddress: self.parentAddress,
-      avatar: self.avatar,
-      isActive: self.isActive,
-      type: self.type,
-      balance: flow ?? self.balance,
-      nfts: nft ?? self.nfts
-    )
-  }
 
-  var isHidden: Bool {
-    guard type == .evm else {
-      return false
-    }
-    if let value = balance?.doubleValue, value > 0 {
-      return false
-    }
-    if let value = nfts?.doubleValue, value > 0 {
-      return false
-    }
-    return true
-  }
-
-  /// Indicates whether the COA account's asset data is ready.
-  /// Returns `true` when both balance and NFT data have been loaded.
-  var coaAssetsIsReady: Bool {
-    balance != nil && nfts != nil
-  }
-}
 // MARK: Tool for RN Model
 
 extension Contact {

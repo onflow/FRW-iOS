@@ -402,6 +402,7 @@ extension RouteMap {
         case wallpaper
         case secureEnclavePrivateKey
         case accountList
+        case account(RNBridge.WalletAccount,RNBridge.WalletAccount?)
     }
 }
 
@@ -503,6 +504,10 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: SecureEnclavePrivateKeyView())
         case .accountList:
           navi.push(content: AccountListView())
+        case .account(let account, let parent):
+          if account.type == .main {
+            navi.push(content: CadenceAccountView(account: account, parent: parent))
+          }
         }
     }
 }

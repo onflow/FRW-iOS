@@ -9,6 +9,8 @@ import Foundation
 import FlowWalletKit
 import WalletCore
 import Flow
+import Combine
+
 
 // MARK: - ProfileManager
 
@@ -20,10 +22,12 @@ class ProfileManager: ObservableObject {
     #if DEBUG
 //    clearAllProfiles()
     #endif
+    
     loadCachedProfiles()
     Task {
       await migrateExistingProfilesIfNeeded()
     }
+
   }
 
   // MARK: Internal
@@ -33,12 +37,21 @@ class ProfileManager: ObservableObject {
   @Published
   var profiles: [ProfileModel] = []
 
-  var currentProfile: ProfileModel? {
-    guard let uid = UserManager.shared.activatedUID else {
-      return nil
-    }
-    return profiles.first { $0.uid == uid }
+  @Published
+  var currentProfile: ProfileModel?
+
+  private var cancellableSet = Set<AnyCancellable>()
+
+  func setup() {
+    fetchAllAccountsInfo()
+    UserManager.shared.$activatedUID
+      .receive(on: DispatchQueue.main)
+      .map { $0 }
+      .sink { _ in
+        self.updateCurrentProfile()
+      }.store(in: &cancellableSet)
   }
+
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
@@ -94,6 +107,16 @@ class ProfileManager: ObservableObject {
     }
 
     return nil
+  }
+
+  func updateCurrentProfile() {
+    log.debug("updating current profile")
+    guard let uid = UserManager.shared.activatedUID else {
+      currentProfile = nil
+      return
+    }
+    currentProfile = profiles.first { $0.uid == uid }
+    log.debug("updated current profile: \(uid)")
   }
 
   func deleteProfile(userId: String) {
