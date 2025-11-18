@@ -400,12 +400,7 @@ extension WalletConnectManager {
                     let data = jsonString[0].data(using: .utf8)!
 
                     var services = [
-                        // Since fcl-js is not implement pre-authz, hence we disable it for now
-                        serviceDefinition(
-                            address: RemoteConfigManager.shared.payer,
-                            keyId: RemoteConfigManager.shared.keyIndex,
-                            type: .preAuthz
-                        ),
+                        serviceDefinition(address: address, keyId: keyId, type: .preAuthz),
                         serviceDefinition(address: address, keyId: keyId, type: .authn),
                         serviceDefinition(address: address, keyId: keyId, type: .authz),
                         serviceDefinition(address: address, keyId: keyId, type: .userSignature),
@@ -455,7 +450,6 @@ extension WalletConnectManager {
                 }
             }
         case FCLWalletConnectMethod.preAuthz.rawValue:
-
             Task {
               let localPayerAddress = RemoteConfigManager.shared.payer
               let localPayerIndex = RemoteConfigManager.shared.keyIndex
