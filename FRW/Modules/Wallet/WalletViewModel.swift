@@ -389,12 +389,11 @@ extension WalletViewModel {
 extension WalletViewModel {
     func refreshButtonState() {
         let isChild = WalletManager.shared.selectedAccount?.type == .child
-        let isEOA = WalletManager.shared.selectedAccount?.type == .eoa
         showAddTokenButton = !isChild
 
         // Swap
         let swapFlag = RemoteConfigManager.shared.config?.features.swap ?? false
-        showSwapButton = swapFlag ? !isChild && !isEOA : false
+        showSwapButton = swapFlag ? !isChild : false
 
         let isMainAccount = WalletManager.shared.selectedAccount?.type == .main
 

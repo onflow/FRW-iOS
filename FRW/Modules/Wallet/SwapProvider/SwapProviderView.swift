@@ -15,7 +15,9 @@ struct SwapProviderView: RouteableView {
 
     init(token: TokenModel?) {
         var result: [SwapProviderModel] = []
-        if WalletManager.shared.isSelectedEVMAccount {
+        if WalletManager.shared.isSelectedEOAAccount {
+          result.append(SwapProviderModel.Punch)
+        }else if WalletManager.shared.isSelectedEVMAccount {
             result.append(SwapProviderModel.Punch)
             result.append(SwapProviderModel.Trado)
         } else {

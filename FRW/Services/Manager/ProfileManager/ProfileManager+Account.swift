@@ -96,7 +96,7 @@ extension ProfileManager {
     let addresses = profiles.flatMap { profile in
       profile.accounts?.compactMap { ($0.type == .evm ? $0.address : nil) } ?? []
     }
-    let token = EVMTokenBalanceProvider()
+    let token = await EVMTokenBalanceProvider()
     var countForCOA: [String: Int] = [:]
     for addr in addresses {
       if let FWAddr = FWAddressDector.create(address: addr) {
