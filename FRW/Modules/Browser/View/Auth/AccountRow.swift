@@ -70,8 +70,8 @@ struct AccountRow: View {
         addressView
       }
       // Balance
-      if let balance = provider.account.balance {
-        Text("\(balance) FLOW")
+      if let balance = provider.account.balance?.doubleValue.formatDisplayFlowBalance {
+        Text("\(balance)")
           .font(.inter(size: 12))
           .foregroundColor(.Brain.Text.secondary)
           .lineLimit(1)
@@ -94,6 +94,7 @@ struct AccountRow: View {
   private var addressView: some View {
     Text(showAddress)
       .font(.inter(size: 12))
+      .truncationMode(.middle)
       .lineLimit(1)
       .foregroundColor(.Brain.Text.secondary)
   }

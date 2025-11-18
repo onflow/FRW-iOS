@@ -10,6 +10,8 @@ import Foundation
 // MARK: - ProfileModel
 
 struct ProfileModel: Codable, Equatable {
+  private static let expirationInterval: TimeInterval = 5 * 60
+
   // MARK: Lifecycle
 
   init(
@@ -18,28 +20,43 @@ struct ProfileModel: Codable, Equatable {
     avatar: String? = nil,
     createdAt: Date = Date(),
     lastUpdated: Date = Date(),
-    wallets: [UserManager.StoreUser] = []
+    wallets: [UserManager.StoreUser] = [],
+    accounts: [RNBridge.WalletAccount] = [],
+    expirationDate: Date? = nil
   ) {
     let version = Bundle.main
       .infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
-    self.uid = uid
-    self.username = username
-    self.avatar = avatar
-    self.createdAt = createdAt
-    self.lastUpdated = lastUpdated
-    self.version = version
-    self.wallets = wallets
+    let resolvedLastUpdated = lastUpdated
+    let defaultExpiration = Date().addingTimeInterval(ProfileModel.expirationInterval)
+    let resolvedExpirationDate = expirationDate ?? defaultExpiration
+    self.init(
+      uid: uid,
+      username: username,
+      avatar: avatar,
+      createdAt: createdAt,
+      lastUpdated: resolvedLastUpdated,
+      version: version,
+      wallets: wallets,
+      accounts: accounts,
+      expirationDate: resolvedExpirationDate
+    )
   }
 
   init(userInfo: UserInfo, with uid: String, wallets: [UserManager.StoreUser] = []) {
     let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
-    self.uid = uid
-    self.username = userInfo.nickname
-    self.avatar = userInfo.avatar
-    self.createdAt = Date()
-    self.lastUpdated = Date()
-    self.version = version
-    self.wallets = wallets
+    let now = Date()
+    let expirationDate = now.addingTimeInterval(ProfileModel.expirationInterval)
+    self.init(
+      uid: uid,
+      username: userInfo.nickname,
+      avatar: userInfo.avatar,
+      createdAt: now,
+      lastUpdated: now,
+      version: version,
+      wallets: wallets,
+      accounts: [],
+      expirationDate: expirationDate
+    )
   }
 
   // Additional initializer to support preserving dates
@@ -50,7 +67,9 @@ struct ProfileModel: Codable, Equatable {
     createdAt: Date,
     lastUpdated: Date,
     version: String,
-    wallets: [UserManager.StoreUser]
+    wallets: [UserManager.StoreUser],
+    accounts: [RNBridge.WalletAccount]?,
+    expirationDate: Date?
   ) {
     self.uid = uid
     self.username = username
@@ -59,6 +78,8 @@ struct ProfileModel: Codable, Equatable {
     self.lastUpdated = lastUpdated
     self.version = version
     self.wallets = wallets
+    self.accounts = accounts
+    self.expirationDate = expirationDate
   }
 
   // MARK: Internal
@@ -70,21 +91,30 @@ struct ProfileModel: Codable, Equatable {
   let lastUpdated: Date
   let version: String
   let wallets: [UserManager.StoreUser]
+  let expirationDate: Date?
+
+  var accounts: [RNBridge.WalletAccount]? = []
+
 
   // MARK: - Equatable
 
   static func == (lhs: ProfileModel, rhs: ProfileModel) -> Bool {
-    lhs.uid == rhs.uid
+    lhs.uid == rhs.uid && lhs.accounts?.count == rhs.accounts?.count
   }
 
   func replace(with users: [UserManager.StoreUser]) -> ProfileModel {
     let sortedUser = users.sorted { ($0.address ?? "") > ($1.address ?? "") }
+    let lastUpdated = Date()
     return ProfileModel(
       uid: uid,
       username: username,
       avatar: avatar,
-      lastUpdated: Date(),
-      wallets: sortedUser
+      createdAt: createdAt,
+      lastUpdated: lastUpdated,
+      version: version,
+      wallets: sortedUser,
+      accounts: accounts,
+      expirationDate: expirationDate
     )
   }
   
@@ -106,25 +136,70 @@ struct ProfileModel: Codable, Equatable {
     // sort by address
     existWallets.sort { ($0.address ?? "") > ($1.address ?? "") }
     // Preserve original creation date but update lastUpdated
+    let lastUpdated = Date()
     return ProfileModel(
       uid: uid,
       username: username ?? self.username,
       avatar: avatar ?? self.avatar,
       createdAt: createdAt, // Preserve original creation date
-      lastUpdated: Date(), // Update timestamp
+      lastUpdated: lastUpdated, // Update timestamp
       version: version,
-      wallets: existWallets
+      wallets: existWallets,
+      accounts: accounts,
+      expirationDate: expirationDate
+    )
+  }
+
+  func updatingAccounts(to newAccounts: [RNBridge.WalletAccount]) -> ProfileModel {
+    ProfileModel(
+      uid: uid,
+      username: username,
+      avatar: avatar,
+      createdAt: createdAt,
+      lastUpdated: Date(),
+      version: version,
+      wallets: wallets,
+      accounts: newAccounts,
+      expirationDate: expirationDate
+    )
+  }
+
+  func hasExpired(at referenceDate: Date = Date()) -> Bool {
+    guard let expirationDate else {
+      return false
+    }
+    return referenceDate >= expirationDate
+  }
+
+  func refreshedExpiration(from referenceDate: Date = Date()) -> ProfileModel {
+    ProfileModel(
+      uid: uid,
+      username: username,
+      avatar: avatar,
+      createdAt: createdAt,
+      lastUpdated: lastUpdated,
+      version: version,
+      wallets: wallets,
+      accounts: accounts,
+      expirationDate: referenceDate.addingTimeInterval(Self.expirationInterval)
     )
   }
 }
 
 extension ProfileModel {
-  var subTitle: String {
-    let count = Set(wallets.compactMap { $0.address?.lowercased() }.filter { !$0.isEmpty }).count
-    return "\(count) Accounts"
+
+  var amountDes: String {
+    let totalFlow = (accounts ?? []).reduce(0.0) { result, account in
+      result + (account.balance?.doubleValue ?? 0)
+    }
+    return totalFlow.formatDisplayFlowBalance
   }
-  
-  var countDes: String {
-    ""
+
+  var accountDes: String {
+    let count = accounts?.filter ({ !$0.isHidden }).count
+    guard let count else {
+      return ""
+    }
+    return "\(count) Accounts"
   }
 }

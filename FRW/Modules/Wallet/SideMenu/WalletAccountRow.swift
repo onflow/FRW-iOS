@@ -9,50 +9,58 @@ import SwiftUI
 
 extension SideMenuView {
   struct AccountRow: View {
-      let account: RNBridge.WalletAccount
+      let account: SideMenuItem
       var isActivity: Bool = false
-      var onClick: ((RNBridge.WalletAccount) -> Void)?
-    
-      var isEVM: Bool {
-        account.type == .evm
+      var onClick: ((SideMenuItem) -> Void)?
+
+      private var isCOA: Bool {
+        account.account.type == .evm
       }
+
+      private var isEOA: Bool {
+        account.account.type == .eoa
+      }
+      
     
       var body: some View {
         Button {
           onClick?(account)
         } label: {
           HStack(spacing: 8) {
-            if account.type != .main && (account.parentAddress != nil) {
+            if account.account.type != .main && (account.account.parentAddress != nil) {
               Image("account_link_mark")
                 .resizable()
                 .frame(width: 20, height: 20)
             }
             WalletAvatarView(
-              emoji: .init(name: account.emojiInfo?.emoji),
-              avatar: account.avatar,
+              emoji: .init(name: account.account.emojiInfo?.emoji),
+              avatar: account.account.avatar,
               showBorder: isActivity
             )
-            
+
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                  Text(account.name)
+                  Text(account.account.name)
                         .font(.inter(size: 14, weight: .semibold))
                         .foregroundStyle(Color.Theme.Text.black8)
                         .frame(height: 22)
-                  if isEVM {
+                  if isEOA {
                     EVMTagView()
                   }
-                    
+                  if isCOA {
+                    COATagView()
+                  }
+
                 }
 
-              Text(account.address)
+              Text(account.account.address)
                     .font(.inter(size: 12))
                     .lineLimit(1)
                     .truncationMode(.middle)
                     .foregroundStyle(Color.Theme.Text.black3)
                     .frame(height: 20)
 
-              if let balance = account.balance {
+              if let balance = account.account.balance {
                   Text(balance)
                       .font(.inter(size: 12))
                       .lineLimit(1)
@@ -63,7 +71,7 @@ extension SideMenuView {
             Spacer()
 
             Button {
-                UIPasteboard.general.string = account.address
+                UIPasteboard.general.string = account.account.address
                 HUD.success(title: "Address Copied".localized)
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
             } label: {
@@ -89,22 +97,24 @@ extension SideMenuView {
 
 #Preview {
   SideMenuView.AccountRow(
-        account: RNBridge.WalletAccount(
-            id: "1",
-            name: "EVM Account",
-            address: "0xABCD1234EF567890",
-            emojiInfo: RNBridge.EmojiInfo(
-                emoji: "🐼",
-                name: "Panda",
-                color: "#EEEEED"
-            ),
-            parentEmoji: nil,
-            parentAddress: nil,
-            avatar: nil,
-            isActive: true,
-            type: .evm,
-            balance: "2.345 ETH",
-            nfts: nil
+        account: SideMenuItem(
+            account: RNBridge.WalletAccount(
+                id: "1",
+                name: "EVM Account",
+                address: "0xABCD1234EF567890",
+                emojiInfo: RNBridge.EmojiInfo(
+                    emoji: "🐼",
+                    name: "Panda",
+                    color: "#EEEEED"
+                ),
+                parentEmoji: nil,
+                parentAddress: nil,
+                avatar: nil,
+                isActive: true,
+                type: .evm,
+                balance: "2.345 ETH",
+                nfts: nil
+            )
         )
     )
 }

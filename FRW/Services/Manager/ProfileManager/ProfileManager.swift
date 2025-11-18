@@ -33,6 +33,12 @@ class ProfileManager: ObservableObject {
   @Published
   var profiles: [ProfileModel] = []
 
+  var currentProfile: ProfileModel? {
+    guard let uid = UserManager.shared.activatedUID else {
+      return nil
+    }
+    return profiles.first { $0.uid == uid }
+  }
   // MARK: - Profile Management
 
   func saveProfile(_ profile: ProfileModel) {
@@ -47,6 +53,27 @@ class ProfileManager: ObservableObject {
       log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
     } catch {
       log.error("[Profile] Failed to save profile for user \(profile.uid): \(error)")
+    }
+  }
+
+  func saveProfiles(_ profiles: [ProfileModel]) {
+    var didSaveAnyProfile = false
+    for profile in profiles {
+      guard keyExist(uid: profile.uid) else {
+        log.warning("[Profile] Profile save skipped for user(\(profile.uid)), key not found.")
+        continue
+      }
+      do {
+        try keychainService.saveProfile(profile)
+        profileCache[profile.uid] = profile
+        didSaveAnyProfile = true
+        log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
+      } catch {
+        log.error("[Profile] Failed to save profile for user \(profile.uid): \(error)")
+      }
+    }
+    if didSaveAnyProfile {
+      refreshProfiles()
     }
   }
 
