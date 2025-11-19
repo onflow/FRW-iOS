@@ -1532,6 +1532,12 @@
 		4E77CE0A2ECC993800C2C628 /* AccountStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE082ECC993800C2C628 /* AccountStyle.swift */; };
 		4E77CE202ECD7BE900C2C628 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */; };
 		4E77CE212ECD7BE900C2C628 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */; };
+		4E77CE232ECDD78200C2C628 /* LinkedAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE222ECDD78200C2C628 /* LinkedAccountDetailView.swift */; };
+		4E77CE242ECDD78200C2C628 /* LinkedAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE222ECDD78200C2C628 /* LinkedAccountDetailView.swift */; };
+		4E77CE262ECDDC5B00C2C628 /* COAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */; };
+		4E77CE272ECDDC5B00C2C628 /* COAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */; };
+		4E77CE292ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */; };
+		4E77CE2A2ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */; };
 		4E7918462B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918472B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918492B21518300DA832F /* BackupMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918482B21518300DA832F /* BackupMultiViewModel.swift */; };
@@ -3153,6 +3159,9 @@
 		4E77CE052ECC96DF00C2C628 /* AccountOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountOptionView.swift; sourceTree = "<group>"; };
 		4E77CE082ECC993800C2C628 /* AccountStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStyle.swift; sourceTree = "<group>"; };
 		4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		4E77CE222ECDD78200C2C628 /* LinkedAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedAccountDetailView.swift; sourceTree = "<group>"; };
+		4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COAAccountDetailView.swift; sourceTree = "<group>"; };
+		4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOAAccountDetailView.swift; sourceTree = "<group>"; };
 		4E7918452B214EEF00DA832F /* BackupMultiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiView.swift; sourceTree = "<group>"; };
 		4E7918482B21518300DA832F /* BackupMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiViewModel.swift; sourceTree = "<group>"; };
 		4E7DD2602858E74600052B21 /* FRWAPI+NFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+NFT.swift"; sourceTree = "<group>"; };
@@ -6615,8 +6624,11 @@
 				4E77CDF52ECC7A0700C2C628 /* Views */,
 				4E77CDF42ECC780400C2C628 /* ViewModels */,
 				4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */,
-				4E77CDF12ECC77FF00C2C628 /* CadenceAccountView.swift */,
 				4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */,
+				4E77CDF12ECC77FF00C2C628 /* CadenceAccountView.swift */,
+				4E77CE222ECDD78200C2C628 /* LinkedAccountDetailView.swift */,
+				4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */,
+				4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */,
 			);
 			path = AccountList;
 			sourceTree = "<group>";
@@ -8472,6 +8484,7 @@
 				15DC21BD27819C56000B187A /* View.CustomViewFrames.swift in Sources */,
 				6AAD4E6D28BC91DF00AEAB1F /* TransactionProgressView.swift in Sources */,
 				6A7F650B289A4CE3007188DC /* PageCache.swift in Sources */,
+				4E77CE242ECDD78200C2C628 /* LinkedAccountDetailView.swift in Sources */,
 				4E8866162DBF7FD80031E242 /* TokenModelResponse.swift in Sources */,
 				15DC213F27819C56000B187A /* VMenuPickerButtonType.swift in Sources */,
 				15DC20BF27819C56000B187A /* VSquareButtonState.swift in Sources */,
@@ -8542,6 +8555,7 @@
 				6ACF0E642851FB2E008E7FA6 /* UserRequests.swift in Sources */,
 				154B8904276A1EEB00780E93 /* OffsetPageTabView.swift in Sources */,
 				158CE8812782BEAA006A8394 /* TYNKViewModel.swift in Sources */,
+				4E77CE262ECDDC5B00C2C628 /* COAAccountDetailView.swift in Sources */,
 				158832E828942DC600142B35 /* MessageRequestInfo.swift in Sources */,
 				6A8FA498285B192800EE5BE3 /* Introspect.swift in Sources */,
 				158637242D6C9D570083A068 /* FWAddress.swift in Sources */,
@@ -9188,6 +9202,7 @@
 				6ADA4C0228F180C400C7B341 /* UIImageView.swift in Sources */,
 				158637272D6CD8310083A068 /* TokenBalanceProvider.swift in Sources */,
 				4E7153252E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */,
+				4E77CE292ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */,
 				1505E5FF2836365C007B98D8 /* FRWAPI+AddressBook.swift in Sources */,
 				7652E32E2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */,
 				158832EE28942FCE00142B35 /* Signable.swift in Sources */,
@@ -9540,6 +9555,7 @@
 				6AAD4E6C28BC91DF00AEAB1F /* TransactionProgressView.swift in Sources */,
 				6A7F650A289A4CE3007188DC /* PageCache.swift in Sources */,
 				15C58AD12868A4EE00BD4FC6 /* VMenuPickerButtonType.swift in Sources */,
+				4E77CE232ECDD78200C2C628 /* LinkedAccountDetailView.swift in Sources */,
 				4E8866172DBF7FD80031E242 /* TokenModelResponse.swift in Sources */,
 				15C58AD22868A4EE00BD4FC6 /* VSquareButtonState.swift in Sources */,
 				15C58AD32868A4EE00BD4FC6 /* SnapAnchorPreferenceKey.swift in Sources */,
@@ -9610,6 +9626,7 @@
 				15C58AEF2868A4EE00BD4FC6 /* OffsetPageTabView.swift in Sources */,
 				15C58AF02868A4EE00BD4FC6 /* TYNKViewModel.swift in Sources */,
 				158832E728942DC600142B35 /* MessageRequestInfo.swift in Sources */,
+				4E77CE272ECDDC5B00C2C628 /* COAAccountDetailView.swift in Sources */,
 				15C58AF22868A4EE00BD4FC6 /* Introspect.swift in Sources */,
 				158637232D6C9D570083A068 /* FWAddress.swift in Sources */,
 				6A0C6E1629540696005F0EF6 /* EnvDefine.swift in Sources */,
@@ -10256,6 +10273,7 @@
 				6ADA4C0128F180C400C7B341 /* UIImageView.swift in Sources */,
 				15C58BF82868A4EE00BD4FC6 /* FRWAPI+AddressBook.swift in Sources */,
 				4E7153242E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */,
+				4E77CE2A2ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */,
 				158637262D6CD8310083A068 /* TokenBalanceProvider.swift in Sources */,
 				158832ED28942FCE00142B35 /* Signable.swift in Sources */,
 				7652E32D2D6AAE3500AECFEF /* AccountCreatedView.swift in Sources */,

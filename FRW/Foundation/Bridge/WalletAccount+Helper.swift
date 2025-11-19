@@ -26,7 +26,6 @@ extension RNBridge.WalletAccount: Equatable {
     lhs.parentEmoji == rhs.parentEmoji &&
     lhs.parentAddress == rhs.parentAddress &&
     lhs.avatar == rhs.avatar &&
-    lhs.isActive == rhs.isActive &&
     lhs.type == rhs.type &&
     lhs.balance == rhs.balance &&
     lhs.nfts == rhs.nfts
@@ -46,7 +45,7 @@ extension RNBridge.WalletAccount {
       parentEmoji: self.parentEmoji,
       parentAddress: self.parentAddress,
       avatar: self.avatar,
-      isActive: self.isActive,
+      isActive: false,
       type: self.type,
       balance: flow ?? self.balance,
       nfts: nft ?? self.nfts
@@ -64,7 +63,7 @@ extension RNBridge.WalletAccount {
       parentEmoji: parentEmoji,
       parentAddress: parentAddress,
       avatar: avatar,
-      isActive: isActive,
+      isActive: false,
       type: type,
       balance: balance,
       nfts: nfts
@@ -105,6 +104,12 @@ extension RNBridge.WalletAccount {
     return true
   }
 
+  var displayBalance: String {
+    guard let balance else {
+      return "0.0 Flow"
+    }
+    return balance.doubleValue.formatDisplayFlowBalance
+  }
   /// Indicates whether the COA account's asset data is ready.
   /// Returns `true` when both balance and NFT data have been loaded.
   var coaAssetsIsReady: Bool {

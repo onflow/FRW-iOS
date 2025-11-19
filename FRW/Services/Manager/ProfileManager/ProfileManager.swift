@@ -191,6 +191,7 @@ class ProfileManager: ObservableObject {
       let allProfiles = try keychainService.getAllProfiles()
       DispatchQueue.main.async {
         self.profiles = allProfiles
+        self.updateCurrentProfile()
       }
     } catch {
       log.error("[Profile] Failed to refresh profiles: \(error)")

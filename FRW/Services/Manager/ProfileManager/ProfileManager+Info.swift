@@ -13,16 +13,16 @@ extension ProfileManager {
     guard let profile = currentProfile else {
       return
     }
-    var list: [RNBridge.WalletAccount] = []
-    let accounts = profile.accounts ?? []
-    for account in accounts {
-      var newAccount = account
-      if account.address.uppercased() == address {
-        newAccount = account.updatedFromEmoji()
+    // Flatten, update, and preserve grouping structure
+    let updatedGroups = profile.accounts.map { group in
+      group.map { account in
+        if account.address.uppercased() == address {
+          return account.updatedFromEmoji()
+        }
+        return account
       }
-      list.append(newAccount)
     }
-    let newProfile = profile.updatingAccounts(to: list)
+    let newProfile = profile.updatingAccounts(to: updatedGroups)
     saveProfile(newProfile)
     currentProfile = newProfile
   }

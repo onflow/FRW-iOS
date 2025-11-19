@@ -50,11 +50,13 @@ class AuthnViewModel: ObservableObject {
     else {
       return
     }
-    let eoaAccount = profile.accounts?.filter { $0.type == .eoa }
-    let coaAccount = profile.accounts?.filter { $0.type == .evm && $0.parentAddress == mainAddress && !$0.isHidden }
-    let eoa = eoaAccount?.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) } ?? []
+    // Flatten 2D array before filtering
+    let flattenedAccounts = profile.accounts.flatMap { $0 }
+    let eoaAccount = flattenedAccounts.filter { $0.type == .eoa }
+    let coaAccount = flattenedAccounts.filter { $0.type == .evm && $0.parentAddress == mainAddress && !$0.isHidden }
+    let eoa = eoaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
     accounts.append(contentsOf: eoa)
-    let coa = coaAccount?.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) } ?? []
+    let coa = coaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
     accounts.append(contentsOf: coa)
 
     let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"

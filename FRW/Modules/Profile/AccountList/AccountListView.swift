@@ -69,11 +69,12 @@ struct AccountInfoView: View {
           Image("account_link_mark")
             .resizable()
             .frame(width: 20, height: 20)
+            .padding(.leading, 18)
         }
         WalletAvatarView(
           emoji: .init(name: account.emojiInfo?.emoji),
           avatar: account.avatar,
-          showBorder: account.isActive
+          showBorder: isActivity
         )
         
         VStack(alignment: .leading, spacing: 0) {
@@ -82,7 +83,7 @@ struct AccountInfoView: View {
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundStyle(Color.Theme.Text.black8)
                     .frame(height: 22)
-              if !account.isActive {
+              if account.type == .main {
                 hideView
               }
               if account.type == .eoa {
@@ -100,13 +101,11 @@ struct AccountInfoView: View {
                 .foregroundStyle(Color.Theme.Text.black3)
                 .frame(height: 20)
 
-          if let balance = account.balance {
-              Text(balance)
-                  .font(.inter(size: 12))
-                  .lineLimit(1)
-                  .truncationMode(.middle)
-                  .foregroundStyle(Color.Theme.Text.black8)
-          }
+          Text(account.displayBalance)
+              .font(.inter(size: 12))
+              .lineLimit(1)
+              .truncationMode(.middle)
+              .foregroundStyle(Color.Theme.Text.black8)
         }
         Spacer()
         
@@ -117,6 +116,7 @@ struct AccountInfoView: View {
             .frame(width: 24, height: 24)
       }
       .frame(height: 56)
+      .contentShape(Rectangle())
     }
     .buttonStyle(ScaleButtonStyle())
     
@@ -136,21 +136,25 @@ struct AccountInfoView: View {
       }
     }
   }
-  
-  func onClick() {
 
-    switch account.type {
-    case .main:
-      Router.route(to: RouteMap.Profile.account(account, parent))
-    case .child:
-      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-    case .evm:
-      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-    case .eoa:
-      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-    case .none:
-      break
-    }
+  var isActivity: Bool {
+    WalletManager.shared.selectedAccount?.hexAddr == account.address
+  }
+
+  func onClick() {
+    Router.route(to: RouteMap.Profile.account(account, parent))
+//    switch account.type {
+//    case .main:
+//      Router.route(to: RouteMap.Profile.account(account, parent))
+//    case .child:
+//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
+//    case .evm:
+//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
+//    case .eoa:
+//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
+//    case .none:
+//      break
+//    }
   }
 }
 

@@ -330,6 +330,7 @@ extension Color {
             static let borders = Color(.Brain.Core.borders)
             /// dark: 0a0a0b, light:
             static let navigation = Color(.Brain.Core.navigation)
+            static let dividers = Color(.Brain.Light.lines).opacity(0.15)
         }
 
         enum Text {

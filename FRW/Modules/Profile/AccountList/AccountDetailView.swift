@@ -18,13 +18,24 @@ struct AccountDetailView: RouteableView {
 
     var body: some View {
       VStack {
-        ScrollView {
-          if account.type == .main {
-            CadenceAccountView(account: $account, showAccountEditor: $showAccountEditor)
-          }
+        if account.type == .main {
+          CadenceAccountView(account: $account, showAccountEditor: $showAccountEditor)
         }
-        .scrollIndicators(.never)
+        if account.type == .child {
+          LinkedAccountDetailView(account: $account, parentAccount: $parentAccount, showAccountEditor: $showAccountEditor)
+        }
+        if account.type == .evm {
+          COAAccountDetailView(account: $account, parentAccount: $parentAccount, showAccountEditor: $showAccountEditor)
+        }
+        if account.type == .eoa {
+          EOAAccountDetailView(
+            account: $account,
+            parentAccount: $parentAccount,
+            showAccountEditor: $showAccountEditor
+          )
+        }
       }
+      .padding(.top, 12)
       .padding(.horizontal, 18)
       .applyRouteable(self)
       .popup(isPresented: $showAccountEditor) {
@@ -40,10 +51,11 @@ struct AccountDetailView: RouteableView {
       }
     }
 
-  func onReload() {
-    ProfileManager.shared.updateAccount(at: account.address)
-    account = account.updatedFromEmoji()
-  }
+
+    func onReload() {
+      ProfileManager.shared.updateAccount(at: account.address)
+      account = account.updatedFromEmoji()
+    }
 }
 
 #Preview {

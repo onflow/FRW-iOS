@@ -505,9 +505,7 @@ extension RouteMap.Profile: RouterTarget {
         case .accountList:
           navi.push(content: AccountListView())
         case .account(let account, let parent):
-          if account.type == .main {
-            navi.push(content: AccountDetailView(account: account, parentAccount: parent))
-          }
+          navi.push(content: AccountDetailView(account: account, parentAccount: parent))
         }
     }
 }

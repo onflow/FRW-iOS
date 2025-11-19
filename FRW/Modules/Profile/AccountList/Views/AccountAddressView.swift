@@ -33,9 +33,9 @@ struct AccountAddressView: View {
                     .renderingMode(.template)
                     .foregroundStyle(Color.Theme.Text.black3)
                     .frame(width: 24, height: 24)
-                    .offset(x: -10)
             }
-            .padding(10)
+            .padding(.vertical, 4)
+            .padding(.leading, 4)
         }
       }
       .accountStyle()

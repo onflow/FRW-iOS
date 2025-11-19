@@ -29,34 +29,22 @@ class AccountListViewModel: ObservableObject {
   }
 
   private func updateAccounts(profile: ProfileModel?) {
-    guard let list = profile?.accounts else {
+    guard let profile = profile else {
+      allAccounts = []
       return
     }
-    
-
-  }
-
-  private func fetchAccounts() async throws -> [[RNBridge.WalletAccount]] {
-    do {
-      let wallet =  await WalletManager.shared
-      let userId = UserManager.shared.activatedUID
-      var result = try await wallet.walletEntity?.buildWalletAccounts(userId: userId) ?? []
-      if let currentAddress =  await wallet.selectedAccount?.address.hexAddr {
-        if let index = result.firstIndex(where: { $0.first?.address == currentAddress }) {
-          let selectedAccount = result.remove(at: index)
-          result.insert(selectedAccount, at: 0)
-        }
+    allAccounts = profile.accounts
+    if let currentAddress = WalletManager.shared.selectedAccount?.address.hexAddr {
+      if let index = allAccounts.firstIndex(where: { $0.first?.address == currentAddress }) {
+        let selectedAccount = allAccounts.remove(at: index)
+        allAccounts.insert(selectedAccount, at: 0)
       }
-      return result
-    } catch {
-      log.error("fetch account failed.")
-      throw error
     }
   }
   
   func hideType(with account: [RNBridge.WalletAccount]) -> AccountHideType {
     //TODO:
-    return .none
+    return .visible
   }
   
 }

@@ -12,7 +12,7 @@ import SwiftUI
 struct CadenceAccountView: View {
 
   @StateObject private var vm = WalletSettingViewModel()
-  @State var isHidden = false
+  @State var isShow = true
   // MARK: Internal
   @Binding var account: RNBridge.WalletAccount
   @Binding var showAccountEditor: Bool
@@ -91,7 +91,7 @@ struct CadenceAccountView: View {
                         .cornerRadius(radius)
                   }
                   
-                  AccountOptionView(title: "show_account_title".localized, style: .toggle, isOn: isHidden) { toggle in
+                  AccountOptionView(title: "show_account_title".localized, style: .toggle, isOn: isShow) { toggle in
                     log.info("---")
                   }
                     .cornerRadius(radius)
@@ -107,6 +107,7 @@ struct CadenceAccountView: View {
                   .cornerRadius(radius)
                 }
             }
+            .scrollIndicators(.never)
         }
         .tracedView(self)
     }

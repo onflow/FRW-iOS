@@ -10,6 +10,7 @@ import SwiftUI
 struct AccountStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .buttonStyle(PressButtonStyle())
             .padding(18)
             .background(Color.Brain.Core.cards)
     }

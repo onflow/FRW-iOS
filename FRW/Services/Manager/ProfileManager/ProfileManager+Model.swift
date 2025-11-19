@@ -21,7 +21,7 @@ struct ProfileModel: Codable, Equatable {
     createdAt: Date = Date(),
     lastUpdated: Date = Date(),
     wallets: [UserManager.StoreUser] = [],
-    accounts: [RNBridge.WalletAccount] = [],
+    accounts: [[RNBridge.WalletAccount]] = [],
     expirationDate: Date? = nil
   ) {
     let version = Bundle.main
@@ -68,7 +68,7 @@ struct ProfileModel: Codable, Equatable {
     lastUpdated: Date,
     version: String,
     wallets: [UserManager.StoreUser],
-    accounts: [RNBridge.WalletAccount]?,
+    accounts: [[RNBridge.WalletAccount]],
     expirationDate: Date?
   ) {
     self.uid = uid
@@ -93,13 +93,15 @@ struct ProfileModel: Codable, Equatable {
   let wallets: [UserManager.StoreUser]
   let expirationDate: Date?
 
-  var accounts: [RNBridge.WalletAccount]? = []
+  var accounts: [[RNBridge.WalletAccount]] = []
 
 
   // MARK: - Equatable
 
   static func == (lhs: ProfileModel, rhs: ProfileModel) -> Bool {
-    lhs.uid == rhs.uid && lhs.accounts?.count == rhs.accounts?.count
+    let lhsCount = lhs.accounts.reduce(0) { $0 + $1.count }
+    let rhsCount = rhs.accounts.reduce(0) { $0 + $1.count }
+    return lhs.uid == rhs.uid && lhsCount == rhsCount
   }
 
   func replace(with users: [UserManager.StoreUser]) -> ProfileModel {
@@ -150,7 +152,7 @@ struct ProfileModel: Codable, Equatable {
     )
   }
 
-  func updatingAccounts(to newAccounts: [RNBridge.WalletAccount]) -> ProfileModel {
+  func updatingAccounts(to newAccounts: [[RNBridge.WalletAccount]]) -> ProfileModel {
     ProfileModel(
       uid: uid,
       username: username,
@@ -189,17 +191,14 @@ struct ProfileModel: Codable, Equatable {
 extension ProfileModel {
 
   var amountDes: String {
-    let totalFlow = (accounts ?? []).reduce(0.0) { result, account in
+    let totalFlow = accounts.flatMap { $0 }.reduce(0.0) { result, account in
       result + (account.balance?.doubleValue ?? 0)
     }
     return totalFlow.formatDisplayFlowBalance
   }
 
   var accountDes: String {
-    let count = accounts?.filter ({ !$0.isHidden }).count
-    guard let count else {
-      return ""
-    }
+    let count = accounts.flatMap { $0 }.filter { !$0.isHidden }.count
     return "\(count) Accounts"
   }
 }
