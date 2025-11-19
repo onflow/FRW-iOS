@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AccountHeaderView: View {
-  @State var account: RNBridge.WalletAccount
+  @Binding var account: RNBridge.WalletAccount
   var parentAccount: RNBridge.WalletAccount?
 
 
@@ -60,38 +60,47 @@ struct AccountHeaderView: View {
 }
 
 #Preview {
-  AccountHeaderView(account: RNBridge.WalletAccount(
-    id: "1",
-    name: "Panda",
-    address: "0x8888888888888ab",
-    emojiInfo: RNBridge.EmojiInfo(
-      emoji: "🐼",
+  struct PreviewWrapper: View {
+    @State private var account = RNBridge.WalletAccount(
+      id: "1",
       name: "Panda",
-      color: "#D6D6D6"
-    ),
-    parentEmoji: nil,
-    parentAddress: nil,
-    avatar: nil,
-    isActive: true,
-    type: .evm,
-    balance: "550.66",
-    nfts: nil
-  ), parentAccount: RNBridge.WalletAccount(
-    id: "5",
-    name: "EVM Account",
-    address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    emojiInfo: RNBridge.EmojiInfo(
-      emoji: "⚡",
-      name: "EVM",
-      color: "#627EEA"
-    ),
-    parentEmoji: nil,
-    parentAddress: nil,
-    avatar: nil,
-    isActive: false,
-    type: .evm,
-    balance: "1.23",
-    nfts: nil
-  )
-  )
+      address: "0x8888888888888ab",
+      emojiInfo: RNBridge.EmojiInfo(
+        emoji: "🐼",
+        name: "Panda",
+        color: "#D6D6D6"
+      ),
+      parentEmoji: nil,
+      parentAddress: nil,
+      avatar: nil,
+      isActive: true,
+      type: .evm,
+      balance: "550.66",
+      nfts: nil
+    )
+
+    let parentAccount = RNBridge.WalletAccount(
+      id: "5",
+      name: "EVM Account",
+      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      emojiInfo: RNBridge.EmojiInfo(
+        emoji: "⚡",
+        name: "EVM",
+        color: "#627EEA"
+      ),
+      parentEmoji: nil,
+      parentAddress: nil,
+      avatar: nil,
+      isActive: false,
+      type: .evm,
+      balance: "1.23",
+      nfts: nil
+    )
+
+    var body: some View {
+      AccountHeaderView(account: $account, parentAccount: parentAccount)
+    }
+  }
+
+  return PreviewWrapper()
 }

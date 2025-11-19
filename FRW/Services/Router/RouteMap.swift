@@ -506,7 +506,7 @@ extension RouteMap.Profile: RouterTarget {
           navi.push(content: AccountListView())
         case .account(let account, let parent):
           if account.type == .main {
-            navi.push(content: CadenceAccountView(account: account, parent: parent))
+            navi.push(content: AccountDetailView(account: account, parentAccount: parent))
           }
         }
     }

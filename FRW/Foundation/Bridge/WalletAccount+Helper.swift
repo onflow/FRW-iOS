@@ -7,6 +7,34 @@
 
 import Foundation
 
+// MARK: - Equatable Conformance
+
+extension RNBridge.EmojiInfo: Equatable {
+  public static func == (lhs: RNBridge.EmojiInfo, rhs: RNBridge.EmojiInfo) -> Bool {
+    lhs.emoji == rhs.emoji &&
+    lhs.name == rhs.name &&
+    lhs.color == rhs.color
+  }
+}
+
+extension RNBridge.WalletAccount: Equatable {
+  public static func == (lhs: RNBridge.WalletAccount, rhs: RNBridge.WalletAccount) -> Bool {
+    lhs.id == rhs.id &&
+    lhs.name == rhs.name &&
+    lhs.address == rhs.address &&
+    lhs.emojiInfo == rhs.emojiInfo &&
+    lhs.parentEmoji == rhs.parentEmoji &&
+    lhs.parentAddress == rhs.parentAddress &&
+    lhs.avatar == rhs.avatar &&
+    lhs.isActive == rhs.isActive &&
+    lhs.type == rhs.type &&
+    lhs.balance == rhs.balance &&
+    lhs.nfts == rhs.nfts
+  }
+}
+
+// MARK: - Helper Extensions
+
 extension RNBridge.WalletAccount {
 
   func copyWith(flow: String? = nil, nft: String? = nil) -> RNBridge.WalletAccount {
@@ -29,7 +57,7 @@ extension RNBridge.WalletAccount {
     let addr = address.addHexPrefix()
     let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
     return RNBridge.WalletAccount(
-      id: UUID().uuidString,
+      id: self.id, // Preserve original ID instead of generating new UUID
       name: user.name,
       address: addr,
       emojiInfo: user.toRNEmoji(),

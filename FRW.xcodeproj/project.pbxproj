@@ -1530,6 +1530,8 @@
 		4E77CE072ECC96DF00C2C628 /* AccountOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE052ECC96DF00C2C628 /* AccountOptionView.swift */; };
 		4E77CE092ECC993800C2C628 /* AccountStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE082ECC993800C2C628 /* AccountStyle.swift */; };
 		4E77CE0A2ECC993800C2C628 /* AccountStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE082ECC993800C2C628 /* AccountStyle.swift */; };
+		4E77CE202ECD7BE900C2C628 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */; };
+		4E77CE212ECD7BE900C2C628 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */; };
 		4E7918462B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918472B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918492B21518300DA832F /* BackupMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918482B21518300DA832F /* BackupMultiViewModel.swift */; };
@@ -3150,6 +3152,7 @@
 		4E77CE022ECC8C5100C2C628 /* AccountAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAddressView.swift; sourceTree = "<group>"; };
 		4E77CE052ECC96DF00C2C628 /* AccountOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountOptionView.swift; sourceTree = "<group>"; };
 		4E77CE082ECC993800C2C628 /* AccountStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStyle.swift; sourceTree = "<group>"; };
+		4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
 		4E7918452B214EEF00DA832F /* BackupMultiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiView.swift; sourceTree = "<group>"; };
 		4E7918482B21518300DA832F /* BackupMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiViewModel.swift; sourceTree = "<group>"; };
 		4E7DD2602858E74600052B21 /* FRWAPI+NFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+NFT.swift"; sourceTree = "<group>"; };
@@ -6613,6 +6616,7 @@
 				4E77CDF42ECC780400C2C628 /* ViewModels */,
 				4EFBF91C2EC5B2C5009964E1 /* AccountListView.swift */,
 				4E77CDF12ECC77FF00C2C628 /* CadenceAccountView.swift */,
+				4E77CE1F2ECD7BE900C2C628 /* AccountDetailView.swift */,
 			);
 			path = AccountList;
 			sourceTree = "<group>";
@@ -8757,6 +8761,7 @@
 				15D6D8E928CB45BA00CBA152 /* DOFavoriteButtonView.swift in Sources */,
 				4E8E3F7E2D82A1C8000916A6 /* NFTSearchView.swift in Sources */,
 				15DC217927819C56000B187A /* VModal.swift in Sources */,
+				4E77CE212ECD7BE900C2C628 /* AccountDetailView.swift in Sources */,
 				4E9621D62B984EF3006859AD /* CadenceManager.swift in Sources */,
 				15DC21A127819C56000B187A /* UIKitTextFieldRepresentable.swift in Sources */,
 				15D874EB28C629430072C6EA /* FirebaseAPI.swift in Sources */,
@@ -9824,6 +9829,7 @@
 				15C58B4E2868A4EE00BD4FC6 /* UIKitTextFieldRepresentable.swift in Sources */,
 				4E8E3F7D2D82A1C8000916A6 /* NFTSearchView.swift in Sources */,
 				15D874EA28C629430072C6EA /* FirebaseAPI.swift in Sources */,
+				4E77CE202ECD7BE900C2C628 /* AccountDetailView.swift in Sources */,
 				4E9621D52B984EF3006859AD /* CadenceManager.swift in Sources */,
 				15C58B4F2868A4EE00BD4FC6 /* VSquareButtonModel.swift in Sources */,
 				15C58B502868A4EE00BD4FC6 /* MMCQ.swift in Sources */,

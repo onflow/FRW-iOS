@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import Combine
 
 enum AccountHideType {
   case none
@@ -17,21 +17,25 @@ enum AccountHideType {
 class AccountListViewModel: ObservableObject {
   
   @Published var allAccounts: [[RNBridge.WalletAccount]] = []
-  
+  private var cancelSets = Set<AnyCancellable>()
   
   init() {
-    Task {
-      do {
-        let result = try await fetchAccounts()
-        await MainActor.run {
-          allAccounts =  result
-        }
-      } catch {
-        log.error("fetch account failed. \(error)")
+    ProfileManager.shared.$currentProfile
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] profile in
+        self?.updateAccounts(profile: profile)
       }
-    }
+      .store(in: &cancelSets)
   }
-  
+
+  private func updateAccounts(profile: ProfileModel?) {
+    guard let list = profile?.accounts else {
+      return
+    }
+    
+
+  }
+
   private func fetchAccounts() async throws -> [[RNBridge.WalletAccount]] {
     do {
       let wallet =  await WalletManager.shared

@@ -9,27 +9,15 @@ import SwiftUI
 
 // MARK: - CadenceAccountView
 
-struct CadenceAccountView: RouteableView {
-    // MARK: Lifecycle
-
-    init(account: RNBridge.WalletAccount, parent:RNBridge.WalletAccount? ) {
-      self.account = account
-      self.parentAccount = parent
-    }
-  // MARK: Private
+struct CadenceAccountView: View {
 
   @StateObject private var vm = WalletSettingViewModel()
   @State var isHidden = false
-  @State private var showAccountEditor = false
-
-    // MARK: Internal
-  @State var account: RNBridge.WalletAccount
-  @State var parentAccount: RNBridge.WalletAccount?
+  // MARK: Internal
+  @Binding var account: RNBridge.WalletAccount
+  @Binding var showAccountEditor: Bool
   private let radius: CGFloat = 16
 
-  var title: String {
-        "account".localized.capitalized
-    }
 
     var isSecureEnclave: Bool {
         WalletManager.shared.keyProvider?.keyType == .secureEnclave
@@ -46,7 +34,7 @@ struct CadenceAccountView: RouteableView {
                   Button {
                     showAccountEditor.toggle()
                   } label: {
-                    AccountHeaderView(account: account, parentAccount: parentAccount)
+                    AccountHeaderView(account: $account, parentAccount: nil)
                       .cornerRadius(radius)
                   }
                   .buttonStyle(ScaleButtonStyle())
@@ -120,22 +108,7 @@ struct CadenceAccountView: RouteableView {
                 }
             }
         }
-        .padding(.horizontal, 18)
-        .backgroundFill(.LL.background)
-        .applyRouteable(self)
         .tracedView(self)
-        .popup(isPresented: $showAccountEditor) {
-          WalletAccountEditor(address: account.address) {
-            onReload()
-            showAccountEditor = false
-          }
-        } customize: {
-            $0
-                .closeOnTap(false)
-                .closeOnTapOutside(true)
-                .backgroundColor(.black.opacity(0.4))
-        }
-
     }
 
     func onReload() {
