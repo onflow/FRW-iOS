@@ -1538,6 +1538,8 @@
 		4E77CE272ECDDC5B00C2C628 /* COAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */; };
 		4E77CE292ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */; };
 		4E77CE2A2ECDDCB500C2C628 /* EOAAccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */; };
+		4E77CE2C2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE2B2ECE1B1B00C2C628 /* AccountShowView.swift */; };
+		4E77CE2D2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E77CE2B2ECE1B1B00C2C628 /* AccountShowView.swift */; };
 		4E7918462B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918472B214EEF00DA832F /* BackupMultiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918452B214EEF00DA832F /* BackupMultiView.swift */; };
 		4E7918492B21518300DA832F /* BackupMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7918482B21518300DA832F /* BackupMultiViewModel.swift */; };
@@ -3162,6 +3164,7 @@
 		4E77CE222ECDD78200C2C628 /* LinkedAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedAccountDetailView.swift; sourceTree = "<group>"; };
 		4E77CE252ECDDC5B00C2C628 /* COAAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COAAccountDetailView.swift; sourceTree = "<group>"; };
 		4E77CE282ECDDCB500C2C628 /* EOAAccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOAAccountDetailView.swift; sourceTree = "<group>"; };
+		4E77CE2B2ECE1B1B00C2C628 /* AccountShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountShowView.swift; sourceTree = "<group>"; };
 		4E7918452B214EEF00DA832F /* BackupMultiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiView.swift; sourceTree = "<group>"; };
 		4E7918482B21518300DA832F /* BackupMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupMultiViewModel.swift; sourceTree = "<group>"; };
 		4E7DD2602858E74600052B21 /* FRWAPI+NFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FRWAPI+NFT.swift"; sourceTree = "<group>"; };
@@ -6246,6 +6249,7 @@
 				4E77CDF92ECC7A4000C2C628 /* AccountHeaderView.swift */,
 				4E77CE022ECC8C5100C2C628 /* AccountAddressView.swift */,
 				4E77CE052ECC96DF00C2C628 /* AccountOptionView.swift */,
+				4E77CE2B2ECE1B1B00C2C628 /* AccountShowView.swift */,
 				4E77CE082ECC993800C2C628 /* AccountStyle.swift */,
 			);
 			path = Views;
@@ -9360,6 +9364,7 @@
 				4E9D62AE2EB4B431000BAA4E /* WalletAvatarView.swift in Sources */,
 				4EE6FA8D2B196B16006A827B /* Dictionary+Add.swift in Sources */,
 				4EC31183284508F200F711F5 /* NFTListView.swift in Sources */,
+				4E77CE2C2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */,
 				4EDEA76C2C904F0300DE76B6 /* ErrorStatus.swift in Sources */,
 				154866F128D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */,
 				4E6ED48C2BA9258D009906A5 /* EVMAccountManager.swift in Sources */,
@@ -10431,6 +10436,7 @@
 				4E9D62AF2EB4B431000BAA4E /* WalletAvatarView.swift in Sources */,
 				4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */,
 				15C58C3B2868A4EE00BD4FC6 /* NFTListView.swift in Sources */,
+				4E77CE2D2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */,
 				4EDEA76B2C904F0300DE76B6 /* ErrorStatus.swift in Sources */,
 				154866F028D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */,
 				4E6ED48B2BA9258D009906A5 /* EVMAccountManager.swift in Sources */,

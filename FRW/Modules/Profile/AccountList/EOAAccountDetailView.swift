@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EOAAccountDetailView: View {
   @Binding var account: RNBridge.WalletAccount
+  var profile: ProfileModel
   @Binding var parentAccount: RNBridge.WalletAccount?
   @Binding var showAccountEditor: Bool
   @State var isShow = true
@@ -79,9 +80,7 @@ struct EOAAccountDetailView: View {
                 }
               }
 
-              AccountOptionView(title: "show_account_title".localized, style: .toggle, isOn: isShow) { toggle in
-                log.info("---")
-              }
+              AccountShowView(address: account.address, uid: profile.uid)
                 .cornerRadius(radius)
             }
         }

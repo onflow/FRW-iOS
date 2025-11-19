@@ -11,12 +11,15 @@ import SwiftUI
 
 struct CadenceAccountView: View {
 
-  @StateObject private var vm = WalletSettingViewModel()
-  @State var isShow = true
+
   // MARK: Internal
   @Binding var account: RNBridge.WalletAccount
+  var profile: ProfileModel
   @Binding var showAccountEditor: Bool
+  @State var isShow = true
+  
   private let radius: CGFloat = 16
+  @StateObject private var vm = WalletSettingViewModel()
 
 
     var isSecureEnclave: Bool {
@@ -91,9 +94,7 @@ struct CadenceAccountView: View {
                         .cornerRadius(radius)
                   }
                   
-                  AccountOptionView(title: "show_account_title".localized, style: .toggle, isOn: isShow) { toggle in
-                    log.info("---")
-                  }
+                  AccountShowView(address: account.address, uid: profile.uid)
                     .cornerRadius(radius)
 
 

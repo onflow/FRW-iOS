@@ -18,7 +18,8 @@ class AccountListViewModel: ObservableObject {
   
   @Published var allAccounts: [[RNBridge.WalletAccount]] = []
   private var cancelSets = Set<AnyCancellable>()
-  
+  private var uid: String?
+
   init() {
     ProfileManager.shared.$currentProfile
       .receive(on: DispatchQueue.main)
@@ -26,6 +27,7 @@ class AccountListViewModel: ObservableObject {
         self?.updateAccounts(profile: profile)
       }
       .store(in: &cancelSets)
+    uid = ProfileManager.shared.currentProfile?.uid
   }
 
   private func updateAccounts(profile: ProfileModel?) {
@@ -42,9 +44,21 @@ class AccountListViewModel: ObservableObject {
     }
   }
   
-  func hideType(with account: [RNBridge.WalletAccount]) -> AccountHideType {
-    //TODO:
-    return .hidden
+  func hideType(with accounts: [RNBridge.WalletAccount]) -> AccountHideType {
+    guard let mainAccount = accounts.first(where: { $0.type == .main || $0.type == .eoa }),
+          let uid
+    else {
+      return .none
+    }
+    let result = LocalUserDefaults.shared.isAddressHidden(mainAccount.address, for: uid)
+    return result ? .hidden : .visible
   }
-  
+
+  func showAddress(at address: String) {
+    guard let uid else {
+      return
+    }
+    LocalUserDefaults.shared.removeHiddenAddress(address, for: uid)
+  }
+
 }

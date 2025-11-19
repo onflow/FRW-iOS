@@ -13,13 +13,14 @@ struct AccountDetailView: RouteableView {
     }
 
     @State var account: RNBridge.WalletAccount
+    var profile: ProfileModel
     @State var parentAccount: RNBridge.WalletAccount?
     @State private var showAccountEditor = false
 
     var body: some View {
       VStack {
         if account.type == .main {
-          CadenceAccountView(account: $account, showAccountEditor: $showAccountEditor)
+          CadenceAccountView(account: $account, profile: profile, showAccountEditor: $showAccountEditor)
         }
         if account.type == .child {
           LinkedAccountDetailView(account: $account, parentAccount: $parentAccount, showAccountEditor: $showAccountEditor)
@@ -30,6 +31,7 @@ struct AccountDetailView: RouteableView {
         if account.type == .eoa {
           EOAAccountDetailView(
             account: $account,
+            profile: profile,
             parentAccount: $parentAccount,
             showAccountEditor: $showAccountEditor
           )

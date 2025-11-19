@@ -22,7 +22,9 @@ struct AccountListView: RouteableView {
             ForEach(0..<viewModel.allAccounts.count, id:\.self) { index in
               let list = viewModel.allAccounts[index]
               let type = viewModel.hideType(with: list)
-              AccountInfoCard(list: list, hideType: type)
+              AccountInfoCard(list: list, hideType: type) { address in
+                viewModel.showAddress(at: address)
+              }
             }
             .padding(.horizontal, 18)
             .padding(.top, 12)
@@ -37,12 +39,13 @@ struct AccountListView: RouteableView {
 struct AccountInfoCard: View {
   let list:[RNBridge.WalletAccount]
   var hideType: AccountHideType = .none
-  
+  var onClickHidden: ((String)->())? = nil
+
   var body: some View {
     VStack {
       ForEach(0..<list.count, id:\.self) { index in
         let account = list[index]
-        AccountInfoView(account: account,parent: parent() ,hideType: hideType)
+        AccountInfoView(account: account,parent: parent() ,hideType: hideType, onClickHidden: onClickHidden)
       }
     }
     .padding(18)
@@ -59,6 +62,7 @@ struct AccountInfoView: View {
   let account: RNBridge.WalletAccount
   let parent: RNBridge.WalletAccount?
   var hideType: AccountHideType = .none
+  var onClickHidden: ((String)->())? = nil
 
   var allowShowEye: Bool {
     !isActivity && (account.type == .main || account.type == .eoa)
@@ -114,7 +118,7 @@ struct AccountInfoView: View {
               .foregroundStyle(Color.Theme.Text.black8)
         }
         Spacer()
-        if allowShowEye {
+        if allowShowEye && hideType == .hidden {
           Button {
             onShowAction()
           } label: {
@@ -160,11 +164,14 @@ struct AccountInfoView: View {
   }
 
   func onShowAction() {
-
+    onClickHidden?(account.address)
   }
 
   func onClick() {
-    Router.route(to: RouteMap.Profile.account(account, parent))
+    guard let profile = ProfileManager.shared.currentProfile else {
+      return
+    }
+    Router.route(to: RouteMap.Profile.account(account, parent, profile))
   }
 }
 
