@@ -60,13 +60,11 @@ extension SideMenuView {
                     .foregroundStyle(Color.Theme.Text.black3)
                     .frame(height: 20)
 
-              if let balance = account.account.balance {
-                  Text(balance)
-                      .font(.inter(size: 12))
-                      .lineLimit(1)
-                      .truncationMode(.middle)
-                      .foregroundStyle(Color.Theme.Text.black8)
-              }
+              Text(account.account.displayBalance)
+                  .font(.inter(size: 12))
+                  .lineLimit(1)
+                  .truncationMode(.middle)
+                  .foregroundStyle(Color.Theme.Text.black8)
             }
             Spacer()
 

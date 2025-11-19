@@ -18,14 +18,14 @@ struct AccountListView: RouteableView {
     var body: some View {
       VStack(spacing: 0) {
         ScrollView(showsIndicators: false){
-          LazyVStack {
+          LazyVStack(spacing: 10) {
             ForEach(0..<viewModel.allAccounts.count, id:\.self) { index in
               let list = viewModel.allAccounts[index]
               let type = viewModel.hideType(with: list)
               AccountInfoCard(list: list, hideType: type)
             }
             .padding(.horizontal, 18)
-            .padding(.top, 10)
+            .padding(.top, 12)
           }
           Spacer()
         }
