@@ -28,6 +28,14 @@ class AccountListViewModel: ObservableObject {
       }
       .store(in: &cancelSets)
     uid = ProfileManager.shared.currentProfile?.uid
+
+    // Listen for hidden addresses changes
+    NotificationCenter.default.publisher(for: .hiddenAddressesDidChanged)
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] _ in
+        self?.onHiddenAddressesChanged()
+      }
+      .store(in: &cancelSets)
   }
 
   private func updateAccounts(profile: ProfileModel?) {
@@ -59,6 +67,11 @@ class AccountListViewModel: ObservableObject {
       return
     }
     LocalUserDefaults.shared.removeHiddenAddress(address, for: uid)
+  }
+
+  private func onHiddenAddressesChanged() {
+    // Trigger view update to refresh hide/show states
+    objectWillChange.send()
   }
 
 }

@@ -79,6 +79,7 @@ struct AccountInfoView: View {
               .resizable()
               .frame(width: 20, height: 20)
               .padding(.leading, 18)
+              .padding(.trailing, 10)
           }
           WalletAvatarView(
             emoji: .init(name: account.emojiInfo?.emoji),

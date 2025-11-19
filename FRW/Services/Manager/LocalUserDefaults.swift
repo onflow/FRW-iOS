@@ -495,6 +495,7 @@ extension LocalUserDefaults {
             profileAddresses.append(address)
             addresses[profileId] = profileAddresses
             hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
         }
     }
 
@@ -503,15 +504,20 @@ extension LocalUserDefaults {
         var addresses = hiddenAddresses
         guard var profileAddresses = addresses[profileId] else { return }
 
+        let originalCount = profileAddresses.count
         profileAddresses.removeAll { $0 == address }
 
-        if profileAddresses.isEmpty {
-            addresses.removeValue(forKey: profileId)
-        } else {
-            addresses[profileId] = profileAddresses
-        }
+        // Only update and notify if something was actually removed
+        if profileAddresses.count != originalCount {
+            if profileAddresses.isEmpty {
+                addresses.removeValue(forKey: profileId)
+            } else {
+                addresses[profileId] = profileAddresses
+            }
 
-        hiddenAddresses = addresses
+            hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
+        }
     }
 
     // Toggle hidden state for an address
@@ -526,7 +532,12 @@ extension LocalUserDefaults {
     // Clear all hidden addresses for a specific profile
     func clearHiddenAddresses(for profileId: String) {
         var addresses = hiddenAddresses
-        addresses.removeValue(forKey: profileId)
-        hiddenAddresses = addresses
+
+        // Only update and notify if the profile had hidden addresses
+        if addresses[profileId] != nil {
+            addresses.removeValue(forKey: profileId)
+            hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
+        }
     }
 }

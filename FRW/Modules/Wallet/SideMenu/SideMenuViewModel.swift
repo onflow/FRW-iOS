@@ -44,11 +44,25 @@ class SideMenuViewModel: ObservableObject {
         .sink { [weak self] account in
           self?.refreshAccount(address: account.hexAddr)
         }.store(in: &cancellableSet)
+
+      // Listen for hidden addresses changes
+      NotificationCenter.default.publisher(for: .hiddenAddressesDidChanged)
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] _ in
+          self?.onHiddenAddressesChanged()
+        }
+        .store(in: &cancellableSet)
     }
 
     private func refreshProfile(profile: ProfileModel) {
       allAccounts = profile.accounts.map({ list in
-        list.map { SideMenuItem(account: $0, isHidden: $0.isHidden) }
+        list.map { account in
+          // Check if manually hidden via LocalUserDefaults
+          let isManuallyHidden = LocalUserDefaults.shared.isAddressHidden(account.address, for: profile.uid)
+          // Combine with original isHidden logic (balance/NFT based)
+          let isHidden = account.isHidden || isManuallyHidden
+          return SideMenuItem(account: account, isHidden: isHidden)
+        }
       })
     }
 
@@ -77,6 +91,12 @@ class SideMenuViewModel: ObservableObject {
     func onClickEnableEVM() {
         NotificationCenter.default.post(name: .toggleSideMenu)
         Router.route(to: RouteMap.Wallet.enableEVM)
+    }
+
+    private func onHiddenAddressesChanged() {
+        // Refresh hidden states for all accounts
+        guard let profile = ProfileManager.shared.currentProfile else { return }
+        refreshProfile(profile: profile)
     }
 
 }
