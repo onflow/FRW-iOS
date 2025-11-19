@@ -59,23 +59,29 @@ struct AccountInfoView: View {
   let account: RNBridge.WalletAccount
   let parent: RNBridge.WalletAccount?
   var hideType: AccountHideType = .none
-  
+
+  var allowShowEye: Bool {
+    !isActivity && (account.type == .main || account.type == .eoa)
+  }
+
   var body: some View {
     Button {
       onClick()
     } label: {
-      HStack(spacing: 8) {
-        if account.type != .main && (account.parentAddress != nil) {
-          Image("account_link_mark")
-            .resizable()
-            .frame(width: 20, height: 20)
-            .padding(.leading, 18)
+      HStack(spacing: 12) {
+        HStack(spacing: 0) {
+          if account.type != .main && (account.parentAddress != nil) {
+            Image("account_link_mark")
+              .resizable()
+              .frame(width: 20, height: 20)
+              .padding(.leading, 18)
+          }
+          WalletAvatarView(
+            emoji: .init(name: account.emojiInfo?.emoji),
+            avatar: account.avatar,
+            showBorder: isActivity
+          )
         }
-        WalletAvatarView(
-          emoji: .init(name: account.emojiInfo?.emoji),
-          avatar: account.avatar,
-          showBorder: isActivity
-        )
         
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
@@ -83,7 +89,7 @@ struct AccountInfoView: View {
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundStyle(Color.Theme.Text.black8)
                     .frame(height: 22)
-              if account.type == .main {
+              if allowShowEye {
                 hideView
               }
               if account.type == .eoa {
@@ -108,7 +114,17 @@ struct AccountInfoView: View {
               .foregroundStyle(Color.Theme.Text.black8)
         }
         Spacer()
-        
+        if allowShowEye {
+          Button {
+            onShowAction()
+          } label: {
+            Image("icon_eye_close")
+              .resizable()
+              .renderingMode(.template)
+              .foregroundStyle(Color.Theme.Text.black3)
+              .frame(width: 24, height: 24)
+          }
+        }
         Image("icon_arrow_right_28")
             .resizable()
             .renderingMode(.template)
@@ -127,10 +143,12 @@ struct AccountInfoView: View {
       if hideType == .visible {
         Image("icon_eye_13")
           .resizable()
+          .renderingMode(.template)
+          .foregroundStyle(Color.Brain.Core.icons)
           .frame(width: 13, height: 13)
       }
       if hideType == .hidden {
-        Text("(\("hidden".localized)")
+        Text("(\("hidden".localized))")
           .font(.inter(size:14))
           .foregroundStyle(Color.Brain.Text.secondary)
       }
@@ -141,20 +159,12 @@ struct AccountInfoView: View {
     WalletManager.shared.selectedAccount?.hexAddr == account.address
   }
 
+  func onShowAction() {
+
+  }
+
   func onClick() {
     Router.route(to: RouteMap.Profile.account(account, parent))
-//    switch account.type {
-//    case .main:
-//      Router.route(to: RouteMap.Profile.account(account, parent))
-//    case .child:
-//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-//    case .evm:
-//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-//    case .eoa:
-//      Router.route(to: RouteMap.Profile.walletSetting(true, account.address))
-//    case .none:
-//      break
-//    }
   }
 }
 

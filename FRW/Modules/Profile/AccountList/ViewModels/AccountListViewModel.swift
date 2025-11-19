@@ -44,7 +44,7 @@ class AccountListViewModel: ObservableObject {
   
   func hideType(with account: [RNBridge.WalletAccount]) -> AccountHideType {
     //TODO:
-    return .visible
+    return .hidden
   }
   
 }
