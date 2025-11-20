@@ -34,8 +34,8 @@ struct AccountRow: View {
   private var accountCardContent: some View {
     let content = HStack(spacing: 12) {
       WalletAvatarView(
-        emoji: provider.account.displayInfo.emoji,
-        avatar: provider.account.displayInfo.avatar,
+        emoji: provider.account.user?.emoji,
+        avatar: provider.account.childInfo?.avatar,
         showBorder: provider.account.isActive
       )
       accountInfo
@@ -82,7 +82,7 @@ struct AccountRow: View {
   }
   
   private var nameView: some View {
-    Text(provider.account.displayInfo.name)
+    Text(provider.account.displayName)
       .font(.inter(size: 14, weight: .semibold))
       .lineLimit(1)
       .foregroundColor(.Brain.Text.primary)
@@ -114,8 +114,8 @@ struct AccountRow: View {
     HStack(spacing: 4) {
       ForEach(provider.linkAccounts) { child in
         WalletAvatarView(
-          emoji: child.displayInfo.emoji,
-          avatar: child.displayInfo.avatar,
+          emoji: child.user?.emoji,
+          avatar: child.childInfo?.avatar,
           size: .small
         )
       }

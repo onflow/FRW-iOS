@@ -82,15 +82,15 @@ struct AccountInfoView: View {
               .padding(.trailing, 10)
           }
           WalletAvatarView(
-            emoji: account.displayInfo.emoji,
-            avatar: account.displayInfo.avatar,
+            emoji: account.user?.emoji,
+            avatar: account.childInfo?.avatar,
             showBorder: isActivity
           )
         }
         
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-              Text(account.displayInfo.name)
+              Text(account.displayName)
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundStyle(Color.Theme.Text.black8)
                     .frame(height: 22)

@@ -10,31 +10,6 @@ import Flow
 
 // MARK: - WalletAccount
 
-/// Native iOS wallet account model
-///
-/// # Architecture
-/// This type represents wallet accounts in the native iOS layer. It provides:
-/// - Type-safe account types with Swift enums
-/// - Proper optional handling for parent relationships
-/// - Asset loading state management
-/// - Full Equatable, Identifiable, Hashable conformance
-///
-/// # Migration from RNBridge.WalletAccount (Phase 1-4 Complete)
-/// The entire iOS native layer now uses `WalletAccount` instead of `RNBridge.WalletAccount`.
-/// Conversions to/from `RNBridge.WalletAccount` happen only at React Native boundaries via `.toRNBridge()`.
-/// See `PHASE-4-CLEANUP-SUMMARY.md` for complete migration details and architecture validation.
-///
-/// # Usage
-/// - **iOS Native Layer**: Use `WalletAccount` for ViewModels, Views, and business logic
-/// - **RN Bridge Layer**: Convert with `.toRNBridge()` when passing to React Native
-/// - **From RN**: Convert with `.toNativeAccount(network:)` when receiving from React Native
-///
-/// # Related Files
-/// - `WalletAccount+FlowWalletKit.swift`: Conversions from FlowWalletKit types
-/// - `WalletAccount+Bridge.swift`: Bidirectional RN bridge conversions
-/// - `WalletAccount+Helpers.swift`: Native helper methods (copyWith, updatedFromEmoji)
-/// - `ProfileModel`: Uses `[[WalletAccount]]` for account storage
-/// - `PHASE-4-CLEANUP-SUMMARY.md`: Migration summary and architecture documentation
 struct WalletAccount: Codable {
     // MARK: - Core Identity
 
@@ -53,7 +28,8 @@ struct WalletAccount: Codable {
     // MARK: - Display Information
 
     /// User-customizable display info
-    let displayInfo: DisplayInfo
+    let user: WalletUser?
+    let childInfo: ChildInfo?
 
     /// Parent account relationship (for linked accounts)
     let parent: ParentInfo?
@@ -68,17 +44,16 @@ struct WalletAccount: Codable {
 
     // MARK: - Nested Types
 
-    /// Account display customization
-    struct DisplayInfo: Codable {
-        let name: String
-        let emoji: WalletEmoji?
-        let avatar: String?  // URL string for child accounts with custom avatars
-    }
-
     /// Parent account information for linked accounts
     struct ParentInfo: Codable {
         let address: String
         let emoji: WalletEmoji
+    }
+
+    struct ChildInfo: Codable {
+      let avatar: String?
+      let name: String?
+      let desc: String?
     }
 
     /// Asset data with loading state
@@ -134,6 +109,12 @@ extension WalletAccount {
         return balance.formatDisplayFlowBalance
     }
 
+    var displayName: String {
+      if type == .child {
+        return childInfo?.name ?? ""
+      }
+      return user?.name ?? ""
+    }
     /// Whether assets are ready for display (COA accounts)
     var assetsReady: Bool {
         assets.isReady
@@ -147,8 +128,7 @@ extension WalletAccount: Equatable {
         lhs.id == rhs.id &&
         lhs.address == rhs.address &&
         lhs.type == rhs.type &&
-        lhs.network == rhs.network &&
-        lhs.isActive == rhs.isActive
+        lhs.network == rhs.network
         // Note: Assets and display info can change without changing identity
     }
 }
@@ -175,7 +155,6 @@ extension WalletAccount.AccountType {
 
 extension WalletAccount: Hashable {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
         hasher.combine(address)
         hasher.combine(type)
     }

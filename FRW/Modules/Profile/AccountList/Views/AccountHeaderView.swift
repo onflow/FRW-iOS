@@ -11,16 +11,15 @@ import Kingfisher
 struct AccountHeaderView: View {
   @Binding var account: WalletAccount
   var parentAccount: WalletAccount?
-  var desc: String? = nil //TODO: Child Account Desc
 
 
   var body: some View {
-    VStack {
+    VStack(spacing: 0) {
       HStack(spacing: 12) {
-        if let emoji = account.displayInfo.emoji {
+        if let emoji = account.user?.emoji {
             emoji.icon(size: 36)
           } else {
-            KFImage.url(URL(string: account.displayInfo.avatar ?? ""))
+            KFImage.url(URL(string: account.childInfo?.avatar ?? ""))
                 .placeholder {
                     Image("placeholder")
                         .resizable()
@@ -32,7 +31,7 @@ struct AccountHeaderView: View {
           }
           VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 2) {
-              Text(account.displayInfo.name)
+              Text(account.displayName)
                 .font(.inter(size: 16, weight: .w600))
                 .foregroundStyle(Color.Theme.Text.black8)
               if account.type == .coa {
@@ -47,7 +46,7 @@ struct AccountHeaderView: View {
                 Image("account_link_mark")
                   .resizable()
                   .frame(width: 14, height: 14)
-                Text(parentAccount.displayInfo.name)
+                Text(parentAccount.displayName)
                   .font(.inter(size: 12))
                   .foregroundStyle(Color.Theme.Text.black8)
               }
@@ -68,18 +67,21 @@ struct AccountHeaderView: View {
         }
         }
         .accountStyle()
-      if let descStr = desc {
+      if let descStr = account.childInfo?.desc {
         Divider()
           .foregroundStyle(Color.Brain.Core.dividers)
-        VStack(alignment: .leading,spacing: 8) {
-          Text("description".localized)
-            .font(.inter(size: 14, weight: .medium))
-            .foregroundStyle(Color.Brain.Text.primary)
-          Text(descStr)
-            .font(.inter(size: 16))
-            .lineLimit(3)
-            .truncationMode(.middle)
-            .foregroundStyle(Color.Brain.Text.secondary)
+        HStack {
+          VStack(alignment: .leading,spacing: 8) {
+            Text("description".localized)
+              .font(.inter(size: 14, weight: .medium))
+              .foregroundStyle(Color.Brain.Text.primary)
+            Text(descStr)
+              .font(.inter(size: 16))
+              .lineLimit(3)
+              .truncationMode(.middle)
+              .foregroundStyle(Color.Brain.Text.secondary)
+          }
+          Spacer()
         }
           .accountStyle()
       }

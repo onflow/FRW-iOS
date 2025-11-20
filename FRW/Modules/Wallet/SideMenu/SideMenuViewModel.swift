@@ -15,6 +15,10 @@ import SwiftUI
 struct SideMenuItem {
   let account: WalletAccount
   var isHidden: Bool = false
+
+  static func mock() -> SideMenuItem {
+    SideMenuItem(account: .mockMain())
+  }
 }
 
 class SideMenuViewModel: ObservableObject {
@@ -25,7 +29,7 @@ class SideMenuViewModel: ObservableObject {
 
     @Published var hasCoa: Bool = true
     @Published var currentAccount: SideMenuItem? = nil
-    @Published var allAccounts: [[SideMenuItem]] = []
+    @Published var allAccounts: [[SideMenuItem]] = [[.mock()],[.mock()],[.mock()]]
     private var cancellableSet = Set<AnyCancellable>()
 
 

@@ -181,6 +181,7 @@ struct SideMenuView: View {
           }
         }
       }
+      .mockPlaceholder(vm.currentAccount == nil)
     }
 
     var bottomMenu: some View {

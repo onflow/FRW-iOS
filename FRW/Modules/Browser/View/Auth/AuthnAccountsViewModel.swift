@@ -39,7 +39,7 @@ final class AuthnAccountsViewModel: ObservableObject {
     onAccountSelected?(account)
     navigateBack()
     // Log the selection for debugging
-    debugPrint("Account selected: \(account.account.displayInfo.name) - \(account.account.address)")
+    debugPrint("Account selected: \(account.account.displayName) - \(account.account.address)")
   }
 
   /// Handle back navigation

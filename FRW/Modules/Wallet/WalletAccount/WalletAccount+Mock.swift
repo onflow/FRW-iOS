@@ -24,16 +24,14 @@ extension WalletAccount {
         balance: Double = 550.66,
         nftCount: Int = 0
     ) -> WalletAccount {
-        WalletAccount(
+        let user = WalletUser(emoji: emoji, address: address)
+        return WalletAccount(
             id: id,
             address: address,
             type: .main,
             network: network,
-            displayInfo: DisplayInfo(
-                name: name,
-                emoji: emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: nil,
             isActive: isActive,
             assets: .loaded(balance: balance, nftCount: nftCount)
@@ -67,16 +65,14 @@ extension WalletAccount {
             assets = .notLoaded
         }
         
+        let user = WalletUser(emoji: emoji, address: address)
         return WalletAccount(
             id: id,
             address: address,
             type: .child,
             network: network,
-            displayInfo: DisplayInfo(
-                name: name,
-                emoji: emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: .init(avatar: "", name: "Child Account", desc: "Dapp Description"),
             parent: parent,
             isActive: isActive,
             assets: assets
@@ -103,16 +99,14 @@ extension WalletAccount {
             parent = nil
         }
         
+        let user = WalletUser(emoji: emoji, address: address)
         return WalletAccount(
             id: id,
             address: address,
             type: .coa,
             network: network,
-            displayInfo: DisplayInfo(
-                name: name,
-                emoji: emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: parent,
             isActive: isActive,
             assets: .loaded(balance: balance, nftCount: nftCount)
@@ -130,16 +124,14 @@ extension WalletAccount {
         balance: Double = 10.5,
         nftCount: Int = 5
     ) -> WalletAccount {
-        WalletAccount(
+        let user = WalletUser(emoji: emoji, address: address)
+        return WalletAccount(
             id: id,
             address: address,
             type: .eoa,
             network: network,
-            displayInfo: DisplayInfo(
-                name: name,
-                emoji: emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: nil,
             isActive: isActive,
             assets: .loaded(balance: balance, nftCount: nftCount)

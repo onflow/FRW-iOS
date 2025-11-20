@@ -24,11 +24,8 @@ extension FlowWalletKit.Account {
             address: addr,
             type: .main,
             network: currentNetwork,
-            displayInfo: WalletAccount.DisplayInfo(
-                name: user.name,
-                emoji: user.emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: nil,
             isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
             assets: .notLoaded
@@ -71,11 +68,8 @@ extension FlowWalletKit.ChildAccount {
             address: addr,
             type: .child,
             network: currentNetwork,
-            displayInfo: WalletAccount.DisplayInfo(
-                name: name ?? "",
-                emoji: .panda,  // Default emoji, child accounts primarily use avatars
-                avatar: icon?.absoluteString
-            ),
+            user: nil,
+            childInfo: .init(avatar: icon?.absoluteString, name: name, desc: description),
             parent: parentInfo,
             isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
             assets: .notLoaded
@@ -112,11 +106,8 @@ extension FlowWalletKit.COA {
             address: addr,
             type: .coa,
             network: currentNetwork,
-            displayInfo: WalletAccount.DisplayInfo(
-                name: user.name,
-                emoji: user.emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: parentInfo,
             isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
             assets: .notLoaded
@@ -145,11 +136,8 @@ extension EOA {
             address: addr,
             type: .eoa,
             network: currentNetwork,
-            displayInfo: WalletAccount.DisplayInfo(
-                name: user.name,
-                emoji: user.emoji,
-                avatar: nil
-            ),
+            user: user,
+            childInfo: nil,
             parent: nil,
             isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
             assets: .notLoaded

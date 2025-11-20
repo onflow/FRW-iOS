@@ -15,9 +15,9 @@ extension WalletAccount {
     /// - Returns: RNBridge.WalletAccount for React Native communication
     func toRNBridge() -> RNBridge.WalletAccount {
         let emojiInfo = RNBridge.EmojiInfo(
-            emoji: displayInfo.emoji.rawValue,
-            name: displayInfo.emoji?.name ?? "",
-            color: displayInfo.emoji?.colorHex ?? ""
+          emoji: user?.emoji.rawValue ?? "",
+            name: user?.emoji.name ?? "",
+            color: user?.emoji.colorHex ?? ""
         )
 
         let parentEmoji: RNBridge.EmojiInfo? = parent.map { parentInfo in
@@ -30,12 +30,12 @@ extension WalletAccount {
 
         return RNBridge.WalletAccount(
             id: id,
-            name: displayInfo.name,
+            name: displayName,
             address: address,
             emojiInfo: emojiInfo,
             parentEmoji: parentEmoji,
             parentAddress: parent?.address,
-            avatar: displayInfo.avatar,
+            avatar: nil, // WalletUser doesn't have avatar, child accounts handle this separately
             isActive: isActive,
             type: type.toRNBridgeType(),
             balance: assets.balance.map { String($0) },
@@ -52,10 +52,9 @@ extension RNBridge.WalletAccount {
     /// - Returns: Native WalletAccount instance
     /// - Note: Asset data defaults to .notLoaded if not provided
     func toNativeAccount(network: Flow.ChainID) -> WalletAccount {
-        let displayInfo = WalletAccount.DisplayInfo(
-            name: name,
-            emoji: WalletEmoji(name: emojiInfo?.emoji),
-            avatar: avatar
+        let user = WalletUser(
+            emoji: WalletEmoji(name: emojiInfo?.emoji) ?? .avocado,
+            address: address
         )
 
         let parentInfo: WalletAccount.ParentInfo? = {
@@ -81,7 +80,8 @@ extension RNBridge.WalletAccount {
             address: address,
             type: type?.toNativeType() ?? .main,
             network: network,
-            displayInfo: displayInfo,
+            user: user,
+            childInfo: nil,
             parent: parentInfo,
             isActive: isActive,
             assets: assetData

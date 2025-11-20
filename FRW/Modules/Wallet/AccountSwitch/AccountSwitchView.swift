@@ -216,8 +216,8 @@ struct AccountSwitchView: View {
                       ForEach(flattenedAccounts.indices, id: \.self) { index in
                         let account = flattenedAccounts[index]
                         WalletAvatarView(
-                          emoji: account.displayInfo.emoji,
-                          avatar: account.displayInfo.avatar,
+                          emoji: account.user?.emoji,
+                          avatar: account.childInfo?.avatar, // WalletUser does not have avatar,
                           size: .small,
                           showBorder: false
                         )

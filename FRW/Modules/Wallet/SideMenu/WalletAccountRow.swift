@@ -27,20 +27,20 @@ extension SideMenuView {
           onClick?(account)
         } label: {
           HStack(spacing: 8) {
-            if account.account.type != .main && (account.account.parent?.address != nil) {
+            if account.account.type != .main && account.account.type != .eoa {
               Image("account_link_mark")
                 .resizable()
                 .frame(width: 20, height: 20)
             }
             WalletAvatarView(
-              emoji: account.account.displayInfo.emoji,
-              avatar: account.account.displayInfo.avatar,
+              emoji: account.account.user?.emoji,
+              avatar: account.account.childInfo?.avatar, // WalletUser doesn't have avatar
               showBorder: isActivity
             )
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
-                  Text(account.account.displayInfo.name)
+                  Text(account.account.displayName)
                         .font(.inter(size: 14, weight: .semibold))
                         .foregroundStyle(Color.Theme.Text.black8)
                         .frame(height: 22)

@@ -11,12 +11,10 @@ struct LinkedAccountDetailView: View {
   @Binding var account: WalletAccount
   @Binding var parentAccount: WalletAccount?
   private let radius: CGFloat = 16
-  var desc: String? = nil
   
-  init(account: Binding<WalletAccount>, parentAccount: Binding<WalletAccount?>, desc: String? = nil) {
+  init(account: Binding<WalletAccount>, parentAccount: Binding<WalletAccount?>) {
     self._account = account
     self._parentAccount = parentAccount
-    self.desc = desc
   }
 
     var body: some View {

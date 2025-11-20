@@ -30,7 +30,8 @@ extension WalletAccount {
       address: address,
       type: type,
       network: network,
-      displayInfo: displayInfo,
+      user: user,
+      childInfo: childInfo,
       parent: parent,
       isActive: isActive,
       assets: newAssets
@@ -42,20 +43,15 @@ extension WalletAccount {
   /// - Returns: New WalletAccount with updated emoji and name
   func updatedFromEmoji(userId: String? = nil) -> WalletAccount {
     let addr = address.addHexPrefix()
-    let user = WalletUser.get(address: addr, userId: userId)
-
-    let newDisplayInfo = DisplayInfo(
-      name: user.name,
-      emoji: user.emoji,
-      avatar: displayInfo.avatar
-    )
+    let newUser = WalletUser.get(address: addr, userId: userId)
 
     return WalletAccount(
       id: id, // Preserve original ID
       address: addr,
       type: type,
       network: network,
-      displayInfo: newDisplayInfo,
+      user: newUser,
+      childInfo: childInfo,
       parent: parent,
       isActive: isActive,
       assets: assets
