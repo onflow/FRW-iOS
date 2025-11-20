@@ -55,15 +55,17 @@ struct AccountHeaderView: View {
           }
 
             Spacer()
-            HStack {
-                Image("icon-edit-child-account")
-                    .resizable()
-                    .renderingMode(.template)
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color.Theme.Text.black3)
-            }
-            .padding(.vertical, 4)
-            .padding(.leading, 4)
+        if account.type != .child {
+          HStack {
+              Image("icon-edit-child-account")
+                  .resizable()
+                  .renderingMode(.template)
+                  .frame(width: 24, height: 24)
+                  .foregroundStyle(Color.Theme.Text.black3)
+          }
+          .padding(.vertical, 4)
+          .padding(.leading, 4)
+        }
         }
         .accountStyle()
       if let descStr = desc {
