@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct COAAccountDetailView: View {
+
   @Binding var account: WalletAccount
   @Binding var parentAccount: WalletAccount?
   @Binding var showAccountEditor: Bool
+  
   private let radius: CGFloat = 16
 
     var body: some View {

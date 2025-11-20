@@ -53,7 +53,7 @@ extension RNBridge.WalletAccount {
     /// - Note: Asset data defaults to .notLoaded if not provided
     func toNativeAccount(network: Flow.ChainID) -> WalletAccount {
         let user = WalletUser(
-            emoji: WalletEmoji(name: emojiInfo?.emoji) ?? .avocado,
+            emoji: WalletEmoji(name: emojiInfo?.emoji),
             address: address
         )
 
@@ -91,7 +91,7 @@ extension RNBridge.WalletAccount {
 
 // MARK: - Account Type Conversion
 
-extension WalletAccount.AccountType {
+extension FWAccount.AccountType {
     /// Convert native account type to RN bridge type
     func toRNBridgeType() -> RNBridge.AccountType {
         switch self {
@@ -106,7 +106,7 @@ extension WalletAccount.AccountType {
 extension RNBridge.AccountType {
     /// Convert RN bridge type to native account type
     /// - Note: Cannot distinguish COA from EOA without parent info
-    func toNativeType() -> WalletAccount.AccountType {
+    func toNativeType() -> FWAccount.AccountType {
         switch self {
         case .main: return .main
         case .child: return .child

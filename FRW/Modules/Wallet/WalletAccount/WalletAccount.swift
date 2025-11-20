@@ -20,7 +20,7 @@ struct WalletAccount: Codable {
     let address: String
 
     /// Account type (main, child, COA, EOA)
-    let type: AccountType
+    let type: FWAccount.AccountType
 
     /// Network the account belongs to
     let network: Flow.ChainID
@@ -78,14 +78,6 @@ struct WalletAccount: Codable {
             return false
         }
     }
-
-    /// Account type classification
-    enum AccountType: String, Codable {
-        case main           // Flow main account
-        case child          // Child account
-        case coa            // Cadence-owned account (EVM linked to Flow)
-        case eoa            // Externally-owned account (standalone EVM)
-    }
 }
 
 // MARK: - Computed Properties
@@ -137,20 +129,6 @@ extension WalletAccount: Equatable {
 
 extension WalletAccount: Identifiable {}
 
-// MARK: - Account Type Helpers
-
-extension WalletAccount.AccountType {
-    /// Whether this account type can have children
-    var canHaveChildren: Bool {
-        self == .main
-    }
-
-    /// Whether this account has a parent
-    var hasParent: Bool {
-        self == .child || self == .coa
-    }
-}
-
 // MARK: - Hashable
 
 extension WalletAccount: Hashable {
@@ -159,10 +137,6 @@ extension WalletAccount: Hashable {
         hasher.combine(type)
     }
 }
-
-// MARK: - Account Type Hashable
-
-extension WalletAccount.AccountType: Hashable {}
 
 // MARK: - AssetData Codable
 

@@ -112,20 +112,6 @@ struct CadenceAccountView: View {
         }
         .tracedView(self)
     }
-
-    func onReload() {
-      ProfileManager.shared.updateAccount(at: account.address)
-      account = account.updatedFromEmoji()
-    }
-
-    func onlyShowInfo() -> Bool {
-//        let list = EVMAccountManager.shared.accounts
-//            .filter { $0.showAddress.lowercased() == address.lowercased() }
-//        return !list.isEmpty
-      return false
-    }
-
-
 }
 
 // MARK: - WalletSettingView_Previews

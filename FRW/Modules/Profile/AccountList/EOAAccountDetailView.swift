@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EOAAccountDetailView: View {
+  
   @Binding var account: WalletAccount
   var profile: ProfileModel
   @Binding var parentAccount: WalletAccount?
