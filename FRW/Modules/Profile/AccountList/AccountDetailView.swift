@@ -56,7 +56,9 @@ struct AccountDetailView: RouteableView {
 
     func onReload() {
       ProfileManager.shared.updateAccount(at: account.address)
-      account = account.updatedFromEmoji()
+      let updatedAccount = account.updatedFromEmoji()
+      account = updatedAccount
+      parentAccount = parentAccount?.updatedFromEmoji()
     }
 }
 

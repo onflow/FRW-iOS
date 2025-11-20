@@ -120,8 +120,8 @@ extension WalletAccount: Equatable {
         lhs.id == rhs.id &&
         lhs.address == rhs.address &&
         lhs.type == rhs.type &&
-        lhs.network == rhs.network
-        // Note: Assets and display info can change without changing identity
+        lhs.network == rhs.network &&
+        lhs.displayName == rhs.displayName
     }
 }
 
@@ -135,6 +135,7 @@ extension WalletAccount: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(address)
         hasher.combine(type)
+        hasher.combine(displayName)
     }
 }
 
