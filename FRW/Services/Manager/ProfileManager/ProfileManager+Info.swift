@@ -11,12 +11,13 @@ extension ProfileManager {
   /// update account by address for current profile
   func updateAccount(at address: String) {
     guard let profile = currentProfile else {
+      log.error("[Profile] not fount current profile")
       return
     }
     // Flatten, update, and preserve grouping structure
     let updatedGroups = profile.accounts.map { group in
       group.map { account in
-        if account.address.uppercased() == address {
+        if account.address.lowercased() == address.lowercased() {
           return account.updatedFromEmoji()
         }
         return account

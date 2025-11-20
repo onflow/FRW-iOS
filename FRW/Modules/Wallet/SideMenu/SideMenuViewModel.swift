@@ -64,6 +64,9 @@ class SideMenuViewModel: ObservableObject {
           return SideMenuItem(account: account, isHidden: isHidden)
         }
       })
+      if let address = currentAccount?.account.address {
+        refreshAccount(address: address)
+      }
     }
 
     private func refreshAccount(address: String?) {
