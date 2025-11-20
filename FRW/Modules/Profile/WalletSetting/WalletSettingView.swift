@@ -14,7 +14,7 @@ struct WalletSettingView: RouteableView {
 
     init(address: String) {
         self.address = address
-        user = WalletManager.shared.walletAccount.readInfo(at: address)
+        user = WalletUser.get(address:  address)
     }
 
     // MARK: Internal
@@ -23,7 +23,7 @@ struct WalletSettingView: RouteableView {
     @State
     var showAccountEditor = false
     @State
-    var user: WalletAccount.User
+    var user: WalletUser
 
     var title: String {
         "account".localized.capitalized
@@ -205,7 +205,7 @@ struct WalletSettingView: RouteableView {
     }
 
     func reload() {
-        user = WalletManager.shared.walletAccount.readInfo(at: address)
+        user = WalletUser.get(address:  address)
         WalletManager.shared.changeNetwork(currentNetwork)
     }
 

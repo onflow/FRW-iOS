@@ -54,7 +54,7 @@ extension RNBridge.WalletAccount {
 
   func updatedFromEmoji(userId: String? = nil) -> RNBridge.WalletAccount {
     let addr = address.addHexPrefix()
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
+    let user = WalletUser.get(address: addr, userId: userId)
     return RNBridge.WalletAccount(
       id: self.id, // Preserve original ID instead of generating new UUID
       name: user.name,

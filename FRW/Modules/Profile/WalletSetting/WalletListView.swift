@@ -11,7 +11,7 @@ import SwiftUI
 
 extension WalletListViewModel {
     struct Item {
-        var user: WalletAccount.User
+        var user: WalletUser
         var address: String
         var balance: String?
         var isEvm: Bool
@@ -29,7 +29,7 @@ class WalletListViewModel: ObservableObject {
     func reload() async {
         mainWallets = []
         if let mainAddress = WalletManager.shared.getPrimaryWalletAddress() {
-            let user = WalletManager.shared.walletAccount.readInfo(at: mainAddress)
+            let user = WalletUser.get(address:  mainAddress)
             let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: mainAddress)
             var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
             
@@ -43,7 +43,7 @@ class WalletListViewModel: ObservableObject {
         }
         multiVMWallets = []
         for account in EVMAccountManager.shared.accounts {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
+            let user = WalletUser.get(address:  account.showAddress)
             let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: account.showAddress)
             var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
             

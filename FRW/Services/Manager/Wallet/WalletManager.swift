@@ -89,8 +89,6 @@ class WalletManager: ObservableObject {
       .synchronizable(false)
       .accessibility(.whenUnlocked)
 
-  var walletAccount = WalletAccount()
-
   @Published
   var walletEntity: FlowWalletKit.Wallet?
 
@@ -115,8 +113,8 @@ class WalletManager: ObservableObject {
     walletEntity?.accounts?[currentNetwork] ?? []
   }
 
-  var walletMetadata: WalletAccount.User {
-    walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
+  var walletMetadata: WalletUser {
+    WalletUser.get(address: selectedAccount?.address.hexAddr ?? "")
   }
 
   var flowToken: TokenModel? {

@@ -298,7 +298,7 @@ class LocalUserDefaults: ObservableObject {
         }
     }
 
-    var walletAccount: [String: [WalletAccount.User]]? {
+    var walletAccount: [String: [WalletUser]]? {
         set {
             if let data = try? JSONEncoder().encode(newValue) {
                 UserDefaults.standard.set(data, forKey: Keys.walletAccountInfo.rawValue)
@@ -309,7 +309,7 @@ class LocalUserDefaults: ObservableObject {
         get {
             if let data = UserDefaults.standard.data(forKey: Keys.walletAccountInfo.rawValue),
                let model = try? JSONDecoder().decode(
-                   [String: [WalletAccount.User]].self,
+                   [String: [WalletUser]].self,
                    from: data
                )
             {

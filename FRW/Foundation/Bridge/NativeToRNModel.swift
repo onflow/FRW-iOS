@@ -11,7 +11,7 @@ import FlowWalletKit
 extension FlowWalletKit.Account {
   func toWalletAccount(userId: String? = nil) -> RNBridge.WalletAccount {
     let addr = address.hexAddr
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
+    let user = WalletUser.get(address: addr, userId: userId)
     return RNBridge.WalletAccount(
       id: UUID().uuidString,
       name: user.name,
@@ -27,9 +27,9 @@ extension FlowWalletKit.Account {
     )
   }
 
-  func walletAccountUser() -> WalletAccount.User {
+  func walletAccountUser() -> WalletUser {
     let addr = address.hexAddr
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr)
+    let user = WalletUser.get(address:  addr)
     return user
   }
 }
@@ -42,7 +42,7 @@ extension FlowWalletKit.ChildAccount {
     let addr = address.hexAddr
     var parentEmoji: RNBridge.EmojiInfo?
     if let parentAddress {
-      let user = WalletManager.shared.walletAccount.readInfo(at: parentAddress, key: userId)
+      let user = WalletUser.get(address:  parentAddress, userId: userId)
       parentEmoji = user.toRNEmoji()
     }
 
@@ -69,10 +69,10 @@ extension FlowWalletKit.COA {
     userId: String? = nil
   ) -> RNBridge.WalletAccount {
     let addr = address.addHexPrefix()
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
+    let user = WalletUser.get(address:  addr, userId: userId)
     var parentEmoji: RNBridge.EmojiInfo?
     if let parentAddress {
-      let parentUser = WalletManager.shared.walletAccount.readInfo(at: parentAddress, key: userId)
+      let parentUser = WalletUser.get(address:  parentAddress, userId: userId)
       parentEmoji = parentUser.toRNEmoji()
     }
     return RNBridge.WalletAccount(
@@ -97,8 +97,8 @@ extension EOA {
     userId: String? = nil
   ) -> RNBridge.WalletAccount {
     let addr = address.addHexPrefix()
-    let user = WalletManager.shared.walletAccount.readInfo(at: addr, key: userId)
-    
+    let user = WalletUser.get(address: addr, userId: userId)
+
     return RNBridge.WalletAccount(
       id: UUID().uuidString,
       name: user.name,
@@ -131,7 +131,7 @@ extension Contact {
   }
 }
 
-extension WalletAccount.User {
+extension WalletUser {
   func toRNEmoji() -> RNBridge.EmojiInfo {
     .init(emoji: emoji.rawValue, name: emoji.name, color: emoji.colorHex)
   }

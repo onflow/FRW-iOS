@@ -17,7 +17,7 @@ struct AccountHeaderView: View {
   var body: some View {
     VStack {
       HStack(spacing: 12) {
-          if let emoji = WalletAccount.Emoji(rawValue: account.emojiInfo?.emoji ?? "") {
+          if let emoji = WalletEmoji(rawValue: account.emojiInfo?.emoji ?? "") {
             emoji.icon(size: 36)
           } else {
             KFImage.url(URL(string: account.avatar ?? ""))

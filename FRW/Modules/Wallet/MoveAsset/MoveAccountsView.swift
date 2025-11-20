@@ -156,7 +156,7 @@ class MoveAccountsViewModel: ObservableObject {
         self.callback = callback
 
         if let primaryAddr = WalletManager.shared.getPrimaryWalletAddress() {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
+          let user = WalletUser.get(address: primaryAddr)
             let contact = Contact(
                 address: primaryAddr,
                 avatar: nil,
@@ -172,7 +172,7 @@ class MoveAccountsViewModel: ObservableObject {
         }
 
         for account in EVMAccountManager.shared.accounts {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
+            let user = WalletUser.get(address: account.showAddress)
             let contact = Contact(
                 address: account.showAddress,
                 avatar: nil,
