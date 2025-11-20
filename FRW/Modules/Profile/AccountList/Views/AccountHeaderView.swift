@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct AccountHeaderView: View {
   @Binding var account: RNBridge.WalletAccount
@@ -18,6 +19,16 @@ struct AccountHeaderView: View {
       HStack(spacing: 12) {
           if let emoji = WalletAccount.Emoji(rawValue: account.emojiInfo?.emoji ?? "") {
             emoji.icon(size: 36)
+          } else {
+            KFImage.url(URL(string: account.avatar ?? ""))
+                .placeholder {
+                    Image("placeholder")
+                        .resizable()
+                }
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 36, height: 36)
+                .cornerRadius(18)
           }
           VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 2) {
