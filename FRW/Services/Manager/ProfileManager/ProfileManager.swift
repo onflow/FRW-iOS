@@ -19,13 +19,10 @@ class ProfileManager: ObservableObject {
   let migrationKey = "profiles_migration_completed_v302"
   
   private init() {
-    #if DEBUG
-//    clearAllProfiles()
-    #endif
-    
-    loadCachedProfiles()
     Task {
       await migrateExistingProfilesIfNeeded()
+      loadCachedProfiles()
+      fetchAllAccountsInfo()
     }
 
   }
@@ -43,7 +40,6 @@ class ProfileManager: ObservableObject {
   private var cancellableSet = Set<AnyCancellable>()
 
   func setup() {
-    fetchAllAccountsInfo()
     UserManager.shared.$activatedUID
       .receive(on: DispatchQueue.main)
       .map { $0 }
@@ -61,7 +57,6 @@ class ProfileManager: ObservableObject {
     }
     do {
       try keychainService.saveProfile(profile)
-      profileCache[profile.uid] = profile
       refreshProfiles()
       log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
     } catch {
@@ -78,7 +73,6 @@ class ProfileManager: ObservableObject {
       }
       do {
         try keychainService.saveProfile(profile)
-        profileCache[profile.uid] = profile
         didSaveAnyProfile = true
         log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
       } catch {
@@ -91,15 +85,9 @@ class ProfileManager: ObservableObject {
   }
 
   func loadProfile(userId: String) -> ProfileModel? {
-    // Check cache first
-    if let cachedProfile = profileCache[userId] {
-      return cachedProfile
-    }
-
     // Load from keychain
     do {
       if let profile = try keychainService.loadProfile(userId: userId) {
-        profileCache[userId] = profile
         return profile
       }
     } catch {
@@ -122,7 +110,6 @@ class ProfileManager: ObservableObject {
   func deleteProfile(userId: String) {
     do {
       try keychainService.deleteProfile(userId: userId)
-      profileCache.removeValue(forKey: userId)
       refreshProfiles()
       log.info("[Profile] Profile deleted successfully for user: \(userId)")
     } catch {
@@ -140,7 +127,6 @@ class ProfileManager: ObservableObject {
   func clearAllProfiles() {
     do {
       try keychainService.clearAllProfiles()
-      profileCache.removeAll()
       DispatchQueue.main.async {
         self.profiles = []
       }
@@ -163,16 +149,12 @@ class ProfileManager: ObservableObject {
   // MARK: Private
 
   private let keychainService = ProfileKeychainService()
-  private var profileCache: [String: ProfileModel] = [:]
 
-  // MARK: - Cache Management
+  // MARK: - Profile Loading
 
   private func loadCachedProfiles() {
     do {
       let allProfiles = try keychainService.getAllProfiles()
-      for profile in allProfiles {
-        profileCache[profile.uid] = profile
-      }
       profiles = allProfiles
       // Check whether the uid of the profile contains a key on keyChain
       for profile in allProfiles {

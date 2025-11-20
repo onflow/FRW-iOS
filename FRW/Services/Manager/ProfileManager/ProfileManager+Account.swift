@@ -14,8 +14,11 @@ extension ProfileManager {
     Task {
       do {
         let accountResult = try await fetchAccounts(profiles: profiles)
+        log.debug("fetch account")
         let BalanceResult = try await fetchFlowAmount(profiles: accountResult)
+        log.debug("fetch balance")
         let result = try await fetchCOANFTs(profiles: BalanceResult)
+        log.debug("fetch coa asset")
         await MainActor.run {
           profiles = result
           updateCurrentProfile()
@@ -29,7 +32,7 @@ extension ProfileManager {
     let supportNetworks: Set<Flow.ChainID> = [currentNetwork]
     var profilesOfAddedAccount: [ProfileModel] = []
     for profile in profiles {
-      guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
+      guard let provider = getKeyProvider(uid: profile.uid) else {
         continue
       }
       var walletAccounts: [[WalletAccount]] = []
@@ -129,4 +132,19 @@ extension ProfileManager {
     return profilesOfAddedBalance
   }
 
+  private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
+    if let provider = try? SecureEnclaveKey.wallet(id: uid),
+       let publicKey = provider.publicKey()?.hexString {
+      return provider
+    }
+
+    if let provider = try? SeedPhraseKey.wallet(id: uid) {
+      return provider
+    }
+
+    if let provider = try? PrivateKey.wallet(id: uid) {
+      return provider
+    }
+    return nil
+  }
 }

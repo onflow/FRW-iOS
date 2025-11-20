@@ -100,7 +100,7 @@ struct AccountInfoView: View {
               if account.type == .eoa {
                 EVMTagView()
               }
-              if account.type == .eoa {
+              if account.type == .coa {
                 COATagView()
               }
             }

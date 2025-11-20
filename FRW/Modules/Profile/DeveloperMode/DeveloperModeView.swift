@@ -430,6 +430,18 @@ struct DeveloperModeView: RouteableView {
                                   copyProfile()
                                   HUD.success(title: "done.")
                               }
+
+                              HStack {
+                                Text("Clear All Profiles (DEBUG)")
+                                  .foregroundColor(.red)
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                ProfileManager.shared.clearAllProfiles()
+                                      HUD.success(title: "All profiles cleared")
+                              }
                               //MARK: -
 //                              HStack {
 //                                Text("Delete SE on Keychain")
