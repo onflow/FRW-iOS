@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct EOAAccountDetailView: View {
-  
+
   @Binding var account: WalletAccount
   var profile: ProfileModel
-  @Binding var parentAccount: WalletAccount?
   @Binding var showAccountEditor: Bool
   @State var isShow = true
 
@@ -32,7 +31,7 @@ struct EOAAccountDetailView: View {
               Button {
                 showAccountEditor.toggle()
               } label: {
-                AccountHeaderView(account: $account, parentAccount: parentAccount)
+                AccountHeaderView(account: $account)
                   .cornerRadius(radius)
               }
 

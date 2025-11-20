@@ -37,7 +37,7 @@ struct CadenceAccountView: View {
                   Button {
                     showAccountEditor.toggle()
                   } label: {
-                    AccountHeaderView(account: $account, parentAccount: nil)
+                    AccountHeaderView(account: $account)
                       .cornerRadius(radius)
                   }
                   .buttonStyle(ScaleButtonStyle())

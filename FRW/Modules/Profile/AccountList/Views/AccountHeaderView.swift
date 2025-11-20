@@ -9,9 +9,8 @@ import SwiftUI
 import Kingfisher
 
 struct AccountHeaderView: View {
-  @Binding var account: WalletAccount
-  var parentAccount: WalletAccount?
 
+  @Binding var account: WalletAccount
 
   var body: some View {
     VStack(spacing: 0) {
@@ -41,12 +40,12 @@ struct AccountHeaderView: View {
                 EVMTagView()
               }
             }
-            if let parentAccount {
+            if let parentAccount = account.parent {
               HStack(spacing: 3) {
                 Image("account_link_mark")
                   .resizable()
                   .frame(width: 14, height: 14)
-                Text(parentAccount.displayName)
+                Text(parentAccount.emoji.name)
                   .font(.inter(size: 12))
                   .foregroundStyle(Color.Theme.Text.black8)
               }
@@ -96,7 +95,7 @@ struct AccountHeaderView: View {
     let parentAccount = WalletAccount.mockMain()
 
     var body: some View {
-      AccountHeaderView(account: $account, parentAccount: parentAccount)
+      AccountHeaderView(account: $account)
     }
   }
 

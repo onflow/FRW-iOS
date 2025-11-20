@@ -10,9 +10,8 @@ import SwiftUI
 struct COAAccountDetailView: View {
 
   @Binding var account: WalletAccount
-  @Binding var parentAccount: WalletAccount?
   @Binding var showAccountEditor: Bool
-  
+
   private let radius: CGFloat = 16
 
     var body: some View {
@@ -22,7 +21,7 @@ struct COAAccountDetailView: View {
               Button {
                 showAccountEditor.toggle()
               } label: {
-                AccountHeaderView(account: $account, parentAccount: parentAccount)
+                AccountHeaderView(account: $account)
                   .cornerRadius(radius)
               }
 

@@ -23,16 +23,15 @@ struct AccountDetailView: RouteableView {
           CadenceAccountView(account: $account, profile: profile, showAccountEditor: $showAccountEditor)
         }
         if account.type == .child {
-          LinkedAccountDetailView(account: $account, parentAccount: $parentAccount)
+          LinkedAccountDetailView(account: $account)
         }
         if account.type == .coa {
-          COAAccountDetailView(account: $account, parentAccount: $parentAccount, showAccountEditor: $showAccountEditor)
+          COAAccountDetailView(account: $account, showAccountEditor: $showAccountEditor)
         }
         if account.type == .eoa {
           EOAAccountDetailView(
             account: $account,
             profile: profile,
-            parentAccount: $parentAccount,
             showAccountEditor: $showAccountEditor
           )
         }
