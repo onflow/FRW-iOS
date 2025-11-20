@@ -39,7 +39,7 @@ final class AuthnAccountsViewModel: ObservableObject {
     onAccountSelected?(account)
     navigateBack()
     // Log the selection for debugging
-    debugPrint("Account selected: \(account.account.name) - \(account.account.address)")
+    debugPrint("Account selected: \(account.account.displayInfo.name) - \(account.account.address)")
   }
 
   /// Handle back navigation
@@ -61,63 +61,15 @@ extension AuthnAccountsViewModel {
   /// Create a mock view model for previews and testing
   static func mock() -> AuthnAccountsViewModel {
     let selectedAccount = AuthnAccountProvider(
-      account: RNBridge.WalletAccount(
-        id: "1",
-        name: "Panda",
-        address: "0x8888888888888ab",
-        emojiInfo: RNBridge.EmojiInfo(
-          emoji: "🐼",
-          name: "Panda",
-          color: "#D6D6D6"
-        ),
-        parentEmoji: nil,
-        parentAddress: nil,
-        avatar: nil,
-        isActive: true,
-        type: .main,
-        balance: "550.66",
-        nfts: nil
-      ),
+      account: .mockMain(),
       linkAccounts: []
     )
 
     let compatibleAccounts = [
       AuthnAccountProvider(
-        account: RNBridge.WalletAccount(
-          id: "2",
-          name: "Fox",
-          address: "0x0c666c888d8fb259",
-          emojiInfo: RNBridge.EmojiInfo(
-            emoji: "🦊",
-            name: "Fox",
-            color: "#FFD787"
-          ),
-          parentEmoji: nil,
-          parentAddress: nil,
-          avatar: nil,
-          isActive: false,
-          type: .main,
-          balance: "550.66",
-          nfts: nil
-        ),
+        account: .mockMain(),
         linkAccounts: [
-          RNBridge.WalletAccount(
-            id: "3",
-            name: "Penguin",
-            address: "0x123456",
-            emojiInfo: RNBridge.EmojiInfo(
-              emoji: "🐧",
-              name: "Penguin",
-              color: "#FFCB6C"
-            ),
-            parentEmoji: nil,
-            parentAddress: nil,
-            avatar: nil,
-            isActive: false,
-            type: .child,
-            balance: nil,
-            nfts: nil
-          )
+          .mockChild()
         ]
       )
     ]

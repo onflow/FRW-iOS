@@ -100,12 +100,9 @@ struct AuthnAccountsView: View {
 #Preview {
   // Create mock ViewModel
   let viewModel = AuthnAccountsViewModel.mock()
-
-
   viewModel.onAccountSelected = { account in
-    print("Selected account: \(account.account.name)")
   }
 
   return AuthnAccountsView(viewModel: viewModel)
-    .background(Color.black)
+          .background(Color.black)
 }

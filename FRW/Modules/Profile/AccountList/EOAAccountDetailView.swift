@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct EOAAccountDetailView: View {
-  @Binding var account: RNBridge.WalletAccount
+  @Binding var account: WalletAccount
   var profile: ProfileModel
-  @Binding var parentAccount: RNBridge.WalletAccount?
+  @Binding var parentAccount: WalletAccount?
   @Binding var showAccountEditor: Bool
   @State var isShow = true
 

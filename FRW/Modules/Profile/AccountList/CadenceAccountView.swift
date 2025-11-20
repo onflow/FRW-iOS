@@ -13,7 +13,7 @@ struct CadenceAccountView: View {
 
 
   // MARK: Internal
-  @Binding var account: RNBridge.WalletAccount
+  @Binding var account: WalletAccount
   var profile: ProfileModel
   @Binding var showAccountEditor: Bool
   @State var isShow = true

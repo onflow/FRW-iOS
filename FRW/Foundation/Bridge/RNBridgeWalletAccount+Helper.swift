@@ -79,9 +79,6 @@ extension RNBridge.WalletAccount {
     case .child:
       return .child
     case .evm:
-      if parentAddress == nil {
-        return .eoa
-      }
       return .coa
     case .eoa:
       return .eoa

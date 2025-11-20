@@ -37,7 +37,7 @@ struct AccountListView: RouteableView {
 }
 
 struct AccountInfoCard: View {
-  let list:[RNBridge.WalletAccount]
+  let list:[WalletAccount]
   var hideType: AccountHideType = .none
   var onClickHidden: ((String)->())? = nil
 
@@ -53,14 +53,14 @@ struct AccountInfoCard: View {
     .cornerRadius(16)
   }
 
-  func parent() -> RNBridge.WalletAccount? {
+  func parent() -> WalletAccount? {
     list.first { $0.type == .main }
   }
 }
 
 struct AccountInfoView: View {
-  let account: RNBridge.WalletAccount
-  let parent: RNBridge.WalletAccount?
+  let account: WalletAccount
+  let parent: WalletAccount?
   var hideType: AccountHideType = .none
   var onClickHidden: ((String)->())? = nil
 
@@ -74,7 +74,7 @@ struct AccountInfoView: View {
     } label: {
       HStack(spacing: 12) {
         HStack(spacing: 0) {
-          if account.type != .main && (account.parentAddress != nil) {
+          if account.type != .main && (account.parent?.address != nil) {
             Image("account_link_mark")
               .resizable()
               .frame(width: 20, height: 20)
@@ -82,15 +82,15 @@ struct AccountInfoView: View {
               .padding(.trailing, 10)
           }
           WalletAvatarView(
-            emoji: .init(name: account.emojiInfo?.emoji),
-            avatar: account.avatar,
+            emoji: account.displayInfo.emoji,
+            avatar: account.displayInfo.avatar,
             showBorder: isActivity
           )
         }
         
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-              Text(account.name)
+              Text(account.displayInfo.name)
                     .font(.inter(size: 14, weight: .semibold))
                     .foregroundStyle(Color.Theme.Text.black8)
                     .frame(height: 22)
@@ -100,7 +100,7 @@ struct AccountInfoView: View {
               if account.type == .eoa {
                 EVMTagView()
               }
-              if account.type == .evm {
+              if account.type == .eoa {
                 COATagView()
               }
             }

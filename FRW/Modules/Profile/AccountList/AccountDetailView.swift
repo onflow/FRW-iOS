@@ -12,9 +12,9 @@ struct AccountDetailView: RouteableView {
         "account".localized.capitalized
     }
 
-    @State var account: RNBridge.WalletAccount
+    @State var account: WalletAccount
     var profile: ProfileModel
-    @State var parentAccount: RNBridge.WalletAccount?
+    @State var parentAccount: WalletAccount?
     @State private var showAccountEditor = false
 
     var body: some View {
@@ -25,7 +25,7 @@ struct AccountDetailView: RouteableView {
         if account.type == .child {
           LinkedAccountDetailView(account: $account, parentAccount: $parentAccount)
         }
-        if account.type == .evm {
+        if account.type == .coa {
           COAAccountDetailView(account: $account, parentAccount: $parentAccount, showAccountEditor: $showAccountEditor)
         }
         if account.type == .eoa {

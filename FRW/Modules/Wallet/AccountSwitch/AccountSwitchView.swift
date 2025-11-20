@@ -213,11 +213,11 @@ struct AccountSwitchView: View {
                 if !flattenedAccounts.isEmpty {
                   ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 0) {
-                      ForEach(0..<flattenedAccounts.count, id: \.self) { index in
+                      ForEach(flattenedAccounts.indices, id: \.self) { index in
                         let account = flattenedAccounts[index]
                         WalletAvatarView(
-                          emoji: .init(name: account.emojiInfo?.emoji),
-                          avatar: account.avatar,
+                          emoji: account.displayInfo.emoji,
+                          avatar: account.displayInfo.avatar,
                           size: .small,
                           showBorder: false
                         )

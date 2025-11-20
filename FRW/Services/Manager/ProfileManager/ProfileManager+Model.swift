@@ -21,7 +21,7 @@ struct ProfileModel: Codable, Equatable {
     createdAt: Date = Date(),
     lastUpdated: Date = Date(),
     wallets: [UserManager.StoreUser] = [],
-    accounts: [[RNBridge.WalletAccount]] = [],
+    accounts: [[WalletAccount]] = [],
     expirationDate: Date? = nil
   ) {
     let version = Bundle.main
@@ -68,7 +68,7 @@ struct ProfileModel: Codable, Equatable {
     lastUpdated: Date,
     version: String,
     wallets: [UserManager.StoreUser],
-    accounts: [[RNBridge.WalletAccount]],
+    accounts: [[WalletAccount]],
     expirationDate: Date?
   ) {
     self.uid = uid
@@ -92,8 +92,7 @@ struct ProfileModel: Codable, Equatable {
   let version: String
   let wallets: [UserManager.StoreUser]
   let expirationDate: Date?
-
-  var accounts: [[RNBridge.WalletAccount]] = []
+  let accounts: [[WalletAccount]]
 
 
   // MARK: - Equatable
@@ -152,7 +151,7 @@ struct ProfileModel: Codable, Equatable {
     )
   }
 
-  func updatingAccounts(to newAccounts: [[RNBridge.WalletAccount]]) -> ProfileModel {
+  func updatingAccounts(to newAccounts: [[WalletAccount]]) -> ProfileModel {
     ProfileModel(
       uid: uid,
       username: username,
@@ -191,8 +190,9 @@ struct ProfileModel: Codable, Equatable {
 extension ProfileModel {
 
   var amountDes: String {
-    let totalFlow = accounts.flatMap { $0 }.reduce(0.0) { result, account in
-      result + (account.balance?.doubleValue ?? 0)
+    let list = accounts.flatMap { $0 }
+    let totalFlow = list.reduce(0.0) { result, account in
+      result + (account.assets.balance ?? 0)
     }
     return totalFlow.formatDisplayFlowBalance
   }

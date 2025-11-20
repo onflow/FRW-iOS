@@ -402,7 +402,7 @@ extension RouteMap {
         case wallpaper
         case secureEnclavePrivateKey
         case accountList
-        case account(RNBridge.WalletAccount,RNBridge.WalletAccount?, ProfileModel)
+        case account(WalletAccount, WalletAccount?, ProfileModel)
     }
 }
 

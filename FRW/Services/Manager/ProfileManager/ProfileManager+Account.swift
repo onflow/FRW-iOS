@@ -32,7 +32,7 @@ extension ProfileManager {
       guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
         continue
       }
-      var walletAccounts: [[RNBridge.WalletAccount]] = []
+      var walletAccounts: [[WalletAccount]] = []
       let walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
       try? await walletEntity.fetchAccount()
       guard let accountList =  walletEntity.accounts?[currentNetwork] else {
@@ -40,7 +40,7 @@ extension ProfileManager {
       }
       if let eoas = walletEntity.eoaAddress {
         let result = Array(eoas).compactMap {
-          EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: nil, userId: profile.uid)
+          EOA($0, network: currentNetwork)?.toWalletAccount(userId: profile.uid)
         }
         walletAccounts.append(contentsOf: [result])
       }
@@ -57,8 +57,8 @@ extension ProfileManager {
     return profilesOfAddedAccount
   }
 
-  private func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
-    var list: [RNBridge.WalletAccount] = []
+  private func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [WalletAccount] {
+    var list: [WalletAccount] = []
     try? await account.fetchAccount()
     list.append(account.toWalletAccount(userId: userId))
     if let linked = account.coa {
@@ -85,7 +85,7 @@ extension ProfileManager {
         group.map { account in
           var newAccount = account
           if let amount = result[account.address] {
-            newAccount = account.copyWith(flow: String(amount.doubleValue))
+            newAccount = account.copyWith(balance: amount.doubleValue)
           }
           return newAccount
         }
@@ -98,7 +98,7 @@ extension ProfileManager {
 
   private func fetchCOANFTs(profiles: [ProfileModel]) async throws -> [ProfileModel] {
     let addresses = profiles.flatMap { profile in
-      profile.accounts.flatMap { $0 }.compactMap { ($0.type == .evm ? $0.address : nil) }
+      profile.accounts.flatMap { $0 }.compactMap { ($0.type == .coa ? $0.address : nil) }
     }
     let token = await EVMTokenBalanceProvider()
     var countForCOA: [String: Int] = [:]
@@ -115,9 +115,9 @@ extension ProfileManager {
       let updatedGroups = profile.accounts.map { group in
         group.map { account in
           var newAccount = account
-          if newAccount.type == .evm {
+          if newAccount.type == .coa {
             if let amount = countForCOA[account.address], amount > 0 {
-              newAccount = account.copyWith(nft: String(amount))
+              newAccount = account.copyWith(nftCount: amount)
             }
           }
           return newAccount

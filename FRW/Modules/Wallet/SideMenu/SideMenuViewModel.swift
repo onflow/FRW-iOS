@@ -13,7 +13,7 @@ import SwiftUI
 // MARK: - SideMenuViewModel
 
 struct SideMenuItem {
-  let account:RNBridge.WalletAccount
+  let account: WalletAccount
   var isHidden: Bool = false
 }
 

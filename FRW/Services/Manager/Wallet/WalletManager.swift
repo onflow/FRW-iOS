@@ -400,7 +400,7 @@ extension WalletManager {
     }
   }
   
-  func switchSelectedAccount(_ selectingAccount: RNBridge.WalletAccount) {
+  func switchSelectedAccount(_ selectingAccount: WalletAccount) {
     UIFeedbackGenerator.impactOccurred(.selectionChanged)
     guard let fwAddress = FWAddressDector.create(address: selectingAccount.address) else {
       HUD.error(WalletError.invaildAddress)
@@ -423,7 +423,7 @@ extension WalletManager {
         }
       case .coa, .child:
         if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
-          account.hexAddr == selectingAccount.parentAddress
+          account.hexAddr == selectingAccount.parent?.address
         }) {
           mainAccount = account
           loadLinkedAccounts()

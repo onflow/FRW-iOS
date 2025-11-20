@@ -15,8 +15,8 @@ enum AccountHideType {
 }
 
 class AccountListViewModel: ObservableObject {
-  
-  @Published var allAccounts: [[RNBridge.WalletAccount]] = []
+
+  @Published var allAccounts: [[WalletAccount]] = []
   private var cancelSets = Set<AnyCancellable>()
   private var uid: String?
 
@@ -52,7 +52,7 @@ class AccountListViewModel: ObservableObject {
     }
   }
   
-  func hideType(with accounts: [RNBridge.WalletAccount]) -> AccountHideType {
+  func hideType(with accounts: [WalletAccount]) -> AccountHideType {
     guard let mainAccount = accounts.first(where: { $0.type == .main || $0.type == .eoa }),
           let uid
     else {
