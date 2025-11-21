@@ -25,7 +25,7 @@ struct COAAccountDetailView: View {
                   .cornerRadius(radius)
               }
 
-              AccountAddressView(address: account.address)
+              AccountAddressView(account: account)
                 .cornerRadius(radius)
 
             }

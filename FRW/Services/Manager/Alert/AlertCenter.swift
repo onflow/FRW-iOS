@@ -194,6 +194,14 @@ extension AlertCenter {
       self?.cancel()
     })
     _ = await presentCustom(content: AnyView(view), actions: [])
+  }
 
+  func presentCOACopy(address: String) async {
+    let view = EVMCopyAlertView(address: address) { [weak self] in
+      self?.resolve(selection: "agree")
+    } onCancel: { [weak self] in
+      self?.cancel()
+    }
+    _ = await presentCustom(content: AnyView(view), actions: [])
   }
 }
