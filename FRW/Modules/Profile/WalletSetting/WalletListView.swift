@@ -42,19 +42,19 @@ class WalletListViewModel: ObservableObject {
             mainWallets.append(mainWallet)
         }
         multiVMWallets = []
-        for account in EVMAccountManager.shared.accounts {
-            let user = WalletUser.get(address:  account.showAddress)
-            let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: account.showAddress)
-            var balanceStr = balance?.doubleValue.formatDisplayFlowBalance
-            
-            let model = WalletListViewModel.Item(
-                user: user,
-                address: account.showAddress,
-                balance: balanceStr,
-                isEvm: true
-            )
-            multiVMWallets.append(model)
-        }
+      if let addr = await WalletManager.shared.coa?.address {
+        let user = WalletUser.get(address:  addr)
+        let balance = try? await TokenBalanceHandler.shared.getAvailableFlowBalance(address: addr)
+        let balanceStr = balance?.doubleValue.formatDisplayFlowBalance
+
+        let model = WalletListViewModel.Item(
+            user: user,
+            address: addr,
+            balance: balanceStr,
+            isEvm: true
+        )
+        multiVMWallets.append(model)
+      }
     }
 
     func addAccount() {

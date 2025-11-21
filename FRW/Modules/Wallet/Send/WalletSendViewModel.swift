@@ -95,24 +95,21 @@ class WalletSendViewModel: ObservableObject {
             )
             ownAccountList.append(contract)
         }
-
-        if WalletManager.shared.isSelectedEVMAccount == false,
-           let emvAddr = EVMAccountManager.shared.accounts.first?.showAddress {}
-
-        for account in EVMAccountManager.shared.accounts {
-            let evmAddr = account.showAddress
-            let user = WalletUser.get(address:  evmAddr)
-            let contract = Contact(
-                address: evmAddr,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: nil,
-                user: user
-            )
-            linkedWalletList.append(contract)
+      
+        if let account = WalletManager.shared.coa {
+          let evmAddr = account.address
+          let user = WalletUser.get(address:  evmAddr)
+          let contract = Contact(
+              address: evmAddr,
+              avatar: nil,
+              contactName: nil,
+              contactType: .user,
+              domain: nil,
+              id: UUID().hashValue,
+              username: nil,
+              user: user
+          )
+          linkedWalletList.append(contract)
         }
 
         for account in ChildAccountManager.shared.childAccounts {

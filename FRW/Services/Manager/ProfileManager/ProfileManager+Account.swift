@@ -148,3 +148,41 @@ extension ProfileManager {
     return nil
   }
 }
+
+//MARK: - refresh Current Profile
+extension ProfileManager {
+  /// Refresh the current profile's accounts by fetching latest data
+  /// This updates account balances, COA assets, and child accounts
+  func refreshCurrentProfileAccounts() async {
+    guard let currentProfile = currentProfile else {
+      log.warning("[Profile] No current profile to refresh")
+      return
+    }
+
+    do {
+      log.debug("[Profile] Starting refresh for current profile: \(currentProfile.uid)")
+
+      // Fetch updated account information for current profile only
+      let accountResult = try await fetchAccounts(profiles: [currentProfile])
+      log.debug("[Profile] Fetched account data")
+
+      let balanceResult = try await fetchFlowAmount(profiles: accountResult)
+      log.debug("[Profile] Fetched balance data")
+
+      let result = try await fetchCOANFTs(profiles: balanceResult)
+      log.debug("[Profile] Fetched COA assets")
+
+      // Update the profile in the main profiles array
+      await MainActor.run {
+        if let index = profiles.firstIndex(where: { $0.uid == currentProfile.uid }) {
+          profiles[index] = result.first ?? currentProfile
+          updateCurrentProfile()
+          saveProfile(result.first ?? currentProfile)
+          log.info("[Profile] Successfully refreshed current profile accounts")
+        }
+      }
+    } catch {
+      log.error("[Profile] Failed to refresh current profile accounts: \(error)")
+    }
+  }
+}

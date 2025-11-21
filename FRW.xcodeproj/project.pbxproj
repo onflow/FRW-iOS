@@ -1500,8 +1500,6 @@
 		4E6736A22E83DF38000AD4FD /* ProfileManager+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */; };
 		4E6736A42E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
 		4E6736A52E83DF6D000AD4FD /* ProfileManager+Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */; };
-		4E6ED48B2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
-		4E6ED48C2BA9258D009906A5 /* EVMAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */; };
 		4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED4912BAA79F6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */; };
@@ -3158,7 +3156,6 @@
 		4E67369D2E83DF16000AD4FD /* ProfileManager+Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Model.swift"; sourceTree = "<group>"; };
 		4E6736A02E83DF38000AD4FD /* ProfileManager+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Error.swift"; sourceTree = "<group>"; };
 		4E6736A32E83DF6D000AD4FD /* ProfileManager+Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileManager+Store.swift"; sourceTree = "<group>"; };
-		4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAccountManager.swift; sourceTree = "<group>"; };
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -5857,7 +5854,6 @@
 				6A46754928F2D50500F705A8 /* DBManager.swift */,
 				6A998DA82936769000EF133B /* StakingManager.swift */,
 				6A18DDFB2A3B10F5003232AB /* ChildAccountManager.swift */,
-				4E6ED48A2BA9258D009906A5 /* EVMAccountManager.swift */,
 				6ADC280B2A651AFD003B0B3A /* PushHandler.swift */,
 				4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */,
 				4EC626082AE8A28100318720 /* UUIDManager.swift */,
@@ -9402,7 +9398,6 @@
 				4E77CE2C2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */,
 				4EDEA76C2C904F0300DE76B6 /* ErrorStatus.swift in Sources */,
 				154866F128D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */,
-				4E6ED48C2BA9258D009906A5 /* EVMAccountManager.swift in Sources */,
 				4EDEA7692C9044E800DE76B6 /* PKWallet+Add.swift in Sources */,
 				154866ED28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */,
 			);
@@ -10481,7 +10476,6 @@
 				4E77CE2D2ECE1B1B00C2C628 /* AccountShowView.swift in Sources */,
 				4EDEA76B2C904F0300DE76B6 /* ErrorStatus.swift in Sources */,
 				154866F028D0EEF000D012B8 /* FlowTransactionTemplate.swift in Sources */,
-				4E6ED48B2BA9258D009906A5 /* EVMAccountManager.swift in Sources */,
 				4EDEA7682C9044E800DE76B6 /* PKWallet+Add.swift in Sources */,
 				154866EC28D0ECE400D012B8 /* FlixAuditEndpoint.swift in Sources */,
 			);

@@ -276,27 +276,7 @@ class LocalUserDefaults: ObservableObject {
         }
     }
 
-    var selectedEVMAccount: EVMAccountManager.Account? {
-        set {
-            if let value = newValue, let data = try? JSONEncoder().encode(value) {
-                UserDefaults.standard.set(data, forKey: Keys.selectedEVMAccount.rawValue)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Keys.selectedEVMAccount.rawValue)
-            }
-        }
-        get {
-            if let data = UserDefaults.standard.data(forKey: Keys.selectedEVMAccount.rawValue),
-               let model = try? JSONDecoder().decode(
-                   EVMAccountManager.Account.self,
-                   from: data
-               )
-            {
-                return model
-            } else {
-                return nil
-            }
-        }
-    }
+    
 
     var walletAccount: [String: [WalletUser]]? {
         set {

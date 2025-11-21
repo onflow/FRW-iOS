@@ -87,7 +87,6 @@ final class WalletViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.refreshButtonState()
                 self?.reloadWalletData()
-                self?.updateMoveAsset()
             }.store(in: &cancelSets)
 
         WalletManager.shared.$activatedCoins
@@ -147,17 +146,10 @@ final class WalletViewModel: ObservableObject {
 
         refreshButtonState()
 
-        EVMAccountManager.shared.$accounts
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refreshButtonState()
-                self?.updateMoveAsset()
-            }.store(in: &cancelSets)
         ChildAccountManager.shared.$childAccounts
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshButtonState()
-                self?.updateMoveAsset()
             }.store(in: &cancelSets)
     }
 
@@ -190,8 +182,6 @@ final class WalletViewModel: ObservableObject {
     @Published
     var showBuyButton: Bool = true
 
-    @Published
-    var showMoveAsset: Bool = false
 
     var needShowPlaceholder: Bool {
         isMock || walletState == .noAddress
@@ -264,11 +254,6 @@ final class WalletViewModel: ObservableObject {
         backupTipsShown = false
     }
 
-    private func updateMoveAsset() {
-        log.info("[Home] update move asset status")
-        showMoveAsset = EVMAccountManager.shared.accounts.count > 0 || !ChildAccountManager.shared
-            .childAccounts.isEmpty
-    }
 }
 
 // MARK: - Action

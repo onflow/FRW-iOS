@@ -7,6 +7,47 @@
 
 import Foundation
 
+
+//MARK: - Coa Enable
+
+extension WalletManager {
+  func enableCOA() async throws {
+    guard let address = getPrimaryWalletAddress() else {
+      throw EVMError.addressError
+    }
+    do {
+        let tid = try await FlowNetwork.createEVM()
+        let result = try await tid.onceSealed()
+        if result.isFailed {
+            log.error("[EVM] create EVM result: Failed")
+            EventTrack.General
+                .coaCreation(
+                    txId: tid.description,
+                    flowAddress: address,
+                    message: result.errorMessage
+                )
+            throw EVMError.createAccount
+        } else {
+            EventTrack.General
+                .coaCreation(
+                    txId: tid.description,
+                    flowAddress: address,
+                    message: ""
+                )
+        }
+    } catch {
+        EventTrack.General
+            .coaCreation(
+                txId: "",
+                flowAddress: address,
+                message: error.localizedDescription
+            )
+        throw error
+    }
+  }
+}
+
+//MARK: -  fetch coa asset
 struct AssetAmount {
   let address: String
   var flow: Decimal?

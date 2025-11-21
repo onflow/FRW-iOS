@@ -210,9 +210,7 @@ struct WalletSettingView: RouteableView {
     }
 
     func onlyShowInfo() -> Bool {
-        let list = EVMAccountManager.shared.accounts
-            .filter { $0.showAddress.lowercased() == address.lowercased() }
-        return !list.isEmpty
+      return WalletManager.shared.coa?.address.lowercased() == address.lowercased()
     }
 
     // MARK: Private
