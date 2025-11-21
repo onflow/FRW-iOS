@@ -53,7 +53,7 @@ class AuthnViewModel: ObservableObject {
     // Flatten 2D array before filtering
     let flattenedAccounts = profile.accounts.flatMap { $0 }
     let eoaAccount = flattenedAccounts.filter { $0.type == .eoa }
-    let coaAccount = flattenedAccounts.filter { $0.type == .coa && $0.parent?.address == mainAddress && !$0.isHidden }
+    let coaAccount = flattenedAccounts.filter { $0.type == .coa && $0.parent?.address == mainAddress }
     let eoa = eoaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
     accounts.append(contentsOf: eoa)
     let coa = coaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
