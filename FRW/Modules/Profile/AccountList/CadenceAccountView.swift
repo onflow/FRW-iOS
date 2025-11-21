@@ -42,7 +42,7 @@ struct CadenceAccountView: View {
                   }
                   .buttonStyle(ScaleButtonStyle())
 
-                  AccountAddressView(address: account.address)
+                  AccountAddressView(account: account)
                     .cornerRadius(radius)
 
                   if !isSecureEnclave {

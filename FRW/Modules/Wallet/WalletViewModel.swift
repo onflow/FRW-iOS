@@ -182,6 +182,8 @@ final class WalletViewModel: ObservableObject {
     @Published
     var showBuyButton: Bool = true
 
+    @Published
+    var walletAccount: WalletAccount? = nil
 
     var needShowPlaceholder: Bool {
         isMock || walletState == .noAddress
@@ -217,7 +219,7 @@ final class WalletViewModel: ObservableObject {
 
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
-        var filter = WalletManager.shared.filterToken.hideTokens
+        let filter = WalletManager.shared.filterToken.hideTokens
         for token in WalletManager.shared.activatedCoins {
             guard !filter.contains(token.contractId) else {
                 continue
@@ -309,9 +311,18 @@ extension WalletViewModel {
     }
 
     func copyAddressAction() {
-        UIPasteboard.general.string = WalletManager.shared.selectedAccountAddress
+      guard let address = WalletManager.shared.selectedAccountAddress else {
+        return
+      }
+      if WalletManager.shared.selectedAccount?.type == .coa {
+        Task {
+          await AlertCenter.shared.presentCOACopy(address: address)
+        }
+      } else {
+        UIPasteboard.general.string = address
         HUD.success(title: "Address Copied".localized)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+      }
     }
 
     func toggleHiddenStatusAction() {

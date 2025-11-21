@@ -68,21 +68,7 @@ extension SideMenuView {
             }
             Spacer()
 
-            Button {
-                UIPasteboard.general.string = account.account.address
-                HUD.success(title: "Address Copied".localized)
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            } label: {
-                HStack {
-                    Image("icon_copy")
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundStyle(Color.Theme.Text.black3)
-                        .frame(width: 24, height: 24)
-                        .offset(x: -10)
-                }
-                .padding(10)
-            }
+            CopyAddressView(account: account.account)
           }
           .frame(height: 56)
           .padding(.vertical, 10)

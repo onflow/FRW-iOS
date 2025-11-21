@@ -30,8 +30,14 @@ class ReceiveQRViewModel: ObservableObject {
     }
 
     func onClickCopy() {
+      if isEVM {
+        Task {
+          await AlertCenter.shared.presentCOACopy(address: address)
+        }
+      } else {
         UIPasteboard.general.string = address
         HUD.success(title: "copied".localized)
+      }
     }
 
     func onChangeChain(isEvm: Bool) {

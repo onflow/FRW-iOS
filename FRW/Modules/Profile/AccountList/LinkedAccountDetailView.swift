@@ -22,7 +22,7 @@ struct LinkedAccountDetailView: View {
               AccountHeaderView(account: $account)
                 .cornerRadius(radius)
 
-              AccountAddressView(address: account.address)
+              AccountAddressView(account: account)
                 .cornerRadius(radius)
 
 
