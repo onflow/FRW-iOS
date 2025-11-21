@@ -26,7 +26,7 @@ class ReceiveQRViewModel: ObservableObject {
     var isEVM: Bool = false
 
     var hasEVM: Bool {
-        EVMAccountManager.shared.hasAccount
+      WalletManager.shared.coa != nil
     }
 
     func onClickCopy() {
@@ -63,6 +63,6 @@ class ReceiveQRViewModel: ObservableObject {
     }
 
     private func EVMAddr() -> String {
-        EVMAccountManager.shared.accounts.first?.showAddress ?? ""
+        WalletManager.shared.coa?.address ?? ""
     }
 }

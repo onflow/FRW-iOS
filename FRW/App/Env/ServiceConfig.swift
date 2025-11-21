@@ -65,14 +65,14 @@ extension ServiceConfig {
                 report.setUserAttribute(address, withKey: "FlowAccount")
             }
 
-            if let address = EVMAccountManager.shared.accounts.first?.showAddress {
+          if let address = WalletManager.shared.coa?.address {
                 report.setUserAttribute(address, withKey: "COA")
             }
             if let url = try? ZipFile.zipLogFile() {
                 report.addFileAttachment(with: url)
             }
 
-            let childAddress = ChildAccountManager.shared.childAccounts.reduce("") { $0 + "," + $1.showAddress }
+            let childAddress = WalletManager.shared.childs?.reduce("", {$0 + "," + $1.address.hexAddr}) ?? ""
             report.setUserAttribute(childAddress, withKey: "Childs")
             return report
         }

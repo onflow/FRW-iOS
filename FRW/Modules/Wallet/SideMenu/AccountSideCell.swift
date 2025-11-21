@@ -131,8 +131,8 @@ struct AccountSideCell: View {
         currentNetwork
     }
 
-    private var user: WalletAccount.User {
-        WalletManager.shared.walletAccount.readInfo(at: address)
+    private var user: WalletUser {
+        WalletUser.get(address:  address)
     }
 
     private var isSelected: Bool {

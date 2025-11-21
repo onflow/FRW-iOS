@@ -402,6 +402,7 @@ extension RouteMap {
         case wallpaper
         case secureEnclavePrivateKey
         case accountList
+        case account(WalletAccount, WalletAccount?, ProfileModel)
     }
 }
 
@@ -503,6 +504,8 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: SecureEnclavePrivateKeyView())
         case .accountList:
           navi.push(content: AccountListView())
+        case .account(let account, let parent, let profile):
+          navi.push(content: AccountDetailView(account: account, profile: profile, parentAccount: parent))
         }
     }
 }

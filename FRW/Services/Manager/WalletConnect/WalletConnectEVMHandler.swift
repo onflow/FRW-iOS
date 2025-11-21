@@ -561,7 +561,7 @@ extension WalletConnectEVMHandler {
 
 extension WalletConnectEVMHandler {
     static func calculateTX(_ model: EVMTransactionReceive, txId: Flow.ID) async throws -> String {
-        guard let myCoaAddress = EVMAccountManager.shared.accounts.first?.showAddress else {
+        guard let myCoaAddress = WalletManager.shared.coa?.address else {
             return ""
         }
         var result = await WalletConnectEVMHandler.calculateTXByCadence(model, from: myCoaAddress)

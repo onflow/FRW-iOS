@@ -1183,3 +1183,4 @@ Key Store and Private Key.";
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
 "hidden" = "Hidden";
+"show_account_title" = "Show in account list";

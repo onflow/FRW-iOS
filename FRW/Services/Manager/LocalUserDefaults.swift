@@ -60,6 +60,8 @@ extension LocalUserDefaults {
         case filterToken
         // default address for evm
         case EVMDefaultAddress
+        // hidden addresses for each profile
+        case hiddenAddresses
     }
 }
 
@@ -274,29 +276,9 @@ class LocalUserDefaults: ObservableObject {
         }
     }
 
-    var selectedEVMAccount: EVMAccountManager.Account? {
-        set {
-            if let value = newValue, let data = try? JSONEncoder().encode(value) {
-                UserDefaults.standard.set(data, forKey: Keys.selectedEVMAccount.rawValue)
-            } else {
-                UserDefaults.standard.removeObject(forKey: Keys.selectedEVMAccount.rawValue)
-            }
-        }
-        get {
-            if let data = UserDefaults.standard.data(forKey: Keys.selectedEVMAccount.rawValue),
-               let model = try? JSONDecoder().decode(
-                   EVMAccountManager.Account.self,
-                   from: data
-               )
-            {
-                return model
-            } else {
-                return nil
-            }
-        }
-    }
+    
 
-    var walletAccount: [String: [WalletAccount.User]]? {
+    var walletAccount: [String: [WalletUser]]? {
         set {
             if let data = try? JSONEncoder().encode(newValue) {
                 UserDefaults.standard.set(data, forKey: Keys.walletAccountInfo.rawValue)
@@ -307,7 +289,7 @@ class LocalUserDefaults: ObservableObject {
         get {
             if let data = UserDefaults.standard.data(forKey: Keys.walletAccountInfo.rawValue),
                let model = try? JSONDecoder().decode(
-                   [String: [WalletAccount.User]].self,
+                   [String: [WalletUser]].self,
                    from: data
                )
             {
@@ -447,7 +429,7 @@ class LocalUserDefaults: ObservableObject {
         users[index] = newUser
         userList = users
     }
-  
+
     @AppStorage(Keys.EVMDefaultAddress.rawValue)
     var EVMDefaultAddress: String?
 }
@@ -457,5 +439,85 @@ extension LocalUserDefaults {
     private func willReset() {
         recentToken = nil
         WalletManager.shared.changeNetwork(.mainnet)
+    }
+}
+
+// MARK: - Hidden Addresses Management
+
+extension LocalUserDefaults {
+    // Hidden addresses for each profile [profileId: [hiddenAddresses]]
+    var hiddenAddresses: [String: [String]] {
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Keys.hiddenAddresses.rawValue)
+        }
+        get {
+            UserDefaults.standard
+                .dictionary(forKey: Keys.hiddenAddresses.rawValue) as? [String: [String]] ?? [:]
+        }
+    }
+
+    // Get hidden addresses for a specific profile
+    func getHiddenAddresses(for profileId: String) -> [String] {
+        return hiddenAddresses[profileId] ?? []
+    }
+
+    // Check if an address is hidden for a specific profile
+    func isAddressHidden(_ address: String, for profileId: String) -> Bool {
+        return getHiddenAddresses(for: profileId).contains(address)
+    }
+
+    // Add a hidden address for a specific profile
+    func addHiddenAddress(_ address: String, for profileId: String) {
+        var addresses = hiddenAddresses
+        var profileAddresses = addresses[profileId] ?? []
+
+        if !profileAddresses.contains(address) {
+            profileAddresses.append(address)
+            addresses[profileId] = profileAddresses
+            hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
+        }
+    }
+
+    // Remove a hidden address for a specific profile
+    func removeHiddenAddress(_ address: String, for profileId: String) {
+        var addresses = hiddenAddresses
+        guard var profileAddresses = addresses[profileId] else { return }
+
+        let originalCount = profileAddresses.count
+        profileAddresses.removeAll { $0 == address }
+
+        // Only update and notify if something was actually removed
+        if profileAddresses.count != originalCount {
+            if profileAddresses.isEmpty {
+                addresses.removeValue(forKey: profileId)
+            } else {
+                addresses[profileId] = profileAddresses
+            }
+
+            hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
+        }
+    }
+
+    // Toggle hidden state for an address
+    func toggleHiddenAddress(_ address: String, for profileId: String) {
+        if isAddressHidden(address, for: profileId) {
+            removeHiddenAddress(address, for: profileId)
+        } else {
+            addHiddenAddress(address, for: profileId)
+        }
+    }
+
+    // Clear all hidden addresses for a specific profile
+    func clearHiddenAddresses(for profileId: String) {
+        var addresses = hiddenAddresses
+
+        // Only update and notify if the profile had hidden addresses
+        if addresses[profileId] != nil {
+            addresses.removeValue(forKey: profileId)
+            hiddenAddresses = addresses
+            NotificationCenter.default.post(name: .hiddenAddressesDidChanged, object: nil)
+        }
     }
 }

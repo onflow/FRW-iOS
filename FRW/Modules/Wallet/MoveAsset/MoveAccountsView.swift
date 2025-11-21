@@ -90,7 +90,7 @@ extension MoveAccountsView {
         }
 
         var isEVM: Bool {
-            guard let evmAdd = EVMAccountManager.shared.accounts.first?.showAddress
+            guard let evmAdd = WalletManager.shared.coa?.address
             else { return false }
             return evmAdd == address
         }
@@ -156,7 +156,7 @@ class MoveAccountsViewModel: ObservableObject {
         self.callback = callback
 
         if let primaryAddr = WalletManager.shared.getPrimaryWalletAddress() {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
+          let user = WalletUser.get(address: primaryAddr)
             let contact = Contact(
                 address: primaryAddr,
                 avatar: nil,
@@ -170,21 +170,21 @@ class MoveAccountsViewModel: ObservableObject {
             )
             list.append(contact)
         }
-
-        for account in EVMAccountManager.shared.accounts {
-            let user = WalletManager.shared.walletAccount.readInfo(at: account.showAddress)
-            let contact = Contact(
-                address: account.showAddress,
-                avatar: nil,
-                contactName: nil,
-                contactType: .user,
-                domain: nil,
-                id: UUID().hashValue,
-                username: user.name,
-                user: user,
-                walletType: .evm
-            )
-            list.append(contact)
+      
+        if let account = WalletManager.shared.coa {
+          let user = WalletUser.get(address: account.address)
+          let contact = Contact(
+            address: account.address,
+              avatar: nil,
+              contactName: nil,
+              contactType: .user,
+              domain: nil,
+              id: UUID().hashValue,
+              username: user.name,
+              user: user,
+              walletType: .evm
+          )
+          list.append(contact)
         }
 
         for account in ChildAccountManager.shared.childAccounts {

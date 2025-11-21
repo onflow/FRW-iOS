@@ -91,7 +91,6 @@ class ProfileKeychainService {
 
     for userId in profileIds {
       if let profile = try loadProfile(userId: userId) {
-        log.debug("[Profile] get profile for \(userId)")
         profiles.append(profile)
       }
     }
