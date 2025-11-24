@@ -33,7 +33,7 @@ class RemoteConfigManager {
 
     var config: Config?
     var contractAddress: ContractAddress?
-
+    var coaDomains: [String] = []
     var isFailed: Bool = false
     var isStaging: Bool = false
 
@@ -136,6 +136,7 @@ class RemoteConfigManager {
 
     func updateFromRemote() {
         fetchNews()
+        fetchCoaDomains()
         do {
             let data: String = try FirebaseConfig.ENVConfig.fetch()
             let key = LocalEnvManager.shared.backupAESKey
@@ -197,6 +198,20 @@ class RemoteConfigManager {
             }
         }
     }
+
+  func fetchCoaDomains() {
+    do {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let list: [String] = try FirebaseConfig.coaDomains.fetch(decoder: decoder)
+        DispatchQueue.main.async {
+          self.coaDomains = list
+        }
+    } catch {
+        log.error("[Firebase] fetch coa domains failed. \(error)")
+    }
+  }
 
     // MARK: Private
 

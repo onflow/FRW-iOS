@@ -8,8 +8,6 @@
 import Foundation
 import Flow
 
-#if DEBUG
-
 // MARK: - WalletAccount Mock Data
 
 extension WalletAccount {
@@ -139,4 +137,3 @@ extension WalletAccount {
     }
 }
 
-#endif
