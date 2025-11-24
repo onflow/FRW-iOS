@@ -15,6 +15,7 @@ extension FRWAPI {
         case currencyRate(Currency)
         case retoken(String, String)
         case flowAddress(String)
+        case coinbase(String)
     }
 }
 
@@ -22,14 +23,7 @@ extension FRWAPI {
 
 extension FRWAPI.Utils: TargetType, AccessTokenAuthorizable {
     var authorizationType: AuthorizationType? {
-        switch self {
-        case .currencyRate:
-            return .bearer
-        case .retoken:
-            return .bearer
-        case .flowAddress:
-            return .bearer
-        }
+        return .bearer
     }
 
     var baseURL: URL {
@@ -44,6 +38,8 @@ extension FRWAPI.Utils: TargetType, AccessTokenAuthorizable {
             #endif
         case .flowAddress:
             return .init(string: "https://production.key-indexer.flow.com/")!
+        case .coinbase:
+          return Config.get(.lilicoWeb)
         }
     }
 
@@ -56,6 +52,8 @@ extension FRWAPI.Utils: TargetType, AccessTokenAuthorizable {
         case let .flowAddress(publicKey):
             let result = publicKey.stripHexPrefix()
             return "/key/\(result)"
+        case let .coinbase(address):
+          return "v4/onramp/coinbase"
         }
     }
 
@@ -63,7 +61,7 @@ extension FRWAPI.Utils: TargetType, AccessTokenAuthorizable {
         switch self {
         case .currencyRate, .flowAddress:
             return .get
-        case .retoken:
+        case .retoken, .coinbase:
             return .post
         }
     }
@@ -79,17 +77,12 @@ extension FRWAPI.Utils: TargetType, AccessTokenAuthorizable {
             return .requestJSONEncodable(["token": token, "address": address])
         case .flowAddress:
             return .requestPlain
+        case let .coinbase(address):
+          return .requestJSONEncodable(["address": address])
         }
     }
 
     var headers: [String: String]? {
-        switch self {
-        case .currencyRate:
-            return FRWAPI.commonHeaders
-        case .retoken:
-            return FRWAPI.commonHeaders
-        case .flowAddress:
-            return FRWAPI.commonHeaders
-        }
+      return FRWAPI.commonHeaders
     }
 }

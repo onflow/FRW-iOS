@@ -39,19 +39,9 @@ struct BuyProvderView: View {
             if currentNetwork == .mainnet {
                 Button {
                     EventTrack.General.rampClick(source: .coinbase)
-                    guard let address = WalletManager.shared.getPrimaryWalletAddress(),
-                          let url =
-                          URL(
-                              string: "https://pay.coinbase.com/buy/input?appId=d22a56bd-68b7-4321-9b25-aa357fc7f9ce&destinationWallets=%5B%7B%22address%22%3A%22\(address)%22%2C%22blockchains%22%3A%5B%22flow%22%5D%7D%5D"
-                          )
-                    else {
-                        return
+                    Task {
+                      await launchCoinbase()
                     }
-
-                    Router.dismiss(animated: true) {
-                        Router.route(to: RouteMap.Explore.safariBrowser(url))
-                    }
-
                 } label: {
                     Color(hex: "#0052FF")
                         .frame(maxWidth: .infinity)
@@ -95,6 +85,40 @@ struct BuyProvderView: View {
             HUD.error(title: "Open MoonPay Failed")
         }
     }
+
+  private func launchCoinbase() async {
+    guard let address = WalletManager.shared.getPrimaryWalletAddress() else {
+        HUD.error(title: "Invaild Address")
+        return
+    }
+
+    HUD.loading()
+
+    do {
+      let resp: BuyProvderView.Data = try await Network.request(FRWAPI.Utils.coinbase(address
+          ))
+        HUD.dismissLoading()
+        Router.dismiss(animated: true) {
+          if let url = URL(string: resp.session.onrampUrl) {
+            Router.route(to: RouteMap.Explore.safariBrowser(url))
+          }
+        }
+
+    } catch {
+        HUD.dismissLoading()
+        HUD.error(title: "Open Coinbase Failed")
+    }
+  }
+}
+
+extension BuyProvderView {
+  struct Data: Codable {
+    let session: BuyProvderView.Session
+  }
+
+  struct Session: Codable {
+    let onrampUrl: String
+  }
 }
 
 // MARK: - BuyProvderView_Previews
