@@ -283,20 +283,17 @@ struct DeveloperModeView: RouteableView {
                             .frame(height: 64)
                             .padding(.horizontal, 16)
 
-//                            Divider()
-//                            HStack {
-//                                Button {
-//                                    HUD.success(title: "done")
-//                                    let list = LocalUserDefaults.shared.userList
-//                                    log.debug("[User] \(list)")
-//
-//                                } label: {
-//                                    Text("Copy all user")
-//                                }
-//                                Spacer()
-//                            }
-//                            .frame(height: 64)
-//                            .padding(.horizontal, 16)
+                          HStack {
+                            Text("Clear All Profiles (DEBUG)")
+                              .foregroundColor(.red)
+                            Spacer()
+                          }
+                          .frame(height: 64)
+                          .padding(.horizontal, 16)
+                          .onTapGesture {
+                            ProfileManager.shared.clearAllProfiles()
+                                  HUD.success(title: "All profiles cleared")
+                          }
                         }
                         .background(.LL.bgForIcon)
                         .cornerRadius(16)
