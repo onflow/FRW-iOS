@@ -27,6 +27,7 @@ enum FirebaseConfig: String {
     case appSecret = "app_secret"
     case ENVConfig = "i_config"
     case news
+    case coaDomains = "coa_domains"
 
     // MARK: Internal
 

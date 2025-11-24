@@ -55,13 +55,20 @@ class AuthnViewModel: ObservableObject {
     let eoaAccount = flattenedAccounts.filter { $0.type == .eoa }
     let coaAccount = flattenedAccounts.filter { $0.type == .coa && $0.parent?.address == mainAddress }
     let eoa = eoaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
-    accounts.append(contentsOf: eoa)
     let coa = coaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
-    accounts.append(contentsOf: coa)
 
-    let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
-    currentAccount =  accounts.first(where: { $0.account.address == preAddress }) ?? accounts.first
-    allowSelection = accounts.count > 1
+    let coaWhiteList = RemoteConfigManager.shared.coaDomains
+    if coaWhiteList.contains(where: { provider.url.lowercased().contains($0.lowercased()) }) {
+      accounts.append(contentsOf: coa)
+      accounts.append(contentsOf: eoa)
+    } else {
+      accounts.append(contentsOf: eoa)
+      accounts.append(contentsOf: coa)
+
+      let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
+      currentAccount = accounts.first(where: { $0.account.address == preAddress }) ?? accounts.first
+      allowSelection = accounts.count > 1
+    }
   }
   
   deinit {
