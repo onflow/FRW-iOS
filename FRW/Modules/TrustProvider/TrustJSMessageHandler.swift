@@ -460,31 +460,72 @@ extension TrustJSMessageHandler {
                     let nonceHex = String(nonce, radix: 16).normalizeHexString()
 
                     //MARK: Get current gas price from network
-                    let gasPrice = try await web3.eth.gasPrice()
-                    let gasPriceHex = String(gasPrice, radix: 16).normalizeHexString()
+                    var gasPrice: BigUInt?
+                    var maxFeePerGas: BigUInt?
+                    var maxPriorityFeePerGas: BigUInt?
+                    
+                    if let urlString = try? await web3.provider.url.absoluteString, let rpcURL = URL(string: urlString) {
+                         if let fees = try? await self.fetchGasFee(rpcURL: rpcURL) {
+                             maxFeePerGas = fees.maxFeePerGas
+                             maxPriorityFeePerGas = fees.maxPriorityFeePerGas
+                             log.info("[SOA] Using EIP-1559 fees: maxFee=\(maxFeePerGas!), priority=\(maxPriorityFeePerGas!)")
+                         } else {
+                             gasPrice = try? await web3.eth.gasPrice()
+                             log.info("[SOA] Using Legacy gasPrice: \(String(describing: gasPrice))")
+                         }
+                    } else {
+                         gasPrice = try? await web3.eth.gasPrice()
+                    }
+                    
+                    if maxFeePerGas == nil && gasPrice == nil {
+                         log.error("[SOA] Failed to fetch any gas fees")
+                         self.cancel(id: id)
+                         return
+                    }
 
                     // Prepare transaction input
                     var input = EthereumSigningInput()
 
                     // Debug logging for hex values
-                    log.info("[SOA] Transaction hex values - chainId: \(chainIdHex), nonce: \(nonceHex), gasPrice: \(gasPriceHex), gasLimit: \(gasValue)")
+                    log.info("[SOA] Transaction hex values - chainId: \(chainIdHex), nonce: \(nonceHex), gasLimit: \(gasValue)")
 
                     guard let chainIdData = Data(hexString: chainIdHex),
                           let nonceData = Data(hexString: nonceHex),
-                          let gasPriceData = Data(hexString: gasPriceHex),
                           let gasLimitData = Data(hexString: gasValue)
                     else {
                       log.error("[SOA] Invalid hex data for transaction parameters")
-                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasPriceHex: \(gasPriceHex), gasValue: \(gasValue)")
+                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasValue: \(gasValue)")
                       self.cancel(id: id)
                       return
                     }
 
                     input.chainID = chainIdData
                     input.nonce = nonceData
-                    input.gasPrice = gasPriceData
                     input.gasLimit = gasLimitData
                     input.toAddress = toAddr.addHexPrefix()
+
+                    if let maxFee = maxFeePerGas, let maxPriority = maxPriorityFeePerGas {
+                        let maxFeeHex = String(maxFee, radix: 16).normalizeHexString()
+                        let maxPriorityHex = String(maxPriority, radix: 16).normalizeHexString()
+                        guard let maxFeeData = Data(hexString: maxFeeHex),
+                              let maxPriorityData = Data(hexString: maxPriorityHex) else {
+                            log.error("[SOA] Invalid EIP-1559 fee data")
+                            self.cancel(id: id)
+                            return
+                        }
+                        input.txMode = .enveloped
+                        input.maxFeePerGas = maxFeeData
+                        input.maxInclusionFeePerGas = maxPriorityData
+                    } else if let price = gasPrice {
+                        let gasPriceHex = String(price, radix: 16).normalizeHexString()
+                        guard let gasPriceData = Data(hexString: gasPriceHex) else {
+                            log.error("[SOA] Invalid gas price data")
+                            self.cancel(id: id)
+                            return
+                        }
+                        input.txMode = .legacy
+                        input.gasPrice = gasPriceData
+                    }
 
                     // Handle both transfer and contract call transactions
                     let normalizedAmount = amount.normalizeHexString()
@@ -694,6 +735,58 @@ extension TrustJSMessageHandler {
             onBlock: .latest
         )
         return nonce
+    }
+    
+    private func fetchGasFee(rpcURL: URL) async throws -> (maxFeePerGas: BigUInt, maxPriorityFeePerGas: BigUInt) {
+        
+        struct RPCRequest: Encodable {
+            let jsonrpc = "2.0"
+            let method: String
+            let params: [String]
+            let id = 1
+        }
+        
+        struct RPCResponse: Decodable {
+            let result: String?
+        }
+        
+        struct BlockResponse: Decodable {
+            struct Result: Decodable {
+                let baseFeePerGas: String?
+            }
+            let result: Result?
+        }
+
+        func send<T: Decodable>(_ method: String, params: [String] = []) async throws -> T {
+            let request = RPCRequest(method: method, params: params)
+            var urlRequest = URLRequest(url: rpcURL)
+            urlRequest.httpMethod = "POST"
+            urlRequest.httpBody = try JSONEncoder().encode(request)
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let (data, _) = try await URLSession.shared.data(for: urlRequest)
+            return try JSONDecoder().decode(T.self, from: data)
+        }
+        
+        // 1. Get maxPriorityFeePerGas
+        let priorityFeeResponse: RPCResponse = try await send("eth_maxPriorityFeePerGas")
+        guard let priorityFeeHex = priorityFeeResponse.result,
+              let priorityFee = BigUInt(priorityFeeHex.stripHexPrefix(), radix: 16) else {
+            throw NSError(domain: "EIP1559", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch maxPriorityFeePerGas"])
+        }
+        
+        // 2. Get latest block for baseFeePerGas
+        let blockResponse: BlockResponse = try await send("eth_getBlockByNumber", params: ["latest", "false"])
+        guard let baseFeeHex = blockResponse.result?.baseFeePerGas,
+              let baseFee = BigUInt(baseFeeHex.stripHexPrefix(), radix: 16) else {
+             throw NSError(domain: "EIP1559", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch baseFeePerGas"])
+        }
+        
+        // 3. Calculate maxFeePerGas
+        // maxFeePerGas = (baseFee * 2) + maxPriorityFeePerGas
+        let maxFee = (baseFee * 2) + priorityFee
+        
+        return (maxFee, priorityFee)
     }
 }
 
