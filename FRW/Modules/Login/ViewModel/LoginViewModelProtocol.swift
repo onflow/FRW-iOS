@@ -129,14 +129,12 @@ extension LoginViewModelProtocol {
       )
       Task {
         
-        await AlertCenter.shared.presentAccountNotFound(onCreate: {
-          self.createUserName{ [weak self] name in
-            Task {
-              HUD.loading()
-              try await self?.regist(address: address, userName: name, flowKey: flowKey)
-              HUD.dismissLoading()
-              Router.popToRoot()
-            }
+        await AlertCenter.shared.presentAccountNotFound(onCreate: { [weak self] in
+          Task {
+            HUD.loading()
+            try await self?.regist(address: address, userName: "", flowKey: flowKey)
+            HUD.dismissLoading()
+            Router.popToRoot()
           }
         }, onCancel: {
           
