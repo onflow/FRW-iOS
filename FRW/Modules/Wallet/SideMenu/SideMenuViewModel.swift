@@ -35,7 +35,6 @@ class SideMenuViewModel: ObservableObject {
 
     init() {
       ProfileManager.shared.$currentProfile
-        .compactMap { $0 }
         .receive(on: DispatchQueue.main)
         .sink { [weak self] profile in
           self?.refreshProfile(profile: profile)
@@ -44,9 +43,8 @@ class SideMenuViewModel: ObservableObject {
 
       wallet.$selectedAccount
         .receive(on: DispatchQueue.main)
-        .compactMap { $0 }
         .sink { [weak self] account in
-          self?.refreshAccount(address: account.hexAddr)
+          self?.refreshAccount(address: account?.hexAddr)
         }.store(in: &cancellableSet)
 
       // Listen for hidden addresses changes
@@ -58,7 +56,12 @@ class SideMenuViewModel: ObservableObject {
         .store(in: &cancellableSet)
     }
 
-    private func refreshProfile(profile: ProfileModel) {
+    private func refreshProfile(profile: ProfileModel?) {
+      guard let profile = profile else {
+        refreshAccount(address: nil)
+        allAccounts = [[.mock()],[.mock()],[.mock()]]
+        return
+      }
       allAccounts = profile.accounts.map({ list in
         list.map { account in
           // Check if manually hidden via LocalUserDefaults
@@ -74,15 +77,21 @@ class SideMenuViewModel: ObservableObject {
     }
 
     private func refreshAccount(address: String?) {
+      guard let address = address else {
+        currentAccount = nil
+        return
+      }
+      var result: SideMenuItem? = nil
       for list in allAccounts {
         for account in list {
-          if account.account.address.lowercased() == address?.lowercased() {
-            withAnimation(.easeInOut) {
-              currentAccount = account
-            }
+          if account.account.address.lowercased() == address.lowercased() {
+            result = account
             break
           }
         }
+      }
+      withAnimation(.easeInOut) {
+        currentAccount = result
       }
     }
   

@@ -209,7 +209,7 @@ struct AccountSwitchView: View {
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(Color.Brain.Text.secondary)
-                let flattenedAccounts = placeholder.accounts.flatMap { $0 }
+                let flattenedAccounts = placeholder.accounts.flatMap({ $0 }).filter{ !$0.isHidden}
                 if !flattenedAccounts.isEmpty {
                   ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 0) {
