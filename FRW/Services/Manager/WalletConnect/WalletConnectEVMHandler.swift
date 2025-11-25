@@ -299,32 +299,57 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     let nonce = try await self.getTransactionNonce(for: address)
                     let nonceHex = self.normalizeHexString(String(nonce, radix: 16))
 
-                    //MARK: Get current gas price from network
-                    let gasPrice = try await web3.eth.gasPrice()
-                    let gasPriceHex = self.normalizeHexString(String(gasPrice, radix: 16))
-
                     // Prepare transaction input
                     var input = EthereumSigningInput()
 
-                    // Debug logging for hex values
-                    log.info("[SOA] Transaction hex values - chainId: \(chainIdHex), nonce: \(nonceHex), gasPrice: \(gasPriceHex), gasLimit: \(gasValue)")
-
                     guard let chainIdData = Data(hexString: chainIdHex),
                           let nonceData = Data(hexString: nonceHex),
-                          let gasPriceData = Data(hexString: gasPriceHex),
                           let gasLimitData = Data(hexString: gasValue)
                     else {
                       log.error("[SOA] Invalid hex data for transaction parameters")
-                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasPriceHex: \(gasPriceHex), gasValue: \(gasValue)")
+                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasValue: \(gasValue)")
                       cancel()
                       return
                     }
 
                     input.chainID = chainIdData
                     input.nonce = nonceData
-                    input.gasPrice = gasPriceData
                     input.gasLimit = gasLimitData
                     input.toAddress = toAddr.addHexPrefix()
+
+                    if let maxFeePerGas = receiveModel.maxFeePerGas,
+                       let maxPriorityFeePerGas = receiveModel.maxPriorityFeePerGas {
+                        
+                        let maxFeeHex = self.normalizeHexString(maxFeePerGas)
+                        let maxPriorityHex = self.normalizeHexString(maxPriorityFeePerGas)
+                        
+                        guard let maxFeeData = Data(hexString: maxFeeHex),
+                              let maxPriorityData = Data(hexString: maxPriorityHex) else {
+                            log.error("[SOA] Invalid EIP-1559 fee data")
+                            cancel()
+                            return
+                        }
+                        
+                        input.txMode = .enveloped
+                        input.maxFeePerGas = maxFeeData
+                        input.maxInclusionFeePerGas = maxPriorityData
+                        log.info("[SOA] EIP-1559 Transaction - maxFee: \(maxFeeHex), maxPriority: \(maxPriorityHex)")
+                        
+                    } else {
+                        //MARK: Get current gas price from network
+                        let gasPrice = try await web3.eth.gasPrice()
+                        let gasPriceHex = self.normalizeHexString(String(gasPrice, radix: 16))
+                        
+                        guard let gasPriceData = Data(hexString: gasPriceHex) else {
+                            log.error("[SOA] Invalid gas price data")
+                            cancel()
+                            return
+                        }
+                        
+                        input.txMode = .legacy
+                        input.gasPrice = gasPriceData
+                        log.info("[SOA] Legacy Transaction - gasPrice: \(gasPriceHex)")
+                    }
 
                     // Handle both transfer and contract call transactions
                     let normalizedAmount = self.normalizeHexString(amount)
