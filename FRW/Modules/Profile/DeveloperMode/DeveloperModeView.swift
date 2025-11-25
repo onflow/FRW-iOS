@@ -20,7 +20,7 @@ struct DeveloperModeView_Previews: PreviewProvider {
 
 struct DeveloperModeView: RouteableView {
     // MARK: Internal
-
+    private let DevApp = isDevModel
     var title: String {
         "developer_mode".localized
     }
@@ -354,7 +354,7 @@ struct DeveloperModeView: RouteableView {
                     }
                     .cornerRadius(16)
 
-                    if isDevModel {
+                    if DevApp {
                         Section {
                             VStack {
                                 HStack {
