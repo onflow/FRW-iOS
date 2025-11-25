@@ -13,11 +13,13 @@ enum RNBridge {
         case main = "main"
         case child = "child"
         case evm = "evm"
+        case eoa = "eoa"
     }
 
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
         case tokenDetail = "token-detail"
+        case receive = "receive"
     }
 
     struct EmojiInfo: Codable {

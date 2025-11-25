@@ -127,6 +127,8 @@ extension RNBridge.WalletAccount {
         return .eoa
       }
       return .coa
+    case .eoa:
+      return .eoa
     case .none:
       return .main
     }

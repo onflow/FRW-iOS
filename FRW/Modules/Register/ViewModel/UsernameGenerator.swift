@@ -10,7 +10,7 @@ import Foundation
 /**
  * Random username generator utility
  * Generates usernames using combinations of fruits, animals, nature words, and adjectives
- * Format: three words (no digits)
+ * Format: configurable number of words (default: 1 word)
  */
 struct UsernameGenerator {
     static let fruits: [String] = [
@@ -81,22 +81,27 @@ struct UsernameGenerator {
     }
 
     /**
-     * Generates a random username using three words.
-     * Format: [adjective]word1word2word3 or word1word2word3
+     * Generates a random username using configurable number of words.
+     * Format: [adjective]word1word2... or word1word2...
      * If any word is an adjective, it's placed first.
      * Avoids repeating the same word.
      * Ensures username is between 3-20 characters as required by the API.
      *
+     * @param wordCount Number of words to use (default: 1, range: 1-5)
      * @returns A randomly generated username string (3-20 characters).
      */
-    static func generateRandomUsername() -> String {
-        // Filter to only short words (max 7 chars) to ensure 3 words fit in 20 chars
-        let shortWords = allWords.filter { $0.count <= 7 }
+    static func generateRandomUsername(wordCount: Int = 1) -> String {
+        // Validate word count range
+        let validWordCount = max(1, min(5, wordCount))
+
+        // Calculate max word length based on word count to stay within 20 char limit
+        let maxWordLength = 20 / validWordCount
+        let shortWords = allWords.filter { $0.count <= maxWordLength }
 
         // Validate we have enough words to work with
-        guard shortWords.count >= 3 else {
+        guard shortWords.count >= validWordCount else {
             #if DEBUG
-            print("⚠️ UsernameGenerator: Insufficient word pool size (\(shortWords.count) words)")
+            print("⚠️ UsernameGenerator: Insufficient word pool size (\(shortWords.count) words) for \(validWordCount) words")
             #endif
             // Emergency fallback with hardcoded safe words
             return generateEmergencyFallback()
@@ -106,8 +111,8 @@ struct UsernameGenerator {
         let maxAttempts = 100
 
         while attempts < maxAttempts {
-            // Safely select 3 unique words using Set-based approach
-            guard let selectedWords = selectThreeUniqueWords(from: shortWords) else {
+            // Safely select unique words using Set-based approach
+            guard let selectedWords = selectUniqueWords(count: validWordCount, from: shortWords) else {
                 attempts += 1
                 continue
             }
@@ -116,7 +121,7 @@ struct UsernameGenerator {
             var username = ""
 
             if let adjectiveIndex = words.firstIndex(where: { adjectives.contains($0) }) {
-                // Put adjective first, then the other two words
+                // Put adjective first, then the other words
                 let adjective = words.remove(at: adjectiveIndex)
                 username = adjective + words.joined()
             } else {
@@ -127,7 +132,7 @@ struct UsernameGenerator {
             // Check if username meets length requirements (3-20 chars)
             if username.count >= 3 && username.count <= 20 {
                 #if DEBUG
-                print("✅ UsernameGenerator: Generated username '\(username)' on attempt \(attempts + 1)")
+                print("✅ UsernameGenerator: Generated username '\(username)' with \(validWordCount) word(s) on attempt \(attempts + 1)")
                 #endif
                 return username.lowercased()
             }
@@ -139,31 +144,32 @@ struct UsernameGenerator {
         #if DEBUG
         print("⚠️ UsernameGenerator: Max attempts reached, using intelligent fallback")
         #endif
-        return generateIntelligentFallback(from: shortWords)
+        return generateIntelligentFallback(from: shortWords, wordCount: validWordCount)
     }
 
     /**
-     * Safely selects 3 unique words from the word pool.
+     * Safely selects specified number of unique words from the word pool.
      * Uses Set-based approach to avoid infinite loops.
      *
+     * @param count Number of words to select
      * @param words The array of words to select from
-     * @returns Array of 3 unique words, or nil if selection fails
+     * @returns Array of unique words, or nil if selection fails
      */
-    private static func selectThreeUniqueWords(from words: [String]) -> [String]? {
-        guard words.count >= 3 else { return nil }
+    private static func selectUniqueWords(count: Int, from words: [String]) -> [String]? {
+        guard words.count >= count else { return nil }
 
         var selected = Set<String>()
         var attempts = 0
-        let maxAttempts = 20 // Safety limit for this inner loop
+        let maxAttempts = count * 10 // Safety limit scales with word count
 
-        while selected.count < 3 && attempts < maxAttempts {
+        while selected.count < count && attempts < maxAttempts {
             if let word = pick(words) {
                 selected.insert(word)
             }
             attempts += 1
         }
 
-        return selected.count == 3 ? Array(selected) : nil
+        return selected.count == count ? Array(selected) : nil
     }
 
     /**
@@ -171,14 +177,15 @@ struct UsernameGenerator {
      * Selects shortest available words to maximize chance of fitting in 20 chars.
      *
      * @param words The filtered word pool
+     * @param wordCount Number of words to use
      * @returns A valid username (3-20 characters)
      */
-    private static func generateIntelligentFallback(from words: [String]) -> String {
-        // Sort by length and take 3 shortest unique words
+    private static func generateIntelligentFallback(from words: [String], wordCount: Int) -> String {
+        // Sort by length and take shortest unique words
         let sortedWords = words.sorted { $0.count < $1.count }
-        let selectedWords = Array(Set(sortedWords.prefix(10))).prefix(3)
+        let selectedWords = Array(Set(sortedWords.prefix(wordCount * 3))).prefix(wordCount)
 
-        guard selectedWords.count >= 3 else {
+        guard selectedWords.count >= wordCount else {
             return generateEmergencyFallback()
         }
 
