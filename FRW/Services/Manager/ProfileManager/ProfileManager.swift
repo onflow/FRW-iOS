@@ -9,6 +9,8 @@ import Foundation
 import FlowWalletKit
 import WalletCore
 import Flow
+import Combine
+
 
 // MARK: - ProfileManager
 
@@ -17,13 +19,12 @@ class ProfileManager: ObservableObject {
   let migrationKey = "profiles_migration_completed_v302"
   
   private init() {
-    #if DEBUG
-//    clearAllProfiles()
-    #endif
-    loadCachedProfiles()
     Task {
       await migrateExistingProfilesIfNeeded()
+      loadCachedProfiles()
+      fetchAllAccountsInfo()
     }
+
   }
 
   // MARK: Internal
@@ -32,6 +33,20 @@ class ProfileManager: ObservableObject {
 
   @Published
   var profiles: [ProfileModel] = []
+
+  @Published
+  var currentProfile: ProfileModel?
+
+  private var cancellableSet = Set<AnyCancellable>()
+
+  func setup() {
+    UserManager.shared.$activatedUID
+      .receive(on: DispatchQueue.main)
+      .map { $0 }
+      .sink { _ in
+        self.updateCurrentProfile()
+      }.store(in: &cancellableSet)
+  }
 
   // MARK: - Profile Management
 
@@ -42,7 +57,6 @@ class ProfileManager: ObservableObject {
     }
     do {
       try keychainService.saveProfile(profile)
-      profileCache[profile.uid] = profile
       refreshProfiles()
       log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
     } catch {
@@ -50,16 +64,30 @@ class ProfileManager: ObservableObject {
     }
   }
 
-  func loadProfile(userId: String) -> ProfileModel? {
-    // Check cache first
-    if let cachedProfile = profileCache[userId] {
-      return cachedProfile
+  func saveProfiles(_ profiles: [ProfileModel]) {
+    var didSaveAnyProfile = false
+    for profile in profiles {
+      guard keyExist(uid: profile.uid) else {
+        log.warning("[Profile] Profile save skipped for user(\(profile.uid)), key not found.")
+        continue
+      }
+      do {
+        try keychainService.saveProfile(profile)
+        didSaveAnyProfile = true
+        log.info("[Profile] Profile saved successfully for user: \(profile.uid)")
+      } catch {
+        log.error("[Profile] Failed to save profile for user \(profile.uid): \(error)")
+      }
     }
+    if didSaveAnyProfile {
+      refreshProfiles()
+    }
+  }
 
+  func loadProfile(userId: String) -> ProfileModel? {
     // Load from keychain
     do {
       if let profile = try keychainService.loadProfile(userId: userId) {
-        profileCache[userId] = profile
         return profile
       }
     } catch {
@@ -69,10 +97,19 @@ class ProfileManager: ObservableObject {
     return nil
   }
 
+  func updateCurrentProfile() {
+    log.debug("updating current profile")
+    guard let uid = UserManager.shared.activatedUID else {
+      currentProfile = nil
+      return
+    }
+    currentProfile = profiles.first { $0.uid == uid }
+    log.debug("updated current profile: \(uid)")
+  }
+
   func deleteProfile(userId: String) {
     do {
       try keychainService.deleteProfile(userId: userId)
-      profileCache.removeValue(forKey: userId)
       refreshProfiles()
       log.info("[Profile] Profile deleted successfully for user: \(userId)")
     } catch {
@@ -90,7 +127,6 @@ class ProfileManager: ObservableObject {
   func clearAllProfiles() {
     do {
       try keychainService.clearAllProfiles()
-      profileCache.removeAll()
       DispatchQueue.main.async {
         self.profiles = []
       }
@@ -113,16 +149,12 @@ class ProfileManager: ObservableObject {
   // MARK: Private
 
   private let keychainService = ProfileKeychainService()
-  private var profileCache: [String: ProfileModel] = [:]
 
-  // MARK: - Cache Management
+  // MARK: - Profile Loading
 
   private func loadCachedProfiles() {
     do {
       let allProfiles = try keychainService.getAllProfiles()
-      for profile in allProfiles {
-        profileCache[profile.uid] = profile
-      }
       profiles = allProfiles
       // Check whether the uid of the profile contains a key on keyChain
       for profile in allProfiles {
@@ -141,6 +173,7 @@ class ProfileManager: ObservableObject {
       let allProfiles = try keychainService.getAllProfiles()
       DispatchQueue.main.async {
         self.profiles = allProfiles
+        self.updateCurrentProfile()
       }
     } catch {
       log.error("[Profile] Failed to refresh profiles: \(error)")

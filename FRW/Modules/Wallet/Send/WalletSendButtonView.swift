@@ -69,7 +69,7 @@ struct WalletSendButtonView: View {
                     )
                     .visible(isLoading)
             }
-            .frame(width: 25, height: 25)
+            .frame(width: 20, height: 20)
             Text(buttonText)
                 .foregroundColor(buttonColor)
                 .font(.inter(size: 14, weight: .bold))

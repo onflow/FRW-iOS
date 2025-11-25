@@ -162,9 +162,11 @@ struct SideMenuView: View {
               let section = vm.allAccounts[index]
               ForEach(0..<section.count, id: \.self) { subIndex in
                 let account = section[subIndex]
-                let isActive = vm.currentAccount?.address == account.address
-                SideMenuView.AccountRow(account: account, isActivity: isActive) { clickedAccount in
-                  vm.updateCurrentAccount(clickedAccount)
+                let isActive = vm.currentAccount?.account.address == account.account.address
+                if !account.isHidden {
+                  SideMenuView.AccountRow(account: account, isActivity: isActive) { clickedAccount in
+                    vm.updateCurrentAccount(clickedAccount)
+                  }
                 }
               }
             }
@@ -179,6 +181,7 @@ struct SideMenuView: View {
           }
         }
       }
+      .mockPlaceholder(vm.currentAccount == nil)
     }
 
     var bottomMenu: some View {

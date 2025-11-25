@@ -1182,3 +1182,8 @@ Key Store and Private Key.";
 "addresses_tag" = "addresses";
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
+"hidden" = "Hidden";
+"show_account_title" = "Show in account list";
+"copy_evm_hint_title" = "EVM on Flow address";
+"copy_evm_hint_des" = "You have copied an EVM address on the Flow network, please make sure you only send assets on the Flow network to this address otherwise they will be lost.";
+"copy_evm_button" = "Confirm to copy address";

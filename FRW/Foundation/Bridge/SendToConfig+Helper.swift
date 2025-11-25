@@ -89,8 +89,8 @@ extension RNBridge.SendToConfig {
             log.error("❌ Main account not found")
               return nil
           }
-          return mainAccount.toWalletAccount()
-          
+          return mainAccount.toWalletAccount().toRNBridge()
+
       case .child:
           // For child account, find the child account by address
           guard let childs = WalletManager.shared.childs,
@@ -98,21 +98,21 @@ extension RNBridge.SendToConfig {
             log.error("❌ Child account not found for address: \(selectedAccount.address.hexAddr)")
               return nil
           }
-          return childAccount.toWalletAccount()
-          
+          return childAccount.toWalletAccount().toRNBridge()
+
       case .coa:
           // For EVM account (COA), use the COA account
           guard let coa = WalletManager.shared.coa else {
             log.error("❌ COA account not found")
               return nil
           }
-          return coa.toWalletAccount()
+          return coa.toWalletAccount().toRNBridge()
       case .eoa:
         guard let account = WalletManager.shared.EOAs?.first(where: { $0.address == selectedAccount.address.hexAddr}) else {
           log.error("❌ EOA account not found:\(selectedAccount.address.hexAddr)")
           return nil
         }
-        return account.toWalletAccount()
+        return account.toWalletAccount().toRNBridge()
       }
   }
 }

@@ -6,279 +6,189 @@
 //
 
 import Foundation
-import SwiftUI
 import Flow
 
 // MARK: - WalletAccount
 
-struct WalletAccount {
-    // MARK: Lifecycle
+struct WalletAccount: Codable {
+    // MARK: - Core Identity
 
-    init() {
-        self.storedAccount = LocalUserDefaults.shared.walletAccount ?? [:]
+    /// Unique identifier for the account
+    let id: String
+
+    /// Account address (hex format with 0x prefix)
+    let address: String
+
+    /// Account type (main, child, COA, EOA)
+    let type: FWAccount.AccountType
+
+    /// Network the account belongs to
+    let network: Flow.ChainID
+
+    // MARK: - Display Information
+
+    /// User-customizable display info
+    let user: WalletUser?
+    let childInfo: ChildInfo?
+
+    /// Parent account relationship (for linked accounts)
+    let parent: ParentInfo?
+
+    // MARK: - Account State
+
+    /// Whether this account is currently selected
+    let isActive: Bool
+
+    /// Asset data (balance and NFT count)
+    let assets: AssetData
+
+    // MARK: - Nested Types
+
+    /// Parent account information for linked accounts
+    struct ParentInfo: Codable {
+        let address: String
+        let emoji: WalletEmoji
     }
 
-    // MARK: Internal
-
-    var storedAccount: [String: [WalletAccount.User]]
-
-    // MARK: Private
-
-    private var key: String {
-        guard let userId = UserManager.shared.activatedUID else {
-            return "empty"
-        }
-        return "\(userId)"
+    struct ChildInfo: Codable {
+      let avatar: String?
+      let name: String?
+      let desc: String?
     }
 
-    private func saveCache() {
-        LocalUserDefaults.shared.walletAccount = storedAccount
-    }
-}
+    /// Asset data with loading state
+    enum AssetData {
+        case notLoaded
+        case loading
+        case loaded(balance: Double, nftCount: Int)
+        case error(Error)
 
-// MARK: Logical processing
-
-extension WalletAccount {
-    /// Read or create wallet account info for a specific address
-    /// - Parameters:
-    ///   - address: Wallet address
-    ///   - key: Optional storage key. If nil, uses current user's ID
-    /// - Returns: User account info with emoji and name
-    mutating func readInfo(at address: String, key: String? = nil) -> WalletAccount.User {
-        let storageKey = key ?? self.key
-        let currentNetwork = currentNetwork
-        if var list = storedAccount[storageKey] {
-            let lastUser = list.last { $0.network == currentNetwork && $0.address == address }
-            if let user = lastUser {
-                return user
-            } else {
-                let filterList = list.filter { $0.network == currentNetwork }
-                let existList = filterList.map { $0.emoji }
-                // Try to get an unused emoji first
-                let nEmoji: WalletAccount.Emoji
-                if let unusedEmoji = generalInfo(count: 1, excluded: existList)?.first {
-                    // Found an unused emoji
-                    nEmoji = unusedEmoji
-                } else {
-                    // All emojis are used (12+ accounts on this network)
-                    // Allow reusing a random emoji
-                    nEmoji = WalletAccount.Emoji.random()
-                }
-                let user = WalletAccount.User(emoji: nEmoji, address: address)
-                list.append(user)
-                storedAccount[storageKey] = list
-                saveCache()
-                return user
-            }
-        } else {
-            // First account for this user, no exclusions needed
-            let nEmoji = generalInfo(count: 1, excluded: [])?.first ?? WalletAccount.Emoji.random()
-            let model = WalletAccount.User(emoji: nEmoji, address: address)
-            storedAccount[storageKey] = [model]
-            saveCache()
-            return model
-        }
-    }
-
-    /// Update wallet account emoji and name
-    /// - Parameters:
-    ///   - address: Wallet address to update
-    ///   - emoji: New emoji to assign
-    ///   - name: Optional new name. If nil, uses emoji's default name
-    ///   - key: Optional storage key. If nil, uses current user's ID
-    mutating func update(at address: String, emoji: WalletAccount.Emoji, name: String? = nil, key: String? = nil) {
-        let storageKey = key ?? self.key
-        let currentNetwork = currentNetwork
-        if var list = storedAccount[storageKey] {
-            if let index = list
-                .lastIndex(where: { $0.network == currentNetwork && $0.address == address }) {
-                var user = list[index]
-                user.emoji = emoji
-                user.name = name ?? emoji.name
-                list[index] = user
-                storedAccount[storageKey] = list
-                saveCache()
-            }
-        }
-    }
-
-    /// Generate random emojis excluding specified ones
-    /// - Parameters:
-    ///   - count: Number of emojis to generate
-    ///   - excluded: Emojis to exclude from selection
-    /// - Returns: Array of random emojis, or nil if not enough available emojis
-    /// - Note: Returns nil when excluded list exhausts all available emojis (12 total)
-    private func generalInfo(count: Int, excluded: [Emoji]) -> [WalletAccount.Emoji]? {
-        return Emoji.random(count: count, excluding: excluded)
-    }
-}
-
-// MARK: data struct
-
-extension WalletAccount {
-    enum Emoji: String, CaseIterable, Codable {
-        case koala = "🐨"
-        case lion = "🦁"
-        case panda = "🐼"
-        case butterfly = "🦋"
-        case loong = "🐲"
-        case penguin = "🐧"
-
-        case cherry = "🍒"
-        case chestnut = "🌰"
-        case peach = "🍑"
-        case coconut = "🥥"
-        case lemon = "🍋"
-        case avocado = "🥑"
-
-        // MARK: Internal
-
-        var name: String {
-            switch self {
-            case .koala: return "Koala"
-            case .lion: return "Lion"
-            case .panda: return "Panda"
-            case .butterfly: return "Butterfly"
-            case .penguin: return "Penguin"
-            case .cherry: return "Cherry"
-            case .chestnut: return "Chestnut"
-            case .peach: return "Peach"
-            case .coconut: return "Coconut"
-            case .lemon: return "Lemon"
-            case .avocado: return "Avocado"
-            case .loong: return "Loong"
-            }
-        }
-
-        var color: Color {
-            Color(hex: colorHex)
-        }
-      
-        var colorHex: String {
-          switch self {
-          case .lion:
-              "#FFA600"
-          case .panda:
-              "#EEEEED"
-          case .butterfly:
-              "#36A5F8"
-          case .loong:
-              "#AEE676"
-          case .peach:
-              "#FBB06B"
-          case .lemon:
-              "#FDEF85"
-          case .chestnut:
-              "#EBCA84"
-          case .avocado:
-              "#B2C45C"
-          case .koala:
-              "#DFCFC8"
-          case .penguin:
-              "#FFCB6C"
-          case .cherry:
-              "#FED5DB"
-          case .coconut:
-              "#E3CAAA"
-          }
-        }
-
-        func icon(size: CGFloat = 24) -> some View {
-            VStack {
-                Text(self.rawValue)
-                    .font(.system(size: size / 2 ))
-            }
-            .frame(width: size, height: size)
-            .background(color)
-            .cornerRadius(size / 2.0)
-        }
-      
-        init(name: String?) {
-          guard let name, let result = Emoji.init(rawValue: name) else {
-            self = Emoji.random()
-            return
-          }
-          self = result
-        }
-
-        // MARK: - Random Selection
-
-        /// Get a single random emoji, optionally excluding specific ones
-        /// - Parameter excluding: Array of emojis to exclude from selection
-        /// - Returns: A random emoji, or nil if all emojis are excluded
-        /// - Note: Returns nil when excluding contains all 12 available emojis
-        static func random(excluding: [Emoji] = []) -> Emoji {
-            return random(count: 1, excluding: excluding)?.first ?? .panda
-        }
-
-        /// Get multiple random emojis without duplicates
-        /// - Parameters:
-        ///   - count: Number of random emojis to return (must be positive)
-        ///   - excluding: Array of emojis to exclude from selection
-        /// - Returns: Array of random emojis, or nil if not enough valid options
-        /// - Note: Returns nil when count > (12 - excluding.count)
-        static func random(count: Int, excluding: [Emoji] = []) -> [Emoji]? {
-            guard count > 0 else { return [] }
-            return allCases.randomDifferentElements(limitCount: count, excluded: excluding)
-        }
-    }
-
-    struct User: Codable {
-        // MARK: Lifecycle
-
-        init(emoji: WalletAccount.Emoji, address: String) {
-            self.emoji = emoji
-            self.name = emoji.name
-            self.address = address
-            self.network = currentNetwork
-        }
-
-        init(from decoder: any Decoder) throws {
-            let container: KeyedDecodingContainer<WalletAccount.User.CodingKeys> = try decoder
-                .container(keyedBy: WalletAccount.User.CodingKeys.self)
-            do {
-                self.emoji = try container.decode(
-                    WalletAccount.Emoji.self,
-                    forKey: WalletAccount.User.CodingKeys.emoji
-                )
-            } catch {
-                self.emoji = WalletAccount.Emoji.avocado
-            }
-
-            self.name = try container.decode(
-                String.self,
-                forKey: WalletAccount.User.CodingKeys.name
-            )
-            self.address = try container.decode(
-                String.self,
-                forKey: WalletAccount.User.CodingKeys.address
-            )
-            self.network = try container.decode(
-                Flow.ChainID.self,
-                forKey: WalletAccount.User.CodingKeys.network
-            )
-        }
-
-        // MARK: Internal
-
-        var emoji: WalletAccount.Emoji
-        var name: String
-        var address: String
-        var network: Flow.ChainID
-    }
-}
-
-extension Array where Element: Equatable {
-    func randomDifferentElements(limitCount: Int, excluded: [Element]) -> [Element]? {
-        // Filter out excluded elements
-        let availableElements = filter { !excluded.contains($0) }
-
-        // Ensure we have enough elements after exclusion
-        guard availableElements.count >= limitCount else {
+        var balance: Double? {
+            if case .loaded(let balance, _) = self { return balance }
             return nil
         }
 
-        // Shuffle and take the required count
-        return Array(availableElements.shuffled().prefix(limitCount))
+        var nftCount: Int? {
+            if case .loaded(_, let count) = self { return count }
+            return nil
+        }
+
+        var isReady: Bool {
+            if case .loaded = self { return true }
+            return false
+        }
+    }
+}
+
+// MARK: - Computed Properties
+
+extension WalletAccount {
+    /// Whether this COA account should be hidden in the UI
+    /// Hidden when it has no balance and no NFTs
+    var isHidden: Bool {
+        guard type == .coa else { return false }
+        guard case .loaded(let balance, let nftCount) = assets else {
+            return false  // Don't hide if data not loaded yet
+        }
+        return balance == 0 && nftCount == 0
+    }
+
+    /// Formatted balance display string
+    var displayBalance: String {
+        guard let balance = assets.balance else {
+            return "0.0 Flow"
+        }
+        return balance.formatDisplayFlowBalance
+    }
+
+    var displayName: String {
+      if type == .child {
+        return childInfo?.name ?? ""
+      }
+      return user?.name ?? ""
+    }
+    /// Whether assets are ready for display (COA accounts)
+    var assetsReady: Bool {
+        assets.isReady
+    }
+}
+
+// MARK: - Equatable
+
+extension WalletAccount: Equatable {
+    static func == (lhs: WalletAccount, rhs: WalletAccount) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.address == rhs.address &&
+        lhs.type == rhs.type &&
+        lhs.network == rhs.network &&
+        lhs.displayName == rhs.displayName
+    }
+}
+
+// MARK: - Identifiable
+
+extension WalletAccount: Identifiable {}
+
+// MARK: - Hashable
+
+extension WalletAccount: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(address)
+        hasher.combine(type)
+        hasher.combine(displayName)
+    }
+}
+
+// MARK: - AssetData Codable
+
+extension WalletAccount.AssetData: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case state
+        case balance
+        case nftCount
+    }
+
+    private enum State: String, Codable {
+        case notLoaded
+        case loading
+        case loaded
+        case error
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        switch self {
+        case .notLoaded:
+            try container.encode(State.notLoaded, forKey: .state)
+        case .loading:
+            try container.encode(State.loading, forKey: .state)
+        case .loaded(let balance, let nftCount):
+            try container.encode(State.loaded, forKey: .state)
+            try container.encode(balance, forKey: .balance)
+            try container.encode(nftCount, forKey: .nftCount)
+        case .error:
+            // Encode error state but don't persist error details
+            try container.encode(State.error, forKey: .state)
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let state = try container.decode(State.self, forKey: .state)
+
+        switch state {
+        case .notLoaded:
+            self = .notLoaded
+        case .loading:
+            self = .loading
+        case .loaded:
+            let balance = try container.decode(Double.self, forKey: .balance)
+            let nftCount = try container.decode(Int.self, forKey: .nftCount)
+            self = .loaded(balance: balance, nftCount: nftCount)
+        case .error:
+            // Decode error state as notLoaded (errors are temporary and shouldn't be persisted)
+            self = .notLoaded
+        }
     }
 }

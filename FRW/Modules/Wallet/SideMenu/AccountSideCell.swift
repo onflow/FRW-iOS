@@ -52,8 +52,8 @@ struct AccountSideCell: View {
                             .foregroundStyle(Color.Theme.Text.black8)
                             .frame(height: 22)
 
-                        EVMTagView()
-                            .visibility(isEVM ? .visible : .gone)
+                        COATagView()
+                            .visibility(isCOA ? .visible : .gone)
                         EVMTagView()
                           .visibility(isEOA ? .visible : .gone)
 
@@ -131,8 +131,8 @@ struct AccountSideCell: View {
         currentNetwork
     }
 
-    private var user: WalletAccount.User {
-        WalletManager.shared.walletAccount.readInfo(at: address)
+    private var user: WalletUser {
+        WalletUser.get(address:  address)
     }
 
     private var isSelected: Bool {
@@ -142,7 +142,7 @@ struct AccountSideCell: View {
         return false
     }
 
-    private var isEVM: Bool {
+    private var isCOA: Bool {
         if let evmAddress = WalletManager.shared.coa?.address {
             return evmAddress.lowercased() == address.lowercased()
         }

@@ -11,13 +11,13 @@ import Kingfisher
 
 
 struct WalletAvatarView: View {
-  let emoji: WalletAccount.Emoji?
+  let emoji: WalletEmoji?
   let avatar: String?
   let size: WalletAvatarSize
   var showBorder: Bool = false
 
   init(
-    emoji: WalletAccount.Emoji? = nil,
+    emoji: WalletEmoji? = nil,
     avatar: String? = nil,
     size: WalletAvatarSize = .normal,
     showBorder: Bool = false

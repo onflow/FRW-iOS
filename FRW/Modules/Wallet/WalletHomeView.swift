@@ -163,10 +163,10 @@ struct WalletHomeView: View {
                                 }
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: 28, height: 28)
+                                .frame(width: 40, height: 40)
                                 .cornerRadius(14)
                         } else {
-                            wm.walletMetadata.emoji.icon(size: 24)
+                            wm.walletMetadata.emoji.icon(size: 40)
                         }
                     }
                     .frame(width: 40, height: 40)
