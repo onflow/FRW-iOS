@@ -132,7 +132,8 @@ extension LoginViewModelProtocol {
         await AlertCenter.shared.presentAccountNotFound(onCreate: { [weak self] in
           Task {
             HUD.loading()
-            try await self?.regist(address: address, userName: "", flowKey: flowKey)
+            let username = UsernameGenerator.generateRandomUsername()
+            try await self?.regist(address: address, userName: username, flowKey: flowKey)
             HUD.dismissLoading()
             Router.popToRoot()
           }
