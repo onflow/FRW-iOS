@@ -25,6 +25,8 @@ struct DeveloperModeView: RouteableView {
         "developer_mode".localized
     }
 
+    let showDEBUGTool = isDevModel
+
     var body: some View {
         ScrollView {
             VStack {
@@ -354,7 +356,7 @@ struct DeveloperModeView: RouteableView {
                     }
                     .cornerRadius(16)
 
-                    if isDevModel {
+                    if showDEBUGTool {
                         Section {
                             VStack {
                                 HStack {
@@ -440,15 +442,15 @@ struct DeveloperModeView: RouteableView {
                                       HUD.success(title: "All profiles cleared")
                               }
                               //MARK: -
-//                              HStack {
-//                                Text("Delete SE on Keychain")
-//                                Spacer()
-//                              }
-//                              .frame(height: 64)
-//                              .padding(.horizontal, 16)
-//                              .onTapGesture {
-//                                Router.route(to: RouteMap.Developer.deleteSE)
-//                              }
+                              HStack {
+                                Text("Delete SE on Keychain")
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                Router.route(to: RouteMap.Developer.deleteSE)
+                              }
                             }
                             .background(.LL.bgForIcon)
                             .cornerRadius(16)
