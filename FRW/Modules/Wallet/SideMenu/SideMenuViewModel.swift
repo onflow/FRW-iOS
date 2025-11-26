@@ -57,7 +57,7 @@ class SideMenuViewModel: ObservableObject {
     }
 
     private func refreshProfile(profile: ProfileModel?) {
-      guard let profile = profile else {
+      guard let profile = profile, profile.accounts.count > 0 else {
         refreshAccount(address: nil)
         allAccounts = [[.mock()],[.mock()],[.mock()]]
         return
