@@ -326,10 +326,18 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         guard let maxFeeData = Data(hexString: maxFeeHex),
                               let maxPriorityData = Data(hexString: maxPriorityHex) else {
                             log.error("[SOA] Invalid EIP-1559 fee data")
+                            HUD.error(title: "Invalid EIP-1559 fee data")
                             cancel()
                             return
                         }
-                        
+                        // Validate EIP-1559 fee relationship
+                        guard maxFeePerGas.doubleValue >= maxPriorityFeePerGas.doubleValue else {
+                            log.error("[SOA] maxFeePerGas must be >= maxPriorityFeePerGas")
+                            HUD.error(title: "Error", message: "maxFeePerGas must be >= maxPriorityFeePerGas")
+                            cancel()
+                            return
+                        }
+
                         input.txMode = .enveloped
                         input.maxFeePerGas = maxFeeData
                         input.maxInclusionFeePerGas = maxPriorityData
@@ -342,6 +350,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                         
                         guard let gasPriceData = Data(hexString: gasPriceHex) else {
                             log.error("[SOA] Invalid gas price data")
+                            HUD.error(title: "Invalid gas price data")
                             cancel()
                             return
                         }
@@ -355,6 +364,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     let normalizedAmount = self.normalizeHexString(amount)
                     guard let amountData = Data(hexString: normalizedAmount) else {
                       log.error("[SOA] Invalid amount data: \(normalizedAmount)")
+                      HUD.error(title: "Invalid amount data")
                       cancel()
                       return
                     }
@@ -386,6 +396,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     // Sign the transaction
                     guard let signedTransaction = try await WalletManager.shared.walletEntity?.ethSignTransaction(input) else {
                       log.error("[SOA] Failed to sign transaction")
+                      HUD.error(title: "Failed to sign transaction")
                       cancel()
                       return
                     }
@@ -414,6 +425,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
 
             Router.route(to: RouteMap.Explore.authz(vm))
         } catch {
+            HUD.error(title: "\(error.localizedDescription)")
             log.error("[EVM] send transaction failed \(error)", context: error)
             cancel()
         }
