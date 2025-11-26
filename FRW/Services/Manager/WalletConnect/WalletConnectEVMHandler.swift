@@ -331,7 +331,9 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                             return
                         }
                         // Validate EIP-1559 fee relationship
-                        guard maxFeePerGas.doubleValue >= maxPriorityFeePerGas.doubleValue else {
+                        guard let maxFeeVal = BigUInt(maxFeeHex, radix: 16),
+                              let maxPriorityVal = BigUInt(maxPriorityHex, radix: 16),
+                              maxFeeVal >= maxPriorityVal else {
                             log.error("[SOA] maxFeePerGas must be >= maxPriorityFeePerGas")
                             HUD.error(title: "Error", message: "maxFeePerGas must be >= maxPriorityFeePerGas")
                             cancel()
