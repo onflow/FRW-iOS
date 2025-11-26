@@ -330,7 +330,13 @@ extension ProfileView {
                             if !isDevModel && currentNetwork != .mainnet {
                                 showAlert = true
                             } else {
+                              let wallet = WalletManager.shared
+                              if wallet.keyProvider?.keyType == .seedPhrase {
+                                Router.route(to: RouteMap.Profile.RecoveryPhraseBackup)
+                              } else {
                                 Router.route(to: RouteMap.Backup.backupList)
+                              }
+
                             }
                         } label: {
                             ProfileView.SettingItemCell(

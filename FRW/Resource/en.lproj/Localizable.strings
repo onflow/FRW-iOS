@@ -186,7 +186,7 @@
 "You__will__need__to__connect__to__your__wallet__again::message" = "You will need to connect to your wallet again to make this change work.";
 "private_place_tips" = "Make sure you are in a private place !";
 "Coin::message" = "Coin";
-"reveal" = "Reveal";
+"reveal" = "Click to reveal phrase";
 "Exec_Transaction::message" = "Exec Transaction";
 "not_share_secret_tips" = "Do not share your secret phrase!";
 "View_more_transactions::message" = "View more transactions";
@@ -1193,3 +1193,6 @@ Key Store and Private Key.";
 "invalid_gas_price_data" = "Invalid gas price data";
 "invalid_amount_data" = "Invalid amount data";
 "failed_to_sign_transaction" = "Failed to sign transaction";
+
+"backup_recovery_sub" = "View your profile’s recovery phrase";
+"backup_recovery_title" = "Your profile’s recovery phrase";
