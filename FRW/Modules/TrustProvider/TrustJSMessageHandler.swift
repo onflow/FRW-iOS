@@ -486,7 +486,7 @@ extension TrustJSMessageHandler {
                         guard let maxFeeData = Data(hexString: maxFeeHex),
                               let maxPriorityData = Data(hexString: maxPriorityHex) else {
                             log.error("[SOA] Invalid EIP-1559 fee data")
-                            HUD.error(title: "invalid_eip1559_fee_data".localized)
+                            HUD.error(EVMError.invalidEIP1559FeeData)
                             self.cancel(id: id)
                             return
                         }
@@ -495,7 +495,7 @@ extension TrustJSMessageHandler {
                               let maxPriorityVal = BigUInt(maxPriorityHex, radix: 16),
                               maxFeeVal >= maxPriorityVal else {
                             log.error("[SOA] maxFeePerGas must be >= maxPriorityFeePerGas")
-                            HUD.error(title: "Error::message".localized, message: "max_fee_must_be_greater_than_priority_fee".localized)
+                            HUD.error(EVMError.EIP1559MaxFeeLessThanPriority)
                             self.cancel(id: id)
                             return
                         }
@@ -512,7 +512,7 @@ extension TrustJSMessageHandler {
                         
                         guard let gasPriceData = Data(hexString: gasPriceHex) else {
                             log.error("[SOA] Invalid gas price data")
-                            HUD.error(title: "invalid_gas_price_data".localized)
+                            HUD.error(EVMError.invalidGasPriceData)
                             self.cancel(id: id)
                             return
                         }
@@ -526,7 +526,7 @@ extension TrustJSMessageHandler {
                     let normalizedAmount = amount.normalizeHexString()
                     guard let amountData = Data(hexString: normalizedAmount) else {
                       log.error("[SOA] Invalid amount data: \(normalizedAmount)")
-                      HUD.error(title: "invalid_amount_data".localized)
+                      HUD.error(EVMError.invalidAmountData)
                       self.cancel(id: id)
                       return
                     }
@@ -558,7 +558,7 @@ extension TrustJSMessageHandler {
                     // Sign the transaction
                     guard let signedTransaction = try await WalletManager.shared.walletEntity?.ethSignTransaction(input) else {
                       log.error("[SOA] Failed to sign transaction")
-                      HUD.error(title: "failed_to_sign_transaction".localized)
+                      HUD.error(EVMError.failedSign)
                       self.cancel(id: id)
                       return
                     }
