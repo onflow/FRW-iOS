@@ -71,7 +71,7 @@ class SideMenuViewModel: ObservableObject {
           return SideMenuItem(account: account, isHidden: isHidden)
         }
       })
-      if let address = currentAccount?.account.address {
+      if let address = wallet.selectedAccount?.hexAddr {
         refreshAccount(address: address)
       }
     }
@@ -90,6 +90,7 @@ class SideMenuViewModel: ObservableObject {
           }
         }
       }
+      log.debug("[Profile] \(result)")
       withAnimation(.easeInOut) {
         currentAccount = result
       }

@@ -64,9 +64,9 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
 
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
-        _ = ProfileManager.shared
         FirebaseApp.configure()
         ServiceConfig.configure()
+        _ = ProfileManager.shared
         Analytics.setAnalyticsCollectionEnabled(true)
         Analytics.logEvent("ios_app_launch", parameters: [:])
 
