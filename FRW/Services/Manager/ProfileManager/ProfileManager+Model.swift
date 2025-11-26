@@ -200,7 +200,7 @@ extension ProfileModel {
     return totalFlow.formatDisplayFlowBalance
   }
 
-  var accountDes: String {
+  var countDes: String {
     let count = accounts.flatMap { $0 }.filter { !$0.isHidden }.count
     guard count > 0 else {
       return ""

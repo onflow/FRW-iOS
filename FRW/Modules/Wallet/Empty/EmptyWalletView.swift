@@ -133,7 +133,7 @@ struct EmptyWalletView: View {
                     .font(.inter(size: 12, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black8)
 
-                Text("\(placeholder.accountDes)")
+                Text("\(placeholder.countDes)")
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundStyle(Color.Theme.Text.black3)

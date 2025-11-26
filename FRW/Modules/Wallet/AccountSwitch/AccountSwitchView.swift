@@ -205,7 +205,7 @@ struct AccountSwitchView: View {
               }
               
               HStack(spacing: 2) {
-                Text("\(placeholder.accountDes)")
+                Text("\(placeholder.countDes)")
                     .lineLimit(1)
                     .font(.inter(size: 12, weight: .regular))
                     .foregroundColor(Color.Brain.Text.secondary)
