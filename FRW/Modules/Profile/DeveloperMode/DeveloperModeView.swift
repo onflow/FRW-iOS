@@ -20,7 +20,6 @@ struct DeveloperModeView_Previews: PreviewProvider {
 
 struct DeveloperModeView: RouteableView {
     // MARK: Internal
-
     var title: String {
         "developer_mode".localized
     }

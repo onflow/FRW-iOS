@@ -173,6 +173,7 @@ class ProfileManager: ObservableObject {
       let allProfiles = try keychainService.getAllProfiles()
       DispatchQueue.main.async {
         self.profiles = allProfiles
+        self.fetchAllAccountsInfo()
         self.updateCurrentProfile()
       }
     } catch {
