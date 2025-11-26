@@ -91,6 +91,9 @@ class SideMenuViewModel: ObservableObject {
             break
           }
         }
+        if result != nil {
+          break
+        }
       }
       log.debug("[Profile] find current account:\(address)")
       withAnimation(.easeInOut) {

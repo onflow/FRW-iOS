@@ -60,7 +60,7 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         reactNativeDelegate = delegate
         reactNativeFactory = factory
 
-        KeyChainAccessibilityUpdate.udpate()
+        KeyChainAccessibilityUpdate.update()
 
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
