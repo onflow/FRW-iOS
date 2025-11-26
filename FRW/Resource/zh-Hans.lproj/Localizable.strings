@@ -961,3 +961,9 @@
 "camera_permission_required_title" = "需要相机访问权限";
 "camera_permission_required_message" = "Flow Wallet 需要相机权限来扫描二维码。请在设置中启用相机权限以继续。";
 "move_asset_browser_title_x" = "在 Flow 上的 cadence 地址之间移动您的资产，以便 %@ 查看您的资产";
+
+"invalid_eip1559_fee_data" = "无效的 EIP-1559 费用数据";
+"max_fee_must_be_greater_than_priority_fee" = "maxFeePerGas 必须大于或等于 maxPriorityFeePerGas";
+"invalid_gas_price_data" = "无效的 gas 价格数据";
+"invalid_amount_data" = "无效的金额数据";
+"failed_to_sign_transaction" = "签署交易失败";
