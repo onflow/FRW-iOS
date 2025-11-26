@@ -19,7 +19,14 @@ enum RNBridge {
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
         case tokenDetail = "token-detail"
+        case onboarding = "onboarding"
         case receive = "receive"
+    }
+
+    enum AccountTypeType: String, Codable {
+        case eoa = "eoa"
+        case coa = "coa"
+        case null = "null"
     }
 
     struct EmojiInfo: Codable {
@@ -105,6 +112,51 @@ enum RNBridge {
         let name: String
         let symbol: String
         let rate: String
+    }
+
+    struct SaveMnemonicResponse: Codable {
+        let success: Bool
+        let error: String
+    }
+
+    struct CreateAccountResponse: Codable {
+        let success: Bool
+        let address: String
+        let username: String
+        let accountType: AccountTypeType
+        let txId: String
+        let error: String
+    }
+
+    struct CreateEOAAccountResponse: Codable {
+        let success: Bool
+        let address: String
+        let username: String
+        let mnemonic: String
+        let phrase: String
+        let accountType: AccountTypeType
+        let error: String
+    }
+
+    struct AccountKey: Codable {
+        let publicKey: String
+        let hashAlgoStr: String
+        let signAlgoStr: String
+        let weight: Int
+        let hashAlgo: Int
+        let signAlgo: Int
+    }
+
+    struct SeedPhraseGenerationResponse: Codable {
+        let mnemonic: String
+        let accountKey: AccountKey
+        let drivepath: String
+    }
+
+    struct SPResponse: Codable {
+        let mnemonic: String
+        let accountKey: AccountKey
+        let drivepath: String
     }
 
     struct NFTModel: Codable {
