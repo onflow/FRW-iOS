@@ -58,6 +58,7 @@ class SideMenuViewModel: ObservableObject {
 
     private func refreshProfile(profile: ProfileModel?) {
       guard let profile = profile, profile.accounts.count > 0 else {
+        log.debug("[Profile] profile:\(profile?.uid ?? "")")
         refreshAccount(address: nil)
         allAccounts = [[.mock()],[.mock()],[.mock()]]
         return
@@ -79,6 +80,7 @@ class SideMenuViewModel: ObservableObject {
     private func refreshAccount(address: String?) {
       guard let address = address else {
         currentAccount = nil
+        log.debug("[Profile] find current account:\(address ?? "")")
         return
       }
       var result: SideMenuItem? = nil
@@ -90,7 +92,7 @@ class SideMenuViewModel: ObservableObject {
           }
         }
       }
-      log.debug("[Profile] \(result)")
+      log.debug("[Profile] find current account:\(address)")
       withAnimation(.easeInOut) {
         currentAccount = result
       }
