@@ -194,11 +194,17 @@ extension ProfileModel {
     let totalFlow = list.reduce(0.0) { result, account in
       result + (account.assets.balance ?? 0)
     }
+    guard totalFlow > 0 else {
+      return ""
+    }
     return totalFlow.formatDisplayFlowBalance
   }
 
-  var accountDes: String {
+  var countDes: String {
     let count = accounts.flatMap { $0 }.filter { !$0.isHidden }.count
+    guard count > 0 else {
+      return ""
+    }
     return "\(count) Accounts"
   }
 }
