@@ -261,12 +261,7 @@ extension ProfileView {
                     iconName: "icon-wallet",
                     title: "wallets".localized
                 ) {
-#if DEBUG
                   Router.route(to: RouteMap.Profile.accountList)
-#else
-                  Router.route(to: RouteMap.Profile.walletList)
-#endif
-      
                 }
             }
             .padding(.vertical, 20)
@@ -330,7 +325,13 @@ extension ProfileView {
                             if !isDevModel && currentNetwork != .mainnet {
                                 showAlert = true
                             } else {
+                              let wallet = WalletManager.shared
+                              if wallet.keyProvider?.keyType == .seedPhrase {
+                                Router.route(to: RouteMap.Profile.RecoveryPhraseBackup)
+                              } else {
                                 Router.route(to: RouteMap.Backup.backupList)
+                              }
+
                             }
                         } label: {
                             ProfileView.SettingItemCell(

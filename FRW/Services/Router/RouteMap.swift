@@ -403,6 +403,7 @@ extension RouteMap {
         case secureEnclavePrivateKey
         case accountList
         case account(WalletAccount, WalletAccount?, ProfileModel)
+        case RecoveryPhraseBackup
     }
 }
 
@@ -506,6 +507,8 @@ extension RouteMap.Profile: RouterTarget {
           navi.push(content: AccountListView())
         case .account(let account, let parent, let profile):
           navi.push(content: AccountDetailView(account: account, profile: profile, parentAccount: parent))
+        case .RecoveryPhraseBackup:
+          navi.push(content: RecoveryPhraseBackupView())
         }
     }
 }

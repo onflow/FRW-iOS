@@ -10,28 +10,26 @@ import SwiftUI
 struct PrivateKeyWarning: View {
     var body: some View {
         HStack(alignment: .top) {
-            Image("Warning")
+            Image("icon-warning")
                 .resizable()
                 .renderingMode(.template)
                 .aspectRatio(contentMode: .fit)
-                .foregroundColor(.LL.warning2)
-                .width(16)
+                .foregroundColor(.Brain.System.red)
+                .frame(width: 24, height: 24)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("not_share_secret_tips".localized)
-                    .font(.LL.caption)
-                    .bold()
+                  .font(.inter(size: 14, weight: .bold))
                 Text("not_share_secret_desc".localized)
-                    .font(.LL.footnote)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                  .font(.inter(size: 14))
+                  .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .foregroundColor(.Brain.System.red)
         }
-        .padding(16)
-        .foregroundColor(.LL.warning2)
+        .padding(18)
         .background {
             RoundedRectangle(cornerRadius: 16)
-                .foregroundColor(.LL.warning6)
+                .foregroundColor(Color.Brain.System.red.opacity(0.15))
         }
     }
 }

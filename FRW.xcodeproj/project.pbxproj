@@ -1857,6 +1857,8 @@
 		4EE282F42EB078FB0070A3E4 /* SeedPhraseLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.swift */; };
 		4EE282F62EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */; };
 		4EE282F72EB082190070A3E4 /* AccountNotFoundAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */; };
+		4EE6AC692ED712990054900C /* RecoveryPhraseBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6AC682ED712990054900C /* RecoveryPhraseBackupView.swift */; };
+		4EE6AC6A2ED712990054900C /* RecoveryPhraseBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6AC682ED712990054900C /* RecoveryPhraseBackupView.swift */; };
 		4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8A2B19677B006A827B /* SyncConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */; };
 		4EE6FA8C2B196B16006A827B /* Dictionary+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */; };
@@ -3355,6 +3357,7 @@
 		4EE282EB2EB078FB0070A3E4 /* PrivateKeyLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyLoginViewModel.swift; sourceTree = "<group>"; };
 		4EE282EC2EB078FB0070A3E4 /* SeedPhraseLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPhraseLoginViewModel.swift; sourceTree = "<group>"; };
 		4EE282F52EB082190070A3E4 /* AccountNotFoundAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNotFoundAlertView.swift; sourceTree = "<group>"; };
+		4EE6AC682ED712990054900C /* RecoveryPhraseBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryPhraseBackupView.swift; sourceTree = "<group>"; };
 		4EE6FA882B19677B006A827B /* SyncConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConfirmViewModel.swift; sourceTree = "<group>"; };
 		4EE6FA8B2B196B16006A827B /* Dictionary+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+Add.swift"; sourceTree = "<group>"; };
 		4EE8E4942834DC7100DFEF59 /* NFTModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTModel.swift; sourceTree = "<group>"; };
@@ -6976,6 +6979,7 @@
 			children = (
 				6A49C19A2899126B00C8FF05 /* ProfileBackupView.swift */,
 				6A49C19D2899364100C8FF05 /* ProfileBackupViewModel.swift */,
+				4EE6AC682ED712990054900C /* RecoveryPhraseBackupView.swift */,
 			);
 			path = ProfileBackup;
 			sourceTree = "<group>";
@@ -8121,9 +8125,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8177,9 +8185,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8194,9 +8206,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8229,9 +8245,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8308,9 +8328,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8347,9 +8371,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9346,6 +9374,7 @@
 				158CE8892782DAD7006A8394 /* UserResponses.swift in Sources */,
 				4E093AD92DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */,
 				4EEDA38E2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */,
+				4EE6AC6A2ED712990054900C /* RecoveryPhraseBackupView.swift in Sources */,
 				6A63F9F028C9C48C00FE96C0 /* SwiftUIPullToRefresh.swift in Sources */,
 				15DC214B27819C56000B187A /* VBaseNaviationViewNavigationBar.swift in Sources */,
 				6A49C19C2899126B00C8FF05 /* ProfileBackupView.swift in Sources */,
@@ -10427,6 +10456,7 @@
 				15C58C0C2868A4EE00BD4FC6 /* UserResponses.swift in Sources */,
 				4E093AD82DCB929A00CF84F0 /* WalletManger+Account.swift in Sources */,
 				4EEDA38D2B4D788A0000D382 /* MultiBackupDetailViewModel.swift in Sources */,
+				4EE6AC692ED712990054900C /* RecoveryPhraseBackupView.swift in Sources */,
 				4E9DCE452B50E845005DE911 /* InstabugConfig.swift in Sources */,
 				6A63F9EF28C9C48C00FE96C0 /* SwiftUIPullToRefresh.swift in Sources */,
 				15C58C0D2868A4EE00BD4FC6 /* VBaseNaviationViewNavigationBar.swift in Sources */,
@@ -10943,10 +10973,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -11011,10 +11038,7 @@
 				MARKETING_VERSION = 3.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

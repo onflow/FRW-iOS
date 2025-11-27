@@ -159,6 +159,27 @@ enum RNBridge {
         let drivepath: String
     }
 
+    struct DeviceInfo: Codable {
+        let device_id: String?
+        let name: String?
+        let type: String?
+        let user_agent: String?
+        let ip: String?
+        let city: String?
+        let country: String?
+        let countryCode: String?
+        let continent: String?
+        let continentCode: String?
+        let regionName: String?
+        let district: String?
+        let zip: String?
+        let lat: Int?
+        let lon: Int?
+        let isp: String?
+        let org: String?
+        let currency: String?
+    }
+
     struct NFTModel: Codable {
         let id: String?
         let name: String?

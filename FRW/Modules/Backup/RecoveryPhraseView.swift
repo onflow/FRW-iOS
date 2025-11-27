@@ -45,32 +45,32 @@ struct RecoveryPhraseView: RouteableView {
         Button {
             viewModel.trigger(.copy)
         } label: {
-            Image("icon-copy-phrase")
+          HStack(spacing: 12) {
+            Image("profile_back_copy")
+              .resizable()
+              .renderingMode(.template)
+              .foregroundStyle(Color.Brain.Primary.main)
+              .frame(width: 24, height: 24)
+            Text("copy".localized)
+              .font(.inter(size:14, weight: .bold))
+              .foregroundStyle(Color.Brain.Primary.main)
+          }
         }
     }
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("recovery".localized)
-                            .bold()
-                            .foregroundColor(Color.LL.text)
-
-                        Text("phrase".localized)
-                            .bold()
-                            .foregroundColor(Color.LL.orange)
-                    }
-                    .font(.LL.largeTitle)
+            VStack(spacing: 18) {
+                VStack(alignment: .center, spacing: 10) {
+                    Text("recovery_phrase".localized)
+                      .font(.inter(size: 20, weight: .w700))
+                      .foregroundStyle(Color.Brain.Text.primary)
 
                     Text("words_save_tips".localized)
-                        .font(.LL.body)
-                        .foregroundColor(.LL.note)
-                        .padding(.top, 1)
+                      .font(.inter(size: 14))
+                      .multilineTextAlignment(.center)
+                      .foregroundStyle(Color.Brain.Text.primary)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                Spacer()
 
                 VStack {
                     HStack {
@@ -103,20 +103,17 @@ struct RecoveryPhraseView: RouteableView {
                         RoundedRectangle(cornerRadius: 16)
                             .strokeBorder(lineWidth: 0.5)
                         VStack(spacing: 10) {
-                            Image(systemName: "eyes")
-                                .font(.largeTitle)
-                            Text("private_place_tips".localized)
-                                .foregroundColor(.LL.note)
-                                .font(.LL.body)
-                                .fontWeight(.semibold)
-                            Text("reveal".localized)
-                                .padding(5)
-                                .padding(.horizontal, 2)
-                                .foregroundColor(.LL.background)
-                                .font(.LL.body)
-                                .background(.LL.note)
-                                .cornerRadius(12)
-                                .padding(.top, 10)
+
+                          Image("profile-lock")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundStyle(Color.Brain.Core.cards)
+                            .frame(width: 16, height: 16)
+
+                          Text("reveal".localized)
+                            .font(.inter(size: 16, weight: .medium))
+                            .foregroundStyle(Color.Brain.Text.primary)
+
                         }
                         .opacity(isBlur ? 1 : 0)
                         .foregroundColor(.LL.note)
@@ -124,16 +121,12 @@ struct RecoveryPhraseView: RouteableView {
                     .allowsHitTesting(false)
                 }
                 .animation(.linear(duration: 0.2), value: isBlur)
-                .padding(.top, 20)
 
-                VStack(alignment: .leading) {
-                    copyBtn
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                copyBtn
 
                 PrivateKeyWarning()
-                    .padding(.top)
-                    .padding(.bottom)
+
+                Spacer()
 
                 VPrimaryButton(
                     model: ButtonStyle.primary,
@@ -168,8 +161,8 @@ struct RecoveryPhraseView: RouteableView {
                 .visibility(isInBackupMode ? .gone : .visible)
             }
         }
-        .padding(.horizontal, 28)
-        .backgroundFill(Color.LL.background)
+        .padding(.horizontal, 18)
+        .backgroundFill(Color.Brain.Core.background)
         .applyRouteable(self)
         .tracedView(self)
     }
@@ -179,13 +172,13 @@ struct RecoveryPhraseView: RouteableView {
     private var isInBackupMode = false
 }
 
-// MARK: - RecoveryPhraseView_Previews
-
-struct RecoveryPhraseView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecoveryPhraseView(backupMode: false)
-    }
-}
+//// MARK: - RecoveryPhraseView_Previews
+//
+//struct RecoveryPhraseView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecoveryPhraseView(backupMode: false)
+//    }
+//}
 
 // MARK: - WordListView
 
