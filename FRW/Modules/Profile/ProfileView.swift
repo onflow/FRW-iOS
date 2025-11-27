@@ -261,12 +261,7 @@ extension ProfileView {
                     iconName: "icon-wallet",
                     title: "wallets".localized
                 ) {
-#if DEBUG
                   Router.route(to: RouteMap.Profile.accountList)
-#else
-                  Router.route(to: RouteMap.Profile.walletList)
-#endif
-      
                 }
             }
             .padding(.vertical, 20)
