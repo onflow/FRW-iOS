@@ -333,6 +333,16 @@ extension WalletConnectManager {
             FCLWalletConnectMethod.accountInfo.rawValue,
         ]
     }
+
+    // Get cached EVM address for a specific dApp URL
+    private func cachedEVMAddress(for dappURL: String) -> String? {
+        guard let uid = LocalUserDefaults.shared.activatedUID,
+              let url = URL(string: dappURL),
+              let host = url.host else {
+            return nil
+        }
+        return LocalUserDefaults.shared.getAuthnAddress(for: uid, host: host)
+    }
 }
 
 // MARK: - Handle
@@ -345,10 +355,11 @@ extension WalletConnectManager {
             rejectSession(proposal: sessionProposal)
             return
         }
+        let info = handler.sessionInfo(sessionProposal: sessionProposal)
         var address = WalletManager.shared.getPrimaryWalletAddress()
         let isEVM = handler.currentTypes(sessionProposal: sessionProposal).contains(.evm)
         if isEVM {
-          address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
+          address = cachedEVMAddress(for: info.dappURL) ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
         }
         guard network == currentNetwork else {
             rejectSession(proposal: sessionProposal)
@@ -363,8 +374,6 @@ extension WalletConnectManager {
             approveSession(proposal: sessionProposal, EVMAddress: address ?? "")
             return
         }
-
-        let info = handler.sessionInfo(sessionProposal: sessionProposal)
         
         currentSessionInfo = info
       
