@@ -28,6 +28,43 @@ extension Color {
         Scanner(string: hex).scanHexInt64(&int)
         self.init(hex: int, alpha: alpha)
     }
+
+    /// Generate a random color
+    static func random(alpha: Double = 1.0) -> Color {
+        Color(
+            red: Double.random(in: 0...1),
+            green: Double.random(in: 0...1),
+            blue: Double.random(in: 0...1),
+            opacity: alpha
+        )
+    }
+
+    /// Generate a random color with seed for consistent results
+    static func random(seed: Int, alpha: Double = 1.0) -> Color {
+        var generator = SeededRandomNumberGenerator(seed: UInt64(abs(seed)))
+        return Color(
+            red: Double.random(in: 0...1, using: &generator),
+            green: Double.random(in: 0...1, using: &generator),
+            blue: Double.random(in: 0...1, using: &generator),
+            opacity: alpha
+        )
+    }
+}
+
+// MARK: - SeededRandomNumberGenerator
+
+private struct SeededRandomNumberGenerator: RandomNumberGenerator {
+    private var state: UInt64
+
+    init(seed: UInt64) {
+        self.state = seed
+    }
+
+    mutating func next() -> UInt64 {
+        // Linear congruential generator
+        state = state &* 6364136223846793005 &+ 1442695040888963407
+        return state
+    }
 }
 
 extension UIColor {
@@ -331,6 +368,12 @@ extension Color {
             /// dark: 0a0a0b, light:
             static let navigation = Color(.Brain.Core.navigation)
             static let dividers = Color(.Brain.Light.lines).opacity(0.15)
+            /// dark: 242424, light: E5E5EA
+            static let container = Color(UIColor { trait in
+                trait.userInterfaceStyle == .dark
+                    ? UIColor(red: 0x24/255, green: 0x24/255, blue: 0x24/255, alpha: 1)
+                    : UIColor(red: 0xE5/255, green: 0xE5/255, blue: 0xEA/255, alpha: 1)
+            })
         }
 
         enum Text {
