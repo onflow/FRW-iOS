@@ -404,6 +404,7 @@ extension RouteMap {
         case accountList
         case account(WalletAccount, WalletAccount?, ProfileModel)
         case RecoveryPhraseBackup
+        case EOAPrivateKey
     }
 }
 
@@ -509,6 +510,8 @@ extension RouteMap.Profile: RouterTarget {
           navi.push(content: AccountDetailView(account: account, profile: profile, parentAccount: parent))
         case .RecoveryPhraseBackup:
           navi.push(content: RecoveryPhraseBackupView())
+        case .EOAPrivateKey:
+          navi.push(content: EOAPrivateKeyView())
         }
     }
 }

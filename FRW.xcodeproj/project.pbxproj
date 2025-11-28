@@ -1513,6 +1513,8 @@
 		4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */; };
 		4E7153242E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */; };
 		4E7153252E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */; };
+		4E722F352ED9A96600627AAD /* EOAPrivateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */; };
+		4E722F362ED9A96600627AAD /* EOAPrivateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */; };
 		4E7712E12E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E7712E22E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */; };
@@ -3173,6 +3175,7 @@
 		4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSEKeychain.swift; sourceTree = "<group>"; };
 		4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+Dev.swift"; sourceTree = "<group>"; };
+		4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOAPrivateKeyView.swift; sourceTree = "<group>"; };
 		4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNBridgeError.swift; sourceTree = "<group>"; };
 		4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncInfo.swift; sourceTree = "<group>"; };
 		4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncDevice.swift"; sourceTree = "<group>"; };
@@ -4890,6 +4893,7 @@
 				4E2B704F2AF37289004F00A0 /* Model */,
 				15BA24B828C7A93400755CBF /* WalletSettingView.swift */,
 				15BA24BB28C7AF1B00755CBF /* PrivateKeyView.swift */,
+				4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */,
 				4EB2EF712C984D00002E59B4 /* SecureEnclavePrivateKeyView.swift */,
 				6AFED0282906794000221F95 /* WalletSettingViewModel.swift */,
 				6AD6D7C62907D82D0037E206 /* WalletResetConfirmView.swift */,
@@ -9414,6 +9418,7 @@
 				4E3138132C658FB2003A73E5 /* ResizeableView.swift in Sources */,
 				6AD3581A28AF700C00BC510A /* NFTUIKitTopSelectionHeaderView.swift in Sources */,
 				1575A74028B29BA200ADC513 /* SVGWebUIView.swift in Sources */,
+				4E722F362ED9A96600627AAD /* EOAPrivateKeyView.swift in Sources */,
 				4ED21F38284E2E6E00320AD0 /* ShareSheet.swift in Sources */,
 				6A32213A2927B49B000B8E1F /* StakingDetailView.swift in Sources */,
 				6AF4A6C828D4725300B12FAB /* FlownsResponses.swift in Sources */,
@@ -10496,6 +10501,7 @@
 				4E09A1FF2CC7A5800099606E /* EventTrack+Account.swift in Sources */,
 				4E3138122C658FB2003A73E5 /* ResizeableView.swift in Sources */,
 				6AD3581928AF700C00BC510A /* NFTUIKitTopSelectionHeaderView.swift in Sources */,
+				4E722F352ED9A96600627AAD /* EOAPrivateKeyView.swift in Sources */,
 				1575A73F28B29BA200ADC513 /* SVGWebUIView.swift in Sources */,
 				15C58C1E2868A4EE00BD4FC6 /* ShareSheet.swift in Sources */,
 				6A3221392927B49B000B8E1F /* StakingDetailView.swift in Sources */,

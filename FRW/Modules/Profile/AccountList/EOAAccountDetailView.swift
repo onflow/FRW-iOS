@@ -45,7 +45,7 @@ struct EOAAccountDetailView: View {
                         Task {
                             let result = await SecurityManager.shared.SecurityVerify()
                             if result {
-                                Router.route(to: RouteMap.Profile.privateKey(true))
+                              Router.route(to: RouteMap.Profile.EOAPrivateKey)
                             }
                         }
                     } label: {
