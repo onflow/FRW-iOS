@@ -143,19 +143,6 @@ extension LoginViewModelProtocol {
         
       }
     }
-  
-    // MARK: - Username Creation
-
-    /// Show username creation screen with callback
-    /// - Parameter callback: Callback with created username
-    func createUserName(callback: @escaping (String) -> Void) {
-        let viewModel = ImportUserNameViewModel { name in
-            if !name.isEmpty {
-                callback(name)
-            }
-        }
-        Router.route(to: RouteMap.RestoreLogin.importUserName(viewModel))
-    }
 
     // MARK: - Public Key Verification
 
@@ -231,18 +218,17 @@ extension LoginViewModelProtocol {
                 } else if response.httpCode == 200 {
                     // New account, create username first
                     HUD.dismissLoading()
-                    createUserName { name in
-                        Task {
-                            HUD.loading()
-                            try await self.performLogin(
-                                address: address,
-                                userName: name,
-                                flowKey: flowKey,
-                                isImport: true
-                            )
-                            HUD.dismissLoading()
-                            Router.popToRoot()
-                        }
+                    Task {
+                        HUD.loading()
+                        let name = UsernameGenerator.generateRandomUsername()
+                        try await self.performLogin(
+                            address: address,
+                            userName: name,
+                            flowKey: flowKey,
+                            isImport: true
+                        )
+                        HUD.dismissLoading()
+                        Router.popToRoot()
                     }
                 }
             } catch {
