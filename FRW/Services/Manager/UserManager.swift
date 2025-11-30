@@ -65,7 +65,7 @@ class UserManager: ObservableObject {
       do {
         guard let uid = activatedUID else { return }
         try MultiAccountStorage.shared.saveUserInfo(userInfo, uid: uid)
-        try ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
+        ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
       } catch {
         log.error("save user info failed", context: error)
       }
