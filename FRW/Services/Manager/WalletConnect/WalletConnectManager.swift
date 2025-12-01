@@ -988,7 +988,7 @@ extension WalletConnectManager {
                 )
 
                 HUD.success(title: "approved".localized)
-                self.navigateBackTodApp(for: request.topic)
+              self.navigateBackTodApp(topic: request.topic)
             } catch {
                 log.error("WalletConnectManager -> approveRequest failed", context: error)
                 rejectRequest(request: request)
@@ -1060,7 +1060,7 @@ extension WalletConnectManager {
                     response: response
                 )
                 HUD.success(title: "rejected".localized)
-                self.navigateBackTodApp(for: request.topic)
+              self.navigateBackTodApp(topic: request.topic)
             } catch {
                 log.error("WalletConnectManager -> approveRequest failed", context: error)
                 HUD.error(title: "reject_failed".localized)
