@@ -64,11 +64,42 @@ class AuthnViewModel: ObservableObject {
     } else {
       accounts.append(contentsOf: eoa)
       accounts.append(contentsOf: coa)
-
-      let preAddress = LocalUserDefaults.shared.EVMDefaultAddress ?? "emtpy"
-      currentAccount = accounts.first(where: { $0.account.address == preAddress }) ?? accounts.first
-      allowSelection = accounts.count > 1
     }
+
+    // Try to get cached address for current uid and host, fallback to first account
+    let cachedAddress = getCachedAddress()
+    if let cached = cachedAddress,
+       let cachedAccount = accounts.first(where: { $0.account.address == cached }) {
+      currentAccount = cachedAccount
+    } else {
+      currentAccount = accounts.first
+    }
+    allowSelection = accounts.count > 1
+  }
+
+  // Extract host from URL
+  private var hostFromURL: String {
+    guard let url = URL(string: provider.url),
+          let host = url.host else {
+      return provider.url
+    }
+    return host
+  }
+
+  // Get cached address for current uid and host
+  private func getCachedAddress() -> String? {
+    guard let uid = LocalUserDefaults.shared.activatedUID else {
+      return nil
+    }
+    return LocalUserDefaults.shared.getAuthnAddress(for: uid, host: hostFromURL)
+  }
+
+  // Save selected address to cache
+  private func saveCachedAddress(_ address: String) {
+    guard let uid = LocalUserDefaults.shared.activatedUID else {
+      return
+    }
+    LocalUserDefaults.shared.setAuthnAddress(address, for: uid, host: hostFromURL)
   }
   
   deinit {
@@ -100,7 +131,9 @@ class AuthnViewModel: ObservableObject {
   }
 
   func didChooseAction(_ result: Bool) {
-      LocalUserDefaults.shared.EVMDefaultAddress = currentAccount?.account.address
+      if let address = currentAccount?.account.address {
+          saveCachedAddress(address)
+      }
       Router.dismiss { [weak self] in
           guard let self else { return }
           callback?(currentAccount?.account.address)

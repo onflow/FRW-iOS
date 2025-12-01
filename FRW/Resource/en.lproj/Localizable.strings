@@ -1196,3 +1196,4 @@ Key Store and Private Key.";
 
 "backup_recovery_sub" = "View your profile’s recovery phrase";
 "backup_recovery_title" = "Your profile’s recovery phrase";
+"reveal_phrase" = "Click to reveal phrase";

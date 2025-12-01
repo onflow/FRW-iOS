@@ -107,10 +107,13 @@ struct RecoveryPhraseView: RouteableView {
                           Image("profile-lock")
                             .resizable()
                             .renderingMode(.template)
-                            .foregroundStyle(Color.Brain.Core.cards)
+                            .foregroundStyle(Color.Brain.Core.icons)
                             .frame(width: 16, height: 16)
+                            .padding(12)
+                            .background(Color.Brain.Light.lines10)
+                            .clipShape(Circle())
 
-                          Text("reveal".localized)
+                          Text("reveal_phrase".localized)
                             .font(.inter(size: 16, weight: .medium))
                             .foregroundStyle(Color.Brain.Text.primary)
 

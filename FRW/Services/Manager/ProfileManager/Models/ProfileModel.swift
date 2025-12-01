@@ -1,8 +1,9 @@
 //
-//  ProfileManager+Model.swift
+//  ProfileModel.swift
 //  FRW
 //
 //  Created by cat on 9/24/25.
+//  Moved to Models folder on 11/29/25.
 //
 
 import Foundation

@@ -58,10 +58,10 @@ extension LocalUserDefaults {
         case selectedAddress
 
         case filterToken
-        // default address for evm
-        case EVMDefaultAddress
         // hidden addresses for each profile
         case hiddenAddresses
+        // selected address for authn by uid and host [uid: [host: address]]
+        case authnSelectedAddress
     }
 }
 
@@ -430,8 +430,40 @@ class LocalUserDefaults: ObservableObject {
         userList = users
     }
 
-    @AppStorage(Keys.EVMDefaultAddress.rawValue)
-    var EVMDefaultAddress: String?
+    // Cache for authn selected address: [uid: [host: address]]
+    var authnSelectedAddress: [String: [String: String]] {
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                UserDefaults.standard.set(data, forKey: Keys.authnSelectedAddress.rawValue)
+            } else {
+                UserDefaults.standard.removeObject(forKey: Keys.authnSelectedAddress.rawValue)
+            }
+        }
+        get {
+            if let data = UserDefaults.standard.data(forKey: Keys.authnSelectedAddress.rawValue),
+               let model = try? JSONDecoder().decode([String: [String: String]].self, from: data)
+            {
+                return model
+            } else {
+                return [:]
+            }
+        }
+    }
+
+    // Get cached address for a specific uid and host
+    func getAuthnAddress(for uid: String, host: String) -> String? {
+        return authnSelectedAddress[uid]?[host]
+    }
+
+    // Set cached address for a specific uid and host
+    func setAuthnAddress(_ address: String, for uid: String, host: String) {
+        var cache = authnSelectedAddress
+        if cache[uid] == nil {
+            cache[uid] = [:]
+        }
+        cache[uid]?[host] = address
+        authnSelectedAddress = cache
+    }
 }
 
 extension LocalUserDefaults {

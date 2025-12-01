@@ -295,7 +295,7 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                     let gasValue = self.normalizeHexString(receiveModel.gas ?? String(format: "%x", defaultGas))
 
                     //MARK: get nonce
-                    let address = evmAddress()
+                    let address = fromAddress ?? self.cachedEVMAddress(for: url) ?? WalletManager.shared.EOAs?.first?.address ?? ""
                     let nonce = try await self.getTransactionNonce(for: address)
                     let nonceHex = self.normalizeHexString(String(nonce, radix: 16))
 
@@ -688,9 +688,14 @@ extension WalletConnectEVMHandler {
       return normalizedHex
   }
   
-  private func evmAddress() -> String {
-    let address = LocalUserDefaults.shared.EVMDefaultAddress ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
-    return address ?? ""
+  // Get cached EVM address for a specific dApp URL
+  private func cachedEVMAddress(for dappURL: String) -> String? {
+      guard let uid = LocalUserDefaults.shared.activatedUID,
+            let url = URL(string: dappURL),
+            let host = url.host else {
+          return nil
+      }
+      return LocalUserDefaults.shared.getAuthnAddress(for: uid, host: host)
   }
   
   private func getTransactionNonce(for address: String) async throws -> BigUInt {
