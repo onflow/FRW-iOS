@@ -107,3 +107,4 @@ iOSInjectionProject/
 /Pods
 /.codex
 /assets/assets/__node_modules
+/assets/__node_modules/.pnpm
