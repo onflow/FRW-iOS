@@ -36,8 +36,6 @@ extension Flow.ChainID {
             return 747
         case .testnet:
             return 545
-        case .previewnet:
-            return 646
         default:
             return nil
         }
@@ -403,25 +401,32 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                       return
                     }
 
+                    let wallet = await WalletManager.shared
+                    let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
+                    let result = try await wallet.walletEntity?
+                      .ethSendSignedTransactionByCadence(
+                        chainId: currentNetwork,
+                        account: .init(hex: mainAddress),
+                        rlpEncodedTransaction: signedTransaction.encoded,
+                        coinbaseAddr: wallet.EOAs?.first?.address ?? "",
+                        signers: wallet.defaultSigners
+                      )
+
                     // Send raw transaction to the network
-                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
-                    let receipt = try? await web3.eth.transactionReceipt(txHash.hash.data(using: .utf8)!)
-                    if let receipt = receipt {
-                        print("Status:", receipt.status)
+//                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
+                    guard let txHash = result?.description else {
+                      cancel()
+                      return
                     }
-                    let txid = Hash.keccak256(data: signedTransaction.encoded)
-                    log.info("[SOA] Transaction sent successfully with hash: \(txHash.hash)")
-                    log.info("txid: \(txid)")
                     await MainActor.run {
-                        confirm(txHash.hash.addHexPrefix())
+                        confirm(txHash.addHexPrefix())
                     }
                     EventTrack.Transaction
                         .evmSigned(
-                            txId: txHash.hash.addHexPrefix(),
+                            txId: txHash.addHexPrefix(),
                             success: true
                         )
                   }
-                    
                 }
             }
 

@@ -562,16 +562,28 @@ extension TrustJSMessageHandler {
                       self.cancel(id: id)
                       return
                     }
-
+                    let wallet = await WalletManager.shared
+                    let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
+                    let result = try await wallet.walletEntity?
+                      .ethSendSignedTransactionByCadence(
+                        chainId: currentNetwork,
+                        account: .init(hex: mainAddress),
+                        rlpEncodedTransaction: signedTransaction.encoded,
+                        coinbaseAddr: wallet.EOAs?.first?.address ?? "",
+                        signers: wallet.defaultSigners
+                      )
                     // Send raw transaction to the network
-                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
-                    log.info("[SOA] Transaction sent successfully with hash: \(txHash.hash)")
-
+//                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
+                    log.info("[SOA] Transaction sent successfully with hash: \(result?.description ?? "")")
+                    guard let txHash = result?.description else {
+                      self.cancel(id: id)
+                      return
+                    }
                     // Return the transaction hash to frontend
                     await MainActor.run {
                       self.webVC?.webView.tw.send(
                           network: .ethereum,
-                          result: txHash.hash.addHexPrefix(),
+                          result: txHash.addHexPrefix(),
                           to: id
                       )
                     }
