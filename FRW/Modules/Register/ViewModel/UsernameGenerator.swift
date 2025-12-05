@@ -90,7 +90,7 @@ struct UsernameGenerator {
      * @param wordCount Number of words to use (default: 1, range: 1-5)
      * @returns A randomly generated username string (3-20 characters).
      */
-    static func generateRandomUsername(wordCount: Int = 1) -> String {
+    static func generateRandomUsername(wordCount: Int = 3) -> String {
         // Validate word count range
         let validWordCount = max(1, min(5, wordCount))
 
