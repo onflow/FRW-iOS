@@ -8,9 +8,10 @@
 import Foundation
 
 enum NativeScreenName: String {
-  case multiBackup
   case deviceBackup
-  case seedPhraseBackup
-  case backupOptions
-  case walletRestore
+  case recoveryPhraseRestore
+  case keyStoreRestore
+  case privateKeyRestore
+  case googleDriveRestore
+  case multiRestore
 }

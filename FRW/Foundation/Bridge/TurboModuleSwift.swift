@@ -373,19 +373,20 @@ extension TurboModuleSwift {
       HUD.error(title: "wrong_network_title".localized)
       return
     }
-
+    let restoreModel = RestoreWalletViewModel()
     switch screen {
-    case .multiBackup:
-      Router.route(to: RouteMap.RestoreLogin.restoreMulti)
     case .deviceBackup:
       Router.route(to: RouteMap.RestoreLogin.syncQC)
-    case .seedPhraseBackup:
-
-    case .backupOptions:
-
-    case .walletRestore:
-
+    case .recoveryPhraseRestore:
+      restoreModel.restoreWithManualAction()
+    case .keyStoreRestore:
+      restoreModel.restoreWithKeyStore()
+    case .privateKeyRestore:
+      restoreModel.resteroWithPrivateKey()
+    case .googleDriveRestore:
+      restoreModel.restoreWithCloudAction(type: .googleDrive)
+    case .multiRestore:
+      Router.route(to: RouteMap.RestoreLogin.restoreMulti)
     }
-
   }
 }
