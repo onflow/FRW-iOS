@@ -204,4 +204,8 @@
     }
 }
 
+- (void)launchNativeScreen:(NSString *)screenName {
+  [TurboModuleSwift launchNativeScreenWithScreen:screenName];
+}
+
 @end

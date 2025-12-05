@@ -362,4 +362,30 @@ extension TurboModuleSwift {
     }
     return try? keyProvider.ethSign(digest: Data(hexData.hexValue)).hexString
   }
+
+  @objc
+  static func launchNativeScreen(screen: String) {
+    guard let screen = NativeScreenName(rawValue: screen) else {
+      log.error("don't support route \(screen)")
+      return
+    }
+    guard currentNetwork == .mainnet else {
+      HUD.error(title: "wrong_network_title".localized)
+      return
+    }
+
+    switch screen {
+    case .multiBackup:
+      Router.route(to: RouteMap.RestoreLogin.restoreMulti)
+    case .deviceBackup:
+      Router.route(to: RouteMap.RestoreLogin.syncQC)
+    case .seedPhraseBackup:
+
+    case .backupOptions:
+
+    case .walletRestore:
+
+    }
+
+  }
 }
