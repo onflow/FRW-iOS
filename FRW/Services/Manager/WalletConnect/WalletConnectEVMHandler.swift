@@ -418,12 +418,14 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                       cancel()
                       return
                     }
+                    let evmTXID = signedTransaction.txIdHex()
+
                     await MainActor.run {
-                        confirm(txHash.addHexPrefix())
+                        confirm(evmTXID.addHexPrefix())
                     }
                     EventTrack.Transaction
                         .evmSigned(
-                            txId: txHash.addHexPrefix(),
+                            txId: evmTXID.addHexPrefix(),
                             success: true
                         )
                   }

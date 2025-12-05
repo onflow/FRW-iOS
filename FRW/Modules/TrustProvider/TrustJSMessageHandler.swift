@@ -579,11 +579,12 @@ extension TrustJSMessageHandler {
                       self.cancel(id: id)
                       return
                     }
+                    let evmTXID = signedTransaction.txIdHex()
                     // Return the transaction hash to frontend
                     await MainActor.run {
                       self.webVC?.webView.tw.send(
                           network: .ethereum,
-                          result: txHash.addHexPrefix(),
+                          result: evmTXID.addHexPrefix(),
                           to: id
                       )
                     }
