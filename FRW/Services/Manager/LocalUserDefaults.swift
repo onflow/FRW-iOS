@@ -55,7 +55,7 @@ extension LocalUserDefaults {
         case migrationFinished
 
         case userDefaultTheme
-        case selectedAddress
+        case selectedAddressByUID
 
         case filterToken
         // hidden addresses for each profile
@@ -369,6 +369,37 @@ class LocalUserDefaults: ObservableObject {
                 return []
             }
         }
+    }
+
+    // MARK: - Selected address for each profile [uid: selectedAccountValue]
+
+    var selectedAddressByUID: [String: String] {
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: Keys.selectedAddressByUID.rawValue)
+        }
+        get {
+            UserDefaults.standard
+                .dictionary(forKey: Keys.selectedAddressByUID.rawValue) as? [String: String] ?? [:]
+        }
+    }
+
+    // Get cached selected address for a specific uid
+    func getSelectedAddress(for uid: String) -> String? {
+        return selectedAddressByUID[uid]
+    }
+
+    // Set cached selected address for a specific uid
+    func setSelectedAddress(_ value: String, for uid: String) {
+        var cache = selectedAddressByUID
+        cache[uid] = value
+        selectedAddressByUID = cache
+    }
+
+    // Clear selected address for a specific uid
+    func clearSelectedAddress(for uid: String) {
+        var cache = selectedAddressByUID
+        cache.removeValue(forKey: uid)
+        selectedAddressByUID = cache
     }
 
     var filterTokens: TokenFilterModel? {
