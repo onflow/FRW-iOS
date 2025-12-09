@@ -27,7 +27,7 @@ var currentNetwork: Flow.ChainID {
 extension WalletManager {
   static let flowPath = "m/44'/539'/0'/0/0"
   static let mnemonicStrength: Int32 = 160
-  static let defaultGas: UInt64 = 16_000_000
+  static let defaultGas: UInt64 = 16_777_216
 
   static let minFlowBalance: Decimal = 0.001
   static let fixedMoveFee: Decimal = 0.001
