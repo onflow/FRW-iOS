@@ -247,11 +247,25 @@ extension WalletManager {
       return
     }
 
+    // Default mainAccount is the first account
     mainAccount = account
 
-    // If there is no selected
+    // If there is no selected, try to restore from saved address for current uid
     if selectedAccount == nil {
-      selectedAccount = .main(account.address)
+      if let uid = UserManager.shared.activatedUID,
+         let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
+         let restoredAccount = FWAccount(savedValue) {
+        // Find the parent account for child/coa types and verify validity
+        if let parentAccount = findParentAccount(for: restoredAccount, in: accounts) {
+          selectedAccount = restoredAccount
+          mainAccount = parentAccount
+        } else {
+          // Saved address not found in current accounts, fallback to main
+          selectedAccount = .main(account.address)
+        }
+      } else {
+        selectedAccount = .main(account.address)
+      }
     }
     updateUserAddress()
     loadLinkedAccounts()
@@ -261,6 +275,32 @@ extension WalletManager {
       } catch {
         log.error(error)
       }
+    }
+  }
+
+  /// Find the parent account for the given account type
+  /// Returns the account itself if it's a main account, or its parent for child/coa types
+  private func findParentAccount(
+    for account: FWAccount,
+    in accounts: [FlowWalletKit.Account]
+  ) -> FlowWalletKit.Account? {
+    let targetAddress = account.hexAddr.lowercased()
+    switch account.type {
+    case .main:
+      return accounts.first { $0.hexAddr.lowercased() == targetAddress }
+    case .child:
+      return accounts.first { flowAccount -> Bool in
+        guard let childs = flowAccount.childs else { return false }
+        return childs.contains { $0.address.hexAddr.lowercased() == targetAddress }
+      }
+    case .coa:
+      return accounts.first { flowAccount -> Bool in
+        guard let coaAddress = flowAccount.coa?.address.lowercased() else { return false }
+        return coaAddress == targetAddress
+      }
+    case .eoa:
+      // EOA addresses are managed separately, return first account as parent
+      return accounts.first
     }
   }
 
@@ -385,11 +425,10 @@ extension WalletManager {
 
     selectedAccount = .init(type: type, addr: fwAddress)
 
-    // Store selected account
-    UserDefaults.standard.set(
-      selectedAccount?.value,
-      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
-    )
+    // Store selected account per uid
+    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
+      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
+    }
     // If it's main account, reload the linked account
     if type == .main,
        let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
@@ -406,13 +445,14 @@ extension WalletManager {
       HUD.error(WalletError.invaildAddress)
       return
     }
-    
+
     selectedAccount = .init(type: selectingAccount.FWAccountType, addr: fwAddress)
-    UserDefaults.standard.set(
-      selectedAccount?.value,
-      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
-    )
-    
+    // Store selected account per uid
+    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
+      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
+    }
+
+
     switch selectingAccount.FWAccountType {
       case .main:
         if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
@@ -430,7 +470,7 @@ extension WalletManager {
         }
       case .eoa:
         break
-      
+
     }
   }
 

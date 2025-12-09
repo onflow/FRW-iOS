@@ -94,8 +94,6 @@ class RemoteConfigManager {
             return config?.payer.mainnet.keyID ?? 0
         case .testnet:
             return config?.payer.testnet.keyID ?? 0
-        case .crescendo:
-            return config?.payer.crescendo?.keyID ?? 0
         default:
             return 0
         }
