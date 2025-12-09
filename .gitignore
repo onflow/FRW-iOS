@@ -106,3 +106,5 @@ iOSInjectionProject/
 .cursor
 /Pods
 /.codex
+/assets/__node_modules
+/assets/assets/__node_modules
