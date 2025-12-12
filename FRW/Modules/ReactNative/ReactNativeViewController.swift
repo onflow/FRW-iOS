@@ -205,8 +205,10 @@ class ReactNativeViewController: UIViewController {
         view.addSubview(surfaceView)
         surfaceView.translatesAutoresizingMaskIntoConstraints = false
 
+        // Use view.topAnchor (not safeAreaLayoutGuide) to allow RN content to extend
+        // behind the status bar. RN's SafeAreaProvider will handle safe area insets.
         NSLayoutConstraint.activate([
-            surfaceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            surfaceView.topAnchor.constraint(equalTo: view.topAnchor),
             surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             surfaceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             surfaceView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
