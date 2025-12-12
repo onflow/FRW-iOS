@@ -79,6 +79,9 @@ class UserManager: ObservableObject {
     }
   }
 
+  // It is only used when the bridge is called on page of onboard
+  var RNRegisterInfo:[String: String] = [:]
+
   var isLoggedIn: Bool {
     activatedUID != nil
   }
@@ -212,7 +215,7 @@ extension UserManager {
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
-    await WalletManager.shared.asyncCreateWalletAddressFromServer()
+    let txid = await WalletManager.shared.asyncCreateWalletAddressFromServer()
     userType = .secure
 
     EventTrack.Account
@@ -221,7 +224,10 @@ extension UserManager {
         signAlgo: key.signAlgo.id,
         hashAlgo: key.hashAlgo.id
       )
-    return model.txId
+    if let txid {
+      RNRegisterInfo[txid] = activatedUID
+    }
+    return txid
   }
 }
 

@@ -203,9 +203,91 @@
       resolve(result);
     }
 }
+//TODO: screenName
+- (void)launchNativeScreen:(NSString *)screenName params:(NSString * _Nullable)params {
+  [TurboModuleSwift launchNativeScreenWithScreen:screenName params:params];
+}
 
-- (void)launchNativeScreen:(NSString *)screenName {
-  [TurboModuleSwift launchNativeScreenWithScreen:screenName];
+// MARK: - Device Info
+- (NSString *)getDeviceId {
+  return [TurboModuleSwift getDeviceId];
+}
+
+// MARK: - Notification Permissions
+- (void)requestNotificationPermission:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift requestNotificationPermissionWithCompletionHandler:^(BOOL granted, NSError * _Nullable error) {
+    if (error) {
+      reject(@"notification_permission_error", error.localizedDescription, error);
+    } else {
+      resolve(@(granted));
+    }
+  }];
+}
+
+- (void)checkNotificationPermission:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift checkNotificationPermissionWithCompletionHandler:^(BOOL granted, NSError * _Nullable error) {
+    if (error) {
+      reject(@"notification_permission_error", error.localizedDescription, error);
+    } else {
+      resolve(@(granted));
+    }
+  }];
+}
+
+// MARK: - Screen Security
+- (void)setScreenSecurityLevel:(NSString *)level {
+  [TurboModuleSwift setScreenSecurityLevelWithLevel:level];
+}
+
+// MARK: - Onboarding Methods
+- (void)generateSeedPhrase:(NSNumber *)strength resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift generateSeedPhraseWithStrength:strength completionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"seed_phrase_generation_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
+- (void)registerSecureTypeAccount:(NSString *)username resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift registerSecureTypeAccountWithUsername:username completionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"register_account_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
+- (void)initSecureEnclaveWallet:(NSString *)txId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift initSecureEnclaveWalletWithTxId:txId completionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"init_wallet_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
+- (void)signInWithCustomToken:(NSString *)customToken resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signInWithCustomTokenWithCustomToken:customToken completionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"sign_in_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)saveMnemonic:(NSString *)mnemonic customToken:(NSString *)customToken txId:(NSString *)txId username:(NSString *)username resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift saveMnemonicWithMnemonic:mnemonic customToken:customToken txId:txId username:username completionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"save_mnemonic_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
 }
 
 @end

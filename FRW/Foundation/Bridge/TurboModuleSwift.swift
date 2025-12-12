@@ -4,6 +4,8 @@ import UIKit
 import Flow
 import SPIndicator
 import FlowWalletKit
+import UserNotifications
+import FirebaseAuth
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -364,7 +366,7 @@ extension TurboModuleSwift {
   }
 
   @objc
-  static func launchNativeScreen(screen: String) {
+  static func launchNativeScreen(screen: String, params: String?) {
     guard let screen = NativeScreenName(rawValue: screen) else {
       log.error("don't support route \(screen)")
       return
@@ -387,6 +389,8 @@ extension TurboModuleSwift {
       restoreModel.restoreWithCloudAction(type: .googleDrive)
     case .multiRestore:
       Router.route(to: RouteMap.RestoreLogin.restoreMulti)
+    case .backupOptions:
+      Router.route(to: RouteMap.Backup.backupList)
     }
   }
 }

@@ -550,22 +550,22 @@ extension WalletManager {
 
 extension WalletManager {
   /// Request server create wallet address, DO NOT call it multiple times.
-  func asyncCreateWalletAddressFromServer() {
-    Task {
-      do {
-        let result: UserAddressV2Response = try await Network
-          .request(FRWAPI.User.userAddressV2)
-        let txId = Flow.ID(hex: result.txId)
-        _ = try await txId.onceExecuted()
-        try? await walletEntity?.fetchAccountsByCreationTxId(
-          txId: txId,
-          network: currentNetwork
-        )
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
-      } catch {
-        print(error)
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
-      }
+  func asyncCreateWalletAddressFromServer() async -> String? {
+    do {
+      let result: UserAddressV2Response = try await Network
+        .request(FRWAPI.User.userAddressV2)
+      let txId = Flow.ID(hex: result.txId)
+      _ = try await txId.onceExecuted()
+      _ = try? await walletEntity?.fetchAccountsByCreationTxId(
+        txId: txId,
+        network: currentNetwork
+      )
+      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
+      return result.txId
+    } catch {
+      print(error)
+      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
+      return nil
     }
   }
 

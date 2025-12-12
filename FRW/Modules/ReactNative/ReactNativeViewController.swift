@@ -14,6 +14,8 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
+    case profileSelection = "ProfileTypeSelection"
+    case getStarted = "GetStarted"
   }
 
 }
@@ -21,7 +23,7 @@ extension ReactNativeViewController {
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
-  
+  var route: ReactNativeViewController.Route? = nil
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
 
@@ -173,10 +175,11 @@ class ReactNativeViewController: UIViewController {
         }
         // zh,en,ru,ja
         let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        let routeName = initialProps?.route.rawValue ?? route?.rawValue ?? "SelectTokens"
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
+            "initialRoute" : routeName,
             "embedded" : false,
             "instanceId": instanceId,
             "language": languageCode
@@ -245,6 +248,8 @@ extension RNBridge.InitialProps {
       } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
         return .selectAddress
       }
+    } else if screen == .onboarding {
+      return .profileSelection
     }
     return .selectAssets
   }

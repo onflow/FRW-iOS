@@ -14,4 +14,5 @@ enum NativeScreenName: String {
   case privateKeyRestore
   case googleDriveRestore
   case multiRestore
+  case backupOptions
 }

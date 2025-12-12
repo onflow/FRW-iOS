@@ -1793,6 +1793,8 @@
 		4EC5E06A2BD8B20D003A1A24 /* EVMModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC5E0682BD8B20D003A1A24 /* EVMModels.swift */; };
 		4EC626092AE8A28100318720 /* UUIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC626082AE8A28100318720 /* UUIDManager.swift */; };
 		4EC6260A2AE8A28100318720 /* UUIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC626082AE8A28100318720 /* UUIDManager.swift */; };
+		4EC758412EEAC17F00B9012E /* TurboModule+Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC758402EEAC16F00B9012E /* TurboModule+Onboard.swift */; };
+		4EC758422EEAC17F00B9012E /* TurboModule+Onboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC758402EEAC16F00B9012E /* TurboModule+Onboard.swift */; };
 		4EC8675D2EBAF25400AFD76D /* AuthnAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8675C2EBAF25400AFD76D /* AuthnAccountsView.swift */; };
 		4EC8675E2EBAF25400AFD76D /* AuthnAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC8675C2EBAF25400AFD76D /* AuthnAccountsView.swift */; };
 		4EC97652286A07060066811D /* NFTCollectionEnableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC97651286A07060066811D /* NFTCollectionEnableView.swift */; };
@@ -3337,6 +3339,7 @@
 		4EC56B2F281FC57900246878 /* FlowQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowQuery.swift; sourceTree = "<group>"; };
 		4EC5E0682BD8B20D003A1A24 /* EVMModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMModels.swift; sourceTree = "<group>"; };
 		4EC626082AE8A28100318720 /* UUIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDManager.swift; sourceTree = "<group>"; };
+		4EC758402EEAC16F00B9012E /* TurboModule+Onboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TurboModule+Onboard.swift"; sourceTree = "<group>"; };
 		4EC8675C2EBAF25400AFD76D /* AuthnAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthnAccountsView.swift; sourceTree = "<group>"; };
 		4EC97651286A07060066811D /* NFTCollectionEnableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionEnableView.swift; sourceTree = "<group>"; };
 		4ECA7E64284371CA0039A210 /* NFTBlurImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTBlurImageView.swift; sourceTree = "<group>"; };
@@ -4834,6 +4837,7 @@
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
+				4EC758402EEAC16F00B9012E /* TurboModule+Onboard.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
 				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
@@ -8193,13 +8197,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8253,13 +8253,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8274,13 +8270,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8313,13 +8305,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8396,13 +8384,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8439,13 +8423,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -9318,6 +9298,7 @@
 				6A95CFB228B7258100267F86 /* NFTTransferView.swift in Sources */,
 				15DC207727819C56000B187A /* VText.swift in Sources */,
 				4E9059302B1792F10029FC66 /* SyncAddDeviceView.swift in Sources */,
+				4EC758412EEAC17F00B9012E /* TurboModule+Onboard.swift in Sources */,
 				6A164F642845F1CB0026B31E /* UIView+Extensions.swift in Sources */,
 				4EB8223D2C040FFE0014E73D /* AccountSideCell.swift in Sources */,
 				15DC1D5D27816F46000B187A /* MoyaAsync.swift in Sources */,
@@ -10407,6 +10388,7 @@
 				15B302B62D9AD51A007C792C /* SideContainerView.swift in Sources */,
 				15C58BDE2868A4EE00BD4FC6 /* VText.swift in Sources */,
 				4E90592F2B1792F10029FC66 /* SyncAddDeviceView.swift in Sources */,
+				4EC758422EEAC17F00B9012E /* TurboModule+Onboard.swift in Sources */,
 				15C58BDF2868A4EE00BD4FC6 /* UIView+Extensions.swift in Sources */,
 				15C58BE12868A4EE00BD4FC6 /* MoyaAsync.swift in Sources */,
 				4EB8223C2C040FFE0014E73D /* AccountSideCell.swift in Sources */,
@@ -11055,7 +11037,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -11120,7 +11105,10 @@
 				MARKETING_VERSION = 3.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

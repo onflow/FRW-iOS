@@ -35,10 +35,12 @@ class AccountSwitchViewModel: ObservableObject {
   @Published var profiles: [ProfileModel] = []
 
   func createNewAccountAction() {
-    Router.route(to: RouteMap.Register.root(nil))
+    Router.route(to: RouteMap.ReactNative.profileSelection)
+//    Router.route(to: RouteMap.Register.root(nil))
   }
 
   func loginAccountAction() {
+
     Router.route(to: RouteMap.RestoreLogin.restoreList)
   }
 

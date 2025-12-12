@@ -37,7 +37,11 @@ struct SideContainerView: View {
 
     var body: some View {
         if !um.isLoggedIn {
-            EmptyWalletView()
+          HStack{}
+            .onAppear() {
+              Router.route(to: RouteMap.ReactNative.getStarted)
+            }
+//            EmptyWalletView()
         } else {
             ZStack {
                 SideMenuView()
