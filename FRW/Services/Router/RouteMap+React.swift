@@ -24,7 +24,8 @@ extension RouteMap.ReactNative: RouterTarget {
       navi.present(ReactNativeViewController(initialProps: props))
     case .profileSelection:
       let props = RNBridge.InitialProps(screen: .onboarding, sendToConfig: nil)
-      navi.present(ReactNativeViewController(initialProps: props))
+      let vc = ReactNativeViewController(initialProps: props)
+      navi.pushViewController(vc)
     case .getStarted:
       let vc = ReactNativeViewController()
       vc.route = .getStarted
