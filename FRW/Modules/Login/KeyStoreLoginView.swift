@@ -26,7 +26,7 @@ struct KeyStoreLoginView: RouteableView {
                         .padding(.top, 48)
 
                     Section {
-                        VStack(spacing: 0) {
+                      VStack(alignment: .leading,spacing: 0) {
                             ImportTextView(
                                 content: $viewModel.json,
                                 placeholder: "keystore_json".localized
@@ -34,22 +34,32 @@ struct KeyStoreLoginView: RouteableView {
                                 viewModel.update(json: value)
                             }
                             .frame(height: 120)
+
+                          // Import from PDF button
+                          HStack {
+                            Button {
+                                viewModel.pickPDF()
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "text.document.fill")
+                                        .font(.system(size: 14))
+                                    Text("import_from_pdf".localized)
+                                        .font(.inter(size: 14, weight: .medium))
+                                }
+                                .foregroundColor(Color.LL.frontColor)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.LL.rebackground)
+                                .cornerRadius(8)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .padding(.top, 8)
+
+                            Spacer()
+                          }
                         }
 
-                        // Import from PDF button
-                        Button {
-                            viewModel.pickPDF()
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "doc.fill")
-                                    .font(.system(size: 14))
-                                Text("import_from_pdf".localized)
-                                    .font(.inter(size: 14, weight: .medium))
-                            }
-                            .foregroundColor(Color.Theme.Accent.green)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.top, 8)
+
 
                     } header: {
                         ImportSectionTitleView(title: "JSON", isStar: true)

@@ -259,23 +259,20 @@ extension KeyStoreLoginViewModel {
                     return
                 }
 
-                // Step 2: Extract JSON string from text
-                let jsonString = self.extractJSONFromText(trimmedText)
+                // Step 2: Extract JSON string from text using BloctoPDFExtractor
+                let jsonString = BloctoPDFExtractor.extractJSON(from: trimmedText)
 
-                // Step 3: Validate and parse JSON
-                let validationResult = JSONValidator.shared.validate(string: jsonString)
-
-                guard validationResult.isValid, let jsonValue = validationResult.parsedValue else {
+                // Step 3: Validate and parse JSON using native JSONSerialization
+                guard let jsonValue = BloctoPDFExtractor.parseJSON(jsonString) else {
                     DispatchQueue.main.async {
                         self.isPDFProcessing = false
-                        let errorMsg = validationResult.errors.first?.localizedDescription ?? "invalid_json".localized
-                        HUD.error(title: errorMsg)
+                        HUD.error(title: "invalid_json".localized)
                     }
                     return
                 }
 
                 // Step 4: Get minified JSON for keystore field
-                let minifiedJSON = JSONValidator.shared.minify(string: jsonString) ?? jsonString
+                let minifiedJSON = BloctoPDFExtractor.minifyJSON(jsonString) ?? jsonString
 
                 // Step 5: Extract address if available
                 var extractedAddress: String?
@@ -303,110 +300,6 @@ extension KeyStoreLoginViewModel {
                 }
             }
         }
-    }
-
-    /// Extract JSON string from raw text
-    /// Handles cases where PDF might have multiple JSON blocks or extra text
-    private func extractJSONFromText(_ text: String) -> String {
-        // Find all potential JSON objects starting with '{'
-        let allJSONBlocks = findAllJSONBlocks(in: text)
-
-        // Try each block and return the first valid one
-        for block in allJSONBlocks {
-            if JSONValidator.shared.isValid(string: block) {
-                return block
-            }
-        }
-
-        // If no valid JSON found, try the whole text
-        if text.hasPrefix("{") || text.hasPrefix("[") {
-            if let jsonString = findJSONBoundary(in: text, startIndex: text.startIndex) {
-                if JSONValidator.shared.isValid(string: jsonString) {
-                    return jsonString
-                }
-            }
-        }
-
-        // Return original text as fallback
-        return text
-    }
-
-    /// Find all potential JSON blocks in text
-    /// Returns array of JSON strings found at each '{' position
-    private func findAllJSONBlocks(in text: String) -> [String] {
-        var blocks: [String] = []
-        var searchStart = text.startIndex
-
-        while searchStart < text.endIndex {
-            // Find next '{' character
-            guard let braceIndex = text[searchStart...].firstIndex(of: "{") else {
-                break
-            }
-
-            // Try to extract JSON starting from this position
-            if let jsonBlock = findJSONBoundary(in: text, startIndex: braceIndex) {
-                blocks.append(jsonBlock)
-            }
-
-            // Move search position forward
-            searchStart = text.index(after: braceIndex)
-        }
-
-        return blocks
-    }
-
-    /// Find JSON boundary by matching brackets starting from a given index
-    private func findJSONBoundary(in text: String, startIndex: String.Index) -> String? {
-        guard startIndex < text.endIndex else { return nil }
-
-        let firstChar = text[startIndex]
-        guard firstChar == "{" || firstChar == "[" else { return nil }
-
-        let openBracket: Character = firstChar == "{" ? "{" : "["
-        let closeBracket: Character = openBracket == "{" ? "}" : "]"
-
-        var depth = 0
-        var inString = false
-        var escaped = false
-        var currentIndex = startIndex
-
-        while currentIndex < text.endIndex {
-            let char = text[currentIndex]
-
-            if escaped {
-                escaped = false
-                currentIndex = text.index(after: currentIndex)
-                continue
-            }
-
-            if char == "\\" && inString {
-                escaped = true
-                currentIndex = text.index(after: currentIndex)
-                continue
-            }
-
-            if char == "\"" {
-                inString.toggle()
-                currentIndex = text.index(after: currentIndex)
-                continue
-            }
-
-            if !inString {
-                if char == openBracket {
-                    depth += 1
-                } else if char == closeBracket {
-                    depth -= 1
-                    if depth == 0 {
-                        let endIndex = text.index(after: currentIndex)
-                        return String(text[startIndex..<endIndex])
-                    }
-                }
-            }
-
-            currentIndex = text.index(after: currentIndex)
-        }
-
-        return nil
     }
 }
 

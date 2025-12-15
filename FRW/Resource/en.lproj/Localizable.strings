@@ -1012,7 +1012,7 @@
 "import_phrase_desc" = "Support 12 words seed phrase.";
 "import_keystore_desc" = "Import keystore file (Blocto Backup).";
 "import_privatekey_desc" = "Import with raw hex key.";
-"keystore_json" = "You can import the json file from other wallet (eg. Blockto)";
+"keystore_json" = "You can import the json file from other wallet (eg. Blocto)";
 "keystore_password" = "Enter password for json file";
 "keystore_address" = "Enter your flow address (Optional)";
 "import_from_pdf" = "Import from PDF";
