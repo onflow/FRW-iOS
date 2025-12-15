@@ -69,9 +69,6 @@ final class KeyStoreLoginViewModel: ObservableObject {
                 )
                 guard let privateKey else {
                     HUD.error(title: "invalid_data".localized)
-                    await MainActor.run {
-                      self.showPDFParseError = true
-                    }
                     return
                 }
               await MainActor.run {
@@ -107,6 +104,9 @@ final class KeyStoreLoginViewModel: ObservableObject {
                     HUD.error(title: "invalid_json".localized)
                 } else {
                     HUD.error(title: "invalid_data".localized)
+                }
+                await MainActor.run {
+                  self.showPDFParseError = true
                 }
                 HUD.dismissLoading()
             } catch {
