@@ -35,28 +35,6 @@ struct KeyStoreLoginView: RouteableView {
                             }
                             .frame(height: 120)
 
-                          // PDF parse error message
-                          if viewModel.showPDFParseError {
-                              Button {
-                                  viewModel.openFlowWalletExtension()
-                              } label: {
-                                  HStack(alignment: .top, spacing: 8) {
-                                      Image(systemName: "exclamationmark.triangle.fill")
-                                          .font(.system(size: 14))
-                                          .foregroundColor(.orange)
-
-                                      Text("keystore_json_invalid".localized)
-                                          .font(.inter(size: 12, weight: .regular))
-                                          .foregroundColor(Color.LL.note)
-                                          .multilineTextAlignment(.leading)
-                                          .underline()
-                                  }
-                                  .padding(.vertical, 8)
-                                  .frame(maxWidth: .infinity, alignment: .leading)
-                              }
-                          }
-
-                          // Import from PDF button
                           HStack {
                             Button {
                                 viewModel.pickPDF()
@@ -78,6 +56,26 @@ struct KeyStoreLoginView: RouteableView {
                             Spacer()
                           }
                           .frame(maxWidth: .infinity)
+                          // PDF parse error message
+                          if viewModel.showPDFParseError {
+                              Button {
+                                  viewModel.openFlowWalletExtension()
+                              } label: {
+                                  HStack(alignment: .top, spacing: 8) {
+
+                                      Text("keystore_json_invalid".localized)
+                                          .font(.inter(size: 12, weight: .regular))
+                                          .foregroundColor(Color.Brain.System.red)
+                                          .multilineTextAlignment(.leading)
+                                          .underline()
+                                  }
+                                  .padding(.vertical, 8)
+                                  .frame(maxWidth: .infinity, alignment: .leading)
+                              }
+                          }
+
+                          // Import from PDF button
+
                         }
 
                     } header: {

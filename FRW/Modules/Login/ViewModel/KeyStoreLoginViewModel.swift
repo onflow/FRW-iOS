@@ -172,7 +172,9 @@ final class KeyStoreLoginViewModel: ObservableObject {
                         flowKey: selectedKey,
                         privateKey: privateKey
                     )
+                    HUD.dismissLoading()
                 } else if response.httpCode == 200 {
+                    HUD.dismissLoading()
                     createUserName { name in
                         Task {
                             try await UserManager.shared.importLogin(
@@ -186,7 +188,7 @@ final class KeyStoreLoginViewModel: ObservableObject {
                         }
                     }
                 }
-                HUD.dismissLoading()
+
             } catch {
                 if let code = error.moyaCode() {
                     if code == 409 {
@@ -260,7 +262,6 @@ extension KeyStoreLoginViewModel {
                 // Step 1: Extract text from PDF
                 let pdfText = try PDFParser.shared.extractText(from: url)
                 let trimmedText = pdfText.trimmingCharacters(in: .whitespacesAndNewlines)
-
                 guard !trimmedText.isEmpty else {
                     DispatchQueue.main.async {
                         self.isPDFProcessing = false
