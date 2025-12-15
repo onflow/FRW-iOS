@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FlowWalletKit
 
 extension EventTrack.Account {
     static func create(
@@ -34,12 +35,37 @@ extension EventTrack.Account {
         EventTrack.timeEnd(event: EventTrack.Account.createdTime)
     }
 
-    static func recovered(address: String, mechanism: String, methods: [String]) {
+  static func recovered(address: String, mechanism: EventTrack.Account.Mechanism, methods: [String]) {
         EventTrack
             .send(event: EventTrack.Account.recovered, properties: [
                 "address": address,
-                "mechanism": mechanism,
+                "mechanism": mechanism.rawValue,
                 "methods": methods,
             ])
     }
+}
+
+extension EventTrack.Account {
+  enum Mechanism: String {
+    case multiBackup = "multi-backup"
+    case seedPhrase = "seed-phrase"
+    case privatekey = "private_key"
+    case keyStore = "KeyStore"
+    case deviceBackup = "device_backup"
+  }
+}
+
+extension KeyType {
+  func toEventMechanism() -> EventTrack.Account.Mechanism? {
+    switch self {
+    case .secureEnclave:
+      return nil
+    case .seedPhrase:
+      return .seedPhrase
+    case .privateKey:
+      return .privatekey
+    case .keyStore:
+      return .keyStore
+    }
+  }
 }

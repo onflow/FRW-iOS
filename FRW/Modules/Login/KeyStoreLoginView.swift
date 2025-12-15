@@ -26,7 +26,7 @@ struct KeyStoreLoginView: RouteableView {
                         .padding(.top, 48)
 
                     Section {
-                        VStack(spacing: 0) {
+                      VStack(alignment: .leading,spacing: 12) {
                             ImportTextView(
                                 content: $viewModel.json,
                                 placeholder: "keystore_json".localized
@@ -34,6 +34,52 @@ struct KeyStoreLoginView: RouteableView {
                                 viewModel.update(json: value)
                             }
                             .frame(height: 120)
+
+                          HStack {
+                            Button {
+                                viewModel.pickPDF()
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "text.document.fill")
+                                        .font(.system(size: 14))
+                                    Text("import_from_pdf".localized)
+                                        .font(.inter(size: 14, weight: .medium))
+                                }
+                                .foregroundColor(Color.LL.frontColor)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.LL.rebackground)
+                                .cornerRadius(8)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Spacer()
+                          }
+                          .frame(maxWidth: .infinity)
+                          // PDF parse error message
+                          if viewModel.showPDFParseError {
+                              (Text("keystore_json_invalid".localized)
+                                  .font(.inter(size: 12, weight: .regular))
+                                  .foregroundColor(Color.Brain.System.red)
+                              + Text(" ")
+                              + Text("keystore_json_invalid_link".localized)
+                                  .font(.inter(size: 12, weight: .medium))
+                                  .foregroundColor(Color.Brain.System.red)
+                                  .underline()
+                              + Text(" ")
+                              + Text("keystore_json_invalid_suffix".localized)
+                                  .font(.inter(size: 12, weight: .regular))
+                                  .foregroundColor(Color.Brain.System.red))
+                              .multilineTextAlignment(.leading)
+                              .padding(.vertical, 8)
+                              .frame(maxWidth: .infinity, alignment: .leading)
+                              .onTapGesture {
+                                  viewModel.openFlowWalletExtension()
+                              }
+                          }
+
+                          // Import from PDF button
+
                         }
 
                     } header: {
@@ -84,6 +130,18 @@ struct KeyStoreLoginView: RouteableView {
         .hideKeyboardWhenTappedAround()
         .applyRouteable(self)
         .tracedView(self)
+        .sheet(isPresented: $viewModel.showPDFPicker) {
+            viewModel.documentPicker
+        }
+        .overlay {
+            if viewModel.isPDFProcessing {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
+            }
+        }
     }
 }
 
