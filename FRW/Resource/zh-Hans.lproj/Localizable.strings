@@ -962,4 +962,6 @@
 "camera_permission_required_title" = "需要相机访问权限";
 "camera_permission_required_message" = "Flow Wallet 需要相机权限来扫描二维码。请在设置中启用相机权限以继续。";
 "move_asset_browser_title_x" = "在 Flow 上的 cadence 地址之间移动您的资产，以便 %@ 查看您的资产";
-"keystore_json_invalid" = "无法解析文件，请下载 Flow Wallet 扩展程序进行解析";
+"keystore_json_invalid" = "无法解析 keystore，请下载";
+"keystore_json_invalid_link" = "Flow Wallet 扩展程序";
+"keystore_json_invalid_suffix" = "进行解析。";

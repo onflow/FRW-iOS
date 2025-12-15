@@ -58,19 +58,23 @@ struct KeyStoreLoginView: RouteableView {
                           .frame(maxWidth: .infinity)
                           // PDF parse error message
                           if viewModel.showPDFParseError {
-                              Button {
+                              (Text("keystore_json_invalid".localized)
+                                  .font(.inter(size: 12, weight: .regular))
+                                  .foregroundColor(Color.Brain.System.red)
+                              + Text(" ")
+                              + Text("keystore_json_invalid_link".localized)
+                                  .font(.inter(size: 12, weight: .medium))
+                                  .foregroundColor(Color.Brain.System.red)
+                                  .underline()
+                              + Text(" ")
+                              + Text("keystore_json_invalid_suffix".localized)
+                                  .font(.inter(size: 12, weight: .regular))
+                                  .foregroundColor(Color.Brain.System.red))
+                              .multilineTextAlignment(.leading)
+                              .padding(.vertical, 8)
+                              .frame(maxWidth: .infinity, alignment: .leading)
+                              .onTapGesture {
                                   viewModel.openFlowWalletExtension()
-                              } label: {
-                                  HStack(alignment: .top, spacing: 8) {
-
-                                      Text("keystore_json_invalid".localized)
-                                          .font(.inter(size: 12, weight: .regular))
-                                          .foregroundColor(Color.Brain.System.red)
-                                          .multilineTextAlignment(.leading)
-                                          .underline()
-                                  }
-                                  .padding(.vertical, 8)
-                                  .frame(maxWidth: .infinity, alignment: .leading)
                               }
                           }
 
