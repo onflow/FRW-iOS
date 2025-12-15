@@ -962,3 +962,4 @@
 "camera_permission_required_title" = "カメラへのアクセスが必要";
 "camera_permission_required_message" = "Flow WalletはQRコードをスキャンするためにカメラへのアクセスが必要です。設定でカメラアクセスを有効にして続行してください。";
 "move_asset_browser_title_x" = "Flow上のケイデンスアドレス間でアセットを移動させ、 %@ 、アセットを閲覧できるようにする。";
+"keystore_json_invalid" = "ファイルを解析できませんでした。Flow Wallet拡張機能をダウンロードして解析してください";

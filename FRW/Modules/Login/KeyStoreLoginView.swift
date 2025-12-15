@@ -26,7 +26,7 @@ struct KeyStoreLoginView: RouteableView {
                         .padding(.top, 48)
 
                     Section {
-                      VStack(alignment: .leading,spacing: 0) {
+                      VStack(alignment: .leading,spacing: 12) {
                             ImportTextView(
                                 content: $viewModel.json,
                                 placeholder: "keystore_json".localized
@@ -34,6 +34,27 @@ struct KeyStoreLoginView: RouteableView {
                                 viewModel.update(json: value)
                             }
                             .frame(height: 120)
+
+                          // PDF parse error message
+                          if viewModel.showPDFParseError {
+                              Button {
+                                  viewModel.openFlowWalletExtension()
+                              } label: {
+                                  HStack(alignment: .top, spacing: 8) {
+                                      Image(systemName: "exclamationmark.triangle.fill")
+                                          .font(.system(size: 14))
+                                          .foregroundColor(.orange)
+
+                                      Text("keystore_json_invalid".localized)
+                                          .font(.inter(size: 12, weight: .regular))
+                                          .foregroundColor(Color.LL.note)
+                                          .multilineTextAlignment(.leading)
+                                          .underline()
+                                  }
+                                  .padding(.vertical, 8)
+                                  .frame(maxWidth: .infinity, alignment: .leading)
+                              }
+                          }
 
                           // Import from PDF button
                           HStack {
@@ -52,14 +73,12 @@ struct KeyStoreLoginView: RouteableView {
                                 .background(Color.LL.rebackground)
                                 .cornerRadius(8)
                             }
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(.top, 8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
                             Spacer()
                           }
+                          .frame(maxWidth: .infinity)
                         }
-
-
 
                     } header: {
                         ImportSectionTitleView(title: "JSON", isStar: true)

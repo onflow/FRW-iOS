@@ -38,6 +38,12 @@ final class KeyStoreLoginViewModel: ObservableObject {
     @Published
     var isPDFProcessing = false
 
+    @Published
+    var showPDFParseError = false
+
+    /// Flow Wallet extension Chrome Web Store URL
+    static let flowWalletExtensionURL = "https://chromewebstore.google.com/detail/flow-wallet/hpclkefagolihohboafpheddmmgdffjm?hl=en"
+
 
     @MainActor
     func update(json _: String) {
@@ -63,6 +69,9 @@ final class KeyStoreLoginViewModel: ObservableObject {
                 )
                 guard let privateKey else {
                     HUD.error(title: "invalid_data".localized)
+                    await MainActor.run {
+                      self.showPDFParseError = true
+                    }
                     return
                 }
               await MainActor.run {
@@ -242,6 +251,7 @@ extension KeyStoreLoginViewModel {
     /// Process selected PDF file: extract text and parse JSON
     private func processPDFFile(url: URL) {
         isPDFProcessing = true
+        showPDFParseError = false
 
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
@@ -254,7 +264,7 @@ extension KeyStoreLoginViewModel {
                 guard !trimmedText.isEmpty else {
                     DispatchQueue.main.async {
                         self.isPDFProcessing = false
-                        HUD.error(title: "PDF contains no text")
+                        self.showPDFParseError = true
                     }
                     return
                 }
@@ -266,7 +276,7 @@ extension KeyStoreLoginViewModel {
                 guard let jsonValue = BloctoPDFExtractor.parseJSON(jsonString) else {
                     DispatchQueue.main.async {
                         self.isPDFProcessing = false
-                        HUD.error(title: "invalid_json".localized)
+                        self.showPDFParseError = true
                     }
                     return
                 }
@@ -282,6 +292,7 @@ extension KeyStoreLoginViewModel {
 
                 DispatchQueue.main.async {
                     self.isPDFProcessing = false
+                    self.showPDFParseError = false
                     self.json = minifiedJSON
 
                     if let address = extractedAddress {
@@ -295,11 +306,17 @@ extension KeyStoreLoginViewModel {
             } catch {
                 DispatchQueue.main.async {
                     self.isPDFProcessing = false
+                    self.showPDFParseError = true
                     log.error("[KeyStore] PDF extraction failed: \(error.localizedDescription)")
-                    HUD.error(title: error.localizedDescription)
                 }
             }
         }
+    }
+
+    /// Open Flow Wallet extension in Safari
+    func openFlowWalletExtension() {
+        guard let url = URL(string: Self.flowWalletExtensionURL) else { return }
+        UIApplication.shared.open(url)
     }
 }
 
