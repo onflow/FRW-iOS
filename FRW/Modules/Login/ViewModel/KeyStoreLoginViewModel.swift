@@ -47,6 +47,9 @@ final class KeyStoreLoginViewModel: ObservableObject {
 
     @MainActor
     func update(json _: String) {
+        if json.isEmpty {
+          self.showPDFParseError = false
+        }
         update()
     }
 
@@ -59,6 +62,11 @@ final class KeyStoreLoginViewModel: ObservableObject {
 
     func onSumbit() {
         UIApplication.shared.endEditing()
+        self.showPDFParseError = false
+        guard BloctoPDFExtractor.isValidJSON(json) else {
+          self.showPDFParseError = true
+          return
+        }
         HUD.loading()
         Task {
             do {
@@ -102,12 +110,13 @@ final class KeyStoreLoginViewModel: ObservableObject {
                     HUD.error(title: "invalid_password".localized)
                 } else if error == FlowWalletKit.FWKError.invaildKeyStoreJSON {
                     HUD.error(title: "invalid_json".localized)
+                    await MainActor.run {
+                      self.showPDFParseError = true
+                    }
                 } else {
                     HUD.error(title: "invalid_data".localized)
                 }
-                await MainActor.run {
-                  self.showPDFParseError = true
-                }
+
                 HUD.dismissLoading()
             } catch {
                 HUD.error(title: "invalid_data".localized)
