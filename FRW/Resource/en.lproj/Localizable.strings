@@ -1015,6 +1015,7 @@
 "keystore_json" = "You can import the json file from other wallet (eg. Blockto)";
 "keystore_password" = "Enter password for json file";
 "keystore_address" = "Enter your flow address (Optional)";
+"import_from_pdf" = "Import from PDF";
 "x_account_found_title" = "%@ Accounts Found";
 "no_account_found" = "No Account Found";
 "import_x_wallet" = "Import %@ Wallet";

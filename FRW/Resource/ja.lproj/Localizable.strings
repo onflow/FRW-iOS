@@ -796,6 +796,7 @@
 "create_new_account" = "新規アカウントの作成";
 "add_existing_account" = "既存のアカウントをインポートする";
 "import_wallet" = "インポート・ウォレット";
+"import_from_pdf" = "PDFからインポート";
 "welcome" = "ようこそ";
 "welcome_sub_desc" = "セキュリティについて";
 "registerd_accounts" = "登録口座";

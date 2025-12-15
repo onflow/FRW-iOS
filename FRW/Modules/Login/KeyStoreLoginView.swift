@@ -36,6 +36,21 @@ struct KeyStoreLoginView: RouteableView {
                             .frame(height: 120)
                         }
 
+                        // Import from PDF button
+                        Button {
+                            viewModel.pickPDF()
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "doc.fill")
+                                    .font(.system(size: 14))
+                                Text("import_from_pdf".localized)
+                                    .font(.inter(size: 14, weight: .medium))
+                            }
+                            .foregroundColor(Color.Theme.Accent.green)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.top, 8)
+
                     } header: {
                         ImportSectionTitleView(title: "JSON", isStar: true)
                     }
@@ -84,6 +99,18 @@ struct KeyStoreLoginView: RouteableView {
         .hideKeyboardWhenTappedAround()
         .applyRouteable(self)
         .tracedView(self)
+        .sheet(isPresented: $viewModel.showPDFPicker) {
+            viewModel.documentPicker
+        }
+        .overlay {
+            if viewModel.isPDFProcessing {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
+            }
+        }
     }
 }
 

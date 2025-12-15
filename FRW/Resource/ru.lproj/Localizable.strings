@@ -796,6 +796,7 @@
 "create_new_account" = "Создать новую учетную запись";
 "add_existing_account" = "Импорт существующей учетной записи";
 "import_wallet" = "Импортный кошелек";
+"import_from_pdf" = "Импорт из PDF";
 "welcome" = "Добро пожаловать";
 "welcome_sub_desc" = "Предоставьте больше информации о безопасности";
 "registerd_accounts" = "Зарегистрированные счета";
