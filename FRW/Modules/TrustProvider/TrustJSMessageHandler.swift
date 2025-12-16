@@ -277,7 +277,7 @@ extension TrustJSMessageHandler {
                   } else {
                     
                     guard let sig = try? await WalletManager.shared.walletEntity?.ethSignPersonalMessage(data) else {
-                      log.error("[SOA] sign for data is error")
+                      log.error("[EOA] sign for data is error")
                       await self.webVC?.webView.tw.send(network: .ethereum, error: "Canceled", to: id)
                       return
                     }
@@ -438,7 +438,7 @@ extension TrustJSMessageHandler {
                   } else {
                     // Send the signed transaction to the network
                     guard let web3 = try await self.web3() else {
-                      log.error("[SOA] Invalid RPC URL for sending transaction")
+                      log.error("[EOA] Invalid RPC URL for sending transaction")
                       self.cancel(id: id)
                       return
                     }
@@ -466,8 +466,8 @@ extension TrustJSMessageHandler {
                           let nonceData = Data(hexString: nonceHex),
                           let gasLimitData = Data(hexString: gasValue)
                     else {
-                      log.error("[SOA] Invalid hex data for transaction parameters")
-                      log.error("[SOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasValue: \(gasValue)")
+                      log.error("[EOA] Invalid hex data for transaction parameters")
+                      log.error("[EOA] chainIdHex: \(chainIdHex), nonceHex: \(nonceHex), gasValue: \(gasValue)")
                       self.cancel(id: id)
                       return
                     }
@@ -485,7 +485,7 @@ extension TrustJSMessageHandler {
                         
                         guard let maxFeeData = Data(hexString: maxFeeHex),
                               let maxPriorityData = Data(hexString: maxPriorityHex) else {
-                            log.error("[SOA] Invalid EIP-1559 fee data")
+                            log.error("[EOA] Invalid EIP-1559 fee data")
                             HUD.error(EVMError.invalidEIP1559FeeData)
                             self.cancel(id: id)
                             return
@@ -494,7 +494,7 @@ extension TrustJSMessageHandler {
                         guard let maxFeeVal = BigUInt(maxFeeHex, radix: 16),
                               let maxPriorityVal = BigUInt(maxPriorityHex, radix: 16),
                               maxFeeVal >= maxPriorityVal else {
-                            log.error("[SOA] maxFeePerGas must be >= maxPriorityFeePerGas")
+                            log.error("[EOA] maxFeePerGas must be >= maxPriorityFeePerGas")
                             HUD.error(EVMError.EIP1559MaxFeeLessThanPriority)
                             self.cancel(id: id)
                             return
@@ -503,7 +503,7 @@ extension TrustJSMessageHandler {
                         input.txMode = .enveloped
                         input.maxFeePerGas = maxFeeData
                         input.maxInclusionFeePerGas = maxPriorityData
-                        log.info("[SOA] EIP-1559 Transaction - maxFee: \(maxFeeHex), maxPriority: \(maxPriorityHex)")
+                        log.info("[EOA] EIP-1559 Transaction - maxFee: \(maxFeeHex), maxPriority: \(maxPriorityHex)")
                         
                     } else {
                         //MARK: Get current gas price from network
@@ -511,7 +511,7 @@ extension TrustJSMessageHandler {
                         let gasPriceHex = String(gasPrice, radix: 16).normalizeHexString()
                         
                         guard let gasPriceData = Data(hexString: gasPriceHex) else {
-                            log.error("[SOA] Invalid gas price data")
+                            log.error("[EOA] Invalid gas price data")
                             HUD.error(EVMError.invalidGasPriceData)
                             self.cancel(id: id)
                             return
@@ -519,13 +519,13 @@ extension TrustJSMessageHandler {
                         
                         input.txMode = .legacy
                         input.gasPrice = gasPriceData
-                        log.info("[SOA] Legacy Transaction - gasPrice: \(gasPriceHex)")
+                        log.info("[EOA] Legacy Transaction - gasPrice: \(gasPriceHex)")
                     }
 
                     // Handle both transfer and contract call transactions
                     let normalizedAmount = amount.normalizeHexString()
                     guard let amountData = Data(hexString: normalizedAmount) else {
-                      log.error("[SOA] Invalid amount data: \(normalizedAmount)")
+                      log.error("[EOA] Invalid amount data: \(normalizedAmount)")
                       HUD.error(EVMError.invalidAmountData)
                       self.cancel(id: id)
                       return
@@ -536,7 +536,7 @@ extension TrustJSMessageHandler {
                       // Contract call transaction
                       let normalizedData = dataString.normalizeHexString()
                       guard let callData = Data(hexString: normalizedData) else {
-                        log.error("[SOA] Invalid contract call data: \(normalizedData)")
+                        log.error("[EOA] Invalid contract call data: \(normalizedData)")
                         self.cancel(id: id)
                         return
                       }
@@ -557,28 +557,32 @@ extension TrustJSMessageHandler {
 
                     // Sign the transaction
                     guard let signedTransaction = try await WalletManager.shared.walletEntity?.ethSignTransaction(input) else {
-                      log.error("[SOA] Failed to sign transaction")
+                      log.error("[EOA] Failed to sign transaction")
                       HUD.error(EVMError.failedSign)
                       self.cancel(id: id)
                       return
                     }
-                    let wallet = await WalletManager.shared
-                    let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
-                    let result = try await wallet.walletEntity?
-                      .ethSendSignedTransactionByCadence(
-                        chainId: currentNetwork,
-                        account: .init(hex: mainAddress),
-                        rlpEncodedTransaction: signedTransaction.encoded,
-                        coinbaseAddr: wallet.EOAs?.first?.address ?? "",
-                        signers: wallet.defaultSigners
-                      )
-                    // Send raw transaction to the network
-//                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
-                    log.info("[SOA] Transaction sent successfully with hash: \(result?.description ?? "")")
-                    guard let txHash = result?.description else {
-                      self.cancel(id: id)
-                      return
+                    if RemoteConfigManager.shared.allowWrapEOAWithCadence {
+                      let wallet = await WalletManager.shared
+                      let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
+                      let result = try await wallet.walletEntity?
+                        .ethSendSignedTransactionByCadence(
+                          chainId: currentNetwork,
+                          account: .init(hex: mainAddress),
+                          rlpEncodedTransaction: signedTransaction.encoded,
+                          coinbaseAddr: wallet.EOAs?.first?.address ?? "",
+                          signers: wallet.defaultSigners
+                        )
+                      log.info("[EOA] Transaction sent successfully with hash: \(result?.description ?? "")")
+                      guard (result?.description) != nil else {
+                        self.cancel(id: id)
+                        return
+                      }
+                    }else {
+                      let result = try await web3.eth.send(raw: signedTransaction.encoded)
+                      log.info("[EOA] result \(result.hash)")
                     }
+
                     let evmTXID = signedTransaction.txIdHex()
                     // Return the transaction hash to frontend
                     await MainActor.run {

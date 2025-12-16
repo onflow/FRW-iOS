@@ -121,6 +121,20 @@ class RemoteConfigManager {
         }
     }
 
+    var allowWrapEOAWithCadence: Bool {
+      if !remoteWrapEOAWithCadence {
+        return false
+      }
+      return localWrapEOAWithCadence
+    }
+
+    var remoteWrapEOAWithCadence: Bool {
+      if let allow = config?.features.wrapEOAWithCadence {
+        return allow
+      }
+      return false
+    }
+
     func getContarctAddress(_ network: Flow.ChainID) -> [String: String]? {
         switch network {
         case .mainnet:
@@ -216,6 +230,9 @@ class RemoteConfigManager {
     private var envConfig: ENVConfig?
     @AppStorage(LocalUserDefaults.Keys.freeGas.rawValue)
     private var localGreeGas = true
+
+    @AppStorage(LocalUserDefaults.Keys.wrapEOAWithCadence.rawValue)
+    private var localWrapEOAWithCadence = true
 
     private func loadLocalConfig() throws {
         do {
