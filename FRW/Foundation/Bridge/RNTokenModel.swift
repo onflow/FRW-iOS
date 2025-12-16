@@ -56,7 +56,7 @@ extension RNBridge.TokenModel {
       availableBalanceToUse: tokenModel.availableBalanceToUse,
       change: nil, // TokenModel doesn't have change field
       decimal: tokenModel.decimalValue,
-      evmAddress: tokenModel.evmAddress,
+      evmAddress: tokenModel.evmAddress ?? (rnType == .evm ? tokenModel.contractAddress : nil),
       website: tokenModel.website?.absoluteString
     )
   }

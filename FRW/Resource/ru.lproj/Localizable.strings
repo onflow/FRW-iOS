@@ -796,6 +796,7 @@
 "create_new_account" = "Создать новую учетную запись";
 "add_existing_account" = "Импорт существующей учетной записи";
 "import_wallet" = "Импортный кошелек";
+"import_from_pdf" = "Импорт из PDF";
 "welcome" = "Добро пожаловать";
 "welcome_sub_desc" = "Предоставьте больше информации о безопасности";
 "registerd_accounts" = "Зарегистрированные счета";
@@ -961,3 +962,6 @@
 "camera_permission_required_title" = "Требуется доступ к камере";
 "camera_permission_required_message" = "Flow Wallet нужен доступ к камере для сканирования QR-кодов. Пожалуйста, включите доступ к камере в настройках, чтобы продолжить.";
 "move_asset_browser_title_x" = "Move your assets between your cadence address on Flow, so %@ can view your assets";
+"keystore_json_invalid" = "Не удалось разобрать keystore, пожалуйста, загрузите";
+"keystore_json_invalid_link" = "расширение Flow Wallet";
+"keystore_json_invalid_suffix" = "для его обработки.";

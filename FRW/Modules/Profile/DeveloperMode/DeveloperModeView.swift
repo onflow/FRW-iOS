@@ -188,6 +188,27 @@ struct DeveloperModeView: RouteableView {
                     .cornerRadius(16)
 
                     Section {
+                      VStack {
+                        HStack {
+                            Toggle("Wrap EOA TX with Cadence",
+                                   isOn: $wrapEOAWithCadence
+                            )
+                            .toggleStyle(SwitchToggleStyle(tint: .LL.Primary.salmonPrimary))
+                            .onChange(of: wrapEOAWithCadence) { value in
+                                wrapEOAWithCadence.toggle()
+                            }
+                            .disabled(!RemoteConfigManager.shared.remoteWrapEOAWithCadence)
+                        }
+                        .frame(height: 64)
+                        .padding(.horizontal, 16)
+                      }
+                      .background(.LL.bgForIcon)
+                      .cornerRadius(16)
+                    } header: {
+                      headView(title: "config".localized)
+                    }
+
+                    Section {
                         VStack {
                             HStack {
                                 Toggle(
@@ -492,6 +513,9 @@ struct DeveloperModeView: RouteableView {
 
     @State
     private var openLogWindow = LocalUserDefaults.shared.openLogWindow
+
+    @AppStorage(LocalUserDefaults.Keys.wrapEOAWithCadence.rawValue)
+    private var wrapEOAWithCadence: Bool = true
 
     private func headView(title: String) -> some View {
         Text(title)

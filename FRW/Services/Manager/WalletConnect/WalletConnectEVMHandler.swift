@@ -400,26 +400,28 @@ struct WalletConnectEVMHandler: WalletConnectChildHandlerProtocol {
                       cancel()
                       return
                     }
-
-                    let wallet = await WalletManager.shared
-                    let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
-                    let result = try await wallet.walletEntity?
-                      .ethSendSignedTransactionByCadence(
-                        chainId: currentNetwork,
-                        account: .init(hex: mainAddress),
-                        rlpEncodedTransaction: signedTransaction.encoded,
-                        coinbaseAddr: wallet.EOAs?.first?.address ?? "",
-                        signers: wallet.defaultSigners
-                      )
-
-                    // Send raw transaction to the network
-//                    let txHash = try await web3.eth.send(raw: signedTransaction.encoded)
-                    guard let txHash = result?.description else {
-                      cancel()
-                      return
+                    if RemoteConfigManager.shared.allowWrapEOAWithCadence {
+                      let wallet = await WalletManager.shared
+                      let mainAddress = await wallet.mainAccount?.hexAddr ?? ""
+                      let result = try await wallet.walletEntity?
+                        .ethSendSignedTransactionByCadence(
+                          chainId: currentNetwork,
+                          account: .init(hex: mainAddress),
+                          rlpEncodedTransaction: signedTransaction.encoded,
+                          coinbaseAddr: wallet.EOAs?.first?.address ?? "",
+                          signers: wallet.defaultSigners
+                        )
+                      guard (result?.description) != nil else {
+                        log.error("[EOA] send signed failed")
+                        cancel()
+                        return
+                      }
+                    } else {
+                      let result = try await web3.eth.send(raw: signedTransaction.encoded)
+                      log.info("[EOA] result \(result.hash)")
                     }
-                    let evmTXID = signedTransaction.txIdHex()
 
+                    let evmTXID = signedTransaction.txIdHex()
                     await MainActor.run {
                         confirm(evmTXID.addHexPrefix())
                     }

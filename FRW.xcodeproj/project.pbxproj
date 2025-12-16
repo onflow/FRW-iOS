@@ -1774,6 +1774,12 @@
 		4EC26FD12BFE315A001330DF /* MoveSingleNFTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26FCF2BFE315A001330DF /* MoveSingleNFTView.swift */; };
 		4EC26FD32BFE31C0001330DF /* MoveSingleNFTViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26FD22BFE31C0001330DF /* MoveSingleNFTViewModel.swift */; };
 		4EC26FD42BFE31C0001330DF /* MoveSingleNFTViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26FD22BFE31C0001330DF /* MoveSingleNFTViewModel.swift */; };
+		4EC279FD2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC279FC2EEFA35800F5DC71 /* DocumentPicker.swift */; };
+		4EC279FE2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC279FC2EEFA35800F5DC71 /* DocumentPicker.swift */; };
+		4EC27A002EEFA36600F5DC71 /* PDFParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC279FF2EEFA36600F5DC71 /* PDFParser.swift */; };
+		4EC27A012EEFA36600F5DC71 /* PDFParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC279FF2EEFA36600F5DC71 /* PDFParser.swift */; };
+		4EC27A032EEFA37A00F5DC71 /* BloctoPDFExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC27A022EEFA37A00F5DC71 /* BloctoPDFExtractor.swift */; };
+		4EC27A042EEFA37A00F5DC71 /* BloctoPDFExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC27A022EEFA37A00F5DC71 /* BloctoPDFExtractor.swift */; };
 		4EC31180284503C600F711F5 /* NFTCollectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC3117E284503C600F711F5 /* NFTCollectionListView.swift */; };
 		4EC31183284508F200F711F5 /* NFTListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC31181284508F200F711F5 /* NFTListView.swift */; };
 		4EC482D1284A3D75000A7E1B /* ColorThief.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC482CE284A3D75000A7E1B /* ColorThief.swift */; };
@@ -3327,6 +3333,9 @@
 		4EC26FC92BFCAF5C001330DF /* EVMAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAssetProvider.swift; sourceTree = "<group>"; };
 		4EC26FCF2BFE315A001330DF /* MoveSingleNFTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSingleNFTView.swift; sourceTree = "<group>"; };
 		4EC26FD22BFE31C0001330DF /* MoveSingleNFTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSingleNFTViewModel.swift; sourceTree = "<group>"; };
+		4EC279FC2EEFA35800F5DC71 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		4EC279FF2EEFA36600F5DC71 /* PDFParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFParser.swift; sourceTree = "<group>"; };
+		4EC27A022EEFA37A00F5DC71 /* BloctoPDFExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloctoPDFExtractor.swift; sourceTree = "<group>"; };
 		4EC3117E284503C600F711F5 /* NFTCollectionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionListView.swift; sourceTree = "<group>"; };
 		4EC31181284508F200F711F5 /* NFTListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTListView.swift; sourceTree = "<group>"; };
 		4EC482CE284A3D75000A7E1B /* ColorThief.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorThief.swift; sourceTree = "<group>"; };
@@ -4366,6 +4375,7 @@
 		153C440427520811006D1E8D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				4EC279FB2EEFA33600F5DC71 /* PDFParse */,
 				1596A8D02E1AD76200E85303 /* ReactNative */,
 				4E09FF7E2DB9239000F2E527 /* Alert */,
 				4E09FF7A2DB8C8B900F2E527 /* Log */,
@@ -6593,6 +6603,16 @@
 				4EB2DBCB2AE6253B00A421CE /* PageStatus.swift */,
 			);
 			path = PageStatus;
+			sourceTree = "<group>";
+		};
+		4EC279FB2EEFA33600F5DC71 /* PDFParse */ = {
+			isa = PBXGroup;
+			children = (
+				4EC279FC2EEFA35800F5DC71 /* DocumentPicker.swift */,
+				4EC279FF2EEFA36600F5DC71 /* PDFParser.swift */,
+				4EC27A022EEFA37A00F5DC71 /* BloctoPDFExtractor.swift */,
+			);
+			path = PDFParse;
 			sourceTree = "<group>";
 		};
 		4EC482CD284A3D75000A7E1B /* ColorThief */ = {
@@ -9041,6 +9061,7 @@
 				6AEA375128A4FA52004545D4 /* NFTUIKitCollectionPinnedSectionView.swift in Sources */,
 				15DC213127819C56000B187A /* VWheelPickerModel.swift in Sources */,
 				4EA0D0A72A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */,
+				4EC279FE2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */,
 				57312EC62CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE1A2C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
@@ -9071,6 +9092,7 @@
 				6A6F6A532A5FE76E006C4CCE /* ChildAccountDetailEditView.swift in Sources */,
 				6A8D2A41283C865F0041100E /* AddressBookInfoModel.swift in Sources */,
 				6A164F482840A1380026B31E /* TabBarPageModel.swift in Sources */,
+				4EC27A012EEFA36600F5DC71 /* PDFParser.swift in Sources */,
 				6AE08417284EF667003BEEF0 /* LocalUserDefaults.swift in Sources */,
 				1599F774278894E00094B196 /* String.swift in Sources */,
 				15DC20F527819C56000B187A /* VBaseListModel.swift in Sources */,
@@ -9477,6 +9499,7 @@
 				4EF5B45C2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */,
 				6A998DA029366EF700EF133B /* StakingProviderCache.swift in Sources */,
 				4E09A1EB2CC793FE0099606E /* EventTrack.swift in Sources */,
+				4EC27A042EEFA37A00F5DC71 /* BloctoPDFExtractor.swift in Sources */,
 				6A29114D28CB37E8003295BD /* TransferListHandler.swift in Sources */,
 				4EC97653286A07060066811D /* NFTCollectionEnableView.swift in Sources */,
 				573429B62CDC4B2E00BDE016 /* AccountModels.swift in Sources */,
@@ -10131,6 +10154,7 @@
 				15BA24B528C785B300755CBF /* GradientButton.swift in Sources */,
 				4EA0D0A62A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */,
 				15C58B6F2868A4EE00BD4FC6 /* VBaseButtonState.swift in Sources */,
+				4EC279FD2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */,
 				57312EC52CFD2833009A344A /* Threading.swift in Sources */,
 				4E03BE192C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
@@ -10161,6 +10185,7 @@
 				15C58B7B2868A4EE00BD4FC6 /* TabBarPageModel.swift in Sources */,
 				15C58B7C2868A4EE00BD4FC6 /* LocalUserDefaults.swift in Sources */,
 				15C58B7D2868A4EE00BD4FC6 /* String.swift in Sources */,
+				4EC27A002EEFA36600F5DC71 /* PDFParser.swift in Sources */,
 				15C58B7E2868A4EE00BD4FC6 /* VBaseListModel.swift in Sources */,
 				15C58B7F2868A4EE00BD4FC6 /* BackupPasswordView.swift in Sources */,
 				15C58B802868A4EE00BD4FC6 /* UINavigationBar.NavigationBarHeight.swift in Sources */,
@@ -10567,6 +10592,7 @@
 				4EF5B45D2EBB43C0002F6B10 /* AuthnAccountsViewModel.swift in Sources */,
 				6A45898C28C1E05100B1024B /* BrowserResponses.swift in Sources */,
 				6A998D9F29366EF700EF133B /* StakingProviderCache.swift in Sources */,
+				4EC27A032EEFA37A00F5DC71 /* BloctoPDFExtractor.swift in Sources */,
 				4E09A1EA2CC793FE0099606E /* EventTrack.swift in Sources */,
 				6A29114C28CB37E8003295BD /* TransferListHandler.swift in Sources */,
 				4EC97652286A07060066811D /* NFTCollectionEnableView.swift in Sources */,
@@ -11138,7 +11164,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11166,7 +11192,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11194,7 +11220,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11222,7 +11248,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11252,7 +11278,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11282,7 +11308,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11312,7 +11338,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11342,7 +11368,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
+				MARKETING_VERSION = 3.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

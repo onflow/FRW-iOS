@@ -589,6 +589,10 @@ extension UserManager {
     isImport: Bool = false,
     flowAccounts: [FlowWalletKit.Account]? = nil
   ) async throws {
+    if let mechanism = privateKey.keyType.toEventMechanism() {
+      EventTrack.Account.recovered(address: address, mechanism: mechanism, methods: [])
+    }
+
     if Auth.auth().currentUser?.isAnonymous != true {
       try await Auth.auth().signInAnonymously()
       await MainActor.run {
