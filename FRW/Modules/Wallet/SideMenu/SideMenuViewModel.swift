@@ -10,16 +10,16 @@ import Factory
 import Foundation
 import SwiftUI
 
-// MARK: - SideMenuViewModel.AccountPlaceholder
-
-extension SideMenuViewModel {
-    struct AccountPlaceholder {
-        let uid: String
-        let avatar: String
-    }
-}
-
 // MARK: - SideMenuViewModel
+
+struct SideMenuItem {
+  let account: WalletAccount
+  var isHidden: Bool = false
+
+  static func mock() -> SideMenuItem {
+    SideMenuItem(account: .mockMain())
+  }
+}
 
 class SideMenuViewModel: ObservableObject {
     // MARK: Internal
@@ -27,107 +27,83 @@ class SideMenuViewModel: ObservableObject {
     @Injected(\.wallet)
     private var wallet: WalletManager
 
-    @Injected(\.token)
-    private var token: TokenBalanceHandler
-
-    @Published
-    var accountLoading: Bool = false
-
-    @Published
-    var linkLoading: Bool = false
-
-    @Published
-    var userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
-
-    @Published
-    var mainAccounts: [String] = []
-
-    @Published
-    var linkedAccounts: [String] = []
-
-    @Published
-    var walletBalance: [String: Decimal] = [:]
-
-    var colorsMap: [String: Color] = [:]
-
-    var currentAddress: String {
-        WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? ""
-    }
-
+    @Published var hasCoa: Bool = true
+    @Published var currentAccount: SideMenuItem? = nil
+    @Published var allAccounts: [[SideMenuItem]] = [[.mock()],[.mock()],[.mock()]]
     private var cancellableSet = Set<AnyCancellable>()
 
-    // MARK: Lifecycle
 
     init() {
-        wallet.$mainAccount
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] _ in
-                self?.loadBalance()
-            }
-            .store(in: &cancellableSet)
+      ProfileManager.shared.$currentProfile
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] profile in
+          self?.refreshProfile(profile: profile)
+        }
+        .store(in: &cancellableSet)
 
-        wallet.$walletEntity
-            .compactMap { $0 }
-            .flatMap { $0.$isLoading }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                self?.accountLoading = value
-            }
-            .store(in: &cancellableSet)
+      wallet.$selectedAccount
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] account in
+          self?.refreshAccount(address: account?.hexAddr)
+        }.store(in: &cancellableSet)
 
-        wallet.$mainAccount
-            .compactMap { $0 }
-            .flatMap { $0.$isLoading }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                self?.linkLoading = value
-            }
-            .store(in: &cancellableSet)
+      // Listen for hidden addresses changes
+      NotificationCenter.default.publisher(for: .hiddenAddressesDidChanged)
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] _ in
+          self?.onHiddenAddressesChanged()
+        }
+        .store(in: &cancellableSet)
     }
 
-    func loadBalance() {
-        Task {
-            let mainAccounts = wallet.currentNetworkAccounts.compactMap(\.hexAddr)
-            var linksAccounts: [String] = []
-            linksAccounts = wallet.childs?.compactMap(\.address.hex) ?? []
-            if let coa = wallet.coa {
-                linksAccounts.insert(coa.address, at: 0)
-            }
-
-            let accounts = mainAccounts + linksAccounts
-
-            if accounts.isEmpty {
-                return
-            }
-            do {
-                let result = try await token.getAvailableFlowBalance(addresses: accounts, forceReload: true)
-                await MainActor.run {
-                    walletBalance = result
-                }
-            } catch {
-                log.debug(error)
-            }
+    private func refreshProfile(profile: ProfileModel?) {
+      guard let profile = profile, profile.accounts.count > 0 else {
+        log.debug("[Profile] profile:\(profile?.uid ?? "")")
+        refreshAccount(address: nil)
+        allAccounts = [[.mock()],[.mock()],[.mock()]]
+        return
+      }
+      allAccounts = profile.accounts.map({ list in
+        list.map { account in
+          // Check if manually hidden via LocalUserDefaults
+          let isManuallyHidden = LocalUserDefaults.shared.isAddressHidden(account.address, for: profile.uid)
+          // Combine with original isHidden logic (balance/NFT based)
+          let isHidden = account.isHidden || isManuallyHidden
+          return SideMenuItem(account: account, isHidden: isHidden)
         }
+      })
+      if let address = wallet.selectedAccount?.hexAddr {
+        refreshAccount(address: address)
+      }
     }
 
-    func pickColor(from url: String) {
-        guard !url.isEmpty else {
-            userInfoBackgroudColor = Color.LL.Neutrals.neutrals6
-            return
+    private func refreshAccount(address: String?) {
+      guard let address = address else {
+        currentAccount = nil
+        log.debug("[Profile] find current account:\(address ?? "")")
+        return
+      }
+      var result: SideMenuItem? = nil
+      for list in allAccounts {
+        for account in list {
+          if account.account.address.lowercased() == address.lowercased() {
+            result = account
+            break
+          }
         }
-        if let color = colorsMap[url] {
-            userInfoBackgroudColor = color
-            return
+        if result != nil {
+          break
         }
-        Task {
-            let color = await ImageHelper.mostFrequentColor(from: url)
-            await MainActor.run {
-                self.colorsMap[url] = color
-                self.userInfoBackgroudColor = color
-            }
-        }
+      }
+      log.debug("[Profile] find current account:\(result?.account)")
+      withAnimation(.easeInOut) {
+        currentAccount = result
+      }
+    }
+  
+    func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
+        WalletManager.shared.changeSelectedAccount(address: selectedAccount.account.address, type: selectedAccount.account.FWAccountType)
+        NotificationCenter.default.post(name: .toggleSideMenu)
     }
 
     func switchAccountMoreAction() {
@@ -139,7 +115,11 @@ class SideMenuViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.enableEVM)
     }
 
-    // MARK: Private
+    private func onHiddenAddressesChanged() {
+        // Refresh hidden states for all accounts
+        guard let profile = ProfileManager.shared.currentProfile else { return }
+        refreshProfile(profile: profile)
+    }
 
-    private var cancelSets = Set<AnyCancellable>()
 }
+

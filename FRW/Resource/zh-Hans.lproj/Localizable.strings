@@ -965,3 +965,8 @@
 "keystore_json_invalid" = "无法解析 keystore，请下载";
 "keystore_json_invalid_link" = "Flow Wallet 扩展程序";
 "keystore_json_invalid_suffix" = "进行解析。";
+"invalid_eip1559_fee_data" = "无效的 EIP-1559 费用数据";
+"max_fee_must_be_greater_than_priority_fee" = "maxFeePerGas 必须大于或等于 maxPriorityFeePerGas";
+"invalid_gas_price_data" = "无效的 gas 价格数据";
+"invalid_amount_data" = "无效的金额数据";
+"failed_to_sign_transaction" = "签署交易失败";

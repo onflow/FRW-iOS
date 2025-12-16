@@ -19,6 +19,7 @@ typealias EmptyClosure = () -> Void
 typealias SwitchNetworkClosure = (Flow.ChainID) -> Void
 typealias BoolClosure = (Bool) -> Void
 
+
 // MARK: - RouteMap.RestoreLogin
 
 extension RouteMap {
@@ -327,13 +328,13 @@ extension RouteMap.Wallet: RouterTarget {
         case .enableEVM:
             navi.push(content: EVMEnableView())
         case .moveNFTs:
-            let vc = PresentHostingController(rootView: MoveNFTsView())
+            let vc = CustomHostingController(rootView: MoveNFTsView())
             navi.present(vc, animated: true, completion: nil)
         case .moveAssets:
-            let vc = PresentHostingController(rootView: MoveAssetsView())
+            let vc = CustomHostingController(rootView: MoveAssetsView())
             navi.present(vc, animated: true, completion: nil)
         case let .moveToken(tokenModel):
-            let vc = PresentHostingController(rootView: MoveTokenView(
+            let vc = CustomHostingController(rootView: MoveTokenView(
                 tokenModel: tokenModel,
                 isPresent: .constant(true)
             ))
@@ -342,14 +343,14 @@ extension RouteMap.Wallet: RouterTarget {
             let vm = TokenBalanceListViewModel(address: address, selectCallback: callback)
             Router.topPresentedController().present(content: TokenBalanceListView(vm: vm))
         case let .chooseChild(model):
-            let vc = PresentHostingController(rootView: MoveAccountsView(viewModel: model))
+            let vc = CustomHostingController(rootView: MoveAccountsView(viewModel: model))
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case .addCustomToken:
             navi.push(content: AddCustomTokenView())
         case let .showCustomToken(token):
             navi.push(content: CustomTokenDetailView(token: token))
         case let .addTokenSheet(token, callback):
-            let vc = PresentHostingController(
+            let vc = CustomHostingController(
                 rootView: AddTokenSheetView(
                     customToken: token,
                     callback: callback
@@ -360,7 +361,7 @@ extension RouteMap.Wallet: RouterTarget {
           if WalletManager.shared.isSelectedEVMAccount, let url = URL(string: "https://swap.flow.com") {
             Router.route(to: RouteMap.Explore.browser(url))
           } else {
-            let vc = PresentHostingController(rootView: SwapProviderView(token: token))
+            let vc = CustomHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
           }
 
@@ -405,6 +406,10 @@ extension RouteMap {
 
         case wallpaper
         case secureEnclavePrivateKey
+        case accountList
+        case account(WalletAccount, WalletAccount?, ProfileModel)
+        case RecoveryPhraseBackup
+        case EOAPrivateKey
     }
 }
 
@@ -475,7 +480,7 @@ extension RouteMap.Profile: RouterTarget {
                 navi.push(content: ChildAccountDetailView(vm: vm))
             }
         case .switchProfile:
-            let vc = PresentHostingController(rootView: AccountSwitchView())
+            let vc = AdaptiveHostingController(rootView: AccountSwitchView())
             Router.topPresentedController().present(vc, animated: true, completion: nil)
         case let .editChildAccount(childAccount):
             let vm = ChildAccountDetailEditViewModel(childAccount: childAccount)
@@ -504,6 +509,14 @@ extension RouteMap.Profile: RouterTarget {
             navi.push(content: WallpaperView())
         case .secureEnclavePrivateKey:
             navi.push(content: SecureEnclavePrivateKeyView())
+        case .accountList:
+          navi.push(content: AccountListView())
+        case .account(let account, let parent, let profile):
+          navi.push(content: AccountDetailView(account: account, profile: profile, parentAccount: parent))
+        case .RecoveryPhraseBackup:
+          navi.push(content: RecoveryPhraseBackupView())
+        case .EOAPrivateKey:
+          navi.push(content: EOAPrivateKeyView())
         }
     }
 }
@@ -663,6 +676,9 @@ extension RouteMap {
             SwitchNetworkClosure?
         )
         case signTypedMessage(BrowserSignTypedMessageViewModel)
+        /// new authn UI
+        case authnV2(AuthnViewModel)
+        case accounts(AuthnAccountsViewModel)
     }
 }
 
@@ -732,6 +748,13 @@ extension RouteMap.Explore: RouterTarget {
                 showLarge: true
             )
             Router.topPresentedController().present(vc, animated: true, completion: nil)
+        case let .authnV2(viewModel):
+          // Use AdaptiveHostingController for automatic content-based sizing
+          let vc = AdaptiveHostingController(rootView: AuthnView(viewModel: viewModel))
+          Router.topPresentedController().present(vc, animated: true, completion: nil)
+        case let .accounts(viewModel):
+          let vc = AdaptiveHostingController(rootView: AuthnAccountsView(viewModel: viewModel))
+          Router.topPresentedController().present(vc, animated: true, completion: nil)
         }
     }
 }

@@ -14,10 +14,10 @@ struct WalletAccountEditor: View {
     // MARK: Lifecycle
 
     init(address: String, callback: @escaping () -> Void) {
-        let user = WalletManager.shared.walletAccount.readInfo(at: address)
+        let user = WalletUser.get(address:  address)
         self.address = address
         self.current = user
-        self.emojis = WalletAccount.Emoji.allCases
+        self.emojis = WalletEmoji.allCases
         self.walletName = user.name
         self.callback = callback
     }
@@ -130,8 +130,8 @@ struct WalletAccountEditor: View {
     }
 
     func onSave() {
-        WalletManager.shared.walletAccount.update(
-            at: current.address,
+        WalletUser.update(
+            address: current.address,
             emoji: current.emoji,
             name: walletName
         )
@@ -141,15 +141,15 @@ struct WalletAccountEditor: View {
     // MARK: Private
 
     @State
-    private var current: WalletAccount.User
+    private var current: WalletUser
     @State
     private var walletName: String
 
-    private var emojis: [WalletAccount.Emoji]
+    private var emojis: [WalletEmoji]
     private let columns: Int = 7
     private let spacing: CGFloat = 8.0
 
-    private func updateEmoji(emoji: WalletAccount.Emoji) {
+    private func updateEmoji(emoji: WalletEmoji) {
         if current.emoji.name == walletName {
             walletName = emoji.name
         }
@@ -162,7 +162,7 @@ struct WalletAccountEditor: View {
 
 extension WalletAccountEditor {
     struct EmojiView: View {
-        var emoji: WalletAccount.Emoji
+        var emoji: WalletEmoji
         var isSelected: Bool
         var action: () -> Void
 

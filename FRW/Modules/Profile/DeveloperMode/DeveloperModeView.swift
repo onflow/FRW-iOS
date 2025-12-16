@@ -20,10 +20,11 @@ struct DeveloperModeView_Previews: PreviewProvider {
 
 struct DeveloperModeView: RouteableView {
     // MARK: Internal
-
     var title: String {
         "developer_mode".localized
     }
+
+    let showDEBUGTool = isDevModel
 
     var body: some View {
         ScrollView {
@@ -283,20 +284,17 @@ struct DeveloperModeView: RouteableView {
                             .frame(height: 64)
                             .padding(.horizontal, 16)
 
-//                            Divider()
-//                            HStack {
-//                                Button {
-//                                    HUD.success(title: "done")
-//                                    let list = LocalUserDefaults.shared.userList
-//                                    log.debug("[User] \(list)")
-//
-//                                } label: {
-//                                    Text("Copy all user")
-//                                }
-//                                Spacer()
-//                            }
-//                            .frame(height: 64)
-//                            .padding(.horizontal, 16)
+                          HStack {
+                            Text("Clear All Profiles (DEBUG)")
+                              .foregroundColor(.red)
+                            Spacer()
+                          }
+                          .frame(height: 64)
+                          .padding(.horizontal, 16)
+                          .onTapGesture {
+                            ProfileManager.shared.clearAllProfiles()
+                                  HUD.success(title: "All profiles cleared")
+                          }
                         }
                         .background(.LL.bgForIcon)
                         .cornerRadius(16)
@@ -357,7 +355,7 @@ struct DeveloperModeView: RouteableView {
                     }
                     .cornerRadius(16)
 
-                    if isDevModel {
+                    if showDEBUGTool {
                         Section {
                             VStack {
                                 HStack {
@@ -430,16 +428,28 @@ struct DeveloperModeView: RouteableView {
                                   copyProfile()
                                   HUD.success(title: "done.")
                               }
+
+                              HStack {
+                                Text("Clear All Profiles (DEBUG)")
+                                  .foregroundColor(.red)
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                ProfileManager.shared.clearAllProfiles()
+                                      HUD.success(title: "All profiles cleared")
+                              }
                               //MARK: -
-//                              HStack {
-//                                Text("Delete SE on Keychain")
-//                                Spacer()
-//                              }
-//                              .frame(height: 64)
-//                              .padding(.horizontal, 16)
-//                              .onTapGesture {
-//                                Router.route(to: RouteMap.Developer.deleteSE)
-//                              }
+                              HStack {
+                                Text("Delete SE on Keychain")
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                Router.route(to: RouteMap.Developer.deleteSE)
+                              }
                             }
                             .background(.LL.bgForIcon)
                             .cornerRadius(16)

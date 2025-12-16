@@ -186,7 +186,7 @@
 "You__will__need__to__connect__to__your__wallet__again::message" = "You will need to connect to your wallet again to make this change work.";
 "private_place_tips" = "Make sure you are in a private place !";
 "Coin::message" = "Coin";
-"reveal" = "Reveal";
+"reveal" = "Click to reveal phrase";
 "Exec_Transaction::message" = "Exec Transaction";
 "not_share_secret_tips" = "Do not share your secret phrase!";
 "View_more_transactions::message" = "View more transactions";
@@ -1184,3 +1184,20 @@ Key Store and Private Key.";
 "keystore_json_invalid" = "Unable to parse keystore, please download the";
 "keystore_json_invalid_link" = "Flow Wallet Extension";
 "keystore_json_invalid_suffix" = "to parse it.";
+"active_account" = "Active account";
+"other_accounts" = "Other accounts";
+"hidden" = "Hidden";
+"show_account_title" = "Show in account list";
+"copy_evm_hint_title" = "EVM on Flow address";
+"copy_evm_hint_des" = "You have copied an EVM address on the Flow network, please make sure you only send assets on the Flow network to this address otherwise they will be lost.";
+"copy_evm_button" = "Confirm to copy address";
+
+"invalid_eip1559_fee_data" = "Invalid EIP-1559 fee data";
+"max_fee_must_be_greater_than_priority_fee" = "maxFeePerGas must be >= maxPriorityFeePerGas";
+"invalid_gas_price_data" = "Invalid gas price data";
+"invalid_amount_data" = "Invalid amount data";
+"failed_to_sign_transaction" = "Failed to sign transaction";
+
+"backup_recovery_sub" = "View your profile’s recovery phrase";
+"backup_recovery_title" = "Your profile’s recovery phrase";
+"reveal_phrase" = "Click to reveal phrase";

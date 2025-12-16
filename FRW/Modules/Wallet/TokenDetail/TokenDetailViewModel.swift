@@ -244,12 +244,6 @@ extension TokenDetailViewModel {
         return false
     }
 
-    var movable: Bool {
-        EVMAccountManager.shared
-            .hasAccount &&
-            (token.evmAddress != nil || token.identifier != nil || token.isFlowCoin)
-    }
-
     var verifiedValue: String {
         token.isVerifiedValue ? "Yes" : "No"
     }

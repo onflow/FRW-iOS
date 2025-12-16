@@ -60,7 +60,8 @@ struct WalletConnectHandler {
     }
 
     func approveSessionNamespaces(
-        sessionProposal: Session.Proposal
+        sessionProposal: Session.Proposal,
+        EVMAddress: String? = nil
     ) throws -> [String: SessionNamespace] {
         var approvedNamespaces: [String: SessionNamespace] = [:]
         
@@ -68,7 +69,7 @@ struct WalletConnectHandler {
         let reqEvm = sessionProposal.requiredNamespaces[EVMHandler.nameTag]
         let optEvm = sessionProposal.optionalNamespaces?[EVMHandler.nameTag]
         if reqEvm != nil || optEvm != nil {
-            if let evmNS = try EVMHandler.approveProposalNamespace(required: reqEvm, optional: optEvm) {
+            if let evmNS = try EVMHandler.approveProposalNamespace(required: reqEvm, optional: optEvm, EVMAddress: EVMAddress) {
                 approvedNamespaces[EVMHandler.nameTag] = evmNS
             }
         }
@@ -77,7 +78,7 @@ struct WalletConnectHandler {
         let reqFlow = sessionProposal.requiredNamespaces[flowHandler.nameTag]
         let optFlow = sessionProposal.optionalNamespaces?[flowHandler.nameTag]
         if reqFlow != nil || optFlow != nil {
-            if let flowNS = try flowHandler.approveProposalNamespace(required: reqFlow, optional: optFlow) {
+            if let flowNS = try flowHandler.approveProposalNamespace(required: reqFlow, optional: optFlow, EVMAddress: nil) {
                 approvedNamespaces[flowHandler.nameTag] = flowNS
             }
         }
