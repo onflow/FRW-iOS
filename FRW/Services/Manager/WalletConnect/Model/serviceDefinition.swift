@@ -41,7 +41,7 @@ func serviceDefinition(address: String, keyId: Int, type: FCLServiceType) -> Ser
   
     if type == .preAuthz {
       service.method = .httpPost
-      service.endpoint = Config.get(.lilicoWeb) + "/api/wc/pre-authz"
+      service.endpoint = Config.get(.lilicoWeb) + "wc/pre-authz"
       service.params = ["address": address, "keyId": String(keyId), "network": currentNetwork.rawValue ]
     }
   

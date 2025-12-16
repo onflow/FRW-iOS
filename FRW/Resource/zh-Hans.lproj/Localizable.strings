@@ -796,6 +796,7 @@
 "create_new_account" = "创建新账户";
 "add_existing_account" = "导入现有账户";
 "import_wallet" = "导入钱包";
+"import_from_pdf" = "从PDF导入";
 "welcome" = "欢迎";
 "welcome_sub_desc" = "提供更多安全信息";
 "registerd_accounts" = "已注册账户";
@@ -961,7 +962,9 @@
 "camera_permission_required_title" = "需要相机访问权限";
 "camera_permission_required_message" = "Flow Wallet 需要相机权限来扫描二维码。请在设置中启用相机权限以继续。";
 "move_asset_browser_title_x" = "在 Flow 上的 cadence 地址之间移动您的资产，以便 %@ 查看您的资产";
-
+"keystore_json_invalid" = "无法解析 keystore，请下载";
+"keystore_json_invalid_link" = "Flow Wallet 扩展程序";
+"keystore_json_invalid_suffix" = "进行解析。";
 "invalid_eip1559_fee_data" = "无效的 EIP-1559 费用数据";
 "max_fee_must_be_greater_than_priority_fee" = "maxFeePerGas 必须大于或等于 maxPriorityFeePerGas";
 "invalid_gas_price_data" = "无效的 gas 价格数据";

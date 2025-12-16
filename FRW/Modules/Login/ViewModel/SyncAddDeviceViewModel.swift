@@ -39,6 +39,7 @@ class SyncAddDeviceViewModel: ObservableObject {
     func addDevice() {
         Task {
             let address = WalletManager.shared.address
+            EventTrack.Account.recovered(address: address.hexAddr, mechanism: .deviceBackup, methods: [])
             let accountKey = Flow.AccountKey(
                 publicKey: Flow.PublicKey(hex: model.accountKey.publicKey),
                 signAlgo: Flow.SignatureAlgorithm(index: model.accountKey.signAlgo),

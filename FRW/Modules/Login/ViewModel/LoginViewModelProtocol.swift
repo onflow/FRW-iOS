@@ -198,8 +198,9 @@ extension LoginViewModelProtocol {
     ///   - flowKey: Flow account key
     private func performImportLogin(address: String, flowKey: Flow.AccountKey) {
         Task {
-            HUD.loading()
+
             do {
+                HUD.loading()
                 let publicKey = flowKey.publicKey.description
                 let response: Network.EmptyResponse = try await Network.requestWithRawModel(
                     FRWAPI.User.checkimport(publicKey)
@@ -217,7 +218,6 @@ extension LoginViewModelProtocol {
                     Router.popToRoot()
                 } else if response.httpCode == 200 {
                     // New account, create username first
-                    HUD.dismissLoading()
                     Task {
                         HUD.loading()
                         let name = UsernameGenerator.generateRandomUsername()
@@ -235,6 +235,7 @@ extension LoginViewModelProtocol {
                 // Handle 409 error code from Moya error
                 if let code = error.moyaCode(), code == 409 {
                     do {
+                        HUD.loading()
                         try await performLogin(
                             address: address,
                             userName: "",
