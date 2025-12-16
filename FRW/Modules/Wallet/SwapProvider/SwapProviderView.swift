@@ -16,8 +16,7 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
     init(token: TokenModel?) {
         var result: [SwapProviderModel] = []
         if WalletManager.shared.isSelectedEVMAccount {
-            result.append(SwapProviderModel.Punch)
-            result.append(SwapProviderModel.Trado)
+            result.append(SwapProviderModel.Flow)
         } else {
             if let token, token.isFlowCoin {
                 result.append(SwapProviderModel.Punch)
@@ -134,6 +133,12 @@ struct SwapProviderModel {
         icon: "https://raw.githubusercontent.com/Outblock/Assets/main/dapp/increment/logo.jpeg",
         url: "https://\(currentNetwork == .mainnet ? "app" : "demo")" +
             ".increment.fi/swap"
+    )
+
+    static let Flow = SwapProviderModel(
+      title: "Flow",
+      icon: "https://swap.flow.com/favicon.png",
+      url: "https://swap.flow.com"
     )
 
     let title: String
