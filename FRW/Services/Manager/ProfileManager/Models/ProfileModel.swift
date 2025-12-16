@@ -95,6 +95,32 @@ struct ProfileModel: Codable, Equatable {
   let expirationDate: Date?
   let accounts: [[WalletAccount]]
 
+  // MARK: - Codable
+
+  enum CodingKeys: String, CodingKey {
+    case uid
+    case username
+    case avatar
+    case createdAt
+    case lastUpdated
+    case version
+    case wallets
+    case expirationDate
+    case accounts
+  }
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    uid = try container.decode(String.self, forKey: .uid)
+    username = try container.decodeIfPresent(String.self, forKey: .username)
+    avatar = try container.decodeIfPresent(String.self, forKey: .avatar)
+    createdAt = try container.decode(Date.self, forKey: .createdAt)
+    lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
+    version = try container.decode(String.self, forKey: .version)
+    wallets = try container.decode([UserManager.StoreUser].self, forKey: .wallets)
+    expirationDate = try container.decodeIfPresent(Date.self, forKey: .expirationDate)
+    accounts = try container.decodeIfPresent([[WalletAccount]].self, forKey: .accounts) ?? []
+  }
 
   // MARK: - Equatable
 
