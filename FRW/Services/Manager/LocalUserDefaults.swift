@@ -62,6 +62,7 @@ extension LocalUserDefaults {
         case hiddenAddresses
         // selected address for authn by uid and host [uid: [host: address]]
         case authnSelectedAddress
+        case wrapEOAWithCadence
     }
 }
 
