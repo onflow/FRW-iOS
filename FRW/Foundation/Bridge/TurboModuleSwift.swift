@@ -414,6 +414,8 @@ extension TurboModuleSwift {
       Router.route(to: RouteMap.RestoreLogin.restoreMulti)
     case .backupOptions:
       Router.route(to: RouteMap.Backup.backupList)
+    case .icloudRestore:
+      restoreModel.restoreWithCloudAction(type: .icloud)
     }
   }
 }
