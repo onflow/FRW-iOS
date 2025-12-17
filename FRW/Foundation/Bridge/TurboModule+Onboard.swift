@@ -49,7 +49,6 @@ extension TurboModuleSwift {
 
   @objc
   static func registerSecureTypeAccount(username: String) async throws -> [String: Any] {
-    print("TurboModuleSwift: registerSecureTypeAccount called")
     do {
       let result = try await UserManager.shared.register(username)
       guard let txid = result else {
@@ -80,7 +79,6 @@ extension TurboModuleSwift {
 
   @objc
   static func initSecureEnclaveWallet(txId: String) async throws -> [String: Any] {
-    print("TurboModuleSwift: initSecureEnclaveWallet called")
     guard let uid = UserManager.shared.RNRegisterInfo[txId] else {
       return [
         "success": false,
@@ -99,13 +97,11 @@ extension TurboModuleSwift {
 
   @objc
   static func signInWithCustomToken(customToken: String) async throws {
-    print("TurboModuleSwift: signInWithCustomToken called")
     try await Auth.auth().signIn(withCustomToken: customToken)
   }
 
   @objc
   static func saveMnemonic(mnemonic: String, customToken: String, txId: String, username: String) async throws {
-    print("TurboModuleSwift: saveMnemonic called")
     try await UserManager.shared.restoreLogin(withMnemonic: mnemonic)
 
   }
@@ -113,7 +109,6 @@ extension TurboModuleSwift {
   // MARK: - Screen Security
   @objc
   static func setScreenSecurityLevel(level: String) {
-    print("TurboModuleSwift: setScreenSecurityLevel called")
     log.info("Screen Security level:\(level)")
     switch level {
     case "secure":
@@ -127,7 +122,6 @@ extension TurboModuleSwift {
   // MARK: - Notification Permissions
   @objc
   static func requestNotificationPermission() async throws -> Bool {
-    print("TurboModuleSwift: requestNotificationPermission called")
     return await withCheckedContinuation { continuation in
       UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
         continuation.resume(returning: granted)
@@ -137,7 +131,6 @@ extension TurboModuleSwift {
 
   @objc
   static func checkNotificationPermission() async throws -> Bool {
-    print("TurboModuleSwift: checkNotificationPermission called")
     return await withCheckedContinuation { continuation in
       UNUserNotificationCenter.current().getNotificationSettings { settings in
         let granted = settings.authorizationStatus == .authorized
@@ -150,7 +143,6 @@ extension TurboModuleSwift {
   // MARK: - Device Info
   @objc
   static func getDeviceId() -> String {
-    print("TurboModuleSwift: getDeviceId called")
     return UUIDManager.appUUID()
   }
 

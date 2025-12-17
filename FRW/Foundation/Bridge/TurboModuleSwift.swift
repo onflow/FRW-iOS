@@ -39,6 +39,11 @@ class TurboModuleSwift: NSObject {
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
     }
+
+    @objc
+    static func getCurrentUserUid() -> String? {
+        return UserManager.shared.activatedUID
+    }
   
     @objc
     static func isFreeGasEnabled() -> Bool {
@@ -229,6 +234,22 @@ extension TurboModuleSwift {
     }
     let response = RNBridge.WalletProfilesResponse(profiles: result ?? [])
     return try response.toDictionary()
+  }
+
+  @objc
+  static func getRecoverableProfiles() async throws -> [String: Any] {
+      // For now, return all known profiles as recoverable
+      return try await getWalletProfiles()
+  }
+
+  @objc
+  static func switchToProfile(userId: String) async throws {
+    try await UserManager.shared.switchAccount(withUID: userId)
+  }
+
+  @objc
+  static func shareQRCode(address: String, qrCodeDataUrl: String) async throws {
+
   }
   
   private static func getCurrentProfile() async throws -> RNBridge.WalletProfile {

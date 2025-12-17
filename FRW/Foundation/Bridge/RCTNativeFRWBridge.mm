@@ -88,6 +88,10 @@
     return [TurboModuleSwift getNetwork];
 }
 
+- (void)getCurrentUserUid:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    resolve([TurboModuleSwift getCurrentUserUid]);
+}
+
 - (NSString * _Nullable)getSelectedAddress {
     return [TurboModuleSwift getCurrentAddress];
 }
@@ -284,6 +288,36 @@
   [TurboModuleSwift saveMnemonicWithMnemonic:mnemonic customToken:customToken txId:txId username:username completionHandler:^(NSError * _Nullable error) {
     if (error) {
       reject(@"save_mnemonic_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)getRecoverableProfiles:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getRecoverableProfilesWithCompletionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"get_recoverable_profiles_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
+- (void)switchToProfile:(NSString *)userId resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift switchToProfileWithUserId:userId completionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"switch_profile_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)shareQRCode:(NSString *)address qrCodeDataUrl:(NSString *)qrCodeDataUrl resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift shareQRCodeWithAddress:address qrCodeDataUrl:qrCodeDataUrl completionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"share_qr_error", error.localizedDescription, error);
     } else {
       resolve(nil);
     }

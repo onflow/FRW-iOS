@@ -69,6 +69,17 @@ final class Coordinator {
         navi.setNavigationBarHidden(true, animated: true)
         rootNavi = navi
         window.rootViewController = rootNavi
+
+        if ProfileManager.shared.profiles.isEmpty {
+          log.info("[] don't have Profile")
+            let vc = ReactNativeViewController()
+            vc.route = .getStarted
+            navi.setNavigationBarHidden(true, animated: true)
+            navi.interactivePopGestureRecognizer?.isEnabled = false
+            navi.pushViewController(vc, animated: false)
+        } else {
+          log.info("[] has profile")
+        }
     }
 
     // MARK: Private
