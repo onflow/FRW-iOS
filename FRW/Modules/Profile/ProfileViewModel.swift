@@ -40,9 +40,11 @@ extension ProfileView {
                 }
             }.store(in: &cancelSets)
 
-            ThemeManager.shared.$style.sink(receiveValue: { [weak self] newScheme in
-                self?.state.colorScheme = newScheme
-            }).store(in: &cancelSets)
+            ThemeManager.shared.$style
+              .receive(on: DispatchQueue.main)
+              .sink(receiveValue: { [weak self] newScheme in
+                  self?.state.colorScheme = newScheme
+              }).store(in: &cancelSets)
 
             UserManager.shared.$activatedUID
                 .receive(on: DispatchQueue.main)
