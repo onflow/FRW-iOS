@@ -388,8 +388,10 @@ extension TurboModuleSwift {
 
   @objc
   static func launchNativeScreen(screen: String, params: String?) {
+    log.info("\(screen)")
     guard let screen = NativeScreenName(rawValue: screen) else {
       log.error("don't support route \(screen)")
+      HUD.error(title: "don't support route \(screen)")
       return
     }
     guard currentNetwork == .mainnet else {
