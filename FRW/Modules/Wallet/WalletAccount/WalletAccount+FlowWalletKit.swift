@@ -130,7 +130,13 @@ extension EOA {
     ) -> WalletAccount {
         let addr = address.addHexPrefix()
         let user = WalletUser.get(address: addr, userId: userId)
-
+        let parentInfo: WalletAccount.ParentInfo? = parentAddress.map { parentAddr in
+            let parentUser = WalletUser.get(address: parentAddr, userId: userId)
+            return WalletAccount.ParentInfo(
+                address: parentAddr,
+                emoji: parentUser.emoji
+            )
+        }
         return WalletAccount(
             id: UUID().uuidString,
             address: addr,
@@ -138,7 +144,7 @@ extension EOA {
             network: currentNetwork,
             user: user,
             childInfo: nil,
-            parent: nil,
+            parent: parentInfo,
             isActive: WalletManager.shared.selectedAccount?.address.hexAddr == addr,
             assets: .notLoaded
         )
