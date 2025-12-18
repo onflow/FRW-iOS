@@ -1,0 +1,47 @@
+name: "CodeQL Analysis"
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  analyze-code:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      pull-requests: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        languages: ['swift']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.languages }}
+          queries: security-extended
+
+      # Autobuild attempts to build Swift projects automatically.
+      # For iOS projects, it will try to build the biggest target from your Xcode project/workspace.
+      # If autobuild fails, you can replace this step with manual build commands.
+      # For faster builds, consider targeting a single architecture (e.g., ARCH=arm64).
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: CodeQL Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.languages }}"
