@@ -51,11 +51,6 @@ extension ProfileView {
                     self?.refreshBackupState()
                 }.store(in: &cancelSets)
 
-            NotificationCenter.default.publisher(for: .backupTypeDidChanged)
-                .receive(on: DispatchQueue.main)
-                .sink { _ in
-                    self.refreshBackupState()
-                }.store(in: &cancelSets)
 
             PushHandler.shared.$isPushEnabled
                 .dropFirst()
