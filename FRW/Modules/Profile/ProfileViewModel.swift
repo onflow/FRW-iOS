@@ -12,17 +12,15 @@ import SwiftUI
 extension ProfileView {
     enum BackupFetchingState {
         case none
-        case manually
         case fetching
-        case failed
-        case synced
+        case multiBackup
     }
 
     struct ProfileState {
         var isLogin: Bool = false
         var currency: String = CurrencyCache.cache.currentCurrency.rawValue
         var colorScheme: ColorScheme?
-        var backupFetchingState: BackupFetchingState = .manually
+        var backupFetchingState: BackupFetchingState = .fetching
         var isPushEnabled: Bool = PushHandler.shared.isPushEnabled
     }
 
@@ -50,13 +48,13 @@ extension ProfileView {
                 .receive(on: DispatchQueue.main)
                 .map { $0 }
                 .sink { [weak self] _ in
-//                    self?.refreshBackupState()
+                    self?.refreshBackupState()
                 }.store(in: &cancelSets)
 
             NotificationCenter.default.publisher(for: .backupTypeDidChanged)
                 .receive(on: DispatchQueue.main)
                 .sink { _ in
-//                    self.refreshBackupState()
+                    self.refreshBackupState()
                 }.store(in: &cancelSets)
 
             PushHandler.shared.$isPushEnabled
@@ -93,36 +91,20 @@ extension ProfileView {
         private var cancelSets = Set<AnyCancellable>()
 
         private func refreshBackupState() {
-            guard let uid = UserManager.shared.activatedUID else {
+            guard UserManager.shared.activatedUID != nil else {
                 state.backupFetchingState = .none
                 return
             }
-
-            let backupType = MultiAccountStorage.shared.getBackupType(uid)
-            switch backupType {
-            case .manual:
-                state.backupFetchingState = .manually
-                return
-            case .none:
+            guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
                 state.backupFetchingState = .none
                 return
-            default:
-                break
             }
-
-            state.backupFetchingState = .fetching
-
             Task {
-                do {
-                    let exist = try await BackupManager.shared.isExistOnCloud(backupType)
-                    DispatchQueue.main.async {
-                        self.state.backupFetchingState = exist ? .synced : .failed
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        self.state.backupFetchingState = .failed
-                    }
-                }
+              let viewModel = BackupListViewModel()
+              await viewModel.fetchMultiBackup()
+              await MainActor.run {
+                self.state.backupFetchingState = (viewModel.backupList.count >= 2) ? .multiBackup : .none
+              }
             }
         }
 
