@@ -58,7 +58,11 @@ class AuthnViewModel: ObservableObject {
     let coa = coaAccount.compactMap { AuthnAccountProvider(account: $0, linkAccounts: []) }
 
     let coaWhiteList = RemoteConfigManager.shared.coaDomains
-    if coaWhiteList.contains(where: { provider.url.lowercased().contains($0.lowercased()) }) {
+    var isShowCoa = false
+    if let isHidden = coaAccount.first?.isHidden {
+      isShowCoa = !isHidden
+    }
+    if coaWhiteList.contains(where: { provider.url.lowercased().contains($0.lowercased()) }) || isShowCoa {
       accounts.append(contentsOf: coa)
       accounts.append(contentsOf: eoa)
     } else {
