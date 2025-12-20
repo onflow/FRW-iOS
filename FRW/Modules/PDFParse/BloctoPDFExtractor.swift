@@ -157,33 +157,38 @@ final class BloctoPDFExtractor: ObservableObject {
     // MARK: - Extraction Methods
 
     /// Extract JSON from PDF URL asynchronously
-    /// - Parameter url: PDF file URL
+    /// - Parameters:
+    ///   - url: PDF file URL
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Extraction result
-    func extract(from url: URL) async throws -> PDFExtractionResult {
+    func extract(from url: URL, password: String? = nil) async throws -> PDFExtractionResult {
         return try await withCheckedThrowingContinuation { continuation in
-            extract(from: url) { result in
+            extract(from: url, password: password) { result in
                 continuation.resume(with: result)
             }
         }
     }
 
     /// Extract JSON from DocumentPickerResult asynchronously
-    /// - Parameter pickerResult: Result from DocumentPicker
+    /// - Parameters:
+    ///   - pickerResult: Result from DocumentPicker
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Extraction result
-    func extract(from pickerResult: DocumentPickerResult) async throws -> PDFExtractionResult {
-        return try await extract(from: pickerResult.url)
+    func extract(from pickerResult: DocumentPickerResult, password: String? = nil) async throws -> PDFExtractionResult {
+        return try await extract(from: pickerResult.url, password: password)
     }
 
     /// Extract JSON from PDF URL with completion handler
     /// - Parameters:
     ///   - url: PDF file URL
+    ///   - password: Optional password for encrypted PDFs
     ///   - completion: Completion handler with result
-    func extract(from url: URL, completion: @escaping (Result<PDFExtractionResult, PDFExtractionError>) -> Void) {
+    func extract(from url: URL, password: String? = nil, completion: @escaping (Result<PDFExtractionResult, PDFExtractionError>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
 
             do {
-                let result = try self.performExtraction(from: url)
+                let result = try self.performExtraction(from: url, password: password)
                 DispatchQueue.main.async {
                     completion(.success(result))
                 }
@@ -201,7 +206,7 @@ final class BloctoPDFExtractor: ObservableObject {
 
     // MARK: - Private Methods
 
-    private func processFile(result: DocumentPickerResult) {
+    private func processFile(result: DocumentPickerResult, password: String? = nil) {
         isProcessing = true
         error = nil
         self.result = nil
@@ -210,7 +215,7 @@ final class BloctoPDFExtractor: ObservableObject {
             guard let self = self else { return }
 
             do {
-                let extractionResult = try self.performExtraction(from: result.url)
+                let extractionResult = try self.performExtraction(from: result.url, password: password)
                 DispatchQueue.main.async {
                     self.isProcessing = false
                     self.result = extractionResult
@@ -229,11 +234,11 @@ final class BloctoPDFExtractor: ObservableObject {
         }
     }
 
-    private func performExtraction(from url: URL) throws -> PDFExtractionResult {
+    private func performExtraction(from url: URL, password: String? = nil) throws -> PDFExtractionResult {
         // Step 1: Parse PDF
         let parseResult: PDFParseResult
         do {
-            parseResult = try pdfParser.parse(from: url)
+            parseResult = try pdfParser.parse(from: url, password: password)
         } catch {
             throw PDFExtractionError.pdfParsingFailed(error)
         }

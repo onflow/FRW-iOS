@@ -1289,6 +1289,8 @@
 		4E131A9F2CA1956B002B258D /* SVGUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131A9D2CA19567002B258D /* SVGUIView.swift */; };
 		4E131AA12CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */; };
 		4E131AA22CA1AB9E002B258D /* ThingsNeedKnowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */; };
+		4E1819962EF64EBD00217D19 /* PDFPasswordAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1819952EF64EBD00217D19 /* PDFPasswordAlertView.swift */; };
+		4E1819972EF64EBD00217D19 /* PDFPasswordAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1819952EF64EBD00217D19 /* PDFPasswordAlertView.swift */; };
 		4E190E242DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */; };
 		4E190E252DBA274400C2E670 /* SwitchNetworkAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */; };
 		4E190E262DBA336100C2E670 /* EmptyKeychainAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FF7F2DB923EE00F2E527 /* EmptyKeychainAlert.swift */; };
@@ -3002,6 +3004,7 @@
 		4E0D349E2A8B4E2900BC6E43 /* e-Ukraine-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "e-Ukraine-Medium.ttf"; sourceTree = "<group>"; };
 		4E131A9D2CA19567002B258D /* SVGUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGUIView.swift; sourceTree = "<group>"; };
 		4E131AA02CA1AB99002B258D /* ThingsNeedKnowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThingsNeedKnowViewModel.swift; sourceTree = "<group>"; };
+		4E1819952EF64EBD00217D19 /* PDFPasswordAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPasswordAlertView.swift; sourceTree = "<group>"; };
 		4E190E232DBA274400C2E670 /* SwitchNetworkAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchNetworkAlert.swift; sourceTree = "<group>"; };
 		4E1914862D2E64240018BAA7 /* FormItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormItem.swift; sourceTree = "<group>"; };
 		4E1A8B652B71A47A00485EDE /* MultiBackupCreatePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBackupCreatePinView.swift; sourceTree = "<group>"; };
@@ -5948,6 +5951,7 @@
 				159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */,
 				15F607312E963E82008D0EDD /* AlertCenter.swift */,
 				15F607382E963E82008D0EDD /* SurgePricingAlertView.swift */,
+				4E1819952EF64EBD00217D19 /* PDFPasswordAlertView.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -8308,6 +8312,7 @@
 				153749182E26FDD60040E3F8 /* SPSlider.swift in Sources */,
 				153749192E26FDD60040E3F8 /* SPLabel.swift in Sources */,
 				1537491A2E26FDD60040E3F8 /* SPTableViewCell.swift in Sources */,
+				4E1819972EF64EBD00217D19 /* PDFPasswordAlertView.swift in Sources */,
 				1537491B2E26FDD60040E3F8 /* CGRectExtension.swift in Sources */,
 				1537491C2E26FDD60040E3F8 /* UserDefaultsExtension.swift in Sources */,
 				1537491D2E26FDD60040E3F8 /* NSUserActivityExtension.swift in Sources */,
@@ -9356,6 +9361,7 @@
 				153749702E26FDD60040E3F8 /* SPSlider.swift in Sources */,
 				153749712E26FDD60040E3F8 /* SPLabel.swift in Sources */,
 				153749722E26FDD60040E3F8 /* SPTableViewCell.swift in Sources */,
+				4E1819962EF64EBD00217D19 /* PDFPasswordAlertView.swift in Sources */,
 				153749732E26FDD60040E3F8 /* CGRectExtension.swift in Sources */,
 				153749742E26FDD60040E3F8 /* UserDefaultsExtension.swift in Sources */,
 				153749752E26FDD60040E3F8 /* NSUserActivityExtension.swift in Sources */,

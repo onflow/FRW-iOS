@@ -10,12 +10,14 @@ import PDFKit
 
 // MARK: - PDF Parser Error
 
-enum PDFParserError: Error, LocalizedError {
+enum PDFParserError: Error, LocalizedError, Equatable {
     case fileNotFound
     case invalidPDF
     case emptyDocument
     case pageExtractionFailed(page: Int)
     case textExtractionFailed
+    case passwordRequired
+    case incorrectPassword
 
     var errorDescription: String? {
         switch self {
@@ -29,6 +31,10 @@ enum PDFParserError: Error, LocalizedError {
             return "Failed to extract content from page \(page)"
         case .textExtractionFailed:
             return "Failed to extract text from PDF"
+        case .passwordRequired:
+            return "This PDF is password protected. Please provide a password."
+        case .incorrectPassword:
+            return "The password provided is incorrect."
         }
     }
 }
@@ -134,16 +140,20 @@ final class PDFParser {
     // MARK: - Public Methods
 
     /// Parse PDF from DocumentPickerResult
-    /// - Parameter result: Result from DocumentPicker
+    /// - Parameters:
+    ///   - result: Result from DocumentPicker
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Parsed PDF content
-    func parse(from result: DocumentPickerResult) throws -> PDFParseResult {
-        return try parse(from: result.url)
+    func parse(from result: DocumentPickerResult, password: String? = nil) throws -> PDFParseResult {
+        return try parse(from: result.url, password: password)
     }
 
     /// Parse PDF from URL
-    /// - Parameter url: File URL to the PDF
+    /// - Parameters:
+    ///   - url: File URL to the PDF
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Parsed PDF content
-    func parse(from url: URL) throws -> PDFParseResult {
+    func parse(from url: URL, password: String? = nil) throws -> PDFParseResult {
         // Verify file exists
         guard FileManager.default.fileExists(atPath: url.path) else {
             throw PDFParserError.fileNotFound
@@ -152,6 +162,19 @@ final class PDFParser {
         // Load PDF document
         guard let document = PDFDocument(url: url) else {
             throw PDFParserError.invalidPDF
+        }
+
+        // Handle encryption
+        if document.isEncrypted {
+            if document.isLocked {
+                if let password = password {
+                    if !document.unlock(withPassword: password) {
+                        throw PDFParserError.incorrectPassword
+                    }
+                } else {
+                    throw PDFParserError.passwordRequired
+                }
+            }
         }
 
         // Check if document has pages
@@ -197,15 +220,30 @@ final class PDFParser {
     }
 
     /// Extract only text from PDF (lightweight operation)
-    /// - Parameter url: File URL to the PDF
+    /// - Parameters:
+    ///   - url: File URL to the PDF
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Full text content
-    func extractText(from url: URL) throws -> String {
+    func extractText(from url: URL, password: String? = nil) throws -> String {
         guard FileManager.default.fileExists(atPath: url.path) else {
             throw PDFParserError.fileNotFound
         }
 
         guard let document = PDFDocument(url: url) else {
             throw PDFParserError.invalidPDF
+        }
+        
+        // Handle encryption
+        if document.isEncrypted {
+            if document.isLocked {
+                if let password = password {
+                    if !document.unlock(withPassword: password) {
+                        throw PDFParserError.incorrectPassword
+                    }
+                } else {
+                    throw PDFParserError.passwordRequired
+                }
+            }
         }
 
         guard document.pageCount > 0 else {
@@ -237,40 +275,12 @@ final class PDFParser {
     /// - Parameter page: PDF page to extract from
     /// - Returns: Extracted text with preserved order
     private func extractTextPreservingOrder(from page: PDFPage) -> String {
-        let pageBounds = page.bounds(for: .mediaBox)
-
-        // Get selection for entire page
-        guard let selection = page.selection(for: pageBounds) else {
-            return page.string ?? ""
-        }
-
-        // Get selections by line
-      let lineSelections = selection.selectionsByLine()
-        guard !lineSelections.isEmpty else {
-            return page.string ?? ""
-        }
-
-        // Sort lines by Y position (top to bottom in PDF coordinates)
-        // PDF coordinates: origin at bottom-left, Y increases upward
-        // So we sort by descending Y to get top-to-bottom order
-        let sortedLines = lineSelections.sorted { sel1, sel2 in
-            let bounds1 = sel1.bounds(for: page)
-            let bounds2 = sel2.bounds(for: page)
-
-            // Compare Y positions (higher Y = higher on page = should come first)
-            let yDiff = bounds2.midY - bounds1.midY
-            if abs(yDiff) > 2 {
-                // Different lines - sort by Y (descending for top-to-bottom)
-                return bounds1.midY > bounds2.midY
-            }
-
-            // Same line - sort by X (ascending for left-to-right)
-            return bounds1.minX < bounds2.minX
-        }
-
-        // Extract text from sorted selections
-        let lines = sortedLines.compactMap { $0.string }
-        return lines.joined(separator: "\n")
+        // PDFSelection.selectionsByLine() is available on macOS but NOT on iOS.
+        // On iOS, we fall back to the page's string property, which typically provides 
+        // text in reading order.
+        // If more advanced layout analysis is needed, we would need to manually 
+        // iterate over character bounds, but for most standard PDFs, this is sufficient.
+        return page.string ?? ""
     }
 
     /// Get document info without full text extraction
@@ -350,6 +360,16 @@ final class PDFParser {
 
         return PDFDocument(url: url) != nil
     }
+
+    /// Check if PDF is password protected and locked
+    /// - Parameter url: File URL to the PDF
+    /// - Returns: True if PDF needs password
+    func isPasswordProtected(at url: URL) -> Bool {
+        guard let document = PDFDocument(url: url) else {
+            return false
+        }
+        return document.isEncrypted && document.isLocked
+    }
 }
 
 // MARK: - Async Support
@@ -357,13 +377,15 @@ final class PDFParser {
 extension PDFParser {
 
     /// Parse PDF asynchronously
-    /// - Parameter url: File URL to the PDF
+    /// - Parameters:
+    ///   - url: File URL to the PDF
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Parsed PDF content
-    func parseAsync(from url: URL) async throws -> PDFParseResult {
+    func parseAsync(from url: URL, password: String? = nil) async throws -> PDFParseResult {
         return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    let result = try self.parse(from: url)
+                    let result = try self.parse(from: url, password: password)
                     continuation.resume(returning: result)
                 } catch {
                     continuation.resume(throwing: error)
@@ -373,20 +395,24 @@ extension PDFParser {
     }
 
     /// Parse PDF from DocumentPickerResult asynchronously
-    /// - Parameter result: Result from DocumentPicker
+    /// - Parameters:
+    ///   - result: Result from DocumentPicker
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Parsed PDF content
-    func parseAsync(from result: DocumentPickerResult) async throws -> PDFParseResult {
-        return try await parseAsync(from: result.url)
+    func parseAsync(from result: DocumentPickerResult, password: String? = nil) async throws -> PDFParseResult {
+        return try await parseAsync(from: result.url, password: password)
     }
 
     /// Extract text asynchronously
-    /// - Parameter url: File URL to the PDF
+    /// - Parameters:
+    ///   - url: File URL to the PDF
+    ///   - password: Optional password for encrypted PDFs
     /// - Returns: Full text content
-    func extractTextAsync(from url: URL) async throws -> String {
+    func extractTextAsync(from url: URL, password: String? = nil) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    let text = try self.extractText(from: url)
+                    let text = try self.extractText(from: url, password: password)
                     continuation.resume(returning: text)
                 } catch {
                     continuation.resume(throwing: error)
