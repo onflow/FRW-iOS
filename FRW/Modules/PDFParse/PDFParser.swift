@@ -275,12 +275,40 @@ final class PDFParser {
     /// - Parameter page: PDF page to extract from
     /// - Returns: Extracted text with preserved order
     private func extractTextPreservingOrder(from page: PDFPage) -> String {
-        // PDFSelection.selectionsByLine() is available on macOS but NOT on iOS.
-        // On iOS, we fall back to the page's string property, which typically provides 
-        // text in reading order.
-        // If more advanced layout analysis is needed, we would need to manually 
-        // iterate over character bounds, but for most standard PDFs, this is sufficient.
-        return page.string ?? ""
+      let pageBounds = page.bounds(for: .mediaBox)
+
+      // Get selection for entire page
+      guard let selection = page.selection(for: pageBounds) else {
+          return page.string ?? ""
+      }
+
+      // Get selections by line
+      let lineSelections = selection.selectionsByLine()
+      guard !lineSelections.isEmpty else {
+          return page.string ?? ""
+      }
+
+      // Sort lines by Y position (top to bottom in PDF coordinates)
+      // PDF coordinates: origin at bottom-left, Y increases upward
+      // So we sort by descending Y to get top-to-bottom order
+      let sortedLines = lineSelections.sorted { sel1, sel2 in
+          let bounds1 = sel1.bounds(for: page)
+          let bounds2 = sel2.bounds(for: page)
+
+          // Compare Y positions (higher Y = higher on page = should come first)
+          let yDiff = bounds2.midY - bounds1.midY
+          if abs(yDiff) > 2 {
+              // Different lines - sort by Y (descending for top-to-bottom)
+              return bounds1.midY > bounds2.midY
+          }
+
+          // Same line - sort by X (ascending for left-to-right)
+          return bounds1.minX < bounds2.minX
+      }
+
+      // Extract text from sorted selections
+      let lines = sortedLines.compactMap { $0.string }
+      return lines.joined(separator: "\n")
     }
 
     /// Get document info without full text extraction
