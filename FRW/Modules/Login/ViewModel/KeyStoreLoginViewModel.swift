@@ -318,7 +318,6 @@ extension KeyStoreLoginViewModel {
                 let minifiedJSON = BloctoPDFExtractor.minifyJSON(jsonString) ?? jsonString
 
                 // Step 5: Extract address if available
-                var extractedAddress: String?
                 if let dict = jsonValue as? [String: Any], let privateKey = dict["private_key"] as? String {
                     DispatchQueue.main.async {
                         self.isPDFProcessing = false
@@ -332,11 +331,7 @@ extension KeyStoreLoginViewModel {
                 DispatchQueue.main.async {
                     self.isPDFProcessing = false
                     self.showPDFParseError = false
-                    self.json = minifiedJSON
-
-                    if let address = extractedAddress {
-                        self.wantedAddress = address
-                    }
+                    self.json = BloctoPDFExtractor.prettyPrintJSON(minifiedJSON) ?? minifiedJSON
 
                     self.update()
                     log.info("[KeyStore] PDF JSON extracted successfully, length: \(minifiedJSON.count)")
