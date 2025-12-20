@@ -44,7 +44,7 @@ extension RestoreWalletViewModel {
     }
 
     func restoreWithKeyStore() {
-        Router.route(to: RouteMap.RestoreLogin.keystore)
+        Router.route(to: RouteMap.RestoreLogin.keystore(""))
     }
 
     func resteroWithPrivateKey() {

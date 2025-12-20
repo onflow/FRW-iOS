@@ -41,7 +41,7 @@ extension RouteMap {
         case createProfileSuccess(CreateProfileWaitingViewModel)
         case restoreErrorView(RestoreErrorView.RestoreError)
 
-        case keystore
+        case keystore(String)
         case importUserName(ImportUserNameViewModel)
         case privateKey(String?)
         case seedPhrase
@@ -84,8 +84,8 @@ extension RouteMap.RestoreLogin: RouterTarget {
             navi.push(content: AccountCreatedView(vm))
         case let .restoreErrorView(error):
             navi.push(content: RestoreErrorView(error: error))
-        case .keystore:
-            navi.push(content: KeyStoreLoginView())
+        case .keystore(let json):
+            navi.push(content: KeyStoreLoginView(json: json))
         case let .importUserName(viewModel):
             navi.push(content: ImportUserNameView(viewModel: viewModel))
         case .privateKey(let privateKey):

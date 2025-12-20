@@ -44,6 +44,10 @@ final class KeyStoreLoginViewModel: ObservableObject {
     /// Flow Wallet extension Chrome Web Store URL
     static let flowWalletExtensionURL = "https://chromewebstore.google.com/detail/flow-wallet/hpclkefagolihohboafpheddmmgdffjm?hl=en"
 
+    init(json: String = "") {
+      self.json = json
+      updateButtonState()
+    }
 
     @MainActor
     func update(json _: String) {

@@ -313,7 +313,10 @@ extension PrivateKeyLoginViewModel {
 
                 // Step 4: Get minified JSON for PrivateKey field
                 let minifiedJSON = BloctoPDFExtractor.minifyJSON(jsonString) ?? jsonString
-
+                if let dict = jsonValue as? [String: Any], let crypto = dict["crypto"] {
+                  Router.route(to: RouteMap.RestoreLogin.keystore(minifiedJSON))
+                  return
+                }
                 // Step 5: Extract address if available
                 var privateKey: String?
                 if let dict = jsonValue as? [String: Any] {
