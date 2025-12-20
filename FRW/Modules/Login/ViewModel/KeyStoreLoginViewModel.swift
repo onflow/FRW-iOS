@@ -261,6 +261,25 @@ extension KeyStoreLoginViewModel {
 
     /// Process selected PDF file: extract text and parse JSON
     private func processPDFFile(url: URL) {
+        if PDFParser.shared.isPasswordProtected(at: url) {
+            promptForPDFPassword(url: url)
+        } else {
+            performPDFExtraction(url: url, password: nil)
+        }
+    }
+
+    private func promptForPDFPassword(url: URL, isRetry: Bool = false) {
+        let message = isRetry ? "The password provided is incorrect." : nil
+        PDFPasswordAlertView.show(message: message) { [weak self] password in
+            guard let password = password else {
+                // User cancelled
+                return
+            }
+            self?.performPDFExtraction(url: url, password: password)
+        }
+    }
+
+    private func performPDFExtraction(url: URL, password: String?) {
         isPDFProcessing = true
         showPDFParseError = false
 
@@ -269,7 +288,7 @@ extension KeyStoreLoginViewModel {
 
             do {
                 // Step 1: Extract text from PDF
-                let pdfText = try PDFParser.shared.extractText(from: url)
+                let pdfText = try PDFParser.shared.extractText(from: url, password: password)
                 let trimmedText = pdfText.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !trimmedText.isEmpty else {
                     DispatchQueue.main.async {
@@ -296,8 +315,14 @@ extension KeyStoreLoginViewModel {
 
                 // Step 5: Extract address if available
                 var extractedAddress: String?
-                if let dict = jsonValue as? [String: Any] {
-                    extractedAddress = dict["address"] as? String
+                if let dict = jsonValue as? [String: Any], let privateKey = dict["private_key"] as? String {
+                    DispatchQueue.main.async {
+                        self.isPDFProcessing = false
+                        self.showPDFParseError = false
+                    }
+                    log.info("skip to private key")
+                    Router.route(to: RouteMap.RestoreLogin.privateKey(privateKey))
+                    return
                 }
 
                 DispatchQueue.main.async {
@@ -313,6 +338,17 @@ extension KeyStoreLoginViewModel {
                     log.info("[KeyStore] PDF JSON extracted successfully, length: \(minifiedJSON.count)")
                 }
 
+            } catch let error as PDFParserError {
+                DispatchQueue.main.async {
+                    self.isPDFProcessing = false
+                    
+                    if error == .incorrectPassword || error == .passwordRequired {
+                        self.promptForPDFPassword(url: url, isRetry: true)
+                    } else {
+                        self.showPDFParseError = true
+                        log.error("[KeyStore] PDF extraction failed: \(error.localizedDescription)")
+                    }
+                }
             } catch {
                 DispatchQueue.main.async {
                     self.isPDFProcessing = false

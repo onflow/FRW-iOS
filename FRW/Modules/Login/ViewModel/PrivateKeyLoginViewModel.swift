@@ -40,6 +40,11 @@ final class PrivateKeyLoginViewModel: ObservableObject {
   /// Flow Wallet extension Chrome Web Store URL
   static let flowWalletExtensionURL = "https://chromewebstore.google.com/detail/flow-wallet/hpclkefagolihohboafpheddmmgdffjm?hl=en"
 
+    init(key: String?) {
+      self.key = key ?? ""
+      buttonState = (self.key.isEmpty) ? .disabled : .enabled
+    }
+
     @MainActor
     func update(key _: String) {
         update()

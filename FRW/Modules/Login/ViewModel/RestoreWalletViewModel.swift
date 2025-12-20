@@ -48,6 +48,6 @@ extension RestoreWalletViewModel {
     }
 
     func resteroWithPrivateKey() {
-        Router.route(to: RouteMap.RestoreLogin.privateKey)
+        Router.route(to: RouteMap.RestoreLogin.privateKey(nil))
     }
 }

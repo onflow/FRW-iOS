@@ -15,8 +15,11 @@ struct PrivateKeyLoginView: RouteableView {
 
     private let backupType: RestoreWalletViewModel.ImportType = .privateKey
 
-    @StateObject
-    var viewModel = PrivateKeyLoginViewModel()
+    @StateObject var viewModel: PrivateKeyLoginViewModel
+
+    init(privateKey: String? = nil) {
+      _viewModel = StateObject(wrappedValue: PrivateKeyLoginViewModel(key: privateKey))
+    }
 
     var body: some View {
         VStack {

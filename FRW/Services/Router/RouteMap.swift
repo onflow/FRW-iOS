@@ -43,7 +43,7 @@ extension RouteMap {
 
         case keystore
         case importUserName(ImportUserNameViewModel)
-        case privateKey
+        case privateKey(String?)
         case seedPhrase
     }
 }
@@ -88,8 +88,8 @@ extension RouteMap.RestoreLogin: RouterTarget {
             navi.push(content: KeyStoreLoginView())
         case let .importUserName(viewModel):
             navi.push(content: ImportUserNameView(viewModel: viewModel))
-        case .privateKey:
-            navi.push(content: PrivateKeyLoginView())
+        case .privateKey(let privateKey):
+          navi.push(content: PrivateKeyLoginView(privateKey: privateKey))
         case .seedPhrase:
             navi.push(content: SeedPhraseLoginView())
         }
