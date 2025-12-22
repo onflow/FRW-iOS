@@ -358,8 +358,13 @@ extension RouteMap.Wallet: RouterTarget {
             )
             navi.present(vc, completion: nil)
         case let .swapProvider(token):
-          if WalletManager.shared.isSelectedEVMAccount, let url = URL(string: "https://swap.flow.com") {
-            Router.route(to: RouteMap.Explore.browser(url))
+
+          if WalletManager.shared.isSelectedEVMAccount {
+            if let swapUrl = token?.swapUrl(), let url = swapUrl.url {
+              Router.route(to: RouteMap.Explore.browser(url))
+            } else if let url = URL(string: "https://swap.flow.com") {
+              Router.route(to: RouteMap.Explore.browser(url))
+            }
           } else {
             let vc = CustomHostingController(rootView: SwapProviderView(token: token))
             navi.present(vc, completion: nil)
