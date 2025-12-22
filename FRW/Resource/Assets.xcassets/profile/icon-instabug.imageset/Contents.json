@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "icon-instabug.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "icon-instabug@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "icon-instabug@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "profile-icon-bug.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

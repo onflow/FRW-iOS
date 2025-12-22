@@ -8,10 +8,8 @@
 import SwiftUI
 import SwiftUIX
 
-struct MoveAssetsView: RouteableView, PresentActionDelegate {
+struct MoveAssetsView: RouteableView {
     // MARK: Internal
-
-    var changeHeight: (() -> Void)?
 
     var token: TokenModel?
 

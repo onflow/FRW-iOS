@@ -11,16 +11,19 @@ import WalletCore
 
 extension TrustWeb3Provider {
     static func flowConfig() -> TrustWeb3Provider? {
-        guard let address = EVMAccountManager.shared.accounts.first?.showAddress else {
-            return nil
+        
+        var allAddresses: [String] = []
+        if let eoa = WalletManager.shared.EOAs?.map({ $0.address }) {
+          allAddresses.append(contentsOf: eoa)
         }
+        if let coa = WalletManager.shared.coa {
+          allAddresses.append(coa.address)
+        }
+      
         let url = currentNetwork.evmURL.absoluteString
         let chainId = currentNetwork.networkID
-        let config = TrustWeb3Provider.Config.EthereumConfig(
-            address: address,
-            chainId: chainId,
-            rpcUrl: url
-        )
+        let config = TrustWeb3Provider.Config.EthereumConfig(addresses: allAddresses, chainId: chainId, rpcUrl: url)
+        
         var isDebug = false
         #if DEBUG
             isDebug = true

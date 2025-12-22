@@ -10,17 +10,12 @@ import SwiftUI
 
 // MARK: - AddTokenView
 
-// struct AddTokenView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddTokenView.AddTokenConfirmView(token: nil)
-//    }
-// }
-
 struct AddTokenView: RouteableView {
     // MARK: Lifecycle
 
     init(vm: AddTokenViewModel) {
         _vm = StateObject(wrappedValue: vm)
+      title = vm.mode == .addToken ? "add_token".localized : "swap_select_token".localized
     }
 
     // MARK: Internal
@@ -28,13 +23,7 @@ struct AddTokenView: RouteableView {
     @StateObject
     var vm: AddTokenViewModel
 
-    var title: String {
-        if vm.mode == .addToken {
-            return "add_token".localized
-        } else {
-            return "swap_select_token".localized
-        }
-    }
+    var title: String = ""
 
     var body: some View {
         ZStack {
@@ -217,14 +206,12 @@ extension AddTokenView {
         }
 
         var body: some View {
-            VStack {
+            VStack(spacing: 0) {
                 SheetHeaderView(title: "add_token".localized) {
                     vm.confirmSheetIsPresented = false
                 }
 
                 VStack {
-                    Spacer()
-
                     ZStack {
                         ZStack(alignment: .top) {
                             color
@@ -267,9 +254,12 @@ extension AddTokenView {
                             .localized : "enable".localized
                     )
                     .padding(.vertical)
+                    .padding(.bottom)
                 }
                 .padding(.horizontal, 36)
             }
+            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
             .task {
                 Task { @MainActor in
                     if let color = await ImageHelper

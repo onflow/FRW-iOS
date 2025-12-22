@@ -76,9 +76,11 @@ class BrowserActionBarView: UIView {
 
     lazy var reloadBtn: UIButton = {
         let btn = UIButton(type: .custom)
-      let image = UIImage(named: "icon-btn-reload-stop")?.withRenderingMode(.alwaysTemplate)
-        btn.setImage(image, for: .normal)
-        btn.setImage(image,for: .selected)
+        btn.setImage(UIImage(named: "icon-btn-reload"), for: .normal)
+        btn.setImage(
+            UIImage(named: "icon-btn-reload-stop")?.withRenderingMode(.alwaysTemplate),
+            for: .selected
+        )
         btn.tintColor = .white
 
         btn.snp.makeConstraints { make in

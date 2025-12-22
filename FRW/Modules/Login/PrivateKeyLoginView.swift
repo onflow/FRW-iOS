@@ -83,7 +83,7 @@ struct PrivateKeyLoginView: RouteableView {
                 model: ButtonStyle.primary,
                 state: viewModel.buttonState,
                 action: {
-                    viewModel.onSumbit()
+                  viewModel.onSubmit()
                 },
                 title: "import_btn_text".localized.lowercased()
                     .uppercasedFirstLetter()

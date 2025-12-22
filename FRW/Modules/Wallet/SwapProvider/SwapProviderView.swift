@@ -10,13 +10,16 @@ import SwiftUI
 
 // MARK: - SwapProviderView
 
-struct SwapProviderView: RouteableView & PresentActionDelegate {
+struct SwapProviderView: RouteableView {
     // MARK: Lifecycle
 
     init(token: TokenModel?) {
         var result: [SwapProviderModel] = []
         if WalletManager.shared.isSelectedEVMAccount {
             result.append(SwapProviderModel.Flow)
+        }else if WalletManager.shared.isSelectedEVMAccount {
+            result.append(SwapProviderModel.Punch)
+            result.append(SwapProviderModel.Trado)
         } else {
             if let token, token.isFlowCoin {
                 result.append(SwapProviderModel.Punch)
@@ -28,8 +31,6 @@ struct SwapProviderView: RouteableView & PresentActionDelegate {
     }
 
     // MARK: Internal
-
-    var changeHeight: (() -> Void)?
 
     @State
     var list: [SwapProviderModel]

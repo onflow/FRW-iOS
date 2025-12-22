@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "Backup@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Backup@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "profile-icon-backup.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
