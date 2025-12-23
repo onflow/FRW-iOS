@@ -16,7 +16,11 @@ struct KeyStoreLoginView: RouteableView {
     private let backupType: RestoreWalletViewModel.ImportType = .keyStore
 
     @StateObject
-    var viewModel = KeyStoreLoginViewModel()
+    var viewModel: KeyStoreLoginViewModel
+
+    init(json: String = "") {
+      _viewModel = StateObject(wrappedValue: KeyStoreLoginViewModel(json: json))
+    }
 
     var body: some View {
         VStack {
