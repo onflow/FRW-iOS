@@ -678,6 +678,8 @@ extension ProfileView {
             )
           }
 
+          Divider().background(Color.LL.Neutrals.background)
+
           Button {
             Router.route(to: RouteMap.Profile.developer)
           } label: {
