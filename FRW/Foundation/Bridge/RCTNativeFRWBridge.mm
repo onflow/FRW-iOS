@@ -192,4 +192,16 @@
   [TurboModuleSwift logToNativeWithLevel:level message:message args:args];
 }
 
+- (void)ethSign:(NSString *)hexData resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+    NSString *result = [TurboModuleSwift ethSign:hexData];
+    if (result == nil) {
+      NSError *error = [NSError errorWithDomain:@"NativeFRWBridge" 
+                                           code:-1 
+                                       userInfo:@{NSLocalizedDescriptionKey: @"Failed to sign data with Ethereum signature"}];
+      reject(@"eth_sign_error", @"Failed to sign data with Ethereum signature", error);
+    } else {
+      resolve(result);
+    }
+}
+
 @end

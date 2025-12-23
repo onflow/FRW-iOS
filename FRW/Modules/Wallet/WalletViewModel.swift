@@ -87,7 +87,6 @@ final class WalletViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.refreshButtonState()
                 self?.reloadWalletData()
-                self?.updateMoveAsset()
             }.store(in: &cancelSets)
 
         WalletManager.shared.$activatedCoins
@@ -147,17 +146,10 @@ final class WalletViewModel: ObservableObject {
 
         refreshButtonState()
 
-        EVMAccountManager.shared.$accounts
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.refreshButtonState()
-                self?.updateMoveAsset()
-            }.store(in: &cancelSets)
         ChildAccountManager.shared.$childAccounts
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.refreshButtonState()
-                self?.updateMoveAsset()
             }.store(in: &cancelSets)
     }
 
@@ -191,7 +183,7 @@ final class WalletViewModel: ObservableObject {
     var showBuyButton: Bool = true
 
     @Published
-    var showMoveAsset: Bool = false
+    var walletAccount: WalletAccount? = nil
 
     var needShowPlaceholder: Bool {
         isMock || walletState == .noAddress
@@ -227,7 +219,7 @@ final class WalletViewModel: ObservableObject {
 
     private func refreshCoinItems() {
         var list = [WalletCoinItemModel]()
-        var filter = WalletManager.shared.filterToken.hideTokens
+        let filter = WalletManager.shared.filterToken.hideTokens
         for token in WalletManager.shared.activatedCoins {
             guard !filter.contains(token.contractId) else {
                 continue
@@ -264,11 +256,6 @@ final class WalletViewModel: ObservableObject {
         backupTipsShown = false
     }
 
-    private func updateMoveAsset() {
-        log.info("[Home] update move asset status")
-        showMoveAsset = EVMAccountManager.shared.accounts.count > 0 || !ChildAccountManager.shared
-            .childAccounts.isEmpty
-    }
 }
 
 // MARK: - Action
@@ -324,9 +311,18 @@ extension WalletViewModel {
     }
 
     func copyAddressAction() {
-        UIPasteboard.general.string = WalletManager.shared.selectedAccountAddress
+      guard let address = WalletManager.shared.selectedAccountAddress else {
+        return
+      }
+      if WalletManager.shared.selectedAccount?.type == .coa {
+        Task {
+          await AlertCenter.shared.presentCOACopy(address: address)
+        }
+      } else {
+        UIPasteboard.general.string = address
         HUD.success(title: "Address Copied".localized)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+      }
     }
 
     func toggleHiddenStatusAction() {

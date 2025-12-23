@@ -9,7 +9,7 @@ import Kingfisher
 import SwiftUI
 import SwiftUIX
 
-struct MoveSingleNFTView: RouteableView, PresentActionDelegate {
+struct MoveSingleNFTView: RouteableView {
     // MARK: Lifecycle
 
     init(nft: NFTModel, fromChildAccount: ChildAccount? = nil, callback: @escaping () -> Void) {
@@ -24,8 +24,6 @@ struct MoveSingleNFTView: RouteableView, PresentActionDelegate {
 
     @StateObject
     var viewModel: MoveSingleNFTViewModel
-
-    var changeHeight: (() -> Void)?
 
     var title: String {
         ""

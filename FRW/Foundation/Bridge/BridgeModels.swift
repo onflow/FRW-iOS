@@ -13,11 +13,20 @@ enum RNBridge {
         case main = "main"
         case child = "child"
         case evm = "evm"
+        case eoa = "eoa"
     }
 
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
         case tokenDetail = "token-detail"
+        case onboarding = "onboarding"
+        case receive = "receive"
+    }
+
+    enum AccountTypeType: String, Codable {
+        case eoa = "eoa"
+        case coa = "coa"
+        case null = "null"
     }
 
     struct EmojiInfo: Codable {
@@ -103,6 +112,72 @@ enum RNBridge {
         let name: String
         let symbol: String
         let rate: String
+    }
+
+    struct SaveMnemonicResponse: Codable {
+        let success: Bool
+        let error: String
+    }
+
+    struct CreateAccountResponse: Codable {
+        let success: Bool
+        let address: String
+        let username: String
+        let accountType: AccountTypeType
+        let txId: String
+        let error: String
+    }
+
+    struct CreateEOAAccountResponse: Codable {
+        let success: Bool
+        let address: String
+        let username: String
+        let mnemonic: String
+        let phrase: String
+        let accountType: AccountTypeType
+        let error: String
+    }
+
+    struct AccountKey: Codable {
+        let publicKey: String
+        let hashAlgoStr: String
+        let signAlgoStr: String
+        let weight: Int
+        let hashAlgo: Int
+        let signAlgo: Int
+    }
+
+    struct SeedPhraseGenerationResponse: Codable {
+        let mnemonic: String
+        let accountKey: AccountKey
+        let drivepath: String
+    }
+
+    struct SPResponse: Codable {
+        let mnemonic: String
+        let accountKey: AccountKey
+        let drivepath: String
+    }
+
+    struct DeviceInfo: Codable {
+        let device_id: String?
+        let name: String?
+        let type: String?
+        let user_agent: String?
+        let ip: String?
+        let city: String?
+        let country: String?
+        let countryCode: String?
+        let continent: String?
+        let continentCode: String?
+        let regionName: String?
+        let district: String?
+        let zip: String?
+        let lat: Int?
+        let lon: Int?
+        let isp: String?
+        let org: String?
+        let currency: String?
     }
 
     struct NFTModel: Codable {

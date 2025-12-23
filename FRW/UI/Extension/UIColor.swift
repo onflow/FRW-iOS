@@ -177,4 +177,19 @@ extension UIColor {
             static let white1 = UIColor(named: "special.white1")
         }
     }
+  
+  enum Brand {
+    enum Core {
+        /// dark: 000000, light: FFFFFF
+        static let background = UIColor(.Brain.Core.background)
+        /// dark: 1a1a1a, light: f2f2f7
+        static let cards = UIColor(.Brain.Core.cards)
+        /// dark: ffffff-50%, light: 767676-50%
+        static let icons = UIColor(.Brain.Core.icons)
+        /// dark: ffffff-25%, light: 000d07-25%
+        static let borders = UIColor(.Brain.Core.borders)
+        /// dark: 0a0a0b, light:
+        static let navigation = UIColor(.Brain.Core.navigation)
+    }
+  }
 }
