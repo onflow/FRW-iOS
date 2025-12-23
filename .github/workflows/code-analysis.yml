@@ -36,12 +36,26 @@ jobs:
           languages: ${{ matrix.languages }}
           queries: security-extended
 
-      # Autobuild attempts to build Swift projects automatically.
-      # For iOS projects, it will try to build the biggest target from your Xcode project/workspace.
-      # If autobuild fails, you can replace this step with manual build commands.
-      # For faster builds, consider targeting a single architecture (e.g., ARCH=arm64).
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v4
+      # Install CocoaPods dependencies
+      - name: Install dependencies
+        run: |
+          sudo gem install cocoapods
+          pod install --repo-update
+
+      # Manual build for CodeQL analysis
+      # Building for a single architecture (arm64) to speed up the build
+      - name: Build
+        run: |
+          xcodebuild clean build \
+            -workspace FRW.xcworkspace \
+            -scheme FlowWallet \
+            -destination 'generic/platform=iOS' \
+            -arch arm64 \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_ENTITLEMENTS="" \
+            ONLY_ACTIVE_ARCH=YES
 
       - name: CodeQL Analyze
         uses: github/codeql-action/analyze@v4
