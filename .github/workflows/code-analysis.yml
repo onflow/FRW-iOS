@@ -36,18 +36,13 @@ jobs:
           languages: ${{ matrix.languages }}
           queries: security-extended
 
-      # Install CocoaPods dependencies
-      - name: Install dependencies
-        run: |
-          sudo gem install cocoapods
-          pod install --repo-update
-
       # Manual build for CodeQL analysis
+      # Building from .xcodeproj to avoid CocoaPods/React Native setup complexity
       # Building for a single architecture (arm64) to speed up the build
       - name: Build
         run: |
           xcodebuild clean build \
-            -workspace FRW.xcworkspace \
+            -project FRW.xcodeproj \
             -scheme FlowWallet \
             -destination 'generic/platform=iOS' \
             -arch arm64 \
