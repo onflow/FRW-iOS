@@ -36,7 +36,6 @@ final class ProfileManager: ObservableObject {
 
     // Forward state publishers
     setupStateBindings()
-
     // Initial load
     initialize()
   }
