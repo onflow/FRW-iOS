@@ -38,14 +38,12 @@ jobs:
 
       # Manual build for CodeQL analysis
       # Building from .xcodeproj to avoid CocoaPods/React Native setup complexity
-      # Building for a single architecture (arm64) to speed up the build
       - name: Build
         run: |
           xcodebuild clean build \
             -project FRW.xcodeproj \
             -scheme FlowWallet \
             -destination 'generic/platform=iOS' \
-            -arch arm64 \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
