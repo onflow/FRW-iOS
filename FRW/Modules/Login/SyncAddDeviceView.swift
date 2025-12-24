@@ -124,7 +124,3 @@ struct SyncAddDeviceView: View {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
-
-// #Preview {
-//    SyncAddDeviceView(model: RegisterRequest(username: "", accountKey: AccountKey(hashAlgo: 0, publicKey: "", signAlgo: 0), deviceInfo: DeviceInfoRequest(deviceId: "", ip: "192.168.0.1", name: "Flow Wallet MacOS 8.4.1", type: "", userAgent: "Flow Wallet MacOS 8.4.1", continent: "", continentCode: "", country: "US", countryCode: "", regionName: "", city: "New York ", district: "", zip: "", lat: 0, lon: 0, timezone: "", currency: "", isp: "", org: "")))
-// }

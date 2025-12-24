@@ -182,21 +182,55 @@ extension UserManager {
 // MARK: - Register
 
 extension UserManager {
-  func register(_ userName: String) async throws -> String? {
+  func register(_ userName: String, evmAddress: String? = nil) async throws -> String? {
     let secureKey = try SecureEnclaveKey.create()
     let key = try secureKey.flowAccountKey(index: 0)
-    return try await register(name: userName, key: key, keyProvider: secureKey)
+    return try await register(
+      name: userName,
+      key: key,
+      keyProvider: secureKey,
+      evmAddress: evmAddress
+    )
   }
-  
-  func register(name: String, key: Flow.AccountKey, keyProvider: any KeyProtocol) async throws -> String? {
+
+  func register(
+    name: String,
+    key: Flow.AccountKey,
+    keyProvider: any KeyProtocol,
+    evmAddress: String? = nil
+  ) async throws -> String? {
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
-    let request = RegisterRequest(
+
+    guard let token = try? await getIDToken(), !token.isEmpty else {
+      loginAnonymousIfNeeded()
+      throw LLError.restoreLoginFailed
+    }
+
+    let signData = token.addUserMessage() ?? Data()
+    let signature = try keyProvider.sign(
+      data: signData,
+      signAlgo: key.signAlgo,
+      hashAlgo: key.hashAlgo
+    ).hexValue
+
+    let flowAccountInfo = FlowAccountInfo(accountKey: key.toCodableModel(), signature: signature)
+    var evmAccountInfo: EVMAccountInfo?
+    if let evmAddress = evmAddress,
+        let ethProvider = keyProvider as? EthereumKeyProtocol,
+        let evmSignature = try? ethProvider.ethSign(digest: signData)
+    {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
+    let request = RegisterParam(
+      flow_account_info: flowAccountInfo,
+      evm_account_info: evmAccountInfo,
       username: name,
-      accountKey: key.toCodableModel(),
       deviceInfo: IPManager.shared.toParams()
     )
+
     let model: RegisterResponse = try await Network.request(FRWAPI.User.register(request))
 
     let pw = KeyProvider.password(with: model.id)

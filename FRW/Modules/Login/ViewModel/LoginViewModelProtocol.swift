@@ -261,7 +261,12 @@ extension LoginViewModelProtocol {
         log.error("[regist] cryptoKey is empty or cannot be cast to KeyProtocol")
         return
       }
-      _ = try await UserManager.shared.register(name: userName, key: flowKey, keyProvider: keyProtocol)
+      _ = try await UserManager.shared.register(
+        name: userName,
+        key: flowKey,
+        keyProvider: keyProtocol,
+        evmAddress: address
+      )
     }
 }
 
