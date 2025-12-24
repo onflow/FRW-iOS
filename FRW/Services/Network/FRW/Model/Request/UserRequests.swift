@@ -18,8 +18,8 @@ struct RegisterRequest: Codable {
 
 ///for v4
 struct RegisterParam: Codable {
-  let flow_account_info: FlowAccountInfo
-  let evm_account_info: EVMAccountInfo?
+  let flowAccountInfo: FlowAccountInfo
+  let evmAccountInfo: EVMAccountInfo?
   let username: String
   let deviceInfo: DeviceInfoRequest
 }
@@ -46,9 +46,8 @@ struct EVMAccountInfo: Codable {
 // MARK: - LoginRequest
 
 struct LoginRequest: Codable {
-//    let publicKey: String
-    let signature: String
-    let accountKey: AccountKey
+    let flowAccountInfo: FlowAccountInfo
+    let evmAccountInfo: EVMAccountInfo?
     let deviceInfo: DeviceInfoRequest
     var address: String? = nil
 }

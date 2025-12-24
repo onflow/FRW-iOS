@@ -46,7 +46,7 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
     var path: String {
         switch self {
         case .login:
-            return "/v3/login"
+            return "/v4/login"
         case .checkUsername:
             return "/v1/user/check"
         case .register:
