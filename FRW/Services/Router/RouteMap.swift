@@ -42,9 +42,9 @@ extension RouteMap {
         case createProfileSuccess(CreateProfileWaitingViewModel)
         case restoreErrorView(RestoreErrorView.RestoreError)
 
-        case keystore
+        case keystore(String)
         case importUserName(ImportUserNameViewModel)
-        case privateKey
+        case privateKey(String?)
         case seedPhrase
     }
 }
@@ -85,12 +85,12 @@ extension RouteMap.RestoreLogin: RouterTarget {
             navi.push(content: AccountCreatedView(vm))
         case let .restoreErrorView(error):
             navi.push(content: RestoreErrorView(error: error))
-        case .keystore:
-            navi.push(content: KeyStoreLoginView())
+        case .keystore(let json):
+            navi.push(content: KeyStoreLoginView(json: json))
         case let .importUserName(viewModel):
             navi.push(content: ImportUserNameView(viewModel: viewModel))
-        case .privateKey:
-            navi.push(content: PrivateKeyLoginView())
+        case .privateKey(let privateKey):
+          navi.push(content: PrivateKeyLoginView(privateKey: privateKey))
         case .seedPhrase:
             navi.push(content: SeedPhraseLoginView())
         }
@@ -214,8 +214,6 @@ extension RouteMap {
         case scan(SPQRCodeCallback, click: SPQRCodeCallback? = nil)
         case buyCrypto
         case transactionList(String?)
-        case swapEvmToken(TokenModel)
-        case swapCadenceToken(TokenModel)
         case selectToken(TokenModel?, [TokenModel], (TokenModel) -> Void)
         case stakingList
         case stakingSelectProvider
@@ -267,16 +265,6 @@ extension RouteMap.Wallet: RouterTarget {
         case let .transactionList(contractId):
             let vc = TransactionListViewController(contractId: contractId)
             navi.pushViewController(vc, animated: true)
-        case let .swapEvmToken(token):
-            guard let url = URL(string: "https://swap.kittypunch.xyz/#/swap") else { return }
-            Router.route(to: RouteMap.Explore.browser(url))
-        case let .swapCadenceToken(token):
-            guard let url =
-                URL(
-                    string: "https://app.increment.fi/swap?in=A.1654653399040a61.FlowToken&out=\(token.contractId)"
-                )
-            else { return }
-            Router.route(to: RouteMap.Explore.browser(url))
         case let .selectToken(selectedToken, disableTokens, callback):
             let vm = AddTokenViewModel(
                 selectedToken: selectedToken,
@@ -358,13 +346,12 @@ extension RouteMap.Wallet: RouterTarget {
             )
             navi.present(vc, completion: nil)
         case let .swapProvider(token):
-          if WalletManager.shared.isSelectedEVMAccount, let url = URL(string: "https://swap.flow.com") {
+          if let token, let url = token.swapUrl().url {
             Router.route(to: RouteMap.Explore.browser(url))
-          } else {
-            let vc = CustomHostingController(rootView: SwapProviderView(token: token))
-            navi.present(vc, completion: nil)
+            return
           }
-
+          let url = WalletManager.shared.swapUrl()
+          Router.route(to: RouteMap.Explore.browser(url))
         case .managerTokens:
             navi.push(content: ManageTokensView())
         }

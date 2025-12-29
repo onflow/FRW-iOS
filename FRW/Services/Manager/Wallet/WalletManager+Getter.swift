@@ -119,3 +119,13 @@ extension WalletManager {
         return contact
     }
 }
+
+extension WalletManager {
+  func swapUrl() -> URL {
+    if isSelectedFlowAccount || isSelectedChildAccount {
+      return URL(string: AppUrl.cadenceSwapUrl)!
+    } else {
+      return URL(string: AppUrl.evmSwapUrl)!
+    }
+  }
+}
