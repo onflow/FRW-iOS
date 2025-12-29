@@ -1202,3 +1202,4 @@ Key Store and Private Key.";
 "backup_recovery_title" = "Your profile’s recovery phrase";
 "reveal_phrase" = "Click to reveal phrase";
 "config" = "Config";
+"delete_nft" = "Delete NFT";

@@ -86,7 +86,7 @@ struct TokenDetailView: RouteableView {
             if vm.showDeleteToken {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu(systemImage: "ellipsis") {
-                        Button("Delete EFT", systemImage: "trash") {
+                      Button("delete_nft".localized, systemImage: "trash") {
                             vm.deleteCustomToken()
                         }
                     }
