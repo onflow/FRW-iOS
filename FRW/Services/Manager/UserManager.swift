@@ -203,7 +203,7 @@ extension UserManager {
       keyType: .secureEnclave,
       account: key.toStoreKey()
     )
-    WalletManager.shared.updateKeyProvider(provider: secureKey, storeUser: store)
+    WalletManager.shared.updateKeyProvider(provider: secureKey)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
@@ -436,7 +436,7 @@ extension UserManager {
       password: KeyProvider.password(with: uid)
     )
     LocalUserDefaults.shared.addUser(user: storeUser)
-    await WalletManager.shared.updateKeyProvider(provider: provider, storeUser: storeUser)
+    await WalletManager.shared.updateKeyProvider(provider: provider)
     try await finishLogin(customToken: customToken)
   }
 
@@ -516,7 +516,8 @@ extension UserManager {
       keyType: keyProvider.keyType,
       account: accountKey
     )
-    await WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: storeUser)
+    await WalletManager.shared.updateKeyProvider(provider: keyProvider)
+    LocalUserDefaults.shared.addUser(user: storeUser)
     try await finishLogin(customToken: customToken)
   }
 
@@ -662,7 +663,7 @@ extension UserManager {
       account: flowKey.toStoreKey()
     )
     LocalUserDefaults.shared.addUser(user: store)
-    await WalletManager.shared.updateKeyProvider(provider: privateKey, storeUser: store)
+    await WalletManager.shared.updateKeyProvider(provider: privateKey)
     log.debug("[user] \(store)")
     try await finishLogin(customToken: customToken)
   }
@@ -724,15 +725,7 @@ extension UserManager {
     guard let customToken = response.data?.customToken, !customToken.isEmpty else {
       throw LLError.restoreLoginFailed
     }
-    // this may be removed
-    let storeUser = StoreUser(
-      publicKey: publicKey,
-      address: nil,
-      userId: profile.uid,
-      keyType: keyProvider.keyType,
-      account: accountKey
-    )
-    await WalletManager.shared.updateKeyProvider(provider: keyProvider, storeUser: storeUser)
+    await WalletManager.shared.updateKeyProvider(provider: keyProvider)
 
     if let validAccount {
       var userStoreList: [StoreUser] = []
@@ -745,6 +738,7 @@ extension UserManager {
           account: accountKey
         )
         userStoreList.append(storeUser)
+        LocalUserDefaults.shared.addUser(user: storeUser)
       }
       ProfileManager.shared.replace(profile: profile, with: userStoreList)
     }
