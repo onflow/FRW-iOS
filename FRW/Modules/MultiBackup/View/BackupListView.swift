@@ -96,7 +96,7 @@ struct BackupListView: RouteableView {
                         title: "im_sure".localized,
                         action: {
                             showBackWarning = false
-                            Router.pop()
+                            Router.popToRoot()
                         }
                     ),
                 AlertView
@@ -428,7 +428,7 @@ extension BackupListView {
         if viewModel.hasSomeBackup == false {
             showBackWarning = true
         } else {
-            Router.pop()
+          Router.popToRoot()
         }
     }
 }

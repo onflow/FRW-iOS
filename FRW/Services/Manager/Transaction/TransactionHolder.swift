@@ -92,6 +92,7 @@ extension TransactionManager {
             let _ = flow.websocket.subscribeToTransactionStatus(txId: transactionId)
                 .filter { $0.payload?.transactionResult.status ?? .unknown >= .sealed }
                 .first()
+                .receive(on: DispatchQueue.main)
                 .sink { complete in
                     self.postNotification()
                 } receiveValue: { [weak self] value in

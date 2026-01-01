@@ -24,8 +24,8 @@ enum RNBridge {
     }
 
     enum AccountTypeType: String, Codable {
-        case eoa = "eoa"
-        case coa = "coa"
+        case full = "full"
+        case hardware = "hardware"
         case null = "null"
     }
 

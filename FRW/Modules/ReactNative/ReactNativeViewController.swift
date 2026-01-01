@@ -14,6 +14,8 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
+    case profileSelection = "ProfileTypeSelection"
+    case getStarted = "GetStarted"
   }
 
 }
@@ -21,7 +23,7 @@ extension ReactNativeViewController {
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
-  
+  var route: ReactNativeViewController.Route? = nil
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
 
@@ -64,6 +66,11 @@ class ReactNativeViewController: UIViewController {
         
         // Register with coordinator for management
         ReactNativeCoordinator.shared.register(self, id: instanceId)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -173,10 +180,11 @@ class ReactNativeViewController: UIViewController {
         }
         // zh,en,ru,ja
         let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        let routeName = initialProps?.route.rawValue ?? route?.rawValue ?? "SelectTokens"
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
+            "initialRoute" : routeName,
             "embedded" : false,
             "instanceId": instanceId,
             "language": languageCode
@@ -202,8 +210,10 @@ class ReactNativeViewController: UIViewController {
         view.addSubview(surfaceView)
         surfaceView.translatesAutoresizingMaskIntoConstraints = false
 
+        // Use view.topAnchor (not safeAreaLayoutGuide) to allow RN content to extend
+        // behind the status bar. RN's SafeAreaProvider will handle safe area insets.
         NSLayoutConstraint.activate([
-            surfaceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            surfaceView.topAnchor.constraint(equalTo: view.topAnchor),
             surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             surfaceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             surfaceView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -245,6 +255,8 @@ extension RNBridge.InitialProps {
       } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
         return .selectAddress
       }
+    } else if screen == .onboarding {
+      return .profileSelection
     }
     return .selectAssets
   }

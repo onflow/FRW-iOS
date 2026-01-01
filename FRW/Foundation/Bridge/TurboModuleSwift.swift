@@ -4,6 +4,8 @@ import UIKit
 import Flow
 import SPIndicator
 import FlowWalletKit
+import UserNotifications
+import FirebaseAuth
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -36,6 +38,11 @@ class TurboModuleSwift: NSObject {
     @objc
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
+    }
+
+    @objc
+    static func getCurrentUserUid() -> String? {
+        return UserManager.shared.activatedUID
     }
   
     @objc
@@ -228,6 +235,22 @@ extension TurboModuleSwift {
     let response = RNBridge.WalletProfilesResponse(profiles: result ?? [])
     return try response.toDictionary()
   }
+
+  @objc
+  static func getRecoverableProfiles() async throws -> [String: Any] {
+      // For now, return all known profiles as recoverable
+      return try await getWalletProfiles()
+  }
+
+  @objc
+  static func switchToProfile(userId: String) async throws {
+    try await UserManager.shared.switchAccount(withUID: userId)
+  }
+
+  @objc
+  static func shareQRCode(address: String, qrCodeDataUrl: String) async throws {
+
+  }
   
   private static func getCurrentProfile() async throws -> RNBridge.WalletProfile {
     guard let userInfo = UserManager.shared.userInfo, let uid = UserManager.shared.activatedUID else {
@@ -361,5 +384,38 @@ extension TurboModuleSwift {
       return nil
     }
     return try? keyProvider.ethSign(digest: Data(hexData.hexValue)).hexString
+  }
+
+  @objc
+  static func launchNativeScreen(screen: String, params: String?) {
+    log.info("\(screen)")
+    guard let screen = NativeScreenName(rawValue: screen) else {
+      log.error("don't support route \(screen)")
+      HUD.error(title: "don't support route \(screen)")
+      return
+    }
+    guard currentNetwork == .mainnet else {
+      HUD.error(title: "wrong_network_title".localized)
+      return
+    }
+    let restoreModel = RestoreWalletViewModel()
+    switch screen {
+    case .deviceBackup:
+      Router.route(to: RouteMap.RestoreLogin.syncQC)
+    case .recoveryPhraseRestore:
+      restoreModel.restoreWithManualAction()
+    case .keyStoreRestore:
+      restoreModel.restoreWithKeyStore()
+    case .privateKeyRestore:
+      restoreModel.resteroWithPrivateKey()
+    case .googleDriveRestore:
+      restoreModel.restoreWithCloudAction(type: .googleDrive)
+    case .multiRestore:
+      Router.route(to: RouteMap.RestoreLogin.restoreMulti)
+    case .backupOptions:
+      Router.route(to: RouteMap.Backup.backupList)
+    case .icloudRestore:
+      restoreModel.restoreWithCloudAction(type: .icloud)
+    }
   }
 }

@@ -296,11 +296,14 @@ extension ProfileView {
         Section {
           if !vm.isLinkedAccount {
             Button {
+              guard vm.state.backupFetchingState != .fetching else {
+                return
+              }
               if !isDevModel, currentNetwork != .mainnet {
                 showAlert = true
               } else {
                 let wallet = WalletManager.shared
-                if wallet.keyProvider?.keyType == .seedPhrase {
+                if wallet.keyProvider?.keyType == .seedPhrase, vm.state.backupFetchingState == .none {
                   Router.route(to: RouteMap.Profile.RecoveryPhraseBackup)
                 } else {
                   Router.route(to: RouteMap.Backup.backupList)
@@ -477,25 +480,24 @@ extension ProfileView.ActionSectionView.Row {
   var style: ProfileView.SettingItemCell.Style {
     switch self {
       case let .backup(vm):
-        .arrow
+        switch vm.state.backupFetchingState {
+        case .fetching:
+          return .progress
+        default:
+          return .arrow
+        }
+
       case .security:
-        .arrow
+        return .arrow
       case .linkedAccount:
-        .arrow
+        return .arrow
     }
   }
 
   var desc: String {
     switch self {
-      case let .backup(vm):
-        switch vm.state.backupFetchingState {
-          case .manually:
-            ""
-          case .none:
-            ""
-          default:
-            ""
-        }
+      case .backup:
+        ""
       case .security:
         ""
       case .linkedAccount:
@@ -505,7 +507,7 @@ extension ProfileView.ActionSectionView.Row {
 
   var imageName: String {
     switch self {
-      case let .backup(vm):
+      case .backup:
         ""
 
       default:
@@ -515,7 +517,7 @@ extension ProfileView.ActionSectionView.Row {
 
   var sysImageColor: Color {
     switch self {
-      case let .backup(vm):
+      case .backup:
         .clear
       default:
         .clear
@@ -675,6 +677,8 @@ extension ProfileView {
               style: Row.instabug.style
             )
           }
+
+          Divider().background(Color.LL.Neutrals.background)
 
           Button {
             Router.route(to: RouteMap.Profile.developer)
