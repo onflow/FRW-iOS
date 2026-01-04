@@ -77,7 +77,7 @@ enum RNBridge {
 
     struct WalletProfile: Codable {
         let name: String
-        let avatar: String
+        let avatar: String?
         let uid: String
         let accounts: [WalletAccount]
     }
@@ -151,12 +151,14 @@ enum RNBridge {
         let mnemonic: String
         let accountKey: AccountKey
         let drivepath: String
+        let evmAddress: String?
     }
 
     struct SPResponse: Codable {
         let mnemonic: String
         let accountKey: AccountKey
         let drivepath: String
+        let evmAddress: String?
     }
 
     struct DeviceInfo: Codable {
@@ -178,6 +180,48 @@ enum RNBridge {
         let isp: String?
         let org: String?
         let currency: String?
+    }
+
+    enum InitialRoute: String, Codable {
+        case get_started = "GetStarted"
+        case profile_type_selection = "ProfileTypeSelection"
+        case import_profile = "ImportProfile"
+        case select_tokens = "SelectTokens"
+        case send_to = "SendTo"
+        case send_tokens = "SendTokens"
+        case home = "Home"
+    }
+
+    enum NativeScreenName: String, Codable {
+        case multi_backup = "multiBackup"
+        case device_backup = "deviceBackup"
+        case seed_phrase_backup = "seedPhraseBackup"
+        case backup_options = "backupOptions"
+        case wallet_restore = "walletRestore"
+        case recovery_phrase_restore = "recoveryPhraseRestore"
+        case key_store_restore = "keyStoreRestore"
+        case private_key_restore = "privateKeyRestore"
+        case google_drive_restore = "googleDriveRestore"
+        case icloud_restore = "icloudRestore"
+        case multi_restore = "multiRestore"
+    }
+
+    enum ScreenName: String, Codable {
+        case get_started = "GetStarted"
+        case profile_type_selection = "ProfileTypeSelection"
+        case recovery_phrase = "RecoveryPhrase"
+        case confirm_recovery_phrase = "ConfirmRecoveryPhrase"
+        case secure_enclave = "SecureEnclave"
+        case import_profile = "ImportProfile"
+        case import_other_methods = "ImportOtherMethods"
+        case confirm_import_profile = "ConfirmImportProfile"
+        case notification_preferences = "NotificationPreferences"
+        case select_tokens = "SelectTokens"
+        case send_to = "SendTo"
+        case send_tokens = "SendTokens"
+        case send_summary = "SendSummary"
+        case nft_list = "NFTList"
+        case nft_detail = "NFTDetail"
     }
 
     struct NFTModel: Codable {

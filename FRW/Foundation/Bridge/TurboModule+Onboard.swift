@@ -37,11 +37,12 @@ extension TurboModuleSwift {
       hashAlgo: Flow.HashAlgorithm.SHA2_256.index,
       signAlgo: Flow.SignatureAlgorithm.ECDSA_SECP256k1.index
     )
-
+    let evmAddress = try? key.ethAddress()
     let response = RNBridge.SeedPhraseGenerationResponse(
       mnemonic: hdWallet.mnemonic,
       accountKey: accountKey,
-      drivepath: FlowWalletKit.SeedPhraseKey.derivationPath
+      drivepath: FlowWalletKit.SeedPhraseKey.derivationPath,
+      evmAddress: evmAddress
     )
 
     return try response.toDictionary()
@@ -101,7 +102,7 @@ extension TurboModuleSwift {
   }
 
   @objc
-  static func saveMnemonic(mnemonic: String, customToken: String, txId: String, username: String) async throws {
+  static func saveMnemonic(mnemonic: String, customToken: String, txId: String, username: String, evmAddress: String?) async throws {
     try await UserManager.shared.restoreLogin(withMnemonic: mnemonic)
 
   }
