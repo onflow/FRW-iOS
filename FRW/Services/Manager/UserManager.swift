@@ -65,7 +65,7 @@ class UserManager: ObservableObject {
       do {
         guard let uid = activatedUID else { return }
         try MultiAccountStorage.shared.saveUserInfo(userInfo, uid: uid)
-        try ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
+        ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
       } catch {
         log.error("save user info failed", context: error)
       }
@@ -78,6 +78,9 @@ class UserManager: ObservableObject {
       LocalUserDefaults.shared.loginUIDList = loginUIDList
     }
   }
+
+  // It is only used when the bridge is called on page of onboard
+  var RNRegisterInfo:[String: String] = [:]
 
   var isLoggedIn: Bool {
     activatedUID != nil
@@ -185,29 +188,34 @@ extension UserManager {
   func register(_ userName: String) async throws -> String? {
     let secureKey = try SecureEnclaveKey.create()
     let key = try secureKey.flowAccountKey(index: 0)
+    return try await register(name: userName, key: key, keyProvider: secureKey)
+  }
+  
+  func register(name: String, key: Flow.AccountKey, keyProvider: any KeyProtocol) async throws -> String? {
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
     let request = RegisterRequest(
-      username: userName,
+      username: name,
       accountKey: key.toCodableModel(),
       deviceInfo: IPManager.shared.toParams()
     )
     let model: RegisterResponse = try await Network.request(FRWAPI.User.register(request))
 
-    try secureKey.store(id: model.id)
+    let pw = KeyProvider.password(with: model.id)
+    try keyProvider.store(id: model.id,password: pw)
     let store = UserManager.StoreUser(
       publicKey: key.publicKey.description,
       address: nil,
       userId: model.id,
-      keyType: .secureEnclave,
+      keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
     WalletManager.shared.updateKeyProvider(provider: secureKey)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
-    WalletManager.shared.asyncCreateWalletAddressFromServer()
+    let txid = await WalletManager.shared.asyncCreateWalletAddressFromServer()
     userType = .secure
 
     EventTrack.Account
@@ -216,7 +224,10 @@ extension UserManager {
         signAlgo: key.signAlgo.id,
         hashAlgo: key.hashAlgo.id
       )
-    return model.txId
+    if let txid {
+      RNRegisterInfo[txid] = activatedUID
+    }
+    return txid
   }
 }
 

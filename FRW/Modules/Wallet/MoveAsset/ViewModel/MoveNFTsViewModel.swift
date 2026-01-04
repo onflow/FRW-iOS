@@ -340,7 +340,7 @@ final class MoveNFTsViewModel: ObservableObject {
         } else if let account = WalletManager.shared.selectedEVMAccount {
             fromContact = account.toContact()
         } else {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
+            let user = WalletUser.get(address:  primaryAddr)
             fromContact = Contact(
                 address: primaryAddr,
                 avatar: nil,
@@ -355,7 +355,7 @@ final class MoveNFTsViewModel: ObservableObject {
         }
 
         if WalletManager.shared.selectedChildAccount != nil || WalletManager.shared.selectedEVMAccount != nil {
-            let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
+            let user = WalletUser.get(address:  primaryAddr)
             toContact = Contact(
                 address: primaryAddr,
                 avatar: nil,
@@ -449,9 +449,9 @@ extension MoveNFTsViewModel: InsufficientStorageToastViewModel {
 }
 
 extension MoveNFTsViewModel {
-    private func emojiAccount(isFirst: Bool) -> WalletAccount.User {
+    private func emojiAccount(isFirst: Bool) -> WalletUser {
         let address = accountAddress(isFirst: isFirst)
-        return WalletManager.shared.walletAccount.readInfo(at: address)
+        return WalletUser.get(address:  address)
     }
 
     func accountIcon(isFirst: Bool) -> some View {

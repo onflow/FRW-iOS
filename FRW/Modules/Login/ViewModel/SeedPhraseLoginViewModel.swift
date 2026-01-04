@@ -2,7 +2,8 @@
 //  SeedPhraseLoginViewModel.swift
 //  FRW
 //
-//  Created by cat on 2024/9/27.
+//  Refactored version using LoginViewModelProtocol
+//  Created by cat on 2024/12/28.
 //
 
 import Flow
@@ -13,30 +14,34 @@ import WalletCore
 
 // MARK: - SeedPhraseLoginViewModel
 
-final class SeedPhraseLoginViewModel: ObservableObject {
-    // MARK: Internal
+final class SeedPhraseLoginViewModel: ObservableObject, LoginViewModelProtocol {
+    // MARK: - LoginViewModelProtocol Required Properties
 
-    @Published
-    var words: String = ""
-    @Published
-    var wantedAddress: String = ""
-    @Published
-    var derivationPath: String = ""
-    @Published
-    var passphrase: String = ""
+    typealias KeyType = FlowWalletKit.SeedPhraseKey
 
-    @Published
-    var buttonState: VPrimaryButtonState = .disabled
-    @Published
-    var isAdvanced: Bool = false
+    @Published var wantedAddress: String = ""
+    @Published var buttonState: VPrimaryButtonState = .disabled
+    var wallet: FlowWalletKit.Wallet? = nil
+    var cryptoKey: FlowWalletKit.SeedPhraseKey?
+    var account: Flow.Account? = nil
 
+    // MARK: - Specific Properties
+
+    @Published var words: String = ""
+    @Published var derivationPath: String = ""
+    @Published var passphrase: String = ""
+    @Published var isAdvanced: Bool = false
     @Published var suggestions: [String] = []
     @Published var hasError: Bool = false
+
+    // MARK: - UI Update Methods
 
     func updateWords(_ text: String) {
         let original = text.condenseWhitespace()
         let words = original.split(separator: " ")
         hasError = false
+
+        // Validate each word
         for word in words {
             if Mnemonic.search(prefix: String(word)).isEmpty {
                 hasError = true
@@ -46,11 +51,13 @@ final class SeedPhraseLoginViewModel: ObservableObject {
 
         let valid = Mnemonic.isValid(mnemonic: original)
 
+        // Update suggestions
         if text.last == " " || valid {
             suggestions = []
         } else {
             suggestions = Mnemonic.search(prefix: String(words.last ?? ""))
         }
+
         updateState()
     }
 
@@ -62,173 +69,90 @@ final class SeedPhraseLoginViewModel: ObservableObject {
         }
     }
 
+    func onAdvance() {
+        isAdvanced.toggle()
+        updateState()
+    }
+
+    // MARK: - LoginViewModelProtocol Required Methods
+
     func onSubmit() {
         UIApplication.shared.endEditing()
-        let chainId = currentNetwork
+
         let rawMnemonic = words.condenseWhitespace()
+
         Task {
+            // Validate HD wallet
             guard let hdWallet = HDWallet(mnemonic: rawMnemonic, passphrase: passphrase) else {
                 HUD.error(title: "invalid_data".localized)
                 return
             }
+
+            // Validate advanced options
             if isAdvanced && derivationPath.isEmpty {
                 HUD.error(title: "required_info_not".localized)
                 return
             }
+
+            // Create seed phrase key
             if isAdvanced && !derivationPath.isEmpty {
-                providerKey = FlowWalletKit.SeedPhraseKey(
+                cryptoKey = FlowWalletKit.SeedPhraseKey(
                     hdWallet: hdWallet,
                     storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage,
                     derivationPath: derivationPath,
                     passphrase: passphrase
                 )
             } else {
-                providerKey = FlowWalletKit.SeedPhraseKey(
+                cryptoKey = FlowWalletKit.SeedPhraseKey(
                     hdWallet: hdWallet,
                     storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
                 )
             }
-            guard let providerKey = providerKey else {
+
+            guard let cryptoKey else {
+                HUD.error(title: "invalid_data".localized)
                 return
             }
-            wallet = FlowWalletKit.Wallet(type: .key(providerKey), networks: [chainId])
+
+            // Create wallet with seed phrase key
+            wallet = FlowWalletKit.Wallet(
+                type: .key(cryptoKey),
+                networks: [currentNetwork]
+            )
+
             HUD.loading()
+
+            // Fetch all addresses (common logic from protocol)
             try await fetchAllAddresses()
-            HUD.dismissLoading()
-            if wantedAddress.isEmpty {
-              guard let account = wallet?.flowAccounts?[currentNetwork]?.first else {
-                return
-              }
-              selectedAccount(by: account)
-            } else {
-                let chainId = currentNetwork
-                guard let keys = wallet?.flowAccounts?[chainId] else {
-                    return
-                }
-                guard let account = keys.filter({ $0.address.hex == wantedAddress }).first else {
-                    HUD.error(title: "not_find_address".localized)
-                    return
-                }
-                selectedAccount(by: account)
-            }
+            // Select account (common logic from protocol)
+            selectAccountFromWallet()
         }
     }
 
-    // fetch all addresses of Public Key
-    func fetchAllAddresses() async throws {
-        do {
-            _ = try await wallet?.fetchAllNetworkAccounts()
-        } catch {
-            log.error("\(error.localizedDescription)")
-        }
+    func getP256PublicKey() -> String? {
+        cryptoKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.format()
     }
 
-    func selectedAccount(by account: Flow.Account) {
-        self.account = account
-        checkPublicKey()
+    func getSecp256PublicKey() -> String? {
+        cryptoKey?.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue.format()
     }
 
-    func createUserName(callback: @escaping (String) -> Void) {
-        let viewModel = ImportUserNameViewModel { name in
-            if !name.isEmpty {
-                callback(name)
-            }
+    func performLogin(
+        address: String,
+        userName: String,
+        flowKey: Flow.AccountKey,
+        isImport: Bool
+    ) async throws {
+        guard let seedPhraseKey = cryptoKey else {
+            throw LoginError.missingKey
         }
-        Router.route(to: RouteMap.RestoreLogin.importUserName(viewModel))
-    }
 
-    func checkPublicKey() {
-        let keys = account?.keys.filter {
-            $0.publicKey.description == p256PublicKey || $0.publicKey
-                .description == secp256PublicKey
-        }
-        guard let selectedKey = keys?.first,
-              let address = account?.address.hex, let privateKey = providerKey
-        else {
-            log.error("[Import] keys of account not match the public:\(String(describing: p256PublicKey)) or \(String(describing: secp256PublicKey))")
-            return
-        }
-        guard selectedKey.weight >= 1000 else {
-            HUD.error(title: "account_key_weight_less".localized)
-            return
-        }
-        guard !selectedKey.revoked else {
-            HUD.error(title: "account_key_done_revoked_tips".localized)
-            return
-        }
-        Task {
-            HUD.loading()
-            do {
-                let publicKey = selectedKey.publicKey.description
-                let response: Network.EmptyResponse = try await Network
-                    .requestWithRawModel(FRWAPI.User.checkimport(publicKey))
-                if response.httpCode == 409 {
-                    try await UserManager.shared.importLogin(
-                        by: address,
-                        userName: "",
-                        flowKey: selectedKey,
-                        privateKey: privateKey
-                    )
-                    HUD.dismissLoading()
-                    Router.popToRoot()
-                } else if response.httpCode == 200 {
-                    HUD.dismissLoading()
-                    createUserName { name in
-                        Task {
-                            HUD.loading()
-                            try await UserManager.shared.importLogin(
-                                by: address,
-                                userName: name,
-                                flowKey: selectedKey,
-                                privateKey: privateKey,
-                                isImport: true
-                            )
-                            HUD.dismissLoading()
-                            Router.popToRoot()
-                        }
-                    }
-                }
-            } catch {
-                if let code = error.moyaCode() {
-                    if code == 409 {
-                        do {
-                            HUD.loading()
-                            try await UserManager.shared.importLogin(
-                                by: address,
-                                userName: "",
-                                flowKey: selectedKey,
-                                privateKey: privateKey
-                            )
-                            HUD.dismissLoading()
-                            Router.popToRoot()
-                        } catch {
-                            log.error("[Import] login 409 :\(error)")
-                        }
-                    }
-                }
-                log.error("[Import] check public key own error:\(error)")
-            }
-        }
-    }
-
-    func onAdvance() {
-        isAdvanced.toggle()
-    }
-
-    // MARK: Private
-
-    private var providerKey: FlowWalletKit.SeedPhraseKey?
-    private var wallet: FlowWalletKit.Wallet? = nil
-    private var account: Flow.Account? = nil
-
-}
-
-extension SeedPhraseLoginViewModel {
-    private var p256PublicKey: String? {
-        providerKey?.publicKey(signAlgo: .ECDSA_P256)?.hexValue.dropPrefix("04")
-    }
-
-    private var secp256PublicKey: String? {
-        providerKey?.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexValue.dropPrefix("04")
+        try await UserManager.shared.importLogin(
+            by: address,
+            userName: userName,
+            flowKey: flowKey,
+            privateKey: seedPhraseKey,
+            isImport: isImport
+        )
     }
 }

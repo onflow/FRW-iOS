@@ -33,7 +33,7 @@ class RemoteConfigManager {
 
     var config: Config?
     var contractAddress: ContractAddress?
-
+    var coaDomains: [String] = []
     var isFailed: Bool = false
     var isStaging: Bool = false
 
@@ -94,8 +94,6 @@ class RemoteConfigManager {
             return config?.payer.mainnet.keyID ?? 0
         case .testnet:
             return config?.payer.testnet.keyID ?? 0
-        case .crescendo:
-            return config?.payer.crescendo?.keyID ?? 0
         default:
             return 0
         }
@@ -123,6 +121,20 @@ class RemoteConfigManager {
         }
     }
 
+    var allowWrapEOAWithCadence: Bool {
+      if !remoteWrapEOAWithCadence {
+        return false
+      }
+      return localWrapEOAWithCadence
+    }
+
+    var remoteWrapEOAWithCadence: Bool {
+      if let allow = config?.features.wrapEOAWithCadence {
+        return allow
+      }
+      return false
+    }
+
     func getContarctAddress(_ network: Flow.ChainID) -> [String: String]? {
         switch network {
         case .mainnet:
@@ -136,6 +148,7 @@ class RemoteConfigManager {
 
     func updateFromRemote() {
         fetchNews()
+        fetchCoaDomains()
         do {
             let data: String = try FirebaseConfig.ENVConfig.fetch()
             let key = LocalEnvManager.shared.backupAESKey
@@ -198,11 +211,28 @@ class RemoteConfigManager {
         }
     }
 
+  func fetchCoaDomains() {
+    do {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let list: [String] = try FirebaseConfig.coaDomains.fetch(decoder: decoder)
+        DispatchQueue.main.async {
+          self.coaDomains = list
+        }
+    } catch {
+        log.error("[Firebase] fetch coa domains failed. \(error)")
+    }
+  }
+
     // MARK: Private
 
     private var envConfig: ENVConfig?
     @AppStorage(LocalUserDefaults.Keys.freeGas.rawValue)
     private var localGreeGas = true
+
+    @AppStorage(LocalUserDefaults.Keys.wrapEOAWithCadence.rawValue)
+    private var localWrapEOAWithCadence = true
 
     private func loadLocalConfig() throws {
         do {

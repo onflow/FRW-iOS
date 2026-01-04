@@ -173,7 +173,7 @@ class NFTTransferViewModel: ObservableObject {
                 }
 
                 if toAccountType == .coa,
-                   toAddress != EVMAccountManager.shared.accounts.first?.showAddress
+                   await toAddress != WalletManager.shared.coa?.address
                 {
                     toAccountType = .eoa
                 }

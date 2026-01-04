@@ -63,15 +63,76 @@ final class Coordinator {
     lazy var rootNavi: UINavigationController? = nil
 
     func showRootView() {
-        let rootView = SideContainerView()
-        let hostingView = UIHostingController(rootView: rootView)
-        let navi = RouterNavigationController(rootViewController: hostingView)
-        navi.setNavigationBarHidden(true, animated: true)
-        rootNavi = navi
-        window.rootViewController = rootNavi
+        // Guard against multiple calls
+        guard !isRootViewSetup else {
+            log.warning("[Coordinator] showRootView() called multiple times, ignoring")
+            return
+        }
+        isRootViewSetup = true
+
+        // Set initial root view controller synchronously to avoid launch error
+        updateRootView(isEmpty: ProfileManager.shared.profiles.isEmpty, animated: false)
+
+        // Subscribe to profile changes for dynamic updates
+        ProfileManager.shared.$profiles
+            .dropFirst() // Skip initial value since we already handled it above
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] profiles in
+                self?.updateRootView(isEmpty: profiles.isEmpty, animated: true)
+            }
+            .store(in: &cancelSets)
     }
 
     // MARK: Private
+
+    /// Guard against multiple showRootView() calls
+    private var isRootViewSetup = false
+
+    /// Track current root state to avoid redundant updates
+    private enum RootState {
+        case reactNative
+        case sideContainer
+    }
+
+    private var currentRootState: RootState?
+
+    private func updateRootView(isEmpty: Bool, animated: Bool) {
+        let targetState: RootState = isEmpty ? .reactNative : .sideContainer
+
+        // Avoid redundant updates
+        guard currentRootState != targetState else { return }
+        currentRootState = targetState
+
+        let newRootNavi: RouterNavigationController
+
+        if isEmpty {
+            log.info("[Coordinator] profiles empty → show ReactNativeViewController")
+            let vc = ReactNativeViewController()
+            vc.route = .getStarted
+            newRootNavi = RouterNavigationController(rootViewController: vc)
+            newRootNavi.setNavigationBarHidden(true, animated: false)
+            newRootNavi.interactivePopGestureRecognizer?.isEnabled = false
+        } else {
+            log.info("[Coordinator] profiles exist → show SideContainerView")
+            let rootView = SideContainerView()
+            let hostingView = UIHostingController(rootView: rootView)
+            newRootNavi = RouterNavigationController(rootViewController: hostingView)
+            newRootNavi.setNavigationBarHidden(true, animated: false)
+        }
+
+        rootNavi = newRootNavi
+
+        if animated {
+            // Smooth transition for dynamic updates
+            newRootNavi.view.alpha = 0
+            window.rootViewController = newRootNavi
+            UIView.animate(withDuration: 0.3) {
+                newRootNavi.view.alpha = 1
+            }
+        } else {
+            window.rootViewController = newRootNavi
+        }
+    }
 
     private lazy var privateView: AppPrivateView = {
         let view = AppPrivateView()

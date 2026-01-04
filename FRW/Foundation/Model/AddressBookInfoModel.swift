@@ -67,7 +67,7 @@ struct Contact: Codable, Identifiable {
     let domain: Domain?
     let id: Int
     let username: String?
-    var user: WalletAccount.User? = nil
+    var user: WalletUser? = nil
     var walletType: WalletType? = .flow
 
     var needShowLocalAvatar: Bool {

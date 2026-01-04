@@ -7,6 +7,7 @@
 
 import Combine
 import Flow
+import FlowWalletKit
 import Foundation
 import Gzip
 import ReownRouter
@@ -102,6 +103,11 @@ class WalletConnectManager: ObservableObject {
 
     @Published
     var setSessions: [Session] = []
+  
+    private var supportChainID: [Int: Flow.ChainID] = [
+        Flow.ChainID.mainnet.networkID: .mainnet,
+        Flow.ChainID.testnet.networkID: .testnet,
+    ]
 
     func connect(link: String) {
         log.debug("WalletConnectManager -> connect(), Thread: \(Thread.isMainThread)")
@@ -119,7 +125,10 @@ class WalletConnectManager: ObservableObject {
                 }
             } catch {
                 log.error("[PROPOSER] Pairing connect error: \(error)")
-                HUD.error(title: "Connect failed")
+                let isRedirect = link.contains("sessionTopic") && link.contains("requestId")
+                if !isRedirect {
+                  HUD.error(title: "Connect failed")
+                }
             }
         }
         onClientConnected = nil
@@ -324,6 +333,16 @@ extension WalletConnectManager {
             FCLWalletConnectMethod.accountInfo.rawValue,
         ]
     }
+
+    // Get cached EVM address for a specific dApp URL
+    private func cachedEVMAddress(for dappURL: String) -> String? {
+        guard let uid = LocalUserDefaults.shared.activatedUID,
+              let url = URL(string: dappURL),
+              let host = url.host else {
+            return nil
+        }
+        return LocalUserDefaults.shared.getAuthnAddress(for: uid, host: host)
+    }
 }
 
 // MARK: - Handle
@@ -336,6 +355,12 @@ extension WalletConnectManager {
             rejectSession(proposal: sessionProposal)
             return
         }
+        let info = handler.sessionInfo(sessionProposal: sessionProposal)
+        var address = WalletManager.shared.getPrimaryWalletAddress()
+        let isEVM = handler.currentTypes(sessionProposal: sessionProposal).contains(.evm)
+        if isEVM {
+          address = cachedEVMAddress(for: info.dappURL) ?? WalletManager.shared.EOAs?.first?.address ?? WalletManager.shared.coa?.address
+        }
         guard network == currentNetwork else {
             rejectSession(proposal: sessionProposal)
             let current = currentNetwork
@@ -344,35 +369,25 @@ extension WalletConnectManager {
         }
 
         if pairings
-            .contains(where: { $0.topic == sessionProposal.pairingTopic })
+            .contains(where: { $0.topic == sessionProposal.pairingTopic }) && !isEVM
         {
-            approveSession(proposal: sessionProposal)
+            approveSession(proposal: sessionProposal, EVMAddress: address ?? "")
             return
         }
-
-        let info = handler.sessionInfo(sessionProposal: sessionProposal)
-        var address = WalletManager.shared.getPrimaryWalletAddress()
-        if handler.currentTypes(sessionProposal: sessionProposal).contains(.evm) {
-            // TODO: if evm not enable
-            address = EVMAccountManager.shared.accounts.first?.showAddress ?? ""
-        }
+        
         currentSessionInfo = info
-        let authnVM = BrowserAuthnViewModel(
-            title: info.name,
-            url: info.dappURL,
-            logo: info.iconURL,
-            walletAddress: address,
-            network: network
+      
+        let authnViewModel = AuthnViewModel(
+          provider: .init(title: info.name, url: info.dappURL, address: address ?? "")
         ) { result in
-            if result {
-                // TODO: Handle network mismatch
-                self.approveSession(proposal: sessionProposal)
-            } else {
-                self.rejectSession(proposal: sessionProposal)
-            }
+              if let address = result {
+                  self.approveSession(proposal: sessionProposal, EVMAddress: address)
+              } else {
+                  self.rejectSession(proposal: sessionProposal)
+              }
         }
-
-        Router.route(to: RouteMap.Explore.authn(authnVM))
+        Router.route(to: RouteMap.Explore.authnV2(authnViewModel))
+        
     }
 
     func handleRequest(_ sessionRequest: WalletConnectSign.Request) {
@@ -735,6 +750,11 @@ extension WalletConnectManager {
             handleSignTypedData(sessionRequest)
         case WalletConnectEVMMethod.watchAsset.rawValue:
             handleWatchAsset(sessionRequest)
+//        case WalletConnectEVMMethod.switchEthereumChain.rawValue:
+//          handleSwitchEthereumChain(sessionRequest)
+//          break
+        case WalletConnectEVMMethod.personalECRecover.rawValue:
+          handlePersonalECRecover(sessionRequest)
         default:
             log.error("[WALLET] reject request \(sessionRequest)")
             rejectRequest(request: sessionRequest, reason: "unspport method")
@@ -814,19 +834,102 @@ extension WalletConnectManager {
             self.rejectRequest(request: sessionRequest)
         }
     }
+  //TODO: need test
+    private func handleSwitchEthereumChain(_ sessionRequest: WalletConnectSign.Request) {
+      struct ChainSwitchParams: Codable {
+          let chainId: String
+      }
+      log.info(sessionRequest)
+      guard let id = Int(sessionRequest.chainId.reference), let targetID = supportChainID[id] else {
+        self.rejectRequest(request: sessionRequest)
+        return
+      }
+      Task {
+          do {
+            let chainIdHex = String(format: "%X", id)
+            let result = AnyCodable([AnyCodable(ChainSwitchParams(chainId: "\(chainIdHex)"))])
+            if targetID == currentNetwork {
+              try await Sign.instance.respond(
+                  topic: sessionRequest.topic,
+                  requestId: sessionRequest.id,
+                  response: .response(result)
+              )
+            } else {
+              let callback: SwitchNetworkClosure = { [weak self] curId in
+                Task {
+                  do {
+                    if curId == targetID {
+                        try await Sign.instance.respond(
+                            topic: sessionRequest.topic,
+                            requestId: sessionRequest.id,
+                            response: .response(result)
+                        )
+                      } else {
+                        self?.rejectRequest(request: sessionRequest)
+                      }
+                  } catch {
+                    log.error(error)
+                  }
+                }
+              }
+              Router.route(to: RouteMap.Explore.switchNetwork(currentNetwork, targetID, callback))
+            }
+              
+          } catch {
+              self.rejectRequest(request: sessionRequest)
+              log.error("[EVM] Request Error: [signTypedDataV4] \(error)")
+          }
+      }
+    }
+  
+    private func handlePersonalECRecover(_ sessionRequest: WalletConnectSign.Request) {
+      guard let model = try? sessionRequest.params.get([String: String].self),
+            let message = model["message"],
+            let signature = model["signature"]
+      else {
+          log.error("[EVM] params error")
+          self.rejectRequest(request: sessionRequest)
+          return
+      }
+      
+      guard let signatureData = Data(hexString: signature) else {
+        log.error("[EVM] signatureData error")
+        self.rejectRequest(request: sessionRequest)
+        return
+      }
+      let messageData = Data(message.utf8)
+      let recovered = try? FlowWalletKit.Wallet.ethRecoverAddress(signature: signatureData, message: messageData)
+      if let result = recovered {
+        Task {
+          do {
+            try await Sign.instance.respond(
+                topic: sessionRequest.topic,
+                requestId: sessionRequest.id,
+                response: .response(AnyCodable(result))
+            )
+          } catch {
+            log.error("error: \(error)")
+            HUD.error(title: "failed".localized, message: error.localizedDescription)
+          }
+        }
+      } else {
+        self.rejectRequest(request: sessionRequest)
+      }
+      
+    }
 }
 
 // MARK: - Action
 
 extension WalletConnectManager {
-    private func approveSession(proposal: Session.Proposal) {
+    private func approveSession(proposal: Session.Proposal, EVMAddress: String? = nil) {
         guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
             return
         }
 
         Task {
             do {
-                let namespaces = try handler.approveSessionNamespaces(sessionProposal: proposal)
+                let namespaces = try handler.approveSessionNamespaces(sessionProposal: proposal, EVMAddress: EVMAddress)
                 _ = try await Sign.instance.approve(proposalId: proposal.id, namespaces: namespaces)
                 HUD.success(title: "approved".localized)
             } catch {
@@ -885,6 +988,7 @@ extension WalletConnectManager {
                 )
 
                 HUD.success(title: "approved".localized)
+              self.navigateBackTodApp(topic: request.topic)
             } catch {
                 log.error("WalletConnectManager -> approveRequest failed", context: error)
                 rejectRequest(request: request)
@@ -956,6 +1060,7 @@ extension WalletConnectManager {
                     response: response
                 )
                 HUD.success(title: "rejected".localized)
+              self.navigateBackTodApp(topic: request.topic)
             } catch {
                 log.error("WalletConnectManager -> approveRequest failed", context: error)
                 HUD.error(title: "reject_failed".localized)

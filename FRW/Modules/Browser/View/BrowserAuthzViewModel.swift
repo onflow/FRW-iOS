@@ -166,7 +166,7 @@ final class BrowserAuthzViewModel: ObservableObject {
     }
 
     func fetchEVMDecodeData(to address: String?, data: String?) {
-        guard !EVMAccountManager.shared.accounts.isEmpty else {
+        guard WalletManager.shared.coa != nil else {
             return
         }
         guard let address = address, let data = data else {

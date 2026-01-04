@@ -335,7 +335,7 @@ extension WalletSendAmountViewModel {
                     .coa : AccountType.flow
                 var toAccountType = targetAddress.isEVMAddress ? AccountType.coa : AccountType.flow
                 if toAccountType == .coa,
-                   targetAddress != EVMAccountManager.shared.accounts.first?.address
+                   targetAddress != WalletManager.shared.coa?.address
                 {
                     toAccountType = .eoa
                 }

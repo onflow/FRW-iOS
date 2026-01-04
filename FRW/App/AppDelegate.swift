@@ -59,14 +59,14 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         delegate.dependencyProvider = RCTAppDependencyProvider()
         reactNativeDelegate = delegate
         reactNativeFactory = factory
-        
-        KeyChainAccessibilityUpdate.udpate()
+
+        KeyChainAccessibilityUpdate.update()
 
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
-        _ = ProfileManager.shared
         FirebaseApp.configure()
-
+        ServiceConfig.configure()
+        _ = ProfileManager.shared
         Analytics.setAnalyticsCollectionEnabled(true)
         Analytics.logEvent("ios_app_launch", parameters: [:])
 
@@ -74,7 +74,7 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
             FirebaseConfig.start()
         }
 
-        ServiceConfig.configure()
+
 
         appConfig()
         commonConfig()
@@ -235,6 +235,8 @@ extension AppDelegate {
         if UserManager.shared.isLoggedIn {
             DeviceManager.shared.updateDevice()
         }
+
+        ProfileManager.shared.setup()
     }
 
     private func commonConfig() {

@@ -48,6 +48,7 @@ extension RemoteConfigManager {
             case hideBrowser = "hide_browser"
             case transactionWarningPrediction = "tx_warning_prediction"
             case coverBridgeFee = "cover_bridge_fee"
+            case wrapEOAWithCadence = "wrap_eoa_tx_with_cadence"
         }
 
         let freeGas: Bool
@@ -60,6 +61,7 @@ extension RemoteConfigManager {
         let hideBrowser: Bool?
         let transactionWarningPrediction: Bool?
         let coverBridgeFee: Bool?
+        let wrapEOAWithCadence: Bool?
     }
 
     // MARK: - Payer

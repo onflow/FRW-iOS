@@ -10,7 +10,7 @@ import Foundation
 import KeychainAccess
 
 enum KeyChainAccessibilityUpdate {
-    static func udpate() {
+    static func update() {
         updateSeedPhrase()
         updateSeedPhraseBackup()
         updatePrivate()
