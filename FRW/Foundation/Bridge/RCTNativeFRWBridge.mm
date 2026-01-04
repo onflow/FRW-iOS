@@ -284,8 +284,8 @@
   }];
 }
 
-- (void)saveMnemonic:(NSString *)mnemonic customToken:(NSString *)customToken txId:(NSString *)txId username:(NSString *)username resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
-  [TurboModuleSwift saveMnemonicWithMnemonic:mnemonic customToken:customToken txId:txId username:username completionHandler:^(NSError * _Nullable error) {
+- (void)saveMnemonic:(NSString *)mnemonic customToken:(NSString *)customToken txId:(NSString *)txId username:(NSString *)username evmAddress:(NSString *)evmAddress resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift saveMnemonicWithMnemonic:mnemonic customToken:customToken txId:txId username:username evmAddress:evmAddress completionHandler:^(NSError * _Nullable error) {
     if (error) {
       reject(@"save_mnemonic_error", error.localizedDescription, error);
     } else {
