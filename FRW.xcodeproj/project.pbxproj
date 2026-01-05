@@ -388,6 +388,8 @@
 		1570467F2793EBA100D1747B /* GithubEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1570467D2793EBA100D1747B /* GithubEndpoint.swift */; };
 		1575765E2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */; };
 		1575765F2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */; };
+		15C0A7F12F1B123400ABCDEF /* NativeEventModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C0A7F02F1B123400ABCDEF /* NativeEventModels.swift */; };
+		15C0A7F22F1B123400ABCDEF /* NativeEventModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C0A7F02F1B123400ABCDEF /* NativeEventModels.swift */; };
 		1575A71428B25EE800ADC513 /* FluidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575A71328B25EE800ADC513 /* FluidView.swift */; };
 		1575A71528B25EE800ADC513 /* FluidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1575A71328B25EE800ADC513 /* FluidView.swift */; };
 		1575A72628B26B9600ADC513 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 1575A72128B26B9600ADC513 /* index.html */; };
@@ -479,7 +481,9 @@
 		159F7FC42E96B78600B153A2 /* AlertOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */; };
 		159F7FC52E96B78600B153A2 /* AlertOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */; };
 		15A87E8E2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */; };
+		4203AA4AEF9F48688E5A18AF /* NativeRequestEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AC00DD79D444B3ACA2B5CA /* NativeRequestEventEmitter.m */; };
 		15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */; };
+		F128232BA9CC4A8E8C06C0EA /* NativeRequestEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AC00DD79D444B3ACA2B5CA /* NativeRequestEventEmitter.m */; };
 		15A87E912E26D9E100F0E550 /* TurboModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */; };
 		15A87E922E26D9E100F0E550 /* TurboModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */; };
 		15ADAE2A28F51EBB0014B722 /* SymmetricEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */; };
@@ -2715,6 +2719,7 @@
 		1570467A2793D60000D1747B /* NFTListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTListResponse.swift; sourceTree = "<group>"; };
 		1570467D2793EBA100D1747B /* GithubEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubEndpoint.swift; sourceTree = "<group>"; };
 		1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BridgeModels.swift; sourceTree = "<group>"; };
+		15C0A7F02F1B123400ABCDEF /* NativeEventModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeEventModels.swift; sourceTree = "<group>"; };
 		1575A71328B25EE800ADC513 /* FluidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FluidView.swift; sourceTree = "<group>"; };
 		1575A72128B26B9600ADC513 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		1575A72228B26B9600ADC513 /* dat.gui.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = dat.gui.min.js; sourceTree = "<group>"; };
@@ -2760,6 +2765,8 @@
 		158CE8872782DAD7006A8394 /* UserResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponses.swift; sourceTree = "<group>"; };
 		158CE88A2782F1FA006A8394 /* RecoveryPhraseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryPhraseViewModel.swift; sourceTree = "<group>"; };
 		1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativeFRWBridge.h; sourceTree = "<group>"; };
+		2462FD6909FE440094144F44 /* NativeRequestEventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeRequestEventEmitter.h; sourceTree = "<group>"; };
+		74AC00DD79D444B3ACA2B5CA /* NativeRequestEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NativeRequestEventEmitter.m; sourceTree = "<group>"; };
 		1596A8CF2E1AD76200E85303 /* ReactNativeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeViewController.swift; sourceTree = "<group>"; };
 		1596A8D72E1AD9B300E85303 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		1599F76F278892680094B196 /* InputMnemonicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicViewModel.swift; sourceTree = "<group>"; };
@@ -4840,8 +4847,12 @@
 				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
+				15C0A7F02F1B123400ABCDEF /* NativeEventModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
+				2462FD6909FE440094144F44 /* NativeRequestEventEmitter.h */,
+				74AC00DD79D444B3ACA2B5CA /* NativeRequestEventEmitter.m */,
+
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
 				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
 				4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */,
@@ -8820,6 +8831,7 @@
 				15DC20B527819C56000B187A /* VChevronButtonDirection.swift in Sources */,
 				15DC20CF27819C56000B187A /* VNavigationLinkExtension.swift in Sources */,
 				15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
+				F128232BA9CC4A8E8C06C0EA /* NativeRequestEventEmitter.m in Sources */,
 				15DC212727819C56000B187A /* VSpinnerModelContinous.swift in Sources */,
 				6AF95B3D2848686D0012C837 /* AddressBookRequest.swift in Sources */,
 				4E7153212E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,
@@ -8967,6 +8979,7 @@
 				15DC20BD27819C56000B187A /* VSquareButtonModel.swift in Sources */,
 				4EC482D3284A3D75000A7E1B /* MMCQ.swift in Sources */,
 				1575765F2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */,
+				15C0A7F22F1B123400ABCDEF /* NativeEventModels.swift in Sources */,
 				15DC21AB27819C56000B187A /* FocusableTextField.swift in Sources */,
 				15DC219B27819C56000B187A /* VTextFieldActions.swift in Sources */,
 				6A98509C28C71B5D00A07C2D /* BrowserAuthnViewModel.swift in Sources */,
@@ -9911,6 +9924,7 @@
 				15C58B0D2868A4EE00BD4FC6 /* VNavigationLinkExtension.swift in Sources */,
 				15C58B0E2868A4EE00BD4FC6 /* VSpinnerModelContinous.swift in Sources */,
 				15A87E8E2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
+				4203AA4AEF9F48688E5A18AF /* NativeRequestEventEmitter.m in Sources */,
 				15C58B0F2868A4EE00BD4FC6 /* AddressBookRequest.swift in Sources */,
 				15C58B102868A4EE00BD4FC6 /* VMenuRow.swift in Sources */,
 				4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,
@@ -10058,6 +10072,7 @@
 				15C58B512868A4EE00BD4FC6 /* FocusableTextField.swift in Sources */,
 				15C58B522868A4EE00BD4FC6 /* VTextFieldActions.swift in Sources */,
 				1575765E2E322E6A00D7D8C4 /* BridgeModels.swift in Sources */,
+				15C0A7F12F1B123400ABCDEF /* NativeEventModels.swift in Sources */,
 				6A98509B28C71B5D00A07C2D /* BrowserAuthnViewModel.swift in Sources */,
 				6A73BF5228C59028004B836A /* JSMessageHandler.swift in Sources */,
 				4EE6FA892B19677B006A827B /* SyncConfirmViewModel.swift in Sources */,

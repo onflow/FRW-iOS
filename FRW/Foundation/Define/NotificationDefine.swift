@@ -46,4 +46,6 @@ public extension Notification.Name {
     static let accountDataDidUpdate = Notification.Name("accountDataDidUpdate")
     static let dropboxCallback = Notification.Name("multiBack.dropboxCallback")
     static let hiddenAddressesDidChanged = Notification.Name("hiddenAddressesDidChanged")
+    static let nativeRequest = Notification.Name("nativeRequest")
+    static let nativeResponse = Notification.Name("nativeResponse")
 }

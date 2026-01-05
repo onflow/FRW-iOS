@@ -61,6 +61,12 @@ class WalletManager: ObservableObject {
       name: .willResetWallet,
       object: nil
     )
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleNativeResponse(_:)),
+      name: .nativeResponse,
+      object: nil
+    )
     self.currentNetwork = LocalUserDefaults.shared.network
     flow.configure(chainID: currentNetwork)
     start()
@@ -437,6 +443,8 @@ extension WalletManager {
       mainAccount = account
       loadLinkedAccounts()
     }
+
+    notifyKeyRotationAddressChanged(address: address)
   }
   
   func switchSelectedAccount(_ selectingAccount: WalletAccount) {
@@ -472,6 +480,8 @@ extension WalletManager {
         break
 
     }
+
+    notifyKeyRotationAddressChanged(address: selectingAccount.address)
   }
 
   func changeNetwork(_ network: Flow.ChainID) {
@@ -502,6 +512,51 @@ extension WalletManager {
   func resetAfterSwitchProfile() {
     selectedAccount = nil
     activatedCoins = []
+  }
+}
+
+// MARK: - React Native Key Rotation Hook
+
+extension WalletManager {
+  private func notifyKeyRotationAddressChanged(address: String) {
+    guard !address.isEmpty else { return }
+    let paramsJson: String = {
+      let payload = ["address": address]
+      guard let data = try? JSONSerialization.data(withJSONObject: payload),
+            let json = String(data: data, encoding: .utf8) else {
+        return "{}"
+      }
+      return json
+    }()
+    // React Native should observe this notification and trigger KeyRotationService.
+    NotificationCenter.default.post(
+      name: .nativeRequest,
+      object: nil,
+      userInfo: [
+        "requestId": UUID().uuidString,
+        "eventName": "keyRotationCheck",
+        "paramsJson": paramsJson,
+      ]
+    )
+    log.debug("[WalletManager] Posted key rotation address change: \(address)")
+  }
+
+  @objc
+  private func handleNativeResponse(_ notification: Notification) {
+    guard let info = notification.userInfo else { return }
+    let requestId = info["requestId"] as? String ?? ""
+    let eventName = info["eventName"] as? String ?? ""
+    let resultJson = info["resultJson"] as? String ?? ""
+    let error = info["error"] as? String
+    log.debug(
+      "[WalletManager] Native response",
+      [
+        "requestId": requestId,
+        "eventName": eventName,
+        "resultJson": resultJson,
+        "error": error ?? "",
+      ]
+    )
   }
 }
 
