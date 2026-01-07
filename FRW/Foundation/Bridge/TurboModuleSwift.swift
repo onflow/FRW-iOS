@@ -145,6 +145,44 @@ extension TurboModuleSwift {
       "INSTABUG_TOKEN": ServiceConfig.instabugRNToken,
     ]
   }
+
+  @objc
+  static func signRotationRequest(publicKey: String, address: String, hash: String) async throws -> String {
+    _ = publicKey
+    _ = address
+    let data = Data(hash.utf8)
+    return try await WalletManager.shared.sign(signableData: data).hexString
+  }
+
+  @objc
+  static func removeOldKey(address: String, publicKey: String) async throws {
+    _ = address
+    _ = publicKey
+  }
+
+  @objc
+  static func nativeResponse(
+    requestId: String,
+    eventName: String,
+    resultJson: String?,
+    error: String?
+  ) async throws {
+    NotificationCenter.default.post(
+      name: .nativeResponse,
+      object: nil,
+      userInfo: [
+        "requestId": requestId,
+        "eventName": eventName,
+        "resultJson": resultJson ?? "",
+        "error": error ?? "",
+      ]
+    )
+  }
+
+  @objc
+  static func nativeReady() {
+    NativeRequestQueue.shared.markReady()
+  }
 }
 
 // MARK: - React Native Management

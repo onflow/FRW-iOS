@@ -482,6 +482,8 @@
 		15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */; };
 		15A87E912E26D9E100F0E550 /* TurboModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */; };
 		15A87E922E26D9E100F0E550 /* TurboModuleSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */; };
+		F0A1B2C3D4E5F60718293A4C /* NativeRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A1B2C3D4E5F60718293A4B /* NativeRequestQueue.swift */; };
+		F0A1B2C3D4E5F60718293A4D /* NativeRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A1B2C3D4E5F60718293A4B /* NativeRequestQueue.swift */; };
 		15ADAE2A28F51EBB0014B722 /* SymmetricEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */; };
 		15ADAE2B28F51EBB0014B722 /* SymmetricEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */; };
 		15B1F62D2786ABE400847BB5 /* BackupPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B1F62B2786ABE400847BB5 /* BackupPasswordView.swift */; };
@@ -2692,6 +2694,7 @@
 		159F7FC32E96B78600B153A2 /* AlertOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertOverlayView.swift; sourceTree = "<group>"; };
 		15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeFRWBridge.mm; sourceTree = "<group>"; };
 		15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurboModuleSwift.swift; sourceTree = "<group>"; };
+		F0A1B2C3D4E5F60718293A4B /* NativeRequestQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeRequestQueue.swift; sourceTree = "<group>"; };
 		15ADAE2928F51EBB0014B722 /* SymmetricEncryption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymmetricEncryption.swift; sourceTree = "<group>"; };
 		15ADAE2C28F51ECE0014B722 /* SymmetricEncryptionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SymmetricEncryptionTests.swift; sourceTree = "<group>"; };
 		15B1F62B2786ABE400847BB5 /* BackupPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupPasswordView.swift; sourceTree = "<group>"; };
@@ -4712,6 +4715,7 @@
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
+				F0A1B2C3D4E5F60718293A4B /* NativeRequestQueue.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
 				4EECEB1D2E3235AB008E21B6 /* NativeToRNModel.swift */,
@@ -8497,6 +8501,7 @@
 				15DC20B527819C56000B187A /* VChevronButtonDirection.swift in Sources */,
 				15DC20CF27819C56000B187A /* VNavigationLinkExtension.swift in Sources */,
 				15A87E8F2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
+				F0A1B2C3D4E5F60718293A4C /* NativeRequestQueue.swift in Sources */,
 				15DC212727819C56000B187A /* VSpinnerModelContinous.swift in Sources */,
 				6AF95B3D2848686D0012C837 /* AddressBookRequest.swift in Sources */,
 				4E7153212E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,
@@ -9548,6 +9553,7 @@
 				15C58B0D2868A4EE00BD4FC6 /* VNavigationLinkExtension.swift in Sources */,
 				15C58B0E2868A4EE00BD4FC6 /* VSpinnerModelContinous.swift in Sources */,
 				15A87E8E2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm in Sources */,
+				F0A1B2C3D4E5F60718293A4D /* NativeRequestQueue.swift in Sources */,
 				15C58B0F2868A4EE00BD4FC6 /* AddressBookRequest.swift in Sources */,
 				15C58B102868A4EE00BD4FC6 /* VMenuRow.swift in Sources */,
 				4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */,

@@ -107,7 +107,61 @@
     }
   }];
 }
+- (void)signRotationRequest:(nonnull NSString *)publicKey
+                    address:(nonnull NSString *)address
+                       hash:(nonnull NSString *)hash
+                    resolve:(nonnull RCTPromiseResolveBlock)resolve
+                     reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signRotationRequestWithPublicKey:publicKey
+                                            address:address
+                                                hash:hash
+                                   completionHandler:^(NSString *_Nullable signature,
+                                                       NSError *_Nullable error) {
+    if (error) {
+      reject(@"sign_rotation_error", error.localizedDescription, error);
+    } else {
+      resolve(signature);
+    }
+  }];
+}
 
+- (void)removeOldKey:(nonnull NSString *)address
+         publicKey:(nonnull NSString *)publicKey
+             resolve:(nonnull RCTPromiseResolveBlock)resolve
+              reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift removeOldKeyWithAddress:address
+                                publicKey:publicKey
+                          completionHandler:^(NSError *_Nullable error) {
+    if (error) {
+      reject(@"remove_old_key_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)nativeResponse:(nonnull NSString *)requestId
+             eventName:(nonnull NSString *)eventName
+             resultJson:(NSString * _Nullable)resultJson
+                 error:(NSString * _Nullable)error
+               resolve:(nonnull RCTPromiseResolveBlock)resolve
+                reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift nativeResponseWithRequestId:requestId
+                                     eventName:eventName
+                                     resultJson:resultJson
+                                          error:error
+                              completionHandler:^(NSError *_Nullable nativeError) {
+    if (nativeError) {
+      reject(@"native_response_error", nativeError.localizedDescription, nativeError);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)nativeReady {
+  [TurboModuleSwift nativeReady];
+}
 - (NSNumber *)getSignKeyIndex {
   return @([TurboModuleSwift getSignKeyIndex]);
 }
