@@ -140,28 +140,7 @@
   }];
 }
 
-- (void)nativeResponse:(nonnull NSString *)requestId
-             eventName:(nonnull NSString *)eventName
-             resultJson:(NSString * _Nullable)resultJson
-                 error:(NSString * _Nullable)error
-               resolve:(nonnull RCTPromiseResolveBlock)resolve
-                reject:(nonnull RCTPromiseRejectBlock)reject {
-  [TurboModuleSwift nativeResponseWithRequestId:requestId
-                                     eventName:eventName
-                                     resultJson:resultJson
-                                          error:error
-                              completionHandler:^(NSError *_Nullable nativeError) {
-    if (nativeError) {
-      reject(@"native_response_error", nativeError.localizedDescription, nativeError);
-    } else {
-      resolve(nil);
-    }
-  }];
-}
 
-- (void)nativeReady {
-  [TurboModuleSwift nativeReady];
-}
 - (NSNumber *)getSignKeyIndex {
   return @([TurboModuleSwift getSignKeyIndex]);
 }

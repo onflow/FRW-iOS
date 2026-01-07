@@ -21,6 +21,7 @@ extension ReactNativeViewController {
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
+  private let initialRouteOverride: String?
   
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
@@ -33,8 +34,9 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialProps: RNBridge.InitialProps? = nil) {
+  init(initialProps: RNBridge.InitialProps? = nil, initialRouteOverride: String? = nil) {
     self.initialProps = initialProps
+    self.initialRouteOverride = initialRouteOverride
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -145,10 +147,13 @@ class ReactNativeViewController: UIViewController {
         }
         // zh,en,ru,ja
         let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        let initialRoute = initialRouteOverride?.isEmpty == false
+          ? initialRouteOverride!
+          : (initialProps?.route.rawValue ?? "SelectTokens")
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
+            "initialRoute" : initialRoute,
             "embedded" : false,
             "instanceId": instanceId,
             "language": languageCode

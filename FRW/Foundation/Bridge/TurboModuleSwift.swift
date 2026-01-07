@@ -160,29 +160,6 @@ extension TurboModuleSwift {
     _ = publicKey
   }
 
-  @objc
-  static func nativeResponse(
-    requestId: String,
-    eventName: String,
-    resultJson: String?,
-    error: String?
-  ) async throws {
-    NotificationCenter.default.post(
-      name: .nativeResponse,
-      object: nil,
-      userInfo: [
-        "requestId": requestId,
-        "eventName": eventName,
-        "resultJson": resultJson ?? "",
-        "error": error ?? "",
-      ]
-    )
-  }
-
-  @objc
-  static func nativeReady() {
-    NativeRequestQueue.shared.markReady()
-  }
 }
 
 // MARK: - React Native Management

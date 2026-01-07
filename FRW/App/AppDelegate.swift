@@ -46,7 +46,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
     var window: UIWindow?
     var reactNativeDelegate: ReactNativeDelegate?
     var reactNativeFactory: RCTReactNativeFactory?
-    private var headlessReactRootView: UIView?
 //    private var bridge: RCTBridge?
     lazy var coordinator = Coordinator(window: window!)
 
@@ -60,8 +59,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         delegate.dependencyProvider = RCTAppDependencyProvider()
         reactNativeDelegate = delegate
         reactNativeFactory = factory
-        startHeadlessReactNativeIfNeeded()
-
         KeyChainAccessibilityUpdate.update()
 
         _ = LocalEnvManager.shared
@@ -197,8 +194,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         // Clean up React Native resources
         reactNativeDelegate = nil
         reactNativeFactory = nil
-        headlessReactRootView = nil
-        
         print("✅ DEBUG: AppDelegate cleaned up successfully")
     }
 }
@@ -291,34 +286,6 @@ extension AppDelegate {
     func handleNetworkChange() {
         window?.backgroundColor = currentNetwork == .mainnet ? UIColor.LL.Neutrals
             .background : UIColor(currentNetwork.color)
-    }
-}
-
-// MARK: - React Native Headless Startup
-
-extension AppDelegate {
-    private func startHeadlessReactNativeIfNeeded() {
-        if AppDelegate.isUnitTest {
-            return
-        }
-
-        if headlessReactRootView != nil {
-            return
-        }
-
-        guard let factory = reactNativeFactory else {
-            return
-        }
-
-        let initialProps: [String: Any] = [
-            "headless": true,
-        ]
-
-        headlessReactRootView = factory.rootViewFactory.view(
-            withModuleName: "FRWRN",
-            initialProperties: initialProps,
-            launchOptions: nil
-        )
     }
 }
 
