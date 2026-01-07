@@ -14,8 +14,8 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
+    case backupTip = "BackupTip"
   }
-
 }
 
 class ReactNativeViewController: UIViewController {
@@ -209,8 +209,9 @@ class ReactNativeViewController: UIViewController {
 
 extension RNBridge.InitialProps {
   var route: ReactNativeViewController.Route {
-    if screen == .sendAsset {
-      
+    
+    switch screen {
+    case .sendAsset:
       guard let json = sendToConfig, let config = RNBridge.SendToConfig.fromJson(json: json) else {
         return .selectAssets
       }
@@ -221,8 +222,12 @@ extension RNBridge.InitialProps {
         return .selectAddress
       } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
         return .selectAddress
+      } else {
+        return .selectAssets
       }
+    case .backupTip:
+      return .backupTip
+    
     }
-    return .selectAssets
   }
 }

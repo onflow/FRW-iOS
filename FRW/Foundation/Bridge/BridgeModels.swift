@@ -17,7 +17,7 @@ enum RNBridge {
 
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
-        case tokenDetail = "token-detail"
+        case backupTip = "backup-tip"
     }
 
     struct EmojiInfo: Codable {

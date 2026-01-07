@@ -11,6 +11,7 @@ import UIKit
 extension RouteMap {
   enum ReactNative {
     case sendAsset(RNBridge.SendToConfig?)
+    case backupTip
   }
 }
 
@@ -20,6 +21,10 @@ extension RouteMap.ReactNative: RouterTarget {
     case .sendAsset(let config):
       let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config?.toJSON())
       navi.present(ReactNativeViewController(initialProps: props))
+    case .backupTip:
+      let props = RNBridge.InitialProps(screen: .backupTip, sendToConfig: nil)
+      let vc = ReactNativeViewController(initialProps: props)
+      navi.pushViewController(vc)
     }
   }
 }
