@@ -236,6 +236,7 @@ extension WalletManager {
     // If there is no selected
     if selectedAccount == nil {
       selectedAccount = .main(account.address)
+      checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
     updateUserAddress()
     loadLinkedAccounts()
