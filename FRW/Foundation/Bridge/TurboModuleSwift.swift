@@ -3,6 +3,8 @@ import UIKit
 import Flow
 import SPIndicator
 import FlowWalletKit
+import KeychainAccess
+import WalletCore
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -128,6 +130,118 @@ class TurboModuleSwift: NSObject {
 }
 
 extension TurboModuleSwift {
+  // MARK: - Key Rotation (Seed Phrase)
+
+  /// Create a new seed phrase and derive a default Flow account public key (P256/SHA2_256)
+  /// - Parameter strength: BIP39 strength in bits (unused for now; library uses default)
+  /// - Returns: Dictionary matching RN NewKeyInfo shape
+  @objc
+  static func createSeedKey(strength: Double) async throws -> [String: Any] {
+    let mnemonicStrength = Int32(strength)
+    guard let hdWallet = HDWallet(strength: mnemonicStrength, passphrase: "") else {
+      HUD.error(title: "invalid_data".localized)
+      //TODO:
+      throw RNBridgeError.invalidParameters
+    }
+    
+    let key = FlowWalletKit.SeedPhraseKey(hdWallet: hdWallet, storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage)
+    
+    guard let publicKey = key.publicKey(signAlgo: .ECDSA_SECP256k1) else {
+      throw RNBridgeError.invalidParameters
+    }
+    let publicKeyHex = publicKey.hexString
+    
+    
+    let flowKey: [String: Any] = [
+      "publicKey": publicKeyHex,
+      "signAlgo": Flow.SignatureAlgorithm.ECDSA_SECP256k1.index,
+      "hashAlgo": Flow.HashAlgorithm.SHA2_256.index,
+      "weight": 1000,
+      "hashAlgoString": Flow.HashAlgorithm.SHA2_256.id,
+      "signAlgoString": Flow.SignatureAlgorithm.ECDSA_SECP256k1.id,
+    ]
+
+    return [
+      "seedphrase": hdWallet.mnemonic,
+      "flowKey": flowKey,
+    ]
+  }
+
+  /// Persist newly created seed phrase securely for current user
+  /// The mnemonic is encrypted with the active uid and stored in the app keychain
+  @objc
+  static func saveNewKey(seedphrase: String) async throws {
+    guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
+      HUD.error(LLError.accountNotFound)
+      log.error(LLError.accountNotFound.localizedDescription)
+      throw LLError.accountNotFound
+    }
+
+    guard !seedphrase.isEmpty else {
+      HUD.error(WalletError.invalidMnemonic)
+      log.error("[Blocto] seed phrase is empty")
+      throw WalletError.invalidMnemonic
+    }
+    guard let hdWallet = HDWallet(mnemonic: seedphrase, passphrase: "") else {
+      HUD.error(WalletError.invalidMnemonic)
+      log.error("[Blocto] failed to create hd wallet from seed phrase")
+      throw WalletError.invalidMnemonic
+    }
+    
+    let provider = FlowWalletKit.SeedPhraseKey(
+      hdWallet: hdWallet,
+      storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
+    )
+    let key = provider.createKey(uid: uid)
+    try provider.store(
+      id: key,
+      password: KeyProvider.password(with: uid)
+    )
+    log.debug("[Blocto] save seedphrase successfully.\(key)")
+  }
+
+  /// Toggle screen security overlay to discourage screenshots/switcher snapshots
+  @objc
+  static func setScreenSecurityLevel(level: String) {
+    let secure = level.lowercased() == "secure"
+    runOnMain {
+      if secure {
+        showSecurityOverlay()
+      } else {
+        hideSecurityOverlay()
+      }
+    }
+  }
+
+  private static var securityOverlayWindow: UIWindow?
+
+  private static func showSecurityOverlay() {
+    if securityOverlayWindow != nil { return }
+
+    guard let scene = UIApplication.shared.connectedScenes
+      .compactMap({ $0 as? UIWindowScene })
+      .first(where: { $0.activationState == .foregroundActive }) else { return }
+
+    let overlay = UIWindow(windowScene: scene)
+    overlay.frame = UIScreen.main.bounds
+    overlay.windowLevel = .alert + 1
+
+    let vc = UIViewController()
+    vc.view.backgroundColor = UIColor.black
+    vc.view.isUserInteractionEnabled = false
+    overlay.rootViewController = vc
+    overlay.isHidden = false
+
+    securityOverlayWindow = overlay
+  }
+
+  private static func hideSecurityOverlay() {
+    guard let overlay = securityOverlayWindow else { return }
+    overlay.isHidden = true
+    overlay.rootViewController = nil
+    securityOverlayWindow = nil
+  }
+
   @objc
   static func listenTransaction(txid: String) {
     guard !txid.isEmpty else {
@@ -147,17 +261,64 @@ extension TurboModuleSwift {
   }
 
   @objc
-  static func signRotationRequest(publicKey: String, address: String, hash: String) async throws -> String {
-    _ = publicKey
-    _ = address
-    let data = Data(hash.utf8)
-    return try await WalletManager.shared.sign(signableData: data).hexString
+  static func signRotationRequest(publicKey: String, address: String, hash: String) async throws -> [String: Any]  {
+    
+    log.debug("[Blocto] start signing")
+    guard UserManager.shared.activatedUID != nil, let jwt = try? await getJWT() else {
+      HUD.error(LLError.accountNotFound)
+      throw LLError.accountNotFound
+    }
+    guard let currentAddress = await WalletManager.shared.getAddress(), let currentPublicKey = await WalletManager.shared.getCurrentPublicKey() else {
+      log.error("[Blocto]  Cannot get current address. Skipping. ")
+      HUD.error(WalletError.emptyAddress)
+      throw WalletError.emptyAddress
+    }
+    guard currentAddress == address else {
+      log.error("[Blocto]  Provided address does not match the selected one. Skipping.")
+      HUD.error(WalletError.invaildAddress)
+      throw WalletError.invaildAddress
+    }
+    
+    guard let data = jwt.addUserMessage() else {
+      HUD.error(WalletError.invalidSignData)
+      throw WalletError.invalidSignData
+    }
+    
+    let accountKey = await WalletManager.shared.mainAccount?.account.keys.first { $0.publicKey.description == currentPublicKey }
+    guard let accountKey else {
+      HUD.error(WalletError.invalidPublicKey)
+      throw WalletError.invalidPublicKey
+    }
+    let signature = try await WalletManager.shared.sign(signableData: data).hexString
+    
+    return [
+      "public_key": currentPublicKey,
+      "hash_algo": accountKey.hashAlgo.index,
+      "sign_algo": accountKey.signAlgo.index,
+      "signature": signature,
+      "sign_message": jwt,
+      "weight": 1000
+    ]
   }
 
   @objc
   static func removeOldKey(address: String, publicKey: String) async throws {
-    _ = address
-    _ = publicKey
+    log.debug("[Blocto] start removing key")
+    guard let uid = UserManager.shared.activatedUID else {
+      throw LLError.accountNotFound
+    }
+    guard let currentAddress = await WalletManager.shared.getAddress() else {
+      log.debug("[Blocto]  Cannot get current address. Skipping. ")
+      throw WalletError.emptyAddress
+    }
+    guard currentAddress == address else {
+      log.debug("[Blocto]  Provided address does not match the selected one. Skipping.")
+      throw WalletError.invaildAddress
+    }
+    let key = KeyProvider.createKey(userId: uid, publicKey: publicKey)
+    let keyProvider = await WalletManager.shared.keyProvider(with: key)
+    try keyProvider?.remove(id: key)
+    log.debug("[Blocto] remove key successfully")
   }
 
 }

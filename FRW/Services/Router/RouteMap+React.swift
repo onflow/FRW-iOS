@@ -24,7 +24,8 @@ extension RouteMap.ReactNative: RouterTarget {
     case .backupTip:
       let props = RNBridge.InitialProps(screen: .backupTip, sendToConfig: nil)
       let vc = ReactNativeViewController(initialProps: props)
-      navi.pushViewController(vc)
+      vc.modalPresentationStyle = .fullScreen
+      navi.present(vc)
     }
   }
 }
