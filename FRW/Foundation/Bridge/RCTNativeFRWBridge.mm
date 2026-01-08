@@ -107,12 +107,12 @@
     }
   }];
 }
-- (void)signRotationRequest:(nonnull NSString *)publicKey
-                    address:(nonnull NSString *)address
-                       hash:(nonnull NSString *)hash
-                    resolve:(nonnull RCTPromiseResolveBlock)resolve
-                     reject:(nonnull RCTPromiseRejectBlock)reject {
-  [TurboModuleSwift signRotationRequestWithPublicKey:publicKey address:address hash:hash completionHandler:^(NSDictionary<NSString *,id> * _Nullable info, NSError * _Nullable error) {
+
+- (void)signRotationRequest:(NSString *)address
+              signatureData:(NSString *)signatureData
+                    resolve:(RCTPromiseResolveBlock)resolve
+                     reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signRotationRequestWithAddress:address signatureData:signatureData completionHandler:^(NSDictionary<NSString *,id> * _Nullable info, NSError * _Nullable error) {
     if (error) {
       reject(@"sign_rotation_error", error.localizedDescription, error);
     } else {

@@ -261,13 +261,9 @@ extension TurboModuleSwift {
   }
 
   @objc
-  static func signRotationRequest(publicKey: String, address: String, hash: String) async throws -> [String: Any]  {
+  static func signRotationRequest(address: String, signatureData: String) async throws -> [String: Any]  {
     
     log.debug("[Blocto] start signing")
-    guard UserManager.shared.activatedUID != nil, let jwt = try? await getJWT() else {
-      HUD.error(LLError.accountNotFound)
-      throw LLError.accountNotFound
-    }
     guard let currentAddress = await WalletManager.shared.getAddress(), let currentPublicKey = await WalletManager.shared.getCurrentPublicKey() else {
       log.error("[Blocto]  Cannot get current address. Skipping. ")
       HUD.error(WalletError.emptyAddress)
@@ -279,24 +275,23 @@ extension TurboModuleSwift {
       throw WalletError.invaildAddress
     }
     
-    guard let data = jwt.addUserMessage() else {
-      HUD.error(WalletError.invalidSignData)
-      throw WalletError.invalidSignData
-    }
-    
     let accountKey = await WalletManager.shared.mainAccount?.account.keys.first { $0.publicKey.description == currentPublicKey }
     guard let accountKey else {
       HUD.error(WalletError.invalidPublicKey)
       throw WalletError.invalidPublicKey
+    }
+    
+    guard let data = signatureData.addUserMessage() else {
+      throw WalletError.invalidSignData
     }
     let signature = try await WalletManager.shared.sign(signableData: data).hexString
     
     let model = RNBridge.AccountKeySignature(
       public_key: currentPublicKey,
       hash_algo: accountKey.hashAlgo.index,
-      sign_algo: accountKey.hashAlgo.index,
+      sign_algo: accountKey.signAlgo.index,
       signature: signature,
-      sign_message: jwt,
+      sign_message: signatureData,
       weight: 1000
     )
     
@@ -513,6 +508,19 @@ extension TurboModuleSwift {
       log.error(message, context: args)
     default:
       log.info(message, context: args)
+    }
+  }
+}
+
+extension Flow.HashAlgorithm {
+  fileprivate func hash(data: Data) throws -> Data {
+    switch self {
+    case .SHA2_256:
+      return Hash.sha256(data: data)
+    case .SHA3_256:
+      return Hash.sha3_256(data: data)
+    default:
+      throw FWKError.unsupportHashAlgorithm
     }
   }
 }
