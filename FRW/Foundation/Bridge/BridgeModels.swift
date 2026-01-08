@@ -81,6 +81,15 @@ enum RNBridge {
         let contacts: [AddressBookContact]
     }
 
+    struct AccountKeySignature: Codable {
+        let public_key: String
+        let hash_algo: Int
+        let sign_algo: Int
+        let signature: String
+        let sign_message: String?
+        let weight: Int?
+    }
+
     struct SendToConfig: Codable {
         let selectedToken: TokenModel?
         let fromAccount: WalletAccount?

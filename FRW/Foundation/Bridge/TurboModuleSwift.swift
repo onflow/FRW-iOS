@@ -291,14 +291,16 @@ extension TurboModuleSwift {
     }
     let signature = try await WalletManager.shared.sign(signableData: data).hexString
     
-    return [
-      "public_key": currentPublicKey,
-      "hash_algo": accountKey.hashAlgo.index,
-      "sign_algo": accountKey.signAlgo.index,
-      "signature": signature,
-      "sign_message": jwt,
-      "weight": 1000
-    ]
+    let model = RNBridge.AccountKeySignature(
+      public_key: currentPublicKey,
+      hash_algo: accountKey.hashAlgo.index,
+      sign_algo: accountKey.hashAlgo.index,
+      signature: signature,
+      sign_message: jwt,
+      weight: 1000
+    )
+    
+    return try model.toDictionary()
   }
 
   @objc
