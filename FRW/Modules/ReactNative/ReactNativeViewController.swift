@@ -14,7 +14,7 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
-    case backupTip = "BackupTip"
+    case keyRotationTip = "KeyRotationTip"
   }
 }
 
@@ -180,7 +180,7 @@ class ReactNativeViewController: UIViewController {
         surfaceView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            surfaceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            surfaceView.topAnchor.constraint(equalTo: view.topAnchor),
             surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             surfaceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             surfaceView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -226,7 +226,7 @@ extension RNBridge.InitialProps {
         return .selectAssets
       }
     case .backupTip:
-      return .backupTip
+      return .keyRotationTip
     
     }
   }
