@@ -59,6 +59,8 @@ class ReactNativeViewController: UIViewController {
         
         // Register with coordinator for management
         ReactNativeCoordinator.shared.register(self, id: instanceId)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
     }
 
     // Static method to get the most recent instance (deprecated - use coordinator)
