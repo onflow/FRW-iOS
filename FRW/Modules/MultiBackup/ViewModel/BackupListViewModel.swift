@@ -47,13 +47,13 @@ class BackupListViewModel: ObservableObject {
 
     func fetchData() {
         Task {
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.isLoading = true
             }
             await fetchDeviceBackup()
             await fetchMultiBackup()
 
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.isLoading = false
             }
         }

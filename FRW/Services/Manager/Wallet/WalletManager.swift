@@ -202,18 +202,7 @@ extension WalletManager {
         log.error("[Wallet] not found provider at \(uid)")
         return
       }
-      guard let user = userStore(with: uid) else {
-        log.error("[Wallet] not found user at \(uid)")
-        Task {
-          do {
-            try await UserManager.shared.logout()
-          } catch {
-            log.warning("logout failed.")
-          }
-        }
-        return
-      }
-      updateKeyProvider(provider: provider, storeUser: user)
+      updateKeyProvider(provider: provider)
       walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
       Task {
         do {
@@ -322,7 +311,25 @@ extension WalletManager {
     else {
       return
     }
-    LocalUserDefaults.shared.updateUser(by: uid, publicKey: publicKey, address: address)
+    let hasUser = LocalUserDefaults.shared.userList
+      .contains { $0.userId == uid && $0.publicKey == publicKey }
+    if hasUser {
+      LocalUserDefaults.shared.updateUser(by: uid, publicKey: publicKey, address: address)
+      return
+    }
+    guard let keyType = keyProvider?.keyType else {
+      log.warning("[Wallet] missing key type for user store at \(uid)")
+      return
+    }
+    let accountKey = mainAccount?.fullWeightKey?.toStoreKey()
+    let storeUser = UserManager.StoreUser(
+      publicKey: publicKey,
+      address: address,
+      userId: uid,
+      keyType: keyType,
+      account: accountKey
+    )
+    LocalUserDefaults.shared.addUser(user: storeUser)
   }
 
   func loadLinkedAccounts() {
@@ -339,9 +346,8 @@ extension WalletManager {
     }
   }
 
-  func updateKeyProvider(provider: any KeyProtocol, storeUser _: UserManager.StoreUser) {
+  func updateKeyProvider(provider: any KeyProtocol) {
     keyProvider = provider
-//        accountKey = storeUser.account
   }
 
   func userStore(with uid: String) -> UserManager.StoreUser? {
@@ -550,22 +556,22 @@ extension WalletManager {
 
 extension WalletManager {
   /// Request server create wallet address, DO NOT call it multiple times.
-  func asyncCreateWalletAddressFromServer() {
-    Task {
-      do {
-        let result: UserAddressV2Response = try await Network
-          .request(FRWAPI.User.userAddressV2)
-        let txId = Flow.ID(hex: result.txId)
-        _ = try await txId.onceExecuted()
-        try? await walletEntity?.fetchAccountsByCreationTxId(
-          txId: txId,
-          network: currentNetwork
-        )
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
-      } catch {
-        print(error)
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
-      }
+  func asyncCreateWalletAddressFromServer() async -> String? {
+    do {
+      let result: UserAddressV2Response = try await Network
+        .request(FRWAPI.User.userAddressV2)
+      let txId = Flow.ID(hex: result.txId)
+      _ = try await txId.onceExecuted()
+      _ = try? await walletEntity?.fetchAccountsByCreationTxId(
+        txId: txId,
+        network: currentNetwork
+      )
+      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
+      return result.txId
+    } catch {
+      print(error)
+      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
+      return nil
     }
   }
 
