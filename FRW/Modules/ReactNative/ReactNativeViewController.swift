@@ -14,13 +14,14 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
+    case keyRotationTip = "KeyRotationTip"
   }
-
 }
 
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
+  private let initialRouteOverride: String?
   
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
@@ -33,8 +34,9 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialProps: RNBridge.InitialProps? = nil) {
+  init(initialProps: RNBridge.InitialProps? = nil, initialRouteOverride: String? = nil) {
     self.initialProps = initialProps
+    self.initialRouteOverride = initialRouteOverride
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -57,6 +59,8 @@ class ReactNativeViewController: UIViewController {
         
         // Register with coordinator for management
         ReactNativeCoordinator.shared.register(self, id: instanceId)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
     }
 
     // Static method to get the most recent instance (deprecated - use coordinator)
@@ -145,10 +149,13 @@ class ReactNativeViewController: UIViewController {
         }
         // zh,en,ru,ja
         let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        let initialRoute = initialRouteOverride?.isEmpty == false
+          ? initialRouteOverride!
+          : (initialProps?.route.rawValue ?? "SelectTokens")
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialProps?.route.rawValue ?? "SelectTokens",
+            "initialRoute" : initialRoute,
             "embedded" : false,
             "instanceId": instanceId,
             "language": languageCode
@@ -175,7 +182,7 @@ class ReactNativeViewController: UIViewController {
         surfaceView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            surfaceView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            surfaceView.topAnchor.constraint(equalTo: view.topAnchor),
             surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             surfaceView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             surfaceView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -204,8 +211,9 @@ class ReactNativeViewController: UIViewController {
 
 extension RNBridge.InitialProps {
   var route: ReactNativeViewController.Route {
-    if screen == .sendAsset {
-      
+    
+    switch screen {
+    case .sendAsset:
       guard let json = sendToConfig, let config = RNBridge.SendToConfig.fromJson(json: json) else {
         return .selectAssets
       }
@@ -216,8 +224,12 @@ extension RNBridge.InitialProps {
         return .selectAddress
       } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
         return .selectAddress
+      } else {
+        return .selectAssets
       }
+    case .backupTip:
+      return .keyRotationTip
+    
     }
-    return .selectAssets
   }
 }

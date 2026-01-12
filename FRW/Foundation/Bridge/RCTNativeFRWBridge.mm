@@ -108,6 +108,35 @@
   }];
 }
 
+- (void)signRotationRequest:(NSString *)address
+              signatureData:(NSString *)signatureData
+                    resolve:(RCTPromiseResolveBlock)resolve
+                     reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift signRotationRequestWithAddress:address signatureData:signatureData completionHandler:^(NSDictionary<NSString *,id> * _Nullable info, NSError * _Nullable error) {
+    if (error) {
+      reject(@"sign_rotation_error", error.localizedDescription, error);
+    } else {
+      resolve(info);
+    }
+  }];
+}
+
+- (void)removeOldKey:(nonnull NSString *)address
+         publicKey:(nonnull NSString *)publicKey
+             resolve:(nonnull RCTPromiseResolveBlock)resolve
+              reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift removeOldKeyWithAddress:address
+                                publicKey:publicKey
+                          completionHandler:^(NSError *_Nullable error) {
+    if (error) {
+      reject(@"remove_old_key_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+
 - (NSNumber *)getSignKeyIndex {
   return @([TurboModuleSwift getSignKeyIndex]);
 }
@@ -190,6 +219,36 @@
 
 - (void)logToNative:(NSString *)level message:(NSString *)message args:(NSArray *)args {
   [TurboModuleSwift logToNativeWithLevel:level message:message args:args];
+}
+
+// MARK: - Key Rotation (Seed Phrase)
+
+- (void)createSeedKey:(double)strength
+               resolve:(nonnull RCTPromiseResolveBlock)resolve
+                reject:(nonnull RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift createSeedKeyWithStrength:strength
+                           completionHandler:^(NSDictionary<NSString *,id> * _Nullable result,
+                                               NSError * _Nullable error) {
+    if (error) {
+      reject(@"create_seed_key_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
+- (void)saveNewKey:(JS::NativeFRWBridge::NewKeyInfo &)key resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift saveNewKeyWithSeedphrase:key.seedphrase() completionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"save_new_key_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
+- (void)setScreenSecurityLevel:(nonnull NSString *)level {
+  [TurboModuleSwift setScreenSecurityLevelWithLevel:level];
 }
 
 @end

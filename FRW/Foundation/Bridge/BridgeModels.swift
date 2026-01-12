@@ -17,7 +17,7 @@ enum RNBridge {
 
     enum ScreenType: String, Codable {
         case sendAsset = "send-asset"
-        case tokenDetail = "token-detail"
+        case backupTip = "backup-tip"
     }
 
     struct EmojiInfo: Codable {
@@ -79,6 +79,15 @@ enum RNBridge {
 
     struct AddressBookResponse: Codable {
         let contacts: [AddressBookContact]
+    }
+
+    struct AccountKeySignature: Codable {
+        let public_key: String
+        let hash_algo: Int
+        let sign_algo: Int
+        let signature: String
+        let sign_message: String?
+        let weight: Int?
     }
 
     struct SendToConfig: Codable {

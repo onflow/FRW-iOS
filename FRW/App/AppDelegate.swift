@@ -59,8 +59,7 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         delegate.dependencyProvider = RCTAppDependencyProvider()
         reactNativeDelegate = delegate
         reactNativeFactory = factory
-        
-        KeyChainAccessibilityUpdate.udpate()
+        KeyChainAccessibilityUpdate.update()
 
         _ = LocalEnvManager.shared
         SecureEnclaveMigration.start()
@@ -195,7 +194,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         // Clean up React Native resources
         reactNativeDelegate = nil
         reactNativeFactory = nil
-        
         print("✅ DEBUG: AppDelegate cleaned up successfully")
     }
 }
