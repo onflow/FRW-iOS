@@ -130,7 +130,8 @@ final class PrivateKeyLoginViewModel: ObservableObject {
                 $0.publicKey.description == p256PublicKey || $0.publicKey
                     .description == secp256PublicKey
             }
-        guard let selectedKey = keys?.first,
+      let filteredKeys = keys?.filter { $0.weight >= 1000 && !$0.revoked }
+        guard let selectedKey = filteredKeys?.first,
               let address = account?.address.hex, let privateKey = privateKey
         else {
             log.error("[Import] keys of account not match the public:\(String(describing: p256PublicKey)) or \(String(describing: secp256PublicKey)) ")
