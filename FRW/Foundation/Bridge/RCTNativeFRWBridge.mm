@@ -324,4 +324,14 @@
   }];
 }
 
+- (void)getV4RegistrationSignatures:(NSString *)mnemonic resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getV4RegisteredSignatureWithMnemonic:mnemonic completionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSError * _Nullable error) {
+    if (error) {
+      reject(@"fet signature fail for regist v4 ", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
 @end
