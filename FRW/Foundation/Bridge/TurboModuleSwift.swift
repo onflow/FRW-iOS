@@ -204,42 +204,6 @@ extension TurboModuleSwift {
   @objc
   static func setScreenSecurityLevel(level: String) {
     let secure = level.lowercased() == "secure"
-    runOnMain {
-      if secure {
-        showSecurityOverlay()
-      } else {
-        hideSecurityOverlay()
-      }
-    }
-  }
-
-  private static var securityOverlayWindow: UIWindow?
-
-  private static func showSecurityOverlay() {
-    if securityOverlayWindow != nil { return }
-
-    guard let scene = UIApplication.shared.connectedScenes
-      .compactMap({ $0 as? UIWindowScene })
-      .first(where: { $0.activationState == .foregroundActive }) else { return }
-
-    let overlay = UIWindow(windowScene: scene)
-    overlay.frame = UIScreen.main.bounds
-    overlay.windowLevel = .alert + 1
-
-    let vc = UIViewController()
-    vc.view.backgroundColor = UIColor.black
-    vc.view.isUserInteractionEnabled = false
-    overlay.rootViewController = vc
-    overlay.isHidden = false
-
-    securityOverlayWindow = overlay
-  }
-
-  private static func hideSecurityOverlay() {
-    guard let overlay = securityOverlayWindow else { return }
-    overlay.isHidden = true
-    overlay.rootViewController = nil
-    securityOverlayWindow = nil
   }
 
   @objc
