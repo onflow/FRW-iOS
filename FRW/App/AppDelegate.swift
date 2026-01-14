@@ -195,7 +195,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         // Clean up React Native resources
         reactNativeDelegate = nil
         reactNativeFactory = nil
-        
         print("✅ DEBUG: AppDelegate cleaned up successfully")
     }
 }

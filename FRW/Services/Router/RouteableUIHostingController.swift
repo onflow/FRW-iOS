@@ -62,6 +62,10 @@ extension RouterContentDelegate {
 
 class RouteableUIHostingController<Content: RouteableView>: UIHostingController<Content>,
     UIPopoverPresentationControllerDelegate {
+
+    // MARK: Private
+    private var backItem: UIBarButtonItem!
+
     // MARK: Lifecycle
 
     override init(rootView: Content) {
@@ -86,14 +90,14 @@ class RouteableUIHostingController<Content: RouteableView>: UIHostingController<
             overrideUserInterfaceStyle = style
         }
 
-        let backItem = UIBarButtonItem(
+        backItem = UIBarButtonItem(
             image: UIImage(systemName: "arrow.backward"),
             style: .plain,
             target: self,
             action: #selector(onBackButtonAction)
         )
         backItem.tintColor = UIColor(named: "button.color")
-        navigationItem.leftBarButtonItem = backItem
+        
 
         navigationController?.navigationBar.prefersLargeTitles = rootView
             .navigationBarTitleDisplayMode == .large
@@ -113,6 +117,11 @@ class RouteableUIHostingController<Content: RouteableView>: UIHostingController<
         }
         UINavigationControllerState.shared.allowsSwipeBack = rootView.enableSwipeBackGesture
         navigationController?.setNavigationBarHidden(rootView.isNavigationBarHidden, animated: true)
+        if rootView.isNavigationBarHidden {
+          navigationItem.leftBarButtonItem = nil
+        } else {
+          navigationItem.leftBarButtonItem = backItem
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -138,3 +147,4 @@ class RouteableUIHostingController<Content: RouteableView>: UIHostingController<
         rootView.backButtonAction()
     }
 }
+

@@ -78,13 +78,14 @@ enum WalletError: String, BaseError {
     case emptyKeyProvider
     case emptyAccountKey
     case invalidMnemonic
-    case invaildPublicKey
+    case invalidPublicKey
     case invaildAddress
     case fetchLinkedAccountsFailed
     case emptyAddress
     case emptyScript
     case emptyMainAccount
     case emptyTransaction
+    case invalidSignData
 
     var baseCode: Int { 2000 }
 }

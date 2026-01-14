@@ -1246,6 +1246,8 @@
 		15F6F4CB2D69FAFD00D62D7F /* EVMTokenBalanceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F6F4C62D69FAFD00D62D7F /* EVMTokenBalanceProvider.swift */; };
 		15F6F4CD2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F6F4CC2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift */; };
 		15F6F4CE2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F6F4CC2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift */; };
+		15FA8A982F0E295F00814FB3 /* BloctoDetectorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8A972F0E295F00814FB3 /* BloctoDetectorService.swift */; };
+		15FA8A992F0E295F00814FB3 /* BloctoDetectorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15FA8A972F0E295F00814FB3 /* BloctoDetectorService.swift */; };
 		1A26387BA2A1E67025983257 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */; };
 		4E03BE162C731E2300EF04DC /* KeyStoreLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE152C731E2300EF04DC /* KeyStoreLoginView.swift */; };
 		4E03BE172C731E2300EF04DC /* KeyStoreLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E03BE152C731E2300EF04DC /* KeyStoreLoginView.swift */; };
@@ -3075,6 +3077,7 @@
 		15F6F4C52D69FAFD00D62D7F /* TokenBalanceHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceHandler.swift; sourceTree = "<group>"; };
 		15F6F4C62D69FAFD00D62D7F /* EVMTokenBalanceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMTokenBalanceProvider.swift; sourceTree = "<group>"; };
 		15F6F4CC2D6A0E8000D62D7F /* CadenceTokenBalanceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CadenceTokenBalanceProvider.swift; sourceTree = "<group>"; };
+		15FA8A972F0E295F00814FB3 /* BloctoDetectorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloctoDetectorService.swift; sourceTree = "<group>"; };
 		4E03BE152C731E2300EF04DC /* KeyStoreLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreLoginView.swift; sourceTree = "<group>"; };
 		4E03BE182C731F3500EF04DC /* ViewsInLoginModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsInLoginModule.swift; sourceTree = "<group>"; };
 		4E03BE1E2C7334EC00EF04DC /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -5969,6 +5972,7 @@
 		15E9E5D82D9A2729003A5816 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				15FA8A972F0E295F00814FB3 /* BloctoDetectorService.swift */,
 				15DE22CE277DBDF800B5EE03 /* WalletManager.swift */,
 				4E8866182DC060050031E242 /* WalletManager+Insufficient.swift */,
 				154E31582DA56D24008A495F /* WalletManager+Signer.swift */,
@@ -8614,6 +8618,7 @@
 				153749002E26FDD60040E3F8 /* BoolExtension.swift in Sources */,
 				153749012E26FDD60040E3F8 /* StringExtension.swift in Sources */,
 				153749022E26FDD60040E3F8 /* UIViewControllerExtension.swift in Sources */,
+				15FA8A992F0E295F00814FB3 /* BloctoDetectorService.swift in Sources */,
 				153749032E26FDD60040E3F8 /* UISegmentedControlExtension.swift in Sources */,
 				153749042E26FDD60040E3F8 /* UINavigationControllerExtension.swift in Sources */,
 				153749052E26FDD60040E3F8 /* UIAlertControllerExtension.swift in Sources */,
@@ -9710,6 +9715,7 @@
 				153749582E26FDD60040E3F8 /* BoolExtension.swift in Sources */,
 				153749592E26FDD60040E3F8 /* StringExtension.swift in Sources */,
 				1537495A2E26FDD60040E3F8 /* UIViewControllerExtension.swift in Sources */,
+				15FA8A982F0E295F00814FB3 /* BloctoDetectorService.swift in Sources */,
 				1537495B2E26FDD60040E3F8 /* UISegmentedControlExtension.swift in Sources */,
 				1537495C2E26FDD60040E3F8 /* UINavigationControllerExtension.swift in Sources */,
 				1537495D2E26FDD60040E3F8 /* UIAlertControllerExtension.swift in Sources */,
@@ -10866,7 +10872,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -10915,7 +10921,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
@@ -10962,7 +10968,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LILICOPROD";
@@ -11008,7 +11014,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = LILICOPROD;
@@ -11077,7 +11083,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -11146,7 +11152,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD = "";
 				LDPLUSPLUS = "";
-				MARKETING_VERSION = 3.1.0;
+				MARKETING_VERSION = 3.0.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = (
@@ -11182,7 +11188,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11210,7 +11216,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.NotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11238,7 +11244,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11266,7 +11272,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11296,7 +11302,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11326,7 +11332,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11356,7 +11362,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -11386,7 +11392,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0.11;
+				MARKETING_VERSION = 3.0.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
