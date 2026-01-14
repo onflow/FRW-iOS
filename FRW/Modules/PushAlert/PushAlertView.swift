@@ -11,6 +11,10 @@ struct PushAlertView: RouteableView {
     var title: String {
         ""
     }
+  
+    var isNavigationBarHidden: Bool {
+      true
+    }
 
     var body: some View {
         VStack {

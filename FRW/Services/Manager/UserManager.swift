@@ -211,7 +211,7 @@ extension UserManager {
       keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
-    await WalletManager.shared.updateKeyProvider(provider: keyProvider)
+    WalletManager.shared.updateKeyProvider(provider: secureKey)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
