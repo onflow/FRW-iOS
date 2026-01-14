@@ -160,7 +160,7 @@ extension RestoreMultiConnectViewModel {
             .SignatureAlgorithm.ECDSA_P256
 
         guard let publicKey = hdWallet.getPublicKey(signAlgo: signAlgo)?.format() else {
-            HUD.error(WalletError.invaildPublicKey)
+            HUD.error(WalletError.invalidPublicKey)
             return
         }
 

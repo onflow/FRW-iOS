@@ -6,6 +6,8 @@ import SPIndicator
 import FlowWalletKit
 import UserNotifications
 import FirebaseAuth
+import KeychainAccess
+import WalletCore
 
 @objc(TurboModuleSwift)
 class TurboModuleSwift: NSObject {
@@ -141,6 +143,76 @@ class TurboModuleSwift: NSObject {
 }
 
 extension TurboModuleSwift {
+  // MARK: - Key Rotation (Seed Phrase)
+
+  /// Create a new seed phrase and derive a default Flow account public key (P256/SHA2_256)
+  /// - Parameter strength: BIP39 strength in bits (unused for now; library uses default)
+  /// - Returns: Dictionary matching RN NewKeyInfo shape
+  @objc
+  static func createSeedKey(strength: Double) async throws -> [String: Any] {
+    let mnemonicStrength = Int32(strength)
+    guard let hdWallet = HDWallet(strength: mnemonicStrength, passphrase: "") else {
+      HUD.error(title: "invalid_data".localized)
+      //TODO:
+      throw RNBridgeError.invalidParameters
+    }
+    
+    let key = FlowWalletKit.SeedPhraseKey(hdWallet: hdWallet, storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage)
+    
+    guard let publicKey = key.publicKey(signAlgo: .ECDSA_SECP256k1) else {
+      throw RNBridgeError.invalidParameters
+    }
+    let publicKeyHex = publicKey.hexString
+    
+    
+    let flowKey: [String: Any] = [
+      "publicKey": publicKeyHex,
+      "signAlgo": Flow.SignatureAlgorithm.ECDSA_SECP256k1.index,
+      "hashAlgo": Flow.HashAlgorithm.SHA2_256.index,
+      "weight": 1000,
+      "hashAlgoString": Flow.HashAlgorithm.SHA2_256.id,
+      "signAlgoString": Flow.SignatureAlgorithm.ECDSA_SECP256k1.id,
+    ]
+
+    return [
+      "seedphrase": hdWallet.mnemonic,
+      "flowKey": flowKey,
+    ]
+  }
+
+  /// Persist newly created seed phrase securely for current user
+  /// The mnemonic is encrypted with the active uid and stored in the app keychain
+  @objc
+  static func saveNewKey(seedphrase: String) async throws {
+    guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
+      HUD.error(LLError.accountNotFound)
+      log.error(LLError.accountNotFound.localizedDescription)
+      throw LLError.accountNotFound
+    }
+
+    guard !seedphrase.isEmpty else {
+      HUD.error(WalletError.invalidMnemonic)
+      log.error("[Blocto] seed phrase is empty")
+      throw WalletError.invalidMnemonic
+    }
+    guard let hdWallet = HDWallet(mnemonic: seedphrase, passphrase: "") else {
+      HUD.error(WalletError.invalidMnemonic)
+      log.error("[Blocto] failed to create hd wallet from seed phrase")
+      throw WalletError.invalidMnemonic
+    }
+    
+    let provider = FlowWalletKit.SeedPhraseKey(
+      hdWallet: hdWallet,
+      storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
+    )
+    let key = provider.createKey(uid: uid)
+    try provider.store(
+      id: key,
+      password: KeyProvider.password(with: uid)
+    )
+    log.debug("[Blocto] save seedphrase successfully.\(key)")
+  }
+
   @objc
   static func listenTransaction(txid: String) {
     guard !txid.isEmpty else {
@@ -158,6 +230,65 @@ extension TurboModuleSwift {
       "INSTABUG_TOKEN": ServiceConfig.instabugRNToken,
     ]
   }
+
+  @objc
+  static func signRotationRequest(address: String, signatureData: String) async throws -> [String: Any]  {
+    
+    log.debug("[Blocto] start signing")
+    guard let currentAddress = await WalletManager.shared.getAddress(), let currentPublicKey = await WalletManager.shared.getCurrentPublicKey() else {
+      log.error("[Blocto]  Cannot get current address. Skipping. ")
+      HUD.error(WalletError.emptyAddress)
+      throw WalletError.emptyAddress
+    }
+    guard currentAddress == address else {
+      log.error("[Blocto]  Provided address does not match the selected one. Skipping.")
+      HUD.error(WalletError.invaildAddress)
+      throw WalletError.invaildAddress
+    }
+    
+    let accountKey = await WalletManager.shared.mainAccount?.account.keys.first { $0.publicKey.description == currentPublicKey }
+    guard let accountKey else {
+      HUD.error(WalletError.invalidPublicKey)
+      throw WalletError.invalidPublicKey
+    }
+    
+    guard let data = signatureData.addUserMessage() else {
+      throw WalletError.invalidSignData
+    }
+    let signature = try await WalletManager.shared.sign(signableData: data).hexString
+    
+    let model = RNBridge.AccountKeySignature(
+      public_key: currentPublicKey,
+      hash_algo: accountKey.hashAlgo.index,
+      sign_algo: accountKey.signAlgo.index,
+      signature: signature,
+      sign_message: signatureData,
+      weight: 1000
+    )
+    
+    return try model.toDictionary()
+  }
+
+  @objc
+  static func removeOldKey(address: String, publicKey: String) async throws {
+    log.debug("[Blocto] start removing key")
+    guard let uid = UserManager.shared.activatedUID else {
+      throw LLError.accountNotFound
+    }
+    guard let currentAddress = await WalletManager.shared.getAddress() else {
+      log.debug("[Blocto]  Cannot get current address. Skipping. ")
+      throw WalletError.emptyAddress
+    }
+    guard currentAddress == address else {
+      log.debug("[Blocto]  Provided address does not match the selected one. Skipping.")
+      throw WalletError.invaildAddress
+    }
+    let key = KeyProvider.createKey(userId: uid, publicKey: publicKey)
+    let keyProvider = await WalletManager.shared.keyProvider(with: key)
+    try keyProvider?.remove(id: key)
+    log.debug("[Blocto] remove key successfully")
+  }
+
 }
 
 // MARK: - React Native Management
@@ -416,6 +547,19 @@ extension TurboModuleSwift {
       Router.route(to: RouteMap.Backup.backupList)
     case .icloudRestore:
       restoreModel.restoreWithCloudAction(type: .icloud)
+    }
+  }
+}
+
+extension Flow.HashAlgorithm {
+  fileprivate func hash(data: Data) throws -> Data {
+    switch self {
+    case .SHA2_256:
+      return Hash.sha256(data: data)
+    case .SHA3_256:
+      return Hash.sha3_256(data: data)
+    default:
+      throw FWKError.unsupportHashAlgorithm
     }
   }
 }

@@ -108,4 +108,4 @@ iOSInjectionProject/
 /.codex
 /assets/assets/__node_modules
 /assets/__node_modules/.pnpm
-
+/assets/__packages

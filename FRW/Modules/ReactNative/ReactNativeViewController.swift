@@ -16,14 +16,16 @@ extension ReactNativeViewController {
     case sendToken = "SendTokens"
     case profileSelection = "ProfileTypeSelection"
     case getStarted = "GetStarted"
+    case keyRotationTip = "KeyRotationTip"
   }
-
 }
 
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
   var route: ReactNativeViewController.Route? = nil
+  private let initialRouteOverride: String?
+  
     // Static identifier for easy identification
     static let identifier = "ReactNativeViewController"
 
@@ -35,8 +37,9 @@ class ReactNativeViewController: UIViewController {
 
     private var reactView: UIView?
   
-  init(initialProps: RNBridge.InitialProps? = nil) {
+  init(initialProps: RNBridge.InitialProps? = nil, initialRouteOverride: String? = nil) {
     self.initialProps = initialProps
+    self.initialRouteOverride = initialRouteOverride
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -66,6 +69,8 @@ class ReactNativeViewController: UIViewController {
         
         // Register with coordinator for management
         ReactNativeCoordinator.shared.register(self, id: instanceId)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -242,8 +247,9 @@ class ReactNativeViewController: UIViewController {
 
 extension RNBridge.InitialProps {
   var route: ReactNativeViewController.Route {
-    if screen == .sendAsset {
-      
+    
+    switch screen {
+    case .sendAsset:
       guard let json = sendToConfig, let config = RNBridge.SendToConfig.fromJson(json: json) else {
         return .selectAssets
       }
@@ -254,10 +260,17 @@ extension RNBridge.InitialProps {
         return .selectAddress
       } else if (config.selectedNFTs != nil && ((config.selectedNFTs?.count ?? 0) > 0) )  {
         return .selectAddress
+      } else {
+        return .selectAssets
       }
-    } else if screen == .onboarding {
+    case .backupTip:
+      return .keyRotationTip
+    case .onboarding:
       return .profileSelection
+    case .receive:
+      return .selectAssets
+    case .tokenDetail:
+      return .selectAssets
     }
-    return .selectAssets
   }
 }

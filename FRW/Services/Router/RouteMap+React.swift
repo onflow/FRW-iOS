@@ -13,6 +13,7 @@ extension RouteMap {
     case sendAsset(RNBridge.SendToConfig?)
     case profileSelection
     case getStarted
+    case backupTip
   }
 }
 
@@ -30,6 +31,11 @@ extension RouteMap.ReactNative: RouterTarget {
       let vc = ReactNativeViewController()
       vc.route = .getStarted
       navi.pushViewController(vc)
+    case .backupTip:
+      let props = RNBridge.InitialProps(screen: .backupTip, sendToConfig: nil)
+      let vc = ReactNativeViewController(initialProps: props)
+      vc.modalPresentationStyle = .fullScreen
+      navi.present(vc)
     }
   }
 }

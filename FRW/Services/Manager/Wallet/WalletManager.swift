@@ -255,6 +255,8 @@ extension WalletManager {
       } else {
         selectedAccount = .main(account.address)
       }
+      selectedAccount = .main(account.address)
+      checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
     updateUserAddress()
     loadLinkedAccounts()
@@ -435,6 +437,10 @@ extension WalletManager {
     if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
       LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
     }
+    if type == .main {
+      checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
+    }
+
     // If it's main account, reload the linked account
     if type == .main,
        let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
@@ -508,6 +514,23 @@ extension WalletManager {
   func resetAfterSwitchProfile() {
     selectedAccount = nil
     activatedCoins = []
+  }
+}
+
+// MARK: - Blocto Detector
+
+extension WalletManager {
+  private func checkBloctoKeyAndPresentBackupTip(address: String) {
+    guard !address.isEmpty else { return }
+    Task {
+      do {
+        let result = try await BloctoDetectorService.detectBloctoKey(address: address)
+        guard result.isBlocto && result.needRevoke else { return }
+        Router.route(to: RouteMap.ReactNative.backupTip)
+      } catch {
+        log.debug("[WalletManager] Blocto detection failed", context: error)
+      }
+    }
   }
 }
 
