@@ -213,12 +213,6 @@ extension TurboModuleSwift {
     log.debug("[Blocto] save seedphrase successfully.\(key)")
   }
 
-  /// Toggle screen security overlay to discourage screenshots/switcher snapshots
-  @objc
-  static func setScreenSecurityLevel(level: String) {
-    let secure = level.lowercased() == "secure"
-  }
-
   @objc
   static func listenTransaction(txid: String) {
     guard !txid.isEmpty else {

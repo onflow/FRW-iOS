@@ -267,6 +267,10 @@ extension RNBridge.InitialProps {
       return .keyRotationTip
     case .onboarding:
       return .profileSelection
+    case .receive:
+      return .selectAssets
+    case .tokenDetail:
+      return .selectAssets
     }
   }
 }

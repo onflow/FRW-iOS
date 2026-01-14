@@ -378,8 +378,4 @@
   }];
 }
 
-- (void)setScreenSecurityLevel:(nonnull NSString *)level {
-  [TurboModuleSwift setScreenSecurityLevelWithLevel:level];
-}
-
 @end
