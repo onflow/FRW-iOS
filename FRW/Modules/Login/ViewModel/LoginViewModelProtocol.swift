@@ -164,7 +164,7 @@ extension LoginViewModelProtocol {
         let matchingKeys = account.keys.filter {
             $0.publicKey.description == p256Key || $0.publicKey.description == secp256Key
         }
-      let filteredKeys = matchingKeys.filter { $0.weight >= 1000 && !$0.revoked }
+        let filteredKeys = matchingKeys.filter { $0.weight >= 1000 && !$0.revoked }
         guard let selectedKey = filteredKeys.first else {
             log.error("[Login] Keys of account do not match the public key: P256=\(String(describing: p256Key)), SECP256k1=\(String(describing: secp256Key))")
             HUD.error(title: "not_find_address".localized)
