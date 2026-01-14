@@ -147,4 +147,28 @@ extension TurboModuleSwift {
     return UUIDManager.appUUID()
   }
 
+  @objc
+  static func getV4RegisteredSignature(mnemonic: String) async throws -> [String: Any] {
+    let jwt = try await getJWT()
+    guard let signatureData = jwt.addUserMessage() else {
+      log.error("invalid data to sign")
+      throw LLError.signFailed
+    }
+    guard let hdWallet = HDWallet(mnemonic: mnemonic, passphrase: "") else {
+      throw WalletError.invalidMnemonic
+    }
+    
+    let key = FlowWalletKit.SeedPhraseKey(hdWallet: hdWallet, storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage)
+    
+    let eoaAddress = try key.ethAddress()
+    let flowSignature = try key.sign(data: signatureData, signAlgo: .ECDSA_SECP256k1, hashAlgo: .SHA2_256)
+    let evmSignature = try key.ethSign(digest: signatureData)
+    let response = [
+      "flowSignature": flowSignature.hexString,
+      "evmSignature": evmSignature.hexString,
+      "eoaAddress": eoaAddress
+    ]
+    return try response.toDictionary()
+    
+  }
 }

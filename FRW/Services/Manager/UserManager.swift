@@ -185,21 +185,55 @@ extension UserManager {
 // MARK: - Register
 
 extension UserManager {
-  func register(_ userName: String) async throws -> String? {
+  func register(_ userName: String, evmAddress: String? = nil) async throws -> String? {
     let secureKey = try SecureEnclaveKey.create()
     let key = try secureKey.flowAccountKey(index: 0)
-    return try await register(name: userName, key: key, keyProvider: secureKey)
+    return try await register(
+      name: userName,
+      key: key,
+      keyProvider: secureKey,
+      evmAddress: evmAddress
+    )
   }
-  
-  func register(name: String, key: Flow.AccountKey, keyProvider: any KeyProtocol) async throws -> String? {
+
+  func register(
+    name: String,
+    key: Flow.AccountKey,
+    keyProvider: any KeyProtocol,
+    evmAddress: String? = nil
+  ) async throws -> String? {
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
-    let request = RegisterRequest(
+
+    guard let token = try? await getIDToken(), !token.isEmpty else {
+      loginAnonymousIfNeeded()
+      throw LLError.restoreLoginFailed
+    }
+
+    let signData = token.addUserMessage() ?? Data()
+    let signature = try keyProvider.sign(
+      data: signData,
+      signAlgo: key.signAlgo,
+      hashAlgo: key.hashAlgo
+    ).hexValue
+
+    let flowAccountInfo = FlowAccountInfo(accountKey: key.toCodableModel(), signature: signature)
+    var evmAccountInfo: EVMAccountInfo?
+    if let evmAddress = evmAddress,
+        let ethProvider = keyProvider as? EthereumKeyProtocol,
+        let evmSignature = try? ethProvider.ethSign(digest: signData)
+    {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
+    let request = RegisterParam(
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       username: name,
-      accountKey: key.toCodableModel(),
       deviceInfo: IPManager.shared.toParams()
     )
+
     let model: RegisterResponse = try await Network.request(FRWAPI.User.register(request))
 
     let pw = KeyProvider.password(with: model.id)
@@ -395,13 +429,13 @@ extension UserManager {
       throw WalletError.emptyPublicKey
     }
 
-    let data = Flow.DomainTag.user.normalize + tokenData
+    let signData = token.addUserMessage() ?? Data()
 
     let hashAlgo = Flow.HashAlgorithm.SHA2_256
     let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
 
     guard let signature = try? provider.sign(
-      data: data,
+      data: signData,
       signAlgo: signAlgo,
       hashAlgo: hashAlgo
     )
@@ -418,9 +452,18 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = provider as? EthereumKeyProtocol,
+       let wallet = try? Wallet(type: .key(provider)),
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
 
@@ -506,9 +549,17 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = keyProvider as? EthereumKeyProtocol,
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
     let response: Network.Response<LoginResponse> = try await Network
@@ -564,9 +615,18 @@ extension UserManager {
       signAlgo: Flow.SignatureAlgorithm.ECDSA_P256.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = secureKey as? EthereumKeyProtocol,
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      // SecureEnclaveKey might not have a direct ethAddress in this context, 
+      // but if it supports ethSign, we might need more info.
+      // For now, following the pattern.
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
 
@@ -641,9 +701,18 @@ extension UserManager {
       }
       loginResponse = response.data
     } else {
+      let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature)
+      var evmAccountInfo: EVMAccountInfo?
+      if let ethProvider = privateKey as? EthereumKeyProtocol,
+         let wallet = try? Wallet(type: .key(privateKey)),
+         let evmAddress = try? wallet.ethAddress(),
+         let evmSignature = try? ethProvider.ethSign(digest: signData) {
+        evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+      }
+
       let request = LoginRequest(
-        signature: signature,
-        accountKey: key,
+        flowAccountInfo: flowAccountInfo,
+        evmAccountInfo: evmAccountInfo,
         deviceInfo: IPManager.shared.toParams(),
         address: address
       )
@@ -723,9 +792,17 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = keyProvider as? EthereumKeyProtocol,
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
     let response: Network.Response<LoginResponse> = try await Network

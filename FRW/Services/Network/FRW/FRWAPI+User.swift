@@ -13,7 +13,7 @@ import Moya
 extension FRWAPI {
     enum User {
         case login(LoginRequest)
-        case register(RegisterRequest)
+        case register(RegisterParam)
         case checkUsername(String)
         case userAddress
         case userAddressV2
@@ -46,11 +46,11 @@ extension FRWAPI.User: TargetType, AccessTokenAuthorizable {
     var path: String {
         switch self {
         case .login:
-            return "/v3/login"
+            return "/v4/login"
         case .checkUsername:
             return "/v1/user/check"
         case .register:
-            return "/v3/register"
+            return "/v4/register"
         case .userAddress:
             return "/v1/user/address"
         case .userAddressV2:
