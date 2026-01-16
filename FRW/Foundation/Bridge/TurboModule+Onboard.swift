@@ -155,17 +155,33 @@ extension TurboModuleSwift {
       throw LLError.signFailed
     }
     guard let hdWallet = HDWallet(mnemonic: mnemonic, passphrase: "") else {
+      HUD.error(WalletError.invalidMnemonic)
       throw WalletError.invalidMnemonic
     }
     
     let key = FlowWalletKit.SeedPhraseKey(hdWallet: hdWallet, storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage)
     
-    let eoaAddress = try key.ethAddress()
     let flowSignature = try key.sign(data: signatureData, signAlgo: .ECDSA_SECP256k1, hashAlgo: .SHA2_256)
-    let evmSignature = try key.ethSign(digest: signatureData)
+
+    let eoaAddress = try key.ethAddress()
+
+    guard let jwtData = jwt.data(using: .utf8) else {
+      HUD.error(WalletError.invalidSignData)
+      throw WalletError.invalidSignData
+    }
+    let digest = Hash.keccak256(data: jwtData)
+    
+    
+    let ethKey = hdWallet.getKeyForCoin(coin: .ethereum)
+    guard let evmSignatureData = ethKey.sign(digest: digest, curve: .secp256k1) else {
+      HUD.error(LLError.signFailed)
+      throw LLError.signFailed
+    }
+    
+    let evmSignature = evmSignatureData.hexValue.addHexPrefix()
     let response = [
       "flowSignature": flowSignature.hexString,
-      "evmSignature": evmSignature.hexString,
+      "evmSignature": evmSignature,
       "eoaAddress": eoaAddress
     ]
     return try response.toDictionary()

@@ -17,4 +17,5 @@ enum RNBridgeError: Error {
   case invalidMnemonic
   case accountCreationFailed
   case walletInitializationFailed
+  case signFailed
 }
