@@ -71,14 +71,19 @@ final class Coordinator {
         isRootViewSetup = true
 
         // Set initial root view controller synchronously to avoid launch error
-        updateRootView(isEmpty: ProfileManager.shared.profiles.isEmpty, animated: false)
+        let isLogout = ProfileManager.shared.profiles.isEmpty || !UserManager.shared.isLoggedIn
+        updateRootView(isEmpty: isLogout, animated: false)
 
         // Subscribe to profile changes for dynamic updates
         ProfileManager.shared.$profiles
             .dropFirst() // Skip initial value since we already handled it above
             .receive(on: DispatchQueue.main)
             .sink { [weak self] profiles in
+              if UserManager.shared.isLoggedIn {
                 self?.updateRootView(isEmpty: profiles.isEmpty, animated: true)
+              } else {
+                self?.updateRootView(isEmpty: true, animated: true)
+              }
             }
             .store(in: &cancelSets)
     }
