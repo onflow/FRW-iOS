@@ -220,31 +220,40 @@ extension WalletManager {
     currentInitializedUID = uid
 
     Task {
-      // Load key provider for new UID
-      let provider = keyProvider(with: uid)
-
-      if let provider = provider {
+      // Use findKeyProvider to get validated key with on-chain control
+      // This ensures we always use the correct active key (not revoked)
+      guard let result = await findKeyProvider(uid: uid) else {
+        log.error("[Wallet] No valid key with on-chain control found for uid: \(uid)")
         await MainActor.run {
-          updateKeyProvider(provider: provider)
-          // Keep old mainAccount until new data loads (prevents UI flicker)
-          // clear() already cleared selectedAccount
-          // loadRecentFlowAccount() will update both when ready
-          walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+          // Notify user about missing valid key
+          NotificationCenter.default.post(
+            name: .walletKeyInvalid,
+            object: nil,
+            userInfo: ["uid": uid, "reason": "No valid key with mainnet control"]
+          )
         }
+        return
+      }
 
-        // Fetch accounts - retry mechanism will handle failures
-        do {
-          try await walletEntity?.fetchAllNetworkAccounts()
-          // After successful fetch, load accounts (observer might have delay)
-          await MainActor.run {
-            loadRecentFlowAccount()
-          }
-        } catch {
-          log.error("[Wallet] Failed to fetch accounts during init: \(error)")
-          // Retry mechanism will handle failures
-          await MainActor.run {
-            reloadWalletInfo()
-          }
+      let provider = result.provider
+      // result.wallet already has mainnet accounts fetched
+
+      await MainActor.run {
+        updateKeyProvider(provider: provider)
+        // Create wallet for all supported networks
+        walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+      }
+
+      // Fetch all network accounts (including testnet if needed)
+      do {
+        try await walletEntity?.fetchAllNetworkAccounts()
+        await MainActor.run {
+          loadRecentFlowAccount()
+        }
+      } catch {
+        log.error("[Wallet] Failed to fetch all network accounts: \(error)")
+        await MainActor.run {
+          reloadWalletInfo()
         }
       }
     }
@@ -334,8 +343,12 @@ extension WalletManager {
   }
 
   /// Reinitialize wallet with current user's key provider (used after key rotation)
+  /// Forces re-initialization even if UID hasn't changed
   func reinitializeWallet() {
     log.debug("[Wallet] Reinitializing wallet after key rotation")
+    // Clear currentInitializedUID to force re-initialization
+    // This is necessary when key changes but UID stays the same (key rotation)
+    currentInitializedUID = nil
     initWallet()
   }
 
@@ -347,64 +360,17 @@ extension WalletManager {
     LocalUserDefaults.shared.userList.last { $0.userId == uid && $0.publicKey == publicKey }
   }
 
-  func keyProvider(with uid: String) -> (any KeyProtocol)? {
-    guard let userStore = userStore(with: uid) else {
-      log.warning("[Wallet] userStore not found for uid: \(uid), trying to find valid key from keychain")
-
-      // If userStore doesn't exist, try to find any valid key in keychain
-      // This handles recovery scenarios where userStore is missing but keys exist
-      return getKeyProvider(uid: uid)
-    }
-
-    log.debug("[Wallet] Loading key - uid: \(uid), type: \(userStore.keyType), publicKey: \(userStore.publicKey.prefix(8))")
-
-    var provider: (any KeyProtocol)?
-    switch userStore.keyType {
-    case .seedPhrase:
-      // CRITICAL FIX: Pass publicKey for matching
-      provider = try? SeedPhraseKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .privateKey:
-      // CRITICAL FIX: Pass publicKey for matching
-      provider = try? PrivateKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .keyStore:
-      // CRITICAL FIX: Pass publicKey for matching
-      provider = try? PrivateKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .secureEnclave:
-      // Already has publicKey matching
-      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    }
-
-    if provider == nil {
-      log.error("[Wallet] CRITICAL: Failed to load key provider for uid: \(uid), trying fallback")
-      // Fallback: try to find any valid key
-      provider = getKeyProvider(uid: uid)
-    }
-
-    return provider
-  }
-
-  /*
-   * find the key by public key from keychain.
-   * for profile.
-   */
-  func keyProvider(profile: ProfileModel) -> (any KeyProtocol)? {
-    let uid = profile.uid
-    return getKeyProvider(uid: uid)
-  }
-  
-  private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
+  /// Quick key provider lookup without on-chain validation
+  /// Used only for non-critical operations like displaying account lists
+  /// For wallet initialization, use findKeyProvider() which validates on-chain
+  func quickKeyProvider(uid: String) -> (any KeyProtocol)? {
+    // Try to load from any keychain storage
     if let provider = try? SecureEnclaveKey.wallet(id: uid) {
       return provider
     }
-
     if let provider = try? SeedPhraseKey.wallet(id: uid) {
       return provider
     }
-
     if let provider = try? PrivateKey.wallet(id: uid) {
       return provider
     }

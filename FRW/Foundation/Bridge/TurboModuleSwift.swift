@@ -169,6 +169,7 @@ extension TurboModuleSwift {
 
   /// Persist newly created seed phrase securely for current user
   /// The mnemonic is encrypted with the active uid and stored in the app keychain
+  /// Also updates userStore and WalletManager with the new key
   @objc
   static func saveNewKey(seedphrase: String) async throws {
     guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
@@ -187,7 +188,7 @@ extension TurboModuleSwift {
       log.error("[Blocto] failed to create hd wallet from seed phrase")
       throw WalletError.invalidMnemonic
     }
-    
+
     let provider = FlowWalletKit.SeedPhraseKey(
       hdWallet: hdWallet,
       storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
@@ -197,7 +198,48 @@ extension TurboModuleSwift {
       id: key,
       password: KeyProvider.password(with: uid)
     )
-    log.debug("[Blocto] save seedphrase successfully.\(key)")
+    log.debug("[Blocto] Saved new key to keychain: \(key)")
+
+    // Validate new key on-chain and update userStore
+    let wallet = FlowWalletKit.Wallet(type: .key(provider), networks: [.mainnet])
+    do {
+      try await wallet.fetchAccount()
+
+      guard let accounts = wallet.accounts?[.mainnet],
+            let validAccount = accounts.first(where: { $0.hasFullWeightKey }),
+            let fullWeightKey = validAccount.fullWeightKey else {
+        log.error("[Blocto] New key has no valid mainnet account")
+        throw WalletError.emptyAccountKey
+      }
+
+      // Check if key is active (not revoked)
+      guard !fullWeightKey.revoked else {
+        log.error("[Blocto] New key is revoked")
+        throw WalletError.emptyAccountKey
+      }
+
+      // Update userStore with new key info
+      let publicKey = provider.publicKey(signAlgo: fullWeightKey.signAlgo)?.hexString ?? ""
+      let updatedStore = UserManager.StoreUser(
+        publicKey: publicKey,
+        address: validAccount.address.hexAddr,
+        userId: uid,
+        keyType: .seedPhrase,
+        account: fullWeightKey.toStoreKey()
+      )
+      LocalUserDefaults.shared.addUser(user: updatedStore)
+      log.info("[Blocto] Updated userStore with new key - publicKey: \(publicKey.prefix(8)), address: \(validAccount.address.hexAddr)")
+
+      // Reinitialize wallet - this will call findKeyProvider() to validate and set the correct provider
+      await MainActor.run {
+        WalletManager.shared.reinitializeWallet()
+        log.info("[Blocto] Reinitialized wallet with new key")
+      }
+
+    } catch {
+      log.error("[Blocto] Failed to validate new key on-chain: \(error)")
+      throw error
+    }
   }
 
   /// Toggle screen security overlay to discourage screenshots/switcher snapshots
@@ -292,31 +334,35 @@ extension TurboModuleSwift {
 
     log.info("[Blocto] ✅ Verified key is revoked, proceeding with isolation")
 
-    // Get user's key type to determine storage
-    guard let userStore = WalletManager.shared.userStore(with: uid) else {
-      throw LLError.accountNotFound
-    }
+    // Search ALL key types (not just userStore.keyType)
+    // This handles cases where keyType changed after rotation
+    let keyTypes: [FlowWalletKit.KeyType] = [.seedPhrase, .privateKey, .secureEnclave]
+    var totalKeysIsolated = 0
 
-    // Find ALL keys matching the publicKey and move to isolated storage
-    let storage = WalletManager.shared.getStorage(for: userStore.keyType)
-    let allKeys = KeyProvider.keys(with: uid, in: storage)
-    var keysToIsolate: [String] = []
+    for keyType in keyTypes {
+      let storage = WalletManager.shared.getStorage(for: keyType)
+      let allKeys = KeyProvider.keys(with: uid, in: storage)
+      var keysToIsolate: [String] = []
 
-    for keyId in allKeys {
-      let suffix = KeyProvider.getSuffix(with: keyId)
-      if publicKey.hasPrefix(suffix) {
-        keysToIsolate.append(keyId)
+      for keyId in allKeys {
+        let suffix = KeyProvider.getSuffix(with: keyId)
+        if publicKey.hasPrefix(suffix) {
+          keysToIsolate.append(keyId)
+        }
+      }
+
+      if !keysToIsolate.isEmpty {
+        log.info("[Blocto] Moving \(keysToIsolate.count) keys from \(keyType) to isolated storage")
+        await WalletManager.shared.moveKeysToRevokedStorage(
+          keyIds: keysToIsolate,
+          keyType: keyType,
+          uid: uid
+        )
+        totalKeysIsolated += keysToIsolate.count
       }
     }
 
-    if !keysToIsolate.isEmpty {
-      log.info("[Blocto] Moving \(keysToIsolate.count) keys to isolated storage (NOT deleting)")
-      await WalletManager.shared.moveKeysToRevokedStorage(
-        keyIds: keysToIsolate,
-        keyType: userStore.keyType,
-        uid: uid
-      )
-    }
+    log.info("[Blocto] Total keys isolated: \(totalKeysIsolated)")
 
     // Reinitialize wallet
     await MainActor.run {
@@ -429,7 +475,7 @@ extension TurboModuleSwift {
     let supportNetworks: Set<Flow.ChainID> = [currentNetwork]
     for profile in allProfiles {
       
-      guard let provider = await WalletManager.shared.keyProvider(profile: profile) else {
+      guard let provider = await WalletManager.shared.quickKeyProvider(uid: profile.uid) else {
         continue
       }
       var walletAccounts: [RNBridge.WalletAccount] = []

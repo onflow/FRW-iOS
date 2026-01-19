@@ -803,12 +803,8 @@ extension UserManager {
     }
 
     // No need to manually call clear() - activatedUID observer will handle it
-    if await WalletManager.shared.keyProvider(with: uid) != nil {
-      try await restoreLogin(with: uid)
-      return
-    }
-
-    try await restoreLogin(userId: uid)
+    // Use restoreLogin(with:) which internally uses findKeyProvider for validation
+    try await restoreLogin(with: uid)
 
     // FIXME: data migrate from device to other device,the private key is destructive
 //        let allModel = try WallectSecureEnclave.Store.fetchAllModel(by: uid)

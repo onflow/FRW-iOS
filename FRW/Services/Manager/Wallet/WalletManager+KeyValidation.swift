@@ -68,6 +68,19 @@ extension WalletManager {
             }
 
             log.info("[KeyValidation] ✅ Found valid active key for uid: \(uid) (keyId: \(keyId), address: \(validAccount.address.hexAddr), signAlgo: \(fullWeightKey.signAlgo), hashAlgo: \(fullWeightKey.hashAlgo), revoked: false)")
+
+            // Update userStore with correct publicKey and account info
+            let correctPublicKey = provider.publicKey(signAlgo: fullWeightKey.signAlgo)?.hexString ?? ""
+            let updatedStore = UserManager.StoreUser(
+              publicKey: correctPublicKey,
+              address: validAccount.address.hexAddr,
+              userId: uid,
+              keyType: keyType,
+              account: fullWeightKey.toStoreKey()
+            )
+            LocalUserDefaults.shared.addUser(user: updatedStore)
+            log.info("[KeyValidation] Updated userStore with correct publicKey: \(correctPublicKey.prefix(8))")
+
             // Return all accounts (including child accounts) to avoid duplicate fetch
             return (provider, fullWeightKey, validAccount.address.hexAddr, wallet, accounts)
           } else {
