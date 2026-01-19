@@ -264,22 +264,70 @@ extension TurboModuleSwift {
 
   @objc
   static func removeOldKey(address: String, publicKey: String) async throws {
-    log.debug("[Blocto] start removing key")
+    log.debug("[Blocto] Starting key removal for publicKey: \(publicKey.prefix(8))")
+
     guard let uid = UserManager.shared.activatedUID else {
       throw LLError.accountNotFound
     }
     guard let currentAddress = await WalletManager.shared.getAddress() else {
-      log.debug("[Blocto]  Cannot get current address. Skipping. ")
       throw WalletError.emptyAddress
     }
     guard currentAddress == address else {
-      log.debug("[Blocto]  Provided address does not match the selected one. Skipping.")
       throw WalletError.invaildAddress
     }
-    let key = KeyProvider.createKey(userId: uid, publicKey: publicKey)
-    let keyProvider = await WalletManager.shared.keyProvider(with: key)
-    try keyProvider?.remove(id: key)
-    log.debug("[Blocto] remove key successfully")
+
+    // Get user's key type to determine storage
+    guard let userStore = WalletManager.shared.userStore(with: uid) else {
+      throw LLError.accountNotFound
+    }
+
+    let storage: FlowWalletKit.KeychainStorage
+    switch userStore.keyType {
+    case .seedPhrase:
+      storage = SeedPhraseKey.seedPhraseStorage
+    case .privateKey, .keyStore:
+      storage = FlowWalletKit.PrivateKey.PKStorage
+    case .secureEnclave:
+      storage = SecureEnclaveKey.KeychainStorage
+    }
+
+    // Remove ALL keys matching the publicKey
+    let allKeys = KeyProvider.keys(with: uid, in: storage)
+    var removedCount = 0
+
+    for keyId in allKeys {
+      let suffix = KeyProvider.getSuffix(with: keyId)
+      if publicKey.hasPrefix(suffix) {
+        do {
+          try storage.remove(keyId)
+          removedCount += 1
+          log.info("[Blocto] Removed key: \(keyId)")
+        } catch {
+          log.error("[Blocto] Failed to remove key: \(keyId), error: \(error)")
+        }
+      }
+    }
+
+    log.info("[Blocto] Removed \(removedCount) keys")
+
+    // Reinitialize wallet
+    await MainActor.run {
+      WalletManager.shared.reinitializeWallet()
+    }
+  }
+
+  @objc
+  static func checkWalletHealth() async throws -> [String: Any] {
+    let (isHealthy, diagnostic) = try await WalletManager.shared.checkWalletHealth()
+    return [
+      "isHealthy": isHealthy,
+      "diagnostic": diagnostic
+    ]
+  }
+
+  @objc
+  static func repairWallet() async throws -> String {
+    return try await WalletManager.shared.repairWallet()
   }
 
 }

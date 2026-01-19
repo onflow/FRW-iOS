@@ -45,4 +45,6 @@ public extension Notification.Name {
     static let remoteConfigDidUpdate = Notification.Name("remoteConfigDidUpdate")
     static let accountDataDidUpdate = Notification.Name("accountDataDidUpdate")
     static let dropboxCallback = Notification.Name("multiBack.dropboxCallback")
+
+    static let walletKeyInvalid = Notification.Name("walletKeyInvalid")
 }

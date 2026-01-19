@@ -105,11 +105,13 @@ struct AddTokenView: RouteableView {
     }
 
     func backButtonAction() {
+      runOnMain {
         if vm.mode == .addToken {
-            Router.pop()
+          Router.pop()
         } else {
-            Router.dismiss()
+          Router.dismiss()
         }
+      }
     }
 
     // MARK: Private

@@ -456,25 +456,9 @@ extension UserManager {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
     }
-    guard let keyProvider = await WalletManager.shared.keyProvider(with: userId) else {
-      throw LLError.restoreLoginFailed
-    }
 
-    let wallet = Wallet(type: .key(keyProvider))
-    try await wallet.fetchAccount()
-    // TODO: Support other network login
-    let network: Flow.ChainID = .mainnet
-    let accounts = wallet.accounts?[network]
-    let validAccount = accounts?.filter { $0.hasFullWeightKey }
-    var flowKey = validAccount?.first?.fullWeightKey
-
-    if flowKey == nil, let address, let publicKey {
-      flowKey = try await getAccount(by: address, for: publicKey)
-    }
-
-    guard let accountKey = flowKey?.toStoreKey() else {
-      throw LLError.cannotFindFlowAccount
-    }
+    // Use key validation to find active key
+    let (accountKey, keyProvider) = try await WalletManager.shared.findActiveKeyAndAccount(uid: userId)
 
     let signAlgo = accountKey.signAlgo
     let hashAlgo = accountKey.hashAlgo
@@ -514,7 +498,7 @@ extension UserManager {
       address: nil,
       userId: userId,
       keyType: keyProvider.keyType,
-      account: accountKey
+      account: accountKey.toStoreKey()
     )
     await WalletManager.shared.updateKeyProvider(provider: keyProvider)
     LocalUserDefaults.shared.addUser(user: storeUser)
@@ -677,21 +661,17 @@ extension UserManager {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
     }
-    guard let keyProvider = await WalletManager.shared.keyProvider(profile: profile) else {
-      throw LLError.providerNotFoundWithProfile
-    }
 
+    // Use key validation to find active key
+    let (accountKey, keyProvider) = try await WalletManager.shared.findActiveKeyAndAccount(uid: profile.uid)
+
+    // Create wallet to get accounts
     let wallet = Wallet(type: .key(keyProvider))
     try await wallet.fetchAccount()
 
     let network: Flow.ChainID = .mainnet
     let accounts = wallet.accounts?[network]
     let validAccount = accounts?.filter { $0.hasFullWeightKey }
-    let flowKey = validAccount?.first?.fullWeightKey
-
-    guard let accountKey = flowKey?.toStoreKey() else {
-      throw LLError.cannotFindFlowAccount
-    }
 
     let signAlgo = accountKey.signAlgo
     let hashAlgo = accountKey.hashAlgo
@@ -735,7 +715,7 @@ extension UserManager {
           address: account.hexAddr,
           userId: profile.uid,
           keyType: keyProvider.keyType,
-          account: accountKey
+          account: accountKey.toStoreKey()
         )
         userStoreList.append(storeUser)
         LocalUserDefaults.shared.addUser(user: storeUser)

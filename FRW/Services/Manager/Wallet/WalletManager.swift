@@ -63,6 +63,10 @@ class WalletManager: ObservableObject {
     )
     self.currentNetwork = LocalUserDefaults.shared.network
     flow.configure(chainID: currentNetwork)
+
+    // Setup wallet key invalid observer
+    setupKeyInvalidObserver()
+
     start()
   }
 
@@ -196,26 +200,9 @@ class WalletManager: ObservableObject {
 
 extension WalletManager {
   private func initWallet() {
-    if let uid = UserManager.shared.activatedUID {
-      keyProvider = keyProvider(with: uid)
-      guard let provider = keyProvider else {
-        log.error("[Wallet] not found provider at \(uid)")
-        return
-      }
-      updateKeyProvider(provider: provider)
-      walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+    if UserManager.shared.activatedUID != nil {
       Task {
-        do {
-          try await walletEntity?.fetchAccount()
-          ProfileManager.shared.update(
-            uid: uid,
-            keyProvider: provider,
-            with: walletEntity
-          )
-
-        } catch {
-          let _ = try await walletEntity?.fetchAllNetworkAccounts()
-        }
+        await initWalletWithActiveKey()
       }
     }
   }
@@ -303,6 +290,12 @@ extension WalletManager {
     keyProvider = provider
   }
 
+  /// Reinitialize wallet with current user's key provider (used after key rotation)
+  func reinitializeWallet() {
+    log.debug("[Wallet] Reinitializing wallet after key rotation")
+    initWallet()
+  }
+
   func userStore(with uid: String) -> UserManager.StoreUser? {
     LocalUserDefaults.shared.userList.last { $0.userId == uid }
   }
@@ -316,7 +309,9 @@ extension WalletManager {
       log.error("[Wallet] not found user at \(uid)")
       return getKeyProvider(uid: uid)
     }
-    log.debug("[user] \(userStore)")
+
+    log.debug("[Wallet] Loading key - uid: \(uid), type: \(userStore.keyType)")
+
     var provider: (any KeyProtocol)?
     switch userStore.keyType {
     case .seedPhrase:
@@ -329,10 +324,14 @@ extension WalletManager {
       provider = try? PrivateKey.wallet(id: uid)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
+      provider = try? SecureEnclaveKey.wallet(id: uid)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     }
-    log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
+
+    if provider == nil {
+      log.error("[Wallet] CRITICAL: Failed to load key provider for uid: \(uid)")
+    }
+
     return provider
   }
 
@@ -346,8 +345,7 @@ extension WalletManager {
   }
   
   private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
-    if let provider = try? SecureEnclaveKey.wallet(id: uid),
-       let publicKey = provider.publicKey()?.hexString {
+    if let provider = try? SecureEnclaveKey.wallet(id: uid) {
       return provider
     }
 
@@ -519,7 +517,7 @@ extension WalletManager {
           .request(FRWAPI.User.userAddressV2)
         let txId = Flow.ID(hex: result.txId)
         _ = try await txId.onceExecuted()
-        try? await walletEntity?.fetchAccountsByCreationTxId(
+        _ = try? await walletEntity?.fetchAccountsByCreationTxId(
           txId: txId,
           network: currentNetwork
         )

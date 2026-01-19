@@ -35,7 +35,11 @@ class EVMEnableViewModel: ObservableObject {
             do {
                 state = .loading
                 try await EVMAccountManager.shared.enableEVM()
+
+                // Refresh both EVM account manager and wallet manager
                 await EVMAccountManager.shared.refreshSync()
+                WalletManager.shared.reloadWalletInfo()
+
                 if let address = EVMAccountManager.shared.accounts.first?.showAddress {
                     WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                 }

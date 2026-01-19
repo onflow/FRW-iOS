@@ -71,6 +71,9 @@ extension SecureEnclaveKey {
         let pw = KeyProvider.password(with: id)
         let key = createKey(uid: id)
         try store(id: key, password: pw)
+
+        // Record key creation time for validation
+        WalletManager.shared.saveKeyCreationTime(keyId: key)
     }
 }
 
