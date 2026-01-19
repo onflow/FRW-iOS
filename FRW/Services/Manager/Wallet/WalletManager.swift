@@ -438,7 +438,14 @@ extension WalletManager {
 
 extension WalletManager {
   private func checkBloctoKeyAndPresentBackupTip(address: String) {
-    guard !address.isEmpty else { return }
+    
+    // Add feature flag check, if it's false, skip key rotation
+    guard !address.isEmpty,
+          let bloctoKeyRotation = RemoteConfigManager.shared.config?.features.bloctoKeyRotation,
+          bloctoKeyRotation == true else {
+      return
+    }
+    
     Task {
       do {
         let result = try await BloctoDetectorService.detectBloctoKey(address: address)

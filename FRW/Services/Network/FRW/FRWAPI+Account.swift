@@ -38,7 +38,7 @@ extension FRWAPI.Account: TargetType, AccessTokenAuthorizable {
     var path: String {
         switch self {
         case .flowScanQuery:
-            return "/v2/account/query"
+            return "v2/account/query"
         case .transfers:
             return "v1/account/transfers"
         case .tokenTransfers:
