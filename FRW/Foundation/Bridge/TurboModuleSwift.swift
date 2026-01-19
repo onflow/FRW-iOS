@@ -264,7 +264,7 @@ extension TurboModuleSwift {
 
   @objc
   static func removeOldKey(address: String, publicKey: String) async throws {
-    log.debug("[Blocto] Starting key removal for publicKey: \(publicKey.prefix(8))")
+    log.debug("[Blocto] Starting key isolation for publicKey: \(publicKey.prefix(8))")
 
     guard let uid = UserManager.shared.activatedUID else {
       throw LLError.accountNotFound
@@ -276,58 +276,52 @@ extension TurboModuleSwift {
       throw WalletError.invaildAddress
     }
 
+    // IMPORTANT: Verify key is actually revoked before isolating
+    log.info("[Blocto] Verifying key is revoked on-chain...")
+    let account = try await FlowNetwork.getAccountAtLatestBlock(address: address)
+
+    // Check if this key is revoked
+    let keyIsRevoked = account.keys.contains { accountKey in
+      accountKey.publicKey.hex == publicKey && accountKey.revoked
+    }
+
+    guard keyIsRevoked else {
+      log.error("[Blocto] SAFETY CHECK FAILED - Key is NOT revoked, refusing to isolate!")
+      throw WalletError.emptyAccountKey // Key is not revoked, refuse to remove
+    }
+
+    log.info("[Blocto] ✅ Verified key is revoked, proceeding with isolation")
+
     // Get user's key type to determine storage
     guard let userStore = WalletManager.shared.userStore(with: uid) else {
       throw LLError.accountNotFound
     }
 
-    let storage: FlowWalletKit.KeychainStorage
-    switch userStore.keyType {
-    case .seedPhrase:
-      storage = SeedPhraseKey.seedPhraseStorage
-    case .privateKey, .keyStore:
-      storage = FlowWalletKit.PrivateKey.PKStorage
-    case .secureEnclave:
-      storage = SecureEnclaveKey.KeychainStorage
-    }
-
-    // Remove ALL keys matching the publicKey
+    // Find ALL keys matching the publicKey and move to isolated storage
+    let storage = WalletManager.shared.getStorage(for: userStore.keyType)
     let allKeys = KeyProvider.keys(with: uid, in: storage)
-    var removedCount = 0
+    var keysToIsolate: [String] = []
 
     for keyId in allKeys {
       let suffix = KeyProvider.getSuffix(with: keyId)
       if publicKey.hasPrefix(suffix) {
-        do {
-          try storage.remove(keyId)
-          removedCount += 1
-          log.info("[Blocto] Removed key: \(keyId)")
-        } catch {
-          log.error("[Blocto] Failed to remove key: \(keyId), error: \(error)")
-        }
+        keysToIsolate.append(keyId)
       }
     }
 
-    log.info("[Blocto] Removed \(removedCount) keys")
+    if !keysToIsolate.isEmpty {
+      log.info("[Blocto] Moving \(keysToIsolate.count) keys to isolated storage (NOT deleting)")
+      await WalletManager.shared.moveKeysToRevokedStorage(
+        keyIds: keysToIsolate,
+        keyType: userStore.keyType,
+        uid: uid
+      )
+    }
 
     // Reinitialize wallet
     await MainActor.run {
       WalletManager.shared.reinitializeWallet()
     }
-  }
-
-  @objc
-  static func checkWalletHealth() async throws -> [String: Any] {
-    let (isHealthy, diagnostic) = try await WalletManager.shared.checkWalletHealth()
-    return [
-      "isHealthy": isHealthy,
-      "diagnostic": diagnostic
-    ]
-  }
-
-  @objc
-  static func repairWallet() async throws -> String {
-    return try await WalletManager.shared.repairWallet()
   }
 
 }

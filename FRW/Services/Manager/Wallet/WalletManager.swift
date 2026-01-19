@@ -115,6 +115,9 @@ class WalletManager: ObservableObject {
 
   var customTokenManager: CustomTokenManager = .init()
 
+  // Track currently initialized UID to avoid duplicate initialization
+  private var currentInitializedUID: String?
+
   var currentNetworkAccounts: [FlowWalletKit.Account] {
     walletEntity?.accounts?[currentNetwork] ?? []
   }
@@ -139,9 +142,10 @@ class WalletManager: ObservableObject {
     UserManager.shared.$activatedUID
       .receive(on: DispatchQueue.main)
       .map { $0 }
-      .sink { _ in
-        log.debug("[Login] activeated uid did changed")
-        self.resetAfterSwitchProfile()
+      .removeDuplicates()  // Only trigger when UID actually changes
+      .sink { uid in
+        log.debug("[Login] activated uid changed to: \(uid ?? "nil")")
+        self.clear()
         self.initWallet()
       }.store(in: &cancellableSet)
 
@@ -200,9 +204,48 @@ class WalletManager: ObservableObject {
 
 extension WalletManager {
   private func initWallet() {
-    if UserManager.shared.activatedUID != nil {
-      Task {
-        await initWalletWithActiveKey()
+    guard let uid = UserManager.shared.activatedUID else {
+      // UID is nil - user logged out, all data cleared by observer
+      log.info("[Wallet] UID is nil")
+      return
+    }
+
+    // If UID is the same as currently initialized, skip re-initialization
+    if currentInitializedUID == uid {
+      log.info("[Wallet] UID unchanged (\(uid)), skipping re-initialization")
+      return
+    }
+
+    log.info("[Wallet] UID changed to \(uid), initializing wallet")
+    currentInitializedUID = uid
+
+    Task {
+      // Load key provider for new UID
+      let provider = keyProvider(with: uid)
+
+      if let provider = provider {
+        await MainActor.run {
+          updateKeyProvider(provider: provider)
+          // Keep old mainAccount until new data loads (prevents UI flicker)
+          // clear() already cleared selectedAccount
+          // loadRecentFlowAccount() will update both when ready
+          walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+        }
+
+        // Fetch accounts - retry mechanism will handle failures
+        do {
+          try await walletEntity?.fetchAllNetworkAccounts()
+          // After successful fetch, load accounts (observer might have delay)
+          await MainActor.run {
+            loadRecentFlowAccount()
+          }
+        } catch {
+          log.error("[Wallet] Failed to fetch accounts during init: \(error)")
+          // Retry mechanism will handle failures
+          await MainActor.run {
+            reloadWalletInfo()
+          }
+        }
       }
     }
   }
@@ -306,30 +349,39 @@ extension WalletManager {
 
   func keyProvider(with uid: String) -> (any KeyProtocol)? {
     guard let userStore = userStore(with: uid) else {
-      log.error("[Wallet] not found user at \(uid)")
+      log.warning("[Wallet] userStore not found for uid: \(uid), trying to find valid key from keychain")
+
+      // If userStore doesn't exist, try to find any valid key in keychain
+      // This handles recovery scenarios where userStore is missing but keys exist
       return getKeyProvider(uid: uid)
     }
 
-    log.debug("[Wallet] Loading key - uid: \(uid), type: \(userStore.keyType)")
+    log.debug("[Wallet] Loading key - uid: \(uid), type: \(userStore.keyType), publicKey: \(userStore.publicKey.prefix(8))")
 
     var provider: (any KeyProtocol)?
     switch userStore.keyType {
     case .seedPhrase:
-      provider = try? SeedPhraseKey.wallet(id: uid)
+      // CRITICAL FIX: Pass publicKey for matching
+      provider = try? SeedPhraseKey.wallet(id: uid, publicKey: userStore.publicKey)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .privateKey:
-      provider = try? PrivateKey.wallet(id: uid)
+      // CRITICAL FIX: Pass publicKey for matching
+      provider = try? PrivateKey.wallet(id: uid, publicKey: userStore.publicKey)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .keyStore:
-      provider = try? PrivateKey.wallet(id: uid)
+      // CRITICAL FIX: Pass publicKey for matching
+      provider = try? PrivateKey.wallet(id: uid, publicKey: userStore.publicKey)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid)
+      // Already has publicKey matching
+      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
       log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
     }
 
     if provider == nil {
-      log.error("[Wallet] CRITICAL: Failed to load key provider for uid: \(uid)")
+      log.error("[Wallet] CRITICAL: Failed to load key provider for uid: \(uid), trying fallback")
+      // Fallback: try to find any valid key
+      provider = getKeyProvider(uid: uid)
     }
 
     return provider
@@ -425,10 +477,16 @@ extension WalletManager {
 // MARK: - Account
 
 extension WalletManager {
-  /// called when switch profile
-  func resetAfterSwitchProfile() {
+  /// Called by activatedUID observer when UID changes
+  /// Clears all wallet state to prepare for re-initialization
+  /// Note: Only called by observer, not manually from UserManager
+  private func clear() {
+    mainAccount = nil
+    walletEntity = nil
     selectedAccount = nil
     activatedCoins = []
+    currentInitializedUID = nil
+    log.info("[Wallet] Cleared wallet state")
   }
 }
 

@@ -33,7 +33,9 @@ extension WalletManager {
     )
   }
 
-  /// Move keys to revoked storage for isolation
+  // MARK: - Core Functions
+
+  /// Move keys to revoked storage for isolation (NEVER delete, only isolate)
   func moveKeysToRevokedStorage(
     keyIds: [String],
     keyType: FlowWalletKit.KeyType,
@@ -60,20 +62,6 @@ extension WalletManager {
     }
   }
 
-  /// List all revoked keys for a key type
-  func listRevokedKeys(for keyType: FlowWalletKit.KeyType) -> [String] {
-    let revokedStorage = getRevokedKeyStorage(for: keyType)
-    return revokedStorage.allKeys
-  }
-
-  /// Get total count of revoked keys
-  func getRevokedKeysCount() -> Int {
-    let seedPhraseCount = listRevokedKeys(for: .seedPhrase).count
-    let privateKeyCount = listRevokedKeys(for: .privateKey).count
-    let secureEnclaveCount = listRevokedKeys(for: .secureEnclave).count
-    return seedPhraseCount + privateKeyCount + secureEnclaveCount
-  }
-
   /// Restore a revoked key back to active storage (for recovery)
   func restoreRevokedKey(
     keyId: String,
@@ -94,23 +82,21 @@ extension WalletManager {
     log.info("[RevokedKey] Restored key from revoked storage: \(keyId)")
   }
 
-  /// Clear all revoked keys (permanent deletion)
-  func clearAllRevokedKeys() async {
-    log.warning("[RevokedKey] Clearing all revoked keys - PERMANENT DELETION")
+  /// List all revoked keys for a key type
+  func listRevokedKeys(for keyType: FlowWalletKit.KeyType) -> [String] {
+    let revokedStorage = getRevokedKeyStorage(for: keyType)
+    return revokedStorage.allKeys
+  }
 
-    for keyType: FlowWalletKit.KeyType in [.seedPhrase, .privateKey, .secureEnclave] {
-      let revokedStorage = getRevokedKeyStorage(for: keyType)
-      let allKeys = revokedStorage.allKeys
+  // MARK: - Debug Functions
 
-      for keyId in allKeys {
-        do {
-          try revokedStorage.remove(keyId)
-          log.info("[RevokedKey] Deleted revoked key: \(keyId)")
-        } catch {
-          log.error("[RevokedKey] Failed to delete key \(keyId): \(error)")
-        }
-      }
-    }
+  #if DEBUG
+  /// Get total count of revoked keys (debug only)
+  func getRevokedKeysCount() -> Int {
+    let seedPhraseCount = listRevokedKeys(for: .seedPhrase).count
+    let privateKeyCount = listRevokedKeys(for: .privateKey).count
+    let secureEnclaveCount = listRevokedKeys(for: .secureEnclave).count
+    return seedPhraseCount + privateKeyCount + secureEnclaveCount
   }
 
   /// Export revoked keys info for debugging
@@ -141,4 +127,24 @@ extension WalletManager {
 
     return info
   }
+
+  /// Clear all revoked keys (PERMANENT DELETION - debug only)
+  func clearAllRevokedKeys() async {
+    log.warning("[RevokedKey] Clearing all revoked keys - PERMANENT DELETION")
+
+    for keyType: FlowWalletKit.KeyType in [.seedPhrase, .privateKey, .secureEnclave] {
+      let revokedStorage = getRevokedKeyStorage(for: keyType)
+      let allKeys = revokedStorage.allKeys
+
+      for keyId in allKeys {
+        do {
+          try revokedStorage.remove(keyId)
+          log.info("[RevokedKey] Deleted revoked key: \(keyId)")
+        } catch {
+          log.error("[RevokedKey] Failed to delete key \(keyId): \(error)")
+        }
+      }
+    }
+  }
+  #endif
 }

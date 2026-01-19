@@ -457,9 +457,19 @@ extension UserManager {
       throw LLError.restoreLoginFailed
     }
 
-    // Use key validation to find active key
-    let (accountKey, keyProvider) = try await WalletManager.shared.findActiveKeyAndAccount(uid: userId)
+    // Find valid key provider (validates on-chain)
+    // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
+    guard let result = await WalletManager.shared.findKeyProvider(uid: userId) else {
+      log.error("[Login] No valid key found for uid: \(userId)")
+      throw WalletError.emptyKeyProvider
+    }
 
+    let keyProvider = result.provider
+    let accountKey = result.accountKey
+    let address = result.address
+    // wallet and accounts are already fetched, no need to fetch again
+
+    // Use the signAlgo and hashAlgo from the on-chain account key
     let signAlgo = accountKey.signAlgo
     let hashAlgo = accountKey.hashAlgo
 
@@ -469,6 +479,8 @@ extension UserManager {
     else {
       throw LLError.signFailed
     }
+
+    log.info("[Login] Using on-chain key config - signAlgo: \(signAlgo), hashAlgo: \(hashAlgo), address: \(address.prefix(8)))")
 
     let signature = try keyProvider.sign(data: signData, signAlgo: signAlgo, hashAlgo: hashAlgo)
 
@@ -492,13 +504,13 @@ extension UserManager {
     guard let customToken = response.data?.customToken, !customToken.isEmpty else {
       throw LLError.restoreLoginFailed
     }
-    // this may be removed
+    // Rebuild userStore with complete info from on-chain validation
     let storeUser = StoreUser(
       publicKey: publicKey,
-      address: nil,
+      address: address,  // From on-chain validation
       userId: userId,
       keyType: keyProvider.keyType,
-      account: accountKey.toStoreKey()
+      account: accountKey.toStoreKey()  // From on-chain validation
     )
     await WalletManager.shared.updateKeyProvider(provider: keyProvider)
     LocalUserDefaults.shared.addUser(user: storeUser)
@@ -662,17 +674,20 @@ extension UserManager {
       throw LLError.restoreLoginFailed
     }
 
-    // Use key validation to find active key
-    let (accountKey, keyProvider) = try await WalletManager.shared.findActiveKeyAndAccount(uid: profile.uid)
+    // Find valid key provider (validates on-chain)
+    // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
+    guard let result = await WalletManager.shared.findKeyProvider(uid: profile.uid) else {
+      log.error("[Login] No valid key found for profile: \(profile.uid)")
+      throw WalletError.emptyKeyProvider
+    }
 
-    // Create wallet to get accounts
-    let wallet = Wallet(type: .key(keyProvider))
-    try await wallet.fetchAccount()
+    let keyProvider = result.provider
+    let accountKey = result.accountKey
+    let address = result.address
+    let wallet = result.wallet  // ✅ Already fetched, reuse it
+    let accounts = result.accounts  // ✅ Already fetched, reuse it
 
-    let network: Flow.ChainID = .mainnet
-    let accounts = wallet.accounts?[network]
-    let validAccount = accounts?.filter { $0.hasFullWeightKey }
-
+    // Use the signAlgo and hashAlgo from the on-chain account key
     let signAlgo = accountKey.signAlgo
     let hashAlgo = accountKey.hashAlgo
 
@@ -682,6 +697,8 @@ extension UserManager {
     else {
       throw LLError.signFailed
     }
+
+    log.info("[Login] Using on-chain key config - signAlgo: \(signAlgo), hashAlgo: \(hashAlgo), address: \(address)")
 
     let signature = try keyProvider.sign(data: signData, signAlgo: signAlgo, hashAlgo: hashAlgo)
 
@@ -705,22 +722,46 @@ extension UserManager {
     guard let customToken = response.data?.customToken, !customToken.isEmpty else {
       throw LLError.restoreLoginFailed
     }
-    await WalletManager.shared.updateKeyProvider(provider: keyProvider)
 
-    if let validAccount {
+    // Use already-fetched accounts (no duplicate network request!)
+    let validAccounts = accounts.filter { $0.hasFullWeightKey }
+
+    if !validAccounts.isEmpty {
       var userStoreList: [StoreUser] = []
-      for account in validAccount {
+      for account in validAccounts {
+        // IMPORTANT: Find the key that matches our publicKey from fullWeightKeys
+        // fullWeightKeys already filters: !revoked && weight >= 1000
+        // But we need to find the one matching our current publicKey
+        let matchingKey = account.fullWeightKeys.first { key in
+          key.publicKey.hex == publicKey
+        }
+
+        // Use the matching key if found, otherwise fall back to accountKey from findKeyProvider
+        let keyToStore = matchingKey ?? accountKey
+
         let storeUser = StoreUser(
           publicKey: publicKey,
           address: account.hexAddr,
           userId: profile.uid,
           keyType: keyProvider.keyType,
-          account: accountKey.toStoreKey()
+          account: keyToStore.toStoreKey()
         )
         userStoreList.append(storeUser)
         LocalUserDefaults.shared.addUser(user: storeUser)
       }
       ProfileManager.shared.replace(profile: profile, with: userStoreList)
+    } else {
+      // Fallback: use the account from findKeyProvider if no accounts found
+      // This shouldn't happen since findKeyProvider already validated
+      let storeUser = StoreUser(
+        publicKey: publicKey,
+        address: address,
+        userId: profile.uid,
+        keyType: keyProvider.keyType,
+        account: accountKey.toStoreKey()
+      )
+      LocalUserDefaults.shared.addUser(user: storeUser)
+      ProfileManager.shared.replace(profile: profile, with: [storeUser])
     }
 
     try await finishLogin(customToken: customToken)
@@ -739,7 +780,9 @@ extension UserManager {
       log.warning("switching the same account")
       return
     }
-    await WalletManager.shared.resetAfterSwitchProfile()
+
+    // No need to manually call clear() - activatedUID observer will handle it
+    // Observer triggers when login() sets activatedUID, calling clear() + initWallet()
     do {
       try await login(with: profile)
     } catch {
@@ -758,7 +801,8 @@ extension UserManager {
       log.warning("switching the same account")
       return
     }
-    await WalletManager.shared.resetAfterSwitchProfile()
+
+    // No need to manually call clear() - activatedUID observer will handle it
     if await WalletManager.shared.keyProvider(with: uid) != nil {
       try await restoreLogin(with: uid)
       return
