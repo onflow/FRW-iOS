@@ -142,6 +142,50 @@ extension WalletManager {
     // Flow addresses are typically 16 characters (8 bytes) or less
     return addr.count > 16
   }
+
+  // MARK: - KeyIndexer Polling
+
+  /// Wait for keyIndexer to index a new key with polling
+  /// Returns true if key was indexed successfully, false if timeout
+  /// Default timeout: 45 attempts * 2 seconds = 90 seconds
+  func waitForKeyIndexer(provider: any KeyProtocol, maxAttempts: Int = 45) async -> Bool {
+    log.info("[KeyIndexer] Waiting for keyIndexer to index new key (max \(maxAttempts * 2) seconds)...")
+    let tempWallet = FlowWalletKit.Wallet(type: .key(provider), networks: [.mainnet])
+    var attempt = 0
+
+    while attempt < maxAttempts {
+      do {
+        try await tempWallet.fetchAccount()
+        if let accounts = tempWallet.accounts?[.mainnet],
+           let flowAccount = accounts.first,
+           flowAccount.hasFullWeightKey {
+          // Successfully fetched from keyIndexer
+          await MainActor.run {
+            self.mainAccount = flowAccount
+            log.info("[KeyIndexer] ✅ New key indexed after \(attempt + 1) attempts - mainAccount updated with keyIndex: \(flowAccount.keyIndex)")
+          }
+          return true
+        } else {
+          // KeyIndexer returned but no valid account yet
+          attempt += 1
+          if attempt < maxAttempts {
+            log.debug("[KeyIndexer] Not ready (attempt \(attempt)/\(maxAttempts)), retrying in 2s...")
+            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+          }
+        }
+      } catch {
+        // KeyIndexer error, retry
+        attempt += 1
+        if attempt < maxAttempts {
+          log.debug("[KeyIndexer] Error (attempt \(attempt)/\(maxAttempts)): \(error), retrying in 2s...")
+          try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        }
+      }
+    }
+
+    log.warning("[KeyIndexer] ⚠️ Timeout after \(maxAttempts) attempts - key is on-chain but not indexed yet")
+    return false
+  }
 }
 
 // MARK: - Key Creation Time Tracking (Debug Only)

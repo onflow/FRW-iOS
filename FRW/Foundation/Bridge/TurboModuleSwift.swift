@@ -200,45 +200,60 @@ extension TurboModuleSwift {
     )
     log.debug("[Blocto] Saved new key to keychain: \(key)")
 
-    // Validate new key on-chain and update userStore
-    let wallet = FlowWalletKit.Wallet(type: .key(provider), networks: [.mainnet])
-    do {
-      try await wallet.fetchAccount()
+    // Get current address and userStore for key info
+    guard let currentAddress = await WalletManager.shared.getAddress() else {
+      log.error("[Blocto] Cannot get current address")
+      throw WalletError.emptyAddress
+    }
 
-      guard let accounts = wallet.accounts?[.mainnet],
-            let validAccount = accounts.first(where: { $0.hasFullWeightKey }),
-            let fullWeightKey = validAccount.fullWeightKey else {
-        log.error("[Blocto] New key has no valid mainnet account")
-        throw WalletError.emptyAccountKey
-      }
+    guard let currentUserStore = WalletManager.shared.userStore(with: uid) else {
+      log.error("[Blocto] Cannot get current userStore")
+      throw LLError.accountNotFound
+    }
 
-      // Check if key is active (not revoked)
-      guard !fullWeightKey.revoked else {
-        log.error("[Blocto] New key is revoked")
-        throw WalletError.emptyAccountKey
-      }
+    // New key is always seedphrase with SECP256k1 + SHA2_256
+    let signAlgo: Flow.SignatureAlgorithm = .ECDSA_SECP256k1
+    guard let newPublicKey = provider.publicKey(signAlgo: signAlgo)?.hexString else {
+      log.error("[Blocto] Failed to generate public key for new key")
+      throw WalletError.invalidPublicKey
+    }
 
-      // Update userStore with new key info
-      let publicKey = provider.publicKey(signAlgo: fullWeightKey.signAlgo)?.hexString ?? ""
-      let updatedStore = UserManager.StoreUser(
-        publicKey: publicKey,
-        address: validAccount.address.hexAddr,
-        userId: uid,
-        keyType: .seedPhrase,
-        account: fullWeightKey.toStoreKey()
-      )
-      LocalUserDefaults.shared.addUser(user: updatedStore)
-      log.info("[Blocto] Updated userStore with new key - publicKey: \(publicKey.prefix(8)), address: \(validAccount.address.hexAddr)")
+    // IMPORTANT: Query chain directly to get correct key index
+    // FlowNetwork.getAccountAtLatestBlock queries the chain directly (not keyIndexer)
+    // So the new key will be immediately available with correct index
+    log.info("[Blocto] Querying chain directly for new key index...")
+    let account = try await FlowNetwork.getAccountAtLatestBlock(address: currentAddress)
 
-      // Reinitialize wallet - this will call findKeyProvider() to validate and set the correct provider
-      await MainActor.run {
-        WalletManager.shared.reinitializeWallet()
-        log.info("[Blocto] Reinitialized wallet with new key")
-      }
+    guard let newKey = account.keys.first(where: { $0.publicKey.hex == newPublicKey }) else {
+      log.error("[Blocto] New key not found on-chain: \(newPublicKey.prefix(8))")
+      throw WalletError.emptyAccountKey
+    }
 
-    } catch {
-      log.error("[Blocto] Failed to validate new key on-chain: \(error)")
-      throw error
+    log.info("[Blocto] ✅ Found new key on-chain - index: \(newKey.index), weight: \(newKey.weight), revoked: \(newKey.revoked)")
+
+    // Create account key info with correct index from chain
+    let newAccountKey = UserManager.Accountkey(
+      index: newKey.index,
+      signAlgo: .ECDSA_SECP256k1,
+      hashAlgo: .SHA2_256,
+      weight: 1000
+    )
+
+    // Update userStore with new key info
+    let updatedStore = UserManager.StoreUser(
+      publicKey: newPublicKey,
+      address: currentAddress,
+      userId: uid,
+      keyType: .seedPhrase,
+      account: newAccountKey
+    )
+    LocalUserDefaults.shared.addUser(user: updatedStore)
+    log.info("[Blocto] Updated userStore with new key - publicKey: \(newPublicKey.prefix(8)), address: \(currentAddress), index: \(newKey.index)")
+
+    // Update keyProvider so settings page shows new mnemonic/privateKey immediately
+    await MainActor.run {
+      WalletManager.shared.updateKeyProvider(provider: provider)
+      log.info("[Blocto] ✅ Updated keyProvider with new key - settings will show new mnemonic")
     }
   }
 
@@ -364,9 +379,18 @@ extension TurboModuleSwift {
 
     log.info("[Blocto] Total keys isolated: \(totalKeysIsolated)")
 
-    // Reinitialize wallet
-    await MainActor.run {
-      WalletManager.shared.reinitializeWallet()
+    // Wait for keyIndexer to index the new key (up to 90 seconds)
+    // This ensures signing works immediately after key rotation completes
+    guard let keyProvider = WalletManager.shared.keyProvider else {
+      log.warning("[Blocto] No keyProvider available, skipping keyIndexer wait")
+      return
+    }
+
+    let keyIndexed = await WalletManager.shared.waitForKeyIndexer(provider: keyProvider, maxAttempts: 45)
+    if keyIndexed {
+      log.info("[Blocto] ✅ Key rotation complete - new key ready to use")
+    } else {
+      log.warning("[Blocto] ⚠️ Key rotation complete but keyIndexer timeout - signing will work after app restart")
     }
   }
 
