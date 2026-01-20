@@ -965,3 +965,8 @@
 "keystore_json_invalid" = "无法解析 keystore，请下载";
 "keystore_json_invalid_link" = "Flow Wallet 扩展程序";
 "keystore_json_invalid_suffix" = "进行解析。";
+
+// Wallet Key Invalid Alert
+"wallet_key_invalid_title" = "钱包访问问题";
+"wallet_key_invalid_message" = "无法找到您钱包的有效密钥。这可能在密钥轮换后发生。请恢复您的钱包以继续。";
+"wallet_key_invalid_restore" = "恢复钱包";

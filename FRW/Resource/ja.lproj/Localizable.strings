@@ -965,3 +965,8 @@
 "keystore_json_invalid" = "keystoreを解析できません。";
 "keystore_json_invalid_link" = "Flow Wallet拡張機能";
 "keystore_json_invalid_suffix" = "をダウンロードして解析してください。";
+
+// Wallet Key Invalid Alert
+"wallet_key_invalid_title" = "ウォレットアクセスの問題";
+"wallet_key_invalid_message" = "ウォレットの有効なキーが見つかりませんでした。これはキーローテーション後に発生する可能性があります。続行するには、ウォレットを復元してください。";
+"wallet_key_invalid_restore" = "ウォレットを復元";

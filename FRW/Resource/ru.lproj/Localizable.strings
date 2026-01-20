@@ -965,3 +965,8 @@
 "keystore_json_invalid" = "Не удалось разобрать keystore, пожалуйста, загрузите";
 "keystore_json_invalid_link" = "расширение Flow Wallet";
 "keystore_json_invalid_suffix" = "для его обработки.";
+
+// Wallet Key Invalid Alert
+"wallet_key_invalid_title" = "Проблема доступа к кошельку";
+"wallet_key_invalid_message" = "Не удалось найти действительный ключ для вашего кошелька. Это может произойти после ротации ключей. Пожалуйста, восстановите кошелек, чтобы продолжить.";
+"wallet_key_invalid_restore" = "Восстановить кошелек";

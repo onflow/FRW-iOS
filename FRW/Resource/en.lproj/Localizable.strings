@@ -1184,3 +1184,8 @@ Key Store and Private Key.";
 "keystore_json_invalid" = "Unable to parse keystore, please download the";
 "keystore_json_invalid_link" = "Flow Wallet Extension";
 "keystore_json_invalid_suffix" = "to parse it.";
+
+// Wallet Key Invalid Alert
+"wallet_key_invalid_title" = "Wallet Access Issue";
+"wallet_key_invalid_message" = "We couldn't find a valid key for your wallet. This may happen after a key rotation. Please restore your wallet to continue.";
+"wallet_key_invalid_restore" = "Restore Wallet";

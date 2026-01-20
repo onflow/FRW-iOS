@@ -64,9 +64,6 @@ class WalletManager: ObservableObject {
     self.currentNetwork = LocalUserDefaults.shared.network
     flow.configure(chainID: currentNetwork)
 
-    // Setup wallet key invalid observer
-    setupKeyInvalidObserver()
-
     start()
   }
 
@@ -225,12 +222,8 @@ extension WalletManager {
       guard let result = await findKeyProvider(uid: uid) else {
         log.error("[Wallet] No valid key with on-chain control found for uid: \(uid)")
         await MainActor.run {
-          // Notify user about missing valid key
-          NotificationCenter.default.post(
-            name: .walletKeyInvalid,
-            object: nil,
-            userInfo: ["uid": uid, "reason": "No valid key with mainnet control"]
-          )
+          // Show alert directly to user about missing valid key
+          showKeyInvalidAlert(uid: uid, reason: "No valid key with mainnet control")
         }
         return
       }
