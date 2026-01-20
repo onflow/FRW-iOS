@@ -375,7 +375,11 @@ extension TurboModuleSwift {
 
   @objc
   static func switchToProfile(userId: String) async throws {
-    try await UserManager.shared.switchAccount(withUID: userId)
+    let allProfiles = ProfileManager.shared.profiles
+    guard let profile = allProfiles.first( where: { $0.uid == userId }) else {
+      throw LLError.accountNotFound
+    }
+    try await UserManager.shared.switchAccount(with: profile)
   }
 
   @objc
