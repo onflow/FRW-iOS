@@ -45,6 +45,6 @@ extension WalletManager {
     log.info("[KeyInvalid] Navigating to restore wallet page")
 
     // Use Router to navigate directly to restore page
-    Router.route(to: RouteMap.RestoreLogin.root)
+    Router.route(to: RouteMap.RestoreLogin.restoreList)
   }
 }
