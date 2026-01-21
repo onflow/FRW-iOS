@@ -17,7 +17,8 @@ extension WalletManager {
   /// Used for account switching - finds the first key that has a valid mainnet account
   /// Returns tuple of (keyProvider, accountKey, address, wallet, accounts) or nil if no valid key found
   /// The wallet and accounts are already fetched to avoid duplicate network requests
-  func findKeyProvider(uid: String) async -> (provider: any KeyProtocol, accountKey: Flow.AccountKey, address: String, wallet: FlowWalletKit.Wallet, accounts: [FlowWalletKit.Account])? {
+  /// Throws `noActiveKeys` if keys exist but are all revoked
+  func findKeyProvider(uid: String) async throws -> (provider: any KeyProtocol, accountKey: Flow.AccountKey, address: String, wallet: FlowWalletKit.Wallet, accounts: [FlowWalletKit.Account])? {
     // Prioritize userStore keyType if available (reduces unnecessary network requests)
     let keyTypes: [FlowWalletKit.KeyType]
     if let userStore = userStore(with: uid) {
@@ -29,6 +30,8 @@ extension WalletManager {
     }
 
     let pw = KeyProvider.password(with: uid)
+    var foundRevokedKeys = false
+    var revokedKeyIds: [String] = []
 
     for keyType in keyTypes {
       let storage = getStorage(for: keyType)
@@ -64,6 +67,8 @@ extension WalletManager {
             // IMPORTANT: Check if key is revoked
             if fullWeightKey.revoked {
               log.warning("[KeyValidation] ❌ Key is REVOKED: \(keyId), address: \(validAccount.address.hexAddr)")
+              foundRevokedKeys = true
+              revokedKeyIds.append(keyId)
               continue
             }
 
@@ -91,6 +96,12 @@ extension WalletManager {
           continue
         }
       }
+    }
+
+    // If we found revoked keys, throw noActiveKeys
+    if foundRevokedKeys {
+      log.error("[KeyValidation] Found only revoked keys for uid: \(uid), keyIds: \(revokedKeyIds)")
+      throw WalletError.noActiveKeys
     }
 
     log.error("[KeyValidation] No valid key found for uid: \(uid)")

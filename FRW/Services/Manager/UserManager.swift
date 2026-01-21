@@ -459,7 +459,7 @@ extension UserManager {
 
     // Find valid key provider (validates on-chain)
     // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
-    guard let result = await WalletManager.shared.findKeyProvider(uid: userId) else {
+    guard let result = try await WalletManager.shared.findKeyProvider(uid: userId) else {
       log.error("[Login] No valid key found for uid: \(userId)")
       throw WalletError.emptyKeyProvider
     }
@@ -676,7 +676,7 @@ extension UserManager {
 
     // Find valid key provider (validates on-chain)
     // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
-    guard let result = await WalletManager.shared.findKeyProvider(uid: profile.uid) else {
+    guard let result = try await WalletManager.shared.findKeyProvider(uid: profile.uid) else {
       log.error("[Login] No valid key found for profile: \(profile.uid)")
       throw WalletError.emptyKeyProvider
     }

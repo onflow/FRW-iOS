@@ -88,6 +88,32 @@ extension WalletManager {
     return revokedStorage.allKeys
   }
 
+  /// Clean up all revoked keys and profile data for a user
+  /// - Parameter userId: The user ID to clean up
+  /// - Note: This moves all keys to revoked storage and deletes the profile record
+  func cleanupRevokedAccount(userId: String) async {
+    log.info("[RevokedKey] Cleaning up revoked account: \(userId)")
+
+    // Try all possible key types
+    for keyType in [FlowWalletKit.KeyType.seedPhrase, .privateKey, .secureEnclave] {
+      let storage = getStorage(for: keyType)
+      let allKeys = KeyProvider.keys(with: userId, in: storage)
+
+      if !allKeys.isEmpty {
+        log.info("[RevokedKey] Moving \(allKeys.count) revoked keys to isolated storage for keyType: \(keyType)")
+        await moveKeysToRevokedStorage(
+          keyIds: allKeys,
+          keyType: keyType,
+          uid: userId
+        )
+      }
+    }
+
+    // Delete the profile record
+    ProfileManager.shared.deleteProfile(userId: userId)
+    log.info("[RevokedKey] Cleanup completed for userId: \(userId)")
+  }
+
   // MARK: - Debug Functions
 
   #if DEBUG
