@@ -24,7 +24,7 @@ struct DeveloperModeView: RouteableView {
         "developer_mode".localized
     }
 
-    let showDEBUGTool = true //isDevModel
+    let showDEBUGTool = isDevModel
 
     var body: some View {
         ScrollView {
