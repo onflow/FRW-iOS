@@ -219,7 +219,7 @@ extension WalletManager {
     Task {
       // Use findKeyProvider to get validated key with on-chain control
       // This ensures we always use the correct active key (not revoked)
-      guard let result = await findKeyProvider(uid: uid) else {
+      guard let result = try? await findKeyProvider(uid: uid) else {
         log.error("[Wallet] No valid key with on-chain control found for uid: \(uid)")
         await MainActor.run {
           // Show alert directly to user about missing valid key
