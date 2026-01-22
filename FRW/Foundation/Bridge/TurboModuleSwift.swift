@@ -269,12 +269,6 @@ extension TurboModuleSwift {
     }
   }
 
-  /// Toggle screen security overlay to discourage screenshots/switcher snapshots
-  @objc
-  static func setScreenSecurityLevel(level: String) {
-    let secure = level.lowercased() == "secure"
-  }
-
   @objc
   static func listenTransaction(txid: String) {
     guard !txid.isEmpty else {
@@ -534,6 +528,9 @@ extension TurboModuleSwift {
     let allProfiles = ProfileManager.shared.profiles
     let supportNetworks: Set<Flow.ChainID> = [currentNetwork]
     for profile in allProfiles {
+      guard let nickname = profile.username else {
+        continue
+      }
       
       guard let provider = await WalletManager.shared.quickKeyProvider(uid: profile.uid) else {
         continue
@@ -667,19 +664,6 @@ extension TurboModuleSwift {
       Router.route(to: RouteMap.Backup.backupList)
     case .icloudRestore:
       restoreModel.restoreWithCloudAction(type: .icloud)
-    }
-  }
-}
-
-extension Flow.HashAlgorithm {
-  fileprivate func hash(data: Data) throws -> Data {
-    switch self {
-    case .SHA2_256:
-      return Hash.sha256(data: data)
-    case .SHA3_256:
-      return Hash.sha3_256(data: data)
-    default:
-      throw FWKError.unsupportHashAlgorithm
     }
   }
 }

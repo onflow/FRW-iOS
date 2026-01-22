@@ -259,6 +259,7 @@ extension WalletManager {
     guard let accounts = accounts[currentNetwork], let account = accounts.first else {
       // TODO: Handle newtork swicth, if no account
       mainAccount = nil
+      HUD.error(WalletError.emptyMainAccount)
       return
     }
 
@@ -267,7 +268,20 @@ extension WalletManager {
 
     // If there is no selected, try to restore from saved address for current uid
     if selectedAccount == nil {
-      selectedAccount = .main(account.address)
+      if let uid = UserManager.shared.activatedUID,
+          let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
+         let restoredAccount = FWAccount(savedValue) {
+        // Find the parent account for child/coa types and verify validity
+        if let parentAccount = findParentAccount(for: restoredAccount, in: accounts) {
+          selectedAccount = restoredAccount
+          mainAccount = parentAccount
+        } else {
+          // Saved address not found in current accounts, fallback to main
+          selectedAccount = .main(account.address)
+        }
+      } else {
+        selectedAccount = .main(account.address)
+      }
       checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
     updateUserAddress()
@@ -582,8 +596,7 @@ extension WalletManager {
 
 extension WalletManager {
   /// Request server create wallet address, DO NOT call it multiple times.
-  func asyncCreateWalletAddressFromServer() {
-    Task {
+  func asyncCreateWalletAddressFromServer() async -> String? {
       do {
         let result: UserAddressV2Response = try await Network
           .request(FRWAPI.User.userAddressV2)
@@ -593,12 +606,13 @@ extension WalletManager {
           txId: txId,
           network: currentNetwork
         )
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
+        log.debug("WalletManager -> asyncCreateWalletAddressFromServer success")
+        return result.txId
       } catch {
-        print(error)
-        debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
+        log.debug("WalletManager -> asyncCreateWalletAddressFromServer failed")
+        log.error(error)
+        return nil
       }
-    }
   }
 
   private func startWalletInfoRetryTimer() {

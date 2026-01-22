@@ -2465,25 +2465,15 @@ SPEC CHECKSUMS:
   React-timing: a90f4654cbda9c628614f9bee68967f1768bd6a5
   React-utils: a612d50555b6f0f90c74b7d79954019ad47f5de6
   ReactAppDependencyProvider: 04d5eb15eb46be6720e17a4a7fa92940a776e584
-<<<<<<< HEAD
-  ReactCodegen: 77f21dd3957c45c64c17af88d70188ffe28ad093
-=======
   ReactCodegen: 5535dab663a825f331de8d53692f9124347851e5
->>>>>>> origin
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
   RNCAsyncStorage: a1c8cc8a99c32de1244a9cf707bf9d83d0de0f71
   RNCClipboard: ea6045252d5c0753cf17f62290f647dc0096f6ac
   RNGestureHandler: 0397fea67f39d5a2d17fcf4a028e206f7ba098ba
-<<<<<<< HEAD
-  RNInstabug: e2ebb62c791df38b1f5847e057b5a9f5693632bb
-  RNReanimated: c9c6175c20e0290dde5d64eadf617139f32af749
-  RNScreens: 824a29c178e253fe8b08fb0b2903195d35f724f2
-=======
   RNInstabug: 606df25cc7ab570bca611ee0acf26ea907bc2f12
   RNReanimated: 026cb7d1de617f492008727d000716f1505cdbe9
   RNScreens: 824a29c178e253fe8b08fb0b2903195d35f724f2
   RNShare: a60af5971cb114a8d31df642b108e3fe00e5b987
->>>>>>> origin
   RNSVG: ba22deba00b123dd9bca2e5540b6fbc0d3f858cb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SSZipArchive: c69881e8ac5521f0e622291387add5f60f30f3c4

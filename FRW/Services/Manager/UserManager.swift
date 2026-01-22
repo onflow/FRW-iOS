@@ -260,7 +260,7 @@ extension UserManager {
       keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
-    WalletManager.shared.updateKeyProvider(provider: secureKey)
+    WalletManager.shared.updateKeyProvider(provider: keyProvider)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
@@ -558,6 +558,7 @@ extension UserManager {
     }
 
     let keyProvider = result.provider
+    let wallet = Wallet(type: .key(keyProvider))
     let accountKey = result.accountKey
     let address = result.address
     // wallet and accounts are already fetched, no need to fetch again
