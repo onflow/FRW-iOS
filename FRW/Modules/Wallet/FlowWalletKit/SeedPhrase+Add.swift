@@ -11,15 +11,27 @@ import Foundation
 
 extension SeedPhraseKey {
     private static let suffix = ".SP"
-    static func wallet(id: String) throws -> SeedPhraseKey {
+    static func wallet(id: String, publicKey: String? = nil) throws -> SeedPhraseKey {
         let pw = KeyProvider.password(with: id)
-        let key = KeyProvider.lastKey(with: id, in: seedPhraseStorage) ?? id
-        let seedPhraseKey = try SeedPhraseKey.get(
-            id: key,
-            password: pw,
-            storage: SeedPhraseKey.seedPhraseStorage
-        )
-        return seedPhraseKey
+        let keys = KeyProvider.keys(with: id, in: seedPhraseStorage)
+        let fallbackKey = keys.last ?? id
+
+        // If publicKey provided, try to find matching key
+        if let targetPubKey = publicKey {
+            if let matched = try? keys.first(where: { k in
+                let spKey = try SeedPhraseKey.get(id: k, password: pw, storage: seedPhraseStorage)
+                let p256 = spKey.publicKey(signAlgo: .ECDSA_P256)?.hexString
+                let secp = spKey.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString
+                return p256 == targetPubKey || secp == targetPubKey
+            }) {
+                log.debug("[SeedPhrase] Found matching key for publicKey: \(targetPubKey.prefix(8))")
+                return try SeedPhraseKey.get(id: matched, password: pw, storage: seedPhraseStorage)
+            }
+            log.warning("[SeedPhrase] No match for publicKey: \(targetPubKey.prefix(8)), using fallback")
+        }
+
+        // Fallback to last key
+        return try SeedPhraseKey.get(id: fallbackKey, password: pw, storage: seedPhraseStorage)
     }
 
     func store(id: String) throws {

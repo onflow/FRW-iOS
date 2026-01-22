@@ -59,7 +59,6 @@ class AppDelegate: RCTDefaultReactNativeFactoryDelegate, UIApplicationDelegate {
         delegate.dependencyProvider = RCTAppDependencyProvider()
         reactNativeDelegate = delegate
         reactNativeFactory = factory
-
         KeyChainAccessibilityUpdate.update()
 
         _ = LocalEnvManager.shared

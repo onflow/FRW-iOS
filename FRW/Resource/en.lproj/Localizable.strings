@@ -1184,6 +1184,12 @@ Key Store and Private Key.";
 "keystore_json_invalid" = "Unable to parse keystore, please download the";
 "keystore_json_invalid_link" = "Flow Wallet Extension";
 "keystore_json_invalid_suffix" = "to parse it.";
+
+// Wallet Key Invalid Alert
+"wallet_key_invalid_title" = "Wallet Access Issue";
+"wallet_key_invalid_message" = "We couldn't find a valid key for your wallet. This may happen after a key rotation. Please restore your wallet to continue.";
+"wallet_key_invalid_restore" = "Restore Wallet";
+
 "active_account" = "Active account";
 "other_accounts" = "Other accounts";
 "hidden" = "Hidden";
@@ -1198,8 +1204,8 @@ Key Store and Private Key.";
 "invalid_amount_data" = "Invalid amount data";
 "failed_to_sign_transaction" = "Failed to sign transaction";
 
-"backup_recovery_sub" = "View your profile’s recovery phrase";
-"backup_recovery_title" = "Your profile’s recovery phrase";
+"backup_recovery_sub" = "View your profile's recovery phrase";
+"backup_recovery_title" = "Your profile's recovery phrase";
 "reveal_phrase" = "Click to reveal phrase";
 "config" = "Config";
 "delete_nft" = "Delete NFT";

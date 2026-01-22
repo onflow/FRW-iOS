@@ -63,3 +63,42 @@ extension KeyProtocol {
     }
 }
 
+// MARK: - Key Validation Utilities
+
+import Flow
+
+extension KeyProvider {
+    /// Check if a key is active on-chain
+    static func isKeyActive(publicKey: String, in account: Flow.Account) -> Bool {
+        return account.keys.contains { key in
+            !key.revoked &&
+            key.weight >= 1000 &&
+            key.publicKey.hex == publicKey
+        }
+    }
+
+    /// Get all active keys from account
+    static func getActiveKeys(from account: Flow.Account) -> [Flow.AccountKey] {
+        return account.keys.filter { !$0.revoked && $0.weight >= 1000 }
+    }
+
+    /// Find matching active key for a key provider
+    static func findMatchingActiveKey(for keyProvider: any KeyProtocol, in account: Flow.Account) -> Flow.AccountKey? {
+        let activeKeys = getActiveKeys(from: account)
+
+        if let p256 = keyProvider.publicKey(signAlgo: .ECDSA_P256)?.hexString {
+            if let matched = activeKeys.first(where: { $0.publicKey.hex == p256 }) {
+                return matched
+            }
+        }
+
+        if let secp = keyProvider.publicKey(signAlgo: .ECDSA_SECP256k1)?.hexString {
+            if let matched = activeKeys.first(where: { $0.publicKey.hex == secp }) {
+                return matched
+            }
+        }
+
+        return nil
+    }
+}
+

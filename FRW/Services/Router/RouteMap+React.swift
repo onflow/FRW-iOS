@@ -22,6 +22,7 @@ extension RouteMap.ReactNative: RouterTarget {
     switch self {
     case .sendAsset(let config):
       let props = RNBridge.InitialProps(screen: .sendAsset, sendToConfig: config?.toJSON())
+      let vc = ReactNativeViewController(initialProps: props)
       navi.present(ReactNativeViewController(initialProps: props))
     case .profileSelection:
       let props = RNBridge.InitialProps(screen: .onboarding, sendToConfig: nil)

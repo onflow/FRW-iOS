@@ -33,12 +33,20 @@ class EmptyWalletViewModel: ObservableObject {
   @Published
   var isLoading: Bool = false
 
+  // MARK: Private
+
   func switchAccount(_ profile: ProfileModel) {
     Task {
       do {
         HUD.loading()
         try await UserManager.shared.switchAccount(with: profile)
         HUD.dismissLoading()
+      } catch WalletError.noActiveKeys {
+        log.warning("[EmptyWalletVM] All keys are revoked, cleaning up")
+        HUD.dismissLoading()
+        // Clean up revoked keys and profile data
+        await WalletManager.shared.cleanupRevokedAccount(userId: profile.uid)
+        HUD.error(title: "Key has been revoked. Please restore your account using backup.")
       } catch {
         log.error("switch account failed", context: error)
         HUD.dismissLoading()

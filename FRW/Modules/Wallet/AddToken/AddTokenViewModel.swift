@@ -279,7 +279,9 @@ extension AddTokenViewModel {
                 let reuslt = try? await transactionId.onceSealed()
                 if let reuslt, !reuslt.isFailed {
                     try await WalletManager.shared.fetchWalletDatas()
-                    self.sections = self.sections
+                    await MainActor.run {
+                      self.sections = self.sections
+                    }
                 }
             } catch {
                 log.debug("AddTokenViewModel -> confirmActiveTokenAction error: \(error)")

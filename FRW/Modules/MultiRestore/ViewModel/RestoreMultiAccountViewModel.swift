@@ -19,6 +19,8 @@ class RestoreMultiAccountViewModel: ObservableObject {
 
     var items: [[MultiBackupManager.StoreItem]]
 
+    // MARK: Private
+
     func onClickUser(at index: Int) {
       log.debug("🟢 [RestoreMultiAccountVM] onClickUser called with index: \(index)")
         guard index < items.count else {
@@ -55,6 +57,14 @@ class RestoreMultiAccountViewModel: ObservableObject {
                     MultiAccountStorage.shared.setBackupType(.multi, uid: selectedUserId)
                     HUD.dismissLoading()
                 } catch LLError.accountNotFound {
+                  log.warning("[RestoreMultiAccountVM] Account not found, adding key")
+                  addKey(item: selectedUser)
+                } catch WalletError.noActiveKeys {
+                  log.warning("[RestoreMultiAccountVM] All keys are revoked, cleaning up and adding new key")
+                  HUD.dismissLoading()
+                  // Clean up revoked keys and profile data
+                  await WalletManager.shared.cleanupRevokedAccount(userId: selectedUserId)
+                  // Add the key again with new data
                   addKey(item: selectedUser)
                 } catch {
                   log.error("switch account failed", context: error)

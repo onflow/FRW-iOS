@@ -86,6 +86,7 @@ enum WalletError: String, BaseError {
     case emptyMainAccount
     case emptyTransaction
     case invalidSignData
+    case noActiveKeys
 
     var baseCode: Int { 2000 }
 }

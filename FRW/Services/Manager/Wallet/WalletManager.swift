@@ -63,6 +63,7 @@ class WalletManager: ObservableObject {
     )
     self.currentNetwork = LocalUserDefaults.shared.network
     flow.configure(chainID: currentNetwork)
+
     start()
   }
 
@@ -109,6 +110,9 @@ class WalletManager: ObservableObject {
 
   var customTokenManager: CustomTokenManager = .init()
 
+  // Track currently initialized UID to avoid duplicate initialization
+  private var currentInitializedUID: String?
+
   var currentNetworkAccounts: [FlowWalletKit.Account] {
     walletEntity?.accounts?[currentNetwork] ?? []
   }
@@ -135,9 +139,10 @@ class WalletManager: ObservableObject {
     UserManager.shared.$activatedUID
       .receive(on: DispatchQueue.main)
       .map { $0 }
-      .sink { _ in
-        log.debug("[Login] activeated uid did changed")
-        self.resetAfterSwitchProfile()
+      .removeDuplicates()  // Only trigger when UID actually changes
+      .sink { uid in
+        log.debug("[Login] activated uid changed to: \(uid ?? "nil")")
+        self.clear()
         self.initWallet()
       }.store(in: &cancellableSet)
 
@@ -195,30 +200,52 @@ class WalletManager: ObservableObject {
 
 extension WalletManager {
   private func initWallet() {
-    if let uid = UserManager.shared.activatedUID {
-      keyProvider = keyProvider(with: uid)
-      guard let provider = keyProvider else {
-        log.error("[Wallet] not found provider at \(uid)")
+    guard let uid = UserManager.shared.activatedUID else {
+      // UID is nil - user logged out, all data cleared by observer
+      log.info("[Wallet] UID is nil")
+      return
+    }
+
+    // If UID is the same as currently initialized, skip re-initialization
+    if currentInitializedUID == uid {
+      log.info("[Wallet] UID unchanged (\(uid)), skipping re-initialization")
+      return
+    }
+
+    log.info("[Wallet] UID changed to \(uid), initializing wallet")
+    currentInitializedUID = uid
+
+    Task {
+      // Use findKeyProvider to get validated key with on-chain control
+      // This ensures we always use the correct active key (not revoked)
+      guard let result = try? await findKeyProvider(uid: uid) else {
+        log.error("[Wallet] No valid key with on-chain control found for uid: \(uid)")
+        await MainActor.run {
+          // Show alert directly to user about missing valid key
+          showKeyInvalidAlert(uid: uid, reason: "No valid key with mainnet control")
+        }
         return
       }
-      updateKeyProvider(provider: provider)
-      walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
-      Task {
-        do {
-          try await walletEntity?.fetchAccount()
-          let currentAccount = self.currentNetworkAccounts
-          for account in currentAccount {
-            try? await account.fetchAccount()
-          }
-          self.EOAs = walletEntity?.eoaAddress?.compactMap{ EOA($0,network: currentNetwork) }
-          ProfileManager.shared.update(
-            uid: uid,
-            keyProvider: provider,
-            with: walletEntity
-          )
 
-        } catch {
-          let _ = try await walletEntity?.fetchAllNetworkAccounts()
+      let provider = result.provider
+      // result.wallet already has mainnet accounts fetched
+
+      await MainActor.run {
+        updateKeyProvider(provider: provider)
+        // Create wallet for all supported networks
+        walletEntity = FlowWalletKit.Wallet(type: .key(provider), networks: supportNetworks)
+      }
+
+      // Fetch all network accounts (including testnet if needed)
+      do {
+        try await walletEntity?.fetchAllNetworkAccounts()
+        await MainActor.run {
+          loadRecentFlowAccount()
+        }
+      } catch {
+        log.error("[Wallet] Failed to fetch all network accounts: \(error)")
+        await MainActor.run {
+          reloadWalletInfo()
         }
       }
     }
@@ -232,6 +259,7 @@ extension WalletManager {
     guard let accounts = accounts[currentNetwork], let account = accounts.first else {
       // TODO: Handle newtork swicth, if no account
       mainAccount = nil
+      HUD.error(WalletError.emptyMainAccount)
       return
     }
 
@@ -241,7 +269,7 @@ extension WalletManager {
     // If there is no selected, try to restore from saved address for current uid
     if selectedAccount == nil {
       if let uid = UserManager.shared.activatedUID,
-         let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
+          let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
          let restoredAccount = FWAccount(savedValue) {
         // Find the parent account for child/coa types and verify validity
         if let parentAccount = findParentAccount(for: restoredAccount, in: accounts) {
@@ -350,6 +378,16 @@ extension WalletManager {
     keyProvider = provider
   }
 
+  /// Reinitialize wallet with current user's key provider (used after key rotation)
+  /// Forces re-initialization even if UID hasn't changed
+  func reinitializeWallet() {
+    log.debug("[Wallet] Reinitializing wallet after key rotation")
+    // Clear currentInitializedUID to force re-initialization
+    // This is necessary when key changes but UID stays the same (key rotation)
+    currentInitializedUID = nil
+    initWallet()
+  }
+
   func userStore(with uid: String) -> UserManager.StoreUser? {
     LocalUserDefaults.shared.userList.last { $0.userId == uid }
   }
@@ -358,50 +396,17 @@ extension WalletManager {
     LocalUserDefaults.shared.userList.last { $0.userId == uid && $0.publicKey == publicKey }
   }
 
-  func keyProvider(with uid: String) -> (any KeyProtocol)? {
-    guard let userStore = userStore(with: uid) else {
-      log.error("[Wallet] not found user at \(uid)")
-      return getKeyProvider(uid: uid)
-    }
-    log.debug("[user] \(userStore)")
-    var provider: (any KeyProtocol)?
-    switch userStore.keyType {
-    case .seedPhrase:
-      provider = try? SeedPhraseKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .privateKey:
-      provider = try? PrivateKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .keyStore:
-      provider = try? PrivateKey.wallet(id: uid)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    case .secureEnclave:
-      provider = try? SecureEnclaveKey.wallet(id: uid, publicKey: userStore.publicKey)
-      log.debug("\(provider != nil ? "" : "don't") find provider from \(uid) by \(userStore.keyType) ")
-    }
-    log.debug("\(provider != nil ? "" : "don't find provider from \(uid)")")
-    return provider
-  }
-
-  /*
-   * find the key by public key from keychain.
-   * for profile.
-   */
-  func keyProvider(profile: ProfileModel) -> (any KeyProtocol)? {
-    let uid = profile.uid
-    return getKeyProvider(uid: uid)
-  }
-  
-  private func getKeyProvider(uid: String) -> (any KeyProtocol)? {
-    if let provider = try? SecureEnclaveKey.wallet(id: uid),
-       let publicKey = provider.publicKey()?.hexString {
+  /// Quick key provider lookup without on-chain validation
+  /// Used only for non-critical operations like displaying account lists
+  /// For wallet initialization, use findKeyProvider() which validates on-chain
+  func quickKeyProvider(uid: String) -> (any KeyProtocol)? {
+    // Try to load from any keychain storage
+    if let provider = try? SecureEnclaveKey.wallet(id: uid) {
       return provider
     }
-
     if let provider = try? SeedPhraseKey.wallet(id: uid) {
       return provider
     }
-
     if let provider = try? PrivateKey.wallet(id: uid) {
       return provider
     }
@@ -431,10 +436,11 @@ extension WalletManager {
 
     selectedAccount = .init(type: type, addr: fwAddress)
 
-    // Store selected account per uid
-    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
-      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
-    }
+    // Store selected account
+    UserDefaults.standard.set(
+      selectedAccount?.value,
+      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
+    )
     if type == .main {
       checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
     }
@@ -508,10 +514,16 @@ extension WalletManager {
 // MARK: - Account
 
 extension WalletManager {
-  /// called when switch profile
-  func resetAfterSwitchProfile() {
+  /// Called by activatedUID observer when UID changes
+  /// Clears all wallet state to prepare for re-initialization
+  /// Note: Only called by observer, not manually from UserManager
+  private func clear() {
+    mainAccount = nil
+    walletEntity = nil
     selectedAccount = nil
     activatedCoins = []
+    currentInitializedUID = nil
+    log.info("[Wallet] Cleared wallet state")
   }
 }
 
@@ -519,7 +531,14 @@ extension WalletManager {
 
 extension WalletManager {
   private func checkBloctoKeyAndPresentBackupTip(address: String) {
-    guard !address.isEmpty else { return }
+    
+    // Add feature flag check, if it's false, skip key rotation
+    guard !address.isEmpty,
+          let bloctoKeyRotation = RemoteConfigManager.shared.config?.features.bloctoKeyRotation,
+          bloctoKeyRotation == true else {
+      return
+    }
+    
     Task {
       do {
         let result = try await BloctoDetectorService.detectBloctoKey(address: address)
@@ -578,22 +597,22 @@ extension WalletManager {
 extension WalletManager {
   /// Request server create wallet address, DO NOT call it multiple times.
   func asyncCreateWalletAddressFromServer() async -> String? {
-    do {
-      let result: UserAddressV2Response = try await Network
-        .request(FRWAPI.User.userAddressV2)
-      let txId = Flow.ID(hex: result.txId)
-      _ = try await txId.onceExecuted()
-      _ = try? await walletEntity?.fetchAccountsByCreationTxId(
-        txId: txId,
-        network: currentNetwork
-      )
-      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer success")
-      return result.txId
-    } catch {
-      print(error)
-      debugPrint("WalletManager -> asyncCreateWalletAddressFromServer failed")
-      return nil
-    }
+      do {
+        let result: UserAddressV2Response = try await Network
+          .request(FRWAPI.User.userAddressV2)
+        let txId = Flow.ID(hex: result.txId)
+        _ = try await txId.onceExecuted()
+        _ = try? await walletEntity?.fetchAccountsByCreationTxId(
+          txId: txId,
+          network: currentNetwork
+        )
+        log.debug("WalletManager -> asyncCreateWalletAddressFromServer success")
+        return result.txId
+      } catch {
+        log.debug("WalletManager -> asyncCreateWalletAddressFromServer failed")
+        log.error(error)
+        return nil
+      }
   }
 
   private func startWalletInfoRetryTimer() {

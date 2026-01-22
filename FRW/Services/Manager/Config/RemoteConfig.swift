@@ -48,6 +48,8 @@ extension RemoteConfigManager {
             case hideBrowser = "hide_browser"
             case transactionWarningPrediction = "tx_warning_prediction"
             case coverBridgeFee = "cover_bridge_fee"
+            case bloctoKeyRotation = "blocto_key_rotation"
+            case coaMigration = "coa_migration"
             case wrapEOAWithCadence = "wrap_eoa_tx_with_cadence"
         }
 
@@ -61,6 +63,8 @@ extension RemoteConfigManager {
         let hideBrowser: Bool?
         let transactionWarningPrediction: Bool?
         let coverBridgeFee: Bool?
+        let bloctoKeyRotation: Bool?
+        let coaMigration: Bool?
         let wrapEOAWithCadence: Bool?
     }
 

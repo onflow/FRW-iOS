@@ -87,11 +87,11 @@ extension TurboModuleSwift {
         "error": "Secure Enclave wallet initialization not yet implemented in WalletManager"
       ]
     }
-    let result = await WalletManager.shared.keyProvider(with: uid)?.keyType == .secureEnclave
+    let result = try? await WalletManager.shared.findKeyProvider(uid: uid)?.provider.keyType == .secureEnclave
     let address = await WalletManager.shared.getPrimaryWalletAddress() ?? ""
     return [
       "success": result,
-      "address": result ? address : "",
+      "address": (result ?? false) ? address : "",
       "error": ""
     ]
   }
