@@ -537,23 +537,6 @@ extension WalletManager {
   }
 }
 
-// MARK: - Blocto Detector
-
-extension WalletManager {
-  private func checkBloctoKeyAndPresentBackupTip(address: String) {
-    guard !address.isEmpty else { return }
-    Task {
-      do {
-        let result = try await BloctoDetectorService.detectBloctoKey(address: address)
-        guard result.isBlocto && result.needRevoke else { return }
-        Router.route(to: RouteMap.ReactNative.backupTip)
-      } catch {
-        log.debug("[WalletManager] Blocto detection failed", context: error)
-      }
-    }
-  }
-}
-
 // MARK: - account type
 
 extension WalletManager {
