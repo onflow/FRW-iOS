@@ -22,6 +22,10 @@ extension WalletManager {
     var isSelectedFlowAccount: Bool {
         selectedAccount?.type == .main
     }
+  
+    var isSelectedEOAAccount: Bool {
+        selectedAccount?.type == .eoa
+    }
 
     var selectedAccountAddress: String? {
         return selectedAccount?.address.hexAddr
@@ -97,9 +101,9 @@ extension WalletManager {
 
     func currentContact() -> Contact {
         let address = getWatchAddressOrChildAccountAddressOrPrimaryAddress()
-        var user: WalletAccount.User?
+        var user: WalletUser?
         if let addr = address {
-            user = WalletManager.shared.walletAccount.readInfo(at: addr)
+            user = WalletUser.get(address:  addr)
         }
 
         let contact = Contact(

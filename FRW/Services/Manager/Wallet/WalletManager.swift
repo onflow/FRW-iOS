@@ -90,8 +90,6 @@ class WalletManager: ObservableObject {
       .synchronizable(false)
       .accessibility(.whenUnlocked)
 
-  var walletAccount = WalletAccount()
-
   @Published
   var walletEntity: FlowWalletKit.Wallet?
 
@@ -119,8 +117,8 @@ class WalletManager: ObservableObject {
     walletEntity?.accounts?[currentNetwork] ?? []
   }
 
-  var walletMetadata: WalletAccount.User {
-    walletAccount.readInfo(at: selectedAccount?.address.hexAddr ?? "")
+  var walletMetadata: WalletUser {
+    WalletUser.get(address: selectedAccount?.address.hexAddr ?? "")
   }
 
   var flowToken: TokenModel? {
@@ -130,6 +128,8 @@ class WalletManager: ObservableObject {
   var coa: COA? {
     mainAccount?.coa
   }
+  
+  var EOAs: [EOA]? = nil
 
   var childs: [FlowWalletKit.ChildAccount]? {
     mainAccount?.childs
@@ -152,9 +152,8 @@ class WalletManager: ObservableObject {
         entity.securityDelegate = self
         return entity.$accounts.compactMap { $0 }
       }
-//            .filter { $0.count >= self.supportNetworks.count }
       .receive(on: DispatchQueue.main)
-      .removeDuplicates()
+//      .removeDuplicates()
       .sink { [weak self] accounts in
         print("Wallet Entity Accounts Updated \(accounts.count)")
         self?.loadRecentFlowAccount()
@@ -263,9 +262,10 @@ extension WalletManager {
       return
     }
 
+    // Default mainAccount is the first account
     mainAccount = account
 
-    // If there is no selected
+    // If there is no selected, try to restore from saved address for current uid
     if selectedAccount == nil {
       selectedAccount = .main(account.address)
       checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
@@ -278,6 +278,32 @@ extension WalletManager {
       } catch {
         log.error(error)
       }
+    }
+  }
+
+  /// Find the parent account for the given account type
+  /// Returns the account itself if it's a main account, or its parent for child/coa types
+  private func findParentAccount(
+    for account: FWAccount,
+    in accounts: [FlowWalletKit.Account]
+  ) -> FlowWalletKit.Account? {
+    let targetAddress = account.hexAddr.lowercased()
+    switch account.type {
+    case .main:
+      return accounts.first { $0.hexAddr.lowercased() == targetAddress }
+    case .child:
+      return accounts.first { flowAccount -> Bool in
+        guard let childs = flowAccount.childs else { return false }
+        return childs.contains { $0.address.hexAddr.lowercased() == targetAddress }
+      }
+    case .coa:
+      return accounts.first { flowAccount -> Bool in
+        guard let coaAddress = flowAccount.coa?.address.lowercased() else { return false }
+        return coaAddress == targetAddress
+      }
+    case .eoa:
+      // EOA addresses are managed separately, return first account as parent
+      return accounts.first
     }
   }
 
@@ -321,9 +347,12 @@ extension WalletManager {
   }
 
   func loadLinkedAccounts() {
+    guard let mainAccount else { return }
     Task {
       do {
-        try await mainAccount?.loadLinkedAccounts()
+        if mainAccount.hasLinkedAccounts {
+          try await mainAccount.fetchAccount()
+        }
       } catch {
         log.error(error)
         log.error(WalletError.fetchLinkedAccountsFailed)
@@ -411,6 +440,41 @@ extension WalletManager {
       loadLinkedAccounts()
     }
   }
+  
+  func switchSelectedAccount(_ selectingAccount: WalletAccount) {
+    UIFeedbackGenerator.impactOccurred(.selectionChanged)
+    guard let fwAddress = FWAddressDector.create(address: selectingAccount.address) else {
+      HUD.error(WalletError.invaildAddress)
+      return
+    }
+
+    selectedAccount = .init(type: selectingAccount.FWAccountType, addr: fwAddress)
+    // Store selected account per uid
+    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
+      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
+    }
+
+
+    switch selectingAccount.FWAccountType {
+      case .main:
+        if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
+          account.hexAddr == selectingAccount.address
+        }) {
+          mainAccount = account
+          loadLinkedAccounts()
+        }
+      case .coa, .child:
+        if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
+          account.hexAddr == selectingAccount.parent?.address
+        }) {
+          mainAccount = account
+          loadLinkedAccounts()
+        }
+      case .eoa:
+        break
+
+    }
+  }
 
   func changeNetwork(_ network: Flow.ChainID) {
     if currentNetwork == network {
@@ -473,18 +537,26 @@ extension WalletManager {
   }
 }
 
+// MARK: - Blocto Detector
+
+extension WalletManager {
+  private func checkBloctoKeyAndPresentBackupTip(address: String) {
+    guard !address.isEmpty else { return }
+    Task {
+      do {
+        let result = try await BloctoDetectorService.detectBloctoKey(address: address)
+        guard result.isBlocto && result.needRevoke else { return }
+        Router.route(to: RouteMap.ReactNative.backupTip)
+      } catch {
+        log.debug("[WalletManager] Blocto detection failed", context: error)
+      }
+    }
+  }
+}
+
 // MARK: - account type
 
 extension WalletManager {
-  func isCoa(_ address: String?) -> Bool {
-    guard let address = address, !address.isEmpty else {
-      return false
-    }
-    return !EVMAccountManager.shared.accounts
-      .filter {
-        $0.showAddress.lowercased().contains(address.lowercased())
-      }.isEmpty
-  }
 
   func isMain() -> Bool {
     guard let currentAddress = getWatchAddressOrChildAccountAddressOrPrimaryAddress(),

@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/attaswift/BigInt.git",
       "state" : {
-        "revision" : "114343a705df4725dfe7ab8a2a326b8883cfd79c",
-        "version" : "5.5.1"
+        "revision" : "793a7fac0bfc318e85994bf6900652e827aef33e",
+        "version" : "5.4.1"
       }
     },
     {
@@ -141,7 +141,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/flow-swift",
       "state" : {
-        "revision" : "0d72e52bca7e8c6aeb4b594b9a31b1f35af770fb"
+        "revision" : "013e8537d1c9654c6be3c9c673fbdcb13ce62ffa"
       }
     },
     {
@@ -149,7 +149,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onflow/flow-wallet-kit.git",
       "state" : {
-        "revision" : "fd4cea203171d47e488fa7adea3f8ff65f67d486"
+        "revision" : "520afb50d81dada659f1becada7451b3e1b8102a"
       }
     },
     {
@@ -430,6 +430,15 @@
       }
     },
     {
+      "identity" : "secp256k1.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GigaBitcoin/secp256k1.swift",
+      "state" : {
+        "revision" : "48fb20fce4ca3aad89180448a127d5bc16f0e44c",
+        "version" : "0.10.0"
+      }
+    },
+    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit",
@@ -550,7 +559,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/trust-web3-provider",
       "state" : {
-        "revision" : "0d58818bae73d6996b6a8caae15dc2e5a0ff88f8"
+        "revision" : "7b85848869c55659a5015bbe431855f65a539e84"
       }
     },
     {
@@ -585,7 +594,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Outblock/web3swift.git",
       "state" : {
-        "revision" : "873e12cb498b66c7ee7d2a58389f74db5c6fa751"
+        "revision" : "12971bafa72bfc243cc4b6f35c107e12ddc6f106"
       }
     },
     {

@@ -14,6 +14,8 @@ extension ReactNativeViewController {
     case selectAssets = "SelectTokens"
     case selectAddress = "SendTo"
     case sendToken = "SendTokens"
+    case profileSelection = "ProfileTypeSelection"
+    case getStarted = "GetStarted"
     case keyRotationTip = "KeyRotationTip"
   }
 }
@@ -21,6 +23,7 @@ extension ReactNativeViewController {
 class ReactNativeViewController: UIViewController {
 
   var initialProps: RNBridge.InitialProps? = nil
+  var route: ReactNativeViewController.Route? = nil
   private let initialRouteOverride: String?
   
     // Static identifier for easy identification
@@ -46,6 +49,13 @@ class ReactNativeViewController: UIViewController {
   
     deinit {
         print("✅ DEBUG: ReactNativeViewController destroyed: \(instanceId)")
+        
+        // Clean up React Native view
+        if let reactView = self.reactView {
+            reactView.removeFromSuperview()
+            self.reactView = nil
+        }
+        
         // Coordinator will automatically clean up weak references
     }
 
@@ -61,6 +71,32 @@ class ReactNativeViewController: UIViewController {
         ReactNativeCoordinator.shared.register(self, id: instanceId)
         navigationController?.setNavigationBarHidden(true, animated: false)
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        // Check if this view controller is being removed from its parent
+        if isMovingFromParent || isBeingDismissed {
+            print("✅ DEBUG: ReactNativeViewController \(instanceId) is being removed, cleaning up...")
+            
+            // Clean up React Native state by sending a cleanup event
+            cleanupReactNativeState()
+        }
+    }
+    
+    private func cleanupReactNativeState() {
+        // Send cleanup event to React Native to reset states
+        // This will be handled by the React Native bridge
+        print("🧹 DEBUG: Sending cleanup event to React Native for instance: \(instanceId)")
+        
+        // You can emit an event to React Native here if needed
+        // For now, we'll rely on the store cleanup mechanisms
     }
 
     // Static method to get the most recent instance (deprecated - use coordinator)
@@ -149,13 +185,11 @@ class ReactNativeViewController: UIViewController {
         }
         // zh,en,ru,ja
         let languageCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
-        let initialRoute = initialRouteOverride?.isEmpty == false
-          ? initialRouteOverride!
-          : (initialProps?.route.rawValue ?? "SelectTokens")
+        let routeName = initialProps?.route.rawValue ?? route?.rawValue ?? "SelectTokens"
         var props: [String: Any] = [
             "address" : wallet.selectedAccount?.address.hexAddr ?? "",
             "network" : wallet.currentNetwork.rawValue,
-            "initialRoute" : initialRoute,
+            "initialRoute" : routeName,
             "embedded" : false,
             "instanceId": instanceId,
             "language": languageCode
@@ -181,6 +215,8 @@ class ReactNativeViewController: UIViewController {
         view.addSubview(surfaceView)
         surfaceView.translatesAutoresizingMaskIntoConstraints = false
 
+        // Use view.topAnchor (not safeAreaLayoutGuide) to allow RN content to extend
+        // behind the status bar. RN's SafeAreaProvider will handle safe area insets.
         NSLayoutConstraint.activate([
             surfaceView.topAnchor.constraint(equalTo: view.topAnchor),
             surfaceView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -229,7 +265,12 @@ extension RNBridge.InitialProps {
       }
     case .backupTip:
       return .keyRotationTip
-    
+    case .onboarding:
+      return .profileSelection
+    case .receive:
+      return .selectAssets
+    case .tokenDetail:
+      return .selectAssets
     }
   }
 }

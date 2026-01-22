@@ -9,11 +9,19 @@ import Foundation
 import MapKit
 
 // MARK: - RegisterRequest
-
+/// <= v3
 struct RegisterRequest: Codable {
     let username: String?
     let accountKey: AccountKey
     let deviceInfo: DeviceInfoRequest
+}
+
+///for v4
+struct RegisterParam: Codable {
+  let flowAccountInfo: FlowAccountInfo
+  let evmAccountInfo: EVMAccountInfo?
+  let username: String
+  let deviceInfo: DeviceInfoRequest
 }
 
 // MARK: - AccountKey
@@ -25,12 +33,21 @@ struct AccountKey: Codable {
     var weight: Int = 1000
 }
 
+struct FlowAccountInfo: Codable {
+  let accountKey: AccountKey
+  let signature: String
+}
+
+struct EVMAccountInfo: Codable {
+  let eoaAddress: String
+  let signature: String
+}
+
 // MARK: - LoginRequest
 
 struct LoginRequest: Codable {
-//    let publicKey: String
-    let signature: String
-    let accountKey: AccountKey
+    let flowAccountInfo: FlowAccountInfo
+    let evmAccountInfo: EVMAccountInfo?
     let deviceInfo: DeviceInfoRequest
     var address: String? = nil
 }

@@ -10,15 +10,40 @@ import SwiftUI
 // MARK: - EVMTagView
 
 struct EVMTagView: View {
+    
     var body: some View {
         Text("EVM")
-            .font(.inter(size: 9))
-            .kerning(0.144)
+            .font(.inter(size: 8,weight: .w500))
             .foregroundStyle(Color.white)
-            .frame(width: 36, height: 16)
+            .frame(width: 26, height: 10)
             .background(Color.Theme.evm)
-            .cornerRadius(8)
+            .cornerRadius(5)
     }
+}
+
+struct COATagView: View {
+  var body: some View {
+    
+    HStack(spacing: 0) {
+      HStack(spacing: 0) {
+        Text("EVM")
+            .font(.inter(size: 8,weight: .w500))
+            .foregroundStyle(Color.white)
+            .offset(x:-4)
+            
+      }
+      .frame(width: 34,height: 10)
+      .background(Color.Theme.evm)
+      .cornerRadius(5)
+      Text("FLOW")
+          .font(.inter(size: 8,weight: .w500))
+          .foregroundStyle(Color.black)
+          .frame(width: 32, height: 10)
+          .background(Color.Theme.Accent.green)
+          .cornerRadius(8)
+          .offset(x: -10)
+    }
+  }
 }
 
 // MARK: - TagView
@@ -65,5 +90,9 @@ struct TagView: View {
 }
 
 #Preview {
-    TagView()
+  VStack(spacing: 10) {
+    EVMTagView()
+    COATagView()
+  }
+  
 }

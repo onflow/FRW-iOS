@@ -36,9 +36,10 @@ struct SheetHeaderView: View {
                             .font(.system(size: 10))
                             .foregroundColor(.LL.Neutrals.neutrals8)
                     }
-                    .frame(width: 40, height: 40)
+                    .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
             }
 
             Text(title)
@@ -125,19 +126,30 @@ struct HalfSheetHelper<SheetView: View>: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         if showSheet {
             if uiViewController.view.tag == 0 {
-                let rootView = NavigationView {
-                    sheetView
-                        .padding(.bottom, 8)
-                        .readSize { size in
-                            self.sheetSize = size
+                let contentView = sheetView
+                    .padding(.bottom, 8)
+                    .readSize { size in
+                        self.sheetSize = size
+                    }
+
+                let rootView = Group {
+                    if #available(iOS 16.0, *) {
+                        NavigationStack {
+                            contentView
                         }
+                    } else {
+                        NavigationView {
+                            contentView
+                        }
+                        .navigationViewStyle(.stack)
+                    }
                 }
                 .cornerRadius([.topLeading, .topTrailing], 16)
                 .ignoresSafeArea()
                 .persistentSystemOverlays(.hidden)
 
                 let sheetController = CustomHostingController(
-                    rootView: rootView,
+                    rootView: AnyView(rootView),
                     sheetSize: self.autoResizing ? _sheetSize.projectedValue : nil
                 )
 

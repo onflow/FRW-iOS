@@ -164,7 +164,10 @@ extension TransferListHandler {
                         limit: Limit,
                         after: start
                     )
-                  let target = await WalletManager.shared.isSelectedEVMAccount ? FRWAPI.Account.evmTransfers(request) : FRWAPI.Account.transfers(request)
+                  let isCOA = await WalletManager.shared.isSelectedEVMAccount
+                  let isEOA = await WalletManager.shared.isSelectedEOAAccount
+                  let target = (isCOA || isEOA) ? FRWAPI.Account.evmTransfers(request) : FRWAPI.Account.transfers(request)
+
                     let response: TransfersResponse = try await Network.request(target)
                     await MainActor.run {
                         self.isRequesting = false

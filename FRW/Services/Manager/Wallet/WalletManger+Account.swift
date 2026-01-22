@@ -27,6 +27,13 @@ extension WalletManager {
         }
         return coa
     }
+  
+    var selectedEOAAccount: EOA? {
+      guard isSelectedEOAAccount else {
+        return nil
+      }
+      return EOAs?.first
+  }
 
     var selectedAccountContact: Contact? {
         guard let primaryAddr = WalletManager.shared.getPrimaryWalletAddressOrCustomWatchAddress() else {
@@ -47,7 +54,7 @@ extension WalletManager {
         guard let primaryAddr = WalletManager.shared.getPrimaryWalletAddress() else {
             return nil
         }
-        let user = WalletManager.shared.walletAccount.readInfo(at: primaryAddr)
+        let user = WalletUser.get(address:  primaryAddr)
         return Contact(
             address: primaryAddr,
             avatar: nil,
@@ -71,7 +78,7 @@ extension FlowWalletKit.ChildAccount {
 extension COA {
     func toContact() -> Contact {
         let showAddress = address.addHexPrefix()
-        let user = WalletManager.shared.walletAccount.readInfo(at: showAddress)
+        let user = WalletUser.get(address:  showAddress)
         return Contact(address: showAddress, avatar: nil, contactName: nil, contactType: .user, domain: nil, id: UUID().hashValue, username: user.name, user: user, walletType: .evm)
     }
 }

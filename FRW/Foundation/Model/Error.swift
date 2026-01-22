@@ -163,6 +163,12 @@ enum EVMError: String, BaseError {
     case createAccount
     case findAddress
     case transactionResult
+    //v3.1.0
+    case invalidEIP1559FeeData
+    case EIP1559MaxFeeLessThanPriority
+    case invalidGasPriceData
+    case invalidAmountData
+    case failedSign 
 
     var baseCode: Int { 8000 }
 }

@@ -10,10 +10,9 @@ import SwiftUI
 
 // MARK: - MoveNFTsView
 
-struct MoveNFTsView: RouteableView, PresentActionDelegate {
+struct MoveNFTsView: RouteableView {
     // MARK: Internal
 
-    var changeHeight: (() -> Void)?
     @StateObject
     var viewModel = MoveNFTsViewModel()
 

@@ -34,14 +34,11 @@ class EVMEnableViewModel: ObservableObject {
         Task {
             do {
                 state = .loading
-                try await EVMAccountManager.shared.enableEVM()
-
-                // Refresh both EVM account manager and wallet manager
-                await EVMAccountManager.shared.refreshSync()
-                WalletManager.shared.reloadWalletInfo()
-
-                if let address = EVMAccountManager.shared.accounts.first?.showAddress {
-                    WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
+                try await WalletManager.shared.enableCOA()
+                try await WalletManager.shared.mainAccount?.fetchAccount()
+                await ProfileManager.shared.refreshCurrentProfileAccounts()
+                if let address = await WalletManager.shared.coa?.address {
+                  await WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
                 }
                 state = .enabled
                 Router.pop()

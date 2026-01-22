@@ -11,4 +11,11 @@ enum RNBridgeError: Error {
   case scanInvalidProvider
   case invalidParameters
   case sendToFlowConfigurationError
+  case mnemonicGenerationFailed
+  case mnemonicSaveFailed
+  case keyGenerationFailed
+  case invalidMnemonic
+  case accountCreationFailed
+  case walletInitializationFailed
+  case signFailed
 }

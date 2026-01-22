@@ -31,6 +31,8 @@ struct EVMTransactionReceive: Codable {
     let value: String?
     let gas: String?
     let data: String?
+    let maxFeePerGas: String?
+    let maxPriorityFeePerGas: String?
 
     var amount: BigUInt {
         let defaultValue = BigUInt(0)

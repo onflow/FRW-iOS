@@ -14,7 +14,7 @@ PODS:
   - hermes-engine (0.79.2):
     - hermes-engine/Pre-built (= 0.79.2)
   - hermes-engine/Pre-built (0.79.2)
-  - Instabug (15.1.2)
+  - Instabug (16.0.3)
   - JWT (3.0.0-beta.14):
     - Base64 (~> 1.1.2)
   - lottie-ios (4.5.0)
@@ -1369,6 +1369,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-get-random-values (1.11.0):
     - React-Core
+  - react-native-render-html (6.3.4):
+    - React-Core
   - react-native-safe-area-context (5.4.0):
     - DoubleConversion
     - glog
@@ -1435,6 +1437,30 @@ PODS:
     - React-ImageManager
     - React-jsi
     - react-native-safe-area-context/common
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-view-shot (4.0.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1838,10 +1864,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNInstabug (15.0.3):
-    - Instabug (= 15.1.2)
+  - RNInstabug (16.0.3):
+    - Instabug (= 16.0.3)
     - React-Core
-  - RNReanimated (3.19.1):
+  - RNReanimated (3.19.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1864,10 +1890,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.19.1)
-    - RNReanimated/worklets (= 3.19.1)
+    - RNReanimated/reanimated (= 3.19.2)
+    - RNReanimated/worklets (= 3.19.2)
     - Yoga
-  - RNReanimated/reanimated (3.19.1):
+  - RNReanimated/reanimated (3.19.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1890,9 +1916,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.19.1)
+    - RNReanimated/reanimated/apple (= 3.19.2)
     - Yoga
-  - RNReanimated/reanimated/apple (3.19.1):
+  - RNReanimated/reanimated/apple (3.19.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1916,7 +1942,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.19.1):
+  - RNReanimated/worklets (3.19.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1939,9 +1965,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.19.1)
+    - RNReanimated/worklets/apple (= 3.19.2)
     - Yoga
-  - RNReanimated/worklets/apple (3.19.1):
+  - RNReanimated/worklets/apple (3.19.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2009,6 +2035,30 @@ PODS:
     - React-NativeModulesApple
     - React-RCTFabric
     - React-RCTImage
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - RNShare (12.2.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
     - React-renderercss
     - React-rendererdebug
     - React-utils
@@ -2113,7 +2163,9 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
+  - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2151,6 +2203,7 @@ DEPENDENCIES:
   - RNInstabug (from `../node_modules/instabug-reactnative`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -2247,8 +2300,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
+  react-native-render-html:
+    :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-oscompat:
@@ -2323,6 +2380,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -2338,7 +2397,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
-  Instabug: af6e48d92b0552606c222d7e1dfcbec5deb01d38
+  Instabug: b6290ceceb5d98966aa6f10fbd7970026a916f65
   JWT: ef71dfb03e1f842081e64dc42eef0e164f35d251
   lottie-ios: a881093fab623c467d3bce374367755c272bdd59
   lottie-react-native: 2d23fe8ac918240e52f40b0f4a3582017160d34f
@@ -2374,7 +2433,9 @@ SPEC CHECKSUMS:
   React-Mapbuffer: c3f4b608e4a59dd2f6a416ef4d47a14400194468
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
+  react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-safe-area-context: 562163222d999b79a51577eda2ea8ad2c32b4d06
+  react-native-view-shot: 57c7b8158751f19f32cb885109574712955ea016
   React-NativeModulesApple: 2c4377e139522c3d73f5df582e4f051a838ff25e
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 9a151e0b4c933c9205fd648c246506a83f31395d
@@ -2404,19 +2465,30 @@ SPEC CHECKSUMS:
   React-timing: a90f4654cbda9c628614f9bee68967f1768bd6a5
   React-utils: a612d50555b6f0f90c74b7d79954019ad47f5de6
   ReactAppDependencyProvider: 04d5eb15eb46be6720e17a4a7fa92940a776e584
+<<<<<<< HEAD
   ReactCodegen: 77f21dd3957c45c64c17af88d70188ffe28ad093
+=======
+  ReactCodegen: 5535dab663a825f331de8d53692f9124347851e5
+>>>>>>> origin
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
   RNCAsyncStorage: a1c8cc8a99c32de1244a9cf707bf9d83d0de0f71
   RNCClipboard: ea6045252d5c0753cf17f62290f647dc0096f6ac
   RNGestureHandler: 0397fea67f39d5a2d17fcf4a028e206f7ba098ba
+<<<<<<< HEAD
   RNInstabug: e2ebb62c791df38b1f5847e057b5a9f5693632bb
   RNReanimated: c9c6175c20e0290dde5d64eadf617139f32af749
   RNScreens: 824a29c178e253fe8b08fb0b2903195d35f724f2
+=======
+  RNInstabug: 606df25cc7ab570bca611ee0acf26ea907bc2f12
+  RNReanimated: 026cb7d1de617f492008727d000716f1505cdbe9
+  RNScreens: 824a29c178e253fe8b08fb0b2903195d35f724f2
+  RNShare: a60af5971cb114a8d31df642b108e3fe00e5b987
+>>>>>>> origin
   RNSVG: ba22deba00b123dd9bca2e5540b6fbc0d3f858cb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SSZipArchive: c69881e8ac5521f0e622291387add5f60f30f3c4
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
 
-PODFILE CHECKSUM: c5088225542e483c205364768aaa600c71595824
+PODFILE CHECKSUM: 5dc5040b5e9a1e5af8328f1f4f4490db1640484a
 
 COCOAPODS: 1.16.2

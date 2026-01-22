@@ -1,8 +1,11 @@
 import Foundation
+import WalletCore
 import UIKit
 import Flow
 import SPIndicator
 import FlowWalletKit
+import UserNotifications
+import FirebaseAuth
 import KeychainAccess
 import WalletCore
 
@@ -38,6 +41,11 @@ class TurboModuleSwift: NSObject {
     static func getNetwork() -> String {
         return WalletManager.shared.currentNetwork.name
     }
+
+    @objc
+    static func getCurrentUserUid() -> String? {
+        return UserManager.shared.activatedUID
+    }
   
     @objc
     static func isFreeGasEnabled() -> Bool {
@@ -53,13 +61,18 @@ class TurboModuleSwift: NSObject {
     static func getCurrentAllAccounts() async throws -> [String: Any] {
       var list: [RNBridge.WalletAccount] = []
       if let account = await WalletManager.shared.mainAccount {
-        list.append(account.toWalletAccount())
+        list.append(account.toWalletAccount().toRNBridge())
       }
       if let account = await WalletManager.shared.coa {
-        list.append(account.toWalletAccount())
+        list.append(account.toWalletAccount().toRNBridge())
+      }
+      if let eoaAccounts = await WalletManager.shared.EOAs {
+        let address =  await WalletManager.shared.mainAccount?.hexAddr
+        let result = eoaAccounts.map{ $0.toWalletAccount(parentAddress: address).toRNBridge()}
+        list.append(contentsOf: result)
       }
       if let childList = await WalletManager.shared.childs {
-        let result = childList.map { $0.toWalletAccount() }
+        let result = childList.map { $0.toWalletAccount().toRNBridge() }
         list.append(contentsOf: result)
       }
 
@@ -169,7 +182,6 @@ extension TurboModuleSwift {
 
   /// Persist newly created seed phrase securely for current user
   /// The mnemonic is encrypted with the active uid and stored in the app keychain
-  /// Also updates userStore and WalletManager with the new key
   @objc
   static func saveNewKey(seedphrase: String) async throws {
     guard let uid = UserManager.shared.activatedUID, !uid.isEmpty else {
@@ -188,7 +200,7 @@ extension TurboModuleSwift {
       log.error("[Blocto] failed to create hd wallet from seed phrase")
       throw WalletError.invalidMnemonic
     }
-
+    
     let provider = FlowWalletKit.SeedPhraseKey(
       hdWallet: hdWallet,
       storage: FlowWalletKit.SeedPhraseKey.seedPhraseStorage
@@ -278,6 +290,7 @@ extension TurboModuleSwift {
       "NODE_API_URL": Config.get(.lilicoWeb).removeSuffix("/api/"),
       "GO_API_URL": Config.get(.lilico),
       "INSTABUG_TOKEN": ServiceConfig.instabugRNToken,
+      "MIXPANEL_TOKEN": ServiceConfig.mixpanelRNToken,
     ]
   }
 
@@ -433,11 +446,14 @@ extension TurboModuleSwift {
   static func getSelectedWalletAccount() async throws -> [String: Any] {
     let manager = await WalletManager.shared
     if let account = await manager.selectedChildAccount {
-      return try account.toWalletAccount().toDictionary()
+      return try account.toWalletAccount().toRNBridge().toDictionary()
     } else if let account = await manager.selectedEVMAccount {
-      return try account.toWalletAccount().toDictionary()
+      return try account.toWalletAccount().toRNBridge().toDictionary()
+    } else if let account = await manager.selectedEOAAccount {
+      let address =  await WalletManager.shared.mainAccount?.hexAddr
+      return try account.toWalletAccount(parentAddress: address).toRNBridge().toDictionary()
     } else if let account = await manager.mainAccount {
-      return try account.toWalletAccount().toDictionary()
+      return try account.toWalletAccount().toRNBridge().toDictionary()
     }
     return [:]
   }
@@ -468,16 +484,36 @@ extension TurboModuleSwift {
     let response = RNBridge.WalletProfilesResponse(profiles: result ?? [])
     return try response.toDictionary()
   }
+
+  @objc
+  static func getRecoverableProfiles() async throws -> [String: Any] {
+      // For now, return all known profiles as recoverable
+      return try await getWalletProfiles()
+  }
+
+  @objc
+  static func switchToProfile(userId: String) async throws {
+    let allProfiles = ProfileManager.shared.profiles
+    guard let profile = allProfiles.first( where: { $0.uid == userId }) else {
+      throw LLError.accountNotFound
+    }
+    try await UserManager.shared.switchAccount(with: profile)
+  }
+
+  @objc
+  static func shareQRCode(address: String, qrCodeDataUrl: String) async throws {
+
+  }
   
   private static func getCurrentProfile() async throws -> RNBridge.WalletProfile {
     guard let userInfo = UserManager.shared.userInfo, let uid = UserManager.shared.activatedUID else {
       throw LLError.accountNotFound
     }
     var list: [RNBridge.WalletAccount] = []
-    
+    let eoas = await WalletManager.shared.walletEntity?.eoaAddress
     let accounts = await WalletManager.shared.currentNetworkAccounts
     for account in accounts {
-      guard let result = try? await parseAccount(account: account, userId: uid) else {
+      guard let result = try? await parseAccount(account: account, userId: uid, eoa: eoas) else {
         continue
       }
       list.append(contentsOf: result)
@@ -508,14 +544,20 @@ extension TurboModuleSwift {
       guard let accountList =  walletEntity.accounts?[currentNetwork] else {
         continue
       }
+      if let eoas = walletEntity.eoaAddress, let address = accountList.first?.hexAddr {
+        let result = Array(eoas).compactMap {
+          EOA($0, network: currentNetwork)?.toWalletAccount(parentAddress: address, userId: profile.uid).toRNBridge()
+        }
+        walletAccounts.append(contentsOf: result)
+      }
       for account in accountList {
-        guard let result = try? await parseAccount(account: account, userId: profile.uid) else {
+        guard let result = try? await parseAccount(account: account, userId: profile.uid, eoa: walletEntity.eoaAddress) else {
           continue
         }
         walletAccounts.append(contentsOf: result)
       }
       let walletProfile = RNBridge.WalletProfile(
-        name: profile.username ?? "",
+        name: nickname,
         avatar: profile.avatar ?? "",
         uid: profile.uid,
         accounts: walletAccounts
@@ -525,16 +567,16 @@ extension TurboModuleSwift {
     return resultOfProfiles
   }
   
-  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil) async throws ->  [RNBridge.WalletAccount] {
+  private static func parseAccount(account: FlowWalletKit.Account, userId: String? = nil, eoa: Set<String>? = nil) async throws ->  [RNBridge.WalletAccount] {
     var list: [RNBridge.WalletAccount] = []
     try? await account.fetchAccount()
-    list.append(account.toWalletAccount(userId: userId))
+    list.append(account.toWalletAccount(userId: userId).toRNBridge())
     if let linked = account.coa {
-      list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId))
+      list.append(linked.toWalletAccount(parentAddress: account.hexAddr, userId: userId).toRNBridge())
     }
 
     if let childList = account.childs {
-      let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr, userId: userId) }
+      let result = childList.map { $0.toWalletAccount(parentAddress: account.hexAddr, userId: userId).toRNBridge() }
       list.append(contentsOf: result)
     }
     return list
@@ -584,6 +626,60 @@ extension TurboModuleSwift {
       log.error(message, context: args)
     default:
       log.info(message, context: args)
+    }
+  }
+  
+  @objc
+  static func ethSign(_ hexData: String) -> String? {
+    guard let keyProvider = WalletManager.shared.keyProvider as? EthereumKeyProtocol else {
+      return nil
+    }
+    return try? keyProvider.ethSign(digest: Data(hexData.hexValue)).hexString
+  }
+
+  @objc
+  static func launchNativeScreen(screen: String, params: String?) {
+    log.info("\(screen)")
+    guard let screen = NativeScreenName(rawValue: screen) else {
+      log.error("don't support route \(screen)")
+      HUD.error(title: "don't support route \(screen)")
+      return
+    }
+    guard currentNetwork == .mainnet else {
+      HUD.error(title: "wrong_network_title".localized)
+      return
+    }
+    let restoreModel = RestoreWalletViewModel()
+    switch screen {
+    case .deviceBackup:
+      Router.route(to: RouteMap.RestoreLogin.syncQC)
+    case .recoveryPhraseRestore:
+      restoreModel.restoreWithManualAction()
+    case .keyStoreRestore:
+      restoreModel.restoreWithKeyStore()
+    case .privateKeyRestore:
+      restoreModel.resteroWithPrivateKey()
+    case .googleDriveRestore:
+      restoreModel.restoreWithCloudAction(type: .googleDrive)
+    case .multiRestore:
+      Router.route(to: RouteMap.RestoreLogin.restoreMulti)
+    case .backupOptions:
+      Router.route(to: RouteMap.Backup.backupList)
+    case .icloudRestore:
+      restoreModel.restoreWithCloudAction(type: .icloud)
+    }
+  }
+}
+
+extension Flow.HashAlgorithm {
+  fileprivate func hash(data: Data) throws -> Data {
+    switch self {
+    case .SHA2_256:
+      return Hash.sha256(data: data)
+    case .SHA3_256:
+      return Hash.sha3_256(data: data)
+    default:
+      throw FWKError.unsupportHashAlgorithm
     }
   }
 }

@@ -65,7 +65,7 @@ class UserManager: ObservableObject {
       do {
         guard let uid = activatedUID else { return }
         try MultiAccountStorage.shared.saveUserInfo(userInfo, uid: uid)
-        try ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
+        ProfileManager.shared.updateOrDeleteProfile(userInfo: userInfo, with: uid)
       } catch {
         log.error("save user info failed", context: error)
       }
@@ -79,9 +79,15 @@ class UserManager: ObservableObject {
     }
   }
 
+  // It is only used when the bridge is called on page of onboard
+  var RNRegisterInfo:[String: String] = [:]
+
   var isLoggedIn: Bool {
     activatedUID != nil
   }
+
+  @Published
+  var isLoggingIn: Bool = false
 
   func verifyUserType() {
     Task {
@@ -182,32 +188,83 @@ extension UserManager {
 // MARK: - Register
 
 extension UserManager {
-  func register(_ userName: String) async throws -> String? {
+  func register(_ userName: String, evmAddress: String? = nil) async throws -> String? {
     let secureKey = try SecureEnclaveKey.create()
     let key = try secureKey.flowAccountKey(index: 0)
+    return try await register(
+      name: userName,
+      key: key,
+      keyProvider: secureKey,
+      evmAddress: evmAddress
+    )
+  }
+
+  func register(
+    name: String,
+    key: Flow.AccountKey,
+    keyProvider: any KeyProtocol,
+    evmAddress: String? = nil
+  ) async throws -> String? {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
-    let request = RegisterRequest(
-      username: userName,
-      accountKey: key.toCodableModel(),
+
+    guard let token = try? await getIDToken(), !token.isEmpty else {
+      loginAnonymousIfNeeded()
+      throw LLError.restoreLoginFailed
+    }
+
+    let signData = token.addUserMessage() ?? Data()
+    let signature = try keyProvider.sign(
+      data: signData,
+      signAlgo: key.signAlgo,
+      hashAlgo: key.hashAlgo
+    ).hexValue
+
+    let flowAccountInfo = FlowAccountInfo(accountKey: key.toCodableModel(), signature: signature)
+    var evmAccountInfo: EVMAccountInfo?
+    if let evmAddress = evmAddress,
+        let ethProvider = keyProvider as? EthereumKeyProtocol,
+        let evmSignature = try? ethProvider.ethSign(digest: signData)
+    {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
+    let request = RegisterParam(
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
+      username: name,
       deviceInfo: IPManager.shared.toParams()
     )
+
     let model: RegisterResponse = try await Network.request(FRWAPI.User.register(request))
 
-    try secureKey.store(id: model.id)
+    let pw = KeyProvider.password(with: model.id)
+    try keyProvider.store(id: model.id,password: pw)
     let store = UserManager.StoreUser(
       publicKey: key.publicKey.description,
       address: nil,
       userId: model.id,
-      keyType: .secureEnclave,
+      keyType: keyProvider.keyType,
       account: key.toStoreKey()
     )
     WalletManager.shared.updateKeyProvider(provider: secureKey)
     LocalUserDefaults.shared.addUser(user: store)
 
     try await finishLogin(customToken: model.customToken, isRegiter: true)
-    WalletManager.shared.asyncCreateWalletAddressFromServer()
+    let txid = await WalletManager.shared.asyncCreateWalletAddressFromServer()
     userType = .secure
 
     EventTrack.Account
@@ -216,7 +273,10 @@ extension UserManager {
         signAlgo: key.signAlgo.id,
         hashAlgo: key.hashAlgo.id
       )
-    return model.txId
+    if let txid {
+      RNRegisterInfo[txid] = activatedUID
+    }
+    return txid
   }
 }
 
@@ -362,6 +422,18 @@ extension UserManager {
   }
 
   func restoreLogin(withMnemonic mnemonic: String, userId _: String? = nil) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(),
           !token.isEmpty,
           let tokenData = token.data(using: .utf8)
@@ -384,13 +456,13 @@ extension UserManager {
       throw WalletError.emptyPublicKey
     }
 
-    let data = Flow.DomainTag.user.normalize + tokenData
+    let signData = token.addUserMessage() ?? Data()
 
     let hashAlgo = Flow.HashAlgorithm.SHA2_256
     let signAlgo = Flow.SignatureAlgorithm.ECDSA_SECP256k1
 
     guard let signature = try? provider.sign(
-      data: data,
+      data: signData,
       signAlgo: signAlgo,
       hashAlgo: hashAlgo
     )
@@ -407,9 +479,18 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = provider as? EthereumKeyProtocol,
+       let wallet = try? Wallet(type: .key(provider)),
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
 
@@ -452,6 +533,18 @@ extension UserManager {
     with address: String? = nil,
     publicKey: String? = nil
   ) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(), !token.isEmpty else {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
@@ -491,9 +584,17 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = keyProvider as? EthereumKeyProtocol,
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
     let response: Network.Response<LoginResponse> = try await Network
@@ -518,6 +619,18 @@ extension UserManager {
   }
 
   func restoreLogin(userId: String) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     EventTrack.Dev.restoreLogin(userId: userId)
     if Auth.auth().currentUser?.isAnonymous != true {
       try await Auth.auth().signInAnonymously()
@@ -549,9 +662,18 @@ extension UserManager {
       signAlgo: Flow.SignatureAlgorithm.ECDSA_P256.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = secureKey as? EthereumKeyProtocol,
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      // SecureEnclaveKey might not have a direct ethAddress in this context, 
+      // but if it supports ethSign, we might need more info.
+      // For now, following the pattern.
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
 
@@ -575,6 +697,18 @@ extension UserManager {
     isImport: Bool = false,
     flowAccounts: [FlowWalletKit.Account]? = nil
   ) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     if let mechanism = privateKey.keyType.toEventMechanism() {
       EventTrack.Account.recovered(address: address, mechanism: mechanism, methods: [])
     }
@@ -626,9 +760,18 @@ extension UserManager {
       }
       loginResponse = response.data
     } else {
+      let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature)
+      var evmAccountInfo: EVMAccountInfo?
+      if let ethProvider = privateKey as? EthereumKeyProtocol,
+         let wallet = try? Wallet(type: .key(privateKey)),
+         let evmAddress = try? wallet.ethAddress(),
+         let evmSignature = try? ethProvider.ethSign(digest: signData) {
+        evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+      }
+
       let request = LoginRequest(
-        signature: signature,
-        accountKey: key,
+        flowAccountInfo: flowAccountInfo,
+        evmAccountInfo: evmAccountInfo,
         deviceInfo: IPManager.shared.toParams(),
         address: address
       )
@@ -669,6 +812,18 @@ extension UserManager {
 
 extension UserManager {
   func login(with profile: ProfileModel) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(), !token.isEmpty else {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
@@ -709,9 +864,17 @@ extension UserManager {
       signAlgo: signAlgo.index
     )
 
+    let flowAccountInfo = FlowAccountInfo(accountKey: key, signature: signature.hexValue)
+    var evmAccountInfo: EVMAccountInfo?
+    if let ethProvider = keyProvider as? EthereumKeyProtocol,
+       let evmAddress = try? wallet.ethAddress(),
+       let evmSignature = try? ethProvider.ethSign(digest: signData) {
+      evmAccountInfo = EVMAccountInfo(eoaAddress: evmAddress, signature: evmSignature.hexValue)
+    }
+
     let request = LoginRequest(
-      signature: signature.hexValue,
-      accountKey: key,
+      flowAccountInfo: flowAccountInfo,
+      evmAccountInfo: evmAccountInfo,
       deviceInfo: IPManager.shared.toParams()
     )
     let response: Network.Response<LoginResponse> = try await Network
@@ -722,6 +885,7 @@ extension UserManager {
     guard let customToken = response.data?.customToken, !customToken.isEmpty else {
       throw LLError.restoreLoginFailed
     }
+    await WalletManager.shared.updateKeyProvider(provider: keyProvider)
 
     // Use already-fetched accounts (no duplicate network request!)
     let validAccounts = accounts.filter { $0.hasFullWeightKey }
