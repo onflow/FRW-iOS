@@ -316,6 +316,16 @@ struct DeveloperModeView: RouteableView {
                             ProfileManager.shared.clearAllProfiles()
                                   HUD.success(title: "All profiles cleared")
                           }
+                          
+                          HStack {
+                            Text("reset UID(click)")
+                            Spacer()
+                          }
+                          .frame(height: 64)
+                          .padding(.horizontal, 16)
+                          .onTapGesture {
+                            UserManager.shared.activatedUID = nil
+                          }
                         }
                         .background(.LL.bgForIcon)
                         .cornerRadius(16)
@@ -470,6 +480,16 @@ struct DeveloperModeView: RouteableView {
                               .padding(.horizontal, 16)
                               .onTapGesture {
                                 Router.route(to: RouteMap.Developer.deleteSE)
+                              }
+                              
+                              HStack {
+                                Text("reset UID(click)")
+                                Spacer()
+                              }
+                              .frame(height: 64)
+                              .padding(.horizontal, 16)
+                              .onTapGesture {
+                                UserManager.shared.activatedUID = nil
                               }
                             }
                             .background(.LL.bgForIcon)

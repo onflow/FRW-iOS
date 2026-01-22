@@ -28,6 +28,10 @@ class ServiceConfig {
   static var instabugRNToken: String {
     ServiceConfig.shared.dict["INSTABUG_RN_TOKEN"] ?? ""
   }
+  
+  static var mixpanelRNToken: String {
+    ServiceConfig.shared.dict["MixPanelToken"] ?? ""
+  }
 
   static func configure() {
     ServiceConfig.shared.setupInstabug()

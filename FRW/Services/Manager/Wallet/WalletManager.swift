@@ -147,9 +147,8 @@ class WalletManager: ObservableObject {
         entity.securityDelegate = self
         return entity.$accounts.compactMap { $0 }
       }
-//            .filter { $0.count >= self.supportNetworks.count }
       .receive(on: DispatchQueue.main)
-      .removeDuplicates()
+//      .removeDuplicates()
       .sink { [weak self] accounts in
         print("Wallet Entity Accounts Updated \(accounts.count)")
         self?.loadRecentFlowAccount()
@@ -255,7 +254,6 @@ extension WalletManager {
       } else {
         selectedAccount = .main(account.address)
       }
-      selectedAccount = .main(account.address)
       checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
     updateUserAddress()

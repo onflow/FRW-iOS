@@ -228,6 +228,7 @@ extension TurboModuleSwift {
       "NODE_API_URL": Config.get(.lilicoWeb).removeSuffix("/api/"),
       "GO_API_URL": Config.get(.lilico),
       "INSTABUG_TOKEN": ServiceConfig.instabugRNToken,
+      "MIXPANEL_TOKEN": ServiceConfig.mixpanelRNToken,
     ]
   }
 
@@ -375,7 +376,11 @@ extension TurboModuleSwift {
 
   @objc
   static func switchToProfile(userId: String) async throws {
-    try await UserManager.shared.switchAccount(withUID: userId)
+    let allProfiles = ProfileManager.shared.profiles
+    guard let profile = allProfiles.first( where: { $0.uid == userId }) else {
+      throw LLError.accountNotFound
+    }
+    try await UserManager.shared.switchAccount(with: profile)
   }
 
   @objc

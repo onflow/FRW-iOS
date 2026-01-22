@@ -274,7 +274,7 @@ struct ScrollViewOffset<Content: View>: View {
     let content: () -> Content
 
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             offsetReader
             content()
                 .padding(.top, -8)
