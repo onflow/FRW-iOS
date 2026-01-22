@@ -86,6 +86,9 @@ class UserManager: ObservableObject {
     activatedUID != nil
   }
 
+  @Published
+  var isLoggingIn: Bool = false
+
   func verifyUserType() {
     Task {
       do {
@@ -202,6 +205,18 @@ extension UserManager {
     keyProvider: any KeyProtocol,
     evmAddress: String? = nil
   ) async throws -> String? {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     if IPManager.shared.info == nil {
       await IPManager.shared.fetch()
     }
@@ -407,6 +422,18 @@ extension UserManager {
   }
 
   func restoreLogin(withMnemonic mnemonic: String, userId _: String? = nil) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(),
           !token.isEmpty,
           let tokenData = token.data(using: .utf8)
@@ -506,6 +533,18 @@ extension UserManager {
     with address: String? = nil,
     publicKey: String? = nil
   ) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(), !token.isEmpty else {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed
@@ -584,6 +623,18 @@ extension UserManager {
   }
 
   func restoreLogin(userId: String) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     EventTrack.Dev.restoreLogin(userId: userId)
     if Auth.auth().currentUser?.isAnonymous != true {
       try await Auth.auth().signInAnonymously()
@@ -650,6 +701,18 @@ extension UserManager {
     isImport: Bool = false,
     flowAccounts: [FlowWalletKit.Account]? = nil
   ) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     if let mechanism = privateKey.keyType.toEventMechanism() {
       EventTrack.Account.recovered(address: address, mechanism: mechanism, methods: [])
     }
@@ -753,6 +816,18 @@ extension UserManager {
 
 extension UserManager {
   func login(with profile: ProfileModel) async throws {
+    await MainActor.run {
+      isLoggingIn = true
+    }
+
+    defer {
+      Task {
+        await MainActor.run {
+          isLoggingIn = false
+        }
+      }
+    }
+
     guard let token = try? await getIDToken(), !token.isEmpty else {
       loginAnonymousIfNeeded()
       throw LLError.restoreLoginFailed

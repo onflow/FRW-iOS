@@ -79,6 +79,7 @@ final class Coordinator {
             .dropFirst() // Skip initial value since we already handled it above
             .receive(on: DispatchQueue.main)
             .sink { [weak self] profiles in
+              guard !UserManager.shared.isLoggingIn else { return } 
               if UserManager.shared.isLoggedIn {
                 self?.updateRootView(isEmpty: profiles.isEmpty, animated: true)
               } else {
