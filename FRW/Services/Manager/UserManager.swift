@@ -552,18 +552,35 @@ extension UserManager {
 
     // Find valid key provider (validates on-chain)
     // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
-    guard let result = try await WalletManager.shared.findKeyProvider(uid: userId) else {
+    let keyResult = await WalletManager.shared.findKeyProvider(uid: userId)
+
+    let keyProvider: any KeyProtocol
+    let accountKey: Flow.AccountKey?
+    let address: String?
+
+    switch keyResult {
+    case .success(let data):
+      // Found valid key with on-chain account
+      keyProvider = data.provider
+      accountKey = data.accountKey
+      address = data.address
+    case .providerWithoutAccount(let provider):
+      // Provider exists but account is still being created
+      // For login, we need on-chain account, so this should fail
+      log.error("[Login] Provider exists but no on-chain account for uid: \(userId)")
+      throw WalletError.emptyMainAccount
+    case .noValidProvider:
       log.error("[Login] No valid key found for uid: \(userId)")
       throw WalletError.emptyKeyProvider
     }
 
-    let keyProvider = result.provider
     let wallet = Wallet(type: .key(keyProvider))
-    let accountKey = result.accountKey
-    let address = result.address
-    // wallet and accounts are already fetched, no need to fetch again
 
     // Use the signAlgo and hashAlgo from the on-chain account key
+    guard let accountKey = accountKey else {
+      log.error("[Login] No account key found")
+      throw WalletError.emptyKeyProvider
+    }
     let signAlgo = accountKey.signAlgo
     let hashAlgo = accountKey.hashAlgo
 
@@ -574,7 +591,7 @@ extension UserManager {
       throw LLError.signFailed
     }
 
-    log.info("[Login] Using on-chain key config - signAlgo: \(signAlgo), hashAlgo: \(hashAlgo), address: \(address.prefix(8)))")
+    log.info("[Login] Using on-chain key config - signAlgo: \(signAlgo), hashAlgo: \(hashAlgo), address: \(address))")
 
     let signature = try keyProvider.sign(data: signData, signAlgo: signAlgo, hashAlgo: hashAlgo)
 
@@ -832,16 +849,31 @@ extension UserManager {
 
     // Find valid key provider (validates on-chain)
     // Returns the key provider along with on-chain account info and already-fetched wallet/accounts
-    guard let result = try await WalletManager.shared.findKeyProvider(uid: profile.uid) else {
+    let keyResult = await WalletManager.shared.findKeyProvider(uid: profile.uid)
+
+    let keyProvider: any KeyProtocol
+    let accountKey: Flow.AccountKey
+    let address: String
+    let wallet: FlowWalletKit.Wallet
+    let accounts: [FlowWalletKit.Account]
+
+    switch keyResult {
+    case .success(let data):
+      // Found valid key with on-chain account
+      keyProvider = data.provider
+      accountKey = data.accountKey
+      address = data.address
+      wallet = data.wallet
+      accounts = data.accounts
+    case .providerWithoutAccount(let provider):
+      // Provider exists but account is still being created
+      // For login, we need on-chain account, so this should fail
+      log.error("[Login] Provider exists but no on-chain account for profile: \(profile.uid)")
+      throw WalletError.emptyMainAccount
+    case .noValidProvider:
       log.error("[Login] No valid key found for profile: \(profile.uid)")
       throw WalletError.emptyKeyProvider
     }
-
-    let keyProvider = result.provider
-    let accountKey = result.accountKey
-    let address = result.address
-    let wallet = result.wallet  // ✅ Already fetched, reuse it
-    let accounts = result.accounts  // ✅ Already fetched, reuse it
 
     // Use the signAlgo and hashAlgo from the on-chain account key
     let signAlgo = accountKey.signAlgo
