@@ -267,14 +267,13 @@ extension WalletManager {
   }
   
   private func loadRecentFlowAccount() {
-    guard let accounts = walletEntity?.accounts, !accounts.isEmpty else {
-      reloadWalletInfo()
-      return
-    }
-    guard let accounts = accounts[currentNetwork], let account = accounts.first else {
-      // TODO: Handle newtork swicth, if no account
+    
+    guard let accounts = walletEntity?.accounts, !accounts.isEmpty,
+          let accounts = accounts[currentNetwork], let account = accounts.first
+    else {
       mainAccount = nil
-      HUD.error(WalletError.emptyMainAccount)
+      reloadWalletInfo()
+      log.debug("\(currentNetwork) : \(String(describing: walletEntity?.accounts?[currentNetwork]?.count))")
       return
     }
 
