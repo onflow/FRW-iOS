@@ -9,103 +9,187 @@ import Flow
 import FlowWalletKit
 import Foundation
 
+// MARK: - Key Validation State
+
+/// Tracks the state during key provider validation process
+private struct KeyValidationState {
+  var hasAnyKeys = false
+  var loadedAnyProvider = false
+  var foundProviderWithoutAccount: (any KeyProtocol)? = nil
+  var revokedKeyIds: [String] = []
+
+  mutating func recordRevokedKey(_ keyId: String) {
+    revokedKeyIds.append(keyId)
+  }
+
+  mutating func recordProviderWithoutAccount(_ provider: any KeyProtocol) {
+    if foundProviderWithoutAccount == nil {
+      foundProviderWithoutAccount = provider
+    }
+  }
+}
+
 // MARK: - Key Validation
 
 extension WalletManager {
 
   /// Find valid key provider for a user ID (validates on-chain)
   /// Used for account switching - finds the first key that has a valid mainnet account
-  /// Returns tuple of (keyProvider, accountKey, address, wallet, accounts) or nil if no valid key found
-  /// The wallet and accounts are already fetched to avoid duplicate network requests
-  /// Throws `noActiveKeys` if keys exist but are all revoked
-  func findKeyProvider(uid: String) async throws -> (provider: any KeyProtocol, accountKey: Flow.AccountKey, address: String, wallet: FlowWalletKit.Wallet, accounts: [FlowWalletKit.Account])? {
-    // Prioritize userStore keyType if available (reduces unnecessary network requests)
-    let keyTypes: [FlowWalletKit.KeyType]
-    if let userStore = userStore(with: uid) {
-      // Try userStore keyType first, then fallback to others
-      keyTypes = [userStore.keyType] + [.seedPhrase, .privateKey, .secureEnclave].filter { $0 != userStore.keyType }
-      log.info("[KeyValidation] Prioritizing keyType from userStore: \(userStore.keyType)")
-    } else {
-      keyTypes = [.seedPhrase, .privateKey, .secureEnclave]
-    }
+  /// Returns KeyProviderResult indicating success, provider without account, or no valid provider
+  func findKeyProvider(uid: String) async -> KeyProviderResult {
+    let keyTypes = determineKeyTypePriority(uid: uid)
+    let password = KeyProvider.password(with: uid)
 
-    let pw = KeyProvider.password(with: uid)
-    var foundRevokedKeys = false
-    var revokedKeyIds: [String] = []
+    var validationState = KeyValidationState()
 
     for keyType in keyTypes {
       let storage = getStorage(for: keyType)
       let allKeys = KeyProvider.keys(with: uid, in: storage)
 
-      if allKeys.isEmpty {
-        continue
-      }
+      guard !allKeys.isEmpty else { continue }
 
+      validationState.hasAnyKeys = true
       log.info("[KeyValidation] Checking \(allKeys.count) keys in \(keyType) for uid: \(uid)")
 
-      // Try each key in this storage type
       for keyId in allKeys {
         guard let provider = try? loadKeyProvider(
           keyId: keyId,
           keyType: keyType,
-          password: pw,
+          password: password,
           storage: storage
         ) else {
           continue
         }
 
-        // Check if this key has a valid mainnet account
-        let wallet = FlowWalletKit.Wallet(type: .key(provider), networks: [.mainnet])
-        do {
-          try await wallet.fetchAccount()
+        validationState.loadedAnyProvider = true
 
-          // Check if we have accounts on mainnet with full weight key that is NOT revoked
-          if let accounts = wallet.accounts?[.mainnet],
-             let validAccount = accounts.first(where: { $0.hasFullWeightKey }),
-             let fullWeightKey = validAccount.fullWeightKey {
-
-            // IMPORTANT: Check if key is revoked
-            if fullWeightKey.revoked {
-              log.warning("[KeyValidation] ❌ Key is REVOKED: \(keyId), address: \(validAccount.address.hexAddr)")
-              foundRevokedKeys = true
-              revokedKeyIds.append(keyId)
-              continue
-            }
-
-            log.info("[KeyValidation] ✅ Found valid active key for uid: \(uid) (keyId: \(keyId), address: \(validAccount.address.hexAddr), signAlgo: \(fullWeightKey.signAlgo), hashAlgo: \(fullWeightKey.hashAlgo), revoked: false)")
-
-            // Update userStore with correct publicKey and account info
-            let correctPublicKey = provider.publicKey(signAlgo: fullWeightKey.signAlgo)?.hexString ?? ""
-            let updatedStore = UserManager.StoreUser(
-              publicKey: correctPublicKey,
-              address: validAccount.address.hexAddr,
-              userId: uid,
-              keyType: keyType,
-              account: fullWeightKey.toStoreKey()
-            )
-            LocalUserDefaults.shared.addUser(user: updatedStore)
-            log.info("[KeyValidation] Updated userStore with correct publicKey: \(correctPublicKey.prefix(8))")
-
-            // Return all accounts (including child accounts) to avoid duplicate fetch
-            return (provider, fullWeightKey, validAccount.address.hexAddr, wallet, accounts)
-          } else {
-            log.warning("[KeyValidation] ❌ Key has no valid mainnet account: \(keyId)")
-          }
-        } catch {
-          log.warning("[KeyValidation] ❌ Failed to fetch account for key: \(keyId), error: \(error)")
-          continue
+        if let result = await validateKeyProvider(
+          provider: provider,
+          keyId: keyId,
+          keyType: keyType,
+          uid: uid,
+          state: &validationState
+        ) {
+          return result
         }
       }
     }
 
-    // If we found revoked keys, throw noActiveKeys
-    if foundRevokedKeys {
-      log.error("[KeyValidation] Found only revoked keys for uid: \(uid), keyIds: \(revokedKeyIds)")
-      throw WalletError.noActiveKeys
+    return buildFinalResult(state: validationState, uid: uid)
+  }
+
+  // MARK: - Private Helper Methods
+
+  /// Determine key type checking priority based on userStore
+  private func determineKeyTypePriority(uid: String) -> [FlowWalletKit.KeyType] {
+    if let userStore = userStore(with: uid) {
+      let prioritized = [userStore.keyType] + [.seedPhrase, .privateKey, .secureEnclave]
+        .filter { $0 != userStore.keyType }
+      log.info("[KeyValidation] Prioritizing keyType from userStore: \(userStore.keyType)")
+      return prioritized
+    }
+    return [.seedPhrase, .privateKey, .secureEnclave]
+  }
+
+  /// Validate a single key provider against on-chain data
+  /// Returns KeyProviderResult if validation is conclusive, nil to continue searching
+  private func validateKeyProvider(
+    provider: any KeyProtocol,
+    keyId: String,
+    keyType: FlowWalletKit.KeyType,
+    uid: String,
+    state: inout KeyValidationState
+  ) async -> KeyProviderResult? {
+    let wallet = FlowWalletKit.Wallet(type: .key(provider), networks: [.mainnet])
+
+    do {
+      try await wallet.fetchAccount()
+
+      guard let accounts = wallet.accounts?[.mainnet],
+            let validAccount = accounts.first(where: { $0.hasFullWeightKey }),
+            let fullWeightKey = validAccount.fullWeightKey else {
+        // Provider exists but no on-chain account yet
+        log.info("[KeyValidation] ⏳ Provider exists but no mainnet account yet: \(keyId)")
+        state.recordProviderWithoutAccount(provider)
+        return nil
+      }
+
+      // Check if key is revoked
+      if fullWeightKey.revoked {
+        log.warning("[KeyValidation] ❌ Key is REVOKED: \(keyId), address: \(validAccount.address.hexAddr)")
+        state.recordRevokedKey(keyId)
+        return nil
+      }
+
+      // Found valid active key!
+      log.info("[KeyValidation] ✅ Found valid active key for uid: \(uid) (keyId: \(keyId), address: \(validAccount.address.hexAddr))")
+
+      updateUserStore(
+        provider: provider,
+        keyType: keyType,
+        accountKey: fullWeightKey,
+        address: validAccount.address.hexAddr,
+        uid: uid
+      )
+
+      return .success(KeyProviderData(
+        provider: provider,
+        accountKey: fullWeightKey,
+        address: validAccount.address.hexAddr,
+        wallet: wallet,
+        accounts: accounts
+      ))
+    } catch {
+      // Network error or account not indexed yet
+      log.warning("[KeyValidation] ⏳ Failed to fetch account for key: \(keyId), error: \(error)")
+      state.recordProviderWithoutAccount(provider)
+      return nil
+    }
+  }
+
+  /// Update userStore with validated on-chain account info
+  private func updateUserStore(
+    provider: any KeyProtocol,
+    keyType: FlowWalletKit.KeyType,
+    accountKey: Flow.AccountKey,
+    address: String,
+    uid: String
+  ) {
+    let publicKey = provider.publicKey(signAlgo: accountKey.signAlgo)?.hexString ?? ""
+    let updatedStore = UserManager.StoreUser(
+      publicKey: publicKey,
+      address: address,
+      userId: uid,
+      keyType: keyType,
+      account: accountKey.toStoreKey()
+    )
+    LocalUserDefaults.shared.addUser(user: updatedStore)
+    log.info("[KeyValidation] Updated userStore with publicKey: \(publicKey.prefix(8))")
+  }
+
+  /// Build final result based on validation state
+  private func buildFinalResult(state: KeyValidationState, uid: String) -> KeyProviderResult {
+    // Priority 1: Provider without account (async creation in progress)
+    if let provider = state.foundProviderWithoutAccount {
+      log.info("[KeyValidation] Returning provider without account (async creation in progress)")
+      return .providerWithoutAccount(provider)
     }
 
-    log.error("[KeyValidation] No valid key found for uid: \(uid)")
-    return nil
+    // Priority 2: Revoked keys
+    if !state.revokedKeyIds.isEmpty {
+      log.error("[KeyValidation] Found only revoked keys for uid: \(uid), keyIds: \(state.revokedKeyIds)")
+      return .noValidProvider(.allKeysRevoked(revokedKeyIds: state.revokedKeyIds))
+    }
+
+    // Priority 3: Keys exist but couldn't load
+    if state.hasAnyKeys && !state.loadedAnyProvider {
+      log.error("[KeyValidation] Keys exist but failed to load for uid: \(uid)")
+      return .noValidProvider(.keysCorrupted)
+    }
+
+    // Priority 4: No keys at all
+    log.error("[KeyValidation] No keys found for uid: \(uid)")
+    return .noValidProvider(.noKeys)
   }
 
   // MARK: - Helper Functions
@@ -137,21 +221,6 @@ extension WalletManager {
     case .secureEnclave:
       return try? SecureEnclaveKey.get(id: keyId, password: password, storage: storage)
     }
-  }
-
-  /// Check if address is an EVM address (COA - Cadence Owned Account)
-  /// EVM addresses have many leading zeros: 0x00000000000000000000000203e18d5934842eca
-  /// Flow addresses are shorter: 0x203e18d5934842eca
-  private func isEVMAddress(_ address: String) -> Bool {
-    var addr = address
-    // Remove 0x prefix
-    if addr.hasPrefix("0x") || addr.hasPrefix("0X") {
-      addr = String(addr.dropFirst(2))
-    }
-
-    // EVM addresses (COA) are 40 characters (20 bytes) with many leading zeros
-    // Flow addresses are typically 16 characters (8 bytes) or less
-    return addr.count > 16
   }
 
   // MARK: - KeyIndexer Polling

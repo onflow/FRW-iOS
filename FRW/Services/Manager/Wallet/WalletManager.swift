@@ -218,17 +218,31 @@ extension WalletManager {
     Task {
       // Use findKeyProvider to get validated key with on-chain control
       // This ensures we always use the correct active key (not revoked)
-      guard let result = try? await findKeyProvider(uid: uid) else {
-        log.error("[Wallet] No valid key with on-chain control found for uid: \(uid)")
+      let result = await findKeyProvider(uid: uid)
+
+      let provider: any KeyProtocol
+
+      switch result {
+      case .success(let data):
+        // Found valid key with on-chain account
+        log.info("[Wallet] ✅ Found valid key with mainnet account for uid: \(uid)")
+        provider = data.provider
+        // data.wallet already has mainnet accounts fetched
+
+      case .providerWithoutAccount(let existingProvider):
+        // Provider exists but no on-chain account yet (async creation in progress)
+        // This is normal for newly created accounts - DO NOT show alert
+        log.info("[Wallet] ⏳ Provider exists but account is still being created for uid: \(uid)")
+        provider = existingProvider
+
+      case .noValidProvider(let reason):
+        // No valid provider found - show alert to user
+        log.error("[Wallet] ❌ No valid provider found for uid: \(uid), reason: \(reason.alertReason)")
         await MainActor.run {
-          // Show alert directly to user about missing valid key
-          showKeyInvalidAlert(uid: uid, reason: "No valid key with mainnet control")
+          showKeyInvalidAlert(uid: uid, reason: reason.alertReason)
         }
         return
       }
-
-      let provider = result.provider
-      // result.wallet already has mainnet accounts fetched
 
       await MainActor.run {
         updateKeyProvider(provider: provider)
