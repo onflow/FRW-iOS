@@ -42,6 +42,10 @@ struct TokenDetailView: RouteableView {
                 .visibility(showAccessibleWarning() ? .visible : .gone)
 
                 summaryView
+                if vm.showEarnBanner {
+                  EarnBanner()
+                }
+                
                 unverifiedTokenView
                     .visibility(vm.token.isVerifiedValue ? .gone : .visible)
 
