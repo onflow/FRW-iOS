@@ -235,11 +235,11 @@ extension WalletManager {
         log.info("[Wallet] ⏳ Provider exists but account is still being created for uid: \(uid)")
         provider = existingProvider
 
-      case .noValidProvider(let reason):
+      case .noValidProvider(let error):
         // No valid provider found - show alert to user
-        log.error("[Wallet] ❌ No valid provider found for uid: \(uid), reason: \(reason.alertReason)")
+        log.error("[Wallet] ❌ No valid provider found for uid: \(uid), error: \(error.errorMessage)")
         await MainActor.run {
-          showKeyInvalidAlert(uid: uid, reason: reason.alertReason)
+          showKeyInvalidAlert(uid: uid, reason: error.errorMessage)
         }
         return
       }
