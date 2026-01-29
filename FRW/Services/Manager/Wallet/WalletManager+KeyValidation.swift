@@ -17,9 +17,14 @@ private struct KeyValidationState {
   var loadedAnyProvider = false
   var foundProviderWithoutAccount: (any KeyProtocol)? = nil
   var revokedKeyIds: [String] = []
+  var insufficientWeightKeyIds: [String] = []
 
   mutating func recordRevokedKey(_ keyId: String) {
     revokedKeyIds.append(keyId)
+  }
+
+  mutating func recordInsufficientWeightKey(_ keyId: String) {
+    insufficientWeightKeyIds.append(keyId)
   }
 
   mutating func recordProviderWithoutAccount(_ provider: any KeyProtocol) {
@@ -105,37 +110,49 @@ extension WalletManager {
     do {
       try await wallet.fetchAccount()
 
+      // Check if account exists
       guard let accounts = wallet.accounts?[.mainnet],
-            let validAccount = accounts.first(where: { $0.hasFullWeightKey }),
-            let fullWeightKey = validAccount.fullWeightKey else {
-        // Provider exists but no on-chain account yet
+            let anyAccount = accounts.first else {
         log.info("[KeyValidation] ⏳ Provider exists but no mainnet account yet: \(keyId)")
         state.recordProviderWithoutAccount(provider)
         return nil
       }
 
-      // Check if key is revoked
-      if fullWeightKey.revoked {
-        log.warning("[KeyValidation] ❌ Key is REVOKED: \(keyId), address: \(validAccount.address.hexAddr)")
-        state.recordRevokedKey(keyId)
+      // Check if has valid full weight key (already filters !revoked && weight >= 1000)
+      guard let fullWeightKey = anyAccount.fullWeightKey else {
+        // No valid full weight key - find matching key to check why
+        let matchingKey = anyAccount.account.keys.first { key in
+          guard let publicKey = provider.publicKey(signAlgo: key.signAlgo)?.hexValue else { return false }
+          return key.publicKey.hex == publicKey
+        }
+
+        if let matchingKey {
+          if matchingKey.revoked {
+            log.warning("[KeyValidation] ❌ Key is REVOKED: \(keyId), address: \(anyAccount.address.hexAddr)")
+            state.recordRevokedKey(keyId)
+          } else if matchingKey.weight < 1000 {
+            log.warning("[KeyValidation] ⚠️ Key has insufficient weight (\(matchingKey.weight)): \(keyId), address: \(anyAccount.address.hexAddr)")
+            state.recordInsufficientWeightKey(keyId)
+          }
+        }
         return nil
       }
 
       // Found valid active key!
-      log.info("[KeyValidation] ✅ Found valid active key for uid: \(uid) (keyId: \(keyId), address: \(validAccount.address.hexAddr))")
+      log.info("[KeyValidation] ✅ Found valid active key for uid: \(uid) (keyId: \(keyId), address: \(anyAccount.address.hexAddr))")
 
       updateUserStore(
         provider: provider,
         keyType: keyType,
         accountKey: fullWeightKey,
-        address: validAccount.address.hexAddr,
+        address: anyAccount.address.hexAddr,
         uid: uid
       )
 
       return .success(KeyProviderData(
         provider: provider,
         accountKey: fullWeightKey,
-        address: validAccount.address.hexAddr,
+        address: anyAccount.address.hexAddr,
         wallet: wallet,
         accounts: accounts
       ))
@@ -177,19 +194,25 @@ extension WalletManager {
 
     // Priority 2: Revoked keys
     if !state.revokedKeyIds.isEmpty {
-      log.error("[KeyValidation] Found only revoked keys for uid: \(uid), keyIds: \(state.revokedKeyIds)")
-      return .noValidProvider(.allKeysRevoked(revokedKeyIds: state.revokedKeyIds))
+      log.error("[KeyValidation] Found only revoked keys for uid: \(uid), keyIds: \(state.revokedKeyIds.joined(separator: ", "))")
+      return .noValidProvider(.noActiveKeys)
     }
 
-    // Priority 3: Keys exist but couldn't load
+    // Priority 3: Insufficient weight keys
+    if !state.insufficientWeightKeyIds.isEmpty {
+      log.error("[KeyValidation] Found only insufficient weight keys for uid: \(uid), keyIds: \(state.insufficientWeightKeyIds.joined(separator: ", "))")
+      return .noValidProvider(.insufficientKeyWeight)
+    }
+
+    // Priority 4: Keys exist but couldn't load
     if state.hasAnyKeys && !state.loadedAnyProvider {
       log.error("[KeyValidation] Keys exist but failed to load for uid: \(uid)")
       return .noValidProvider(.keysCorrupted)
     }
 
-    // Priority 4: No keys at all
+    // Priority 5: No keys at all
     log.error("[KeyValidation] No keys found for uid: \(uid)")
-    return .noValidProvider(.noKeys)
+    return .noValidProvider(.emptyKeyProvider)
   }
 
   // MARK: - Helper Functions
