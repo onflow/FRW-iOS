@@ -186,7 +186,7 @@ final class WalletViewModel: ObservableObject {
     var walletAccount: WalletAccount? = nil
   
     @Published
-    var showEarnButton: Bool = true
+    var showEarnButton: Bool = !AppUrl.earnUrl.isEmpty
   
     var needShowPlaceholder: Bool {
         isMock || walletState == .noAddress

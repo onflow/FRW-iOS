@@ -186,7 +186,7 @@ class TokenDetailViewModel: ObservableObject {
     var isTokenDetailsButtonEnabled: Bool { token.website.isNotNullNorEmpty }
     
     @Published
-    var showEarnBanner: Bool = true
+    var showEarnBanner: Bool = !AppUrl.earnUrl.isEmpty
     // MARK: Private
 
     private var cancelSets = Set<AnyCancellable>()
