@@ -55,6 +55,7 @@ struct AccountSwitchView: View {
                     Spacer()
                 }
                 .frame(height: 56)
+                .contentShape(Rectangle())
             }
             .alert("wrong_network_title".localized, isPresented: $showAlert) {
                 Button("switch_to_mainnet".localized) {
@@ -90,6 +91,7 @@ struct AccountSwitchView: View {
                     Spacer()
                 }
                 .frame(height: 56)
+                .contentShape(Rectangle())
             }
             .buttonStyle(ScaleButtonStyle())
         }
