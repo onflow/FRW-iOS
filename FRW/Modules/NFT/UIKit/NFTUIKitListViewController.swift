@@ -44,12 +44,6 @@ class NFTUIKitListViewController: UIViewController {
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(onChildAccountChanged),
-            name: .childAccountChanged,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
             selector: #selector(onNFTDidChangedByMoving),
             name: .nftDidChangedByMoving,
             object: nil
@@ -193,21 +187,14 @@ class NFTUIKitListViewController: UIViewController {
 
     @objc
     private func didReset() {
-        listStyleHandler.collectionView.beginRefreshing()
-        gridStyleHandler.collectionView.beginRefreshing()
+        listStyleHandler.refreshAction()
+        gridStyleHandler.refreshAction()
     }
 
     @objc
     private func onCustomAddressChanged() {
-        listStyleHandler.collectionView.beginRefreshing()
-        gridStyleHandler.collectionView.beginRefreshing()
-    }
-
-    @objc
-    private func onChildAccountChanged() {
-        addButton.isHidden = !WalletManager.shared.isSelectedFlowAccount
-        listStyleHandler.collectionView.beginRefreshing()
-        gridStyleHandler.collectionView.beginRefreshing()
+        listStyleHandler.refreshAction()
+        gridStyleHandler.refreshAction()
     }
 
     @objc
@@ -219,8 +206,8 @@ class NFTUIKitListViewController: UIViewController {
 
     private func walletInfoDidChanged() {
         addButton.isHidden = !WalletManager.shared.isSelectedFlowAccount
-        listStyleHandler.collectionView.beginRefreshing()
-        gridStyleHandler.collectionView.beginRefreshing()
+        listStyleHandler.refreshAction()
+        gridStyleHandler.refreshAction()
     }
 
     private func setupViews() {

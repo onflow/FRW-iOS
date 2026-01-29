@@ -36,7 +36,6 @@ public extension Notification.Name {
     static let toggleSideMenu = Notification.Name("toggleSideMenu")
 
     static let nftCountChanged = Notification.Name("nftCountChanged")
-    static let childAccountChanged = Notification.Name("childAccountChanged")
 
     static let syncDeviceStatusDidChanged = Notification.Name("syncDeviceStatusDidChanged")
 
