@@ -97,7 +97,14 @@ class WalletManager: ObservableObject {
   var mainAccount: FlowWalletKit.Account?
 
   @Published
-  private(set) var selectedAccount: FWAccount?
+  private(set) var selectedAccount: FWAccount? {
+    didSet {
+      // Store selected account per uid
+      if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
+        LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
+      }
+    }
+  }
 
   @Published
   private(set) var currentNetwork: Flow.ChainID = .mainnet
@@ -450,11 +457,6 @@ extension WalletManager {
 
     selectedAccount = .init(type: type, addr: fwAddress)
 
-    // Store selected account
-    UserDefaults.standard.set(
-      selectedAccount?.value,
-      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
-    )
     if type == .main {
       checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
     }
@@ -477,11 +479,6 @@ extension WalletManager {
     }
 
     selectedAccount = .init(type: selectingAccount.FWAccountType, addr: fwAddress)
-    // Store selected account per uid
-    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
-      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
-    }
-
 
     switch selectingAccount.FWAccountType {
       case .main:
