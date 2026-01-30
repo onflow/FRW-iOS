@@ -110,16 +110,6 @@
 		152711A028D4C418002520EA /* NFTEmptyView_dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */; };
 		15299E912F273BC900DCFFC3 /* KeyProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15299E8F2F273BC900DCFFC3 /* KeyProviderResult.swift */; };
 		15299E922F273BC900DCFFC3 /* KeyProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15299E8F2F273BC900DCFFC3 /* KeyProviderResult.swift */; };
-		1529A0312F2C23E300DCFFC3 /* get_started_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0212F2C23E300DCFFC3 /* get_started_background.png */; };
-		1529A0332F2C23E300DCFFC3 /* card_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A01F2F2C23E300DCFFC3 /* card_bg.png */; };
-		1529A0382F2C23E300DCFFC3 /* get_started_background_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0222F2C23E300DCFFC3 /* get_started_background_light.png */; };
-		1529A0392F2C23E300DCFFC3 /* full_bg_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0202F2C23E300DCFFC3 /* full_bg_light.png */; };
-		1529A0512F2C23E300DCFFC3 /* push-notifications.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0232F2C23E300DCFFC3 /* push-notifications.png */; };
-		1529A05E2F2C23E300DCFFC3 /* get_started_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0212F2C23E300DCFFC3 /* get_started_background.png */; };
-		1529A0602F2C23E300DCFFC3 /* card_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A01F2F2C23E300DCFFC3 /* card_bg.png */; };
-		1529A0652F2C23E300DCFFC3 /* get_started_background_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0222F2C23E300DCFFC3 /* get_started_background_light.png */; };
-		1529A0662F2C23E300DCFFC3 /* full_bg_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0202F2C23E300DCFFC3 /* full_bg_light.png */; };
-		1529A07E2F2C23E300DCFFC3 /* push-notifications.png in Resources */ = {isa = PBXBuildFile; fileRef = 1529A0232F2C23E300DCFFC3 /* push-notifications.png */; };
 		152BB09828AE91A700B2A2AA /* ResizableLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */; };
 		152BB09928AE91A700B2A2AA /* ResizableLottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */; };
 		152EEC6928E4F26300C37A67 /* FRWWebEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152EEC6828E4F26300C37A67 /* FRWWebEndpoint.swift */; };
@@ -2606,11 +2596,6 @@
 		152516FA2DAFEE8B00DBC83A /* UserAddressV2Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAddressV2Response.swift; sourceTree = "<group>"; };
 		1527119F28D4C3F5002520EA /* NFTEmptyView_dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTEmptyView_dev.swift; sourceTree = "<group>"; };
 		15299E8F2F273BC900DCFFC3 /* KeyProviderResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyProviderResult.swift; sourceTree = "<group>"; };
-		1529A01F2F2C23E300DCFFC3 /* card_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = card_bg.png; sourceTree = "<group>"; };
-		1529A0202F2C23E300DCFFC3 /* full_bg_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = full_bg_light.png; sourceTree = "<group>"; };
-		1529A0212F2C23E300DCFFC3 /* get_started_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = get_started_background.png; sourceTree = "<group>"; };
-		1529A0222F2C23E300DCFFC3 /* get_started_background_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = get_started_background_light.png; sourceTree = "<group>"; };
-		1529A0232F2C23E300DCFFC3 /* push-notifications.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "push-notifications.png"; sourceTree = "<group>"; };
 		152BB09728AE91A600B2A2AA /* ResizableLottieView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizableLottieView.swift; sourceTree = "<group>"; };
 		152EEC6828E4F26300C37A67 /* FRWWebEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRWWebEndpoint.swift; sourceTree = "<group>"; };
 		152EEC6C28E4F2AB00C37A67 /* TxTemplateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TxTemplateRequest.swift; sourceTree = "<group>"; };
@@ -4173,66 +4158,6 @@
 				15299E8F2F273BC900DCFFC3 /* KeyProviderResult.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		1529A0242F2C23E300DCFFC3 /* onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				1529A01F2F2C23E300DCFFC3 /* card_bg.png */,
-				1529A0202F2C23E300DCFFC3 /* full_bg_light.png */,
-				1529A0212F2C23E300DCFFC3 /* get_started_background.png */,
-				1529A0222F2C23E300DCFFC3 /* get_started_background_light.png */,
-				1529A0232F2C23E300DCFFC3 /* push-notifications.png */,
-			);
-			path = onboarding;
-			sourceTree = "<group>";
-		};
-		1529A0252F2C23E300DCFFC3 /* images */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0242F2C23E300DCFFC3 /* onboarding */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
-		1529A0262F2C23E300DCFFC3 /* assets */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0252F2C23E300DCFFC3 /* images */,
-			);
-			path = assets;
-			sourceTree = "<group>";
-		};
-		1529A0272F2C23E300DCFFC3 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0262F2C23E300DCFFC3 /* assets */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		1529A0282F2C23E300DCFFC3 /* ui */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0272F2C23E300DCFFC3 /* src */,
-			);
-			path = ui;
-			sourceTree = "<group>";
-		};
-		1529A0292F2C23E300DCFFC3 /* __packages */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0282F2C23E300DCFFC3 /* ui */,
-			);
-			path = __packages;
-			sourceTree = "<group>";
-		};
-		1529A02D2F2C23E300DCFFC3 /* assets */ = {
-			isa = PBXGroup;
-			children = (
-				1529A0292F2C23E300DCFFC3 /* __packages */,
-			);
-			path = assets;
 			sourceTree = "<group>";
 		};
 		152EEC6728E4F24C00C37A67 /* FRWWeb */ = {
@@ -6091,7 +6016,6 @@
 		15EC9DE5274FD1FC00F70CD9 = {
 			isa = PBXGroup;
 			children = (
-				1529A02D2F2C23E300DCFFC3 /* assets */,
 				1596A8D72E1AD9B300E85303 /* main.jsbundle */,
 				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
 				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
@@ -7826,6 +7750,7 @@
 				154B88FF276A1EEB00780E93 /* Sources */,
 				154B8919276A1EEB00780E93 /* Frameworks */,
 				154B8921276A1EEB00780E93 /* Resources */,
+				9F6D7B1C5C8D4F3E9C5E7A1B /* Copy RN Assets Folder */,
 				158CEFBE277DB3FF004EF2C7 /* Embed Frameworks */,
 				6A0C6E2C29542DFE005F0EF6 /* Embed Foundation Extensions */,
 				6A04A4732961A71000F069C4 /* dSYM Upload */,
@@ -7914,6 +7839,7 @@
 				15C58AAE2868A4EE00BD4FC6 /* Sources */,
 				15C58C3C2868A4EE00BD4FC6 /* Frameworks */,
 				15C58C5A2868A4EE00BD4FC6 /* Resources */,
+				9F6D7B1C5C8D4F3E9C5E7A1B /* Copy RN Assets Folder */,
 				4ED06E412ABABB9400F49A1A /* Embed Frameworks */,
 				6A9DFBD329519D9A00E10EAC /* Embed Foundation Extensions */,
 				6A04A4722961A5A900F069C4 /* dSYM Upload */,
@@ -8194,11 +8120,6 @@
 				1575A72728B26B9600ADC513 /* index.html in Resources */,
 				1575A73828B28D3300ADC513 /* LDR_LLL1_0.png in Resources */,
 				154B8922276A1EEB00780E93 /* Preview Assets.xcassets in Resources */,
-				1529A0312F2C23E300DCFFC3 /* get_started_background.png in Resources */,
-				1529A0332F2C23E300DCFFC3 /* card_bg.png in Resources */,
-				1529A0382F2C23E300DCFFC3 /* get_started_background_light.png in Resources */,
-				1529A0392F2C23E300DCFFC3 /* full_bg_light.png in Resources */,
-				1529A0512F2C23E300DCFFC3 /* push-notifications.png in Resources */,
 				15DE215028C57968008AFE17 /* AR.json in Resources */,
 				7652E32A2D6AA3F000AECFEF /* CreatingAccount.json in Resources */,
 				152EEC7328E4F61600C37A67 /* config.plist in Resources */,
@@ -8252,11 +8173,6 @@
 				15D3BA7A28C4D2A4009AEA6E /* LaunchScreen.storyboard in Resources */,
 				1575A72628B26B9600ADC513 /* index.html in Resources */,
 				1575A73728B28D3300ADC513 /* LDR_LLL1_0.png in Resources */,
-				1529A05E2F2C23E300DCFFC3 /* get_started_background.png in Resources */,
-				1529A0602F2C23E300DCFFC3 /* card_bg.png in Resources */,
-				1529A0652F2C23E300DCFFC3 /* get_started_background_light.png in Resources */,
-				1529A0662F2C23E300DCFFC3 /* full_bg_light.png in Resources */,
-				1529A07E2F2C23E300DCFFC3 /* push-notifications.png in Resources */,
 				15C58C5D2868A4EE00BD4FC6 /* remote_config_defaults.plist in Resources */,
 				1565FB6728B14F140086A652 /* Account.json in Resources */,
 				4ED40AF72B1A190B00C25EBF /* Loading_animation.json in Resources */,
@@ -8335,6 +8251,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9F6D7B1C5C8D4F3E9C5E7A1B /* Copy RN Assets Folder */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy RN Assets Folder";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nASSETS_SRC=\"${SRCROOT}/assets\"\nASSETS_DST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assets\"\n\nif [ -d \"${ASSETS_SRC}\" ]; then\n  echo \"[Copy RN Assets Folder] Copying ${ASSETS_SRC} -> ${ASSETS_DST}\"\n  mkdir -p \"${ASSETS_DST}\"\n  rsync -a --delete \"${ASSETS_SRC}/\" \"${ASSETS_DST}/\"\nelse\n  echo \"warning: [Copy RN Assets Folder] assets dir not found at ${ASSETS_SRC}\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		07872F7BB26D4561983D1151 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8343,9 +8278,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8399,9 +8338,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8416,9 +8359,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8451,9 +8398,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8530,9 +8481,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8569,9 +8524,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -11205,10 +11164,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -11273,10 +11229,7 @@
 				MARKETING_VERSION = 3.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
