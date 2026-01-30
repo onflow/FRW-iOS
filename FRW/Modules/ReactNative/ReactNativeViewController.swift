@@ -17,6 +17,7 @@ extension ReactNativeViewController {
     case profileSelection = "ProfileTypeSelection"
     case getStarted = "GetStarted"
     case keyRotationTip = "KeyRotationTip"
+    case activity = "Activity"
   }
 }
 
@@ -271,6 +272,9 @@ extension RNBridge.InitialProps {
       return .selectAssets
     case .tokenDetail:
       return .selectAssets
+    case .activity:
+      // TODO: Revisit me
+      return .activity
     }
   }
 }
