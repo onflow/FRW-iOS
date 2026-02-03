@@ -38,7 +38,16 @@ class DeepLinkHandler {
         guard let item = DeepLinkItem(url: url) else {
             return
         }
+
+      switch item {
+      case .dapp:
+        showAlert(onContinue: { [weak self] in
+          self?.handleItem(item)
+        })
+      default:
         handleItem(item)
+      }
+
     }
 
     func handlePaddingItem() {
@@ -54,4 +63,17 @@ class DeepLinkHandler {
             pendingItem = item
         }
     }
+
+  private func showAlert(onContinue: @escaping EmptyClosure) {
+    HUD.showAlert(
+      title: "deep_link_hint_title".localized,
+      msg: "deep_link_hint_desc".localized,
+      cancelTitle: "cancel".localized,
+      cancelAction: {},
+      confirmTitle: "continue".localized,
+      confirmAction: {
+        onContinue()
+      }
+    )
+  }
 }

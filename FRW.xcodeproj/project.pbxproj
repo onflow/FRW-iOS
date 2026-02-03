@@ -8251,25 +8251,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9F6D7B1C5C8D4F3E9C5E7A1B /* Copy RN Assets Folder */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy RN Assets Folder";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nASSETS_SRC=\"${SRCROOT}/assets\"\nASSETS_DST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assets\"\n\nif [ -d \"${ASSETS_SRC}\" ]; then\n  echo \"[Copy RN Assets Folder] Copying ${ASSETS_SRC} -> ${ASSETS_DST}\"\n  mkdir -p \"${ASSETS_DST}\"\n  rsync -a --delete \"${ASSETS_SRC}/\" \"${ASSETS_DST}/\"\nelse\n  echo \"warning: [Copy RN Assets Folder] assets dir not found at ${ASSETS_SRC}\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		07872F7BB26D4561983D1151 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8492,6 +8473,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9F6D7B1C5C8D4F3E9C5E7A1B /* Copy RN Assets Folder */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy RN Assets Folder";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nASSETS_SRC=\"${SRCROOT}/assets\"\nASSETS_DST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/assets\"\n\nif [ -d \"${ASSETS_SRC}\" ]; then\n  echo \"[Copy RN Assets Folder] Copying ${ASSETS_SRC} -> ${ASSETS_DST}\"\n  mkdir -p \"${ASSETS_DST}\"\n  rsync -a --delete \"${ASSETS_SRC}/\" \"${ASSETS_DST}/\"\nelse\n  echo \"warning: [Copy RN Assets Folder] assets dir not found at ${ASSETS_SRC}\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A627629BDE8562BC1440F50B /* [CP] Check Pods Manifest.lock */ = {

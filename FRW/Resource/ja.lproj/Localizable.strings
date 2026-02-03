@@ -970,3 +970,5 @@
 "wallet_key_invalid_title" = "ウォレットアクセスの問題";
 "wallet_key_invalid_message" = "ウォレットの有効なキーが見つかりませんでした。これはキーローテーション後に発生する可能性があります。続行するには、ウォレットを復元してください。";
 "wallet_key_invalid_restore" = "ウォレットを復元";
+"deep_link_hint_title" = "注意して続行";
+"deep_link_hint_desc" = "Flow Walletではなく第三者からここに誘導されています。続行するとDappが開きます。";

@@ -976,3 +976,5 @@
 "invalid_gas_price_data" = "无效的 gas 价格数据";
 "invalid_amount_data" = "无效的金额数据";
 "failed_to_sign_transaction" = "签署交易失败";
+"deep_link_hint_title" = "谨慎继续";
+"deep_link_hint_desc" = "您是由第三方引导至此，而非 Flow Wallet。继续将打开 Dapp。";
