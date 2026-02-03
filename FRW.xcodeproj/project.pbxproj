@@ -1534,7 +1534,6 @@
 		4E6ED48E2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED48F2BA96DBB009906A5 /* ChildAccountSideCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */; };
 		4E6ED4912BAA79F6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */; };
-		4E6ED4932BAA7CB6009906A5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */; };
 		4E7153212E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */; };
 		4E7153222E9752D700C5D0BA /* DeleteSEKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */; };
 		4E7153242E97564D00C5D0BA /* RouteMap+Dev.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */; };
@@ -1996,16 +1995,6 @@
 		6A0B10682A6676B200023767 /* FRWNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6A0B10492A66679100023767 /* FRWNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		6A0C6E1329540682005F0EF6 /* EnvDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C6E1229540682005F0EF6 /* EnvDefine.swift */; };
 		6A0C6E1629540696005F0EF6 /* EnvDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C6E1529540696005F0EF6 /* EnvDefine.swift */; };
-		6A0C6E1C29542DFC005F0EF6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A9DFBC429519D9800E10EAC /* WidgetKit.framework */; };
-		6A0C6E1D29542DFC005F0EF6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A9DFBC629519D9800E10EAC /* SwiftUI.framework */; };
-		6A0C6E2829542DFE005F0EF6 /* FRWDevWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6A0C6E1B29542DFC005F0EF6 /* FRWDevWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6A0C6E2E29542EA4005F0EF6 /* FlowReferenceWalletWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFBC929519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift */; };
-		6A0C6E2F29542EA7005F0EF6 /* FlowReferenceWalletWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFBCB29519D9800E10EAC /* FlowReferenceWalletWidgets.swift */; };
-		6A0C6E3029542EAA005F0EF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9DFBCD29519D9A00E10EAC /* Assets.xcassets */; };
-		6A0C6E3229542EC9005F0EF6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6A0C6E3129542EC9005F0EF6 /* Kingfisher */; };
-		6A0C6E3329542EDD005F0EF6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15B1F63B2786B89800847BB5 /* Localizable.strings */; };
-		6A0C6E3429542F1A005F0EF6 /* EnvDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C6E1529540696005F0EF6 /* EnvDefine.swift */; };
-		6A0C6E3529542F24005F0EF6 /* EnvDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0C6E1229540682005F0EF6 /* EnvDefine.swift */; };
 		6A11596B288E710C005EF797 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A11596A288E710C005EF797 /* Router.swift */; };
 		6A11596C288E710C005EF797 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A11596A288E710C005EF797 /* Router.swift */; };
 		6A11596E288E7134005EF797 /* RouteMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A11596D288E7134005EF797 /* RouteMap.swift */; };
@@ -2257,14 +2246,6 @@
 		6A9CFE4D2A69331100AEA847 /* JailbreakAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9CFE4B2A69331100AEA847 /* JailbreakAlertView.swift */; };
 		6A9D7C472833B45500078F63 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9D7C3D2833AC9700078F63 /* ThemeManager.swift */; };
 		6A9D7C4D2834D7D100078F63 /* ThemeChangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9D7C4B2834D7D100078F63 /* ThemeChangeView.swift */; };
-		6A9DFBC529519D9800E10EAC /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A9DFBC429519D9800E10EAC /* WidgetKit.framework */; };
-		6A9DFBC729519D9800E10EAC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A9DFBC629519D9800E10EAC /* SwiftUI.framework */; };
-		6A9DFBCA29519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFBC929519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift */; };
-		6A9DFBCC29519D9800E10EAC /* FlowReferenceWalletWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9DFBCB29519D9800E10EAC /* FlowReferenceWalletWidgets.swift */; };
-		6A9DFBCE29519D9A00E10EAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9DFBCD29519D9A00E10EAC /* Assets.xcassets */; };
-		6A9DFBD229519D9A00E10EAC /* FRWWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6A9DFBC329519D9800E10EAC /* FRWWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6A9DFBDA2951A1F900E10EAC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 6A9DFBD92951A1F900E10EAC /* Kingfisher */; };
-		6A9DFBDC2951C31200E10EAC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15B1F63B2786B89800847BB5 /* Localizable.strings */; };
 		6AA2E75A289D28EC00B4DD96 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA2E759289D28EC00B4DD96 /* DispatchQueue.swift */; };
 		6AA2E75B289D28EC00B4DD96 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA2E759289D28EC00B4DD96 /* DispatchQueue.swift */; };
 		6AA591F628854FB300F4B5CA /* BackupGDTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA591F528854FB300F4B5CA /* BackupGDTarget.swift */; };
@@ -2296,11 +2277,8 @@
 		6ABAE52B2836288400C97AE2 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAE5292836288400C97AE2 /* Font.swift */; };
 		6ABAE53028362D1100C97AE2 /* Others.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAE52E28362D1100C97AE2 /* Others.swift */; };
 		6ABFE59529A708C400AA1688 /* LocalEnv in Resources */ = {isa = PBXBuildFile; fileRef = 6ABFE59329A708C400AA1688 /* LocalEnv */; };
-		6ABFE59729A708C400AA1688 /* LocalEnv in Resources */ = {isa = PBXBuildFile; fileRef = 6ABFE59329A708C400AA1688 /* LocalEnv */; };
 		6ABFE59C29A70E6700AA1688 /* LocalEnvManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFE59B29A70E6700AA1688 /* LocalEnvManager.swift */; };
 		6ABFE59D29A70E6700AA1688 /* LocalEnvManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFE59B29A70E6700AA1688 /* LocalEnvManager.swift */; };
-		6ABFE59E29A70E6700AA1688 /* LocalEnvManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFE59B29A70E6700AA1688 /* LocalEnvManager.swift */; };
-		6ABFE59F29A70E6700AA1688 /* LocalEnvManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABFE59B29A70E6700AA1688 /* LocalEnvManager.swift */; };
 		6ABFE5A129A711ED00AA1688 /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 6ABFE5A029A711ED00AA1688 /* Gzip */; };
 		6AC1AE69289BACDF00F76C7A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC1AE68289BACDF00F76C7A /* SnapKit */; };
 		6AC1AE6B289BAD0600F76C7A /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6AC1AE6A289BAD0600F76C7A /* SnapKit */; };
@@ -2472,26 +2450,12 @@
 			remoteGlobalIDString = 6A0B10482A66679100023767;
 			remoteInfo = FlowReferenceWalletNotificationServiceExtension;
 		};
-		6A0C6E2629542DFE005F0EF6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 15EC9DE6274FD1FC00F70CD9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6A0C6E1A29542DFC005F0EF6;
-			remoteInfo = FlowReferenceWalletDevWidgetsExtension;
-		};
 		6A6A84FE2A26F6A0002D7FD6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 15EC9DE6274FD1FC00F70CD9 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 15C58A7E2868A4EE00BD4FC6;
 			remoteInfo = FlowReferenceWallet;
-		};
-		6A9DFBD029519D9A00E10EAC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 15EC9DE6274FD1FC00F70CD9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6A9DFBC229519D9700E10EAC;
-			remoteInfo = FlowReferenceWalletWidgetsExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -2522,7 +2486,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				6A0C6E2829542DFE005F0EF6 /* FRWDevWidgetsExtension.appex in Embed Foundation Extensions */,
 				6A0B10602A6675A600023767 /* FRWDevNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -2535,7 +2498,6 @@
 			dstSubfolderSpec = 13;
 			files = (
 				6A0B10682A6676B200023767 /* FRWNotificationServiceExtension.appex in Embed Foundation Extensions */,
-				6A9DFBD229519D9A00E10EAC /* FRWWidgetsExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3094,8 +3056,6 @@
 		4E03BE182C731F3500EF04DC /* ViewsInLoginModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsInLoginModule.swift; sourceTree = "<group>"; };
 		4E03BE1E2C7334EC00EF04DC /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		4E05BFC22DCCF29000659097 /* InstallInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallInfoManager.swift; sourceTree = "<group>"; };
-		4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWWidgetsExtension.entitlements; sourceTree = "<group>"; };
-		4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRWDevWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		4E0860512AB8BB1D0037F582 /* FRW.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = FRW.entitlements; sourceTree = "<group>"; };
 		4E0860522AB8BB260037F582 /* FRW-dev.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "FRW-dev.entitlements"; sourceTree = "<group>"; };
 		4E093AD72DCB929A00CF84F0 /* WalletManger+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletManger+Account.swift"; sourceTree = "<group>"; };
@@ -3221,7 +3181,6 @@
 		4E6DBFC62EF9260800C0B744 /* AppUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUrl.swift; sourceTree = "<group>"; };
 		4E6ED48D2BA96DBB009906A5 /* ChildAccountSideCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildAccountSideCell.swift; sourceTree = "<group>"; };
 		4E6ED4902BAA79F6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		4E7153202E9752D700C5D0BA /* DeleteSEKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSEKeychain.swift; sourceTree = "<group>"; };
 		4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+Dev.swift"; sourceTree = "<group>"; };
 		4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOAPrivateKeyView.swift; sourceTree = "<group>"; };
@@ -3476,8 +3435,6 @@
 		6A0B10642A6675C500023767 /* FRWDevNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FRWDevNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		6A0C6E1229540682005F0EF6 /* EnvDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvDefine.swift; sourceTree = "<group>"; };
 		6A0C6E1529540696005F0EF6 /* EnvDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvDefine.swift; sourceTree = "<group>"; };
-		6A0C6E1B29542DFC005F0EF6 /* FRWDevWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FRWDevWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A0C6E2529542DFE005F0EF6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A11596A288E710C005EF797 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		6A11596D288E7134005EF797 /* RouteMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMap.swift; sourceTree = "<group>"; };
 		6A115970288E72CC005EF797 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -3625,13 +3582,8 @@
 		6A9CFE4B2A69331100AEA847 /* JailbreakAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakAlertView.swift; sourceTree = "<group>"; };
 		6A9D7C3D2833AC9700078F63 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		6A9D7C4B2834D7D100078F63 /* ThemeChangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChangeView.swift; sourceTree = "<group>"; };
-		6A9DFBC329519D9800E10EAC /* FRWWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FRWWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A9DFBC429519D9800E10EAC /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		6A9DFBC629519D9800E10EAC /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		6A9DFBC929519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowReferenceWalletWidgetsBundle.swift; sourceTree = "<group>"; };
-		6A9DFBCB29519D9800E10EAC /* FlowReferenceWalletWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowReferenceWalletWidgets.swift; sourceTree = "<group>"; };
-		6A9DFBCD29519D9A00E10EAC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6A9DFBCF29519D9A00E10EAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AA2E759289D28EC00B4DD96 /* DispatchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		6AA591F528854FB300F4B5CA /* BackupGDTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupGDTarget.swift; sourceTree = "<group>"; };
 		6AA78E0228A0BF2C00FF6CF9 /* ScanHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanHandler.swift; sourceTree = "<group>"; };
@@ -3902,26 +3854,6 @@
 			files = (
 				4E2FA6A22CF40FFE00D46EA7 /* ReownWalletKit in Frameworks */,
 				4E2FA6A42CF40FFE00D46EA7 /* WalletConnectNotify in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A0C6E1829542DFC005F0EF6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6A0C6E3229542EC9005F0EF6 /* Kingfisher in Frameworks */,
-				6A0C6E1D29542DFC005F0EF6 /* SwiftUI.framework in Frameworks */,
-				6A0C6E1C29542DFC005F0EF6 /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A9DFBC029519D9700E10EAC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6A9DFBDA2951A1F900E10EAC /* Kingfisher in Frameworks */,
-				6A9DFBC729519D9800E10EAC /* SwiftUI.framework in Frameworks */,
-				6A9DFBC529519D9800E10EAC /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6017,12 +5949,8 @@
 			isa = PBXGroup;
 			children = (
 				1596A8D72E1AD9B300E85303 /* main.jsbundle */,
-				4E08604A2AB8AF9B0037F582 /* FRWDevWidgetsExtension.entitlements */,
-				4E0860492AB8AF9B0037F582 /* FRWWidgetsExtension.entitlements */,
 				15EC9DF0274FD1FC00F70CD9 /* FRW */,
 				1500783C286830EF00A00109 /* FRWTests */,
-				6A9DFBC829519D9800E10EAC /* FRWWidgets */,
-				6A0C6E1E29542DFD005F0EF6 /* FRWDevWidgets */,
 				6A0B104A2A66679100023767 /* FRWNotificationServiceExtension */,
 				6A0B105A2A6675A600023767 /* FRWDevNotificationServiceExtension */,
 				15EC9DEF274FD1FC00F70CD9 /* Products */,
@@ -6037,8 +5965,6 @@
 				154B8928276A1EEB00780E93 /* FRW-dev.app */,
 				1500783B286830EF00A00109 /* FRWTests.xctest */,
 				15C58C6D2868A4EE00BD4FC6 /* FRW.app */,
-				6A9DFBC329519D9800E10EAC /* FRWWidgetsExtension.appex */,
-				6A0C6E1B29542DFC005F0EF6 /* FRWDevWidgetsExtension.appex */,
 				6A0B10492A66679100023767 /* FRWNotificationServiceExtension.appex */,
 				6A0B10592A6675A600023767 /* FRWDevNotificationServiceExtension.appex */,
 			);
@@ -6863,14 +6789,6 @@
 			path = FRWDevNotificationServiceExtension;
 			sourceTree = "<group>";
 		};
-		6A0C6E1E29542DFD005F0EF6 /* FRWDevWidgets */ = {
-			isa = PBXGroup;
-			children = (
-				6A0C6E2529542DFE005F0EF6 /* Info.plist */,
-			);
-			path = FRWDevWidgets;
-			sourceTree = "<group>";
-		};
 		6A115969288E70FF005EF797 /* Router */ = {
 			isa = PBXGroup;
 			children = (
@@ -7350,18 +7268,6 @@
 			path = JailbreakAlert;
 			sourceTree = "<group>";
 		};
-		6A9DFBC829519D9800E10EAC /* FRWWidgets */ = {
-			isa = PBXGroup;
-			children = (
-				6A9DFBC929519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift */,
-				6A9DFBCB29519D9800E10EAC /* FlowReferenceWalletWidgets.swift */,
-				6A9DFBCD29519D9A00E10EAC /* Assets.xcassets */,
-				6A9DFBCF29519D9A00E10EAC /* Info.plist */,
-				4E6ED4922BAA7CB6009906A5 /* PrivacyInfo.xcprivacy */,
-			);
-			path = FRWWidgets;
-			sourceTree = "<group>";
-		};
 		6AA591F328854F5900F4B5CA /* Backup */ = {
 			isa = PBXGroup;
 			children = (
@@ -7761,7 +7667,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				6A0C6E2729542DFE005F0EF6 /* PBXTargetDependency */,
 				6A0B105F2A6675A600023767 /* PBXTargetDependency */,
 			);
 			name = "FRW-dev";
@@ -7850,7 +7755,6 @@
 			);
 			dependencies = (
 				6A0B10662A6675E000023767 /* PBXTargetDependency */,
-				6A9DFBD129519D9A00E10EAC /* PBXTargetDependency */,
 			);
 			name = FRW;
 			packageProductDependencies = (
@@ -7962,46 +7866,6 @@
 			productReference = 6A0B10592A6675A600023767 /* FRWDevNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		6A0C6E1A29542DFC005F0EF6 /* FRWDevWidgetsExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6A0C6E2929542DFE005F0EF6 /* Build configuration list for PBXNativeTarget "FRWDevWidgetsExtension" */;
-			buildPhases = (
-				6A0C6E1729542DFC005F0EF6 /* Sources */,
-				6A0C6E1829542DFC005F0EF6 /* Frameworks */,
-				6A0C6E1929542DFC005F0EF6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FRWDevWidgetsExtension;
-			packageProductDependencies = (
-				6A0C6E3129542EC9005F0EF6 /* Kingfisher */,
-			);
-			productName = FlowReferenceWalletDevWidgetsExtension;
-			productReference = 6A0C6E1B29542DFC005F0EF6 /* FRWDevWidgetsExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		6A9DFBC229519D9700E10EAC /* FRWWidgetsExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6A9DFBD629519D9A00E10EAC /* Build configuration list for PBXNativeTarget "FRWWidgetsExtension" */;
-			buildPhases = (
-				6A9DFBBF29519D9700E10EAC /* Sources */,
-				6A9DFBC029519D9700E10EAC /* Frameworks */,
-				6A9DFBC129519D9700E10EAC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FRWWidgetsExtension;
-			packageProductDependencies = (
-				6A9DFBD92951A1F900E10EAC /* Kingfisher */,
-			);
-			productName = FlowReferenceWalletWidgetsExtension;
-			productReference = 6A9DFBC329519D9800E10EAC /* FRWWidgetsExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -8021,12 +7885,6 @@
 					};
 					6A0B10582A6675A600023767 = {
 						CreatedOnToolsVersion = 14.3.1;
-					};
-					6A0C6E1A29542DFC005F0EF6 = {
-						CreatedOnToolsVersion = 14.2;
-					};
-					6A9DFBC229519D9700E10EAC = {
-						CreatedOnToolsVersion = 14.2;
 					};
 				};
 			};
@@ -8092,8 +7950,6 @@
 				15C58A7E2868A4EE00BD4FC6 /* FRW */,
 				154B88F0276A1EEB00780E93 /* FRW-dev */,
 				1500783A286830EF00A00109 /* FRWTests */,
-				6A9DFBC229519D9700E10EAC /* FRWWidgetsExtension */,
-				6A0C6E1A29542DFC005F0EF6 /* FRWDevWidgetsExtension */,
 				6A0B10482A66679100023767 /* FRWNotificationServiceExtension */,
 				6A0B10582A6675A600023767 /* FRWDevNotificationServiceExtension */,
 			);
@@ -8225,26 +8081,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A0C6E1929542DFC005F0EF6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6ABFE59729A708C400AA1688 /* LocalEnv in Resources */,
-				6A0C6E3029542EAA005F0EF6 /* Assets.xcassets in Resources */,
-				6A0C6E3329542EDD005F0EF6 /* Localizable.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A9DFBC129519D9700E10EAC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4E6ED4932BAA7CB6009906A5 /* PrivacyInfo.xcprivacy in Resources */,
-				6A9DFBCE29519D9A00E10EAC /* Assets.xcassets in Resources */,
-				6A9DFBDC2951C31200E10EAC /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -10791,28 +10627,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6A0C6E1729542DFC005F0EF6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6A0C6E3529542F24005F0EF6 /* EnvDefine.swift in Sources */,
-				6A0C6E2E29542EA4005F0EF6 /* FlowReferenceWalletWidgetsBundle.swift in Sources */,
-				6A0C6E2F29542EA7005F0EF6 /* FlowReferenceWalletWidgets.swift in Sources */,
-				6ABFE59F29A70E6700AA1688 /* LocalEnvManager.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6A9DFBBF29519D9700E10EAC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6A9DFBCA29519D9800E10EAC /* FlowReferenceWalletWidgetsBundle.swift in Sources */,
-				6A0C6E3429542F1A005F0EF6 /* EnvDefine.swift in Sources */,
-				6A9DFBCC29519D9800E10EAC /* FlowReferenceWalletWidgets.swift in Sources */,
-				6ABFE59E29A70E6700AA1688 /* LocalEnvManager.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -10831,20 +10645,10 @@
 			target = 6A0B10482A66679100023767 /* FRWNotificationServiceExtension */;
 			targetProxy = 6A0B10652A6675E000023767 /* PBXContainerItemProxy */;
 		};
-		6A0C6E2729542DFE005F0EF6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6A0C6E1A29542DFC005F0EF6 /* FRWDevWidgetsExtension */;
-			targetProxy = 6A0C6E2629542DFE005F0EF6 /* PBXContainerItemProxy */;
-		};
 		6A6A84FF2A26F6A0002D7FD6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 15C58A7E2868A4EE00BD4FC6 /* FRW */;
 			targetProxy = 6A6A84FE2A26F6A0002D7FD6 /* PBXContainerItemProxy */;
-		};
-		6A9DFBD129519D9A00E10EAC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6A9DFBC229519D9700E10EAC /* FRWWidgetsExtension */;
-			targetProxy = 6A9DFBD029519D9A00E10EAC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -11353,126 +11157,6 @@
 			};
 			name = Release;
 		};
-		6A0C6E2A29542DFE005F0EF6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = FRWDevWidgetsExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 444MY26W7F;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FRWDevWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FlowRefDevWidgets;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		6A0C6E2B29542DFE005F0EF6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = FRWDevWidgetsExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 444MY26W7F;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FRWDevWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FlowRefDevWidgets;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.dev.DevWidgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		6A9DFBD429519D9A00E10EAC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = FRWWidgetsExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 444MY26W7F;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = FRWWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FRWWidgets;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		6A9DFBD529519D9A00E10EAC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = FRWWidgetsExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 444MY26W7F;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = FRWWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = FRWWidgets;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = "$(MARKETING_VERSION)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.flowfoundation.wallet.Widgets;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -11526,24 +11210,6 @@
 			buildConfigurations = (
 				6A0B10622A6675A600023767 /* Debug */,
 				6A0B10632A6675A600023767 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6A0C6E2929542DFE005F0EF6 /* Build configuration list for PBXNativeTarget "FRWDevWidgetsExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6A0C6E2A29542DFE005F0EF6 /* Debug */,
-				6A0C6E2B29542DFE005F0EF6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6A9DFBD629519D9A00E10EAC /* Build configuration list for PBXNativeTarget "FRWWidgetsExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6A9DFBD429519D9A00E10EAC /* Debug */,
-				6A9DFBD529519D9A00E10EAC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -12584,11 +12250,6 @@
 			package = 6A0454CB28768E9E00A9131C /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
 			productName = SwiftUIPager;
 		};
-		6A0C6E3129542EC9005F0EF6 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 157046712793237300D1747B /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
 		6A19A74D2A612FAB00B84F09 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 154B887C2765EBA700780E93 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -12628,11 +12289,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6AE46060286EE644009C2B96 /* XCRemoteSwiftPackageReference "SwiftUICharts" */;
 			productName = SwiftUICharts;
-		};
-		6A9DFBD92951A1F900E10EAC /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 157046712793237300D1747B /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
 		};
 		6AADFB53293CB7F800E5D6B2 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
