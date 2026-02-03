@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import WidgetKit
 
 // MARK: - NFTUIKitCache
 
@@ -316,8 +315,6 @@ extension NFTUIKitCache {
         } else {
             groupUserDefaults()?.set(nil, forKey: FirstFavNFTImageURL)
         }
-
-        WidgetCenter.shared.reloadAllTimelines()
     }
 
     func removeFavCache() {
