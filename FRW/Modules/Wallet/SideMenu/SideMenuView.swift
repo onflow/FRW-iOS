@@ -155,6 +155,12 @@ struct SideMenuView: View {
               }
             }
         }
+
+        if shouldShowMigrationCard {
+          migrationInfoCard
+            .padding(.top, 8)
+            .padding(.bottom, 8)
+        }
         
         if !vm.allAccounts.isEmpty {
           Section {
@@ -182,6 +188,53 @@ struct SideMenuView: View {
         }
       }
       .mockPlaceholder(vm.currentAccount == nil)
+    }
+
+    var migrationInfoCard: some View {
+        Button {
+            vm.onClickMigrationCard()
+        } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 8) {
+                    Text("Account migration required".localized)
+                        .font(.inter(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.Theme.Text.black8)
+                        .lineLimit(1)
+
+                    Spacer()
+
+                    Image("device_arrow_right")
+                        .resizable()
+                        .renderingMode(.template)
+                        .foregroundStyle(Color.Theme.Text.black8)
+                        .frame(width: 8, height: 14)
+                }
+
+                Text("Your account needs to be migrated from".localized)
+                    .font(.inter(size: 12))
+                    .foregroundStyle(Color.Theme.Text.black3)
+                    .lineLimit(1)
+
+                HStack(spacing: 6) {
+                    COATagView()
+                    Text("to".localized)
+                        .font(.inter(size: 12))
+                        .foregroundStyle(Color.Theme.Text.black3)
+                    EVMTagView()
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(Color.Theme.Accent.green.opacity(0.1))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.Theme.Accent.green, lineWidth: 1)
+            )
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .buttonStyle(ScaleButtonStyle())
     }
 
     var bottomMenu: some View {
@@ -310,4 +363,6 @@ struct SideMenuView: View {
     private var showSwitchUserAlert = false
 
     private let cPadding = 12.0
+
+    private var shouldShowMigrationCard: Bool = false
 }

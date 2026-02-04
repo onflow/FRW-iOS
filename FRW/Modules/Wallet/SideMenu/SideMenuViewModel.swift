@@ -115,6 +115,11 @@ class SideMenuViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.enableEVM)
     }
 
+    func onClickMigrationCard() {
+        NotificationCenter.default.post(name: .toggleSideMenu)
+        Router.route(to: RouteMap.ReactNative.migration)
+    }
+
     private func onHiddenAddressesChanged() {
         // Refresh hidden states for all accounts
         guard let profile = ProfileManager.shared.currentProfile else { return }
@@ -122,4 +127,3 @@ class SideMenuViewModel: ObservableObject {
     }
 
 }
-

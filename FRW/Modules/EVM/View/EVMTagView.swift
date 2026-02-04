@@ -23,26 +23,21 @@ struct EVMTagView: View {
 
 struct COATagView: View {
   var body: some View {
-    
-    HStack(spacing: 0) {
-      HStack(spacing: 0) {
-        Text("EVM")
-            .font(.inter(size: 8,weight: .w500))
-            .foregroundStyle(Color.white)
-            .offset(x:-4)
-            
-      }
-      .frame(width: 34,height: 10)
-      .background(Color.Theme.evm)
-      .cornerRadius(5)
+    HStack(spacing: 2) {
+      Text("EVM")
+          .font(.inter(size: 8, weight: .w500))
+          .foregroundStyle(Color.white)
+          .padding(.leading, 4)
+
       Text("FLOW")
-          .font(.inter(size: 8,weight: .w500))
+          .font(.inter(size: 8, weight: .w500))
           .foregroundStyle(Color.black)
           .frame(width: 32, height: 10)
           .background(Color.Theme.Accent.green)
-          .cornerRadius(8)
-          .offset(x: -10)
+          .cornerRadius(5)
     }
+    .background(Color.Theme.evm)
+    .cornerRadius(5)
   }
 }
 
