@@ -124,11 +124,10 @@ class StakingManager: ObservableObject {
             return
         }
 
-        if WalletManager.shared.isSelectedChildAccount {
+        if WalletManager.shared.isSelectedChildAccount || WalletManager.shared.isSelectedEOAAccount || WalletManager.shared.isSelectedEVMAccount {
             log.warning("child account should will not refresh staking info")
             return
         }
-
         log.debug("start refresh")
 
         updateApy()
@@ -231,12 +230,12 @@ class StakingManager: ObservableObject {
 
 extension StakingManager {
     private func updateApy() {
-        let refAddress = WalletManager.shared.getPrimaryWalletAddress() ?? "0"
+        let refAddress = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "0"
 
         Task {
             do {
                 let apy = try await FlowNetwork.getStakingApyByWeek()
-                if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
+                if WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() != refAddress {
                     return
                 }
 
@@ -251,12 +250,12 @@ extension StakingManager {
     }
 
     private func queryStakingInfo() {
-        let refAddress = WalletManager.shared.getPrimaryWalletAddress() ?? "0"
+        let refAddress = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "0"
 
         Task {
             do {
                 if let response = try await FlowNetwork.queryStakeInfo() {
-                    if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
+                    if WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() != refAddress {
                         return
                     }
                     let result = response.sorted { $0.allStatusCount > $1.allStatusCount }
@@ -283,27 +282,28 @@ extension StakingManager {
     }
 
     func refreshDelegatorInfo() async throws {
-        guard let refAddress = WalletManager.shared.getPrimaryWalletAddress() else {
+        guard let refAddress = await WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() else {
             throw WalletError.emptyAddress
         }
         let response = try await FlowNetwork.getDelegatorInfo()
 
-        if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
+        if await WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() != refAddress {
             return
         }
-
-        for node in response {
-            delegatorIds[node.nodeID] = node.delegatorID
+        await MainActor.run {
+          for node in response {
+              delegatorIds[node.nodeID] = node.delegatorID
+          }
         }
     }
 
     private func updateSetupStatus() {
-        let refAddress = WalletManager.shared.getPrimaryWalletAddress() ?? "0"
+        let refAddress = WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "0"
 
         Task {
             do {
                 let isSetup = try await FlowNetwork.accountStakingIsSetup()
-                if WalletManager.shared.getPrimaryWalletAddress() != refAddress {
+                if await WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() != refAddress {
                     return
                 }
 
