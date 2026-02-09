@@ -288,7 +288,11 @@ extension WalletManager {
     mainAccount = account
 
     // If there is no selected, try to restore from saved address for current uid
-    if selectedAccount == nil {
+    if let currentAccount = selectedAccount {
+      if let parentAccount = findParentAccount(for: currentAccount, in: accounts) {
+        mainAccount = parentAccount
+      }
+    } else {
       if let uid = UserManager.shared.activatedUID,
           let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
          let restoredAccount = FWAccount(savedValue) {
@@ -305,6 +309,7 @@ extension WalletManager {
       }
       checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
+
     updateUserAddress()
     loadLinkedAccounts()
     Task {
@@ -448,28 +453,7 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
-  func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
-    UIFeedbackGenerator.impactOccurred(.selectionChanged)
-    guard let fwAddress = FWAddressDector.create(address: address) else {
-      HUD.error(WalletError.invaildAddress)
-      return
-    }
 
-    selectedAccount = .init(type: type, addr: fwAddress)
-
-    if type == .main {
-      checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
-    }
-
-    // If it's main account, reload the linked account
-    if type == .main,
-       let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
-         account.hexAddr == address
-       }) {
-      mainAccount = account
-      loadLinkedAccounts()
-    }
-  }
   
   func switchSelectedAccount(_ selectingAccount: WalletAccount) {
     UIFeedbackGenerator.impactOccurred(.selectionChanged)
@@ -485,6 +469,7 @@ extension WalletManager {
         if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
           account.hexAddr == selectingAccount.address
         }) {
+          checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
           mainAccount = account
           loadLinkedAccounts()
         }
