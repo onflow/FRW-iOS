@@ -102,7 +102,7 @@ class SideMenuViewModel: ObservableObject {
     }
   
     func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
-        WalletManager.shared.changeSelectedAccount(address: selectedAccount.account.address, type: selectedAccount.account.FWAccountType)
+        WalletManager.shared.switchSelectedAccount(selectedAccount.account)
         NotificationCenter.default.post(name: .toggleSideMenu)
     }
 
