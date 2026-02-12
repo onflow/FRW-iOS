@@ -156,7 +156,7 @@ struct SideMenuView: View {
             }
         }
 
-        if shouldShowMigrationCard {
+        if vm.shouldShowMigrationCard {
           migrationInfoCard
             .padding(.top, 8)
             .padding(.bottom, 8)
@@ -363,6 +363,4 @@ struct SideMenuView: View {
     private var showSwitchUserAlert = false
 
     private let cPadding = 12.0
-
-    private var shouldShowMigrationCard: Bool = false
 }

@@ -183,6 +183,20 @@
   
 }
 
+- (void)getMigrationAssets:(NSString *)sourceAddress
+                   resolve:(RCTPromiseResolveBlock)resolve
+                    reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift getMigrationAssetsWithSourceAddress:sourceAddress
+                                     completionHandler:^(NSDictionary<NSString *,id> * _Nullable result,
+                                                         NSError * _Nullable error) {
+    if (error) {
+      reject(@"migration_assets_error", error.localizedDescription, error);
+    } else {
+      resolve(result);
+    }
+  }];
+}
+
 - (NSDictionary *)getCurrency {
   return [TurboModuleSwift getCurrency];
 }
@@ -387,5 +401,7 @@
     }
   }];
 }
+
+
 
 @end

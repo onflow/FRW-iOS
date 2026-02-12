@@ -37,8 +37,10 @@ class EVMEnableViewModel: ObservableObject {
                 try await WalletManager.shared.enableCOA()
                 try await WalletManager.shared.mainAccount?.fetchAccount()
                 await ProfileManager.shared.refreshCurrentProfileAccounts()
-                if let address = await WalletManager.shared.coa?.address {
-                  await WalletManager.shared.changeSelectedAccount(address: address, type: .coa)
+
+                if let parentAddress = await WalletManager.shared.getPrimaryWalletAddress(),
+                   let account = await WalletManager.shared.coa?.toWalletAccount(parentAddress: parentAddress) {
+                  await WalletManager.shared.switchSelectedAccount(account)
                 }
                 state = .enabled
                 Router.pop()

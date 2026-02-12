@@ -30,6 +30,7 @@ class SideMenuViewModel: ObservableObject {
     @Published var hasCoa: Bool = true
     @Published var currentAccount: SideMenuItem? = nil
     @Published var allAccounts: [[SideMenuItem]] = [[.mock()],[.mock()],[.mock()]]
+    @Published var shouldShowMigrationCard: Bool = false
     private var cancellableSet = Set<AnyCancellable>()
 
 
@@ -74,6 +75,7 @@ class SideMenuViewModel: ObservableObject {
       })
       if let address = wallet.selectedAccount?.hexAddr {
         refreshAccount(address: address)
+        updateMigrationCardVisibility(for: currentAccount)
       }
     }
 
@@ -102,8 +104,9 @@ class SideMenuViewModel: ObservableObject {
     }
   
     func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
-        WalletManager.shared.changeSelectedAccount(address: selectedAccount.account.address, type: selectedAccount.account.FWAccountType)
+        WalletManager.shared.switchSelectedAccount(selectedAccount.account)
         NotificationCenter.default.post(name: .toggleSideMenu)
+        updateMigrationCardVisibility(for: selectedAccount)
     }
 
     func switchAccountMoreAction() {
@@ -124,6 +127,42 @@ class SideMenuViewModel: ObservableObject {
         // Refresh hidden states for all accounts
         guard let profile = ProfileManager.shared.currentProfile else { return }
         refreshProfile(profile: profile)
+    }
+
+    private func updateMigrationCardVisibility(for item: SideMenuItem?) {
+      guard let item else {
+        shouldShowMigrationCard = false
+        return
+      }
+      guard item.account.type == .coa else {
+        shouldShowMigrationCard = false
+        return
+      }
+
+      guard let list = wallet.EOAs, list.count > 0 else {
+        shouldShowMigrationCard = false
+        return
+      }
+
+      let address = item.account.address.lowercased()
+      guard let group = allAccounts.first(where: { accounts in
+        accounts.contains { $0.account.address.lowercased() == address }
+      }) else {
+        shouldShowMigrationCard = false
+        return
+      }
+
+      guard let coaAccount = group.first(where: { account in
+        account.account.type == .coa
+      }) else {
+        shouldShowMigrationCard = false
+        return
+      }
+      let balance = coaAccount.account.assets.balance ?? 0
+      let nftCount = coaAccount.account.assets.nftCount ?? 0
+      withAnimation(.easeInOut) {
+        self.shouldShowMigrationCard = balance > 0 || nftCount > 0
+      }
     }
 
 }

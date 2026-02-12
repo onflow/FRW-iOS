@@ -466,6 +466,12 @@ extension TurboModuleSwift {
     let result =  response?.getLastRate() ?? 0
     return result
   }
+
+  @objc
+  static func getMigrationAssets(sourceAddress: String) async throws -> [String: Any] {
+    let model = try await TurboModuleSwift.fetchAmountForCoa(address: sourceAddress)
+    return try model.toDictionary()
+  }
   
   @objc
   static func getWalletProfiles() async throws -> [String: Any] {

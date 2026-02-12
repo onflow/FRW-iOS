@@ -448,6 +448,8 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
+
+  
   func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
     UIFeedbackGenerator.impactOccurred(.selectionChanged)
     guard let fwAddress = FWAddressDector.create(address: address) else {
@@ -485,6 +487,7 @@ extension WalletManager {
         if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
           account.hexAddr == selectingAccount.address
         }) {
+          checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
           mainAccount = account
           loadLinkedAccounts()
         }

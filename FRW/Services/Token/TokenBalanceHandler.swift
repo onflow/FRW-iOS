@@ -101,7 +101,7 @@ class TokenBalanceHandler: ObservableObject {
         address: FWAddress,
         network: Flow.ChainID = currentNetwork
     ) async throws -> [NFTCollection] {
-      let provider = await generateProvider(address: address, network: network)
+        let provider = await generateProvider(address: address, network: network)
         return try await provider.getNFTCollections(address: address)
     }
 
