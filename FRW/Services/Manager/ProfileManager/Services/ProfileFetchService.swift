@@ -259,7 +259,8 @@ final class ProfileFetchService: ProfileFetchServiceProtocol {
                         return nil
                     }
                     do {
-                        let tokens = try await TokenBalanceHandler.shared.getFTBalance(address: fwAddress)
+                        // Force refresh to avoid stale cache after migration
+                        let tokens = try await TokenBalanceHandler.shared.fetchUserTokens(address: fwAddress)
                         let sum = tokens.reduce(Decimal.zero) { partial, token in
                             guard let display = token.displayBalance,
                                   let value = Decimal(string: display),

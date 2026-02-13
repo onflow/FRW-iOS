@@ -197,6 +197,17 @@
   }];
 }
 
+- (void)refreshCoaAfterMigration:(RCTPromiseResolveBlock)resolve
+                          reject:(RCTPromiseRejectBlock)reject {
+  [TurboModuleSwift refreshCoaAfterMigrationWithCompletionHandler:^(NSError * _Nullable error) {
+    if (error) {
+      reject(@"refresh_coa_after_migration_error", error.localizedDescription, error);
+    } else {
+      resolve(nil);
+    }
+  }];
+}
+
 - (NSDictionary *)getCurrency {
   return [TurboModuleSwift getCurrency];
 }

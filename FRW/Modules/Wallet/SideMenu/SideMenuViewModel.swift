@@ -98,9 +98,7 @@ class SideMenuViewModel: ObservableObject {
         }
       }
       log.debug("[Profile] find current account:\(result?.account)")
-      withAnimation(.easeInOut) {
-        currentAccount = result
-      }
+      currentAccount = result
     }
   
     func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
@@ -131,9 +129,9 @@ class SideMenuViewModel: ObservableObject {
 
     private func updateMigrationCardVisibility(for item: SideMenuItem?) {
       shouldShowMigrationCard = false
-      guard let coaMigration = RemoteConfigManager.shared.config?.features.coaMigration, coaMigration else {
-        return
-      }
+//      guard let coaMigration = RemoteConfigManager.shared.config?.features.coaMigration, coaMigration else {
+//        return
+//      }
       guard let item else {
         return
       }
