@@ -60,16 +60,21 @@ struct WalletAccount: Codable {
     enum AssetData {
         case notLoaded
         case loading
-        case loaded(balance: Double, nftCount: Int)
+        case loaded(balance: Double, nftCount: Int, erc20Balance: Double)
         case error(Error)
 
         var balance: Double? {
-            if case .loaded(let balance, _) = self { return balance }
+            if case .loaded(let balance, _, _) = self { return balance }
             return nil
         }
 
         var nftCount: Int? {
-            if case .loaded(_, let count) = self { return count }
+            if case .loaded(_, let count, _) = self { return count }
+            return nil
+        }
+        
+        var erc20Balance: Double? {
+            if case .loaded(_, _, let erc20Balance) = self { return erc20Balance }
             return nil
         }
 
@@ -87,10 +92,10 @@ extension WalletAccount {
     /// Hidden when it has no balance and no NFTs
     var isHidden: Bool {
         guard type == .coa else { return false }
-        guard case .loaded(let balance, let nftCount) = assets else {
+        guard case .loaded(let balance, let nftCount, let erc20Balance) = assets else {
             return false  // Don't hide if data not loaded yet
         }
-        return balance == 0 && nftCount == 0
+        return balance == 0 && nftCount == 0 && erc20Balance == 0
     }
 
     /// Formatted balance display string
@@ -146,6 +151,7 @@ extension WalletAccount.AssetData: Codable {
         case state
         case balance
         case nftCount
+        case erc20Balance
     }
 
     private enum State: String, Codable {
@@ -163,10 +169,11 @@ extension WalletAccount.AssetData: Codable {
             try container.encode(State.notLoaded, forKey: .state)
         case .loading:
             try container.encode(State.loading, forKey: .state)
-        case .loaded(let balance, let nftCount):
+        case .loaded(let balance, let nftCount, let erc20Balance):
             try container.encode(State.loaded, forKey: .state)
             try container.encode(balance, forKey: .balance)
             try container.encode(nftCount, forKey: .nftCount)
+            try container.encode(erc20Balance, forKey: .erc20Balance)
         case .error:
             // Encode error state but don't persist error details
             try container.encode(State.error, forKey: .state)
@@ -185,7 +192,8 @@ extension WalletAccount.AssetData: Codable {
         case .loaded:
             let balance = try container.decode(Double.self, forKey: .balance)
             let nftCount = try container.decode(Int.self, forKey: .nftCount)
-            self = .loaded(balance: balance, nftCount: nftCount)
+            let erc20Balance = try container.decodeIfPresent(Double.self, forKey: .erc20Balance) ?? 0
+            self = .loaded(balance: balance, nftCount: nftCount, erc20Balance: erc20Balance)
         case .error:
             // Decode error state as notLoaded (errors are temporary and shouldn't be persisted)
             self = .notLoaded

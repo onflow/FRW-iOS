@@ -70,7 +70,7 @@ extension RNBridge.WalletAccount {
                let nftStr = nfts,
                let balance = Double(balanceStr),
                let nftCount = Int(nftStr) {
-                return .loaded(balance: balance, nftCount: nftCount)
+                return .loaded(balance: balance, nftCount: nftCount, erc20Balance: 0)
             }
             return .notLoaded
         }()

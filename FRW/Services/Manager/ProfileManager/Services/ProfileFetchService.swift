@@ -74,7 +74,36 @@ final class ProfileFetchService: ProfileFetchServiceProtocol {
             return profile.updatingAccounts(to: updatedGroups)
         }
     }
+    
+    func fetchERC20Balances(for profiles: [ProfileModel]) async throws -> [ProfileModel] {
+        let coaAddresses = profiles.flatMap { profile in
+            profile.accounts.flatMap { $0 }
+                .filter { $0.type == .coa }
+                .compactMap { $0.address }
+        }
 
+        guard !coaAddresses.isEmpty else { return profiles }
+        let erc20Balances = await fetchERC20DisplayBalancesForAddresses(coaAddresses)
+        let nonZeroCount = erc20Balances.values.filter { $0 > 0 }.count
+        let totalErc20Balance = erc20Balances.values.reduce(0, +)
+        log.debug("[ProfileFetch] ERC20 summary: \(nonZeroCount)/\(coaAddresses.count) non-zero, total=\(totalErc20Balance)")
+
+        return profiles.map { profile in
+            let updatedGroups = profile.accounts.map { group in
+                group.map { account in
+                    guard account.type == .coa,
+                          let erc20Balance = erc20Balances[account.address]
+                    else {
+                        return account
+                    }
+
+                    return account.copyWith(erc20Balance: erc20Balance)
+                }
+            }
+            return profile.updatingAccounts(to: updatedGroups)
+        }
+    }
+    
     func fetchNFTCounts(for profiles: [ProfileModel]) async throws -> [ProfileModel] {
         // Collect all COA addresses
         let coaAddresses = profiles.flatMap { profile in
@@ -106,14 +135,17 @@ final class ProfileFetchService: ProfileFetchServiceProtocol {
     }
 
     func fetchAllAccountInfo(for profiles: [ProfileModel]) async throws -> [ProfileModel] {
-        // Pipeline: Accounts → Balances → NFTs
+        // Pipeline: Accounts → Balances → ERC20 → NFTs
         let withAccounts = try await fetchAccounts(for: profiles)
         log.debug("[ProfileFetch] Fetched accounts for \(withAccounts.count) profiles")
 
         let withBalances = try await fetchBalances(for: withAccounts)
         log.debug("[ProfileFetch] Fetched balances")
 
-        let withNFTs = try await fetchNFTCounts(for: withBalances)
+        let withERC20 = try await fetchERC20Balances(for: withBalances)
+        log.debug("[ProfileFetch] Fetched ERC20 balances")
+
+        let withNFTs = try await fetchNFTCounts(for: withERC20)
         log.debug("[ProfileFetch] Fetched NFT counts")
 
         return withNFTs
@@ -188,6 +220,7 @@ final class ProfileFetchService: ProfileFetchServiceProtocol {
         return list
     }
 
+  
     private func fetchNFTCountsForAddresses(_ addresses: [String]) async -> [String: Int] {
         await withTaskGroup(of: (String, Int)?.self) { group in
           let tokenProvider = await EVMTokenBalanceProvider()
@@ -212,6 +245,42 @@ final class ProfileFetchService: ProfileFetchServiceProtocol {
             for await result in group {
                 if let (address, count) = result {
                     results[address] = count
+                }
+            }
+            return results
+        }
+    }
+    
+    private func fetchERC20DisplayBalancesForAddresses(_ addresses: [String]) async -> [String: Double] {
+        await withTaskGroup(of: (String, Double)?.self) { group in
+            for address in addresses {
+                group.addTask {
+                    guard let fwAddress = FWAddressDector.create(address: address) else {
+                        return nil
+                    }
+                    do {
+                        let tokens = try await TokenBalanceHandler.shared.getFTBalance(address: fwAddress)
+                        let sum = tokens.reduce(Decimal.zero) { partial, token in
+                            guard let display = token.displayBalance,
+                                  let value = Decimal(string: display),
+                                  value > 0
+                            else {
+                                return partial
+                            }
+                            return partial + value
+                        }
+                        return (address, sum.doubleValue)
+                    } catch {
+                        log.warning("[ProfileFetch] ERC20 fetch failed for \(address): \(error)")
+                        return nil
+                    }
+                }
+            }
+
+            var results: [String: Double] = [:]
+            for await result in group {
+                if let (address, sum) = result {
+                    results[address] = sum
                 }
             }
             return results

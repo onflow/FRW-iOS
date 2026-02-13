@@ -19,10 +19,10 @@ extension TurboModuleSwift {
     let collectionList = try await evmProvider.getNFTCollections(address: addr)
 
     let erc20: [RNBridge.Erc20Asset] = tokenList.compactMap { model in
-      guard let addr = model.getAddress(), let amount = model.balanceInFLOW else {
+      guard let addr = model.getAddress(), !addr.isEmpty else {
         return nil
       }
-      guard amount.count > 0, amount != "0" else {
+      guard let amount = model.balanceInFLOW, amount.count > 0, amount != "0" else {
         return nil
       }
       return RNBridge.Erc20Asset(address: addr, amount: amount)

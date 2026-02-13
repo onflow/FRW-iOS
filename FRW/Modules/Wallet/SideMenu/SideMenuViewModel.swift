@@ -130,17 +130,18 @@ class SideMenuViewModel: ObservableObject {
     }
 
     private func updateMigrationCardVisibility(for item: SideMenuItem?) {
+      shouldShowMigrationCard = false
+      guard let coaMigration = RemoteConfigManager.shared.config?.features.coaMigration, coaMigration else {
+        return
+      }
       guard let item else {
-        shouldShowMigrationCard = false
         return
       }
       guard item.account.type == .coa else {
-        shouldShowMigrationCard = false
         return
       }
 
       guard let list = wallet.EOAs, list.count > 0 else {
-        shouldShowMigrationCard = false
         return
       }
 
@@ -148,20 +149,19 @@ class SideMenuViewModel: ObservableObject {
       guard let group = allAccounts.first(where: { accounts in
         accounts.contains { $0.account.address.lowercased() == address }
       }) else {
-        shouldShowMigrationCard = false
         return
       }
 
       guard let coaAccount = group.first(where: { account in
         account.account.type == .coa
       }) else {
-        shouldShowMigrationCard = false
         return
       }
       let balance = coaAccount.account.assets.balance ?? 0
       let nftCount = coaAccount.account.assets.nftCount ?? 0
+      let erc20Count = coaAccount.account.assets.erc20Balance ?? 0
       withAnimation(.easeInOut) {
-        self.shouldShowMigrationCard = balance > 0 || nftCount > 0
+        self.shouldShowMigrationCard = balance > 0 || nftCount > 0 || erc20Count > 0
       }
     }
 
