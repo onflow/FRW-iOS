@@ -160,9 +160,7 @@ class SideMenuViewModel: ObservableObject {
       let balance = coaAccount.account.assets.balance ?? 0
       let nftCount = coaAccount.account.assets.nftCount ?? 0
       let erc20Count = coaAccount.account.assets.erc20Balance ?? 0
-      withAnimation(.easeInOut) {
-        self.shouldShowMigrationCard = balance > 0 || nftCount > 0 || erc20Count > 0
-      }
+      self.shouldShowMigrationCard = balance > 0 || nftCount > 0 || erc20Count > 0
     }
 
 }
