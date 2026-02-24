@@ -66,6 +66,13 @@ class RestoreMultiAccountViewModel: ObservableObject {
                   await WalletManager.shared.cleanupRevokedAccount(userId: selectedUserId)
                   // Add the key again with new data
                   addKey(item: selectedUser)
+                } catch WalletError.emptyMainAccount {
+                  log.warning("[RestoreMultiAccountVM] Key revoked and no on-chain account found, cleaning up and adding new key")
+                  HUD.dismissLoading()
+                  // Key was revoked so keyIndexer returns no account for this public key
+                  // Clean up and create a new key
+                  await WalletManager.shared.cleanupRevokedAccount(userId: selectedUserId)
+                  addKey(item: selectedUser)
                 } catch {
                   log.error("switch account failed", context: error)
                   HUD.dismissLoading()
