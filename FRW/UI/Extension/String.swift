@@ -164,7 +164,7 @@ extension String {
     func convertedAvatarString() -> String {
         if var comp = URLComponents(string: self) {
             if comp.host == "source.boringavatars.com" {
-                comp.host = isDevModel ? "test.lilico.app" : "lilico.app"
+                comp.host = isDevMode ? "test.lilico.app" : "lilico.app"
                 comp.path = "/api/avatar\(comp.path)" + "&square=true"
                 return comp.url!.absoluteString
             }
