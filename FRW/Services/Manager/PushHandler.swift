@@ -60,6 +60,9 @@ class PushHandler: NSObject, ObservableObject {
     }
 
     func showPushAlertIfNeeded() {
+        guard !isDevModel else {
+          return
+        }
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
                 if settings.authorizationStatus == .notDetermined, !self.hasSeenPushAlert {
