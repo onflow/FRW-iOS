@@ -299,7 +299,7 @@ extension ProfileView {
               guard vm.state.backupFetchingState != .fetching else {
                 return
               }
-              if !isDevModel, currentNetwork != .mainnet {
+              if !isDevMode, currentNetwork != .mainnet {
                 showAlert = true
               } else {
                 let wallet = WalletManager.shared
