@@ -73,7 +73,7 @@ extension EventTrack {
         let env: String
         if RemoteConfigManager.shared.isStaging {
             env = "staging"
-        } else if isDevModel {
+        } else if isDevMode {
             env = "development"
         } else {
             env = "production"

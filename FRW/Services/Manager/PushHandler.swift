@@ -60,7 +60,7 @@ class PushHandler: NSObject, ObservableObject {
     }
 
     func showPushAlertIfNeeded() {
-        guard !isDevModel else {
+        guard !isDevMode else {
           return
         }
         UNUserNotificationCenter.current().getNotificationSettings { settings in

@@ -49,7 +49,7 @@ class KeychainListViewModel: ObservableObject {
     }
 
     func radomUpdatePrivateKey(index _: Int) {
-        if isDevModel {
+        if isDevMode {
             // Modifying private key for test
         }
     }
