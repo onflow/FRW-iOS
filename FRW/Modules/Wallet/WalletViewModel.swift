@@ -264,6 +264,9 @@ final class WalletViewModel: ObservableObject {
 // MARK: - Action
 
 extension WalletViewModel {
+    func reloadStaking() {
+      StakingManager.shared.refresh()
+    }
     func reloadWalletData() {
         guard WalletManager.shared.getPrimaryWalletAddress() != nil else {
             return

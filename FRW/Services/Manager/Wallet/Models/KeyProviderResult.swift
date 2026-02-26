@@ -19,8 +19,8 @@ enum KeyProviderResult {
   /// Provider exists but no on-chain account yet (async account creation in progress)
   case providerWithoutAccount(any KeyProtocol)
 
-  /// No provider found or all providers are revoked
-  case noValidProvider(NoValidProviderReason)
+  /// No valid provider found - contains the specific WalletError
+  case noValidProvider(WalletError)
 }
 
 /// Data returned when key provider is successfully validated
@@ -30,36 +30,4 @@ struct KeyProviderData {
   let address: String
   let wallet: FlowWalletKit.Wallet
   let accounts: [FlowWalletKit.Account]
-}
-
-/// Reason why no valid provider was found
-enum NoValidProviderReason {
-  /// No keys exist at all for this UID
-  case noKeys
-
-  /// Keys exist but all are revoked on-chain
-  case allKeysRevoked(revokedKeyIds: [String])
-
-  /// Keys exist but failed to load (wrong password, corrupted keychain, etc.)
-  case keysCorrupted
-
-  var shouldShowAlert: Bool {
-    switch self {
-    case .noKeys, .allKeysRevoked:
-      return true
-    case .keysCorrupted:
-      return true
-    }
-  }
-
-  var alertReason: String {
-    switch self {
-    case .noKeys:
-      return "No keys found for user"
-    case .allKeysRevoked(let keyIds):
-      return "All keys are revoked (keyIds: \(keyIds.joined(separator: ", ")))"
-    case .keysCorrupted:
-      return "Keys exist but failed to load"
-    }
-  }
 }

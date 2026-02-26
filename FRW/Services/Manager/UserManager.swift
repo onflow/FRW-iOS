@@ -569,9 +569,9 @@ extension UserManager {
       // For login, we need on-chain account, so this should fail
       log.error("[Login] Provider exists but no on-chain account for uid: \(userId)")
       throw WalletError.emptyMainAccount
-    case .noValidProvider:
-      log.error("[Login] No valid key found for uid: \(userId)")
-      throw WalletError.emptyKeyProvider
+    case .noValidProvider(let error):
+      log.error("[Login] No valid key found for uid: \(userId), error: \(error.errorMessage)")
+      throw error
     }
 
     let wallet = Wallet(type: .key(keyProvider))
@@ -870,9 +870,9 @@ extension UserManager {
       // For login, we need on-chain account, so this should fail
       log.error("[Login] Provider exists but no on-chain account for profile: \(profile.uid)")
       throw WalletError.emptyMainAccount
-    case .noValidProvider:
-      log.error("[Login] No valid key found for profile: \(profile.uid)")
-      throw WalletError.emptyKeyProvider
+    case .noValidProvider(let error):
+      log.error("[Login] No valid key found for profile: \(profile.uid), error: \(error.errorMessage)")
+      throw error
     }
 
     // Use the signAlgo and hashAlgo from the on-chain account key

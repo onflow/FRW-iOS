@@ -35,11 +35,11 @@ extension GithubEndpoint: TargetType {
         case .collections:
             return "/Outblock/Assets/main/nft/nft.json"
         case let .ftTokenList(network):
-            return "/Outblock/token-list-jsons/outblock/jsons/\(network.rawValue)/flow/\(isDevModel ? "dev" : "default").json"
+            return "/Outblock/token-list-jsons/outblock/jsons/\(network.rawValue)/flow/\(isDevMode ? "dev" : "default").json"
         case let .EVMNFTList(network):
             return "/Outblock/token-list-jsons/outblock/jsons/\(network.rawValue)/flow/nfts.json"
         case let .EVMTokenList(network):
-            return "/Outblock/token-list-jsons/outblock/jsons/\(network.rawValue)/evm/\(isDevModel ? "dev" : "default").json"
+            return "/Outblock/token-list-jsons/outblock/jsons/\(network.rawValue)/evm/\(isDevMode ? "dev" : "default").json"
         }
     }
 

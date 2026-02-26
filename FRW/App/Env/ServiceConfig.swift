@@ -8,7 +8,7 @@
 import Foundation
 import InstabugSDK
 import SwiftyDropbox
-
+import FlowWalletKit
 // MARK: - ServiceConfig
 
 class ServiceConfig {
@@ -79,6 +79,10 @@ extension ServiceConfig {
       if let url = try? ZipFile.zipLogFile() {
         report.addFileAttachment(with: url)
       }
+      
+      if let keyType = WalletManager.shared.keyProvider?.keyType {
+        report.setUserAttribute(keyType.name, withKey: "ProfileType")
+      }
 
       let childAddress = WalletManager.shared.childs?
         .reduce("") { $0 + "," + $1.address.hexAddr } ?? ""
@@ -103,6 +107,21 @@ extension ServiceConfig {
   private func setupDropbox() {
     let appKey = ServiceConfig.shared.dropboxAppKey
     DropboxClientsManager.setupWithTeamAppKey(appKey)
+  }
+}
+
+extension FlowWalletKit.KeyType {
+  var name: String {
+    switch self {
+    case .seedPhrase:
+      return "SeedPhrase"
+    case .privateKey:
+      return "PrivateKey"
+    case .secureEnclave:
+      return "SecureEnclave"
+    case .keyStore:
+      return "Keystore"
+    }
   }
 }
 

@@ -98,6 +98,7 @@ struct WalletHomeView: View {
                 return
             }
             isRefreshing = true
+            vm.reloadStaking()
             vm.reloadWalletData()
             DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
                 done()

@@ -199,7 +199,7 @@ public extension String {
         let version = Bundle.main
             .infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
-        let model = isDevModel ? "(Dev)" : ""
+        let model = isDevMode ? "(Dev)" : ""
         return "iOS-\(version)-\(buildVersion)\(model)"
     }
 }

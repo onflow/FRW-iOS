@@ -254,7 +254,7 @@ extension FlowNetwork {
     }
 
     static func accountStakingIsSetup() async throws -> Bool {
-        let address = Flow.Address(hex: WalletManager.shared.getPrimaryWalletAddress() ?? "")
+        let address = Flow.Address(hex: WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "")
         return try await fetch(by: \.staking?.checkSetup, arguments: [.address(address)])
     }
 
@@ -364,7 +364,7 @@ extension FlowNetwork {
     }
 
     static func queryStakeInfo() async throws -> [StakingNode]? {
-        let address = Flow.Address(hex: WalletManager.shared.getPrimaryWalletAddress() ?? "")
+        let address = await Flow.Address(hex: WalletManager.shared.getWatchAddressOrChildAccountAddressOrPrimaryAddress() ?? "")
         let response: [StakingNode] = try await fetch(
             by: \.staking?.getDelegatesInfoArrayV2,
             arguments: [.address(address)]

@@ -97,7 +97,14 @@ class WalletManager: ObservableObject {
   var mainAccount: FlowWalletKit.Account?
 
   @Published
-  private(set) var selectedAccount: FWAccount?
+  private(set) var selectedAccount: FWAccount? {
+    didSet {
+      // Store selected account per uid
+      if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
+        LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
+      }
+    }
+  }
 
   @Published
   private(set) var currentNetwork: Flow.ChainID = .mainnet
@@ -235,11 +242,11 @@ extension WalletManager {
         log.info("[Wallet] ⏳ Provider exists but account is still being created for uid: \(uid)")
         provider = existingProvider
 
-      case .noValidProvider(let reason):
+      case .noValidProvider(let error):
         // No valid provider found - show alert to user
-        log.error("[Wallet] ❌ No valid provider found for uid: \(uid), reason: \(reason.alertReason)")
+        log.error("[Wallet] ❌ No valid provider found for uid: \(uid), error: \(error.errorMessage)")
         await MainActor.run {
-          showKeyInvalidAlert(uid: uid, reason: reason.alertReason)
+          showKeyInvalidAlert(uid: uid, reason: error.errorMessage)
         }
         return
       }
@@ -281,7 +288,11 @@ extension WalletManager {
     mainAccount = account
 
     // If there is no selected, try to restore from saved address for current uid
-    if selectedAccount == nil {
+    if let currentAccount = selectedAccount {
+      if let parentAccount = findParentAccount(for: currentAccount, in: accounts) {
+        mainAccount = parentAccount
+      }
+    } else {
       if let uid = UserManager.shared.activatedUID,
           let savedValue = LocalUserDefaults.shared.getSelectedAddress(for: uid),
          let restoredAccount = FWAccount(savedValue) {
@@ -298,6 +309,7 @@ extension WalletManager {
       }
       checkBloctoKeyAndPresentBackupTip(address: account.hexAddr)
     }
+
     updateUserAddress()
     loadLinkedAccounts()
     Task {
@@ -441,33 +453,7 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
-  func changeSelectedAccount(address: String, type: FWAccount.AccountType) {
-    UIFeedbackGenerator.impactOccurred(.selectionChanged)
-    guard let fwAddress = FWAddressDector.create(address: address) else {
-      HUD.error(WalletError.invaildAddress)
-      return
-    }
 
-    selectedAccount = .init(type: type, addr: fwAddress)
-
-    // Store selected account
-    UserDefaults.standard.set(
-      selectedAccount?.value,
-      forKey: LocalUserDefaults.Keys.selectedAddress.rawValue
-    )
-    if type == .main {
-      checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
-    }
-
-    // If it's main account, reload the linked account
-    if type == .main,
-       let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
-         account.hexAddr == address
-       }) {
-      mainAccount = account
-      loadLinkedAccounts()
-    }
-  }
   
   func switchSelectedAccount(_ selectingAccount: WalletAccount) {
     UIFeedbackGenerator.impactOccurred(.selectionChanged)
@@ -477,17 +463,13 @@ extension WalletManager {
     }
 
     selectedAccount = .init(type: selectingAccount.FWAccountType, addr: fwAddress)
-    // Store selected account per uid
-    if let uid = UserManager.shared.activatedUID, let value = selectedAccount?.value {
-      LocalUserDefaults.shared.setSelectedAddress(value, for: uid)
-    }
-
 
     switch selectingAccount.FWAccountType {
       case .main:
         if let account = walletEntity?.accounts?[currentNetwork]?.first(where: { account in
           account.hexAddr == selectingAccount.address
         }) {
+          checkBloctoKeyAndPresentBackupTip(address: fwAddress.hexAddr)
           mainAccount = account
           loadLinkedAccounts()
         }
