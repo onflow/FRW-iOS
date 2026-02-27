@@ -452,7 +452,11 @@ struct WalletHomeView: View {
                     .font(.inter(size: 18, weight: .bold))
                     .foregroundStyle(Color.Theme.Text.black3)
                 Spacer()
-
+                  
+                if vm.showEarnButton {
+                  EarnButton()
+                }
+              
                 CircleButton(image: .menu) {
                     vm.onClickManagerToken()
                 }
