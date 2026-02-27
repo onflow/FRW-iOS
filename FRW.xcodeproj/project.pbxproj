@@ -1632,6 +1632,8 @@
 		4E9059302B1792F10029FC66 /* SyncAddDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E90592E2B1792F10029FC66 /* SyncAddDeviceView.swift */; };
 		4E9182622EB89C63008FD73A /* AdaptiveHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9182612EB89C63008FD73A /* AdaptiveHostingController.swift */; };
 		4E9182632EB89C63008FD73A /* AdaptiveHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9182612EB89C63008FD73A /* AdaptiveHostingController.swift */; };
+		4E93A3822F339D7F00C9ED7B /* BridgeModels+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E93A3812F339D7D00C9ED7B /* BridgeModels+Extension.swift */; };
+		4E93A3832F339D7F00C9ED7B /* BridgeModels+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E93A3812F339D7D00C9ED7B /* BridgeModels+Extension.swift */; };
 		4E947C922BBEB2E300E87A85 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4E947C912BBEB2E300E87A85 /* web3swift */; };
 		4E952F4A2EE2B59F00175DAA /* NativeScreenName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E952F492EE2B59F00175DAA /* NativeScreenName.swift */; };
 		4E952F4B2EE2B59F00175DAA /* NativeScreenName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E952F492EE2B59F00175DAA /* NativeScreenName.swift */; };
@@ -1785,6 +1787,8 @@
 		4EBDF2C92BFB9F3700E56968 /* SelectCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDF2C72BFB9F3700E56968 /* SelectCollectionViewModel.swift */; };
 		4EBE49262AA1B732000FFFFE /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */; };
 		4EBE49272AA1B732000FFFFE /* AppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */; };
+		4EC1269E2F39E06700D2467B /* TurboModule+CoaToEoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC1269D2F39E06700D2467B /* TurboModule+CoaToEoa.swift */; };
+		4EC1269F2F39E06700D2467B /* TurboModule+CoaToEoa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC1269D2F39E06700D2467B /* TurboModule+CoaToEoa.swift */; };
 		4EC212F22C45E7F5008469F1 /* MoveAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */; };
 		4EC212F32C45E7F5008469F1 /* MoveAccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */; };
 		4EC26FCA2BFCAF5C001330DF /* EVMAssetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC26FC92BFCAF5C001330DF /* EVMAssetProvider.swift */; };
@@ -3236,6 +3240,7 @@
 		4E8E3F882D8306C7000916A6 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		4E90592E2B1792F10029FC66 /* SyncAddDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAddDeviceView.swift; sourceTree = "<group>"; };
 		4E9182612EB89C63008FD73A /* AdaptiveHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveHostingController.swift; sourceTree = "<group>"; };
+		4E93A3812F339D7D00C9ED7B /* BridgeModels+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BridgeModels+Extension.swift"; sourceTree = "<group>"; };
 		4E952F492EE2B59F00175DAA /* NativeScreenName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeScreenName.swift; sourceTree = "<group>"; };
 		4E95322E2CD2082F00AAECD1 /* AddCustomTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomTokenView.swift; sourceTree = "<group>"; };
 		4E9532312CD2089C00AAECD1 /* AddCustomTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCustomTokenViewModel.swift; sourceTree = "<group>"; };
@@ -3318,6 +3323,7 @@
 		4EBDF2C42BFB9E9400E56968 /* SelectCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectCollectionView.swift; sourceTree = "<group>"; };
 		4EBDF2C72BFB9F3700E56968 /* SelectCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCollectionViewModel.swift; sourceTree = "<group>"; };
 		4EBE49252AA1B732000FFFFE /* AppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateManager.swift; sourceTree = "<group>"; };
+		4EC1269D2F39E06700D2467B /* TurboModule+CoaToEoa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TurboModule+CoaToEoa.swift"; sourceTree = "<group>"; };
 		4EC212F12C45E7F5008469F1 /* MoveAccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAccountsView.swift; sourceTree = "<group>"; };
 		4EC26FC92BFCAF5C001330DF /* EVMAssetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVMAssetProvider.swift; sourceTree = "<group>"; };
 		4EC26FCF2BFE315A001330DF /* MoveSingleNFTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveSingleNFTView.swift; sourceTree = "<group>"; };
@@ -4818,7 +4824,9 @@
 				4E33F7D42E42423F00B3D62F /* RNTokenModel.swift */,
 				4EECEB202E323F29008E21B6 /* RNEncoder.swift */,
 				1575765D2E322E6A00D7D8C4 /* BridgeModels.swift */,
+				4E93A3812F339D7D00C9ED7B /* BridgeModels+Extension.swift */,
 				15A87E902E26D9E100F0E550 /* TurboModuleSwift.swift */,
+				4EC1269D2F39E06700D2467B /* TurboModule+CoaToEoa.swift */,
 				4EC758402EEAC16F00B9012E /* TurboModule+Onboard.swift */,
 				15A87E8D2E26D9CF00F0E550 /* RCTNativeFRWBridge.mm */,
 				1594792C2E282F7000F2B7A6 /* RCTNativeFRWBridge.h */,
@@ -8103,13 +8111,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8163,13 +8167,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8184,13 +8184,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8223,13 +8219,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRWTests/Pods-FRWTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8306,13 +8298,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW-dev/Pods-FRW-dev-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8368,13 +8356,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRW/Pods-FRW-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -8998,6 +8982,7 @@
 				4EA0D0A72A7A5AED004C6A19 /* FRWAPI+ChildAccount.swift in Sources */,
 				4EC279FE2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */,
 				57312EC62CFD2833009A344A /* Threading.swift in Sources */,
+				4E93A3832F339D7F00C9ED7B /* BridgeModels+Extension.swift in Sources */,
 				4E03BE1A2C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D42E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
 				154E31572DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
@@ -9114,6 +9099,7 @@
 				6A06CB0728AA25F400C81BE1 /* NFTUIKitListDataSource.swift in Sources */,
 				6AAD4E6A28BC6E9900AEAB1F /* TransactionModels.swift in Sources */,
 				4E411DBF2CB91C3A005AD540 /* MoveComponentView.swift in Sources */,
+				4EC1269E2F39E06700D2467B /* TurboModule+CoaToEoa.swift in Sources */,
 				159DEC9328C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */,
 				4E5885452A6FDF00007CACCC /* SPQRMaskView.swift in Sources */,
 				4EFBE5D12BC7D4AA0012968A /* ConfettiManager.swift in Sources */,
@@ -10101,6 +10087,7 @@
 				15C58B6F2868A4EE00BD4FC6 /* VBaseButtonState.swift in Sources */,
 				4EC279FD2EEFA35800F5DC71 /* DocumentPicker.swift in Sources */,
 				57312EC52CFD2833009A344A /* Threading.swift in Sources */,
+				4E93A3822F339D7F00C9ED7B /* BridgeModels+Extension.swift in Sources */,
 				4E03BE192C731F3500EF04DC /* ViewsInLoginModule.swift in Sources */,
 				1596A8D12E1AD76200E85303 /* ReactNativeViewController.swift in Sources */,
 				154E31562DA56A1D008A495F /* WalletManager+Getter.swift in Sources */,
@@ -10217,6 +10204,7 @@
 				159DEC9228C67DB900493E9F /* NFTDetailPageViewModel.swift in Sources */,
 				15C58BA52868A4EE00BD4FC6 /* TabBar.swift in Sources */,
 				4E411DC02CB91C3A005AD540 /* MoveComponentView.swift in Sources */,
+				4EC1269F2F39E06700D2467B /* TurboModule+CoaToEoa.swift in Sources */,
 				4E5885442A6FDF00007CACCC /* SPQRMaskView.swift in Sources */,
 				15C58BA62868A4EE00BD4FC6 /* Logger.swift in Sources */,
 				4EFBE5D02BC7D4AA0012968A /* ConfettiManager.swift in Sources */,
@@ -10980,7 +10968,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -11045,7 +11036,10 @@
 				MARKETING_VERSION = 3.1.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

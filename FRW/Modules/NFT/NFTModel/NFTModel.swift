@@ -101,6 +101,13 @@ extension NFTCollectionInfo {
     struct SocialItem: Codable, Hashable {
         let url: String?
     }
+
+    var ERCType: FlowProvider.ABIType {
+        guard let value = contractType?.lowercased() else {
+            return .erc721
+        }
+        return FlowProvider.ABIType(rawValue: value) ?? .erc721
+    }
 }
 
 // MARK: - ContractPath

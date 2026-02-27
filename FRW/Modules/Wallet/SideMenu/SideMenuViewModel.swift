@@ -30,6 +30,7 @@ class SideMenuViewModel: ObservableObject {
     @Published var hasCoa: Bool = true
     @Published var currentAccount: SideMenuItem? = nil
     @Published var allAccounts: [[SideMenuItem]] = [[.mock()],[.mock()],[.mock()]]
+    @Published var shouldShowMigrationCard: Bool = false
     private var cancellableSet = Set<AnyCancellable>()
 
 
@@ -74,6 +75,7 @@ class SideMenuViewModel: ObservableObject {
       })
       if let address = wallet.selectedAccount?.hexAddr {
         refreshAccount(address: address)
+        updateMigrationCardVisibility(for: currentAccount)
       }
     }
 
@@ -96,14 +98,13 @@ class SideMenuViewModel: ObservableObject {
         }
       }
       log.debug("[Profile] find current account:\(result?.account)")
-      withAnimation(.easeInOut) {
-        currentAccount = result
-      }
+      currentAccount = result
     }
   
     func updateCurrentAccount(_ selectedAccount: SideMenuItem) {
         WalletManager.shared.switchSelectedAccount(selectedAccount.account)
         NotificationCenter.default.post(name: .toggleSideMenu)
+        updateMigrationCardVisibility(for: selectedAccount)
     }
 
     func switchAccountMoreAction() {
@@ -115,11 +116,49 @@ class SideMenuViewModel: ObservableObject {
         Router.route(to: RouteMap.Wallet.enableEVM)
     }
 
+    func onClickMigrationCard() {
+        NotificationCenter.default.post(name: .toggleSideMenu)
+        Router.route(to: RouteMap.ReactNative.migration)
+    }
+
     private func onHiddenAddressesChanged() {
         // Refresh hidden states for all accounts
         guard let profile = ProfileManager.shared.currentProfile else { return }
         refreshProfile(profile: profile)
     }
 
-}
+    private func updateMigrationCardVisibility(for item: SideMenuItem?) {
+      shouldShowMigrationCard = false
+//      guard let coaMigration = RemoteConfigManager.shared.config?.features.coaMigration, coaMigration else {
+//        return
+//      }
+      guard let item else {
+        return
+      }
+      guard item.account.type == .coa else {
+        return
+      }
 
+      guard let list = wallet.EOAs, list.count > 0 else {
+        return
+      }
+
+      let address = item.account.address.lowercased()
+      guard let group = allAccounts.first(where: { accounts in
+        accounts.contains { $0.account.address.lowercased() == address }
+      }) else {
+        return
+      }
+
+      guard let coaAccount = group.first(where: { account in
+        account.account.type == .coa
+      }) else {
+        return
+      }
+      let balance = coaAccount.account.assets.balance ?? 0
+      let nftCount = coaAccount.account.assets.nftCount ?? 0
+      let erc20Count = coaAccount.account.assets.erc20Balance ?? 0
+      self.shouldShowMigrationCard = balance > 0 || nftCount > 0 || erc20Count > 0
+    }
+
+}

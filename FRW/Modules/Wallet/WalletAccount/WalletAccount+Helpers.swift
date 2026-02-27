@@ -15,15 +15,22 @@ extension WalletAccount {
   /// - Parameters:
   ///   - balance: Optional new balance value
   ///   - nftCount: Optional new NFT count
+  ///   - erc20Balance: Optional new ERC-20 balance sum (display units)
   /// - Returns: New WalletAccount with updated assets
-  func copyWith(balance: Double? = nil, nftCount: Int? = nil) -> WalletAccount {
+  func copyWith(balance: Double? = nil, nftCount: Int? = nil, erc20Balance: Double? = nil) -> WalletAccount {
     let currentBalance = assets.balance ?? 0
     let currentNFTCount = assets.nftCount ?? 0
+    let currentErc20Balance = assets.erc20Balance ?? 0
 
     let newBalance = balance ?? currentBalance
     let newNFTCount = nftCount ?? currentNFTCount
+    let newErc20Balance = erc20Balance ?? currentErc20Balance
 
-    let newAssets: AssetData = .loaded(balance: newBalance, nftCount: newNFTCount)
+    let newAssets: AssetData = .loaded(
+      balance: newBalance,
+      nftCount: newNFTCount,
+      erc20Balance: newErc20Balance
+    )
 
     return WalletAccount(
       id: id,

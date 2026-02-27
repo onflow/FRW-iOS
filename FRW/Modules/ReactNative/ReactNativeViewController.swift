@@ -18,6 +18,7 @@ extension ReactNativeViewController {
     case getStarted = "GetStarted"
     case keyRotationTip = "KeyRotationTip"
     case activity = "Activity"
+    case migration = "Migration"
   }
 }
 
@@ -275,6 +276,8 @@ extension RNBridge.InitialProps {
     case .activity:
       // TODO: Revisit me
       return .activity
+    case .migration:
+      return .migration
     }
   }
 }

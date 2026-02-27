@@ -453,7 +453,6 @@ extension WalletManager {
 // MARK: - Child Account
 
 extension WalletManager {
-
   
   func switchSelectedAccount(_ selectingAccount: WalletAccount) {
     UIFeedbackGenerator.impactOccurred(.selectionChanged)

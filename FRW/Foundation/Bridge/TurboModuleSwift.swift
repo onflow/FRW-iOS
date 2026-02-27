@@ -466,6 +466,25 @@ extension TurboModuleSwift {
     let result =  response?.getLastRate() ?? 0
     return result
   }
+
+  @objc
+  static func getMigrationAssets(sourceAddress: String) async throws -> [String: Any] {
+    let model = try await TurboModuleSwift.fetchAmountForCoa(address: sourceAddress)
+    return try model.toDictionary()
+  }
+
+  @objc
+  static func refreshCoaAfterMigration() async throws {
+    async let refreshProfile: Void = ProfileManager.shared.refreshCurrentProfileAccounts()
+    async let refreshWallet: Void = {
+      do {
+        try await WalletManager.shared.fetchWalletDatas()
+      } catch {
+        log.warning("[Migration] Refresh wallet data failed: \(error)")
+      }
+    }()
+    _ = await (refreshProfile, refreshWallet)
+  }
   
   @objc
   static func getWalletProfiles() async throws -> [String: Any] {

@@ -14,6 +14,7 @@ extension RouteMap {
     case profileSelection
     case getStarted
     case backupTip
+    case migration
   }
 }
 
@@ -37,6 +38,10 @@ extension RouteMap.ReactNative: RouterTarget {
       let vc = ReactNativeViewController(initialProps: props)
       vc.modalPresentationStyle = .fullScreen
       navi.present(vc)
+    case .migration:
+      let vc = ReactNativeViewController()
+      vc.route = .migration
+      navi.pushViewController(vc, animated: true)
     }
   }
 }

@@ -32,7 +32,7 @@ extension WalletAccount {
             childInfo: nil,
             parent: nil,
             isActive: isActive,
-            assets: .loaded(balance: balance, nftCount: nftCount)
+            assets: .loaded(balance: balance, nftCount: nftCount, erc20Balance: 0)
         )
     }
     
@@ -58,7 +58,7 @@ extension WalletAccount {
         
         let assets: AssetData
         if let balance, let nftCount {
-            assets = .loaded(balance: balance, nftCount: nftCount)
+            assets = .loaded(balance: balance, nftCount: nftCount, erc20Balance: 0)
         } else {
             assets = .notLoaded
         }
@@ -107,7 +107,7 @@ extension WalletAccount {
             childInfo: nil,
             parent: parent,
             isActive: isActive,
-            assets: .loaded(balance: balance, nftCount: nftCount)
+            assets: .loaded(balance: balance, nftCount: nftCount, erc20Balance: 0)
         )
     }
     
@@ -132,8 +132,7 @@ extension WalletAccount {
             childInfo: nil,
             parent: nil,
             isActive: isActive,
-            assets: .loaded(balance: balance, nftCount: nftCount)
+            assets: .loaded(balance: balance, nftCount: nftCount, erc20Balance: 0)
         )
     }
 }
-
