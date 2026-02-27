@@ -1542,6 +1542,10 @@
 		4E722F362ED9A96600627AAD /* EOAPrivateKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */; };
 		4E722F382ED9AF8B00627AAD /* LinkedAccountDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E722F372ED9AF8B00627AAD /* LinkedAccountDetailViewModel.swift */; };
 		4E722F392ED9AF8B00627AAD /* LinkedAccountDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E722F372ED9AF8B00627AAD /* LinkedAccountDetailViewModel.swift */; };
+		4E73FAC12F2A378200AF2711 /* EarnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E73FAC02F2A378200AF2711 /* EarnButton.swift */; };
+		4E73FAC22F2A378200AF2711 /* EarnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E73FAC02F2A378200AF2711 /* EarnButton.swift */; };
+		4E73FAC42F2A3C1200AF2711 /* EarnBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E73FAC32F2A3C1200AF2711 /* EarnBanner.swift */; };
+		4E73FAC52F2A3C1200AF2711 /* EarnBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E73FAC32F2A3C1200AF2711 /* EarnBanner.swift */; };
 		4E7712E12E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E7712E22E3B2AD70011C1DA /* RNBridgeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */; };
 		4E777CAE2B1ECF8900300A3E /* SyncInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */; };
@@ -3189,6 +3193,8 @@
 		4E7153232E97564D00C5D0BA /* RouteMap+Dev.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteMap+Dev.swift"; sourceTree = "<group>"; };
 		4E722F342ED9A96600627AAD /* EOAPrivateKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EOAPrivateKeyView.swift; sourceTree = "<group>"; };
 		4E722F372ED9AF8B00627AAD /* LinkedAccountDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedAccountDetailViewModel.swift; sourceTree = "<group>"; };
+		4E73FAC02F2A378200AF2711 /* EarnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnButton.swift; sourceTree = "<group>"; };
+		4E73FAC32F2A3C1200AF2711 /* EarnBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EarnBanner.swift; sourceTree = "<group>"; };
 		4E7712E02E3B2AD70011C1DA /* RNBridgeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNBridgeError.swift; sourceTree = "<group>"; };
 		4E777CAD2B1ECF8900300A3E /* SyncInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncInfo.swift; sourceTree = "<group>"; };
 		4E777CB02B1EE69E00300A3E /* WalletConnect+SyncDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletConnect+SyncDevice.swift"; sourceTree = "<group>"; };
@@ -4123,6 +4129,8 @@
 				15362A172DA02BA1008F4E51 /* VisualEffectView.swift */,
 				15362A1A2DA02BCD008F4E51 /* CoinCell.swift */,
 				4EB2C3092DC0E2F900E79FC5 /* FilterButton.swift */,
+				4E73FAC02F2A378200AF2711 /* EarnButton.swift */,
+				4E73FAC32F2A3C1200AF2711 /* EarnBanner.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8516,6 +8524,7 @@
 				153749082E26FDD60040E3F8 /* SPPopoverController.swift in Sources */,
 				153749092E26FDD60040E3F8 /* SPDimmedButton+Colorise.swift in Sources */,
 				1537490A2E26FDD60040E3F8 /* UISwitchExtension.swift in Sources */,
+				4E73FAC52F2A3C1200AF2711 /* EarnBanner.swift in Sources */,
 				1537490B2E26FDD60040E3F8 /* UIFontExtension.swift in Sources */,
 				1537490C2E26FDD60040E3F8 /* SPCollectionViewController.swift in Sources */,
 				1537490D2E26FDD60040E3F8 /* CollectionExtension.swift in Sources */,
@@ -9116,6 +9125,7 @@
 				4ED4831B2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */,
 				6A06CB1128AA54A600C81BE1 /* NFTUIKitGridStyleHandler.swift in Sources */,
 				1586370D2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */,
+				4E73FAC22F2A378200AF2711 /* EarnButton.swift in Sources */,
 				6AC476ED28F40E50008503E6 /* BrowserBookmarkView.swift in Sources */,
 				4E1A8B702B71A7FA00485EDE /* MultiBackupConfirmPinViewModel.swift in Sources */,
 				6A8FA4B4285B192900EE5BE3 /* ScrollView+SnappableModifier.swift in Sources */,
@@ -9619,6 +9629,7 @@
 				153749602E26FDD60040E3F8 /* SPPopoverController.swift in Sources */,
 				153749612E26FDD60040E3F8 /* SPDimmedButton+Colorise.swift in Sources */,
 				153749622E26FDD60040E3F8 /* UISwitchExtension.swift in Sources */,
+				4E73FAC42F2A3C1200AF2711 /* EarnBanner.swift in Sources */,
 				153749632E26FDD60040E3F8 /* UIFontExtension.swift in Sources */,
 				153749642E26FDD60040E3F8 /* SPCollectionViewController.swift in Sources */,
 				153749652E26FDD60040E3F8 /* CollectionExtension.swift in Sources */,
@@ -10219,6 +10230,7 @@
 				15C58BAD2868A4EE00BD4FC6 /* ScrollView+SnappableModifier.swift in Sources */,
 				4ED4831A2DA515FC00AA23E6 /* BlocklistHandler.swift in Sources */,
 				6AC476EC28F40E50008503E6 /* BrowserBookmarkView.swift in Sources */,
+				4E73FAC12F2A378200AF2711 /* EarnButton.swift in Sources */,
 				1586370C2D6BF1EC0083A068 /* TokenBalanceListView.swift in Sources */,
 				15C58BAE2868A4EE00BD4FC6 /* VNavigationViewNavigationBar.swift in Sources */,
 				4E1A8B6F2B71A7FA00485EDE /* MultiBackupConfirmPinViewModel.swift in Sources */,

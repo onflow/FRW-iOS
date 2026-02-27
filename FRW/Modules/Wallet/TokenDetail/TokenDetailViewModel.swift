@@ -184,7 +184,9 @@ class TokenDetailViewModel: ObservableObject {
     var showStorageView: Bool { token.isFlowCoin && wallet.selectedAccount?.type == .main }
 
     var isTokenDetailsButtonEnabled: Bool { token.website.isNotNullNorEmpty }
-
+    
+    @Published
+    var showEarnBanner: Bool = !AppUrl.earnUrl.isEmpty
     // MARK: Private
 
     private var cancelSets = Set<AnyCancellable>()
